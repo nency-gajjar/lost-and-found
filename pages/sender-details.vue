@@ -17,10 +17,10 @@
               rules="required"
               class="block"
             >
-              <UiSelect
+              <BaseSelect
                 v-model="venue"
                 :options="venueArr"
-                label="Venue"
+                label="Sender Affiliation"
                 :class="errors.length > 0 && 'error'"
               />
               <p
@@ -36,10 +36,10 @@
               rules="required"
               class="block"
             >
-              <UiInput
+              <BaseInput
                 v-model="manualVenue"
                 type="text"
-                label="Venue"
+                label="Type here manually..."
                 :class="errors.length > 0 && 'error'"
               />
               <p
@@ -54,10 +54,10 @@
               rules="required"
               class="block"
             >
-              <UiInput
+              <BaseInput
                 v-model="foundDate"
                 type="date"
-                label="Item Found Date"
+                label="Found Item Date"
                 :class="errors.length > 0 && 'error'"
               />
               <p
@@ -72,11 +72,12 @@
               rules="max:100|venueName"
               class="block"
             >
-              <UiInput
+              <BaseInput
                 v-model="venueName"
                 type="text"
                 label="Venue Name"
                 :class="errors.length > 0 && 'error'"
+                @input="debouncedGetData('name')"
               />
               <p
                 v-if="errors.length"
@@ -90,11 +91,12 @@
               rules="required|email"
               class="block"
             >
-              <UiInput
+              <BaseInput
                 v-model="venueEmail"
                 type="email"
                 label="Venue Email"
                 :class="errors.length > 0 && 'error'"
+                @input="debouncedGetData('email')"
               />
               <p
                 v-if="errors.length"
@@ -108,11 +110,12 @@
               rules="required|us_phone|max:100"
               class="block"
             >
-              <UiInput
+              <BaseInput
                 v-model="venuePhone"
                 type="text"
                 label="Venue Phone No."
                 :class="errors.length > 0 && 'error'"
+                @input="debouncedGetData('phoneno')"
                 @blur="
                   () => {
                     venuePhone = formatPhoneNumber(venuePhone)
@@ -134,7 +137,7 @@
               rules="required|us_phone|max:100"
               class="block"
             >
-              <UiInput
+              <BaseInput
                 v-model="employeePhone"
                 type="text"
                 label="Employee Mobile No."
@@ -161,7 +164,7 @@
               rules="max:100|address"
               class="block"
             >
-              <UiInput
+              <BaseInput
                 v-model="address"
                 type="text"
                 label="Address Line"
@@ -180,7 +183,7 @@
                 rules="max:28|required"
                 class="block lg:col-span-2"
               >
-                <UiInput
+                <BaseInput
                   v-model="city"
                   label="City"
                   type="text"
@@ -198,7 +201,7 @@
                 rules="required"
                 class="block col-span-1"
               >
-                <UiSelect
+                <BaseSelect
                   v-model="state"
                   :options="stateArr"
                   label="State"
@@ -218,7 +221,7 @@
                 rules="max:28|required"
                 class="block lg:col-span-2"
               >
-                <UiInput
+                <BaseInput
                   v-model="country"
                   label="Country"
                   type="text"
@@ -231,13 +234,9 @@
                   {{ errors[0] }}
                 </p>
               </ValidationProvider>
-              <ValidationProvider
-                v-slot="{ errors }"
-                rules="required|zip"
-                class="block col-span-1"
-              >
-                <UiInput
-                  v-model="zip"
+              <ValidationProvider v-slot="{ errors }" class="block col-span-1">
+                <BaseInput
+                  v-model="zipcode"
                   label="Zip Code"
                   type="text"
                   :class="errors.length > 0 && 'error'"
@@ -250,49 +249,18 @@
                 </p>
               </ValidationProvider>
             </div>
-            <button
-              type="submit"
+
+            <div
               class="
-                bg-blue-500
-                hover:bg-blue-700
-                text-white
+                space-y-4
+                text-[#757D8A]
                 font-bold
-                py-2
-                px-10
-                rounded
+                tracking-wide
+                text-center
               "
             >
-              Submit
-            </button>
-          </form>
-          <button
-            type="submit"
-            class="
-              bg-blue-500
-              hover:bg-blue-700
-              text-white
-              font-bold
-              py-2
-              px-10
-              rounded
-            "
-            @click="downloadTestPDF"
-          >
-            Download
-          </button>
-        </ValidationObserver>
-      </div>
-      <div class="card mt-6">
-        <div
-          class="space-y-4 text-[#757D8A] font-bold tracking-wide text-center"
-        >
-          FOUND ITEM DETAILS
-        </div>
-        <ValidationObserver v-slot="{ validate }" ref="observerItem">
-          <form
-            class="space-y-4 mt-11 p-2"
-            @submit.prevent="validate().then(onSubmitItemDetails)"
-          >
+              FOUND ITEM DETAILS
+            </div>
             <ValidationProvider
               v-slot="{ validate, errors }"
               rules="required|image"
@@ -316,7 +284,6 @@
                   focus:outline-none
                 "
                 id="itemImage"
-                ref="itemImageRef"
                 type="file"
               />
               <p
@@ -331,7 +298,7 @@
               rules="required"
               class="block"
             >
-              <UiSelect
+              <BaseSelect
                 v-model="itemDescription"
                 :options="itemDescriptionArr"
                 label="Item Description"
@@ -350,7 +317,7 @@
                 rules="required"
                 class="block col-span-1"
               >
-                <UiSelect
+                <BaseSelect
                   v-model="packageType"
                   :options="packageTypeArr"
                   label="Package Type"
@@ -368,9 +335,9 @@
                 rules="max:28|required"
                 class="block lg:col-span-2"
               >
-                <UiInput
-                  v-model="weightAndDimension"
-                  label="Weight And Dimension"
+                <BaseInput
+                  v-model="weight"
+                  label="Weight"
                   type="text"
                   :class="errors.length > 0 && 'error'"
                 />
@@ -384,10 +351,28 @@
             </div>
             <ValidationProvider
               v-slot="{ errors }"
+              rules="max:28|required"
+              class="block lg:col-span-2"
+            >
+              <BaseInput
+                v-model="dimension"
+                label="Dimension"
+                type="text"
+                :class="errors.length > 0 && 'error'"
+              />
+              <p
+                v-if="errors.length"
+                class="vee-validation-error mt-2 text-sm text-red-600"
+              >
+                {{ errors[0] }}
+              </p>
+            </ValidationProvider>
+            <ValidationProvider
+              v-slot="{ errors }"
               rules="required"
               class="block"
             >
-              <UiSelect
+              <BaseSelect
                 v-model="itemStatus"
                 :options="itemStatusArr"
                 label="Item Status"
@@ -406,7 +391,7 @@
                 rules="max:100|required"
                 class="block"
               >
-                <UiInput
+                <BaseInput
                   v-model="receiverName"
                   type="text"
                   label="Receiver's Name"
@@ -424,7 +409,7 @@
                 rules="required|email"
                 class="block"
               >
-                <UiInput
+                <BaseInput
                   v-model="receiverEmail"
                   type="email"
                   label="Receiver's Email"
@@ -442,7 +427,7 @@
                 rules="required|us_phone|max:100"
                 class="block"
               >
-                <UiInput
+                <BaseInput
                   v-model="receiverPhone"
                   type="text"
                   label="Receiver Mobile No."
@@ -478,6 +463,21 @@
               Submit
             </button>
           </form>
+          <!-- <button
+            type="submit"
+            class="
+              bg-blue-500
+              hover:bg-blue-700
+              text-white
+              font-bold
+              py-2
+              px-10
+              rounded
+            "
+            @click="downloadTestPDF"
+          >
+            Download
+          </button> -->
         </ValidationObserver>
       </div>
     </div>
@@ -486,21 +486,59 @@
 
 <script>
 import { ValidationObserver, ValidationProvider } from "vee-validate";
-import UiInput from "~/components/ui/input.vue";
-import UiSelect from "~/components/ui/Select.vue";
+import BaseInput from "~/components/base/BaseInput.vue";
+import BaseSelect from "~/components/base/BaseSelect.vue";
 import formatPhoneNumber from "~/mixins/formatPhoneNumber";
+import { debounce } from "lodash";
 
 export default {
   mixins: [formatPhoneNumber],
   data: () => ({
     venueName: "",
     venueEmail: "",
-    address: "",
-    zip: "",
-    city: "",
-    country: "",
-    state: "",
-    stateArr: ["abc", "pqr", "xyz"],
+    autoSelectAddress: "",
+    autoSelectCity: "",
+    autoSelectState: "",
+    autoSelectCountry: "",
+    autoSelectZipcode: "",
+    stateArr: [
+      "Andhra Pradesh",
+      "Arunachal Pradesh",
+      "Assam",
+      "Bihar",
+      "Chhattisgarh",
+      "Goa",
+      "Gujarat",
+      "Haryana",
+      "Himachal Pradesh",
+      "Jammu and Kashmir",
+      "Jharkhand",
+      "Karnataka",
+      "Kerala",
+      "Madhya Pradesh",
+      "Maharashtra",
+      "Manipur",
+      "Meghalaya",
+      "Mizoram",
+      "Nagaland",
+      "Odisha",
+      "Punjab",
+      "Rajasthan",
+      "Sikkim",
+      "Tamil Nadu",
+      "Telangana",
+      "Tripura",
+      "Uttarakhand",
+      "Uttar Pradesh",
+      "West Bengal",
+      "Andaman and Nicobar Islands",
+      "Chandigarh",
+      "Dadra and Nagar Haveli",
+      "Daman and Diu",
+      "Delhi",
+      "Lakshadweep",
+      "Puducherry",
+    ],
     manualVenue: "",
     venue: "",
     venueArr: ["Hotel", "Restaurent", "Airport", "Other"],
@@ -508,34 +546,113 @@ export default {
     employeePhone: "",
     foundDate: new Date().toISOString().slice(0, 10),
     venueManually: false,
-
-    // item details
     itemDescription: "",
-    itemDescriptionArr: ["abc1", "pqr1", "xyz1"],
+    itemDescriptionArr: [
+      "Laptop",
+      "Mobile",
+      "Electronics",
+      "Headphones",
+      "Headset",
+    ],
     packageType: "",
-    packageTypeArr: ["abc2", "pqr2", "xyz2"],
-    weightAndDimension: "",
+    packageTypeArr: ["Box", "Envelope"],
+    weight: "2.4 kg",
+    dimension: "60 cm X 45 cm",
     itemStatus: "",
     itemStatusArr: ["Claimed", "Unclaimed"],
     showReceiverInputs: false,
     receiverName: "",
     receiverEmail: "",
     receiverPhone: "",
+    responseData: [],
   }),
   components: {
     ValidationObserver,
     ValidationProvider,
-    UiInput,
-    UiSelect,
+    BaseInput,
+    BaseSelect,
+  },
+  computed: {
+    address: {
+      get() {
+        if (this.responseData.length > 0) {
+          return this.responseData[0].address || "";
+        }
+        return;
+      },
+      set(value) {
+        this.autoSelectAddress = value;
+      },
+    },
+    city: {
+      get() {
+        if (this.responseData.length > 0) {
+          return this.responseData[0].city || null;
+        }
+        return;
+      },
+      set(value) {
+        this.autoSelectCity = value;
+      },
+    },
+    state: {
+      get() {
+        if (this.responseData.length > 0) {
+          return this.responseData[0].state || null;
+        }
+        return;
+      },
+      set(value) {
+        this.autoSelectState = value;
+      },
+    },
+    country: {
+      get() {
+        if (this.responseData.length > 0) {
+          return this.responseData[0].country || null;
+        }
+        return;
+      },
+      set(value) {
+        this.autoSelectCountry = value;
+      },
+    },
+    zipcode: {
+      get() {
+        if (this.responseData.length > 0) {
+          return this.responseData[0].zipcode || null;
+        }
+        return;
+      },
+      set(value) {
+        this.autoSelectZipcode = value;
+      },
+    },
   },
   methods: {
+    debouncedGetData: debounce(function (type) {
+      this.getData(type);
+    }, 800),
+    async getData(type) {
+      const params = {
+        // TODO: current lat long
+        lat: "21.171168",
+        long: "72.790264",
+      };
+      if (type === "name") params.place = this.venueName;
+      else if (type === "email") params.place = this.venueEmail;
+      else if (type === "phoneno") params.mobileno = this.venuePhone;
+
+      // let responseData = [];
+      await this.$axios.get("/autofilladdress", { params }).then(({ data }) => {
+        if (!data.error) {
+          this.responseData.push(...data.data);
+        }
+      });
+    },
+
+    // Ref
     async downloadTestPDF() {
-      // let res = await this.$axios.get(
-      //   "https://jsonplaceholder.typicode.com/todos/1"
-      // );
-      // let res1 = await this.$axios.get(
-      //   "https://3y8gyebzqi.execute-api.us-east-1.amazonaws.com/storelostitem"
-      // );
       await this.$axios({
         url: "/storelostitem", // download file link goes here
         method: "POST",
@@ -552,45 +669,56 @@ export default {
         fileLink.click();
       });
     },
+
     async onSubmit() {
       const isValid = await this.$refs.observer.validate();
       if (!isValid) {
         console.log("not valid");
       } else {
         console.log("valid");
-        console.log(this.venue);
-        if (this.venue == "Other") {
-          console.log(this.manualVenue);
-        }
-        console.log(this.foundDate);
-        console.log(this.venueName);
-        console.log(this.venueEmail);
-        console.log(this.venuePhone);
-        console.log(this.employeePhone);
-        console.log(this.address);
-        console.log(this.city);
-        console.log(this.country);
-        console.log(this.state);
-        console.log(this.zip);
-      }
-    },
 
-    async onSubmitItemDetails() {
-      const isValid = await this.$refs.observerItem.validate();
-      if (!isValid) {
-        console.log("not valid");
-      } else {
-        console.log("valid");
-        console.log(this.$refs.itemImageRef.files[0]);
-        console.log(this.itemDescription);
-        console.log(this.packageType);
-        console.log(this.weightAndDimension);
-        console.log(this.itemStatus);
-        if (this.itemStatus == "Claimed") {
-          console.log(this.receiverName);
-          console.log(this.receiverEmail);
-          console.log(this.receiverPhone);
-        }
+        // Sample Request payload
+        const data = {
+          venu_type: "Hotel",
+          date: "2022-10-11",
+          venue_name: "GNINE",
+          venue_email: "gninehospitality@gmail.com",
+          venue_phone_no: "9109512266600",
+          employee_mobile_no: "919624863068",
+          address:
+            "328, Sector A, Mahalaxmi Nagar, Indore, Madhya Pradesh 452010, India",
+          city: "Indore",
+          state: "Madhya Pradesh",
+          country: "India",
+          zipcode: "452010",
+          image:
+            "https://landf.s3.amazonaws.com/images/2022-09-30T12%3A58%3A59.494Z.jpeg?AWSAccessKeyId=AKIAT7JZ55LI27TARXOG&Expires=1664543639&Signature=AasFA02GhZtrQPQqNou50CkdbXQ%3D",
+          item_description: "Laptop",
+          package_type: "Box",
+          weight: "2.4 kg",
+          dimensions: "60 cm X 45 cm",
+          item_status: 0,
+          receiver_name: "prem",
+          receiver_email: "prem.panwala@bacancy.com",
+          receiver_mobile_no: "916355537257",
+        };
+
+        await this.$axios({
+          url: "/storelostitem",
+          method: "POST",
+          headers: { "Content-Type": "application/x-www-form-urlencoded" },
+          responseType: "blob",
+          data,
+        }).then((response) => {
+          var fileURL = window.URL.createObjectURL(new Blob([response.data]));
+          var fileLink = document.createElement("a");
+
+          fileLink.href = fileURL;
+          fileLink.setAttribute("download", "file.pdf");
+          document.body.appendChild(fileLink);
+
+          fileLink.click();
+        });
       }
     },
   },

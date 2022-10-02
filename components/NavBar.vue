@@ -8,8 +8,7 @@
           </div>
         </div>
         <div class="link-container">
-          <NuxtLink to="/sellerDetails" class="btn">Sender details</NuxtLink>
-          <NuxtLink to="/login" class="btn">Found Item details</NuxtLink>
+          <NuxtLink to="/sender-details" class="btn">Sender details</NuxtLink>
         </div>
         <div class="drawer-container">
           <div class="icon-container" @click="toggleMenu">
@@ -20,8 +19,16 @@
         </div>
       </div>
       <div v-show="menuVisible" class="mobile-menu">
-        <div><NuxtLink to="/sellerDetails" class="opacity-100">Sender details</NuxtLink></div>
-        <div><NuxtLink to="/login"  class="opacity-100">Found item details</NuxtLink></div>
+        <div>
+          <NuxtLink to="/sender-details" class="opacity-100"
+            >Sender details</NuxtLink
+          >
+        </div>
+        <div>
+          <NuxtLink to="/login" class="opacity-100"
+            >Found item details</NuxtLink
+          >
+        </div>
       </div>
     </nav>
   </div>
@@ -29,27 +36,27 @@
 
 <script>
 export default {
-  data(){
-    return{
+  data() {
+    return {
       menuVisible: false,
-    }
+    };
   },
   methods: {
-    toggleMenu(){
+    toggleMenu() {
       this.menuVisible = !this.menuVisible;
     },
-  }
+  },
 };
 </script>
 
 <style lang="scss" scoped>
 .appbar-container {
   z-index: 100;
-  @apply flex justify-between items-center py-2 px-10 fixed w-full bg-white shadow-lg;
-  .logo-main-container{
+  @apply flex  items-center py-2 px-10 fixed w-full bg-white shadow-lg;
+  .logo-main-container {
     @apply flex items-center;
   }
-  .logo-container{
+  .logo-container {
     @apply p-4;
     .logo {
       @apply px-4 py-2 font-bold;
@@ -63,7 +70,7 @@ export default {
   }
 }
 
-.drawer-container{
+.drawer-container {
   @apply hidden;
 }
 
@@ -72,27 +79,28 @@ export default {
   cursor: pointer;
 }
 
-.bar1, .bar2, .bar3 {
+.bar1,
+.bar2,
+.bar3 {
   width: 35px;
   height: 5px;
   background-color: #333;
   margin: 6px 0;
 }
-.mobile-menu{
+.mobile-menu {
   @apply hidden;
 }
 
 @media screen and (max-width: 726px) {
-  .link-container{
+  .link-container {
     @apply hidden;
   }
-  .drawer-container{
+  .drawer-container {
     @apply block;
   }
-  .mobile-menu{
+  .mobile-menu {
     z-index: 99;
     @apply block pt-24 pb-3 fixed w-full bg-white shadow-lg px-16;
-
   }
 }
 </style>
