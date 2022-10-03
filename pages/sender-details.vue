@@ -262,7 +262,8 @@
               FOUND ITEM DETAILS
             </div>
             <ValidationProvider
-              v-slot="{ validate, errors }"
+              v-slot="{ errors }"
+              ref="imageValidationProvider"
               rules="required|image"
               class="block"
             >
@@ -272,7 +273,7 @@
                 >Found item image</label
               >
               <input
-                @change="validate"
+                @change="uploadImg($event)"
                 class="
                   block
                   w-full
@@ -293,6 +294,66 @@
                 {{ errors[0] }}
               </p>
             </ValidationProvider>
+            <div class="block" v-show="showEditor">
+              <div class="editor-tools">
+                <div class="tool-undo">
+                  <rotate-ccw-icon
+                    :size="size_icon"
+                    @click="undo()"
+                  ></rotate-ccw-icon>
+                </div>
+                <div class="tool-redo">
+                  <rotate-cw-icon
+                    :size="size_icon"
+                    @click="redo()"
+                  ></rotate-cw-icon>
+                </div>
+                <div class="tool-trash">
+                  <trash-2-icon
+                    :size="size_icon"
+                    @click="deleteEditable()"
+                  ></trash-2-icon>
+                </div>
+                <div class="tool-freeDrawing">
+                  <edit-2-icon
+                    :size="size_icon"
+                    @click="freeDrawing()"
+                  ></edit-2-icon>
+                </div>
+                <div class="tool-addCircle">
+                  <circle-icon
+                    :size="size_icon"
+                    @click="addCicle()"
+                  ></circle-icon>
+                </div>
+                <div class="tool-addSquare">
+                  <square-icon
+                    :size="size_icon"
+                    @click="addSquare()"
+                  ></square-icon>
+                </div>
+                <div class="tool-crop">
+                  <maximize-icon
+                    v-if="stateCrop"
+                    :size="size_icon"
+                    @click="crop()"
+                  ></maximize-icon>
+                  <check-icon
+                    v-else
+                    :size="size_icon"
+                    @click="applyCrop()"
+                  ></check-icon>
+                </div>
+                <div class="save-upload">
+                  <save-icon :size="size_icon" @click="saveImg()"></save-icon>
+                </div>
+              </div>
+              <Editor
+                :canvasWidth="canvasWidth"
+                :canvasHeight="canvasHeight"
+                ref="editor"
+              />
+            </div>
             <ValidationProvider
               v-slot="{ errors }"
               rules="required"
@@ -490,6 +551,18 @@ import BaseInput from "~/components/base/BaseInput.vue";
 import BaseSelect from "~/components/base/BaseSelect.vue";
 import formatPhoneNumber from "~/mixins/formatPhoneNumber";
 import { debounce } from "lodash";
+import Editor from "~/components/vueImageEditor/Editor.vue";
+import {
+  CircleIcon,
+  RotateCcwIcon,
+  RotateCwIcon,
+  Edit2Icon,
+  Trash2Icon,
+  SquareIcon,
+  MaximizeIcon,
+  SaveIcon,
+  CheckIcon
+} from "vue-feather-icons";
 
 export default {
   mixins: [formatPhoneNumber],
@@ -565,12 +638,28 @@ export default {
     receiverEmail: "",
     receiverPhone: "",
     responseData: [],
+    itemImage: "",
+    canvasWidth: "600",
+    canvasHeight: "600",
+    showEditor: false,
+    stateCrop: true,
+    size_icon: "2x",
   }),
   components: {
     ValidationObserver,
     ValidationProvider,
     BaseInput,
     BaseSelect,
+    Editor,
+    CircleIcon,
+    RotateCcwIcon,
+    RotateCwIcon,
+    Edit2Icon,
+    Trash2Icon,
+    SquareIcon,
+    MaximizeIcon,
+    CheckIcon,
+    SaveIcon
   },
   computed: {
     address: {
@@ -721,6 +810,64 @@ export default {
         });
       }
     },
+    undo() {
+      this.$refs.editor.undo();
+    },
+    redo() {
+      this.$refs.editor.redo();
+    },
+    deleteEditable() {
+      this.$refs.editor.clear();
+      this.showEditor = false;
+      this.stateCrop = true;
+    },
+    freeDrawing() {
+      let customizeFreeDrawing = { stroke: "black", strokeWidth: "5" };
+      this.$refs.editor.set("freeDrawing", customizeFreeDrawing);
+    },
+    addCicle() {
+      let circleModeParams = { fill: "black", stroke: "black" };
+      this.$refs.editor.set("circle", circleModeParams);
+    },
+    addSquare() {
+      let customizeRectangle = {
+        fill: "black",
+        stroke: "black",
+        strokeWidth: 1,
+      };
+      this.$refs.editor.set("rect", customizeRectangle);
+    },
+    crop() {
+      let cropModeOptions = {
+        width: "100",
+        height: "100",
+        overlayOpacity: "0.9",
+      };
+      this.$refs.editor.set("crop", cropModeOptions);
+      this.stateCrop = false;
+    },
+    applyCrop() {
+      this.$refs.editor.applyCropping();
+      this.stateCrop = true;
+    },
+    async uploadImg(event) {
+      const { valid } = await this.$refs.imageValidationProvider.validate(event);
+      if (valid) {
+        console.log(event.target.files[0]);
+        if (event.target.files[0]) {
+          this.showEditor = true;
+          this.$refs.editor.uploadImage(event);
+        }
+        else{
+          this.showEditor = false;
+        }
+      }
+    },
+    saveImg() {
+      const file = this.$refs.editor.saveImage();
+      this.itemImage = file;
+      console.log(this.itemImage);
+    },
   },
   watch: {
     venue(newValue, oldValue) {
@@ -748,5 +895,55 @@ export default {
 <style scoped>
 .wrapper {
   @apply min-h-screen flex justify-center pt-24 mx-auto pb-24;
+}
+
+.editor-tools {
+  @apply flex w-full justify-around;
+  max-width: 600px;
+  margin-bottom: 20px;
+}
+
+.custom-editor{
+  @apply flex justify-center;
+  background-color: #ffffff;
+}
+
+.editor-tools div {
+  cursor: pointer;
+}
+
+canvas{
+  width: 0 !important;
+}
+.upper-canvas {
+  border: 1px solid;
+  margin: 0px 0px;
+  min-width: 600px !important;
+  height: 600px;
+}
+.lower-canvas{
+  min-width: 600px !important;
+  height: 600px;
+}
+
+@media only screen and (max-width: 700px) {
+  .upper-canvas, .lower-canvas {
+    min-width: 400px !important;
+    height: 400px;
+  }
+}
+
+@media only screen and (max-width: 510px) {
+  .upper-canvas, .lower-canvas {
+    min-width: 300px !important;
+    height: 300px;
+  }
+}
+
+@media only screen and (max-width: 410px) {
+  .upper-canvas, .lower-canvas {
+    min-width: 200px;
+    height: 200px;
+  }
 }
 </style>
