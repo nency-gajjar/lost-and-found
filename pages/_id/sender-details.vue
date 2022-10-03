@@ -952,7 +952,7 @@ export default {
 };
 </script>
 
-<style scoped>
+<style>
 .wrapper {
   @apply min-h-screen flex justify-center pt-24 mx-auto pb-24;
 }
@@ -991,24 +991,27 @@ canvas{
   height: 600px;
 }
 
-@media only screen and (max-width: 700px) {
+@media only screen and (max-width: 650px) {
   .canvas-container, .upper-canvas, .lower-canvas {
-    width: 400px !important;
-    height: 400px;
+    min-width: 0 !important;
+    width: 500px !important;
+    height: 500px !important;
   }
 }
 
 @media only screen and (max-width: 510px) {
   .canvas-container, .upper-canvas, .lower-canvas {
-    width: 300px !important;
-    height: 300px;
+    min-width: 0 !important;
+    width: 400px !important;
+    height: 400px !important;
   }
 }
 
 @media only screen and (max-width: 410px) {
   .canvas-container, .upper-canvas, .lower-canvas {
-    width: 200px;
-    height: 200px;
+    min-width: 0 !important;
+    width: 300px !important;
+    height: 300px !important;
   }
 }
 </style>
