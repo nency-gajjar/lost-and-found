@@ -8,7 +8,7 @@
           </div>
         </div>
         <div class="link-container">
-          <NuxtLink to="/sender-details" class="btn">Sender details</NuxtLink>
+          <NuxtLink to="/new/sender-details" class="btn">Sender details</NuxtLink>
         </div>
         <div class="drawer-container">
           <div class="icon-container" @click="toggleMenu">
@@ -20,13 +20,8 @@
       </div>
       <div v-show="menuVisible" class="mobile-menu">
         <div>
-          <NuxtLink to="/sender-details" class="opacity-100"
+          <NuxtLink to="/new/sender-details" class="opacity-100"
             >Sender details</NuxtLink
-          >
-        </div>
-        <div>
-          <NuxtLink to="/login" class="opacity-100"
-            >Found item details</NuxtLink
           >
         </div>
       </div>

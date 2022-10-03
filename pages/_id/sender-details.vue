@@ -1,11 +1,11 @@
 <template>
   <div class="wrapper">
-    <div>
+    <div v-show="!showFilledDetails">
       <div class="card">
         <div
           class="space-y-4 text-[#757D8A] font-bold tracking-wide text-center"
         >
-          SENDER'S DETAILS
+          {{ senderFormTitle }}
         </div>
         <ValidationObserver v-slot="{ validate }" ref="observer">
           <form
@@ -259,7 +259,7 @@
                 text-center
               "
             >
-              FOUND ITEM DETAILS
+              {{ foundItemFormTitle }}
             </div>
             <ValidationProvider
               v-slot="{ errors }"
@@ -542,6 +542,31 @@
         </ValidationObserver>
       </div>
     </div>
+    <div class="card previewCard p-7" v-show="showFilledDetails">
+      <div>
+        <h2 class="mt-5 mb-5">Your details submitted successfully!</h2>
+        <h3 class="mt-3.5 mb-3.5">Preview: </h3>
+        <div>
+          <p>Item Description: {{ itemDescription }}</p>
+          <button
+            type="button"
+            @click="editDetails"
+            class="
+              bg-blue-500
+              hover:bg-blue-700
+              text-white
+              font-bold
+              py-2
+              mt-3.5
+              px-10
+              rounded
+            "
+          >
+            Edit Details
+          </button>
+        </div>
+      </div>
+    </div>
   </div>
 </template>
 
@@ -567,6 +592,8 @@ import {
 export default {
   mixins: [formatPhoneNumber],
   data: () => ({
+    senderFormTitle: "",
+    foundItemFormTitle: "",
     venueName: "",
     venueEmail: "",
     autoSelectAddress: "",
@@ -644,6 +671,7 @@ export default {
     showEditor: false,
     stateCrop: true,
     size_icon: "2x",
+    showFilledDetails: false,
   }),
   components: {
     ValidationObserver,
@@ -765,6 +793,7 @@ export default {
         console.log("not valid");
       } else {
         console.log("valid");
+        this.showFilledDetails = true;
 
         // Sample Request payload
         const data = {
@@ -810,6 +839,10 @@ export default {
         });
       }
     },
+    editDetails(){
+        let userId = "12345678";
+        this.$router.push({ path: "/edit/sender-details", query: { userId }});
+    },
     undo() {
       this.$refs.editor.undo();
     },
@@ -841,7 +874,7 @@ export default {
       let cropModeOptions = {
         width: "100",
         height: "100",
-        overlayOpacity: "0.9",
+        overlayOpacity: "0",
       };
       this.$refs.editor.set("crop", cropModeOptions);
       this.stateCrop = false;
@@ -889,6 +922,33 @@ export default {
       }
     },
   },
+  mounted(){
+    if($nuxt.$route.path === "/new/sender-details"){
+      this.senderFormTitle = "SENDER'S DETAILS";
+      this.foundItemFormTitle = "FOUND ITEM'S DETAILS";
+    }
+    else if($nuxt.$route.path === "/edit/sender-details"){
+      this.senderFormTitle = "EDIT SENDER'S DETAILS";
+      this.foundItemFormTitle = "EDIT FOUND ITEM'S DETAILS";
+      this.venueName = "abc";
+      this.venueEmail = "abc@gmail.com";
+      this.manualVenue = "abc1";
+      this.venue = "Other";
+      this.venuePhone = "1234567890";
+      this.employeePhone = "1234567890";
+      this.foundDate = new Date().toISOString().slice(0, 10);
+      this.venueManually = true;
+      this.itemDescription = "Laptop";
+      this.packageType = "Box";
+      this.weight = "2.4 kg";
+      this.dimension = "60 cm X 45 cm";
+      this.itemStatus = "Claimed";
+      this.showReceiverInputs = true;
+      this.receiverName = "abc3";
+      this.receiverEmail = "abc3@gmail.com";
+      this.receiverPhone = "1234567890";
+    }
+  },
 };
 </script>
 
@@ -905,6 +965,7 @@ export default {
 
 .custom-editor{
   @apply flex justify-center;
+  border: 1px solid #000000;
   background-color: #ffffff;
 }
 
@@ -912,11 +973,15 @@ export default {
   cursor: pointer;
 }
 
+.previewCard h1, h2, h3, h4, h5, h6 {
+  font-size: revert;
+  font-weight: revert;
+}
+
 canvas{
   width: 0 !important;
 }
 .upper-canvas {
-  border: 1px solid;
   margin: 0px 0px;
   min-width: 600px !important;
   height: 600px;
@@ -927,22 +992,22 @@ canvas{
 }
 
 @media only screen and (max-width: 700px) {
-  .upper-canvas, .lower-canvas {
-    min-width: 400px !important;
+  .canvas-container, .upper-canvas, .lower-canvas {
+    width: 400px !important;
     height: 400px;
   }
 }
 
 @media only screen and (max-width: 510px) {
-  .upper-canvas, .lower-canvas {
-    min-width: 300px !important;
+  .canvas-container, .upper-canvas, .lower-canvas {
+    width: 300px !important;
     height: 300px;
   }
 }
 
 @media only screen and (max-width: 410px) {
-  .upper-canvas, .lower-canvas {
-    min-width: 200px;
+  .canvas-container, .upper-canvas, .lower-canvas {
+    width: 200px;
     height: 200px;
   }
 }
