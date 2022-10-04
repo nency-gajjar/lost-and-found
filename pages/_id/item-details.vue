@@ -1,5 +1,5 @@
 <template>
-  <div class="wrapper">
+  <div class="wrapper-form">
     <div v-show="!showFilledDetails">
       <div class="card">
         <div
@@ -1093,7 +1093,7 @@ export default {
 </script>
 
 <style>
-.wrapper {
+.wrapper-form {
   @apply min-h-screen flex justify-center pt-24 mx-auto pb-24;
 }
 

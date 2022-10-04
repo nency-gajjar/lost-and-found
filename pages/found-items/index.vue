@@ -3,8 +3,9 @@
     <div class="h-fit w-full min-h-full flex justify-end mt-28">
       <button
         class="
+          addButton
           float-right
-          mr-60
+          mr-56
           bg-indigo-400
           hover:bg-indigo-600
           text-white text-sm
@@ -23,7 +24,6 @@
         cursor-pointer
         mt-8
         p-5
-        h-36
         flex flex-col
         items-center
         bg-white
@@ -38,8 +38,6 @@
       <div class="w-24 h-24">
         <img
           class="
-            object-cover
-            h-48
             w-full
             rounded-t-lg
             md:h-auto md:w-48 md:rounded-none md:rounded-l-lg
@@ -66,7 +64,7 @@
           consectetur, adipisci velit.
         </p>
       </div>
-      <div class="ml-28">
+      <div>
         <a
           class="text-indigo-600 hover:text-indigo-900 mr-3 py-2 inline-flex"
           @click="editDetails"
@@ -149,7 +147,7 @@ export default {
       }
     },
     addNewItem() {
-      this.$router.push({ path: "/item-details" });
+      this.$router.push({ path: "/new/item-details" });
     },
   },
   computed: {
@@ -163,5 +161,29 @@ export default {
 <style scoped>
 .wrapper {
   @apply min-h-screen flex flex-col items-center text-center mx-auto;
+}
+
+@media only screen and (max-width: 950px) {
+  .addButton{
+    @apply mr-36;
+  }
+}
+
+@media only screen and (max-width: 750px) {
+  .addButton{
+    @apply mr-28;
+  }
+}
+
+@media only screen and (max-width: 550px) {
+  .addButton{
+    @apply mr-14;
+  }
+}
+
+@media only screen and (max-width: 450px) {
+  .addButton{
+    @apply mr-11;
+  }
 }
 </style>
