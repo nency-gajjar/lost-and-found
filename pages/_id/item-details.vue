@@ -855,21 +855,37 @@ export default {
     debouncedGetData: debounce(function (type) {
       this.getData(type);
     }, 800),
+    
     async getData(type) {
-      const params = {
-        // TODO: current lat long
-        lat: "21.171168",
-        long: "72.790264",
-      };
-      if (type === "name") params.place = this.venueName;
-      else if (type === "email") params.place = this.venueEmail;
-      else if (type === "phoneno") params.mobileno = this.venuePhone;
+      let lat, long;
 
-      // let responseData = [];
-      await this.$axios.get("/autofilladdress", { params }).then(({ data }) => {
-        if (!data.error) {
-          this.responseData.push(...data.data);
+      let locationPromise = new Promise(function(resolve, reject) {
+        navigator.geolocation.getCurrentPosition((position) => {
+          lat = position.coords.latitude;
+          long = position.coords.longitude;
+          // console.log(lat + ", "+long);
+          resolve({lat,long});
+        });
+      });
+
+      locationPromise.then( async (value) => {
+        const params = {
+          lat: value.lat, 
+          long: value.long
         }
+
+        console.log(params);
+
+        if (type === "name") params.place = this.venueName;
+        else if (type === "email") params.place = this.venueEmail;
+        else if (type === "phoneno") params.mobileno = this.venuePhone;
+
+        // let responseData = [];
+        await this.$axios.get("/autofilladdress", { params }).then(({ data }) => {
+          if (!data.error) {
+            this.responseData.push(...data.data);
+          }
+        });
       });
     },
 
