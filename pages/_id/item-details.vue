@@ -797,7 +797,10 @@ export default {
   computed: {
     address: {
       get() {
-        if (this.responseData.length > 0) {
+        if(this.autoSelectAddress){
+          return this.autoSelectAddress;
+        }
+        else if (this.responseData.length > 0) {
           return this.responseData[0].address || "";
         }
         return;
@@ -808,7 +811,10 @@ export default {
     },
     city: {
       get() {
-        if (this.responseData.length > 0) {
+        if(this.autoSelectCity){
+          return this.autoSelectCity;
+        }
+        else if (this.responseData.length > 0) {
           return this.responseData[0].city || null;
         }
         return;
@@ -819,7 +825,10 @@ export default {
     },
     state: {
       get() {
-        if (this.responseData.length > 0) {
+        if(this.autoSelectState){
+          return this.autoSelectState;
+        }
+        else if (this.responseData.length > 0) {
           return this.responseData[0].state || null;
         }
         return;
@@ -830,7 +839,10 @@ export default {
     },
     country: {
       get() {
-        if (this.responseData.length > 0) {
+        if(this.autoSelectCountry){
+          return this.autoSelectCountry;
+        }
+        else if (this.responseData.length > 0) {
           return this.responseData[0].country || null;
         }
         return;
@@ -841,7 +853,10 @@ export default {
     },
     zipcode: {
       get() {
-        if (this.responseData.length > 0) {
+        if(this.autoSelectZipcode){
+          return this.autoSelectZipcode;
+        }
+        else if (this.responseData.length > 0) {
           return this.responseData[0].zipcode || null;
         }
         return;
@@ -855,7 +870,7 @@ export default {
     debouncedGetData: debounce(function (type) {
       this.getData(type);
     }, 800),
-    
+
     async getData(type) {
       let lat, long;
 
