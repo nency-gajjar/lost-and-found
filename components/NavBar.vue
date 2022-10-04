@@ -8,7 +8,7 @@
           </div>
         </div>
         <div class="link-container">
-          <NuxtLink to="/new/sender-details" class="btn">Sender details</NuxtLink>
+          <NuxtLink to="/found-items" class="btn">Found Items</NuxtLink>
         </div>
         <div class="drawer-container">
           <div class="icon-container" @click="toggleMenu">
@@ -20,9 +20,7 @@
       </div>
       <div v-show="menuVisible" class="mobile-menu">
         <div>
-          <NuxtLink to="/new/sender-details" class="opacity-100"
-            >Sender details</NuxtLink
-          >
+          <NuxtLink to="/found-items" class="opacity-100">Found Items</NuxtLink>
         </div>
       </div>
     </nav>
@@ -58,9 +56,9 @@ export default {
     }
   }
   .btn {
-    @apply px-4 py-2 text-gray-500 rounded-lg hover:bg-emerald-100 hover:text-emerald-700;
+    @apply px-4 py-2 text-gray-500 rounded-lg hover:bg-indigo-100 hover:text-indigo-700;
     &.nuxt-link-exact-active {
-      @apply bg-emerald-100 text-emerald-700;
+      @apply bg-indigo-100 text-indigo-700;
     }
   }
 }

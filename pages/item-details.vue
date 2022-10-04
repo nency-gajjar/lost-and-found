@@ -512,8 +512,8 @@
             <button
               type="submit"
               class="
-                bg-blue-500
-                hover:bg-blue-700
+                bg-indigo-500
+                hover:bg-indigo-700
                 text-white
                 font-bold
                 py-2
@@ -524,36 +524,140 @@
               Submit
             </button>
           </form>
-          <!-- <button
-            type="submit"
-            class="
-              bg-blue-500
-              hover:bg-blue-700
-              text-white
-              font-bold
-              py-2
-              px-10
-              rounded
-            "
-            @click="downloadTestPDF"
+
+          <!-- Modal -->
+          <div
+            v-show="showConfirmModal"
+            class="fixed z-10 overflow-y-auto top-0 w-full left-0"
+            id="modal"
           >
-            Download
-          </button> -->
+            <div
+              class="
+                flex
+                items-center
+                justify-center
+                min-height-100vh
+                pt-4
+                px-4
+                pb-20
+                text-center
+                sm:block sm:p-0
+              "
+            >
+              <div class="fixed inset-0 transition-opacity">
+                <div class="absolute inset-0 bg-gray-900 opacity-75" />
+              </div>
+              <span class="hidden sm:inline-block sm:align-middle sm:h-screen"
+                >&#8203;</span
+              >
+              <div
+                class="
+                  inline-block
+                  align-center
+                  bg-white
+                  rounded-lg
+                  text-left
+                  overflow-hidden
+                  shadow-xl
+                  transform
+                  transition-all
+                  sm:my-8 sm:align-middle sm:max-w-lg sm:w-full
+                "
+                role="dialog"
+                aria-modal="true"
+                aria-labelledby="modal-headline"
+              >
+                <div
+                  class="
+                    w-full
+                    max-w-lg
+                    p-3
+                    relative
+                    mx-auto
+                    my-auto
+                    rounded-xl
+                    shadow-lg
+                    bg-white
+                  "
+                >
+                  <div>
+                    <div
+                      class="text-center p-3 flex-auto justify-center leading-6"
+                    >
+                      <img
+                        src="@/assets/icons/alert-circle.svg"
+                        class="m-auto"
+                      />
+                      <h2 class="text-2xl font-bold py-4">Are you sure?</h2>
+                      <p class="text-md text-gray-500 px-8">
+                        Do you want to continue and proceed?
+                      </p>
+                    </div>
+                    <div class="p-3 mt-2 text-center space-x-4 md:block">
+                      <button
+                        class="
+                          mb-2
+                          md:mb-0
+                          bg-white
+                          px-5
+                          py-2
+                          text-sm
+                          shadow-sm
+                          font-medium
+                          tracking-wider
+                          border
+                          text-gray-600
+                          rounded-md
+                          hover:shadow-lg hover:bg-gray-100
+                        "
+                        @click="showConfirmModal = false"
+                      >
+                        Close
+                      </button>
+                      <button
+                        class="
+                          mb-2
+                          md:mb-0
+                          bg-indigo-500
+                          border border-indigo-500
+                          px-5
+                          py-2
+                          text-sm
+                          shadow-sm
+                          font-medium
+                          tracking-wider
+                          text-white
+                          rounded-md
+                          hover:shadow-lg hover:bg-indigo-600
+                        "
+                        @click="generatePdf"
+                      >
+                        Generate Label Tag
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
         </ValidationObserver>
       </div>
     </div>
-    <div class="card previewCard p-7" v-show="showFilledDetails">
+
+    <!-- <div class="card previewCard p-7" v-show="showFilledDetails">
       <div>
-        <h2 class="mt-5 mb-5">Your details submitted successfully!</h2>
-        <h3 class="mt-3.5 mb-3.5">Preview: </h3>
-        <div>
+        <h2 class="mt-5 mb-5">Your details submitted successfully!</h2> -->
+    <!-- <h3 class="mt-3.5 mb-3.5"> -->
+    <!-- <NuxtLink to="/found-items">Found Items</NuxtLink> -->
+    <!-- </h3> -->
+    <!-- <div>
           <p>Item Description: {{ itemDescription }}</p>
           <button
             type="button"
             @click="editDetails"
             class="
-              bg-blue-500
-              hover:bg-blue-700
+              bg-indigo-500
+              hover:bg-indigo-700
               text-white
               font-bold
               py-2
@@ -564,9 +668,9 @@
           >
             Edit Details
           </button>
-        </div>
-      </div>
-    </div>
+        </div> -->
+    <!-- </div>
+    </div> -->
   </div>
 </template>
 
@@ -586,16 +690,17 @@ import {
   SquareIcon,
   MaximizeIcon,
   SaveIcon,
-  CheckIcon
+  CheckIcon,
 } from "vue-feather-icons";
 
 export default {
   mixins: [formatPhoneNumber],
   data: () => ({
+    showConfirmModal: false,
     senderFormTitle: "",
     foundItemFormTitle: "",
     venueName: "",
-    venueEmail: "",
+    venueEmail: "test@gmail.com",
     autoSelectAddress: "",
     autoSelectCity: "",
     autoSelectState: "",
@@ -640,13 +745,13 @@ export default {
       "Puducherry",
     ],
     manualVenue: "",
-    venue: "",
+    venue: "Hotel",
     venueArr: ["Hotel", "Restaurent", "Airport", "Other"],
-    venuePhone: "",
-    employeePhone: "",
+    venuePhone: "(940) 816-4313",
+    employeePhone: "(940) 816-4313",
     foundDate: new Date().toISOString().slice(0, 10),
     venueManually: false,
-    itemDescription: "",
+    itemDescription: "Laptop",
     itemDescriptionArr: [
       "Laptop",
       "Mobile",
@@ -654,11 +759,11 @@ export default {
       "Headphones",
       "Headset",
     ],
-    packageType: "",
+    packageType: "Box",
     packageTypeArr: ["Box", "Envelope"],
     weight: "2.4 kg",
     dimension: "60 cm X 45 cm",
-    itemStatus: "",
+    itemStatus: "Unclaimed",
     itemStatusArr: ["Claimed", "Unclaimed"],
     showReceiverInputs: false,
     receiverName: "",
@@ -687,7 +792,7 @@ export default {
     SquareIcon,
     MaximizeIcon,
     CheckIcon,
-    SaveIcon
+    SaveIcon,
   },
   computed: {
     address: {
@@ -769,65 +874,65 @@ export default {
     },
 
     // Ref
-    async downloadTestPDF() {
-      await this.$axios({
-        url: "/storelostitem", // download file link goes here
-        method: "POST",
-        headers: { "Content-Type": "application/x-www-form-urlencoded" },
-        responseType: "blob",
-      }).then((response) => {
-        var fileURL = window.URL.createObjectURL(new Blob([response.data]));
-        var fileLink = document.createElement("a");
+    // generatePdf () {
+    //  await this.$axios({
+    //     url: "/storelostitem", // download file link goes here
+    //     method: "POST",
+    //     headers: { "Content-Type": "application/x-www-form-urlencoded" },
+    //     responseType: "blob",
+    //   }).then((response) => {
+    //     var fileURL = window.URL.createObjectURL(new Blob([response.data]));
+    //     var fileLink = document.createElement("a");
 
-        fileLink.href = fileURL;
-        fileLink.setAttribute("download", "file.pdf");
-        document.body.appendChild(fileLink);
+    //     fileLink.href = fileURL;
+    //     fileLink.setAttribute("download", "file.pdf");
+    //     document.body.appendChild(fileLink);
 
-        fileLink.click();
-      });
-    },
+    //     fileLink.click();
+    //   });
+    // }
+    async generatePdf() {
+      const params = {
+        venu_type: "Hotel",
+        date: "2022-10-11",
+        venue_name: "GNINE",
+        venue_email: "gninehospitality@gmail.com",
+        venue_phone_no: "9109512266600",
+        employee_mobile_no: "919624863068",
+        address:
+          "328, Sector A, Mahalaxmi Nagar, Indore, Madhya Pradesh 452010, India",
+        city: "Indore",
+        state: "Madhya Pradesh",
+        country: "India",
+        zipcode: "452010",
+        image:
+          "https://landf.s3.amazonaws.com/images/2022-09-30T12%3A58%3A59.494Z.jpeg?AWSAccessKeyId=AKIAT7JZ55LI27TARXOG&Expires=1664543639&Signature=AasFA02GhZtrQPQqNou50CkdbXQ%3D",
+        item_description: "Laptop",
+        package_type: "Box",
+        weight: "2.4 kg",
+        dimensions: "60 cm X 45 cm",
+        item_status: 0,
+        receiver_name: "prem",
+        receiver_email: "prem.panwala@bacancy.com",
+        receiver_mobile_no: "916355537257",
+      };
 
-    async onSubmit() {
-      const isValid = await this.$refs.observer.validate();
-      if (!isValid) {
-        console.log("not valid");
-      } else {
-        console.log("valid");
-        this.showFilledDetails = true;
-
-        // Sample Request payload
-        const data = {
-          venu_type: "Hotel",
-          date: "2022-10-11",
-          venue_name: "GNINE",
-          venue_email: "gninehospitality@gmail.com",
-          venue_phone_no: "9109512266600",
-          employee_mobile_no: "919624863068",
-          address:
-            "328, Sector A, Mahalaxmi Nagar, Indore, Madhya Pradesh 452010, India",
-          city: "Indore",
-          state: "Madhya Pradesh",
-          country: "India",
-          zipcode: "452010",
-          image:
-            "https://landf.s3.amazonaws.com/images/2022-09-30T12%3A58%3A59.494Z.jpeg?AWSAccessKeyId=AKIAT7JZ55LI27TARXOG&Expires=1664543639&Signature=AasFA02GhZtrQPQqNou50CkdbXQ%3D",
-          item_description: "Laptop",
-          package_type: "Box",
-          weight: "2.4 kg",
-          dimensions: "60 cm X 45 cm",
-          item_status: 0,
-          receiver_name: "prem",
-          receiver_email: "prem.panwala@bacancy.com",
-          receiver_mobile_no: "916355537257",
-        };
-
-        await this.$axios({
-          url: "/storelostitem",
-          method: "POST",
-          headers: { "Content-Type": "application/x-www-form-urlencoded" },
-          responseType: "blob",
-          data,
-        }).then((response) => {
+      await this.$axios
+        .post(
+          "/storelostitem",
+          params
+          // , {
+          //   headers: {
+          //     // "Access-Control-Allow-Origin": "*",
+          //     // "content-type": "application/x-www-form-urlencoded",
+          //     // "Access-Control-Allow-Origin": "*",
+          //     Accept: "application/json",
+          //     "Content-Type": "application/json",
+          //     // "Access-Control-Allow-Methods": "GET,PUT,POST,DELETE,PATCH,OPTIONS",
+          //   },
+          // }
+        )
+        .then((response) => {
           var fileURL = window.URL.createObjectURL(new Blob([response.data]));
           var fileLink = document.createElement("a");
 
@@ -837,11 +942,23 @@ export default {
 
           fileLink.click();
         });
+
+      this.$router.push({ path: "/found-items" });
+    },
+    async onSubmit() {
+      const isValid = await this.$refs.observer.validate();
+      if (!isValid) {
+        console.log("not valid");
+      } else {
+        console.log("valid");
+        this.showConfirmModal = true;
+        // this.showFilledDetails = true;
+        // Sample Request payload
       }
     },
-    editDetails(){
-        let userId = "12345678";
-        this.$router.push({ path: "/edit/sender-details", query: { userId }});
+    editDetails() {
+      let userId = "12345678";
+      this.$router.push({ path: "/edit/sender-details", query: { userId } });
     },
     undo() {
       this.$refs.editor.undo();
@@ -884,14 +1001,15 @@ export default {
       this.stateCrop = true;
     },
     async uploadImg(event) {
-      const { valid } = await this.$refs.imageValidationProvider.validate(event);
+      const { valid } = await this.$refs.imageValidationProvider.validate(
+        event
+      );
       if (valid) {
         console.log(event.target.files[0]);
         if (event.target.files[0]) {
           this.showEditor = true;
           this.$refs.editor.uploadImage(event);
-        }
-        else{
+        } else {
           this.showEditor = false;
         }
       }
@@ -900,6 +1018,22 @@ export default {
       const file = this.$refs.editor.saveImage();
       this.itemImage = file;
       console.log(this.itemImage);
+
+      const params = this.itemImage;
+      this.$axios
+        .post("/demo", params, {
+          headers: {
+            // "Access-Control-Allow-Origin": "*",
+            // "content-type": "application/x-www-form-urlencoded",
+            "Access-Control-Allow-Origin": "*",
+            Accept: "application/json",
+            "Content-Type": "application/json",
+            "Access-Control-Allow-Methods": "GET,PUT,POST,DELETE,PATCH,OPTIONS",
+          },
+        })
+        .then((response) => {
+          console.log("===image resp", response);
+        });
     },
   },
   watch: {
@@ -922,12 +1056,11 @@ export default {
       }
     },
   },
-  mounted(){
-    if($nuxt.$route.path === "/new/sender-details"){
+  mounted() {
+    if ($nuxt.$route.path === "/item-details") {
       this.senderFormTitle = "SENDER'S DETAILS";
       this.foundItemFormTitle = "FOUND ITEM'S DETAILS";
-    }
-    else if($nuxt.$route.path === "/edit/sender-details"){
+    } else if ($nuxt.$route.path === "/edit/sender-details") {
       this.senderFormTitle = "EDIT SENDER'S DETAILS";
       this.foundItemFormTitle = "EDIT FOUND ITEM'S DETAILS";
       this.venueName = "abc";
@@ -963,7 +1096,7 @@ export default {
   margin-bottom: 20px;
 }
 
-.custom-editor{
+.custom-editor {
   @apply flex justify-center;
   border: 1px solid #000000;
   background-color: #ffffff;
@@ -973,12 +1106,17 @@ export default {
   cursor: pointer;
 }
 
-.previewCard h1, h2, h3, h4, h5, h6 {
+.previewCard h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
   font-size: revert;
   font-weight: revert;
 }
 
-canvas{
+canvas {
   width: 0 !important;
 }
 .upper-canvas {
@@ -986,13 +1124,15 @@ canvas{
   min-width: 600px !important;
   height: 600px;
 }
-.lower-canvas{
+.lower-canvas {
   min-width: 600px !important;
   height: 600px;
 }
 
 @media only screen and (max-width: 650px) {
-  .canvas-container, .upper-canvas, .lower-canvas {
+  .canvas-container,
+  .upper-canvas,
+  .lower-canvas {
     min-width: 0 !important;
     width: 500px !important;
     height: 500px !important;
@@ -1000,7 +1140,9 @@ canvas{
 }
 
 @media only screen and (max-width: 510px) {
-  .canvas-container, .upper-canvas, .lower-canvas {
+  .canvas-container,
+  .upper-canvas,
+  .lower-canvas {
     min-width: 0 !important;
     width: 400px !important;
     height: 400px !important;
@@ -1008,10 +1150,25 @@ canvas{
 }
 
 @media only screen and (max-width: 410px) {
-  .canvas-container, .upper-canvas, .lower-canvas {
+  .canvas-container,
+  .upper-canvas,
+  .lower-canvas {
     min-width: 0 !important;
     width: 300px !important;
     height: 300px !important;
   }
+}
+
+.fade-enter {
+  opacity: 0;
+}
+
+.fade-enter-active,
+.fade-leave-active {
+  transition: opacity 500ms ease-out;
+}
+
+.fade-leave-to {
+  opacity: 0;
 }
 </style>
