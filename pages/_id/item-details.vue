@@ -610,7 +610,7 @@
                           rounded-md
                           hover:shadow-lg hover:bg-gray-100
                         "
-                        @click="showConfirmModal = false"
+                        @click="closeClicked"
                       >
                         Close
                       </button>
@@ -956,10 +956,15 @@ export default {
         // Sample Request payload
       }
     },
-    editDetails() {
-      let userId = "12345678";
-      this.$router.push({ path: "/edit/sender-details", query: { userId } });
+    closeClicked(){
+      this.showConfirmModal = false;
+      let id = "12345678";
+      this.$router.push({ path: "/found-items", query: { id, itemDescription: this.itemDescription } });
     },
+    // editDetails() {
+    //   let userId = "12345678";
+    //   this.$router.push({ path: "/edit/sender-details", query: { userId } });
+    // },
     undo() {
       this.$refs.editor.undo();
     },
@@ -1057,10 +1062,8 @@ export default {
     },
   },
   mounted() {
-    if ($nuxt.$route.path === "/item-details") {
-      this.senderFormTitle = "SENDER'S DETAILS";
-      this.foundItemFormTitle = "FOUND ITEM'S DETAILS";
-    } else if ($nuxt.$route.path === "/edit/sender-details") {
+    if ($nuxt.$route.path === "/edit/item-details") {
+      console.log(this.$route.query.id);
       this.senderFormTitle = "EDIT SENDER'S DETAILS";
       this.foundItemFormTitle = "EDIT FOUND ITEM'S DETAILS";
       this.venueName = "abc";
@@ -1080,6 +1083,10 @@ export default {
       this.receiverName = "abc3";
       this.receiverEmail = "abc3@gmail.com";
       this.receiverPhone = "1234567890";
+    }
+    else{
+      this.senderFormTitle = "SENDER'S DETAILS";
+      this.foundItemFormTitle = "FOUND ITEM'S DETAILS";
     }
   },
 };

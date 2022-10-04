@@ -59,7 +59,7 @@
             dark:text-white
           "
         >
-          Lorem ipsum dolor sit amet
+          {{ itemDescription }}
         </h5>
         <p class="mb-3 font-normal text-gray-700 dark:text-gray-400">
           Neque porro quisquam est qui dolorem ipsum quia dolor sit amet,
@@ -141,13 +141,22 @@
 export default {
   methods: {
     editDetails() {
-      let id = "12345678";
-      this.$router.push({ path: "/item-details", query: { id } });
+      if(this.$route.query.id){
+        this.$router.push({ path: "/edit/item-details", query: { id: this.$route.query.id } });
+      }
+      else{
+        this.$router.push({ path: "/new/item-details"});
+      }
     },
     addNewItem() {
       this.$router.push({ path: "/item-details" });
     },
   },
+  computed: {
+    itemDescription(){
+      return this.$route.query.itemDescription || "Lorem ipsum dolor sit amet";
+    }
+  }
 };
 </script>
 
