@@ -139,15 +139,10 @@
 export default {
   methods: {
     editDetails() {
-      if(this.$route.query.id){
-        this.$router.push({ path: "/edit/item-details", query: { id: this.$route.query.id } });
-      }
-      else{
-        this.$router.push({ path: "/new/item-details"});
-      }
+      this.$router.push({ path: "item-details", query: { id: "123456" } });
     },
     addNewItem() {
-      this.$router.push({ path: "/new/item-details" });
+      this.$router.push({ path: "item-details" });
     },
   },
   computed: {

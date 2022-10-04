@@ -989,8 +989,7 @@ export default {
     },
     closeClicked(){
       this.showConfirmModal = false;
-      let id = "12345678";
-      this.$router.push({ path: "/found-items", query: { id, itemDescription: this.itemDescription } });
+      this.$router.push("/found-items");
     },
     // editDetails() {
     //   let userId = "12345678";
@@ -1093,7 +1092,7 @@ export default {
     },
   },
   mounted() {
-    if ($nuxt.$route.path === "/edit/item-details") {
+    if (this.$route.query.id) {
       console.log(this.$route.query.id);
       this.senderFormTitle = "EDIT SENDER'S DETAILS";
       this.foundItemFormTitle = "EDIT FOUND ITEM'S DETAILS";
