@@ -164,8 +164,22 @@
               rules="max:100|address"
               class="block"
             >
+              <v-select v-model="address" :options="addressArr" class="rounded-lg" :class="errors.length > 0 && 'error'"></v-select>
+              <p
+                v-if="errors.length"
+                class="vee-validation-error mt-2 text-sm text-red-600"
+              >
+                {{ errors[0] }}
+              </p>
+            </ValidationProvider>
+            <ValidationProvider
+              v-if="manualAddressSelected"
+              v-slot="{ errors }"
+              rules="max:100|address"
+              class="block"
+            >
               <BaseInput
-                v-model="address"
+                v-model="manualAddress"
                 type="text"
                 label="Address Line"
                 :class="errors.length > 0 && 'error'"
@@ -234,7 +248,11 @@
                   {{ errors[0] }}
                 </p>
               </ValidationProvider>
-              <ValidationProvider v-slot="{ errors }" class="block col-span-1">
+              <ValidationProvider 
+                rules="required" 
+                v-slot="{ errors }" 
+                class="block col-span-1"
+              >
                 <BaseInput
                   v-model="zipcode"
                   label="Zip Code"
@@ -675,12 +693,14 @@
 </template>
 
 <script>
+import 'vue-select/dist/vue-select.css';
 import { ValidationObserver, ValidationProvider } from "vee-validate";
 import BaseInput from "~/components/base/BaseInput.vue";
 import BaseSelect from "~/components/base/BaseSelect.vue";
 import formatPhoneNumber from "~/mixins/formatPhoneNumber";
 import { debounce } from "lodash";
 import Editor from "~/components/vueImageEditor/Editor.vue";
+import VSelect from 'vue-select';
 import {
   CircleIcon,
   RotateCcwIcon,
@@ -701,11 +721,13 @@ export default {
     foundItemFormTitle: "",
     venueName: "",
     venueEmail: "test@gmail.com",
-    autoSelectAddress: "",
-    autoSelectCity: "",
-    autoSelectState: "",
-    autoSelectCountry: "",
-    autoSelectZipcode: "",
+    manualAddressSelected: false,
+    manualAddress: "",
+    address: "",
+    city: "",
+    state: "",
+    country: "",
+    zipcode: "",
     stateArr: [
       "Andhra Pradesh",
       "Arunachal Pradesh",
@@ -743,6 +765,7 @@ export default {
       "Delhi",
       "Lakshadweep",
       "Puducherry",
+      "California",
     ],
     manualVenue: "",
     venue: "Hotel",
@@ -793,77 +816,20 @@ export default {
     MaximizeIcon,
     CheckIcon,
     SaveIcon,
+    VSelect,
   },
   computed: {
-    address: {
-      get() {
-        if(this.autoSelectAddress){
-          return this.autoSelectAddress;
-        }
-        else if (this.responseData.length > 0) {
-          return this.responseData[0].address || "";
-        }
-        return;
-      },
-      set(value) {
-        this.autoSelectAddress = value;
-      },
-    },
-    city: {
-      get() {
-        if(this.autoSelectCity){
-          return this.autoSelectCity;
-        }
-        else if (this.responseData.length > 0) {
-          return this.responseData[0].city || null;
-        }
-        return;
-      },
-      set(value) {
-        this.autoSelectCity = value;
-      },
-    },
-    state: {
-      get() {
-        if(this.autoSelectState){
-          return this.autoSelectState;
-        }
-        else if (this.responseData.length > 0) {
-          return this.responseData[0].state || null;
-        }
-        return;
-      },
-      set(value) {
-        this.autoSelectState = value;
-      },
-    },
-    country: {
-      get() {
-        if(this.autoSelectCountry){
-          return this.autoSelectCountry;
-        }
-        else if (this.responseData.length > 0) {
-          return this.responseData[0].country || null;
-        }
-        return;
-      },
-      set(value) {
-        this.autoSelectCountry = value;
-      },
-    },
-    zipcode: {
-      get() {
-        if(this.autoSelectZipcode){
-          return this.autoSelectZipcode;
-        }
-        else if (this.responseData.length > 0) {
-          return this.responseData[0].zipcode || null;
-        }
-        return;
-      },
-      set(value) {
-        this.autoSelectZipcode = value;
-      },
+    addressArr(){
+      if(this.responseData.length == 0){
+        this.address = "Other";
+        this.manualAddressSelected = true;
+      }
+      let addressLineArr = this.responseData.map(addressObj => {
+        return addressObj.address;
+      });
+      addressLineArr.push("Other");
+      this.address = addressLineArr[0];
+      return addressLineArr;
     },
   },
   methods: {
@@ -1090,6 +1056,30 @@ export default {
         }
       }
     },
+    address(newAddress, oldAddress) {
+      if (newAddress != oldAddress) {
+        if(newAddress == "Other"){
+          this.manualAddressSelected = true;
+          this.manualAddress = "";
+          this.city = "";
+          this.state = "";
+          this.country = "";
+          this.zipcode = "";
+        }
+        else{
+          this.manualAddressSelected = false;
+          let index = this.responseData.findIndex(addressObj => {
+            return addressObj.address == newAddress;
+          });
+          if(index != -1){
+            this.city = this.responseData[index].city;
+            this.state = this.responseData[index].state;
+            this.country = this.responseData[index].country;
+            this.zipcode = this.responseData[index].zipcode;
+          }
+        }
+      }
+    },
   },
   mounted() {
     if (this.$route.query.id) {
@@ -1122,7 +1112,7 @@ export default {
 };
 </script>
 
-<style>
+<style lang="scss">
 .wrapper-form {
   @apply min-h-screen flex justify-center pt-24 mx-auto pb-24;
 }
@@ -1164,6 +1154,19 @@ canvas {
 .lower-canvas {
   min-width: 600px !important;
   height: 600px;
+}
+
+.vs__dropdown-toggle {
+  @apply h-12 rounded-lg;
+}
+
+.error {
+  & > div {
+    @apply text-red-500;
+  }
+  .vs__dropdown-toggle {
+    @apply border-red-500 border-2 ring-4 ring-red-500 ring-opacity-10 transition-none;
+  }
 }
 
 @media only screen and (max-width: 650px) {
