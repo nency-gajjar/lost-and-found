@@ -164,7 +164,12 @@
               rules="max:100|address"
               class="block"
             >
-              <v-select v-model="address" :options="addressArr" class="rounded-lg" :class="errors.length > 0 && 'error'"></v-select>
+              <v-select
+                v-model="address"
+                :options="addressArr"
+                class="rounded-lg"
+                :class="errors.length > 0 && 'error'"
+              ></v-select>
               <p
                 v-if="errors.length"
                 class="vee-validation-error mt-2 text-sm text-red-600"
@@ -175,7 +180,7 @@
             <ValidationProvider
               v-if="manualAddressSelected"
               v-slot="{ errors }"
-              rules="max:100|address"
+              rules="max:500|address"
               class="block"
             >
               <BaseInput
@@ -215,10 +220,10 @@
                 rules="required"
                 class="block col-span-1"
               >
-                <BaseSelect
+                <BaseInput
                   v-model="state"
-                  :options="stateArr"
                   label="State"
+                  type="text"
                   :class="errors.length > 0 && 'error'"
                 />
                 <p
@@ -248,9 +253,9 @@
                   {{ errors[0] }}
                 </p>
               </ValidationProvider>
-              <ValidationProvider 
-                rules="required" 
-                v-slot="{ errors }" 
+              <ValidationProvider
+                rules="required"
+                v-slot="{ errors }"
                 class="block col-span-1"
               >
                 <BaseInput
@@ -279,12 +284,7 @@
             >
               {{ foundItemFormTitle }}
             </div>
-            <ValidationProvider
-              v-slot="{ errors }"
-              ref="imageValidationProvider"
-              rules="required|image"
-              class="block"
-            >
+            <div class="block">
               <label
                 class="block mb-2 text-sm font-medium text-gray-800"
                 for="itemImage"
@@ -305,22 +305,36 @@
                 id="itemImage"
                 type="file"
               />
-              <p
-                v-if="errors.length"
-                class="vee-validation-error mt-2 text-sm text-red-600"
+            </div>
+            <div
+              class="top-margin-3 flex justify-center"
+              v-if="loadingSpinner"
+              role="status"
+            >
+              <svg
+                aria-hidden="true"
+                class="mr-2 w-8 h-8 text-gray-200 animate-spin fill-blue-600"
+                viewBox="0 0 100 101"
+                fill="none"
+                xmlns="http://www.w3.org/2000/svg"
               >
-                {{ errors[0] }}
-              </p>
-            </ValidationProvider>
-            <div class="top-margin-3 flex justify-center" v-if="loadingSpinner" role="status">
-              <svg aria-hidden="true" class="mr-2 w-8 h-8 text-gray-200 animate-spin fill-blue-600" viewBox="0 0 100 101" fill="none" xmlns="http://www.w3.org/2000/svg">
-                  <path d="M100 50.5908C100 78.2051 77.6142 100.591 50 100.591C22.3858 100.591 0 78.2051 0 50.5908C0 22.9766 22.3858 0.59082 50 0.59082C77.6142 0.59082 100 22.9766 100 50.5908ZM9.08144 50.5908C9.08144 73.1895 27.4013 91.5094 50 91.5094C72.5987 91.5094 90.9186 73.1895 90.9186 50.5908C90.9186 27.9921 72.5987 9.67226 50 9.67226C27.4013 9.67226 9.08144 27.9921 9.08144 50.5908Z" fill="currentColor"/>
-                  <path d="M93.9676 39.0409C96.393 38.4038 97.8624 35.9116 97.0079 33.5539C95.2932 28.8227 92.871 24.3692 89.8167 20.348C85.8452 15.1192 80.8826 10.7238 75.2124 7.41289C69.5422 4.10194 63.2754 1.94025 56.7698 1.05124C51.7666 0.367541 46.6976 0.446843 41.7345 1.27873C39.2613 1.69328 37.813 4.19778 38.4501 6.62326C39.0873 9.04874 41.5694 10.4717 44.0505 10.1071C47.8511 9.54855 51.7191 9.52689 55.5402 10.0491C60.8642 10.7766 65.9928 12.5457 70.6331 15.2552C75.2735 17.9648 79.3347 21.5619 82.5849 25.841C84.9175 28.9121 86.7997 32.2913 88.1811 35.8758C89.083 38.2158 91.5421 39.6781 93.9676 39.0409Z" fill="currentFill"/>
+                <path
+                  d="M100 50.5908C100 78.2051 77.6142 100.591 50 100.591C22.3858 100.591 0 78.2051 0 50.5908C0 22.9766 22.3858 0.59082 50 0.59082C77.6142 0.59082 100 22.9766 100 50.5908ZM9.08144 50.5908C9.08144 73.1895 27.4013 91.5094 50 91.5094C72.5987 91.5094 90.9186 73.1895 90.9186 50.5908C90.9186 27.9921 72.5987 9.67226 50 9.67226C27.4013 9.67226 9.08144 27.9921 9.08144 50.5908Z"
+                  fill="currentColor"
+                />
+                <path
+                  d="M93.9676 39.0409C96.393 38.4038 97.8624 35.9116 97.0079 33.5539C95.2932 28.8227 92.871 24.3692 89.8167 20.348C85.8452 15.1192 80.8826 10.7238 75.2124 7.41289C69.5422 4.10194 63.2754 1.94025 56.7698 1.05124C51.7666 0.367541 46.6976 0.446843 41.7345 1.27873C39.2613 1.69328 37.813 4.19778 38.4501 6.62326C39.0873 9.04874 41.5694 10.4717 44.0505 10.1071C47.8511 9.54855 51.7191 9.52689 55.5402 10.0491C60.8642 10.7766 65.9928 12.5457 70.6331 15.2552C75.2735 17.9648 79.3347 21.5619 82.5849 25.841C84.9175 28.9121 86.7997 32.2913 88.1811 35.8758C89.083 38.2158 91.5421 39.6781 93.9676 39.0409Z"
+                  fill="currentFill"
+                />
               </svg>
               <span class="sr-only">Loading...</span>
             </div>
-            <p v-if="imageSaved" class="top-margin-3 text-lime-500">Image saved successfully!</p>
-            <p v-if="imageNotSaved" class="top-margin-3 text-red-600">Something went wrong! Try again.</p>
+            <p v-if="imageSaved" class="top-margin-3 text-lime-500">
+              Image saved successfully!
+            </p>
+            <p v-if="imageNotSaved" class="top-margin-3 text-red-600">
+              Something went wrong! Try again.
+            </p>
             <div class="block" v-show="showEditor">
               <div class="editor-tools">
                 <div class="tool-undo">
@@ -391,6 +405,7 @@
                 :options="itemDescriptionArr"
                 label="Item Description"
                 :class="errors.length > 0 && 'error'"
+                @input="setItemDetails"
               />
               <p
                 v-if="errors.length"
@@ -550,6 +565,21 @@
             >
               Submit
             </button>
+            <button
+              type="submit"
+              class="
+                bg-indigo-500
+                hover:bg-indigo-700
+                text-white
+                font-bold
+                py-2
+                px-10
+                rounded
+              "
+              @click="showPreviewPage"
+            >
+              Preview
+            </button>
           </form>
 
           <!-- Modal -->
@@ -702,14 +732,14 @@
 </template>
 
 <script>
-import 'vue-select/dist/vue-select.css';
+import "vue-select/dist/vue-select.css";
 import { ValidationObserver, ValidationProvider } from "vee-validate";
 import BaseInput from "~/components/base/BaseInput.vue";
 import BaseSelect from "~/components/base/BaseSelect.vue";
 import formatPhoneNumber from "~/mixins/formatPhoneNumber";
 import { debounce } from "lodash";
 import Editor from "~/components/vueImageEditor/Editor.vue";
-import VSelect from 'vue-select';
+import VSelect from "vue-select";
 import {
   CircleIcon,
   RotateCcwIcon,
@@ -737,45 +767,6 @@ export default {
     state: "",
     country: "",
     zipcode: "",
-    stateArr: [
-      "Andhra Pradesh",
-      "Arunachal Pradesh",
-      "Assam",
-      "Bihar",
-      "Chhattisgarh",
-      "Goa",
-      "Gujarat",
-      "Haryana",
-      "Himachal Pradesh",
-      "Jammu and Kashmir",
-      "Jharkhand",
-      "Karnataka",
-      "Kerala",
-      "Madhya Pradesh",
-      "Maharashtra",
-      "Manipur",
-      "Meghalaya",
-      "Mizoram",
-      "Nagaland",
-      "Odisha",
-      "Punjab",
-      "Rajasthan",
-      "Sikkim",
-      "Tamil Nadu",
-      "Telangana",
-      "Tripura",
-      "Uttarakhand",
-      "Uttar Pradesh",
-      "West Bengal",
-      "Andaman and Nicobar Islands",
-      "Chandigarh",
-      "Dadra and Nagar Haveli",
-      "Daman and Diu",
-      "Delhi",
-      "Lakshadweep",
-      "Puducherry",
-      "California",
-    ],
     manualVenue: "",
     venue: "Hotel",
     venueArr: ["Hotel", "Restaurent", "Airport", "Other"],
@@ -812,6 +803,8 @@ export default {
     loadingSpinner: false,
     imageSaved: false,
     imageNotSaved: false,
+    imageRecognitionData: [],
+    image: "",
   }),
   components: {
     ValidationObserver,
@@ -831,12 +824,12 @@ export default {
     VSelect,
   },
   computed: {
-    addressArr(){
-      if(this.responseData.length == 0){
+    addressArr() {
+      if (this.responseData.length == 0) {
         this.address = "Other";
         this.manualAddressSelected = true;
       }
-      let addressLineArr = this.responseData.map(addressObj => {
+      let addressLineArr = this.responseData.map((addressObj) => {
         return addressObj.address;
       });
       addressLineArr.push("Other");
@@ -845,6 +838,28 @@ export default {
     },
   },
   methods: {
+    showPreviewPage() {
+      this.$router.push({ path: "/detail-confirmation" });
+    },
+    setItemDetails(value) {
+      switch (value) {
+        case "Laptop":
+          this.packageType = "Box";
+          this.weight = "2.4 kg";
+          this.dimension = "60 cm X 45 cm";
+          break;
+        case "Mobile Phone":
+          this.packageType = "Box";
+          this.weight = "0.4 kg";
+          this.dimension = "30 cm X 15 cm";
+          break;
+        case "Driving Licence":
+          this.packageType = "Box";
+          this.weight = "0.05 kg";
+          this.dimension = "5 cm X 10 cm";
+          break;
+      }
+    },
     debouncedGetData: debounce(function (type) {
       this.getData(type);
     }, 800),
@@ -852,20 +867,20 @@ export default {
     async getData(type) {
       let lat, long;
 
-      let locationPromise = new Promise(function(resolve, reject) {
+      let locationPromise = new Promise(function (resolve, reject) {
         navigator.geolocation.getCurrentPosition((position) => {
           lat = position.coords.latitude;
           long = position.coords.longitude;
           // console.log(lat + ", "+long);
-          resolve({lat,long});
+          resolve({ lat, long });
         });
       });
 
-      locationPromise.then( async (value) => {
+      locationPromise.then(async (value) => {
         const params = {
-          lat: value.lat, 
-          long: value.long
-        }
+          lat: value.lat,
+          long: value.long,
+        };
 
         console.log(params);
 
@@ -874,85 +889,62 @@ export default {
         else if (type === "phoneno") params.mobileno = this.venuePhone;
 
         // let responseData = [];
-        await this.$axios.get("/autofilladdress", { params }).then(({ data }) => {
-          if (!data.error) {
-            this.responseData.push(...data.data);
-          }
-        });
+        await this.$axios
+          .get("/autofilladdress", { params })
+          .then(({ data }) => {
+            if (!data.error) {
+              this.responseData.push(...data.data);
+            }
+          });
       });
     },
-
-    // Ref
-    // generatePdf () {
-    //  await this.$axios({
-    //     url: "/storelostitem", // download file link goes here
-    //     method: "POST",
-    //     headers: { "Content-Type": "application/x-www-form-urlencoded" },
-    //     responseType: "blob",
-    //   }).then((response) => {
-    //     var fileURL = window.URL.createObjectURL(new Blob([response.data]));
-    //     var fileLink = document.createElement("a");
-
-    //     fileLink.href = fileURL;
-    //     fileLink.setAttribute("download", "file.pdf");
-    //     document.body.appendChild(fileLink);
-
-    //     fileLink.click();
-    //   });
-    // }
     async generatePdf() {
       const params = {
-        venu_type: "Hotel",
-        date: "2022-10-11",
-        venue_name: "GNINE",
-        venue_email: "gninehospitality@gmail.com",
-        venue_phone_no: "9109512266600",
-        employee_mobile_no: "919624863068",
-        address:
-          "328, Sector A, Mahalaxmi Nagar, Indore, Madhya Pradesh 452010, India",
-        city: "Indore",
-        state: "Madhya Pradesh",
-        country: "India",
-        zipcode: "452010",
-        image:
-          "https://landf.s3.amazonaws.com/images/2022-09-30T12%3A58%3A59.494Z.jpeg?AWSAccessKeyId=AKIAT7JZ55LI27TARXOG&Expires=1664543639&Signature=AasFA02GhZtrQPQqNou50CkdbXQ%3D",
-        item_description: "Laptop",
-        package_type: "Box",
-        weight: "2.4 kg",
-        dimensions: "60 cm X 45 cm",
-        item_status: 0,
-        receiver_name: "prem",
-        receiver_email: "prem.panwala@bacancy.com",
-        receiver_mobile_no: "916355537257",
+        venu_type:
+          this.venueType === "Other" ? this.manualVenue : this.venueType,
+        date: this.foundItemDate,
+        venue_name: this.venueName,
+        venue_email: this.venueEmail,
+        venue_phone_no: this.venuePhone,
+        employee_mobile_no: this.employeePhone,
+        address: this.address,
+        city: this.city,
+        state: this.state,
+        country: this.country,
+        zipcode: this.zipcode,
+        image: this.image,
+        item_description: this.itemDescription,
+        package_type: this.packageType,
+        weight: this.weight,
+        dimensions: this.dimension,
+        item_status: this.itemStatus === "Claimed" ? 0 : 1,
       };
-
-      await this.$axios
-        .post(
-          "/storelostitem",
-          params
-          // , {
-          //   headers: {
-          //     // "Access-Control-Allow-Origin": "*",
-          //     // "content-type": "application/x-www-form-urlencoded",
-          //     // "Access-Control-Allow-Origin": "*",
-          //     Accept: "application/json",
-          //     "Content-Type": "application/json",
-          //     // "Access-Control-Allow-Methods": "GET,PUT,POST,DELETE,PATCH,OPTIONS",
-          //   },
-          // }
-        )
+      if (this.itemStatus === "Claimed") {
+        params.receiver_name = this.receiverName;
+        params.receiver_email = this.receiverEmail;
+        params.receiver_mobile_no = this.receiverPhone;
+      }
+      this.$store.commit("item/SET_ITEM_DETAILS", params);
+      this.$axios
+        .post("/storelostitem", params, {
+          responseType: "arraybuffer",
+          headers: {
+            "Content-Type": "application/json",
+            Accept: "application/pdf",
+          },
+        })
         .then((response) => {
-          var fileURL = window.URL.createObjectURL(new Blob([response.data]));
-          var fileLink = document.createElement("a");
-
-          fileLink.href = fileURL;
-          fileLink.setAttribute("download", "file.pdf");
-          document.body.appendChild(fileLink);
-
-          fileLink.click();
-        });
-
-      this.$router.push({ path: "/found-items" });
+          if (response.status === 200) {
+            const url = window.URL.createObjectURL(new Blob([response.data]));
+            const link = document.createElement("a");
+            link.href = url;
+            link.setAttribute("download", "file.pdf");
+            document.body.appendChild(link);
+            link.click();
+          }
+          this.$router.push({ path: "/detail-confirmation" });
+        })
+        .catch((error) => console.log(error));
     },
     async onSubmit() {
       const isValid = await this.$refs.observer.validate();
@@ -965,9 +957,8 @@ export default {
         // Sample Request payload
       }
     },
-    closeClicked(){
+    closeClicked() {
       this.showConfirmModal = false;
-      this.$router.push("/found-items");
     },
     // editDetails() {
     //   let userId = "12345678";
@@ -1034,34 +1025,17 @@ export default {
     },
     saveImg() {
       const file = this.$refs.editor.saveImage();
-      this.itemImage = file;
-      console.log(this.itemImage);
-      this.showEditor = false;
-      this.loadingSpinner = true;
-      const params = this.itemImage;
-      this.$axios
-        .post("/demo", params, {
-          headers: {
-            // "Access-Control-Allow-Origin": "*",
-            // "content-type": "application/x-www-form-urlencoded",
-            "Access-Control-Allow-Origin": "*",
-            Accept: "application/json",
-            "Content-Type": "application/json",
-            "Access-Control-Allow-Methods": "GET,PUT,POST,DELETE,PATCH,OPTIONS",
-          },
-        })
-        .then((response) => {
-          console.log("===image resp", response);
-          this.imageNotSaved = false;
-          this.loadingSpinner = false;
-          this.imageSaved = true;
-        })
-        .catch((err) => {
-          console.log(err);
-          this.imageSaved = false
-          this.loadingSpinner = false;
-          this.imageNotSaved = true;
-        })
+      this.$axios.post("/demo", { file }).then((response) => {
+        if (response.status === 200) {
+          console.log("===image resp", response.data);
+          this.imageRecognitionData = response.data.data;
+          this.itemDescription = response.data.data[0].name;
+          this.image =
+            this.imageRecognitionData[
+              this.imageRecognitionData.length - 1
+            ].image;
+        }
+      });
     },
   },
   watch: {
@@ -1085,26 +1059,44 @@ export default {
     },
     address(newAddress, oldAddress) {
       if (newAddress != oldAddress) {
-        if(newAddress == "Other"){
+        if (newAddress == "Other") {
           this.manualAddressSelected = true;
           this.manualAddress = "";
           this.city = "";
           this.state = "";
           this.country = "";
           this.zipcode = "";
-        }
-        else{
+        } else {
           this.manualAddressSelected = false;
-          let index = this.responseData.findIndex(addressObj => {
+          let index = this.responseData.findIndex((addressObj) => {
             return addressObj.address == newAddress;
           });
-          if(index != -1){
+          if (index != -1) {
             this.city = this.responseData[index].city;
             this.state = this.responseData[index].state;
             this.country = this.responseData[index].country;
             this.zipcode = this.responseData[index].zipcode;
           }
         }
+      }
+    },
+    itemDescription(value) {
+      switch (value) {
+        case "Laptop":
+          this.packageType = "Box";
+          this.weight = "2.4 kg";
+          this.dimension = "60 cm X 45 cm";
+          break;
+        case "Mobile Phone":
+          this.packageType = "Box";
+          this.weight = "0.4 kg";
+          this.dimension = "30 cm X 15 cm";
+          break;
+        case "Driving Licence":
+          this.packageType = "Box";
+          this.weight = "0.05 kg";
+          this.dimension = "5 cm X 10 cm";
+          break;
       }
     },
   },
@@ -1130,8 +1122,7 @@ export default {
       this.receiverName = "abc3";
       this.receiverEmail = "abc3@gmail.com";
       this.receiverPhone = "1234567890";
-    }
-    else{
+    } else {
       this.senderFormTitle = "SENDER'S DETAILS";
       this.foundItemFormTitle = "FOUND ITEM'S DETAILS";
     }
@@ -1196,7 +1187,7 @@ canvas {
   }
 }
 
-.top-margin-3{
+.top-margin-3 {
   margin-top: 3px !important;
 }
 
