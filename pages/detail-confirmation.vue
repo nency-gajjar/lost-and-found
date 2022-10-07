@@ -1,6 +1,6 @@
 <template>
   <div class="wrapper">
-    <div class="card w-9/12">
+    <div v-if="Object.keys(itemDetails).length > 0" class="card w-9/12">
       <section class="bg-white border-b p-8">
         <div class="container max-w-5xl mx-auto m-8">
           <h1
@@ -44,39 +44,49 @@
             <div class="text-left text-gray-600 font-medium w-4/12">
               Sender Affiliation
             </div>
-            <div class="text-gray-600 text-left w-8/12">Hotel</div>
+            <div class="text-gray-600 text-left sm:w-8/12">
+              {{ itemDetails.venu_type }}
+            </div>
           </div>
           <div class="flex items-center mt-3">
             <div class="text-left text-gray-600 font-medium w-4/12">
               Found Item Date
             </div>
-            <div class="text-gray-600 text-left w-8/12">05/10/2022</div>
+            <div class="text-gray-600 text-left sm:w-8/12">
+              {{ itemDetails.date }}
+            </div>
           </div>
           <div class="flex items-center mt-3">
             <div class="text-left text-gray-600 font-medium w-4/12">
               Venue Name
             </div>
-            <div class="text-gray-600 text-left w-8/12">ABC</div>
+            <div class="text-gray-600 text-left sm:w-8/12">
+              {{ itemDetails.venue_name }}
+            </div>
           </div>
           <div class="flex items-center mt-3">
             <div class="text-left text-gray-600 font-medium w-4/12">
               Venue Email
             </div>
-            <div class="text-gray-600 text-left w-8/12">
-              nency.bhadeshiya@bacancy.com
+            <div class="text-gray-600 text-left sm:w-8/12">
+              {{ itemDetails.venue_email }}
             </div>
           </div>
           <div class="flex items-center mt-3">
             <div class="text-left text-gray-600 font-medium w-4/12">
               Venue Phone No.
             </div>
-            <div class="text-gray-600 text-left w-8/12">940 815 45145</div>
+            <div class="text-gray-600 text-left sm:w-8/12">
+              {{ itemDetails.venue_phone_no }}
+            </div>
           </div>
           <div class="flex items-center mt-3">
             <div class="text-left text-gray-600 font-medium w-4/12">
               Employee Mobile No.
             </div>
-            <div class="text-gray-600 text-left w-8/12">940 815 45145</div>
+            <div class="text-gray-600 text-left sm:w-8/12">
+              {{ itemDetails.employee_mobile_no }}
+            </div>
           </div>
 
           <br />
@@ -98,31 +108,37 @@
             <div class="text-left text-gray-600 font-medium w-4/12">
               Address
             </div>
-            <div class="text-gray-600 text-left w-8/12">ABX</div>
+            <div class="text-gray-600 text-left sm:w-8/12">
+              {{ itemDetails.address }}
+            </div>
           </div>
           <div class="flex items-center mt-3">
-            <div class="text-left text-gray-600 font-medium w-4/12">
-              City
+            <div class="text-left text-gray-600 font-medium w-4/12">City</div>
+            <div class="text-gray-600 text-left sm:w-8/12">
+              {{ itemDetails.city }}
             </div>
-            <div class="text-gray-600 text-left w-8/12">Rajkot</div>
           </div>
           <div class="flex items-center mt-3">
-            <div class="text-left text-gray-600 font-medium w-4/12">
-              State
+            <div class="text-left text-gray-600 font-medium w-4/12">State</div>
+            <div class="text-gray-600 text-left sm:w-8/12">
+              {{ itemDetails.state }}
             </div>
-            <div class="text-gray-600 text-left w-8/12">Gujurat</div>
           </div>
           <div class="flex items-center mt-3">
             <div class="text-left text-gray-600 font-medium w-4/12">
               Country
             </div>
-            <div class="text-gray-600 text-left w-8/12">India</div>
+            <div class="text-gray-600 text-left sm:w-8/12">
+              {{ itemDetails.country }}
+            </div>
           </div>
           <div class="flex items-center mt-3">
             <div class="text-left text-gray-600 font-medium w-4/12">
               Zipcode
             </div>
-            <div class="text-gray-600 text-left w-8/12">360002</div>
+            <div class="text-gray-600 text-left sm:w-8/12">
+              {{ itemDetails.zipcode }}
+            </div>
           </div>
           <br />
           <hr />
@@ -145,41 +161,51 @@
                 <div class="text-left text-gray-600 font-medium w-6/12">
                   Item Description
                 </div>
-                <div class="text-gray-600 text-left w-6/12">Abcsflfj</div>
+                <div class="text-gray-600 text-left sm:w-6/12">
+                  {{ itemDetails.item_description }}
+                </div>
               </div>
               <div class="flex items-center mt-3">
                 <div class="text-left text-gray-600 font-medium w-6/12">
                   Package Type
                 </div>
-                <div class="text-gray-600 text-left w-6/12">Box</div>
+                <div class="text-gray-600 text-left sm:w-6/12">
+                  {{ itemDetails.package_type }}
+                </div>
               </div>
               <div class="flex items-center mt-3">
                 <div class="text-left text-gray-600 font-medium w-6/12">
                   Weight
                 </div>
-                <div class="text-gray-600 text-left w-6/12">98 lbs</div>
+                <div class="text-gray-600 text-left sm:w-6/12">
+                  {{ itemDetails.weight }}
+                </div>
               </div>
               <div class="flex items-center mt-3">
                 <div class="text-left text-gray-600 font-medium w-6/12">
                   Dimension
                 </div>
-                <div class="text-gray-600 text-left w-6/12">34 * 34</div>
+                <div class="text-gray-600 text-left sm:w-6/12">
+                  {{ itemDetails.dimensions }}
+                </div>
               </div>
               <div class="flex items-center mt-3">
                 <div class="text-left text-gray-600 font-medium w-6/12">
                   Item Status
                 </div>
-                <div class="text-gray-600 text-left w-6/12">Claimed</div>
+                <div class="text-gray-600 text-left sm:w-6/12">
+                  {{ itemDetails.item_status === 0 ? "Claimed" : "Unclaimed" }}
+                </div>
               </div>
             </div>
 
-            <div class="img-container text-gray-600 text-left md:w-4/12 sm:w-full">
-              <svg
+            <div class="text-gray-600 text-left sm:w-4/12">
+              <img class="w-full mx-auto" :src="itemDetails.image" alt="" />
+              <!-- <svg
                 class="w-full mx-auto"
                 viewBox="0 0 1177 598.5"
                 xmlns="http://www.w3.org/2000/svg"
               >
-                <title>travel booking</title>
                 <path
                   transform="translate(-11.5 -150.75)"
                   d="M274.63,501l-6.29-3.91c-.6-.37-1.19-.77-1.79-1.15a59.86,59.86,0,0,0,6.05-116.62l.31,24.66-13.55-26.83h-.17a59.87,59.87,0,0,0-62.58,57c-.06,1.15,0,2.27,0,3.4-4.71-5.38-9-11.15-11.83-17.47-5.73-12.79-5.84-27.28-5.39-44.9.9-34.9,2.41-70.08,4.37-105.14a59.85,59.85,0,0,0,53.16-56.64c.08-1.83,0-3.63,0-5.43,0-.45,0-.89-.07-1.34-.12-1.74-.28-3.46-.55-5.16,0-.28-.1-.55-.15-.82-.24-1.44-.54-2.86-.88-4.26-.13-.53-.26-1-.4-1.57-.42-1.53-.88-3-1.42-4.52-.18-.49-.39-1-.58-1.46-.42-1.09-.88-2.17-1.37-3.23-.26-.56-.51-1.12-.78-1.67-.08-.14-.13-.29-.21-.43l0,0a59.84,59.84,0,0,0-70.28-30.36l.4,32.1-13.4-26.52a59.57,59.57,0,0,0-28.55,64.51h-.06c.09.43.22.84.32,1.26.19.79.39,1.57.61,2.35.28,1,.6,2,.93,3,.25.74.49,1.47.77,2.2.41,1.06.87,2.09,1.33,3.12.27.6.51,1.22.8,1.81q1.14,2.33,2.48,4.53c.31.52.66,1,1,1.51.64,1,1.28,2,2,2.93.43.59.89,1.16,1.34,1.73.66.83,1.33,1.65,2,2.44.49.57,1,1.12,1.51,1.66.74.78,1.49,1.53,2.27,2.26.52.49,1,1,1.57,1.46.88.79,1.8,1.53,2.73,2.26.47.37.93.75,1.41,1.11,1.42,1,2.88,2,4.39,3,.28.17.59.31.87.48,1.27.74,2.55,1.45,3.87,2.09.57.28,1.15.53,1.73.79,1.08.48,2.17.95,3.29,1.38l2,.7c1.1.37,2.22.72,3.35,1,.66.18,1.33.37,2,.53,1.22.29,2.47.53,3.73.75l.24.05q-1.23,22.19-2.2,44.39a59.83,59.83,0,0,0-83.07-26l10.58,29-21.77-20.9a59.66,59.66,0,0,0-19.34,41.34A58.5,58.5,0,0,0,52.8,354a59.84,59.84,0,0,0,110.06,16.3c0,1.5-.1,3-.14,4.51-.4,15.54-.9,34.88,6.85,52.15,5.25,11.7,13.69,21.21,22,29.73,5.43,5.54,11.06,10.91,16.83,16.1a60.09,60.09,0,0,0,21.62,18c9.48,7.3,19.3,14.17,29.45,20.51l6.34,3.94c5.7,3.53,11.54,7.16,17.26,10.93-1-.1-2-.21-3-.26a59.89,59.89,0,0,0-58.94,39l37.4,30.43-41.14-9.54a59.89,59.89,0,0,0,85.82,53.92l-2.78,3.45q-2.76,3.43-5.45,6.82c-24.34,30.83-31.11,60.09-19.06,82.4l14.66-7.91c-11.73-21.72,5.91-49.52,17.47-64.16q2.64-3.33,5.36-6.7c15.55-19.32,33.17-41.22,32.74-68.08C345.52,545,306.21,520.6,274.63,501Z"
@@ -444,7 +470,7 @@
                   d="M998.23,509.4A15.27,15.27,0,0,1,1014,512c5.47,4.88,6.57,12.85,8,20s4.17,15.21,11,18a28.35,28.35,0,0,1-9.19-.27l10.25,9.19-17.27-5.63c-5.42-1.77-11.11-3.56-16.72-2.56-9.3,1.65-15.78,10.4-24.71,13.47l1-4.85-6,0a11.75,11.75,0,0,0,3.43-4,3.27,3.27,0,0,0-2.29-1.2c-2.5-15.59,6.76-31,18.81-41.17,2.38-2,5-3.92,8.06-4.42s6.64.87,7.71,3.78"
                   fill="#3c354c"
                 />
-              </svg>
+              </svg> -->
             </div>
           </div>
         </div>
@@ -544,7 +570,7 @@
 <script>
 import { mapGetters } from "vuex";
 export default {
-  computed:{
+  computed: {
     ...mapGetters("item", ["itemDetails"]),
   },
 };
@@ -565,27 +591,27 @@ export default {
     @apply text-6xl font-bold;
   }
 }
-.text-gray-600{
+.text-gray-600 {
   @apply sm:px-3;
 }
 
 @media only screen and (max-width: 650px) {
-  .foundItemContainer{
+  .foundItemContainer {
     @apply flex-col;
   }
-  .img-container{
+  .img-container {
     @apply mt-3;
   }
-  .card{
+  .card {
     @apply py-10 px-0;
-    section{
+    section {
       padding: 2rem 0.75rem;
     }
   }
-  .text-gray-800{
+  .text-gray-800 {
     font-size: 1rem;
   }
-  .text-gray-600{
+  .text-gray-600 {
     @apply pr-2;
     font-size: 12px;
   }

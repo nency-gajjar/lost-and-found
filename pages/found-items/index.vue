@@ -6,8 +6,8 @@
           addButton
           float-right
           mr-56
-          bg-indigo-400
-          hover:bg-indigo-600
+          bg-indigo-500
+          hover:bg-indigo-700
           text-white text-sm
           font-bold
           rounded
@@ -124,10 +124,10 @@ export default {
     },
   },
   computed: {
-    itemDescription(){
+    itemDescription() {
       return this.$route.query.itemDescription || "Lorem ipsum dolor sit amet";
-    }
-  }
+    },
+  },
 };
 </script>
 
@@ -137,25 +137,25 @@ export default {
 }
 
 @media only screen and (max-width: 950px) {
-  .addButton{
+  .addButton {
     @apply mr-36;
   }
 }
 
 @media only screen and (max-width: 750px) {
-  .addButton{
+  .addButton {
     @apply mr-28;
   }
 }
 
 @media only screen and (max-width: 550px) {
-  .addButton{
+  .addButton {
     @apply mr-14;
   }
 }
 
 @media only screen and (max-width: 450px) {
-  .addButton{
+  .addButton {
     @apply mr-11;
   }
 }

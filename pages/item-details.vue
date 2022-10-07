@@ -3,26 +3,26 @@
     <div v-show="!showFilledDetails">
       <div class="card">
         <h1
-            class="
-              w-full
-              my-2
-              text-xl
-              font-bold
-              leading-tight
-              text-center text-gray-700
-            "
-          >
-            {{ senderFormTitle }}
+          class="
+            w-full
+            my-2
+            text-xl
+            font-bold
+            leading-tight
+            text-center text-gray-700
+          "
+        >
+          {{ senderFormTitle }}
         </h1>
         <div class="flex justify-center">
           <span
-              class="
-                w-20
-                border-t-2 border-solid border-indigo-200
-                inline-block
-                mb-3
-              "
-            ></span>
+            class="
+              w-20
+              border-t-2 border-solid border-indigo-200
+              inline-block
+              mb-3
+            "
+          ></span>
         </div>
         <ValidationObserver v-slot="{ validate }" ref="observer">
           <form
@@ -178,7 +178,7 @@
             <p>Address:</p>
             <ValidationProvider
               v-slot="{ errors }"
-              rules="max:100|address"
+              rules="required"
               class="block"
             >
               <v-select
@@ -197,7 +197,7 @@
             <ValidationProvider
               v-if="manualAddressSelected"
               v-slot="{ errors }"
-              rules="max:500|address"
+              rules="required"
               class="block"
             >
               <BaseInput
@@ -289,7 +289,7 @@
                 </p>
               </ValidationProvider>
             </div>
-            
+
             <h1
               class="
                 w-full
@@ -304,21 +304,16 @@
             </h1>
             <div class="flex justify-center">
               <span
-                  class="
-                    w-20
-                    border-t-2 border-solid border-indigo-200
-                    inline-block
-                    mb-3
-                  "
-                ></span>
+                class="
+                  w-20
+                  border-t-2 border-solid border-indigo-200
+                  inline-block
+                  mb-3
+                "
+              ></span>
             </div>
 
-            <ValidationProvider
-              v-slot="{ errors }"
-              ref="imageValidationProvider"
-              rules="required|image"
-              class="block"
-            >
+            <div class="block">
               <label
                 class="block mb-2 text-sm font-medium text-gray-800"
                 for="itemImage"
@@ -339,13 +334,7 @@
                 id="itemImage"
                 type="file"
               />
-              <p
-                v-if="errors.length"
-                class="vee-validation-error mt-2 text-sm text-red-600"
-              >
-                {{ errors[0] }}
-              </p>
-            </ValidationProvider>
+            </div>
             <div
               class="top-margin-3 flex justify-center"
               v-if="loadingSpinner"
@@ -940,9 +929,8 @@ export default {
     },
     async generatePdf() {
       const params = {
-        venu_type:
-          this.venueType === "Other" ? this.manualVenue : this.venueType,
-        date: this.foundItemDate,
+        venu_type: this.venueType === "Other" ? this.manualVenue : this.venue,
+        date: this.foundDate,
         venue_name: this.venueName,
         venue_email: this.venueEmail,
         venue_phone_no: this.venuePhone,
@@ -964,7 +952,10 @@ export default {
         params.receiver_email = this.receiverEmail;
         params.receiver_mobile_no = this.receiverPhone;
       }
-      this.$store.commit("item/SET_ITEM_DETAILS", params);
+      this.$store.commit("item/SET_ITEM_DETAILS", {
+        ...params,
+        image: this.image,
+      });
       this.$axios
         .post("/storelostitem", params, {
           responseType: "arraybuffer",
@@ -982,7 +973,9 @@ export default {
             document.body.appendChild(link);
             link.click();
           }
-          this.$router.push({ path: "/detail-confirmation" });
+          this.$nextTick(() => {
+            this.$router.push({ path: "/detail-confirmation" });
+          });
         })
         .catch((error) => console.log(error));
     },
@@ -1047,21 +1040,16 @@ export default {
     },
     async uploadImg(event) {
       this.showEditor = false;
-      const { valid } = await this.$refs.imageValidationProvider.validate(
-        event
-      );
-      if (valid) {
-        console.log(event.target.files[0]);
-        if (event.target.files[0]) {
-          this.$refs.editor.uploadImage(event);
-          this.loadingSpinner = true;
-          setTimeout(() => {
-            this.loadingSpinner = false;
-            this.showEditor = true;
-          }, 2000);
-        } else {
-          this.showEditor = false;
-        }
+      console.log(event.target.files[0]);
+      if (event.target.files[0]) {
+        this.$refs.editor.uploadImage(event);
+        this.loadingSpinner = true;
+        setTimeout(() => {
+          this.loadingSpinner = false;
+          this.showEditor = true;
+        }, 2000);
+      } else {
+        this.showEditor = false;
       }
     },
     saveImg() {
@@ -1146,7 +1134,8 @@ export default {
       console.log(this.$route.query.id);
       this.senderFormTitle = "EDIT SENDER'S DETAILS";
       this.foundItemFormTitle = "EDIT FOUND ITEM'S DETAILS";
-      this.$axios.get("/getsinglelostitem?id="+this.$route.query.id)
+      this.$axios
+        .get("/getsinglelostitem?id=" + this.$route.query.id)
         .then((response) => {
           if (response.status === 200) {
             let responseData = response.data.data.Item;
@@ -1167,7 +1156,8 @@ export default {
             this.packageType = responseData.package_type;
             this.weight = responseData.weight;
             this.dimension = responseData.dimensions;
-            this.itemStatus = responseData.item_status == 0 ? "Claimed" : "Unclaimed";
+            this.itemStatus =
+              responseData.item_status == 0 ? "Claimed" : "Unclaimed";
             this.receiverName = responseData.receiver_name;
             this.receiverEmail = responseData.receiver_email;
             this.receiverPhone = responseData.receiver_mobile_no;
