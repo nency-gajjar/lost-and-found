@@ -2,14 +2,31 @@
   <div class="wrapper-form">
     <div v-show="!showFilledDetails">
       <div class="card">
-        <div
-          class="space-y-4 text-[#757D8A] font-bold tracking-wide text-center"
-        >
-          {{ senderFormTitle }}
+        <h1
+            class="
+              w-full
+              my-2
+              text-xl
+              font-bold
+              leading-tight
+              text-center text-gray-700
+            "
+          >
+            {{ senderFormTitle }}
+        </h1>
+        <div class="flex justify-center">
+          <span
+              class="
+                w-20
+                border-t-2 border-solid border-indigo-200
+                inline-block
+                mb-3
+              "
+            ></span>
         </div>
         <ValidationObserver v-slot="{ validate }" ref="observer">
           <form
-            class="space-y-4 mt-11 p-2"
+            class="space-y-4 mt-7 p-2"
             @submit.prevent="validate().then(onSubmit)"
           >
             <ValidationProvider
@@ -272,18 +289,30 @@
                 </p>
               </ValidationProvider>
             </div>
-
-            <div
+            
+            <h1
               class="
-                space-y-4
-                text-[#757D8A]
+                w-full
+                my-2
+                text-xl
                 font-bold
-                tracking-wide
-                text-center
+                leading-tight
+                text-center text-gray-700
               "
             >
               {{ foundItemFormTitle }}
+            </h1>
+            <div class="flex justify-center">
+              <span
+                  class="
+                    w-20
+                    border-t-2 border-solid border-indigo-200
+                    inline-block
+                    mb-3
+                  "
+                ></span>
             </div>
+
             <ValidationProvider
               v-slot="{ errors }"
               ref="imageValidationProvider"
@@ -1120,7 +1149,6 @@ export default {
       this.$axios.get("/getsinglelostitem?id="+this.$route.query.id)
         .then((response) => {
           if (response.status === 200) {
-            console.log(response);
             let responseData = response.data.data.Item;
             this.venueName = responseData.venue_name;
             this.venueEmail = responseData.venue_email;

@@ -7,13 +7,13 @@
             class="
               w-full
               my-2
-              text-3xl
+              text-xl
               font-bold
               leading-tight
               text-center text-gray-700
             "
           >
-            Preview Details
+            PREVIEW DETAILS
           </h1>
           <!-- <div class="w-full mb-4">
             <div
@@ -40,43 +40,43 @@
           >
             Sender's Details:
           </h2>
-          <div class="flex mt-3">
-            <div class="text-left text-gray-600 font-medium sm:w-4/12">
+          <div class="flex items-center mt-3">
+            <div class="text-left text-gray-600 font-medium w-4/12">
               Sender Affiliation
             </div>
-            <div class="text-gray-600 text-left sm:w-8/12">Hotel</div>
+            <div class="text-gray-600 text-left w-8/12">Hotel</div>
           </div>
-          <div class="flex mt-3">
-            <div class="text-left text-gray-600 font-medium sm:w-4/12">
+          <div class="flex items-center mt-3">
+            <div class="text-left text-gray-600 font-medium w-4/12">
               Found Item Date
             </div>
-            <div class="text-gray-600 text-left sm:w-8/12">05/10/2022</div>
+            <div class="text-gray-600 text-left w-8/12">05/10/2022</div>
           </div>
-          <div class="flex mt-3">
-            <div class="text-left text-gray-600 font-medium sm:w-4/12">
+          <div class="flex items-center mt-3">
+            <div class="text-left text-gray-600 font-medium w-4/12">
               Venue Name
             </div>
-            <div class="text-gray-600 text-left sm:w-8/12">ABC</div>
+            <div class="text-gray-600 text-left w-8/12">ABC</div>
           </div>
-          <div class="flex mt-3">
-            <div class="text-left text-gray-600 font-medium sm:w-4/12">
+          <div class="flex items-center mt-3">
+            <div class="text-left text-gray-600 font-medium w-4/12">
               Venue Email
             </div>
-            <div class="text-gray-600 text-left sm:w-8/12">
+            <div class="text-gray-600 text-left w-8/12">
               nency.bhadeshiya@bacancy.com
             </div>
           </div>
-          <div class="flex mt-3">
-            <div class="text-left text-gray-600 font-medium sm:w-4/12">
+          <div class="flex items-center mt-3">
+            <div class="text-left text-gray-600 font-medium w-4/12">
               Venue Phone No.
             </div>
-            <div class="text-gray-600 text-left sm:w-8/12">940 815 45145</div>
+            <div class="text-gray-600 text-left w-8/12">940 815 45145</div>
           </div>
-          <div class="flex mt-3">
-            <div class="text-left text-gray-600 font-medium sm:w-4/12">
+          <div class="flex items-center mt-3">
+            <div class="text-left text-gray-600 font-medium w-4/12">
               Employee Mobile No.
             </div>
-            <div class="text-gray-600 text-left sm:w-8/12">940 815 45145</div>
+            <div class="text-gray-600 text-left w-8/12">940 815 45145</div>
           </div>
 
           <br />
@@ -94,35 +94,35 @@
             Address:
           </h2>
 
-          <div class="flex mt-3">
-            <div class="text-left text-gray-600 font-medium sm:w-4/12">
+          <div class="flex items-center mt-3">
+            <div class="text-left text-gray-600 font-medium w-4/12">
               Address
             </div>
-            <div class="text-gray-600 text-left sm:w-8/12">ABX</div>
+            <div class="text-gray-600 text-left w-8/12">ABX</div>
           </div>
-          <div class="flex mt-3">
-            <div class="text-left text-gray-600 font-medium sm:w-4/12">
+          <div class="flex items-center mt-3">
+            <div class="text-left text-gray-600 font-medium w-4/12">
               City
             </div>
-            <div class="text-gray-600 text-left sm:w-8/12">Rajkot</div>
+            <div class="text-gray-600 text-left w-8/12">Rajkot</div>
           </div>
-          <div class="flex mt-3">
-            <div class="text-left text-gray-600 font-medium sm:w-4/12">
+          <div class="flex items-center mt-3">
+            <div class="text-left text-gray-600 font-medium w-4/12">
               State
             </div>
-            <div class="text-gray-600 text-left sm:w-8/12">Gujurat</div>
+            <div class="text-gray-600 text-left w-8/12">Gujurat</div>
           </div>
-          <div class="flex mt-3">
-            <div class="text-left text-gray-600 font-medium sm:w-4/12">
+          <div class="flex items-center mt-3">
+            <div class="text-left text-gray-600 font-medium w-4/12">
               Country
             </div>
-            <div class="text-gray-600 text-left sm:w-8/12">India</div>
+            <div class="text-gray-600 text-left w-8/12">India</div>
           </div>
-          <div class="flex mt-3">
-            <div class="text-left text-gray-600 font-medium sm:w-4/12">
+          <div class="flex items-center mt-3">
+            <div class="text-left text-gray-600 font-medium w-4/12">
               Zipcode
             </div>
-            <div class="text-gray-600 text-left sm:w-8/12">360002</div>
+            <div class="text-gray-600 text-left w-8/12">360002</div>
           </div>
           <br />
           <hr />
@@ -139,41 +139,41 @@
             Found Item's Details:
           </h2>
 
-          <div class="flex mt-3">
-            <div class="flex flex-col sm:w-8/12">
-              <div class="flex mt-3">
-                <div class="text-left text-gray-600 font-medium sm:w-6/12">
+          <div class="flex foundItemContainer mt-3">
+            <div class="flex flex-col md:w-8/12 sm:w-full">
+              <div class="flex items-center mt-3">
+                <div class="text-left text-gray-600 font-medium w-6/12">
                   Item Description
                 </div>
-                <div class="text-gray-600 text-left sm:w-6/12">Abcsflfj</div>
+                <div class="text-gray-600 text-left w-6/12">Abcsflfj</div>
               </div>
-              <div class="flex mt-3">
-                <div class="text-left text-gray-600 font-medium sm:w-6/12">
+              <div class="flex items-center mt-3">
+                <div class="text-left text-gray-600 font-medium w-6/12">
                   Package Type
                 </div>
-                <div class="text-gray-600 text-left sm:w-6/12">Box</div>
+                <div class="text-gray-600 text-left w-6/12">Box</div>
               </div>
-              <div class="flex mt-3">
-                <div class="text-left text-gray-600 font-medium sm:w-6/12">
+              <div class="flex items-center mt-3">
+                <div class="text-left text-gray-600 font-medium w-6/12">
                   Weight
                 </div>
-                <div class="text-gray-600 text-left sm:w-6/12">98 lbs</div>
+                <div class="text-gray-600 text-left w-6/12">98 lbs</div>
               </div>
-              <div class="flex mt-3">
-                <div class="text-left text-gray-600 font-medium sm:w-6/12">
+              <div class="flex items-center mt-3">
+                <div class="text-left text-gray-600 font-medium w-6/12">
                   Dimension
                 </div>
-                <div class="text-gray-600 text-left sm:w-6/12">34 * 34</div>
+                <div class="text-gray-600 text-left w-6/12">34 * 34</div>
               </div>
-              <div class="flex mt-3">
-                <div class="text-left text-gray-600 font-medium sm:w-6/12">
+              <div class="flex items-center mt-3">
+                <div class="text-left text-gray-600 font-medium w-6/12">
                   Item Status
                 </div>
-                <div class="text-gray-600 text-left sm:w-6/12">Claimed</div>
+                <div class="text-gray-600 text-left w-6/12">Claimed</div>
               </div>
             </div>
 
-            <div class="text-gray-600 text-left sm:w-4/12">
+            <div class="img-container text-gray-600 text-left md:w-4/12 sm:w-full">
               <svg
                 class="w-full mx-auto"
                 viewBox="0 0 1177 598.5"
@@ -563,6 +563,31 @@ export default {
   @apply p-10 rounded-lg text-indigo-500;
   .title {
     @apply text-6xl font-bold;
+  }
+}
+.text-gray-600{
+  @apply sm:px-3;
+}
+
+@media only screen and (max-width: 650px) {
+  .foundItemContainer{
+    @apply flex-col;
+  }
+  .img-container{
+    @apply mt-3;
+  }
+  .card{
+    @apply py-10 px-0;
+    section{
+      padding: 2rem 0.75rem;
+    }
+  }
+  .text-gray-800{
+    font-size: 1rem;
+  }
+  .text-gray-600{
+    @apply pr-2;
+    font-size: 12px;
   }
 }
 </style>
