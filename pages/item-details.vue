@@ -284,7 +284,12 @@
             >
               {{ foundItemFormTitle }}
             </div>
-            <div class="block">
+            <ValidationProvider
+              v-slot="{ errors }"
+              ref="imageValidationProvider"
+              rules="required|image"
+              class="block"
+            >
               <label
                 class="block mb-2 text-sm font-medium text-gray-800"
                 for="itemImage"
@@ -305,7 +310,13 @@
                 id="itemImage"
                 type="file"
               />
-            </div>
+              <p
+                v-if="errors.length"
+                class="vee-validation-error mt-2 text-sm text-red-600"
+              >
+                {{ errors[0] }}
+              </p>
+            </ValidationProvider>
             <div
               class="top-margin-3 flex justify-center"
               v-if="loadingSpinner"
@@ -996,6 +1007,7 @@ export default {
         width: "100",
         height: "100",
         overlayOpacity: "0",
+        hasControls: true,
       };
       this.$refs.editor.set("crop", cropModeOptions);
       this.stateCrop = false;
@@ -1105,23 +1117,35 @@ export default {
       console.log(this.$route.query.id);
       this.senderFormTitle = "EDIT SENDER'S DETAILS";
       this.foundItemFormTitle = "EDIT FOUND ITEM'S DETAILS";
-      this.venueName = "abc";
-      this.venueEmail = "abc@gmail.com";
-      this.manualVenue = "abc1";
-      this.venue = "Other";
-      this.venuePhone = "1234567890";
-      this.employeePhone = "1234567890";
-      this.foundDate = new Date().toISOString().slice(0, 10);
-      this.venueManually = true;
-      this.itemDescription = "Laptop";
-      this.packageType = "Box";
-      this.weight = "2.4 kg";
-      this.dimension = "60 cm X 45 cm";
-      this.itemStatus = "Claimed";
-      this.showReceiverInputs = true;
-      this.receiverName = "abc3";
-      this.receiverEmail = "abc3@gmail.com";
-      this.receiverPhone = "1234567890";
+      this.$axios.get("/getsinglelostitem?id="+this.$route.query.id)
+        .then((response) => {
+          if (response.status === 200) {
+            console.log(response);
+            let responseData = response.data.data.Item;
+            this.venueName = responseData.venue_name;
+            this.venueEmail = responseData.venue_email;
+            // this.manualVenue = "abc1";
+            this.venue = "Hotel"; // not found in api response
+            this.address = "Other"; // not found in api response
+            this.manualAddress = responseData.address;
+            this.city = responseData.city;
+            this.state = responseData.state;
+            this.country = responseData.country;
+            this.zipcode = responseData.zipcode;
+            this.venuePhone = responseData.venue_phone_no;
+            this.employeePhone = responseData.employee_mobile_no;
+            this.foundDate = new Date().toISOString().slice(0, 10); // not found in api response
+            this.itemDescription = responseData.item_description;
+            this.packageType = responseData.package_type;
+            this.weight = responseData.weight;
+            this.dimension = responseData.dimensions;
+            this.itemStatus = responseData.item_status == 0 ? "Claimed" : "Unclaimed";
+            this.receiverName = responseData.receiver_name;
+            this.receiverEmail = responseData.receiver_email;
+            this.receiverPhone = responseData.receiver_mobile_no;
+          }
+        })
+        .catch((error) => console.log(error));
     } else {
       this.senderFormTitle = "SENDER'S DETAILS";
       this.foundItemFormTitle = "FOUND ITEM'S DETAILS";
