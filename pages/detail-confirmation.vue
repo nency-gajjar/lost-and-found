@@ -197,6 +197,34 @@
                   {{ itemDetails.item_status === 0 ? "Claimed" : "Unclaimed" }}
                 </div>
               </div>
+              <template v-if="!itemDetails.item_status">
+                <div class="flex items-center mt-3">
+                  <div class="text-left text-gray-600 font-medium w-6/12">
+                    Receiver's Name
+                  </div>
+                  <div class="text-gray-600 text-left sm:w-6/12">
+                    {{ itemDetails.receiver_name }}
+                  </div>
+                </div>
+
+                <div class="flex items-center mt-3">
+                  <div class="text-left text-gray-600 font-medium w-6/12">
+                    Receiver's Email
+                  </div>
+                  <div class="text-gray-600 text-left sm:w-6/12">
+                    {{ itemDetails.receiver_email }}
+                  </div>
+                </div>
+
+                <div class="flex items-center mt-3">
+                  <div class="text-left text-gray-600 font-medium w-6/12">
+                    Receiver's Mobile No.
+                  </div>
+                  <div class="text-gray-600 text-left sm:w-6/12">
+                    {{ itemDetails.receiver_mobile_no }}
+                  </div>
+                </div>
+              </template>
             </div>
 
             <div class="text-gray-600 text-left sm:w-4/12">
@@ -497,6 +525,7 @@
               ease-in-out
               w-full
             "
+            @click="submitDetails"
           >
             Submit
           </button>
@@ -531,6 +560,7 @@
               w-full
               border border-gray-300
             "
+            @click="editDetails()"
           >
             Edit
           </button>
@@ -572,6 +602,40 @@ import { mapGetters } from "vuex";
 export default {
   computed: {
     ...mapGetters("item", ["itemDetails"]),
+  },
+  methods: {
+    submitDetails() {
+      this.$axios
+        .post("/storelostitem", this.itemDetails, {
+          responseType: "arraybuffer",
+          headers: {
+            "Content-Type": "application/json",
+            Accept: "application/pdf",
+          },
+        })
+        .then((response) => {
+          if (response.status === 200) {
+            const url = window.URL.createObjectURL(new Blob([response.data]));
+            const link = document.createElement("a");
+            link.href = url;
+            link.setAttribute("download", "file.pdf");
+            document.body.appendChild(link);
+            link.click();
+          }
+          // this.$nextTick(() => {
+          //   this.$router.push({ path: "/detail-confirmation" });
+          // });
+        })
+        .catch((error) => console.log(error));
+    },
+    editDetails() {
+      this.$nextTick(() => {
+        this.$router.push({
+          name: "item-details",
+          params: { itemDetails: this.itemDetails },
+        });
+      });
+    },
   },
 };
 </script>
