@@ -32,7 +32,6 @@
         shadow-md
         md:flex-row
         hover:bg-gray-100
-        dark:border-gray-700 dark:bg-gray-800 dark:hover:bg-gray-700
       "
     >
       <div class="w-24 h-24">
@@ -54,12 +53,11 @@
             font-bold
             tracking-tight
             text-gray-900
-            dark:text-white
           "
         >
           {{ itemDescription }}
         </h5>
-        <p class="mb-3 font-normal text-gray-700 dark:text-gray-400">
+        <p class="mb-3 font-normal text-gray-700">
           Neque porro quisquam est qui dolorem ipsum quia dolor sit amet,
           consectetur, adipisci velit.
         </p>
