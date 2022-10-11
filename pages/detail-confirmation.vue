@@ -53,7 +53,7 @@
               Found Item Date
             </div>
             <div class="text-gray-600 text-left sm:w-8/12">
-              {{ itemDetails.date }}
+              {{ itemDetails.datse }}
             </div>
           </div>
           <div class="flex items-center mt-3">
@@ -121,7 +121,7 @@
           <div class="flex items-center mt-3">
             <div class="text-left text-gray-600 font-medium w-4/12">State</div>
             <div class="text-gray-600 text-left sm:w-8/12">
-              {{ itemDetails.state }}
+              {{ itemDetails.states }}
             </div>
           </div>
           <div class="flex items-center mt-3">
@@ -605,28 +605,55 @@ export default {
   },
   methods: {
     submitDetails() {
-      this.$axios
-        .post("/storelostitem", this.itemDetails, {
-          responseType: "arraybuffer",
-          headers: {
-            "Content-Type": "application/json",
-            Accept: "application/pdf",
-          },
-        })
-        .then((response) => {
-          if (response.status === 200) {
-            const url = window.URL.createObjectURL(new Blob([response.data]));
-            const link = document.createElement("a");
-            link.href = url;
-            link.setAttribute("download", "file.pdf");
-            document.body.appendChild(link);
-            link.click();
-          }
-          // this.$nextTick(() => {
-          //   this.$router.push({ path: "/detail-confirmation" });
-          // });
-        })
-        .catch((error) => console.log(error));
+      let params = {...this.itemDetails};
+      delete params.foundItemId;
+      if(this.itemDetails.foundItemId){
+        this.$axios
+          .post("/updatesinglelostitem?id="
+           + this.itemDetails.foundItemId, params, {
+            responseType: "arraybuffer",
+            headers: {
+              "Content-Type": "application/json",
+              Accept: "application/pdf",
+            },
+          })
+          .then((response) => {
+            if (response.status === 200) {
+              console.log(response);
+              const url = window.URL.createObjectURL(new Blob([response.data]));
+              const link = document.createElement("a");
+              link.href = url;
+              link.setAttribute("download", "file.pdf");
+              document.body.appendChild(link);
+              link.click();
+            }
+          })
+          .catch((error) => console.log(error));
+      }
+      else{
+        this.$axios
+          .post("/storelostitem", params, {
+            responseType: "arraybuffer",
+            headers: {
+              "Content-Type": "application/json",
+              Accept: "application/pdf",
+            },
+          })
+          .then((response) => {
+            if (response.status === 200) {
+              const url = window.URL.createObjectURL(new Blob([response.data]));
+              const link = document.createElement("a");
+              link.href = url;
+              link.setAttribute("download", "file.pdf");
+              document.body.appendChild(link);
+              link.click();
+            }
+            // this.$nextTick(() => {
+            //   this.$router.push({ path: "/detail-confirmation" });
+            // });
+          })
+          .catch((error) => console.log(error));
+      }
     },
     editDetails() {
       this.$nextTick(() => {

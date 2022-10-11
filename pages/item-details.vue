@@ -857,6 +857,7 @@ export default {
         showDialCode: false,
       },
     },
+    foundItemId: "",
   }),
   components: {
     ValidationObserver,
@@ -986,14 +987,14 @@ export default {
       let venuePhoneNo = arr.join('');
       const params = {
         venu_type: this.venue === "Other" ? this.manualVenue : this.venue,
-        date: this.foundDate,
+        datse: this.foundDate,
         venue_name: this.venueName,
         venue_email: this.venueEmail,
         venue_phone_no: venuePhoneNo,
         employee_mobile_no: this.employeePhone,
         address: this.address,
         city: this.city,
-        state: this.state,
+        states: this.state,
         country: this.country,
         zipcode: this.zipcode,
         image: this.image,
@@ -1045,15 +1046,16 @@ export default {
       } else {
         console.log("valid");
         const params = {
+          foundItemId: this.foundItemId,
           venu_type: this.venue === "Other" ? this.manualVenue : this.venue,
-          date: this.foundDate,
+          datse: this.foundDate,
           venue_name: this.venueName,
           venue_email: this.venueEmail,
           venue_phone_no: venuePhoneNo,
           employee_mobile_no: this.employeePhone,
           address: this.address,
           city: this.city,
-          state: this.state,
+          states: this.state,
           country: this.country,
           zipcode: this.zipcode,
           image: this.image,
@@ -1225,6 +1227,7 @@ export default {
   },
   mounted() {
     if (this.$route.query.id) {
+      this.foundItemId = this.$route.query.id;
       console.log(this.$route.query.id);
       this.senderFormTitle = "EDIT SENDER'S DETAILS";
       this.foundItemFormTitle = "EDIT FOUND ITEM'S DETAILS";
@@ -1235,11 +1238,12 @@ export default {
             let responseData = response.data.data.Item;
             this.venueName = responseData.venue_name;
             this.venueEmail = responseData.venue_email;
-            this.venue = "Hotel";
-            this.address = "Other";
+            this.venue = responseData.venu_type;
+            this.address = responseData.address;
             this.manualAddress = responseData.address;
             this.city = responseData.city;
-            this.state = responseData.state;
+            this.image = responseData.image;
+            this.state = responseData.states;
             this.country = responseData.country;
             this.zipcode = responseData.zipcode;
             this.venuePhone = responseData.venue_phone_no;
@@ -1266,14 +1270,15 @@ export default {
       else this.venue = "Other";
 
       this.manualVenue = data.venu_type;
-      this.foundDate = data.date;
+      this.foundItemId = data.foundItemId;
+      this.foundDate = data.datse;
       this.venueName = data.venue_name;
       this.venueEmail = data.venue_email;
       this.venuePhone = data.venue_phone_no;
       this.employeePhone = data.employee_mobile_no;
       this.address = data.address;
       this.city = data.city;
-      this.state = data.state;
+      this.state = data.states;
       this.country = data.country;
       this.zipcode = data.zipcode;
       this.image = data.image;
