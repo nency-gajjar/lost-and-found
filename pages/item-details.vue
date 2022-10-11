@@ -878,15 +878,17 @@ export default {
   computed: {
     ...mapGetters("item", ["itemDetails"]),
     addressArr() {
-      if (this.apiAddressData.length == 0) {
+      if (this.apiAddressData.length == 0 && !this.address) {
         this.address = "";
         this.manualAddressSelected = true;
       }
       let addressLineArr = this.apiAddressData.map((addressObj) => {
         return addressObj.address;
       });
-      addressLineArr.push("");
-      this.address = addressLineArr[0];
+      // addressLineArr.push("");
+      if(!this.address){
+        this.address = addressLineArr[0];
+      }
       return addressLineArr;
     },
   },
@@ -1204,19 +1206,19 @@ export default {
     itemDescription(value) {
       switch (value) {
         case "Laptop":
-          this.packageType = "Box";
-          this.weight = "2.4 kg";
-          this.dimension = "60 cm X 45 cm";
+          this.packageType = this.packageType? this.packageType : "Box";
+          this.weight = this.weight? this.weight : "2.4 kg";
+          this.dimension = this.dimension? this.dimension : "60 cm X 45 cm";
           break;
         case "Mobile Phone":
-          this.packageType = "Box";
-          this.weight = "0.4 kg";
-          this.dimension = "30 cm X 15 cm";
+          this.packageType = this.packageType? this.packageType : "Box";
+          this.weight = this.weight? this.weight : "0.4 kg";
+          this.dimension = this.dimension? this.dimension : "30 cm X 15 cm";
           break;
         case "Driving Licence":
-          this.packageType = "Box";
-          this.weight = "0.05 kg";
-          this.dimension = "5 cm X 10 cm";
+          this.packageType = this.packageType? this.packageType : "Box";
+          this.weight = this.weight? this.weight : "0.05 kg";
+          this.dimension = this.dimension? this.dimension : "5 cm X 10 cm";
           break;
       }
     },
