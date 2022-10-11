@@ -141,6 +141,8 @@
               "
             /> -->
             <vue-tel-input
+              @input="debouncedGetData('phoneno')"
+              class="vue-tel-input"
               v-model="venuePhone"
               v-bind="bindPhoneInputProps"
               @country-changed="countryChanged"
@@ -821,7 +823,12 @@ export default {
     receiverName: "",
     receiverEmail: "",
     receiverPhone: "",
-    responseData: [],
+    responseData: {
+      venueName: [],
+      venueEmail: [],
+      venuePhone: [],
+    },
+    apiAddressData: [],
     itemImage: "",
     canvasWidth: "600",
     canvasHeight: "600",
@@ -871,11 +878,11 @@ export default {
   computed: {
     ...mapGetters("item", ["itemDetails"]),
     addressArr() {
-      if (this.responseData.length == 0) {
+      if (this.apiAddressData.length == 0) {
         this.address = "";
         this.manualAddressSelected = true;
       }
-      let addressLineArr = this.responseData.map((addressObj) => {
+      let addressLineArr = this.apiAddressData.map((addressObj) => {
         return addressObj.address;
       });
       addressLineArr.push("");
@@ -930,27 +937,57 @@ export default {
 
         console.log(params);
 
-        if (type === "name") params.place = this.venueName;
-        else if (type === "email") params.place = this.venueEmail;
-        else if (type === "phoneno") params.mobileno = this.venuePhone;
+        if (type === "name"){
+          params.place = this.venueName;
+          this.responseData.venueName = [];
+        }
+        else if (type === "email"){
+          params.place = this.venueEmail;
+          this.responseData.venueEmail = [];
+        }
+        else if (type === "phoneno"){
+          params.mobileno = this.venuePhone;
+          this.responseData.venuePhone = [];
+        }
 
         // let responseData = [];
         await this.$axios
           .get("/autofilladdress", { params })
           .then(({ data }) => {
             if (!data.error) {
-              this.responseData.push(...data.data);
+              // this.responseData.push(...data.data);
+
+              if (type === "name"){
+                if(this.venueName){
+                  this.responseData.venueName.push(...data.data);
+                }
+              }
+              else if (type === "email"){
+                if(this.venueEmail){
+                  this.responseData.venueEmail.push(...data.data);
+                }
+              }
+              else if (type === "phoneno"){
+                if(this.venuePhone){
+                  this.responseData.venuePhone.push(...data.data);
+                }
+              }
+              this.apiAddressData = [];
+              this.apiAddressData.push(...this.responseData.venueName,...this.responseData.venuePhone,...this.responseData.venueEmail);
             }
           });
       });
     },
     async generatePdf() {
+      let arr = this.venuePhone.split(" ");
+      arr.shift();
+      let venuePhoneNo = arr.join('');
       const params = {
         venu_type: this.venue === "Other" ? this.manualVenue : this.venue,
         date: this.foundDate,
         venue_name: this.venueName,
         venue_email: this.venueEmail,
-        venue_phone_no: this.venuePhone,
+        venue_phone_no: venuePhoneNo,
         employee_mobile_no: this.employeePhone,
         address: this.address,
         city: this.city,
@@ -997,6 +1034,9 @@ export default {
         .catch((error) => console.log(error));
     },
     async onSubmit() {
+      let arr = this.venuePhone.split(" ");
+      arr.shift();
+      let venuePhoneNo = arr.join('');
       const isValid = await this.$refs.observer.validate();
       if (!isValid) {
         console.log("not valid");
@@ -1007,7 +1047,7 @@ export default {
           date: this.foundDate,
           venue_name: this.venueName,
           venue_email: this.venueEmail,
-          venue_phone_no: this.venuePhone,
+          venue_phone_no: venuePhoneNo,
           employee_mobile_no: this.employeePhone,
           address: this.address,
           city: this.city,
@@ -1140,7 +1180,7 @@ export default {
     },
     address(newAddress, oldAddress) {
       if (newAddress != oldAddress) {
-        if (newAddress == "Other") {
+        if (!newAddress) {
           this.manualAddressSelected = true;
           this.manualAddress = "";
           this.city = "";
@@ -1149,14 +1189,14 @@ export default {
           this.zipcode = "";
         } else {
           this.manualAddressSelected = false;
-          let index = this.responseData.findIndex((addressObj) => {
+          let index = this.apiAddressData.findIndex((addressObj) => {
             return addressObj.address == newAddress;
           });
           if (index != -1) {
-            this.city = this.responseData[index].city;
-            this.state = this.responseData[index].state;
-            this.country = this.responseData[index].country;
-            this.zipcode = this.responseData[index].zipcode;
+            this.city = this.apiAddressData[index].city;
+            this.state = this.apiAddressData[index].state;
+            this.country = this.apiAddressData[index].country;
+            this.zipcode = this.apiAddressData[index].zipcode;
           }
         }
       }
@@ -1303,6 +1343,10 @@ canvas {
   @apply h-12 rounded-lg;
 }
 
+.vti__dropdown-list{
+  z-index: 50 !important;
+}
+
 .error {
   & > div {
     @apply text-red-500;
@@ -1314,6 +1358,15 @@ canvas {
 
 .top-margin-3 {
   margin-top: 3px !important;
+}
+
+.vue-tel-input{
+  @apply h-12;
+  border-radius: 0.5rem !important;
+  input{
+    border-top-right-radius: 0.5rem !important;
+    border-bottom-right-radius: 0.5rem !important;
+  }
 }
 
 @media only screen and (max-width: 650px) {
