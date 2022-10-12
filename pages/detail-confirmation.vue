@@ -1,234 +1,498 @@
 <template>
-  <div class="wrapper">
-    <div v-if="Object.keys(itemDetails).length > 0" class="card w-9/12">
-      <section class="bg-white border-b p-8">
-        <div class="container max-w-5xl mx-auto m-8">
+  <div class="wrapper" v-if="Object.keys(itemDetails).length > 0">
+    <div
+      class="
+        card
+        w-full
+        mx-6
+        lg:mx-0
+        md:w-8/12
+        lg:w-7/12
+        xl:w-6/12
+        overflow-hidden
+        bg-white
+        border border-[#E1E3E6]
+        rounded-lg
+      "
+      style="box-shadow: rgba(54, 28, 93, 0.04) -10px 18px 32px"
+    >
+      <section class="bg-white">
+        <div class="main-title bg-accent-100 text-white mb-3">
           <h1
             class="
               w-full
-              my-2
-              text-xl
+              py-3
+              text-2xl
               font-bold
               leading-tight
-              text-center text-gray-700
+              text-center text-white
             "
           >
             PREVIEW DETAILS
           </h1>
-          <!-- <div class="w-full mb-4">
+        </div>
+        <div class="sections py-4 px-6">
+          <div class="form-title">
+            <h2
+              class="
+                text-lg text-accent-100
+                font-medium
+                leading-tight
+                text-left text-gray-800
+              "
+            >
+              Sender's Details:
+            </h2>
+
+            <span
+              class="
+                w-20
+                border-t-4 border-solid border-gray-300
+                inline-block
+                mb-1
+              "
+            ></span>
+          </div>
+          <div class="flex items-center mt-3 flex-wrap">
             <div
-              style="background: linear-gradient(90deg, #d53369 0%, #daae51)"
-              class="h-1 mx-auto gradient w-64 opacity-25 my-0 py-0 rounded-t"
-            ></div>
-          </div> -->
-          <span
-            class="
-              w-20
-              border-t-2 border-solid border-indigo-200
-              inline-block
-              mb-3
-            "
-          ></span>
-          <h2
-            class="
-              my-2
-              text-xl
-              font-medium
-              leading-tight
-              text-left text-gray-800
-            "
-          >
-            Sender's Details:
-          </h2>
-          <div class="flex items-center mt-3">
-            <div class="text-left text-gray-600 font-medium w-4/12">
+              class="
+                text-left text-gray-600
+                font-medium
+                w-full
+                lg:w-4/12
+                md:w-5/12
+                sm:w-6/12
+              "
+            >
               Sender Affiliation
             </div>
-            <div class="text-gray-600 text-left sm:w-8/12">
+            <div class="text-gray-600 text-left md:w-7/12 sm:w-6/12">
               {{ itemDetails.venu_type }}
             </div>
           </div>
-          <div class="flex items-center mt-3">
-            <div class="text-left text-gray-600 font-medium w-4/12">
+          <div class="flex items-center mt-3 flex-wrap">
+            <div
+              class="
+                text-left text-gray-600
+                font-medium
+                w-full
+                lg:w-4/12
+                md:w-5/12
+                sm:w-6/12
+              "
+            >
               Found Item Date
             </div>
-            <div class="text-gray-600 text-left sm:w-8/12">
+            <div class="text-gray-600 text-left md:w-7/12 sm:w-6/12">
               {{ itemDetails.datse }}
             </div>
           </div>
-          <div class="flex items-center mt-3">
-            <div class="text-left text-gray-600 font-medium w-4/12">
+          <div class="flex items-center mt-3 flex-wrap">
+            <div
+              class="
+                text-left text-gray-600
+                font-medium
+                w-full
+                lg:w-4/12
+                md:w-5/12
+                sm:w-6/12
+              "
+            >
               Venue Name
             </div>
-            <div class="text-gray-600 text-left sm:w-8/12">
+            <div class="text-gray-600 text-left md:w-7/12 sm:w-6/12">
               {{ itemDetails.venue_name }}
             </div>
           </div>
-          <div class="flex items-center mt-3">
-            <div class="text-left text-gray-600 font-medium w-4/12">
+          <div class="flex items-center mt-3 flex-wrap">
+            <div
+              class="
+                text-left text-gray-600
+                font-medium
+                w-full
+                lg:w-4/12
+                md:w-5/12
+                sm:w-6/12
+              "
+            >
               Venue Email
             </div>
-            <div class="text-gray-600 text-left sm:w-8/12">
+            <div class="text-gray-600 text-left md:w-7/12 sm:w-6/12">
               {{ itemDetails.venue_email }}
             </div>
           </div>
-          <div class="flex items-center mt-3">
-            <div class="text-left text-gray-600 font-medium w-4/12">
+          <div class="flex items-center mt-3 flex-wrap">
+            <div
+              class="
+                text-left text-gray-600
+                font-medium
+                w-full
+                lg:w-4/12
+                md:w-5/12
+                sm:w-6/12
+              "
+            >
               Venue Phone No.
             </div>
-            <div class="text-gray-600 text-left sm:w-8/12">
+            <div class="text-gray-600 text-left md:w-7/12 sm:w-6/12">
               {{ itemDetails.venue_phone_no }}
             </div>
           </div>
-          <div class="flex items-center mt-3">
-            <div class="text-left text-gray-600 font-medium w-4/12">
+          <div class="flex items-center mt-3 flex-wrap">
+            <div
+              class="
+                text-left text-gray-600
+                font-medium
+                w-full
+                lg:w-4/12
+                md:w-5/12
+                sm:w-6/12
+              "
+            >
               Employee Mobile No.
             </div>
-            <div class="text-gray-600 text-left sm:w-8/12">
+            <div class="text-gray-600 text-left md:w-7/12 sm:w-6/12">
               {{ itemDetails.employee_mobile_no }}
             </div>
           </div>
+        </div>
 
-          <br />
-          <hr />
-          <br />
-          <h2
+        <div data-v-272705a6="" class="flex items-center my-2">
+          <div
             class="
-              my-2
-              text-xl
-              font-medium
-              leading-tight
-              text-left text-gray-800
+              h-6
+              w-6
+              box-content
+              border-r border-[#E1E3E6]
+              rounded-r-full
+              relative
+              right-3.5
+              bg-primary-60
             "
-          >
-            Address:
-          </h2>
+          ></div>
+          <hr class="flex-grow border-dashed border border-[#E1E3E6]" />
+          <div
+            class="
+              h-6
+              w-6
+              box-border
+              border-l border-[#E1E3E6]
+              rounded-l-full
+              relative
+              left-3.5
+              bg-primary-60
+            "
+          ></div>
+        </div>
 
-          <div class="flex items-center mt-3">
-            <div class="text-left text-gray-600 font-medium w-4/12">
+        <div class="sections px-6 py-4">
+          <div class="form-title">
+            <h2
+              class="
+                text-lg text-accent-100
+                font-medium
+                leading-tight
+                text-left text-gray-800
+              "
+            >
+              Address Details:
+            </h2>
+            <span
+              class="
+                w-20
+                border-t-4 border-solid border-gray-300
+                inline-block
+                mb-1
+              "
+            ></span>
+          </div>
+
+          <div class="flex items-center mt-3 flex-wrap">
+            <div
+              class="
+                text-left text-gray-600
+                font-medium
+                w-full
+                lg:w-4/12
+                md:w-5/12
+                sm:w-6/12
+              "
+            >
               Address
             </div>
-            <div class="text-gray-600 text-left sm:w-8/12">
+            <div class="text-gray-600 text-left md:w-7/12 sm:w-6/12">
               {{ itemDetails.address }}
             </div>
           </div>
-          <div class="flex items-center mt-3">
-            <div class="text-left text-gray-600 font-medium w-4/12">City</div>
-            <div class="text-gray-600 text-left sm:w-8/12">
+          <div class="flex items-center mt-3 flex-wrap">
+            <div
+              class="
+                text-left text-gray-600
+                font-medium
+                w-full
+                lg:w-4/12
+                md:w-5/12
+                sm:w-6/12
+              "
+            >
+              City
+            </div>
+            <div class="text-gray-600 text-left md:w-7/12 sm:w-6/12">
               {{ itemDetails.city }}
             </div>
           </div>
-          <div class="flex items-center mt-3">
-            <div class="text-left text-gray-600 font-medium w-4/12">State</div>
-            <div class="text-gray-600 text-left sm:w-8/12">
+          <div class="flex items-center mt-3 flex-wrap">
+            <div
+              class="
+                text-left text-gray-600
+                font-medium
+                w-full
+                lg:w-4/12
+                md:w-5/12
+                sm:w-6/12
+              "
+            >
+              State
+            </div>
+            <div class="text-gray-600 text-left md:w-7/12 sm:w-6/12">
               {{ itemDetails.states }}
             </div>
           </div>
-          <div class="flex items-center mt-3">
-            <div class="text-left text-gray-600 font-medium w-4/12">
+          <div class="flex items-center mt-3 flex-wrap">
+            <div
+              class="
+                text-left text-gray-600
+                font-medium
+                w-full
+                lg:w-4/12
+                md:w-5/12
+                sm:w-6/12
+              "
+            >
               Country
             </div>
-            <div class="text-gray-600 text-left sm:w-8/12">
+            <div class="text-gray-600 text-left md:w-7/12 sm:w-6/12">
               {{ itemDetails.country }}
             </div>
           </div>
-          <div class="flex items-center mt-3">
-            <div class="text-left text-gray-600 font-medium w-4/12">
+          <div class="flex items-center mt-3 flex-wrap">
+            <div
+              class="
+                text-left text-gray-600
+                font-medium
+                w-full
+                lg:w-4/12
+                md:w-5/12
+                sm:w-6/12
+              "
+            >
               Zipcode
             </div>
-            <div class="text-gray-600 text-left sm:w-8/12">
+            <div class="text-gray-600 text-left md:w-7/12 sm:w-6/12">
               {{ itemDetails.zipcode }}
             </div>
           </div>
-          <br />
-          <hr />
-          <br />
-          <h2
-            class="
-              my-2
-              text-xl
-              font-medium
-              leading-tight
-              text-left text-gray-800
-            "
-          >
-            Found Item's Details:
-          </h2>
+        </div>
 
-          <div class="flex foundItemContainer mt-3">
-            <div class="flex flex-col md:w-8/12 sm:w-full">
-              <div class="flex items-center mt-3">
-                <div class="text-left text-gray-600 font-medium w-6/12">
+        <div data-v-272705a6="" class="flex items-center my-2">
+          <div
+            class="
+              h-6
+              w-6
+              box-content
+              border-r border-[#E1E3E6]
+              rounded-r-full
+              relative
+              right-3.5
+              bg-primary-60
+            "
+          ></div>
+          <hr class="flex-grow border-dashed border border-[#E1E3E6]" />
+          <div
+            class="
+              h-6
+              w-6
+              box-border
+              border-l border-[#E1E3E6]
+              rounded-l-full
+              relative
+              left-3.5
+              bg-primary-60
+            "
+          ></div>
+        </div>
+        <div class="sections px-6 py-4">
+          <div class="form-title">
+            <h2
+              class="
+                text-lg text-accent-100
+                font-medium
+                leading-tight
+                text-left text-gray-800
+              "
+            >
+              Found Item's Details:
+            </h2>
+            <span
+              class="
+                w-20
+                border-t-4 border-solid border-gray-300
+                inline-block
+                mb-1
+              "
+            ></span>
+          </div>
+
+          <div class="flex foundItemContainer flex-col">
+            <div class="flex flex-col w-full">
+              <div class="flex items-center mt-3 flex-wrap">
+                <div
+                  class="
+                    text-left text-gray-600
+                    font-medium
+                    w-full
+                    lg:w-4/12
+                    md:w-5/12
+                    sm:w-6/12
+                  "
+                >
                   Item Description
                 </div>
-                <div class="text-gray-600 text-left sm:w-6/12">
+                <div class="text-gray-600 text-left md:w-7/12 sm:w-6/12">
                   {{ itemDetails.item_description }}
                 </div>
               </div>
-              <div class="flex items-center mt-3">
-                <div class="text-left text-gray-600 font-medium w-6/12">
+              <div class="flex items-center mt-3 flex-wrap">
+                <div
+                  class="
+                    text-left text-gray-600
+                    font-medium
+                    w-full
+                    lg:w-4/12
+                    md:w-5/12
+                    sm:w-6/12
+                  "
+                >
                   Package Type
                 </div>
-                <div class="text-gray-600 text-left sm:w-6/12">
+                <div class="text-gray-600 text-left md:w-7/12 sm:w-6/12">
                   {{ itemDetails.package_type }}
                 </div>
               </div>
-              <div class="flex items-center mt-3">
-                <div class="text-left text-gray-600 font-medium w-6/12">
+              <div class="flex items-center mt-3 flex-wrap">
+                <div
+                  class="
+                    text-left text-gray-600
+                    font-medium
+                    w-full
+                    lg:w-4/12
+                    md:w-5/12
+                    sm:w-6/12
+                  "
+                >
                   Weight
                 </div>
-                <div class="text-gray-600 text-left sm:w-6/12">
+                <div class="text-gray-600 text-left md:w-7/12 sm:w-6/12">
                   {{ itemDetails.weight }}
                 </div>
               </div>
-              <div class="flex items-center mt-3">
-                <div class="text-left text-gray-600 font-medium w-6/12">
+              <div class="flex items-center mt-3 flex-wrap">
+                <div
+                  class="
+                    text-left text-gray-600
+                    font-medium
+                    w-full
+                    lg:w-4/12
+                    md:w-5/12
+                    sm:w-6/12
+                  "
+                >
                   Dimension
                 </div>
-                <div class="text-gray-600 text-left sm:w-6/12">
+                <div class="text-gray-600 text-left md:w-7/12 sm:w-6/12">
                   {{ itemDetails.dimensions }}
                 </div>
               </div>
-              <div class="flex items-center mt-3">
-                <div class="text-left text-gray-600 font-medium w-6/12">
+              <div class="flex items-center mt-3 flex-wrap">
+                <div
+                  class="
+                    text-left text-gray-600
+                    font-medium
+                    w-full
+                    lg:w-4/12
+                    md:w-5/12
+                    sm:w-6/12
+                  "
+                >
                   Item Status
                 </div>
-                <div class="text-gray-600 text-left sm:w-6/12">
+                <div class="text-gray-600 text-left md:w-7/12 sm:w-6/12">
                   {{ itemDetails.item_status === 0 ? "Claimed" : "Unclaimed" }}
                 </div>
               </div>
-              <template v-if="!itemDetails.item_status">
-                <div class="flex items-center mt-3">
-                  <div class="text-left text-gray-600 font-medium w-6/12">
+              <template>
+                <div class="flex items-center mt-3 flex-wrap">
+                  <div
+                    class="
+                      text-left text-gray-600
+                      font-medium
+                      w-full
+                      lg:w-4/12
+                      md:w-5/12
+                      sm:w-6/12
+                    "
+                  >
                     Receiver's Name
                   </div>
-                  <div class="text-gray-600 text-left sm:w-6/12">
+                  <div class="text-gray-600 text-left md:w-7/12 sm:w-6/12">
                     {{ itemDetails.receiver_name }}
                   </div>
                 </div>
 
-                <div class="flex items-center mt-3">
-                  <div class="text-left text-gray-600 font-medium w-6/12">
+                <div class="flex items-center mt-3 flex-wrap">
+                  <div
+                    class="
+                      text-left text-gray-600
+                      font-medium
+                      w-full
+                      lg:w-4/12
+                      md:w-5/12
+                      sm:w-6/12
+                    "
+                  >
                     Receiver's Email
                   </div>
-                  <div class="text-gray-600 text-left sm:w-6/12">
+                  <div class="text-gray-600 text-left md:w-7/12 sm:w-6/12">
                     {{ itemDetails.receiver_email }}
                   </div>
                 </div>
 
-                <div class="flex items-center mt-3">
-                  <div class="text-left text-gray-600 font-medium w-6/12">
+                <div class="flex items-center mt-3 flex-wrap">
+                  <div
+                    class="
+                      text-left text-gray-600
+                      font-medium
+                      w-full
+                      lg:w-4/12
+                      md:w-5/12
+                      sm:w-6/12
+                    "
+                  >
                     Receiver's Mobile No.
                   </div>
-                  <div class="text-gray-600 text-left sm:w-6/12">
+                  <div class="text-gray-600 text-left md:w-7/12 sm:w-6/12">
                     {{ itemDetails.receiver_mobile_no }}
                   </div>
                 </div>
               </template>
             </div>
 
-            <div class="text-gray-600 text-left sm:w-4/12">
-              <img class="w-full mx-auto" :src="itemDetails.image" alt="" />
+            <div class="text-gray-600 mt-4 text-left w-full">
+              <img
+                class="w-full"
+                src="data:image/jpeg;base64,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"
+              />
+              <!-- :src="itemDetails.image" alt="" -->
               <!-- <svg
                 class="w-full mx-auto"
                 viewBox="0 0 1177 598.5"
@@ -502,32 +766,38 @@
             </div>
           </div>
         </div>
-        <br />
-        <div v-show="!itemDetails.onlyDisplay" class="text-left sm:w-12/12">
+
+        <div v-show="!itemDetails.onlyDisplay" class="text-left sm:w-12/12 px-6 pb-6 pt-4">
           <button
             type="submit"
+            :class="{ 'button--loading': isLoading }"
             class="
-              inline-block
-              px-7
-              py-3
-              bg-indigo-500
-              hover:bg-indigo-700
-              text-white
+              !py-3
               font-medium
-              text-sm
-              leading-snug
+              text-md
+              leading-5
               uppercase
+              py-2
+              px-12
               rounded-md
-              shadow-md
-              hover:shadow-lg
-              transition
-              duration-150
-              ease-in-out
+              button
               w-full
+              focus:outline-none
+              focus:ring-2
+              focus:ring-offset-2
+              focus:ring-offset-primary-60
+              transition-all
+              font-display
+              disabled:cursor-not-allowed
+              bg-accent-100
+              text-white
+              focus:ring-accent-100
+              shadow-accent
+              hover:bg-accent-200
             "
             @click="submitDetails"
           >
-            {{ btnName }}
+          <span class="button__text"> Submit </span>
           </button>
 
           <div
@@ -539,7 +809,7 @@
               after:flex-1 after:border-t after:border-gray-300 after:mt-0.5
             "
           >
-            <p class="text-center font-semibold mx-4 mb-0">OR</p>
+            <p class="text-center text-gray-400 font-medium mx-4 mb-0">OR</p>
           </div>
           <button
             type="submit"
@@ -564,33 +834,6 @@
           >
             Edit
           </button>
-          <!-- <button
-            type="submit"
-            class="
-              flex
-              items-center
-              justify-center
-              px-7
-              py-3
-              space-x-2
-              text-sm
-              leading-snug
-              uppercase
-              transition-colors
-              duration-300
-              border border-indigo-500
-              rounded-md
-              group
-              hover:bg-indigo-500
-              focus:outline-none
-              w-full
-            "
-          >
-            <span
-              class="text-sm font-medium text-indigo-500 group-hover:text-white"
-              >Edit</span
-            >
-          </button> -->
         </div>
       </section>
     </div>
@@ -600,26 +843,34 @@
 <script>
 import { mapGetters } from "vuex";
 export default {
+  data() {
+    return {
+      isLoading: false
+    }
+  },
   computed: {
     ...mapGetters("item", ["itemDetails"]),
-    btnName(){
-      return this.itemDetails.foundItemId? "Update" : "Submit";
+    btnName() {
+      return this.itemDetails.foundItemId ? "Update" : "Submit";
     },
   },
   methods: {
     submitDetails() {
-      let params = {...this.itemDetails};
+      let params = { ...this.itemDetails };
       delete params.foundItemId;
-      if(this.itemDetails.foundItemId){
+      if (this.itemDetails.foundItemId) {
         this.$axios
-          .post("/updatesinglelostitem?id="
-           + this.itemDetails.foundItemId, params, {
-            responseType: "arraybuffer",
-            headers: {
-              "Content-Type": "application/json",
-              Accept: "application/pdf",
-            },
-          })
+          .post(
+            "/updatesinglelostitem?id=" + this.itemDetails.foundItemId,
+            params,
+            {
+              responseType: "arraybuffer",
+              headers: {
+                "Content-Type": "application/json",
+                Accept: "application/pdf",
+              },
+            }
+          )
           .then((response) => {
             if (response.status === 200) {
               console.log(response);
@@ -632,8 +883,8 @@ export default {
             }
           })
           .catch((error) => console.log(error));
-      }
-      else{
+      } else {
+        this.isLoading = true
         this.$axios
           .post("/storelostitem", params, {
             responseType: "arraybuffer",
@@ -644,18 +895,24 @@ export default {
           })
           .then((response) => {
             if (response.status === 200) {
+              this.isLoading = false
               const url = window.URL.createObjectURL(new Blob([response.data]));
               const link = document.createElement("a");
               link.href = url;
               link.setAttribute("download", "file.pdf");
               document.body.appendChild(link);
               link.click();
+
+              this.$root.$emit("detail-submitted", true);
             }
-            // this.$nextTick(() => {
-            //   this.$router.push({ path: "/detail-confirmation" });
-            // });
+            this.$nextTick(() => {
+              this.$router.push({ path: "/detail-confirmation" });
+            });
           })
-          .catch((error) => console.log(error));
+          .catch((error) => {
+            this.isLoading = false
+            console.log(error)
+          });
       }
     },
     editDetails() {
@@ -671,22 +928,60 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-/* Sample `apply` at-rules with Tailwind CSS
-.container {
-@apply min-h-screen flex justify-center items-center text-center mx-auto;
-}
-*/
 .wrapper {
-  @apply min-h-screen flex justify-center items-end text-center mx-auto;
+  @apply min-h-screen flex justify-center py-10 mx-auto;
 }
 .card {
-  @apply p-10 rounded-lg text-indigo-500;
+  @apply rounded-lg text-indigo-500;
   .title {
     @apply text-6xl font-bold;
   }
 }
 .text-gray-600 {
   @apply sm:px-3;
+}
+
+.button {
+  position: relative;
+  border: none;
+  outline: none;
+  cursor: pointer;
+}
+
+.button__text {
+  color: #ffffff;
+  transition: all 0.2s;
+}
+
+.button--loading .button__text {
+  visibility: hidden;
+  opacity: 0;
+}
+
+.button--loading::after {
+  content: "";
+  position: absolute;
+  width: 16px;
+  height: 16px;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  margin: auto;
+  border: 4px solid transparent;
+  border-top-color: #ffffff;
+  border-radius: 50%;
+  animation: button-loading-spinner 1s ease infinite;
+}
+
+@keyframes button-loading-spinner {
+  from {
+    transform: rotate(0turn);
+  }
+
+  to {
+    transform: rotate(1turn);
+  }
 }
 
 @media only screen and (max-width: 650px) {
@@ -696,18 +991,8 @@ export default {
   .img-container {
     @apply mt-3;
   }
-  .card {
-    @apply py-10 px-0;
-    section {
-      padding: 2rem 0.75rem;
-    }
-  }
-  .text-gray-800 {
-    font-size: 1rem;
-  }
   .text-gray-600 {
     @apply pr-2;
-    font-size: 12px;
   }
 }
 </style>
