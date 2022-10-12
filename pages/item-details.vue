@@ -141,6 +141,7 @@
               "
             /> -->
             <vue-tel-input
+              :inputOptions="{placeholder: 'Venue Phone No.'}"
               @input="debouncedGetData('phoneno')"
               class="vue-tel-input"
               v-model="venuePhone"
@@ -157,10 +158,10 @@
           </ValidationProvider>
           <ValidationProvider
             v-slot="{ errors }"
-            rules="required|us_phone|max:100"
+            rules="required"
             class="block"
           >
-            <BaseInput
+            <!-- <BaseInput
               v-model="employeePhone"
               type="text"
               label="Employee Mobile No."
@@ -172,7 +173,16 @@
                     : employeePhone;
                 }
               "
-            />
+            /> -->
+            
+            <vue-tel-input
+              :inputOptions="{placeholder: 'Employee Mobile No.'}"
+              @input="debouncedGetData('phoneno')"
+              class="vue-tel-input"
+              v-model="employeePhone"
+              v-bind="bindPhoneInputProps"
+              @country-changed="countryChanged"
+            ></vue-tel-input>
 
             <p
               v-if="errors.length"
@@ -562,10 +572,10 @@
             </ValidationProvider>
             <ValidationProvider
               v-slot="{ errors }"
-              rules="required|us_phone|max:100"
+              rules="required"
               class="block"
             >
-              <BaseInput
+              <!-- <BaseInput
                 v-model="receiverPhone"
                 type="text"
                 label="Receiver Mobile No."
@@ -577,7 +587,15 @@
                       : receiverPhone;
                   }
                 "
-              />
+              /> -->
+              <vue-tel-input
+                :inputOptions="{placeholder: 'Receiver Mobile No.'}"
+                @input="debouncedGetData('phoneno')"
+                class="vue-tel-input"
+                v-model="receiverPhone"
+                v-bind="bindPhoneInputProps"
+                @country-changed="countryChanged"
+              ></vue-tel-input>
               <p
                 v-if="errors.length"
                 class="vee-validation-error mt-2 text-sm text-red-600"
@@ -985,13 +1003,16 @@ export default {
       let arr = this.venuePhone.split(" ");
       arr.shift();
       let venuePhoneNo = arr.join('');
+      let arr2 = this.employeePhone.split(" ");
+      arr2.shift();
+      let employeePhone = arr2.join('');
       const params = {
         venu_type: this.venue === "Other" ? this.manualVenue : this.venue,
         datse: this.foundDate,
         venue_name: this.venueName,
         venue_email: this.venueEmail,
         venue_phone_no: venuePhoneNo,
-        employee_mobile_no: this.employeePhone,
+        employee_mobile_no: employeePhone,
         address: this.address,
         city: this.city,
         states: this.state,
@@ -1005,9 +1026,12 @@ export default {
         item_status: this.itemStatus === "Claimed" ? 0 : 1,
       };
       if (this.itemStatus === "Claimed") {
+        let arr3 = this.receiverPhone.split(" ");
+        arr3.shift();
+        let receiverPhone = arr3.join('');
         params.receiver_name = this.receiverName;
         params.receiver_email = this.receiverEmail;
-        params.receiver_mobile_no = this.receiverPhone;
+        params.receiver_mobile_no = receiverPhone;
       }
       this.$store.commit("item/SET_ITEM_DETAILS", {
         ...params,
@@ -1040,6 +1064,9 @@ export default {
       let arr = this.venuePhone.split(" ");
       arr.shift();
       let venuePhoneNo = arr.join('');
+      let arr2 = this.employeePhone.split(" ");
+      arr2.shift();
+      let employeePhone = arr2.join('');
       const isValid = await this.$refs.observer.validate();
       if (!isValid) {
         console.log("not valid");
@@ -1052,7 +1079,7 @@ export default {
           venue_name: this.venueName,
           venue_email: this.venueEmail,
           venue_phone_no: venuePhoneNo,
-          employee_mobile_no: this.employeePhone,
+          employee_mobile_no: employeePhone,
           address: this.address,
           city: this.city,
           states: this.state,
@@ -1066,9 +1093,12 @@ export default {
           item_status: this.itemStatus === "Claimed" ? 0 : 1,
         };
         if (this.itemStatus === "Claimed") {
+          let arr3 = this.receiverPhone.split(" ");
+          arr3.shift();
+          let employeePhone = arr3.join('');
           params.receiver_name = this.receiverName;
           params.receiver_email = this.receiverEmail;
-          params.receiver_mobile_no = this.receiverPhone;
+          params.receiver_mobile_no = employeePhone;
         }
         this.$store.commit("item/SET_ITEM_DETAILS", {
           ...params,

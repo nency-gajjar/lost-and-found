@@ -503,7 +503,7 @@
           </div>
         </div>
         <br />
-        <div class="text-left sm:w-12/12">
+        <div v-show="!itemDetails.onlyDisplay" class="text-left sm:w-12/12">
           <button
             type="submit"
             class="
@@ -527,7 +527,7 @@
             "
             @click="submitDetails"
           >
-            Submit
+            {{ btnName }}
           </button>
 
           <div
@@ -602,6 +602,9 @@ import { mapGetters } from "vuex";
 export default {
   computed: {
     ...mapGetters("item", ["itemDetails"]),
+    btnName(){
+      return this.itemDetails.foundItemId? "Update" : "Submit";
+    },
   },
   methods: {
     submitDetails() {

@@ -20,6 +20,7 @@
       </button>
     </div>
     <div
+      v-for="item in lostItemData" :key="item.id"
       class="
         cursor-pointer
         mt-8
@@ -32,7 +33,6 @@
         shadow-md
         md:flex-row
         hover:bg-gray-100
-        dark:border-gray-700 dark:bg-gray-800 dark:hover:bg-gray-700
       "
     >
       <div class="w-24 h-24">
@@ -42,7 +42,7 @@
             rounded-t-lg
             md:h-auto md:w-48 md:rounded-none md:rounded-l-lg
           "
-          src="@/assets/images/headphones.png"
+          :src="item.image"
           alt=""
         />
       </div>
@@ -54,18 +54,17 @@
             font-bold
             tracking-tight
             text-gray-900
-            dark:text-white
           "
         >
-          {{ itemDescription }}
+          {{ item.item_description }}
         </h5>
-        <p class="mb-3 font-normal text-gray-700 dark:text-gray-400">
-          Neque porro quisquam est qui dolorem ipsum quia dolor sit amet,
-          consectetur, adipisci velit.
+        <p class="mb-3 font-normal text-gray-700">
+          {{ `Dimensions: ${item.dimensions}, Package type: ${item.package_type}, Weight: ${item.weight}` }}
         </p>
       </div>
       <div>
         <a
+          @click="displayDetails(item)"
           class="
             text-gray-600
             hover:text-gray-900
@@ -118,15 +117,39 @@
 
 <script>
 export default {
+  data(){
+    return{
+      lostItemData: [],
+    }
+  },
   methods: {
     addNewItem() {
       this.$router.push({ path: "item-details" });
     },
+    displayDetails(item){
+      this.$store.commit("item/SET_ITEM_DETAILS", {
+        ...item,
+        onlyDisplay: true,
+      });
+      this.$nextTick(() => {
+        this.$router.push({ path: "/detail-confirmation" });
+      });
+    },
   },
   computed: {
-    itemDescription() {
-      return this.$route.query.itemDescription || "Lorem ipsum dolor sit amet";
-    },
+  },
+  created(){
+    this.$axios
+        .get("/getalllostitem")
+        .then((response) => {
+          if (response.status === 200) {
+            this.lostItemData = response?.data?.data;
+            console.log(this.lostItemData);
+          }
+        })
+        .catch((err) => {
+          console.log(err);
+        })
   },
 };
 </script>
