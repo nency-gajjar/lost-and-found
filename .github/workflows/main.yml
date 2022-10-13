@@ -1,9 +1,9 @@
+# .github/workflows/main.yml
 name: CI
 on:
   push:
-    branches: [ main ]
+    branches: master
  
-  workflow_dispatch:
 jobs:
   build:
     runs-on: ubuntu-latest
@@ -22,4 +22,3 @@ jobs:
           aws-region: us-east-1
       - name: Deploy Next.js app
         run: nohup npm run dev & 
-        run: rm nohup.out
