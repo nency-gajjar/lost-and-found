@@ -823,6 +823,11 @@ export default {
     },
   },
   methods: {
+    formatMobileNumber(phoneNumber){
+      let arr = phoneNumber.split(" ");
+      let countryCode = arr.shift();
+      return countryCode + ' ' + arr.join('');
+    },
     countryChanged(country) {
       // console.log("===countryChanged", country);
     },
@@ -909,12 +914,8 @@ export default {
     },
     async onSubmit() {
       this.isLoading = true
-      let arr = this.venuePhone.split(" ");
-      arr.shift();
-      let venuePhoneNo = arr.join("");
-      let arr2 = this.employeePhone.split(" ");
-      arr2.shift();
-      let employeePhone = arr2.join("");
+      let venuePhoneNo = this.formatMobileNumber(this.venuePhone);
+      let employeePhone = this.formatMobileNumber(this.employeePhone);
       const isValid = await this.$refs.observer.validate();
       if (!isValid) {
         this.showValidateAlert = true;
@@ -944,12 +945,10 @@ export default {
           item_status: this.itemStatus === "Claimed" ? 0 : 1,
         };
         if (this.itemStatus === "Claimed") {
-          let arr3 = this.receiverPhone.split(" ");
-          arr3.shift();
-          let employeePhone = arr3.join("");
+          let receiverPhone = this.formatMobileNumber(this.receiverPhone);
           params.receiver_name = this.receiverName;
           params.receiver_email = this.receiverEmail;
-          params.receiver_mobile_no = employeePhone;
+          params.receiver_mobile_no = receiverPhone;
         }
         this.$store.commit("item/SET_ITEM_DETAILS", {
           ...params,
