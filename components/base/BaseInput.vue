@@ -8,8 +8,6 @@
           !active && 'my-3.5 text-sm',
         ]"
       >
-      <!-- <div class="absolute px-4 transition-all text-gray-500 z-10"> -->
-        <!-- :class="active ? 'my-2 text-[0.625rem] leading-3' : 'my-3.5 text-sm'" -->
         {{ label }}
       </div>
       <input
@@ -89,25 +87,25 @@ export default {
     icon: { type: String, default: "" },
     hideValue: { type: Boolean, default: false },
   },
-  data(){
-    return{
+  data() {
+    return {
       active: false,
-    }
+    };
   },
   methods: {
-    updateValue(event){
-      this.$emit('input', event.target.value)
+    updateValue(event) {
+      this.$emit("input", event.target.value);
     },
   },
   watch: {
-    value(newValue, oldValue){
-      if(newValue != oldValue){
+    value(newValue, oldValue) {
+      if (newValue != oldValue) {
         this.active = newValue.length === 0 ? false : true;
       }
-    }
+    },
   },
-  created(){
-    if(this.value.length != 0){
+  created() {
+    if (this.value.length != 0) {
       this.active = true;
     }
   },

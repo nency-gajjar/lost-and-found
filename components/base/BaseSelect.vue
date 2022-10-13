@@ -10,7 +10,7 @@
       {{ label }}
     </div>
     <select
-      v-model="value"
+      :value="value"
       class="
         relative
         border
@@ -32,20 +32,20 @@
       ]"
       :disabled="disabled"
       @blur="
-        active = value !== ''
-        $emit('blur', $event)
+        active = value !== '';
+        $emit('blur', $event);
       "
       @focus="
-        active = true
-        $emit('focus', $event)
+        active = true;
+        $emit('focus', $event);
       "
       @input="$emit('input', $event.target.value)"
       @change="updateValue"
     >
       <option v-for="option in options" :key="option">
         {{ option }}
-      </option></select
-    >
+      </option>
+    </select>
   </label>
 </template>
 
@@ -59,25 +59,25 @@ export default {
     disabled: { type: Boolean, default: false },
     hideValue: { type: Boolean, default: false },
   },
-  data(){
-    return{
+  data() {
+    return {
       active: false,
-    }
+    };
   },
   methods: {
-    updateValue(event){
-      this.$emit('input', event.target.value)
+    updateValue(event) {
+      this.$emit("input", event.target.value);
     },
   },
   watch: {
-    value(newValue, oldValue){
-      if(newValue != oldValue){
+    value(newValue, oldValue) {
+      if (newValue != oldValue) {
         this.active = newValue.length === 0 ? false : true;
       }
-    }
+    },
   },
-  created(){
-    if(this.value){
+  created() {
+    if (this.value) {
       this.active = true;
     }
   },

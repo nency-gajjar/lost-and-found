@@ -18,6 +18,7 @@ import {
   integer,
   length,
   numeric,
+  image,
   // eslint-disable-next-line camelcase
   max_value,
   max,
@@ -38,6 +39,7 @@ const dictionary = {
 
 extend('required', required)
 extend('numeric', numeric)
+extend('image', image)
 extend('max_value', max_value)
 extend('insurance', {
   // eslint-disable-next-line camelcase
