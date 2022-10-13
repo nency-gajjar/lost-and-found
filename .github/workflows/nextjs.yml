@@ -12,16 +12,23 @@ jobs:
       - uses: actions/setup-node@v1
         with:
           node-version: '14.16.0'
+      - name: Deploy to server
+        uses: easingthemes/ssh-deploy@main
+        env:
+          SSH_PRIVATE_KEY: ${{ secrets.EC2_SSH_KEY }}
+          REMOTE_HOST: ${{ secrets.HOST_DNS }}
+          REMOTE_USER: ${{ secrets.USERNAME }}
+          TARGET: ${{ secrets.TARGET_DIR }}
       - name: Install NPM dependencies
         run: npm install
       - name: Install PM2
         run: npm install pm2@latest -g
-      - name: Configure AWS Credentials
-        uses: aws-actions/configure-aws-credentials@v1
-        with:
-          aws-access-key-id: ${{ secrets.AWS_KEY }}
-          aws-secret-access-key: ${{ secrets.AWS_SECRET }}
-          aws-region: us-east-1
+#      - name: Configure AWS Credentials
+ #       uses: aws-actions/configure-aws-credentials@v1
+  #      with:
+   #       aws-access-key-id: ${{ secrets.AWS_KEY }}
+    #      aws-secret-access-key: ${{ secrets.AWS_SECRET }}
+     #     aws-region: us-east-1
       - name: npm i
         run: npm i
       - name: Deploy Next.js app
