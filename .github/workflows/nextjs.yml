@@ -23,4 +23,4 @@ jobs:
       - name: npm i
         run: npm i
       - name: Deploy Next.js app
-        run: npm run dev
+        run: pm2 restart 0
