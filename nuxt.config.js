@@ -53,9 +53,9 @@ export default {
   build: {
     transpile: ['vee-validate/dist/rules'],
   },
-  // server: {
-  //   port: 8000, // default: 3000
-  //   host: '0.0.0.0', // default: localhost,
-  //   timing: false
-  // }
+  server: {
+    port: 8000, // default: 3000
+    host: '0.0.0.0', // default: localhost,
+    timing: false
+  }
 }

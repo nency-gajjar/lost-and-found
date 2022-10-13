@@ -124,7 +124,7 @@ export default {
     console.log('=====Test');
     this.isLoading = true
     this.$axios
-      .get("/getalllostitem")
+      .get("https://uydzh352zk.execute-api.us-east-1.amazonaws.com/getalllostitem")
       .then((response) => {
         if (response.status === 200) {
           this.isLoading = false
