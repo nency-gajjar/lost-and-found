@@ -30,7 +30,7 @@
           + Add New Item
         </button>
       </div>
-      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+      <div v-if="!isLoading && lostItems.length > 0" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
         <div
           v-for="item in lostItems"
           :key="item.id"
@@ -89,6 +89,11 @@
           <div></div>
         </div>
       </div>
+      <div v-else>
+        <div wire:loading class="loader-container z-50 overflow-hidden flex flex-col items-center justify-center">
+	        <div class="loader ease-linear rounded-full border-4 border-t-4 border-gray-200 h-12 w-12 mb-4"></div>
+        </div>
+     </div>
     </div>
   </div>
 </template>
@@ -98,6 +103,7 @@ export default {
   data() {
     return {
       lostItems: [],
+      isLoading: false
     };
   },
   methods: {
@@ -115,14 +121,17 @@ export default {
     },
   },
   created() {
+    this.isLoading = true
     this.$axios
       .get("/getalllostitem")
       .then((response) => {
         if (response.status === 200) {
+          this.isLoading = false
           this.lostItems = response?.data?.data;
         }
       })
       .catch((err) => {
+        this.isLoading = false
         console.log(err);
       });
   },
@@ -132,5 +141,33 @@ export default {
 <style scoped>
 .wrapper {
   @apply flex flex-col items-center text-center mx-auto;
+}
+
+.loader-container {
+  height: calc(100vh - theme('spacing.52'));
+}
+
+.loader {
+	border-top-color:orange;
+	-webkit-animation: spinner 1.5s linear infinite;
+	animation: spinner 1.5s linear infinite;
+}
+
+@-webkit-keyframes spinner {
+	0% {
+		-webkit-transform: rotate(0deg);
+	}
+	100% {
+		-webkit-transform: rotate(360deg);
+	}
+}
+
+@keyframes spinner {
+	0% {
+		transform: rotate(0deg);
+	}
+	100% {
+		transform: rotate(360deg);
+	}
 }
 </style>

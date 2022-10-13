@@ -15,7 +15,7 @@
       "
       style="box-shadow: rgba(54, 28, 93, 0.04) -10px 18px 32px"
     >
-     <template v-if="!isLoadingItemDetails || Object.keys(itemDetails).length > 0">
+     <div v-if="!isLoadingItemDetails || Object.keys(itemDetails).length > 0">
       <ValidationObserver v-slot="{ validate }" ref="observer">
         <form @submit.prevent="validate().then(onSubmit)">
           <div class="card p-6 space-y-4">
@@ -735,15 +735,12 @@
           </div>
         </form>
       </ValidationObserver>
-     </template>
-     <template v-else>
-      <!--  Add loader here -->
-        <div class="flex items-center justify-center">
-          <div class="spinner-border animate-spin inline-block w-8 h-8 border-4 rounded-full" role="status">
-            <span class="visually-hidden">Loading...</span>
-          </div>
+     </div>
+     <div v-else>
+        <div wire:loading class="h-screen z-50 overflow-hidden flex flex-col items-center justify-center">
+	        <div class="loader ease-linear rounded-full border-4 border-t-4 border-gray-200 h-12 w-12 mb-4"></div>
         </div>
-     </template>
+     </div>
     </div>
   </div>
 </template>
@@ -1454,4 +1451,29 @@ canvas {
     transform: rotate(1turn);
   }
 }
+
+.loader {
+	border-top-color:orange;
+	-webkit-animation: spinner 1.5s linear infinite;
+	animation: spinner 1.5s linear infinite;
+}
+
+@-webkit-keyframes spinner {
+	0% {
+		-webkit-transform: rotate(0deg);
+	}
+	100% {
+		-webkit-transform: rotate(360deg);
+	}
+}
+
+@keyframes spinner {
+	0% {
+		transform: rotate(0deg);
+	}
+	100% {
+		transform: rotate(360deg);
+	}
+}
+
 </style>

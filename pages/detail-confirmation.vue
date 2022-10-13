@@ -797,7 +797,7 @@
             "
             @click="submitDetails"
           >
-          <span class="button__text"> Submit </span>
+          <span class="button__text"> {{ btnName}} </span>
           </button>
 
           <div
