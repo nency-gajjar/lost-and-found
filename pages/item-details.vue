@@ -835,7 +835,8 @@ export default {
     },
     foundItemId: "",
     isLoading: false,
-    isLoadingItemDetails: false
+    isLoadingItemDetails: false,
+    isAdmin: false
   }),
   components: {
     ValidationObserver,
@@ -928,6 +929,11 @@ export default {
           resolve({ lat, long });
         });
       });
+      // const params = {
+      //   lat: "22.256471166295917",
+      //   long: "70.80530507987775",
+      // };
+
 
       locationPromise.then(async (value) => {
         const params = {
@@ -1017,7 +1023,11 @@ export default {
         setTimeout(() => {
           this.isLoading = false
           this.$nextTick(() => {
-          this.$router.push({ path: "/detail-confirmation" });
+            if (this.isAdmin) {
+              this.$router.push({ path: "admin/detail-confirmation" });
+            } else {
+              this.$router.push({ path: "/detail-confirmation" });
+            }
         });
         }, 1000);
 
@@ -1223,6 +1233,7 @@ export default {
         })
         .catch((error) => console.log(error));
     } else if (this.$route.params?.itemDetails) {
+      if(this.$route.params?.isAdmin) this.isAdmin = true 
       this.senderFormTitle = "EDIT SENDER'S DETAILS";
       this.foundItemFormTitle = "EDIT FOUND ITEM'S DETAILS";
       let data = this.$route.params.itemDetails;
