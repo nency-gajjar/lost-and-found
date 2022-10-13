@@ -103,7 +103,7 @@ export default (function () {
                 cornerStyle: properties.cornerStyle,
                 transparentCorners: properties.transparentCorners,
                 hasRotatingPoint: properties.hasRotatingPoint,
-                lockUniScaling: JSON.parse(properties.lockUniScaling),
+                lockUniScaling: false,
                 noScaleCache: JSON.parse(properties.noScaleCache),
                 strokeUniform: JSON.parse(properties.strokeUniform),
 
