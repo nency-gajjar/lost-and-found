@@ -121,6 +121,7 @@ export default {
     },
   },
   created() {
+    console.log('===created');
     this.isLoading = true
     this.$axios
       .get("/getalllostitem")
