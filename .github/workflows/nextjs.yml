@@ -23,6 +23,4 @@ jobs:
       - name: npm i
         run: npm i
       - name: Deploy Next.js app
-        run: nohup npm run dev & 
-      - name: final
-        run: exit
+        run: npm run dev
