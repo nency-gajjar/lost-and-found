@@ -76,7 +76,6 @@
                 font-bold
                 tracking-tight
                 text-gray-900 text-accent-100
-                dark:text-white
               "
             >
               {{ item.item_description }}
