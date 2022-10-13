@@ -824,7 +824,7 @@ export default {
   },
   methods: {
     countryChanged(country) {
-      console.log("===countryChanged", country);
+      // console.log("===countryChanged", country);
     },
     setItemDetails(value) {
       switch (value) {
@@ -855,21 +855,21 @@ export default {
     }, 1000),
 
     async getData(type) {
-      // let lat, long;
+      let lat, long;
 
-      // let locationPromise = new Promise(function (resolve, reject) {
-      //   navigator.geolocation.getCurrentPosition((position) => {
-      //     lat = position.coords.latitude;
-      //     long = position.coords.longitude;
-      //     resolve({ lat, long });
-      //   });
-      // });
+      let locationPromise = new Promise(function (resolve, reject) {
+        navigator.geolocation.getCurrentPosition((position) => {
+          lat = position.coords.latitude;
+          long = position.coords.longitude;
+          resolve({ lat, long });
+        });
+      });
 
-      // locationPromise.then(async (value) => {
-      const params = {
-        lat: "22.256471166295917",
-        long: "70.80530507987775",
-      };
+      locationPromise.then(async (value) => {
+        const params = {
+          lat: value.lat,
+          long: value.long,
+        };
 
       if (type === "name") {
         params.place = this.venueName;
@@ -905,7 +905,7 @@ export default {
           );
         }
       });
-      // });
+      });
     },
     async onSubmit() {
       this.isLoading = true
@@ -1019,7 +1019,6 @@ export default {
     },
     async uploadImg(event) {
       this.showEditor = false;
-      console.log(event.target.files[0]);
       if (event.target.files[0]) {
         this.$refs.editor.uploadImage(event);
         this.loadingSpinner = true;
@@ -1125,7 +1124,6 @@ export default {
     if (this.$route.query.id) {
       this.isLoadingItemDetails = true
       this.foundItemId = this.$route.query.id;
-      console.log(this.$route.query.id);
       this.senderFormTitle = "EDIT SENDER'S DETAILS";
       this.foundItemFormTitle = "EDIT FOUND ITEM'S DETAILS";
       this.$axios
