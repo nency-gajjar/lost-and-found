@@ -401,9 +401,6 @@
                 <div class="fixed inset-0 transition-opacity">
                   <div class="absolute inset-0 bg-gray-900 opacity-75" />
                 </div>
-                <span class="inline-block align-middle h-screen"
-                  >&#8203;</span
-                >
                 <div
                   class="
                     inline-block
@@ -421,11 +418,23 @@
                   aria-modal="true"
                   aria-labelledby="modal-headline"
                 >
+                    	
+                <div class="relative">	
+                    <div class="title bg-accent-100 pl-6 py-4 mb-4">	
+                      <h3 class="text-white">Crop Image</h3>	
+                    </div>	
+                    <span class="absolute right-5 top-5 inline-block z-10">	
+                      <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-x" width="24" height="24" viewBox="0 0 24 24" stroke-width="1.5" stroke="#ffffff" fill="none" stroke-linecap="round" stroke-linejoin="round">	
+                        <path stroke="none" d="M0 0h24v24H0z" fill="none"/>	
+                        <line x1="18" y1="6" x2="6" y2="18" />	
+                        <line x1="6" y1="6" x2="18" y2="18" />	
+                      </svg>	
+                    </span>	
+                  </div>
                   <div
                     class="
                       w-full
                       max-w-screen-md
-                      p-3
                       relative
                       mx-auto
                       my-auto
@@ -461,66 +470,97 @@
                       </svg>
                       <span class="sr-only">Loading...</span>
                     </div>
-                    <div v-show="!loadingSpinner">
-                      <div class="editor-tools">
-                        <div class="tool-undo">
-                          <rotate-ccw-icon
-                            :size="size_icon"
-                            @click="undo()"
-                          ></rotate-ccw-icon>
-                        </div>
-                        <div class="tool-redo">
-                          <rotate-cw-icon
-                            :size="size_icon"
-                            @click="redo()"
-                          ></rotate-cw-icon>
-                        </div>
-                        <div class="tool-trash">
-                          <trash-2-icon
-                            :size="size_icon"
-                            @click="deleteEditable()"
-                          ></trash-2-icon>
-                        </div>
-                        <div class="tool-freeDrawing">
-                          <edit-2-icon
-                            :size="size_icon"
-                            @click="freeDrawing()"
-                          ></edit-2-icon>
-                        </div>
-                        <div class="tool-addCircle">
-                          <circle-icon
-                            :size="size_icon"
-                            @click="addCicle()"
-                          ></circle-icon>
-                        </div>
-                        <div class="tool-addSquare">
-                          <square-icon
-                            :size="size_icon"
-                            @click="addSquare()"
-                          ></square-icon>
-                        </div>
-                        <div class="tool-crop">
-                          <maximize-icon
-                            v-if="stateCrop"
-                            :size="size_icon"
-                            @click="crop()"
-                          ></maximize-icon>
-                          <check-icon
-                            v-else
-                            :size="size_icon"
-                            @click="applyCrop()"
-                          ></check-icon>
-                        </div>
-                        <div class="save-upload">
-                          <save-icon :size="size_icon" @click="saveImg()"></save-icon>
+                    <div v-show="!loadingSpinner" class="w-full">	
+                      <div class="px-6">	
+                        <Editor	
+                          :canvasWidth="canvasWidth"	
+                          :canvasHeight="canvasHeight"	
+                          ref="editor"	
+                        />	
+                      </div>	
+                      <div class="editor-tools mt-5 px-6 border-t pt-4">	
+                        <div class="icons">	
+                          <div class="tool-undo">	
+                            <rotate-ccw-icon	
+                              :size="size_icon"	
+                              @click="undo()"	
+                            ></rotate-ccw-icon>	
+                          </div>	
+                          <div class="tool-redo">	
+                            <rotate-cw-icon	
+                              :size="size_icon"	
+                              @click="redo()"	
+                            ></rotate-cw-icon>	
+                          </div>	
+                          <div class="tool-trash">	
+                            <trash-2-icon	
+                              :size="size_icon"	
+                              @click="deleteEditable()"	
+                            ></trash-2-icon>	
+                          </div>	
+                          <div class="tool-freeDrawing">	
+                            <edit-2-icon	
+                              :size="size_icon"	
+                              @click="freeDrawing()"	
+                            ></edit-2-icon>	
+                          </div>	
+                          <div class="tool-addCircle">	
+                            <circle-icon	
+                              :size="size_icon"	
+                              @click="addCicle()"	
+                            ></circle-icon>	
+                          </div>	
+                          <div class="tool-addSquare">	
+                            <square-icon	
+                              :size="size_icon"	
+                              @click="addSquare()"	
+                            ></square-icon>	
+                          </div>	
+                          <div class="tool-crop">	
+                            <maximize-icon	
+                              v-if="stateCrop"	
+                              :size="size_icon"	
+                              @click="crop()"	
+                            ></maximize-icon>	
+                            <check-icon	
+                              v-else	
+                              :size="size_icon"	
+                              @click="applyCrop()"	
+                            ></check-icon>	
+                          </div>	
+                        </div>	
+                        <div class="save-upload">	
+                          <button	
+                            @click="saveImg()"	
+                            type="submit"	
+                            class="	
+                              font-medium	
+                              text-md	
+                              leading-5	
+                              uppercase	
+                              py-2	
+                              px-6	
+                              rounded-md	
+                              button	
+                              focus:outline-none	
+                              focus:ring-2	
+                              focus:ring-offset-2	
+                              focus:ring-offset-primary-60	
+                              transition-all	
+                              font-display	
+                              disabled:cursor-not-allowed	
+                              bg-accent-100	
+                              text-white	
+                              focus:ring-accent-100	
+                              shadow-accent	
+                              hover:bg-accent-200	
+                            "	
+                          >	
+                            <span class="button__text"> <save-icon :size="size_icon"></save-icon> Save </span>	
+                          </button>	
+                          </div>
                         </div>
                       </div>
-                      <Editor
-                        :canvasWidth="canvasWidth"
-                        :canvasHeight="canvasHeight"
-                        ref="editor"
-                      />
-                    </div>
                   </div>
                 </div>
               </div>
@@ -1285,8 +1325,19 @@ export default {
 }
 
 .editor-tools {
-  @apply flex flex-wrap w-full justify-around;
+  @apply flex flex-wrap w-full justify-between;
   margin-bottom: 20px;
+}
+
+.editor-tools .icons {	
+  @apply flex items-center	
+}	
+.editor-tools .save-upload .button__text {	
+  @apply flex items-center	
+}	
+.editor-tools .save-upload .button__text svg {	
+  margin-right: 10px;	
+  width: 18px;	
 }
 
 .custom-editor {
@@ -1294,21 +1345,24 @@ export default {
   border: 1px solid #000000;
   background-color: #ffffff;
 }
-
-.editor-tools {
-  div{
-    cursor: pointer;
-    border: 1px solid #808080;
-    border-radius: 14px;
-    &:hover{
-      background: #dfdfdf;
-    }
-    padding: 8px;
-    background-color: #f3f3f3;
-    margin-bottom: 5px;
-  }
+	
+.editor-tools .icons {	
+  div{	
+    cursor: pointer;	
+    border: 1px solid #808080;	
+    border-radius: 14px; 	
+    margin-right: 5px;	
+    &:hover{	
+      background: #dfdfdf;	
+    }	
+    padding: 2px 10px;	
+    background-color: #f3f3f3;	
+    margin-bottom: 5px;	
+    svg {	
+      width: 18px;	
+    }	
+  }	
 }
-
 .previewCard h1,
 h2,
 h3,
