@@ -120,9 +120,10 @@ export default {
     },
   },
   created() {
+    console.log('=====Test');
     this.isLoading = true
     this.$axios
-      .get("/getalllostitem")
+      .get("https://qst50rc6xg.execute-api.us-east-1.amazonaws.com/getalllostitem")
       .then((response) => {
         if (response.status === 200) {
           this.isLoading = false
