@@ -221,7 +221,7 @@
               Address
             </div>
             <div class="text-gray-600 text-left md:w-7/12 sm:w-6/12">
-              {{ itemDetails.address }}
+              {{ filterAddressLine(itemDetails) }}
             </div>
           </div>
           <div class="flex items-center mt-3 flex-wrap">
@@ -430,7 +430,7 @@
                   {{ itemDetails.item_status === 0 ? "Claimed" : "Unclaimed" }}
                 </div>
               </div>
-              <template>
+              <template v-if="itemDetails.item_status === 0">
                 <div class="flex items-center mt-3 flex-wrap">
                   <div
                     class="
@@ -855,9 +855,16 @@ export default {
     },
   },
   methods: {
+    filterAddressLine(itemDetails){
+      return itemDetails.address == "Other" || !itemDetails.address ? itemDetails.manualAddress : itemDetails.address;
+    },
     submitDetails() {
       let params = { ...this.itemDetails };
+      if(params.address == "Other" || !params.address){
+        params.address = params.manualAddress;
+      }
       delete params.foundItemId;
+      delete params.manualAddress;
       if (this.itemDetails.foundItemId) {
         this.$axios
           .post(
@@ -873,7 +880,6 @@ export default {
           )
           .then((response) => {
             if (response.status === 200) {
-              console.log(response);
               const url = window.URL.createObjectURL(new Blob([response.data]));
               const link = document.createElement("a");
               link.href = url;

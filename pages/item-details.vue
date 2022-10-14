@@ -136,65 +136,54 @@
                 {{ errors[0] }}
               </p>
             </ValidationProvider>
-            <ValidationProvider
-              v-slot="{ errors }"
-              rules="required"
-              class="block"
+            <div class="block relative box-content h-12">
+              <vue-tel-input
+                :inputOptions="{ placeholder: 'Your Phone No.' }"
+                class="
+                  relative
+                  border
+                  inline-block
+                  border-gray-300
+                  w-full
+                  rounded-lg
+                  h-full
+                "
+                v-model="venuePhone"
+                @blur="validateVenuePhoneNumber"
+                v-bind="bindPhoneInputProps"
+                @country-changed="countryChanged"
+              ></vue-tel-input>
+            </div>
+            <div
+              v-if="!isVenuePhoneValid"
+              class="vee-validation-error top-margin-05 text-sm text-red-600"
             >
-              <div class="block relative box-content h-12">
-                <vue-tel-input
-                  :inputOptions="{ placeholder: 'Your Phone No.' }"
-                  :class="errors.length > 0 && 'error'"
-                  class="
-                    relative
-                    border
-                    inline-block
-                    border-gray-300
-                    w-full
-                    rounded-lg
-                    h-full
-                  "
-                  v-model="venuePhone"
-                  v-bind="bindPhoneInputProps"
-                  @country-changed="countryChanged"
-                ></vue-tel-input>
-              </div>
-              <p
-                v-if="errors.length"
-                class="vee-validation-error mt-2 text-sm text-red-600"
-              >
-                {{ errors[0] }}
-              </p>
-            </ValidationProvider>
-            <ValidationProvider
-              v-slot="{ errors }"
-              rules="required"
-              class="block"
+              *Required
+            </div>
+            <div class="block relative box-content h-12">
+              <vue-tel-input
+                :inputOptions="{ placeholder: 'Employee Mobile No.' }"
+                class="
+                  relative
+                  border
+                  inline-block
+                  border-gray-300
+                  w-full
+                  rounded-lg
+                  h-full
+                "
+                v-model="employeePhone"
+                v-bind="bindPhoneInputProps"
+                @blur="validateEmployeePhoneNumber"
+                @country-changed="countryChanged"
+              ></vue-tel-input>
+            </div>
+            <div
+              v-if="!isEmployeePhoneValid"
+              class="vee-validation-error top-margin-05 text-sm text-red-600"
             >
-              <div class="block relative box-content h-12">
-                <vue-tel-input
-                  :inputOptions="{ placeholder: 'Employee Mobile No.' }"
-                  class="
-                    relative
-                    border
-                    inline-block
-                    border-gray-300
-                    w-full
-                    rounded-lg
-                    h-full
-                  "
-                  v-model="employeePhone"
-                  v-bind="bindPhoneInputProps"
-                  @country-changed="countryChanged"
-                ></vue-tel-input>
-              </div>
-              <p
-                v-if="errors.length"
-                class="vee-validation-error mt-2 text-sm text-red-600"
-              >
-                {{ errors[0] }}
-              </p>
-            </ValidationProvider>
+              *Required
+            </div>
             <p>Address:</p>
             <ValidationProvider
               v-slot="{ errors }"
@@ -655,41 +644,37 @@
                   {{ errors[0] }}
                 </p>
               </ValidationProvider>
-              <ValidationProvider
-                v-slot="{ errors }"
-                rules="required"
-                class="block"
-              >
-                <div class="block relative box-content h-12">
-                  <vue-tel-input
-                    :inputOptions="{ placeholder: 'Receiver Mobile No.' }"
-                    class="
-                      relative
-                      border
-                      inline-block
-                      border-gray-300
-                      w-full
-                      rounded-lg
-                      h-full
-                    "
-                    v-model="receiverPhone"
-                    v-bind="bindPhoneInputProps"
-                    @country-changed="countryChanged"
-                  ></vue-tel-input>
-                  <p
-                    v-if="errors.length"
-                    class="vee-validation-error mt-2 text-sm text-red-600"
-                  >
-                    {{ errors[0] }}
-                  </p>
+              <div class="block relative box-content h-12">
+                <vue-tel-input
+                  :inputOptions="{ placeholder: 'Receiver Mobile No.' }"
+                  class="
+                    relative
+                    border
+                    inline-block
+                    border-gray-300
+                    w-full
+                    rounded-lg
+                    h-full
+                  "
+                  v-model="receiverPhone"
+                  v-bind="bindPhoneInputProps"
+                  @blur="validateReceiverPhoneNumber"
+                  @country-changed="countryChanged"
+                ></vue-tel-input>
+                <div
+                  v-if="!isReceiverPhoneValid"
+                  class="vee-validation-error mt-2 text-sm text-red-600"
+                >
+                  *Required
                 </div>
-              </ValidationProvider>
+              </div>
             </template>
             <div
               v-show="showValidateAlert"
               class="
                 p-4
                 mb-4
+                top-margin-alert
                 text-sm text-red-700
                 bg-red-100
                 rounded-lg
@@ -773,7 +758,7 @@ export default {
     foundItemFormTitle: "",
     venueName: "",
     venueEmail: "",
-    manualAddressSelected: false,
+    manualAddressSelected: true,
     manualAddress: "",
     address: "",
     city: "",
@@ -805,6 +790,7 @@ export default {
       venuePhone: [],
     },
     apiAddressData: [],
+    addressArr: [],
     itemImage: "",
     canvasWidth: "600",
     canvasHeight: "400",
@@ -835,7 +821,10 @@ export default {
     },
     foundItemId: "",
     isLoading: false,
-    isLoadingItemDetails: false
+    isLoadingItemDetails: false,
+    isVenuePhoneValid: true,
+    isEmployeePhoneValid: true,
+    isReceiverPhoneValid: true
   }),
   components: {
     ValidationObserver,
@@ -867,21 +856,34 @@ export default {
         return "Venue Name";
       }
     },
-    addressArr() {
-      if (this.apiAddressData.length == 0 && !this.address) {
-        this.address = "";
-        this.manualAddressSelected = true;
-      }
-      let addressLineArr = this.apiAddressData.map((addressObj) => {
-        return addressObj.address;
-      });
-      if (!this.address) {
-        this.address = addressLineArr[0];
-      }
-      return addressLineArr;
-    },
   },
   methods: {
+    validateVenuePhoneNumber(){
+      if(!this.venuePhone){
+        this.isVenuePhoneValid = false;
+        this.debouncedGetData("phoneno");
+      }
+      else{
+        this.isVenuePhoneValid = true;
+        this.debouncedGetData("phoneno");
+      }
+    },
+    validateEmployeePhoneNumber(){
+      if(!this.employeePhone){
+        this.isEmployeePhoneValid = false;
+      }
+      else{
+        this.isEmployeePhoneValid = true;
+      }
+    },
+    validateReceiverPhoneNumber(){
+      if(!this.receiverPhone){
+        this.isReceiverPhoneValid = false;
+      }
+      else{
+        this.isReceiverPhoneValid = true;
+      }
+    },
     formatMobileNumber(phoneNumber){
       let arr = phoneNumber.split(" ");
       let countryCode = arr.shift();
@@ -914,11 +916,39 @@ export default {
           break;
       }
     },
+    addressFilter(mode){
+      if (this.apiAddressData.length == 0 && !this.address) {
+        this.address = "";
+        this.manualAddressSelected = true;
+      }
+      let addressLineArr = this.apiAddressData.map((addressObj) => {
+        return addressObj.address;
+      });
+      addressLineArr.push("Other");
+      if(mode != "edit"){
+        if(this.address && addressLineArr.length > 1){
+          let index = addressLineArr.findIndex(address => {
+            return address == this.address;
+          });
+          if(index == -1){
+            this.address = addressLineArr[0];
+          }
+        }
+        if(!this.address && addressLineArr.length > 1){
+          this.manualAddressSelected = false;
+          this.address = addressLineArr[0];
+        }
+        if(this.apiAddressData.length < 1){
+          this.address = "";
+        }
+      }
+      this.addressArr = addressLineArr;
+    },
     debouncedGetData: debounce(function (type) {
-      this.getData(type);
+      this.getData(type, "");
     }, 1000),
 
-    async getData(type) {
+    async getData(type, mode) {
       let lat, long;
 
       let locationPromise = new Promise(function (resolve, reject) {
@@ -935,53 +965,57 @@ export default {
           long: value.long,
         };
 
-      if (type === "name") {
-        params.place = this.venueName;
-        this.responseData.venueName = [];
-      } else if (type === "email") {
-        params.place = this.venueEmail;
-        this.responseData.venueEmail = [];
-      } else if (type === "phoneno") {
-        params.mobileno = this.venuePhone;
-        this.responseData.venuePhone = [];
-      }
-
-      await this.$axios.get("/autofilladdress", { params }).then(({ data }) => {
-        if (!data.error) {
-          if (type === "name") {
-            if (this.venueName) {
-              this.responseData.venueName.push(...data.data);
-            }
-          } else if (type === "email") {
-            if (this.venueEmail) {
-              this.responseData.venueEmail.push(...data.data);
-            }
-          } else if (type === "phoneno") {
-            if (this.venuePhone) {
-              this.responseData.venuePhone.push(...data.data);
-            }
-          }
-          this.apiAddressData = [];
-          this.apiAddressData.push(
-            ...this.responseData.venueName,
-            ...this.responseData.venuePhone,
-            ...this.responseData.venueEmail
-          );
+        if (type === "name") {
+          params.place = this.venueName;
+          this.responseData.venueName = [];
+        } else if (type === "email") {
+          params.place = this.venueEmail;
+          this.responseData.venueEmail = [];
+        } else if (type === "phoneno") {
+          params.mobileno = this.venuePhone;
+          this.responseData.venuePhone = [];
         }
-      });
+
+        await this.$axios.get("/autofilladdress", { params }).then(({ data }) => {
+          if (!data.error) {
+            if (type === "name") {
+              if (this.venueName) {
+                this.responseData.venueName.push(...data.data);
+              }
+            } else if (type === "email") {
+              if (this.venueEmail) {
+                this.responseData.venueEmail.push(...data.data);
+              }
+            } else if (type === "phoneno") {
+              if (this.venuePhone) {
+                this.responseData.venuePhone.push(...data.data);
+              }
+            }
+            this.apiAddressData = [];
+            this.apiAddressData.push(
+              ...this.responseData.venueName,
+              ...this.responseData.venuePhone,
+              ...this.responseData.venueEmail
+            );
+            this.addressFilter(mode);
+          }
+        });
       });
     },
     async onSubmit() {
+      this.validateVenuePhoneNumber();
+      this.validateEmployeePhoneNumber();
+      if(this.itemStatus == "Claimed"){
+        this.validateReceiverPhoneNumber();
+      }
       this.isLoading = true
       let venuePhoneNo = this.formatMobileNumber(this.venuePhone);
       let employeePhone = this.formatMobileNumber(this.employeePhone);
       const isValid = await this.$refs.observer.validate();
-      if (!isValid) {
+      if (!isValid || !this.isVenuePhoneValid || !this.isEmployeePhoneValid || !this.isReceiverPhoneValid) {
         this.showValidateAlert = true;
         this.isLoading = false
-        console.log("not valid");
       } else {
-        console.log("valid");
         this.showValidateAlert = false;
         const params = {
           foundItemId: this.foundItemId,
@@ -992,6 +1026,7 @@ export default {
           venue_phone_no: venuePhoneNo,
           employee_mobile_no: employeePhone,
           address: this.address,
+          manualAddress: this.manualAddress,
           city: this.city,
           states: this.state,
           country: this.country,
@@ -1127,9 +1162,11 @@ export default {
     },
     address(newAddress, oldAddress) {
       if (newAddress != oldAddress) {
-        if (!newAddress) {
+        if (!newAddress || newAddress == "Other") {
           this.manualAddressSelected = true;
-          this.manualAddress = "";
+          if(oldAddress && newAddress == "Other"){
+            this.manualAddress = "";
+          }
           this.city = "";
           this.state = "";
           this.country = "";
@@ -1239,6 +1276,7 @@ export default {
       this.venuePhone = data.venue_phone_no;
       this.employeePhone = data.employee_mobile_no;
       this.address = data.address;
+      this.manualAddress = data.manualAddress;
       this.city = data.city;
       this.state = data.states;
       this.country = data.country;
@@ -1254,6 +1292,33 @@ export default {
         this.receiverName = data.receiver_name;
         this.receiverEmail = data.receiver_email;
         this.receiverPhone = data.receiver_mobile_no;
+      }
+      if(this.venueName){
+        this.getData("name", "edit").then(() => {
+          this.address = data.address;
+          this.city = data.city;
+          this.state = data.states;
+          this.country = data.country;
+          this.zipcode = data.zipcode;
+        });
+      }
+      if(this.venueEmail){
+        this.getData("email", "edit").then(() => {
+          this.address = data.address;
+          this.city = data.city;
+          this.state = data.states;
+          this.country = data.country;
+          this.zipcode = data.zipcode;
+        });
+      }
+      if(this.venuePhone){
+        this.getData("phoneno", "edit").then(() => {
+          this.address = data.address;
+          this.city = data.city;
+          this.state = data.states;
+          this.country = data.country;
+          this.zipcode = data.zipcode;
+        });
       }
     } else {
       this.senderFormTitle = "SENDER'S DETAILS";
@@ -1296,6 +1361,14 @@ export default {
     background-color: #f3f3f3;
     margin-bottom: 5px;
   }
+}
+
+.top-margin-05{
+  margin-top: 0.5rem !important;
+}
+
+.top-margin-alert{
+  margin-top: 2.5rem !important;
 }
 
 .previewCard h1,
