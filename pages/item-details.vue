@@ -335,7 +335,7 @@
                 for="itemImage"
                 >Found item image</label
               >
-              <div class="h-12">
+              <div class="h-12 flex">
                 <input
                   @change="uploadImg($event)"
                   class="
@@ -361,6 +361,63 @@
                   id="itemImage"
                   type="file"
                 />
+                <div v-show="image" class="flex">
+                  <a
+                    @click="editImage"
+                    class="text-indigo-600 hover:cursor-pointer hover:text-indigo-900 mr-3 py-2 inline-flex items-center"
+                    >
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      class="w-6 h-6"
+                      fill="none"
+                      viewBox="0 0 24 24"
+                      stroke="currentColor"
+                    >
+                      <path
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                        stroke-width="2"
+                        d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"
+                      />
+                    </svg>
+                  </a>
+                  <a
+                    @click="previewImage = !previewImage"
+                    class="
+                      hover:cursor-pointer
+                      text-gray-600
+                      hover:text-gray-900
+                      ml-3
+                      py-2
+                      inline-flex
+                      items-center
+                    "
+                  >
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      class="w-6 h-6"
+                      fill="none"
+                      viewBox="0 0 24 24"
+                      stroke="currentColor"
+                    >
+                      <path
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                        stroke-width="2"
+                        d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"
+                      />
+                      <path
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                        stroke-width="2"
+                        d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"
+                      />
+                    </svg>
+                  </a>
+                </div>
+              </div>
+              <div class="mt-3" v-if="previewImage">
+                <img :src="image" alt="Item image">
               </div>
             </div>
             <p v-if="imageSaved" class="top-margin-3 text-lime-500">
@@ -520,8 +577,8 @@
                         </div>	
                         <div class="save-upload">	
                           <button	
-                            @click="saveImg()"	
-                            type="submit"	
+                            type="button"
+                            @click="saveImg"
                             class="	
                               font-medium	
                               text-md	
@@ -844,6 +901,7 @@ export default {
     imageRecognitionData: [],
     image: "",
     imageKey: "",
+    previewImage: false,
     bindPhoneInputProps: {
       mode: "international",
       autoDefaultCountry: true,
@@ -865,7 +923,7 @@ export default {
     isVenuePhoneValid: true,
     isEmployeePhoneValid: true,
     isReceiverPhoneValid: true,
-    isAdmin: false
+    isAdmin: false,
   }),
   components: {
     ValidationObserver,
@@ -990,63 +1048,53 @@ export default {
     }, 1000),
 
     async getData(type, mode) {
-      let lat, long;
 
-      let locationPromise = new Promise(function (resolve, reject) {
-        navigator.geolocation.getCurrentPosition((position) => {
-          lat = position.coords.latitude;
-          long = position.coords.longitude;
-          resolve({ lat, long });
-        });
-      });
-      // const params = {
-      //   lat: "22.256471166295917",
-      //   long: "70.80530507987775",
-      // };
+      fetch("http://ip-api.com/json")
+        .then((data) => {
+          return data.json();
+        })
+        .then(async (data) => {
+          const params = {
+            lat: data.lat,
+            long: data.lon,
+          };
 
-
-      locationPromise.then(async (value) => {
-        const params = {
-          lat: value.lat,
-          long: value.long,
-        };
-
-        if (type === "name") {
-          params.place = this.venueName;
-          this.responseData.venueName = [];
-        } else if (type === "email") {
-          params.place = this.venueEmail;
-          this.responseData.venueEmail = [];
-        } else if (type === "phoneno") {
-          params.mobileno = this.venuePhone;
-          this.responseData.venuePhone = [];
-        }
-
-        await this.$axios.get("/autofilladdress", { params }).then(({ data }) => {
-          if (!data.error) {
-            if (type === "name") {
-              if (this.venueName) {
-                this.responseData.venueName.push(...data.data);
-              }
-            } else if (type === "email") {
-              if (this.venueEmail) {
-                this.responseData.venueEmail.push(...data.data);
-              }
-            } else if (type === "phoneno") {
-              if (this.venuePhone) {
-                this.responseData.venuePhone.push(...data.data);
-              }
-            }
-            this.apiAddressData = [];
-            this.apiAddressData.push(
-              ...this.responseData.venueName,
-              ...this.responseData.venuePhone,
-              ...this.responseData.venueEmail
-            );
-            this.addressFilter(mode);
+          if (type === "name") {
+            params.place = this.venueName;
+            this.responseData.venueName = [];
+          } else if (type === "email") {
+            params.place = this.venueEmail;
+            this.responseData.venueEmail = [];
+          } else if (type === "phoneno") {
+            params.mobileno = this.venuePhone;
+            this.responseData.venuePhone = [];
           }
+
+          await this.$axios.get("/autofilladdress", { params }).then(({ data }) => {
+            if (!data.error) {
+              if (type === "name") {
+                if (this.venueName) {
+                  this.responseData.venueName.push(...data.data);
+                }
+              } else if (type === "email") {
+                if (this.venueEmail) {
+                  this.responseData.venueEmail.push(...data.data);
+                }
+              } else if (type === "phoneno") {
+                if (this.venuePhone) {
+                  this.responseData.venuePhone.push(...data.data);
+                }
+              }
+              this.apiAddressData = [];
+              this.apiAddressData.push(
+                ...this.responseData.venueName,
+                ...this.responseData.venuePhone,
+                ...this.responseData.venueEmail
+              );
+              this.addressFilter(mode);
+            }
+          });
         });
-      });
     },
     async onSubmit() {
       this.validateVenuePhoneNumber();
@@ -1064,7 +1112,6 @@ export default {
       } else {
         this.showValidateAlert = false;
         const params = {
-          foundItemId: this.foundItemId,
           venu_type: this.venue === "Other" ? this.manualVenue : this.venue,
           datse: this.foundDate,
           venue_name: this.venueName,
@@ -1084,6 +1131,12 @@ export default {
           dimensions: this.dimension,
           item_status: this.itemStatus === "Claimed" ? 0 : 1,
         };
+        if (this.isAdmin) {
+          params.id = this.foundItemId;
+        }
+        else{
+          params.foundItemId = this.foundItemId;
+        }
         if (this.itemStatus === "Claimed") {
           let receiverPhone = this.formatMobileNumber(this.receiverPhone);
           params.receiver_name = this.receiverName;
@@ -1160,10 +1213,26 @@ export default {
       this.$refs.editor.applyCropping();
       this.stateCrop = true;
     },
+    async editImage(){
+      // this.showEditor = false;
+      // if (this.image) {
+      //   const response = await fetch(this.image);
+      //   const blob = await response.blob();
+      //   const file = new File([blob], 'image.jpg', {type: blob.type});
+      //   this.$refs.editor.uploadImage(file);
+      //   this.showEditor = true;
+      //   this.loadingSpinner = true;
+      //   setTimeout(() => {
+      //     this.loadingSpinner = false;
+      //   }, 2000);
+      // } else {
+      //   this.showEditor = false;
+      // }
+    },
     async uploadImg(event) {
       this.showEditor = false;
       if (event.target.files[0]) {
-        this.$refs.editor.uploadImage(event);
+        this.$refs.editor.uploadImage(event.target.files[0]);
         this.showEditor = true;
         this.loadingSpinner = true;
         setTimeout(() => {
@@ -1320,7 +1389,12 @@ export default {
         this.venue = "Other";
         this.manualVenue = data.venu_type;
       }
-      this.foundItemId = data.foundItemId;
+      if(data.foundItemId){
+        this.foundItemId = data.foundItemId;
+      }
+      else{
+        this.foundItemId = data.id;
+      }
       this.foundDate = data.datse;
       this.venueName = data.venue_name;
       this.venueEmail = data.venue_email;

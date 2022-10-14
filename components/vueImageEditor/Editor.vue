@@ -283,7 +283,7 @@
                 this.cancelCroppingImage();
                 return this.canvas.toDataURL('image/jpeg', 1);
             },
-            uploadImage(e) {
+            uploadImage(file) {
                 this.cancelCroppingImage();
                 let inst = this;
                 let reader = new FileReader();
@@ -338,7 +338,7 @@
                         }
                     }
                 };
-                reader.readAsDataURL(e.target.files[0]);
+                reader.readAsDataURL(file);
             },
             customCircle(type, params) {
                 this.createArrow = false;
