@@ -172,28 +172,89 @@
               <div class="block">
                 <label class="block mb-2 text-sm font-medium text-gray-800" for="itemImage">Found item image</label>
                 <div class="h-12 flex">
-                  <input @change="uploadImg($event)" class="
-                    form-control
-                    block
-                    w-full
-                    px-3
-                    py-1.5
-                    text-base
-                    font-normal
-                    text-gray-700
-                    bg-white bg-clip-padding
-                    border border-solid border-gray-300
-                    rounded-lg
-                    transition
-                    ease-in-out
-                    m-0
-                    focus:text-gray-700
-                    focus:bg-white
-                    focus:border-blue-600
-                    focus:outline-none
-                  " id="itemImage" type="file" />
+                  <input
+                    @change="uploadImg($event)"
+                    class="
+                      form-control
+                      block
+                      w-full
+                      px-3
+                      py-1.5
+                      text-base
+                      font-normal
+                      text-gray-700
+                      bg-white bg-clip-padding
+                      border border-solid border-gray-300
+                      rounded-lg
+                      transition
+                      ease-in-out
+                      m-0
+                      focus:text-gray-700
+                      focus:bg-white
+                      focus:border-blue-600
+                      focus:outline-none
+                    "
+                    id="itemImage"
+                    type="file"
+                  />
+                  <div v-show="image" class="flex">
+                    <a
+                      @click="editImage"
+                      class="text-indigo-600 hover:cursor-pointer hover:text-indigo-900 mr-3 py-2 inline-flex items-center"
+                      >
+                      <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        class="w-6 h-6"
+                        fill="none"
+                        viewBox="0 0 24 24"
+                        stroke="currentColor"
+                      >
+                        <path
+                          stroke-linecap="round"
+                          stroke-linejoin="round"
+                          stroke-width="2"
+                          d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"
+                        />
+                      </svg>
+                    </a>
+                    <a
+                      @click="previewImage = !previewImage"
+                      class="
+                        hover:cursor-pointer
+                        text-gray-600
+                        hover:text-gray-900
+                        ml-3
+                        py-2
+                        inline-flex
+                        items-center
+                      "
+                    >
+                      <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        class="w-6 h-6"
+                        fill="none"
+                        viewBox="0 0 24 24"
+                        stroke="currentColor"
+                      >
+                        <path
+                          stroke-linecap="round"
+                          stroke-linejoin="round"
+                          stroke-width="2"
+                          d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"
+                        />
+                        <path
+                          stroke-linecap="round"
+                          stroke-linejoin="round"
+                          stroke-width="2"
+                          d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"
+                        />
+                      </svg>
+                    </a>
+                  </div>
                 </div>
-                <img v-if="image" class="w-full py-3" :src="image" alt="Item image" />
+                <div class="mt-3" v-if="previewImage">
+                  <img :src="image" alt="Item image">
+                </div>
               </div>
               <div v-show="showEditor" class="fixed z-50 top-0 w-full left-0" id="modal">
                 <div class="
@@ -824,21 +885,21 @@ export default {
       this.$refs.editor.applyCropping();
       this.stateCrop = true;
     },
-    async editImage() {
-      // this.showEditor = false;
-      // if (this.image) {
-      //   const response = await fetch(this.image);
-      //   const blob = await response.blob();
-      //   const file = new File([blob], 'image.jpg', {type: blob.type});
-      //   this.$refs.editor.uploadImage(file);
-      //   this.showEditor = true;
-      //   this.loadingSpinner = true;
-      //   setTimeout(() => {
-      //     this.loadingSpinner = false;
-      //   }, 2000);
-      // } else {
-      //   this.showEditor = false;
-      // }
+    async editImage(){
+      this.showEditor = false;
+      if (this.image) {
+        const response = await fetch(this.image);
+        const blob = await response.blob();
+        const file = new File([blob], 'image.jpg', {type: blob.type});
+        this.$refs.editor.uploadImage(file);
+        this.showEditor = true;
+        this.loadingSpinner = true;
+        setTimeout(() => {
+          this.loadingSpinner = false;
+        }, 2000);
+      } else {
+        this.showEditor = false;
+      }
     },
     async uploadImg(event) {
       this.showEditor = false;
@@ -856,7 +917,9 @@ export default {
         if (response.status === 200) {
           this.isSavingImage = false
           this.imageRecognitionData = response.data.data;
-          this.itemDescription = response.data.data[0].name;
+          if (!this.isAdmin) {
+            this.itemDescription = response.data.data[0].name;
+          }
           this.image =
             this.imageRecognitionData[
               this.imageRecognitionData.length - 1
