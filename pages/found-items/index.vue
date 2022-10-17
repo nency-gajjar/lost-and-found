@@ -1,7 +1,7 @@
 <template>
   <div class="wrapper">
     <div class="container max-w-7xl mx-auto px-4">
-      <div class="w-full flex justify-end mt-10">
+      <div class="w-full flex justify-end mt-8 mb-5">
         <button class="
             !py-3
             font-medium
@@ -30,7 +30,6 @@
       <div v-if="!isLoading && lostItems.length > 0" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
         <div v-for="item in lostItems" :key="item.id" @click="viewItem(item)" class="
             cursor-pointer
-            mt-8
             py-4
             px-5
             flex flex-col
@@ -123,7 +122,7 @@ export default {
 
 <style scoped>
 .wrapper {
-  @apply flex flex-col items-center text-center mx-auto;
+  @apply flex flex-col justify-start pt-0 items-center text-center mx-auto;
 }
 
 .loader-container {
