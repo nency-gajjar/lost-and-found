@@ -1,7 +1,6 @@
 <template>
   <div class="wrapper-form">
-    <div
-      class="
+    <div class="
         card
         w-full
         mx-6
@@ -12,427 +11,221 @@
         bg-white
         border border-[#E1E3E6]
         rounded-lg
-      "
-      style="box-shadow: rgba(54, 28, 93, 0.04) -10px 18px 32px"
-    >
-     <div v-if="!isLoadingItemDetails || Object.keys(itemDetails).length > 0">
-      <ValidationObserver v-slot="{ validate }" ref="observer">
-        <form @submit.prevent="validate().then(onSubmit)">
-          <div class="card p-6 space-y-4">
-            <div class="form-title">
-              <h1
-                class="
+      " style="box-shadow: rgba(54, 28, 93, 0.04) -10px 18px 32px">
+      <div v-if="!isLoadingItemDetails || Object.keys(itemDetails).length > 0">
+        <ValidationObserver v-slot="{ validate }" ref="observer">
+          <form @submit.prevent="validate().then(onSubmit)">
+            <div class="card p-6 space-y-4">
+              <div class="form-title">
+                <h1 class="
                   w-full
                   my-2
                   text-xl
                   font-bold
                   leading-tight
                   text-gray-700
-                "
-              >
-                {{ senderFormTitle }}
-              </h1>
-              <div class="flex justify-start">
-                <span
-                  class="
+                ">
+                  {{ senderFormTitle }}
+                </h1>
+                <div class="flex justify-start">
+                  <span class="
                     w-20
                     border-t-4 border-solid border-orange-200
                     inline-block
                     mb-3
-                  "
-                ></span>
+                  "></span>
+                </div>
+              </div>
+              <ValidationProvider v-slot="{ errors }" rules="required" class="block">
+                <BaseSelect v-model="venue" :options="venueArr" label="Sender Affiliation"
+                  :class="errors.length > 0 && 'error'" />
+                <p v-if="errors.length" class="vee-validation-error mt-2 text-sm text-red-600">
+                  {{ errors[0] }}
+                </p>
+              </ValidationProvider>
+              <ValidationProvider v-if="venueManually" v-slot="{ errors }" rules="required" class="block">
+                <BaseInput v-model="manualVenue" type="text" label="Type here manually..."
+                  :class="errors.length > 0 && 'error'" />
+                <p v-if="errors.length" class="vee-validation-error mt-2 text-sm text-red-600">
+                  {{ errors[0] }}
+                </p>
+              </ValidationProvider>
+              <ValidationProvider v-slot="{ errors }" rules="required" class="block">
+                <BaseInput v-model="foundDate" type="date" label="Found Item Date"
+                  :class="errors.length > 0 && 'error'" />
+                <p v-if="errors.length" class="vee-validation-error mt-2 text-sm text-red-600">
+                  {{ errors[0] }}
+                </p>
+              </ValidationProvider>
+              <ValidationProvider v-slot="{ errors }" rules="max:100|venueName" class="block">
+                <BaseInput v-model="venueName" type="text" :label="displayVenueName"
+                  :class="errors.length > 0 && 'error'" @blur="debouncedGetData('name')" />
+                <p v-if="errors.length" class="vee-validation-error mt-2 text-sm text-red-600">
+                  {{ errors[0] }}
+                </p>
+              </ValidationProvider>
+              <ValidationProvider v-slot="{ errors }" name="Email" rules="required|email" class="block">
+                <BaseInput v-model="venueEmail" type="email" label="Venue Email" :class="errors.length > 0 && 'error'"
+                  @blur="debouncedGetData('email')" />
+                <p v-if="errors.length" class="vee-validation-error mt-2 text-sm text-red-600">
+                  {{ errors[0] }}
+                </p>
+              </ValidationProvider>
+              <div class="block relative box-content h-12">
+                <vue-tel-input :inputOptions="{ placeholder: 'Your Phone No.' }" class="
+                  relative
+                  border
+                  inline-block
+                  border-gray-300
+                  w-full
+                  rounded-lg
+                  h-full
+                " v-model="venuePhone" @blur="validateVenuePhoneNumber(); debouncedGetData('phoneno')"
+                  v-bind="bindPhoneInputProps"></vue-tel-input>
+              </div>
+              <div v-if="!isVenuePhoneValid" class="vee-validation-error top-margin-05 text-sm text-red-600">
+                *Required
+              </div>
+              <div class="block relative box-content h-12">
+                <vue-tel-input :inputOptions="{ placeholder: 'Employee Mobile No.' }" class="
+                  relative
+                  border
+                  inline-block
+                  border-gray-300
+                  w-full
+                  rounded-lg
+                  h-full
+                " v-model="employeePhone" v-bind="bindPhoneInputProps" @blur="validateEmployeePhoneNumber">
+                </vue-tel-input>
+              </div>
+              <div v-if="!isEmployeePhoneValid" class="vee-validation-error top-margin-05 text-sm text-red-600">
+                *Required
+              </div>
+              <p>Address:</p>
+              <ValidationProvider v-slot="{ errors }" rules="required" class="block">
+                <v-select v-model="address" :options="addressArr" class="rounded-lg"
+                  :class="errors.length > 0 && 'error'"></v-select>
+                <p v-if="errors.length" class="vee-validation-error mt-2 text-sm text-red-600">
+                  {{ errors[0] }}
+                </p>
+              </ValidationProvider>
+              <ValidationProvider v-if="manualAddressSelected" v-slot="{ errors }" rules="required" class="block">
+                <BaseInput v-model="manualAddress" type="text" label="Address Line"
+                  :class="errors.length > 0 && 'error'" />
+                <p v-if="errors.length" class="vee-validation-error mt-2 text-sm text-red-600">
+                  {{ errors[0] }}
+                </p>
+              </ValidationProvider>
+              <div class="grid grid-cols-2 lg:grid-cols-3 gap-4">
+                <ValidationProvider v-slot="{ errors }" rules="max:28|required" class="block lg:col-span-2">
+                  <BaseInput v-model="city" label="City" type="text" :class="errors.length > 0 && 'error'" />
+                  <p v-if="errors.length" class="vee-validation-error mt-2 text-sm text-red-600">
+                    {{ errors[0] }}
+                  </p>
+                </ValidationProvider>
+                <ValidationProvider v-slot="{ errors }" rules="required" class="block col-span-1">
+                  <BaseInput v-model="state" label="State" type="text" :class="errors.length > 0 && 'error'" />
+                  <p v-if="errors.length" class="vee-validation-error mt-2 text-sm text-red-600">
+                    {{ errors[0] }}
+                  </p>
+                </ValidationProvider>
+              </div>
+              <div class="grid grid-cols-2 lg:grid-cols-3 gap-4">
+                <ValidationProvider v-slot="{ errors }" rules="max:28|required" class="block lg:col-span-2">
+                  <BaseInput v-model="country" label="Country" type="text" :class="errors.length > 0 && 'error'" />
+                  <p v-if="errors.length" class="vee-validation-error mt-2 text-sm text-red-600">
+                    {{ errors[0] }}
+                  </p>
+                </ValidationProvider>
+                <ValidationProvider rules="required" v-slot="{ errors }" class="block col-span-1">
+                  <BaseInput v-model="zipcode" label="Zip Code" type="text" :class="errors.length > 0 && 'error'" />
+                  <p v-if="errors.length" class="vee-validation-error mt-2 text-sm text-red-600">
+                    {{ errors[0] }}
+                  </p>
+                </ValidationProvider>
               </div>
             </div>
-            <ValidationProvider
-              v-slot="{ errors }"
-              rules="required"
-              class="block"
-            >
-              <BaseSelect
-                v-model="venue"
-                :options="venueArr"
-                label="Sender Affiliation"
-                :class="errors.length > 0 && 'error'"
-              />
-              <p
-                v-if="errors.length"
-                class="vee-validation-error mt-2 text-sm text-red-600"
-              >
-                {{ errors[0] }}
-              </p>
-            </ValidationProvider>
-            <ValidationProvider
-              v-if="venueManually"
-              v-slot="{ errors }"
-              rules="required"
-              class="block"
-            >
-              <BaseInput
-                v-model="manualVenue"
-                type="text"
-                label="Type here manually..."
-                :class="errors.length > 0 && 'error'"
-              />
-              <p
-                v-if="errors.length"
-                class="vee-validation-error mt-2 text-sm text-red-600"
-              >
-                {{ errors[0] }}
-              </p>
-            </ValidationProvider>
-            <ValidationProvider
-              v-slot="{ errors }"
-              rules="required"
-              class="block"
-            >
-              <BaseInput
-                v-model="foundDate"
-                type="date"
-                label="Found Item Date"
-                :class="errors.length > 0 && 'error'"
-              />
-              <p
-                v-if="errors.length"
-                class="vee-validation-error mt-2 text-sm text-red-600"
-              >
-                {{ errors[0] }}
-              </p>
-            </ValidationProvider>
-            <ValidationProvider
-              v-slot="{ errors }"
-              rules="max:100|venueName"
-              class="block"
-            >
-              <BaseInput
-                v-model="venueName"
-                type="text"
-                :label="displayVenueName"
-                :class="errors.length > 0 && 'error'"
-                @blur="debouncedGetData('name')"
-              />
-              <p
-                v-if="errors.length"
-                class="vee-validation-error mt-2 text-sm text-red-600"
-              >
-                {{ errors[0] }}
-              </p>
-            </ValidationProvider>
-            <ValidationProvider
-              v-slot="{ errors }"
-              rules="required|email"
-              class="block"
-            >
-              <BaseInput
-                v-model="venueEmail"
-                type="email"
-                label="Venue Email"
-                :class="errors.length > 0 && 'error'"
-                @blur="debouncedGetData('email')"
-              />
-              <p
-                v-if="errors.length"
-                class="vee-validation-error mt-2 text-sm text-red-600"
-              >
-                {{ errors[0] }}
-              </p>
-            </ValidationProvider>
-            <div class="block relative box-content h-12">
-              <vue-tel-input
-                :inputOptions="{ placeholder: 'Your Phone No.' }"
-                class="
-                  relative
-                  border
-                  inline-block
-                  border-gray-300
-                  w-full
-                  rounded-lg
-                  h-full
-                "
-                v-model="venuePhone"
-                @blur="validateVenuePhoneNumber"
-                v-bind="bindPhoneInputProps"
-                @country-changed="countryChanged"
-              ></vue-tel-input>
+            <div class="flex mt-2">
+              <span class="w-full border-t border-solid border-gray-200 inline-block"></span>
             </div>
-            <div
-              v-if="!isVenuePhoneValid"
-              class="vee-validation-error top-margin-05 text-sm text-red-600"
-            >
-              *Required
-            </div>
-            <div class="block relative box-content h-12">
-              <vue-tel-input
-                :inputOptions="{ placeholder: 'Employee Mobile No.' }"
-                class="
-                  relative
-                  border
-                  inline-block
-                  border-gray-300
-                  w-full
-                  rounded-lg
-                  h-full
-                "
-                v-model="employeePhone"
-                v-bind="bindPhoneInputProps"
-                @blur="validateEmployeePhoneNumber"
-                @country-changed="countryChanged"
-              ></vue-tel-input>
-            </div>
-            <div
-              v-if="!isEmployeePhoneValid"
-              class="vee-validation-error top-margin-05 text-sm text-red-600"
-            >
-              *Required
-            </div>
-            <p>Address:</p>
-            <ValidationProvider
-              v-slot="{ errors }"
-              rules="required"
-              class="block"
-            >
-              <v-select
-                v-model="address"
-                :options="addressArr"
-                class="rounded-lg"
-                :class="errors.length > 0 && 'error'"
-              ></v-select>
-              <p
-                v-if="errors.length"
-                class="vee-validation-error mt-2 text-sm text-red-600"
-              >
-                {{ errors[0] }}
-              </p>
-            </ValidationProvider>
-            <ValidationProvider
-              v-if="manualAddressSelected"
-              v-slot="{ errors }"
-              rules="required"
-              class="block"
-            >
-              <BaseInput
-                v-model="manualAddress"
-                type="text"
-                label="Address Line"
-                :class="errors.length > 0 && 'error'"
-              />
-              <p
-                v-if="errors.length"
-                class="vee-validation-error mt-2 text-sm text-red-600"
-              >
-                {{ errors[0] }}
-              </p>
-            </ValidationProvider>
-            <div class="grid grid-cols-2 lg:grid-cols-3 gap-4">
-              <ValidationProvider
-                v-slot="{ errors }"
-                rules="max:28|required"
-                class="block lg:col-span-2"
-              >
-                <BaseInput
-                  v-model="city"
-                  label="City"
-                  type="text"
-                  :class="errors.length > 0 && 'error'"
-                />
-                <p
-                  v-if="errors.length"
-                  class="vee-validation-error mt-2 text-sm text-red-600"
-                >
-                  {{ errors[0] }}
-                </p>
-              </ValidationProvider>
-              <ValidationProvider
-                v-slot="{ errors }"
-                rules="required"
-                class="block col-span-1"
-              >
-                <BaseInput
-                  v-model="state"
-                  label="State"
-                  type="text"
-                  :class="errors.length > 0 && 'error'"
-                />
-                <p
-                  v-if="errors.length"
-                  class="vee-validation-error mt-2 text-sm text-red-600"
-                >
-                  {{ errors[0] }}
-                </p>
-              </ValidationProvider>
-            </div>
-            <div class="grid grid-cols-2 lg:grid-cols-3 gap-4">
-              <ValidationProvider
-                v-slot="{ errors }"
-                rules="max:28|required"
-                class="block lg:col-span-2"
-              >
-                <BaseInput
-                  v-model="country"
-                  label="Country"
-                  type="text"
-                  :class="errors.length > 0 && 'error'"
-                />
-                <p
-                  v-if="errors.length"
-                  class="vee-validation-error mt-2 text-sm text-red-600"
-                >
-                  {{ errors[0] }}
-                </p>
-              </ValidationProvider>
-              <ValidationProvider
-                rules="required"
-                v-slot="{ errors }"
-                class="block col-span-1"
-              >
-                <BaseInput
-                  v-model="zipcode"
-                  label="Zip Code"
-                  type="text"
-                  :class="errors.length > 0 && 'error'"
-                />
-                <p
-                  v-if="errors.length"
-                  class="vee-validation-error mt-2 text-sm text-red-600"
-                >
-                  {{ errors[0] }}
-                </p>
-              </ValidationProvider>
-            </div>
-          </div>
-          <div class="flex mt-2">
-            <span
-              class="w-full border-t border-solid border-gray-200 inline-block"
-            ></span>
-          </div>
-          <div class="card p-6 space-y-4">
-            <div class="form-title">
-              <h1
-                class="
+            <div class="card p-6 space-y-4">
+              <div class="form-title">
+                <h1 class="
                   w-full
                   text-xl
                   font-bold
                   leading-tight
                   text-gray-700
                   mb-3
-                "
-              >
-                {{ foundItemFormTitle }}
-              </h1>
-              <div class="flex justify-start">
-                <span
-                  class="
+                ">
+                  {{ foundItemFormTitle }}
+                </h1>
+                <div class="flex justify-start">
+                  <span class="
                     w-20
                     border-t-4 border-solid border-orange-200
                     inline-block
-                  "
-                ></span>
-              </div>
-            </div>
-
-            <div class="block">
-              <label
-                class="block mb-2 text-sm font-medium text-gray-800"
-                for="itemImage"
-                >Found item image</label
-              >
-              <div class="h-12 flex">
-                <input
-                  @change="uploadImg($event)"
-                  class="
-                    form-control
-                    block
-                    w-full
-                    px-3
-                    py-1.5
-                    text-base
-                    font-normal
-                    text-gray-700
-                    bg-white bg-clip-padding
-                    border border-solid border-gray-300
-                    rounded-lg
-                    transition
-                    ease-in-out
-                    m-0
-                    focus:text-gray-700
-                    focus:bg-white
-                    focus:border-blue-600
-                    focus:outline-none
-                  "
-                  id="itemImage"
-                  type="file"
-                />
-                <div v-show="image" class="flex">
-                  <a
-                    @click="editImage"
-                    class="text-indigo-600 hover:cursor-pointer hover:text-indigo-900 mr-3 py-2 inline-flex items-center"
-                    >
-                    <svg
-                      xmlns="http://www.w3.org/2000/svg"
-                      class="w-6 h-6"
-                      fill="none"
-                      viewBox="0 0 24 24"
-                      stroke="currentColor"
-                    >
-                      <path
-                        stroke-linecap="round"
-                        stroke-linejoin="round"
-                        stroke-width="2"
-                        d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"
-                      />
-                    </svg>
-                  </a>
-                  <a
-                    @click="previewImage = !previewImage"
-                    class="
-                      hover:cursor-pointer
-                      text-gray-600
-                      hover:text-gray-900
-                      ml-3
-                      py-2
-                      inline-flex
-                      items-center
-                    "
-                  >
-                    <svg
-                      xmlns="http://www.w3.org/2000/svg"
-                      class="w-6 h-6"
-                      fill="none"
-                      viewBox="0 0 24 24"
-                      stroke="currentColor"
-                    >
-                      <path
-                        stroke-linecap="round"
-                        stroke-linejoin="round"
-                        stroke-width="2"
-                        d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"
-                      />
-                      <path
-                        stroke-linecap="round"
-                        stroke-linejoin="round"
-                        stroke-width="2"
-                        d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"
-                      />
-                    </svg>
-                  </a>
+                  "></span>
                 </div>
               </div>
-              <div class="mt-3" v-if="previewImage">
-                <img :src="image" alt="Item image">
+
+              <div class="block">
+                <label class="block mb-2 text-sm font-medium text-gray-800" for="itemImage">Found item image</label>
+                <div class="h-12 flex">
+                  <input @change="uploadImg($event)" class="
+                      form-control
+                      block
+                      w-full
+                      px-3
+                      py-1.5
+                      text-base
+                      font-normal
+                      text-gray-700
+                      bg-white bg-clip-padding
+                      border border-solid border-gray-300
+                      rounded-lg
+                      transition
+                      ease-in-out
+                      m-0
+                      focus:text-gray-700
+                      focus:bg-white
+                      focus:border-blue-600
+                      focus:outline-none
+                    " id="itemImage" type="file" />
+                  <div v-show="image" class="flex">
+                    <a @click="editImage"
+                      class="text-indigo-600 hover:cursor-pointer hover:text-indigo-900 mr-3 py-2 inline-flex items-center">
+                      <svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6" fill="none" viewBox="0 0 24 24"
+                        stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                          d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
+                      </svg>
+                    </a>
+                    <a @click="previewImage = !previewImage" class="
+                        hover:cursor-pointer
+                        text-gray-600
+                        hover:text-gray-900
+                        ml-3
+                        py-2
+                        inline-flex
+                        items-center
+                      ">
+                      <svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6" fill="none" viewBox="0 0 24 24"
+                        stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                          d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                          d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
+                      </svg>
+                    </a>
+                  </div>
+                </div>
+                <div class="mt-3" v-if="previewImage">
+                  <img :src="image" alt="Item image">
+                </div>
               </div>
-            </div>
-            <p v-if="imageSaved" class="top-margin-3 text-lime-500">
-              Image saved successfully!
-            </p>
-            <p v-if="imageNotSaved" class="top-margin-3 text-red-600">
-              Something went wrong! Try again.
-            </p>
-            <div
-              v-show="showEditor"
-              class="fixed z-50 top-0 w-full left-0"
-              id="modal"
-            >
-              <div
-                class="
+              <div v-show="showEditor" class="fixed z-50 top-0 w-full left-0" id="modal">
+                <div class="
                   flex
                   items-center
                   justify-center
@@ -442,13 +235,11 @@
                   pb-20
                   text-center
                   sm:p-0
-                "
-              >
-                <div class="fixed inset-0 transition-opacity">
-                  <div class="absolute inset-0 bg-gray-900 opacity-75" />
-                </div>
-                <div
-                  class="
+                ">
+                  <div class="fixed inset-0 transition-opacity">
+                    <div class="absolute inset-0 bg-gray-900 opacity-75" />
+                  </div>
+                  <div class="
                     inline-block
                     align-middle
                     bg-white
@@ -459,26 +250,24 @@
                     transform
                     transition-all
                     sm:my-8 sm:align-middle sm:max-w-screen-md sm:w-full
-                  "
-                  role="dialog"
-                  aria-modal="true"
-                  aria-labelledby="modal-headline"
-                >
-                    	
-                <div class="relative">	
-                    <div class="title bg-accent-100 pl-6 py-4 mb-4">	
-                      <h3 class="text-white">Crop Image</h3>	
-                    </div>	
-                    <span @click="showEditor=false" class="absolute right-5 top-5 inline-block z-10">	
-                      <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-x" width="24" height="24" viewBox="0 0 24 24" stroke-width="1.5" stroke="#ffffff" fill="none" stroke-linecap="round" stroke-linejoin="round">	
-                        <path stroke="none" d="M0 0h24v24H0z" fill="none"/>	
-                        <line x1="18" y1="6" x2="6" y2="18" />	
-                        <line x1="6" y1="6" x2="18" y2="18" />	
-                      </svg>	
-                    </span>	
-                  </div>
-                  <div
-                    class="
+                  " role="dialog" aria-modal="true" aria-labelledby="modal-headline">
+
+                    <div class="relative">
+                      <div class="title bg-accent-100 pl-6 py-4 mb-4">
+                        <h3 class="text-white">Crop Image</h3>
+                      </div>
+                      <span @click="showEditor = false"
+                        class=" cursor-pointer absolute right-5 top-5 inline-block z-10">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-x" width="24"
+                          height="24" viewBox="0 0 24 24" stroke-width="1.5" stroke="#ffffff" fill="none"
+                          stroke-linecap="round" stroke-linejoin="round">
+                          <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+                          <line x1="18" y1="6" x2="6" y2="18" />
+                          <line x1="6" y1="6" x2="18" y2="18" />
+                        </svg>
+                      </span>
+                    </div>
+                    <div class="
                       w-full
                       max-w-screen-md
                       relative
@@ -491,95 +280,38 @@
                       justify-center
                       items-center
                       editor-container
-                    "
-                  >
-                    <div
-                      class="top-margin-3 flex justify-center"
-                      v-show="loadingSpinner"
-                      role="status"
-                    >
-                      <svg
-                        aria-hidden="true"
-                        class="mr-2 w-16 h-16 text-gray-200 animate-spin fill-blue-600"
-                        viewBox="0 0 100 101"
-                        fill="none"
-                        xmlns="http://www.w3.org/2000/svg"
-                      >
-                        <path
-                          d="M100 50.5908C100 78.2051 77.6142 100.591 50 100.591C22.3858 100.591 0 78.2051 0 50.5908C0 22.9766 22.3858 0.59082 50 0.59082C77.6142 0.59082 100 22.9766 100 50.5908ZM9.08144 50.5908C9.08144 73.1895 27.4013 91.5094 50 91.5094C72.5987 91.5094 90.9186 73.1895 90.9186 50.5908C90.9186 27.9921 72.5987 9.67226 50 9.67226C27.4013 9.67226 9.08144 27.9921 9.08144 50.5908Z"
-                          fill="currentColor"
-                        />
-                        <path
-                          d="M93.9676 39.0409C96.393 38.4038 97.8624 35.9116 97.0079 33.5539C95.2932 28.8227 92.871 24.3692 89.8167 20.348C85.8452 15.1192 80.8826 10.7238 75.2124 7.41289C69.5422 4.10194 63.2754 1.94025 56.7698 1.05124C51.7666 0.367541 46.6976 0.446843 41.7345 1.27873C39.2613 1.69328 37.813 4.19778 38.4501 6.62326C39.0873 9.04874 41.5694 10.4717 44.0505 10.1071C47.8511 9.54855 51.7191 9.52689 55.5402 10.0491C60.8642 10.7766 65.9928 12.5457 70.6331 15.2552C75.2735 17.9648 79.3347 21.5619 82.5849 25.841C84.9175 28.9121 86.7997 32.2913 88.1811 35.8758C89.083 38.2158 91.5421 39.6781 93.9676 39.0409Z"
-                          fill="currentFill"
-                        />
-                      </svg>
-                      <span class="sr-only">Loading...</span>
-                    </div>
-                    <div v-show="!loadingSpinner" class="w-full">	
-                      <div class="px-6">	
-                        <Editor	
-                          :canvasWidth="canvasWidth"	
-                          :canvasHeight="canvasHeight"	
-                          ref="editor"	
-                        />	
-                      </div>	
-                      <div class="editor-tools mt-5 px-6 border-t pt-4">	
-                        <div class="icons">	
-                          <div class="tool-undo">	
-                            <rotate-ccw-icon	
-                              :size="size_icon"	
-                              @click="undo()"	
-                            ></rotate-ccw-icon>	
-                          </div>	
-                          <div class="tool-redo">	
-                            <rotate-cw-icon	
-                              :size="size_icon"	
-                              @click="redo()"	
-                            ></rotate-cw-icon>	
-                          </div>	
-                          <div class="tool-trash">	
-                            <trash-2-icon	
-                              :size="size_icon"	
-                              @click="deleteEditable()"	
-                            ></trash-2-icon>	
-                          </div>	
-                          <div class="tool-freeDrawing">	
-                            <edit-2-icon	
-                              :size="size_icon"	
-                              @click="freeDrawing()"	
-                            ></edit-2-icon>	
-                          </div>	
-                          <div class="tool-addCircle">	
-                            <circle-icon	
-                              :size="size_icon"	
-                              @click="addCicle()"	
-                            ></circle-icon>	
-                          </div>	
-                          <div class="tool-addSquare">	
-                            <square-icon	
-                              :size="size_icon"	
-                              @click="addSquare()"	
-                            ></square-icon>	
-                          </div>	
-                          <div class="tool-crop">	
-                            <maximize-icon	
-                              v-if="stateCrop"	
-                              :size="size_icon"	
-                              @click="crop()"	
-                            ></maximize-icon>	
-                            <check-icon	
-                              v-else	
-                              :size="size_icon"	
-                              @click="applyCrop()"	
-                            ></check-icon>	
-                          </div>	
-                        </div>	
-                        <div class="save-upload">	
-                          <button	
-                            type="button"
-                            @click="saveImg"
-                            class="	
+                    ">
+                      <div class="w-full">
+                        <div class="px-6">
+                          <Editor :canvasWidth="canvasWidth" :canvasHeight="canvasHeight" ref="editor" />
+                        </div>
+                        <div class="editor-tools mt-5 px-6 border-t pt-4">
+                          <div class="icons">
+                            <div class="tool-undo">
+                              <rotate-ccw-icon :size="size_icon" @click="undo()"></rotate-ccw-icon>
+                            </div>
+                            <div class="tool-redo">
+                              <rotate-cw-icon :size="size_icon" @click="redo()"></rotate-cw-icon>
+                            </div>
+                            <div class="tool-trash">
+                              <trash-2-icon :size="size_icon" @click="deleteEditable()"></trash-2-icon>
+                            </div>
+                            <!-- <div class="tool-freeDrawing">
+                              <edit-2-icon :size="size_icon" @click="freeDrawing()"></edit-2-icon>
+                            </div> -->
+                            <div class="tool-addCircle">
+                              <circle-icon :size="size_icon" @click="addCicle()"></circle-icon>
+                            </div>
+                            <div class="tool-addSquare">
+                              <square-icon :size="size_icon" @click="addSquare()"></square-icon>
+                            </div>
+                            <div class="tool-crop">
+                              <maximize-icon v-if="stateCrop" :size="size_icon" @click="crop()"></maximize-icon>
+                              <check-icon v-else :size="size_icon" @click="applyCrop()"></check-icon>
+                            </div>
+                          </div>
+                          <div class="save-upload">
+                            <button type="button" :class="{ 'button--loading': isSavingImage }" @click="saveImg" class="	
                               font-medium	
                               text-md	
                               leading-5	
@@ -600,151 +332,70 @@
                               focus:ring-accent-100	
                               shadow-accent	
                               hover:bg-accent-200	
-                            "	
-                          >	
-                            <span class="button__text"> <save-icon :size="size_icon"></save-icon> Save </span>	
-                          </button>	
+                            ">
+                              <span class="button__text">
+                                <save-icon :size="size_icon"></save-icon> Save
+                              </span>
+                            </button>
                           </div>
                         </div>
                       </div>
+                    </div>
                   </div>
                 </div>
               </div>
-            </div>
-            <ValidationProvider
-              v-slot="{ errors }"
-              rules="required"
-              class="block"
-            >
-              <BaseSelect
-                v-model="itemDescription"
-                :options="itemDescriptionArr"
-                label="Item Description"
-                :class="errors.length > 0 && 'error'"
-                @input="setItemDetails"
-              />
-              <p
-                v-if="errors.length"
-                class="vee-validation-error mt-2 text-sm text-red-600"
-              >
-                {{ errors[0] }}
-              </p>
-            </ValidationProvider>
-            <div class="grid grid-cols-2 lg:grid-cols-3 gap-4">
-              <ValidationProvider
-                v-slot="{ errors }"
-                rules="required"
-                class="block col-span-1"
-              >
-                <BaseSelect
-                  v-model="packageType"
-                  :options="packageTypeArr"
-                  label="Package Type"
-                  :class="errors.length > 0 && 'error'"
-                />
-                <p
-                  v-if="errors.length"
-                  class="vee-validation-error mt-2 text-sm text-red-600"
-                >
+              <ValidationProvider v-slot="{ errors }" rules="required" class="block">
+                <BaseSelect v-model="itemDescription" :options="itemDescriptionArr" label="Item Description"
+                  :class="errors.length > 0 && 'error'" @input="setItemDetails" />
+                <p v-if="errors.length" class="vee-validation-error mt-2 text-sm text-red-600">
                   {{ errors[0] }}
                 </p>
               </ValidationProvider>
-              <ValidationProvider
-                v-slot="{ errors }"
-                rules="max:28|required"
-                class="block lg:col-span-2"
-              >
-                <BaseInput
-                  v-model="weight"
-                  label="Weight"
-                  type="text"
-                  :class="errors.length > 0 && 'error'"
-                />
-                <p
-                  v-if="errors.length"
-                  class="vee-validation-error mt-2 text-sm text-red-600"
-                >
+              <div class="grid grid-cols-2 lg:grid-cols-3 gap-4">
+                <ValidationProvider v-slot="{ errors }" rules="required" class="block col-span-1">
+                  <BaseSelect v-model="packageType" :options="packageTypeArr" label="Package Type"
+                    :class="errors.length > 0 && 'error'" />
+                  <p v-if="errors.length" class="vee-validation-error mt-2 text-sm text-red-600">
+                    {{ errors[0] }}
+                  </p>
+                </ValidationProvider>
+                <ValidationProvider v-slot="{ errors }" rules="max:28|required" class="block lg:col-span-2">
+                  <BaseInput v-model="weight" label="Weight" type="text" :class="errors.length > 0 && 'error'" />
+                  <p v-if="errors.length" class="vee-validation-error mt-2 text-sm text-red-600">
+                    {{ errors[0] }}
+                  </p>
+                </ValidationProvider>
+              </div>
+              <ValidationProvider v-slot="{ errors }" rules="max:28|required" class="block lg:col-span-2">
+                <BaseInput v-model="dimension" label="Dimension" type="text" :class="errors.length > 0 && 'error'" />
+                <p v-if="errors.length" class="vee-validation-error mt-2 text-sm text-red-600">
                   {{ errors[0] }}
                 </p>
               </ValidationProvider>
-            </div>
-            <ValidationProvider
-              v-slot="{ errors }"
-              rules="max:28|required"
-              class="block lg:col-span-2"
-            >
-              <BaseInput
-                v-model="dimension"
-                label="Dimension"
-                type="text"
-                :class="errors.length > 0 && 'error'"
-              />
-              <p
-                v-if="errors.length"
-                class="vee-validation-error mt-2 text-sm text-red-600"
-              >
-                {{ errors[0] }}
-              </p>
-            </ValidationProvider>
-            <ValidationProvider
-              v-slot="{ errors }"
-              rules="required"
-              class="block"
-            >
-              <BaseSelect
-                v-model="itemStatus"
-                :options="itemStatusArr"
-                label="Item Status"
-                :class="errors.length > 0 && 'error'"
-              />
-              <p
-                v-if="errors.length"
-                class="vee-validation-error mt-2 text-sm text-red-600"
-              >
-                {{ errors[0] }}
-              </p>
-            </ValidationProvider>
-            <template v-if="showReceiverInputs">
-              <ValidationProvider
-                v-slot="{ errors }"
-                rules="max:100|required"
-                class="block"
-              >
-                <BaseInput
-                  v-model="receiverName"
-                  type="text"
-                  label="Receiver's Name"
-                  :class="errors.length > 0 && 'error'"
-                />
-                <p
-                  v-if="errors.length"
-                  class="vee-validation-error mt-2 text-sm text-red-600"
-                >
+              <ValidationProvider v-slot="{ errors }" rules="required" class="block">
+                <BaseSelect v-model="itemStatus" :options="itemStatusArr" label="Item Status"
+                  :class="errors.length > 0 && 'error'" />
+                <p v-if="errors.length" class="vee-validation-error mt-2 text-sm text-red-600">
                   {{ errors[0] }}
                 </p>
               </ValidationProvider>
-              <ValidationProvider
-                v-slot="{ errors }"
-                rules="required|email"
-                class="block"
-              >
-                <BaseInput
-                  v-model="receiverEmail"
-                  type="email"
-                  label="Receiver's Email"
-                  :class="errors.length > 0 && 'error'"
-                />
-                <p
-                  v-if="errors.length"
-                  class="vee-validation-error mt-2 text-sm text-red-600"
-                >
-                  {{ errors[0] }}
-                </p>
-              </ValidationProvider>
-              <div class="block relative box-content h-12">
-                <vue-tel-input
-                  :inputOptions="{ placeholder: 'Receiver Mobile No.' }"
-                  class="
+              <template v-if="showReceiverInputs">
+                <ValidationProvider v-slot="{ errors }" rules="max:100|required" class="block">
+                  <BaseInput v-model="receiverName" type="text" label="Receiver's Name"
+                    :class="errors.length > 0 && 'error'" />
+                  <p v-if="errors.length" class="vee-validation-error mt-2 text-sm text-red-600">
+                    {{ errors[0] }}
+                  </p>
+                </ValidationProvider>
+                <ValidationProvider v-slot="{ errors }" rules="required|email" class="block">
+                  <BaseInput v-model="receiverEmail" type="email" label="Receiver's Email"
+                    :class="errors.length > 0 && 'error'" />
+                  <p v-if="errors.length" class="vee-validation-error mt-2 text-sm text-red-600">
+                    {{ errors[0] }}
+                  </p>
+                </ValidationProvider>
+                <div class="block relative box-content h-12">
+                  <vue-tel-input :inputOptions="{ placeholder: 'Receiver Mobile No.' }" class="
                     relative
                     border
                     inline-block
@@ -752,23 +403,14 @@
                     w-full
                     rounded-lg
                     h-full
-                  "
-                  v-model="receiverPhone"
-                  v-bind="bindPhoneInputProps"
-                  @blur="validateReceiverPhoneNumber"
-                  @country-changed="countryChanged"
-                ></vue-tel-input>
-                <div
-                  v-if="!isReceiverPhoneValid"
-                  class="vee-validation-error mt-2 text-sm text-red-600"
-                >
-                  *Required
+                  " v-model="receiverPhone" v-bind="bindPhoneInputProps" @blur="validateReceiverPhoneNumber">
+                  </vue-tel-input>
+                  <div v-if="!isReceiverPhoneValid" class="vee-validation-error mt-2 text-sm text-red-600">
+                    *Required
+                  </div>
                 </div>
-              </div>
-            </template>
-            <div
-              v-show="showValidateAlert"
-              class="
+              </template>
+              <div v-show="showValidateAlert" class="
                 p-4
                 mb-4
                 top-margin-alert
@@ -776,18 +418,13 @@
                 bg-red-100
                 rounded-lg
                 dark:bg-red-200 dark:text-red-800
-              "
-              role="alert"
-            >
-              <span class="font-medium">Oops!</span> Please fill all required
-              fields and try submitting again.
-            </div>
-            <!-- onclick="this.classList.toggle('button--loading')" -->
-            <div class="flex justify-end">
-              <button
-              :class="{ 'button--loading': isLoading }"
-                type="submit"
-                class="
+              " role="alert">
+                <span class="font-medium">Oops!</span> Please fill all required
+                fields and try submitting again.
+              </div>
+              <!-- onclick="this.classList.toggle('button--loading')" -->
+              <div class="flex justify-end">
+                <button :class="{ 'button--loading': isLoading }" type="submit" class="
                   !py-3
                   font-medium
                   text-md
@@ -809,20 +446,19 @@
                   focus:ring-accent-100
                   shadow-accent
                   hover:bg-accent-200
-                "
-              >
-                <span class="button__text"> Preview </span>
-              </button>
+                ">
+                  <span class="button__text"> Preview </span>
+                </button>
+              </div>
             </div>
-          </div>
-        </form>
-      </ValidationObserver>
-     </div>
-     <div v-else>
+          </form>
+        </ValidationObserver>
+      </div>
+      <div v-else>
         <div wire:loading class="h-screen z-50 overflow-hidden flex flex-col items-center justify-center">
-	        <div class="loader ease-linear rounded-full border-4 border-t-4 border-gray-200 h-12 w-12 mb-4"></div>
+          <div class="loader ease-linear rounded-full border-4 border-t-4 border-gray-200 h-12 w-12 mb-4"></div>
         </div>
-     </div>
+      </div>
     </div>
   </div>
 </template>
@@ -895,9 +531,7 @@ export default {
     stateCrop: true,
     size_icon: "2x",
     showFilledDetails: false,
-    loadingSpinner: false,
-    imageSaved: false,
-    imageNotSaved: false,
+    isSavingImage: false,
     imageRecognitionData: [],
     image: "",
     imageKey: "",
@@ -924,6 +558,10 @@ export default {
     isEmployeePhoneValid: true,
     isReceiverPhoneValid: true,
     isAdmin: false,
+    currentPosition: {
+      lat: null,
+      long: null
+    }
   }),
   components: {
     ValidationObserver,
@@ -957,39 +595,45 @@ export default {
     },
   },
   methods: {
-    validateVenuePhoneNumber(){
-      if(!this.venuePhone){
+    getCurrentPosition() {
+      fetch("http://ip-api.com/json")
+        .then((data) => {
+          return data.json();
+        })
+        .then(async (data) => {
+          this.currentPosition = { lat: data.lat, long: data.lon }
+        })
+    },
+    validateVenuePhoneNumber() {
+      if (!this.venuePhone) {
         this.isVenuePhoneValid = false;
         this.debouncedGetData("phoneno");
       }
-      else{
+      else {
         this.isVenuePhoneValid = true;
         this.debouncedGetData("phoneno");
       }
     },
-    validateEmployeePhoneNumber(){
-      if(!this.employeePhone){
+    validateEmployeePhoneNumber() {
+      if (!this.employeePhone) {
         this.isEmployeePhoneValid = false;
       }
-      else{
+      else {
         this.isEmployeePhoneValid = true;
       }
     },
-    validateReceiverPhoneNumber(){
-      if(!this.receiverPhone){
+    validateReceiverPhoneNumber() {
+      if (!this.receiverPhone) {
         this.isReceiverPhoneValid = false;
       }
-      else{
+      else {
         this.isReceiverPhoneValid = true;
       }
     },
-    formatMobileNumber(phoneNumber){
+    formatMobileNumber(phoneNumber) {
       let arr = phoneNumber.split(" ");
       let countryCode = arr.shift();
       return countryCode + ' ' + arr.join('');
-    },
-    countryChanged(country) {
-      // console.log("===countryChanged", country);
     },
     setItemDetails(value) {
       switch (value) {
@@ -1015,7 +659,7 @@ export default {
           break;
       }
     },
-    addressFilter(mode){
+    addressFilter(mode) {
       if (this.apiAddressData.length == 0 && !this.address) {
         this.address = "";
       }
@@ -1023,82 +667,78 @@ export default {
         return addressObj.address;
       });
       addressLineArr.push("Other");
-      if(mode != "edit"){
-        if(this.address && addressLineArr.length > 1){
+      if (mode != "edit") {
+        if (this.address && addressLineArr.length > 1) {
           let index = addressLineArr.findIndex(address => {
             return address == this.address;
           });
-          if(index == -1){
+          if (index == -1) {
             this.address = addressLineArr[0];
           }
         }
-        if(!this.address && addressLineArr.length > 1){
+        if (!this.address && addressLineArr.length > 1) {
           this.manualAddressSelected = false;
           this.address = addressLineArr[0];
         }
-        if(this.apiAddressData.length < 1){
+        if (this.apiAddressData.length < 1) {
           this.address = "";
         }
       }
       this.addressArr = addressLineArr;
     },
+
     debouncedGetData: debounce(function (type) {
       this.getData(type, "");
     }, 1000),
 
-    async getData(type, mode) {
+    getData(type, mode) {
+      const params = {
+        lat: this.currentPosition.lat,
+        long: this.currentPosition.long
+      }
+      if (type === "name" && this.venueName.length > 0) {
+        params.type = 'name'
+        params.place = this.venueName;
+        this.responseData.venueName = [];
+      } else if (type === "email") {
+        params.type = 'email'
+        params.place = this.venueEmail;
+        this.responseData.venueEmail = [];
+      } else if (type === "phoneno") {
+        params.type = 'phoneno'
+        params.mobileno = this.venuePhone;
+        this.responseData.venuePhone = [];
+      }
 
-      fetch("http://ip-api.com/json")
-        .then((data) => {
-          return data.json();
-        })
-        .then(async (data) => {
-          const params = {
-            lat: data.lat,
-            long: data.lon,
-          };
-
+      this.$axios.get("/autofilladdress", { params }).then(({ data }) => {
+        if (!data.error) {
           if (type === "name") {
-            params.place = this.venueName;
-            this.responseData.venueName = [];
-          } else if (type === "email") {
-            params.place = this.venueEmail;
-            this.responseData.venueEmail = [];
-          } else if (type === "phoneno") {
-            params.mobileno = this.venuePhone;
-            this.responseData.venuePhone = [];
-          }
-
-          await this.$axios.get("/autofilladdress", { params }).then(({ data }) => {
-            if (!data.error) {
-              if (type === "name") {
-                if (this.venueName) {
-                  this.responseData.venueName.push(...data.data);
-                }
-              } else if (type === "email") {
-                if (this.venueEmail) {
-                  this.responseData.venueEmail.push(...data.data);
-                }
-              } else if (type === "phoneno") {
-                if (this.venuePhone) {
-                  this.responseData.venuePhone.push(...data.data);
-                }
-              }
-              this.apiAddressData = [];
-              this.apiAddressData.push(
-                ...this.responseData.venueName,
-                ...this.responseData.venuePhone,
-                ...this.responseData.venueEmail
-              );
-              this.addressFilter(mode);
+            if (this.venueName) {
+              this.responseData.venueName.push(...data.data);
             }
-          });
-        });
+          } else if (type === "email") {
+            if (this.venueEmail) {
+              this.responseData.venueEmail.push(...data.data);
+            }
+          } else if (type === "phoneno") {
+            if (this.venuePhone) {
+              this.responseData.venuePhone.push(...data.data);
+            }
+          }
+          this.apiAddressData = [];
+          this.apiAddressData.push(
+            ...this.responseData.venueName,
+            ...this.responseData.venuePhone,
+            ...this.responseData.venueEmail
+          );
+          this.addressFilter(mode);
+        }
+      })
     },
     async onSubmit() {
       this.validateVenuePhoneNumber();
       this.validateEmployeePhoneNumber();
-      if(this.itemStatus == "Claimed"){
+      if (this.itemStatus == "Claimed") {
         this.validateReceiverPhoneNumber();
       }
       this.isLoading = true
@@ -1133,7 +773,7 @@ export default {
         if (this.isAdmin) {
           params.id = this.foundItemId;
         }
-        else{
+        else {
           params.foundItemId = this.foundItemId;
         }
         if (this.itemStatus === "Claimed") {
@@ -1145,8 +785,8 @@ export default {
         this.$store.commit("item/SET_ITEM_DETAILS", {
           ...params,
           image: this.image,
-        });   
-        
+        });
+
         setTimeout(() => {
           this.isLoading = false
           this.$nextTick(() => {
@@ -1155,10 +795,10 @@ export default {
             } else {
               this.$router.push({ path: "/detail-confirmation" });
             }
-        });
+          });
         }, 1000);
 
-      
+
       }
     },
     resetForm() {
@@ -1182,10 +822,10 @@ export default {
       this.showEditor = false;
       this.stateCrop = true;
     },
-    freeDrawing() {
-      let customizeFreeDrawing = { stroke: "black", strokeWidth: "5" };
-      this.$refs.editor.set("freeDrawing", customizeFreeDrawing);
-    },
+    // freeDrawing() {
+    //   let customizeFreeDrawing = { stroke: "black", strokeWidth: "5" };
+    //   this.$refs.editor.set("freeDrawing", customizeFreeDrawing);
+    // },
     addCicle() {
       let circleModeParams = { fill: "black", stroke: "black" };
       this.$refs.editor.set("circle", circleModeParams);
@@ -1212,12 +852,12 @@ export default {
       this.$refs.editor.applyCropping();
       this.stateCrop = true;
     },
-    async editImage(){
+    async editImage() {
       this.showEditor = false;
       if (this.image) {
         const response = await fetch(this.image);
         const blob = await response.blob();
-        const file = new File([blob], 'image.jpg', {type: blob.type});
+        const file = new File([blob], 'image.jpg', { type: blob.type });
         this.$refs.editor.uploadImage(file);
         this.showEditor = true;
         this.loadingSpinner = true;
@@ -1233,18 +873,16 @@ export default {
       if (event.target.files[0]) {
         this.$refs.editor.uploadImage(event.target.files[0]);
         this.showEditor = true;
-        this.loadingSpinner = true;
-        setTimeout(() => {
-          this.loadingSpinner = false;
-        }, 2000);
       } else {
         this.showEditor = false;
       }
     },
     saveImg() {
+      this.isSavingImage = true
       const file = this.$refs.editor.saveImage();
       this.$axios.post("/demo", { file }).then((response) => {
         if (response.status === 200) {
+          this.isSavingImage = false
           this.imageRecognitionData = response.data.data;
           if (!this.isAdmin) {
             this.itemDescription = response.data.data[0].name;
@@ -1283,10 +921,10 @@ export default {
     address(newAddress, oldAddress) {
       if (newAddress != oldAddress) {
         if (!newAddress || newAddress == "Other") {
-          if(newAddress == "Other"){
+          if (newAddress == "Other") {
             this.manualAddressSelected = true;
           }
-          if(oldAddress && newAddress == "Other"){
+          if (oldAddress && newAddress == "Other") {
             this.manualAddress = "";
           }
           this.city = "";
@@ -1339,6 +977,7 @@ export default {
     });
   },
   mounted() {
+    this.getCurrentPosition()
     if (this.$route.query.id) {
       this.isLoadingItemDetails = true
       this.foundItemId = this.$route.query.id;
@@ -1382,7 +1021,7 @@ export default {
         })
         .catch((error) => console.log(error));
     } else if (this.$route.params?.itemDetails) {
-      if(this.$route.params?.isAdmin) this.isAdmin = true 
+      if (this.$route.params?.isAdmin) this.isAdmin = true
       this.senderFormTitle = "EDIT SENDER'S DETAILS";
       this.foundItemFormTitle = "EDIT FOUND ITEM'S DETAILS";
       let data = this.$route.params.itemDetails;
@@ -1392,10 +1031,10 @@ export default {
         this.venue = "Other";
         this.manualVenue = data.venu_type;
       }
-      if(data.foundItemId){
+      if (data.foundItemId) {
         this.foundItemId = data.foundItemId;
       }
-      else{
+      else {
         this.foundItemId = data.id;
       }
       this.foundDate = data.datse;
@@ -1421,7 +1060,7 @@ export default {
         this.receiverEmail = data.receiver_email;
         this.receiverPhone = data.receiver_mobile_no;
       }
-      if(this.venueName){
+      if (this.venueName) {
         this.getData("name", "edit")
         this.address = data.address;
         this.city = data.city;
@@ -1429,7 +1068,7 @@ export default {
         this.country = data.country;
         this.zipcode = data.zipcode;
       }
-      if(this.venueEmail){
+      if (this.venueEmail) {
         this.getData("email", "edit")
         this.address = data.address;
         this.city = data.city;
@@ -1437,7 +1076,7 @@ export default {
         this.country = data.country;
         this.zipcode = data.zipcode;
       }
-      if(this.venuePhone){
+      if (this.venuePhone) {
         this.getData("phoneno", "edit")
         this.address = data.address;
         this.city = data.city;
@@ -1458,7 +1097,7 @@ export default {
   @apply min-h-screen flex justify-center py-10 mx-auto;
 }
 
-.editor-container{
+.editor-container {
   min-width: 200px;
   min-height: 200px;
 }
@@ -1468,46 +1107,52 @@ export default {
   margin-bottom: 20px;
 }
 
-.editor-tools .icons {	
-  @apply flex items-center	
-}	
-.editor-tools .save-upload .button__text {	
-  @apply flex items-center	
-}	
-.editor-tools .save-upload .button__text svg {	
-  margin-right: 10px;	
-  width: 18px;	
+.editor-tools .icons {
+  @apply flex items-center
+}
+
+.editor-tools .save-upload .button__text {
+  @apply flex items-center
+}
+
+.editor-tools .save-upload .button__text svg {
+  margin-right: 10px;
+  width: 18px;
 }
 
 .custom-editor {
   @apply flex justify-center;
-  border: 1px solid #000000;
+  border: 1px solid #808080;
   background-color: #ffffff;
 }
-	
-.editor-tools .icons {	
-  div{	
-    cursor: pointer;	
-    border: 1px solid #808080;	
-    border-radius: 14px; 	
-    margin-right: 5px;	
-    &:hover{	
-      background: #dfdfdf;	
-    }	
-    padding: 2px 10px;	
-    background-color: #f3f3f3;	
-    margin-bottom: 5px;	
-    svg {	
-      width: 18px;	
-    }	
-  }	
+
+.editor-tools .icons {
+  div {
+    cursor: pointer;
+    border: 1px solid #808080;
+    border-radius: 14px;
+    margin-right: 7px;
+
+    &:hover {
+      background: #dfdfdf;
+    }
+
+    padding: 2px 10px;
+    background-color: #f3f3f3;
+    margin-bottom: 5px;
+    color: #ff9800;
+
+    svg {
+      width: 18px;
+    }
+  }
 }
 
-.top-margin-05{
+.top-margin-05 {
   margin-top: 0.5rem !important;
 }
 
-.top-margin-alert{
+.top-margin-alert {
   margin-top: 2.5rem !important;
 }
 
@@ -1525,21 +1170,25 @@ canvas {
   width: 0 !important;
   object-fit: contain;
 }
+
 .canvas-container {
   width: 100% !important;
 }
-.canvas-container{
+
+.canvas-container {
   display: flex;
   justify-content: center;
   align-items: center;
   min-width: 500px !important;
   min-height: 384px;
 }
+
 .upper-canvas {
   margin: 0px 0px;
   min-width: 500px !important;
   min-height: 384px;
 }
+
 .lower-canvas {
   min-width: 500px !important;
   min-height: 384px;
@@ -1551,9 +1200,10 @@ canvas {
 }
 
 .error {
-  & > div {
+  &>div {
     @apply text-red-500;
   }
+
   .vs__dropdown-toggle {
     @apply border-red-500 border-2 ring-4 ring-red-500 ring-opacity-10 transition-none;
   }
@@ -1564,6 +1214,7 @@ canvas {
 }
 
 @media only screen and (max-width: 650px) {
+
   .canvas-container,
   .upper-canvas,
   .lower-canvas {
@@ -1575,6 +1226,7 @@ canvas {
 }
 
 @media only screen and (max-width: 510px) {
+
   .canvas-container,
   .upper-canvas,
   .lower-canvas {
@@ -1586,6 +1238,7 @@ canvas {
 }
 
 @media only screen and (max-width: 410px) {
+
   .canvas-container,
   .upper-canvas,
   .lower-canvas {
@@ -1608,13 +1261,16 @@ canvas {
 .fade-leave-to {
   opacity: 0;
 }
+
 .vue-tel-input {
   border-radius: 0.5rem;
   overflow: hidden;
 }
+
 .vs__actions svg {
   display: none;
 }
+
 .vs__actions {
   background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 20 20'%3e%3cpath stroke='%23737373' stroke-linecap='round' stroke-linejoin='round' stroke-width='1.5' d='M6 8l4 4 4-4'/%3e%3c/svg%3e");
   background-position: right 0.5rem center;
@@ -1622,6 +1278,7 @@ canvas {
   background-size: 1.5em 1.5em;
   width: 26px;
 }
+
 .button {
   position: relative;
   border: none;
@@ -1666,27 +1323,28 @@ canvas {
 }
 
 .loader {
-	border-top-color:orange;
-	-webkit-animation: spinner 1.5s linear infinite;
-	animation: spinner 1.5s linear infinite;
+  border-top-color: orange;
+  -webkit-animation: spinner 1.5s linear infinite;
+  animation: spinner 1.5s linear infinite;
 }
 
 @-webkit-keyframes spinner {
-	0% {
-		-webkit-transform: rotate(0deg);
-	}
-	100% {
-		-webkit-transform: rotate(360deg);
-	}
+  0% {
+    -webkit-transform: rotate(0deg);
+  }
+
+  100% {
+    -webkit-transform: rotate(360deg);
+  }
 }
 
 @keyframes spinner {
-	0% {
-		transform: rotate(0deg);
-	}
-	100% {
-		transform: rotate(360deg);
-	}
-}
+  0% {
+    transform: rotate(0deg);
+  }
 
+  100% {
+    transform: rotate(360deg);
+  }
+}
 </style>
