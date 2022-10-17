@@ -45,20 +45,25 @@ export default {
 <style lang="scss" scoped>
 .appbar-container {
   z-index: 100;
-  @apply flex  items-center py-2 px-10  w-full bg-white shadow-lg;
+  @apply flex items-center py-2 px-10 w-full bg-white shadow-lg;
+
   .logo-main-container {
     @apply flex items-center;
   }
+
   .logo-container {
     @apply p-4;
+
     .logo {
       @apply px-4 py-2 font-bold;
     }
   }
+
   .btn {
-    @apply px-4 py-2 text-gray-500 rounded-lg hover:bg-indigo-100 hover:text-indigo-700;
+    @apply px-4 py-2 text-gray-500 rounded-lg font-medium;
+
     &.nuxt-link-exact-active {
-      @apply bg-indigo-100 text-indigo-700;
+      @apply bg-orange-100 text-orange-700;
     }
   }
 }
@@ -80,6 +85,7 @@ export default {
   background-color: #333;
   margin: 6px 0;
 }
+
 .mobile-menu {
   @apply hidden;
 }
@@ -88,9 +94,11 @@ export default {
   .link-container {
     @apply hidden;
   }
+
   .drawer-container {
     @apply block;
   }
+
   .mobile-menu {
     z-index: 99;
     @apply block pt-24 pb-3 fixed w-full bg-white shadow-lg px-16;
