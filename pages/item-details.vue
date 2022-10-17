@@ -1,5 +1,5 @@
 <template>
-  <div class="wrapper">
+  <div class="wrapper-form">
     <div
       class="
         card
@@ -469,7 +469,7 @@
                     <div class="title bg-accent-100 pl-6 py-4 mb-4">	
                       <h3 class="text-white">Crop Image</h3>	
                     </div>	
-                    <span class="absolute right-5 top-5 inline-block z-10">	
+                    <span @click="showEditor=false" class="absolute right-5 top-5 inline-block z-10">	
                       <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-x" width="24" height="24" viewBox="0 0 24 24" stroke-width="1.5" stroke="#ffffff" fill="none" stroke-linecap="round" stroke-linejoin="round">	
                         <path stroke="none" d="M0 0h24v24H0z" fill="none"/>	
                         <line x1="18" y1="6" x2="6" y2="18" />	
@@ -855,7 +855,7 @@ export default {
     foundItemFormTitle: "",
     venueName: "",
     venueEmail: "",
-    manualAddressSelected: true,
+    manualAddressSelected: false,
     manualAddress: "",
     address: "",
     city: "",
@@ -1018,7 +1018,6 @@ export default {
     addressFilter(mode){
       if (this.apiAddressData.length == 0 && !this.address) {
         this.address = "";
-        this.manualAddressSelected = true;
       }
       let addressLineArr = this.apiAddressData.map((addressObj) => {
         return addressObj.address;
@@ -1214,20 +1213,20 @@ export default {
       this.stateCrop = true;
     },
     async editImage(){
-      // this.showEditor = false;
-      // if (this.image) {
-      //   const response = await fetch(this.image);
-      //   const blob = await response.blob();
-      //   const file = new File([blob], 'image.jpg', {type: blob.type});
-      //   this.$refs.editor.uploadImage(file);
-      //   this.showEditor = true;
-      //   this.loadingSpinner = true;
-      //   setTimeout(() => {
-      //     this.loadingSpinner = false;
-      //   }, 2000);
-      // } else {
-      //   this.showEditor = false;
-      // }
+      this.showEditor = false;
+      if (this.image) {
+        const response = await fetch(this.image);
+        const blob = await response.blob();
+        const file = new File([blob], 'image.jpg', {type: blob.type});
+        this.$refs.editor.uploadImage(file);
+        this.showEditor = true;
+        this.loadingSpinner = true;
+        setTimeout(() => {
+          this.loadingSpinner = false;
+        }, 2000);
+      } else {
+        this.showEditor = false;
+      }
     },
     async uploadImg(event) {
       this.showEditor = false;
@@ -1247,7 +1246,9 @@ export default {
       this.$axios.post("/demo", { file }).then((response) => {
         if (response.status === 200) {
           this.imageRecognitionData = response.data.data;
-          this.itemDescription = response.data.data[0].name;
+          if (!this.isAdmin) {
+            this.itemDescription = response.data.data[0].name;
+          }
           this.image =
             this.imageRecognitionData[
               this.imageRecognitionData.length - 1
@@ -1282,7 +1283,9 @@ export default {
     address(newAddress, oldAddress) {
       if (newAddress != oldAddress) {
         if (!newAddress || newAddress == "Other") {
-          this.manualAddressSelected = true;
+          if(newAddress == "Other"){
+            this.manualAddressSelected = true;
+          }
           if(oldAddress && newAddress == "Other"){
             this.manualAddress = "";
           }
@@ -1419,31 +1422,28 @@ export default {
         this.receiverPhone = data.receiver_mobile_no;
       }
       if(this.venueName){
-        this.getData("name", "edit").then(() => {
-          this.address = data.address;
-          this.city = data.city;
-          this.state = data.states;
-          this.country = data.country;
-          this.zipcode = data.zipcode;
-        });
+        this.getData("name", "edit")
+        this.address = data.address;
+        this.city = data.city;
+        this.state = data.states;
+        this.country = data.country;
+        this.zipcode = data.zipcode;
       }
       if(this.venueEmail){
-        this.getData("email", "edit").then(() => {
-          this.address = data.address;
-          this.city = data.city;
-          this.state = data.states;
-          this.country = data.country;
-          this.zipcode = data.zipcode;
-        });
+        this.getData("email", "edit")
+        this.address = data.address;
+        this.city = data.city;
+        this.state = data.states;
+        this.country = data.country;
+        this.zipcode = data.zipcode;
       }
       if(this.venuePhone){
-        this.getData("phoneno", "edit").then(() => {
-          this.address = data.address;
-          this.city = data.city;
-          this.state = data.states;
-          this.country = data.country;
-          this.zipcode = data.zipcode;
-        });
+        this.getData("phoneno", "edit")
+        this.address = data.address;
+        this.city = data.city;
+        this.state = data.states;
+        this.country = data.country;
+        this.zipcode = data.zipcode;
       }
     } else {
       this.senderFormTitle = "SENDER'S DETAILS";
@@ -1454,7 +1454,7 @@ export default {
 </script>
 
 <style lang="scss">
-.wrapper {
+.wrapper-form {
   @apply min-h-screen flex justify-center py-10 mx-auto;
 }
 
