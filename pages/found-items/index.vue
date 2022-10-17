@@ -50,12 +50,23 @@
         >
           <div class="w-24 h-24 mx-auto">
             <img
+              v-if="item.image"
               class="
                 w-full
                 rounded-t-lg
                 md:h-auto md:w-48 md:rounded-none md:rounded-l-lg
               "
-              src="@/assets/images/headphones.png"
+              :src="item.image"
+              alt=""
+            />
+            <img
+              v-else
+              class="
+                w-full
+                rounded-t-lg
+                md:h-auto md:w-48 md:rounded-none md:rounded-l-lg
+              "
+              src="@/assets/images/not-found.png"
               alt=""
             />
           </div>

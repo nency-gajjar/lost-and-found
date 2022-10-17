@@ -1,5 +1,5 @@
 <template>
-  <div class="wrapper">
+  <div class="wrapper-form">
     <div
       class="
         card
@@ -855,7 +855,7 @@ export default {
     foundItemFormTitle: "",
     venueName: "",
     venueEmail: "",
-    manualAddressSelected: true,
+    manualAddressSelected: false,
     manualAddress: "",
     address: "",
     city: "",
@@ -1018,7 +1018,6 @@ export default {
     addressFilter(mode){
       if (this.apiAddressData.length == 0 && !this.address) {
         this.address = "";
-        this.manualAddressSelected = true;
       }
       let addressLineArr = this.apiAddressData.map((addressObj) => {
         return addressObj.address;
@@ -1284,7 +1283,9 @@ export default {
     address(newAddress, oldAddress) {
       if (newAddress != oldAddress) {
         if (!newAddress || newAddress == "Other") {
-          this.manualAddressSelected = true;
+          if(newAddress == "Other"){
+            this.manualAddressSelected = true;
+          }
           if(oldAddress && newAddress == "Other"){
             this.manualAddress = "";
           }
@@ -1421,31 +1422,28 @@ export default {
         this.receiverPhone = data.receiver_mobile_no;
       }
       if(this.venueName){
-        this.getData("name", "edit").then(() => {
-          this.address = data.address;
-          this.city = data.city;
-          this.state = data.states;
-          this.country = data.country;
-          this.zipcode = data.zipcode;
-        });
+        this.getData("name", "edit")
+        this.address = data.address;
+        this.city = data.city;
+        this.state = data.states;
+        this.country = data.country;
+        this.zipcode = data.zipcode;
       }
       if(this.venueEmail){
-        this.getData("email", "edit").then(() => {
-          this.address = data.address;
-          this.city = data.city;
-          this.state = data.states;
-          this.country = data.country;
-          this.zipcode = data.zipcode;
-        });
+        this.getData("email", "edit")
+        this.address = data.address;
+        this.city = data.city;
+        this.state = data.states;
+        this.country = data.country;
+        this.zipcode = data.zipcode;
       }
       if(this.venuePhone){
-        this.getData("phoneno", "edit").then(() => {
-          this.address = data.address;
-          this.city = data.city;
-          this.state = data.states;
-          this.country = data.country;
-          this.zipcode = data.zipcode;
-        });
+        this.getData("phoneno", "edit")
+        this.address = data.address;
+        this.city = data.city;
+        this.state = data.states;
+        this.country = data.country;
+        this.zipcode = data.zipcode;
       }
     } else {
       this.senderFormTitle = "SENDER'S DETAILS";
@@ -1456,7 +1454,7 @@ export default {
 </script>
 
 <style lang="scss">
-.wrapper {
+.wrapper-form {
   @apply min-h-screen flex justify-center py-10 mx-auto;
 }
 
