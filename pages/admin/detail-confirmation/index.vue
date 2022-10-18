@@ -806,7 +806,7 @@
                 shadow-accent
                 hover:bg-accent-200
               "
-              @click="action('Approve withut image')"
+              @click="action('Approve without Image')"
             >
               <span class="button__text"> Approve without Image </span>
             </button>
@@ -1013,7 +1013,7 @@ export default {
     action(type) {
       this.isLoading[type] = true;
       let params = {};
-      if(this.isImageEdited){
+      if(this.itemDetails.image && type === 'Approve' && this.isImageEdited){
         params.image = this.image;
       }
       params.is_default = type;
