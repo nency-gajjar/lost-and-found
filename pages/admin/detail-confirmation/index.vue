@@ -1,10 +1,6 @@
 <template>
   <div class="wrapper-admin" v-if="Object.keys(itemDetails).length > 0">
-    <div
-      v-show="showEditor"
-      class="fixed z-50 top-0 w-full left-0"
-      id="modal"
-    >
+    <div v-show="showEditor" class="fixed z-50 top-0 w-full left-0" id="modal">
       <div
         class="
           flex
@@ -38,18 +34,31 @@
           aria-modal="true"
           aria-labelledby="modal-headline"
         >
-              
-        <div class="relative">	
-            <div class="title bg-accent-100 pl-6 py-4 mb-4">	
-              <h3 class="text-white">Crop Image</h3>	
-            </div>	
-            <span @click="showEditor=false" class="absolute right-5 top-5 inline-block z-10">	
-              <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-x" width="24" height="24" viewBox="0 0 24 24" stroke-width="1.5" stroke="#ffffff" fill="none" stroke-linecap="round" stroke-linejoin="round">	
-                <path stroke="none" d="M0 0h24v24H0z" fill="none"/>	
-                <line x1="18" y1="6" x2="6" y2="18" />	
-                <line x1="6" y1="6" x2="18" y2="18" />	
-              </svg>	
-            </span>	
+          <div class="relative">
+            <div class="title bg-accent-100 pl-6 py-4 mb-4">
+              <h3 class="text-white">Crop Image</h3>
+            </div>
+            <span
+              @click="showEditor = false"
+              class="absolute right-5 top-5 inline-block z-10"
+            >
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                class="icon icon-tabler icon-tabler-x"
+                width="24"
+                height="24"
+                viewBox="0 0 24 24"
+                stroke-width="1.5"
+                stroke="#ffffff"
+                fill="none"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+              >
+                <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+                <line x1="18" y1="6" x2="6" y2="18" />
+                <line x1="6" y1="6" x2="18" y2="18" />
+              </svg>
+            </span>
           </div>
           <div
             class="
@@ -90,97 +99,100 @@
               </svg>
               <span class="sr-only">Loading...</span>
             </div>
-            <div v-show="!loadingSpinner" class="w-full">	
-              <div class="px-6">	
-                <Editor	
-                  :canvasWidth="canvasWidth"	
-                  :canvasHeight="canvasHeight"	
-                  ref="editor"	
-                />	
-              </div>	
-              <div class="editor-tools mt-5 px-6 border-t pt-4">	
-                <div class="icons">	
-                  <div class="tool-undo">	
-                    <rotate-ccw-icon	
-                      :size="size_icon"	
-                      @click="undo()"	
-                    ></rotate-ccw-icon>	
-                  </div>	
-                  <div class="tool-redo">	
-                    <rotate-cw-icon	
-                      :size="size_icon"	
-                      @click="redo()"	
-                    ></rotate-cw-icon>	
-                  </div>	
-                  <div class="tool-trash">	
-                    <trash-2-icon	
-                      :size="size_icon"	
-                      @click="deleteEditable()"	
-                    ></trash-2-icon>	
-                  </div>	
+            <div v-show="!loadingSpinner" class="w-full">
+              <div class="px-6">
+                <Editor
+                  :canvasWidth="canvasWidth"
+                  :canvasHeight="canvasHeight"
+                  ref="editor"
+                />
+              </div>
+              <div class="editor-tools mt-5 px-6 border-t pt-4">
+                <div class="icons">
+                  <div class="tool-undo">
+                    <rotate-ccw-icon
+                      :size="size_icon"
+                      @click="undo()"
+                    ></rotate-ccw-icon>
+                  </div>
+                  <div class="tool-redo">
+                    <rotate-cw-icon
+                      :size="size_icon"
+                      @click="redo()"
+                    ></rotate-cw-icon>
+                  </div>
+                  <div class="tool-trash">
+                    <trash-2-icon
+                      :size="size_icon"
+                      @click="deleteEditable()"
+                    ></trash-2-icon>
+                  </div>
                   <!-- <div class="tool-freeDrawing">	
                     <edit-2-icon	
                       :size="size_icon"	
                       @click="freeDrawing()"	
                     ></edit-2-icon>	
                   </div>	 -->
-                  <div class="tool-addCircle">	
-                    <circle-icon	
-                      :size="size_icon"	
-                      @click="addCicle()"	
-                    ></circle-icon>	
-                  </div>	
-                  <div class="tool-addSquare">	
-                    <square-icon	
-                      :size="size_icon"	
-                      @click="addSquare()"	
-                    ></square-icon>	
-                  </div>	
-                  <div class="tool-crop">	
-                    <maximize-icon	
-                      v-if="stateCrop"	
-                      :size="size_icon"	
-                      @click="crop()"	
-                    ></maximize-icon>	
-                    <check-icon	
-                      v-else	
-                      :size="size_icon"	
-                      @click="applyCrop()"	
-                    ></check-icon>	
-                  </div>	
-                </div>	
-                <div class="save-upload">	
-                  <button	
-                    type="button"
-                    @click="saveImg"
-                    class="	
-                      font-medium	
-                      text-md	
-                      leading-5	
-                      uppercase	
-                      py-2	
-                      px-6	
-                      rounded-md	
-                      button	
-                      focus:outline-none	
-                      focus:ring-2	
-                      focus:ring-offset-2	
-                      focus:ring-offset-primary-60	
-                      transition-all	
-                      font-display	
-                      disabled:cursor-not-allowed	
-                      bg-accent-100	
-                      text-white	
-                      focus:ring-accent-100	
-                      shadow-accent	
-                      hover:bg-accent-200	
-                    "	
-                  >	
-                    <span class="button__text"> <save-icon :size="size_icon"></save-icon> Save </span>	
-                  </button>	
+                  <div class="tool-addCircle">
+                    <circle-icon
+                      :size="size_icon"
+                      @click="addCicle()"
+                    ></circle-icon>
+                  </div>
+                  <div class="tool-addSquare">
+                    <square-icon
+                      :size="size_icon"
+                      @click="addSquare()"
+                    ></square-icon>
+                  </div>
+                  <div class="tool-crop">
+                    <maximize-icon
+                      v-if="stateCrop"
+                      :size="size_icon"
+                      @click="crop()"
+                    ></maximize-icon>
+                    <check-icon
+                      v-else
+                      :size="size_icon"
+                      @click="applyCrop()"
+                    ></check-icon>
                   </div>
                 </div>
+                <div class="save-upload">
+                  <button
+                    type="button"
+                    :class="{ 'button--loading': isSavingImage }"
+                    @click="saveImg"
+                    class="
+                      font-medium
+                      text-md
+                      leading-5
+                      uppercase
+                      py-2
+                      px-6
+                      rounded-md
+                      button
+                      focus:outline-none
+                      focus:ring-2
+                      focus:ring-offset-2
+                      focus:ring-offset-primary-60
+                      transition-all
+                      font-display
+                      disabled:cursor-not-allowed
+                      bg-accent-100
+                      text-white
+                      focus:ring-accent-100
+                      shadow-accent
+                      hover:bg-accent-200
+                    "
+                  >
+                    <span class="button__text">
+                      <save-icon :size="size_icon"></save-icon> Save
+                    </span>
+                  </button>
+                </div>
               </div>
+            </div>
           </div>
         </div>
       </div>
@@ -672,100 +684,143 @@
               </template>
             </div>
 
-            <div
-              v-if="image"
-              class="text-gray-600 mt-4 text-left w-full"
-            >
+            <div v-if="image" class="text-gray-600 mt-4 text-left w-full">
               <img class="w-full" :src="image" alt="" />
             </div>
           </div>
         </div>
 
-
-          <div class="flex flex-wrap gap-2">
-                <button :class="{ 'button--loading': isLoading['approve'] }" type="submit" class="
-                  !py-3
-                  flex-auto
-                  font-medium
-                  text-md
-                  leading-5
-                  uppercase
-                  py-2
-                  px-8
-                  rounded-md
-                  button
-                  focus:outline-none
-                  focus:ring-2
-                  focus:ring-offset-2
-                  focus:ring-offset-primary-60
-                  transition-all
-                  font-display
-                  disabled:cursor-not-allowed
-                  bg-accent-100
-                  text-white
-                  focus:ring-accent-100
-                  shadow-accent
-                  hover:bg-accent-200
-                "
-                 @click="action('Approve')">
-                   <span class="button__text"> Approve </span>
-                </button>
-                <button  :class="{ 'button--loading': isLoading['deny'] }" type="submit"  class="
-                  !py-3
-                  flex-auto
-                  font-medium
-                  text-md
-                  leading-5
-                  uppercase
-                  py-2
-                  px-8
-                  rounded-md
-                  button
-                  focus:outline-none
-                  focus:ring-2
-                  focus:ring-offset-2
-                  focus:ring-offset-primary-60
-                  transition-all
-                  font-display
-                  disabled:cursor-not-allowed
-                  bg-accent-100
-                  text-white
-                  focus:ring-accent-100
-                  shadow-accent
-                  hover:bg-accent-200
-                "  @click="action('Deny')">
-                  <span class="button__text"> Deny </span>
-                </button>
-                <button   :class="{ 'button--loading': isLoading['approve-without-image'] }" type="submit"  class="
-                  !py-3
-                  flex-auto
-                  font-medium
-                  text-md
-                  leading-5
-                  uppercase
-                  py-2
-                  px-8
-                  rounded-md
-                  button
-                  focus:outline-none
-                  focus:ring-2
-                  focus:ring-offset-2
-                  focus:ring-offset-primary-60
-                  transition-all
-                  font-display
-                  disabled:cursor-not-allowed
-                  bg-accent-100
-                  text-white
-                  focus:ring-accent-100
-                  shadow-accent
-                  hover:bg-accent-200
-                "
-                   @click="action('Approve without Image')">
-                  <span class="button__text"> Approve without Image </span>
-                </button>
-              </div>
-
-
+        <div class="flex flex-wrap gap-2">
+          <button
+            :class="{ 'button--loading': isLoading['approve'] }"
+            type="submit"
+            class="
+              !py-3
+              flex-auto
+              font-medium
+              text-md
+              leading-5
+              uppercase
+              py-2
+              px-8
+              rounded-md
+              button
+              focus:outline-none
+              focus:ring-2
+              focus:ring-offset-2
+              focus:ring-offset-primary-60
+              transition-all
+              font-display
+              disabled:cursor-not-allowed
+              bg-accent-100
+              text-white
+              focus:ring-accent-100
+              shadow-accent
+              hover:bg-accent-200
+            "
+            @click="action('Approve')"
+          >
+            <span class="button__text"> Approve </span>
+          </button>
+          <button
+            :class="{ 'button--loading': isLoading['deny'] }"
+            type="submit"
+            class="
+              !py-3
+              flex-auto
+              font-medium
+              text-md
+              leading-5
+              uppercase
+              py-2
+              px-8
+              rounded-md
+              button
+              focus:outline-none
+              focus:ring-2
+              focus:ring-offset-2
+              focus:ring-offset-primary-60
+              transition-all
+              font-display
+              disabled:cursor-not-allowed
+              bg-accent-100
+              text-white
+              focus:ring-accent-100
+              shadow-accent
+              hover:bg-accent-200
+            "
+            @click="action('Deny')"
+          >
+            <span class="button__text"> Deny </span>
+          </button>
+          <button
+            :class="{ 'button--loading': isLoading['approve-without-image'] }"
+            type="submit"
+            class="
+              !py-3
+              flex-auto
+              font-medium
+              text-md
+              leading-5
+              uppercase
+              py-2
+              px-8
+              rounded-md
+              button
+              focus:outline-none
+              focus:ring-2
+              focus:ring-offset-2
+              focus:ring-offset-primary-60
+              transition-all
+              font-display
+              disabled:cursor-not-allowed
+              bg-accent-100
+              text-white
+              focus:ring-accent-100
+              shadow-accent
+              hover:bg-accent-200
+            "
+            @click="action('Approve without Image')"
+          >
+            <span class="button__text"> Approve without Image </span>
+          </button>
+        </div>
+        <div class="text-left sm:w-12/12 px-6 pb-6 pt-4">
+          <div
+            class="
+              flex
+              items-center
+              my-4
+              before:flex-1 before:border-t before:border-gray-300 before:mt-0.5
+              after:flex-1 after:border-t after:border-gray-300 after:mt-0.5
+            "
+          >
+            <p class="text-center text-gray-400 font-medium mx-4 mb-0">OR</p>
+          </div>
+          <button
+            type="submit"
+            class="
+              inline-block
+              px-7
+              py-3
+              bg-gray
+              hover:shadow-lg hover:bg-gray-100
+              text-gray-600 text-sm
+              leading-snug
+              uppercase
+              rounded-md
+              font-medium
+              transition
+              duration-150
+              ease-in-out
+              w-full
+              border border-gray-300
+            "
+            @click="editImage()"
+          >
+            Edit Image
+          </button>
+        </div>
 
         <!-- <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3">
           <div
@@ -982,6 +1037,7 @@ export default {
       responseData: {},
       image: "",
       imageKey: "",
+      isSavingImage: false,
       isImageEdited: false,
       showEditor: false,
       stateCrop: true,
@@ -991,7 +1047,7 @@ export default {
     };
   },
   computed: {
-    itemDetails(){
+    itemDetails() {
       return this.responseData;
     },
   },
@@ -1060,12 +1116,12 @@ export default {
       this.$refs.editor.applyCropping();
       this.stateCrop = true;
     },
-    async editImage(){
+    async editImage() {
       this.showEditor = false;
       if (this.image) {
         const response = await fetch(this.image);
         const blob = await response.blob();
-        const file = new File([blob], 'image.jpg', {type: blob.type});
+        const file = new File([blob], "image.jpg", { type: blob.type });
         this.$refs.editor.uploadImage(file);
         this.showEditor = true;
         this.loadingSpinner = true;
@@ -1077,9 +1133,11 @@ export default {
       }
     },
     saveImg() {
+      this.isSavingImage = true;
       const file = this.$refs.editor.saveImage();
       this.$axios.post("/demo", { file }).then((response) => {
         if (response.status === 200) {
+          this.isSavingImage = false;
           this.imageRecognitionData = response.data.data;
           this.image =
             this.imageRecognitionData[
@@ -1093,29 +1151,27 @@ export default {
         this.isImageEdited = true;
       });
     },
-    filterAddressLine(itemDetails){
-      return itemDetails.address == "Other" || !itemDetails.address ? itemDetails.manualAddress : itemDetails.address;
+    filterAddressLine(itemDetails) {
+      return itemDetails.address == "Other" || !itemDetails.address
+        ? itemDetails.manualAddress
+        : itemDetails.address;
     },
     action(type) {
       this.isLoading[type] = true;
       let params = {};
-      if(this.itemDetails.image && type === 'Approve' && this.isImageEdited){
+      if (this.itemDetails.image && type === "Approve" && this.isImageEdited) {
         params.image = this.image;
       }
       params.is_default = type;
       if (this.itemDetails.id) {
         this.$axios
-          .post(
-            "/updatesinglelostitem?id=" + this.itemDetails.id,
-            params,
-            {
-              responseType: "arraybuffer",
-              headers: {
-                "Content-Type": "application/json",
-                Accept: "application/pdf",
-              },
-            }
-          )
+          .post("/updatesinglelostitem?id=" + this.itemDetails.id, params, {
+            responseType: "arraybuffer",
+            headers: {
+              "Content-Type": "application/json",
+              Accept: "application/pdf",
+            },
+          })
           .then((response) => {
             if (response.status === 200) {
               this.isLoading[type] = false;
@@ -1132,7 +1188,7 @@ export default {
 .wrapper-admin {
   @apply min-h-screen flex justify-center py-10 mx-auto;
 }
-.editor-container{
+.editor-container {
   min-width: 200px;
   min-height: 200px;
 }
@@ -1142,15 +1198,15 @@ export default {
   margin-bottom: 20px;
 }
 
-.editor-tools .icons {	
-  @apply flex items-center	
-}	
-.editor-tools .save-upload .button__text {	
-  @apply flex items-center	
-}	
-.editor-tools .save-upload .button__text svg {	
-  margin-right: 10px;	
-  width: 18px;	
+.editor-tools .icons {
+  @apply flex items-center;
+}
+.editor-tools .save-upload .button__text {
+  @apply flex items-center;
+}
+.editor-tools .save-upload .button__text svg {
+  margin-right: 10px;
+  width: 18px;
 }
 
 .custom-editor {
@@ -1158,7 +1214,7 @@ export default {
   border: 1px solid #000000;
   background-color: #ffffff;
 }
-	
+
 .editor-tools .icons {
   div {
     cursor: pointer;
@@ -1187,7 +1243,7 @@ canvas {
 .canvas-container {
   width: 100% !important;
 }
-.canvas-container{
+.canvas-container {
   display: flex;
   justify-content: center;
   align-items: center;

@@ -432,12 +432,6 @@
                   <img :src="image" alt="Item image" />
                 </div>
               </div>
-              <p v-if="imageSaved" class="top-margin-3 text-lime-500">
-                Image saved successfully!
-              </p>
-              <p v-if="imageNotSaved" class="top-margin-3 text-red-600">
-                Something went wrong! Try again.
-              </p>
               <div
                 v-show="showEditor"
                 class="fixed z-50 top-0 w-full left-0"
@@ -610,6 +604,7 @@
                           <div class="save-upload">
                             <button
                               type="button"
+                              :class="{ 'button--loading': isSavingImage }"
                               @click="saveImg"
                               class="
                                 font-medium
@@ -1075,10 +1070,9 @@ export default {
     showEditor: false,
     stateCrop: true,
     size_icon: "2x",
-    showFilledDetails: false,
+    showFilledDetails: false,	
+    isSavingImage: false,
     loadingSpinner: false,
-    imageSaved: false,
-    imageNotSaved: false,
     imageRecognitionData: [],
     image: "",
     imageKey: "",
@@ -1103,7 +1097,11 @@ export default {
     isLoadingItemDetails: false,
     isVenuePhoneValid: true,
     isEmployeePhoneValid: true,
-    isReceiverPhoneValid: true,
+    isReceiverPhoneValid: true,	
+    currentPosition: {	
+      lat: null,	
+      long: null,	
+    },
   }),
   components: {
     ValidationObserver,
@@ -1137,6 +1135,15 @@ export default {
     },
   },
   methods: {
+    getCurrentPosition() {	
+      fetch("http://ip-api.com/json")	
+        .then((data) => {	
+          return data.json();	
+        })	
+        .then(async (data) => {	
+          this.currentPosition = { lat: data.lat, long: data.lon };	
+        });	
+    },
     validateVenuePhoneNumber() {
       if (!this.venuePhone) {
         this.isVenuePhoneValid = false;
@@ -1520,7 +1527,6 @@ export default {
           this.itemWidth = "";
           this.itemHeight = "";
           this.weight = "";
-          this.weightOunces = "";
           this.weightOunces = "0";
           break;
       }
@@ -1556,55 +1562,48 @@ export default {
       this.getData(type, "");
     }, 1000),
 
-    async getData(type, mode) {
-      fetch("http://ip-api.com/json")
-        .then((data) => {
-          return data.json();
-        })
-        .then(async (data) => {
-          const params = {
-            lat: data.lat,
-            long: data.lon,
-          };
-
-          if (type === "name") {
-            params.place = this.venueName;
-            this.responseData.venueName = [];
-          } else if (type === "email") {
-            params.place = this.venueEmail;
-            this.responseData.venueEmail = [];
-          } else if (type === "phoneno") {
-            params.mobileno = this.venuePhone;
-            this.responseData.venuePhone = [];
-          }
-
-          await this.$axios
-            .get("/autofilladdress", { params })
-            .then(({ data }) => {
-              if (!data.error) {
-                if (type === "name") {
-                  if (this.venueName) {
-                    this.responseData.venueName.push(...data.data);
-                  }
-                } else if (type === "email") {
-                  if (this.venueEmail) {
-                    this.responseData.venueEmail.push(...data.data);
-                  }
-                } else if (type === "phoneno") {
-                  if (this.venuePhone) {
-                    this.responseData.venuePhone.push(...data.data);
-                  }
-                }
-                this.apiAddressData = [];
-                this.apiAddressData.push(
-                  ...this.responseData.venueName,
-                  ...this.responseData.venuePhone,
-                  ...this.responseData.venueEmail
-                );
-                this.addressFilter(mode);
-              }
-            });
-        });
+    getData(type, mode) {	
+      const params = {	
+        lat: this.currentPosition.lat,	
+        long: this.currentPosition.long,	
+      };	
+      if (type === "name" && this.venueName.length > 0) {	
+        params.type = "name";	
+        params.place = this.venueName;	
+        this.responseData.venueName = [];	
+      } else if (type === "email") {	
+        params.type = "email";	
+        params.place = this.venueEmail;	
+        this.responseData.venueEmail = [];	
+      } else if (type === "phoneno") {	
+        params.type = "phoneno";	
+        params.mobileno = this.venuePhone;	
+        this.responseData.venuePhone = [];	
+      }	
+      this.$axios.get("/autofilladdress", { params }).then(({ data }) => {	
+        if (!data.error) {	
+          if (type === "name") {	
+            if (this.venueName) {	
+              this.responseData.venueName.push(...data.data);	
+            }	
+          } else if (type === "email") {	
+            if (this.venueEmail) {	
+              this.responseData.venueEmail.push(...data.data);	
+            }	
+          } else if (type === "phoneno") {	
+            if (this.venuePhone) {	
+              this.responseData.venuePhone.push(...data.data);	
+            }	
+          }	
+          this.apiAddressData = [];	
+          this.apiAddressData.push(	
+            ...this.responseData.venueName,	
+            ...this.responseData.venuePhone,	
+            ...this.responseData.venueEmail	
+          );	
+          this.addressFilter(mode);	
+        }	
+      });
     },
     async onSubmit() {
       this.validateVenuePhoneNumber();
@@ -1747,10 +1746,12 @@ export default {
         this.showEditor = false;
       }
     },
-    saveImg() {
+    saveImg() {	
+      this.isSavingImage = true;
       const file = this.$refs.editor.saveImage();
       this.$axios.post("/demo", { file }).then((response) => {
-        if (response.status === 200) {
+        if (response.status === 200) {	
+          this.isSavingImage = false;
           this.imageRecognitionData = response.data.data;
           this.itemDescriptionArr = response.data.data
             .filter((obj) => {
@@ -2175,8 +2176,7 @@ export default {
           this.itemWidth = "";
           this.itemHeight = "";
           this.weight = "";
-          this.weightOunces = "";
-          this.weightOunces = this.weightOunces ? this.weightOunces : "0";
+          this.weightOunces = "0";
           break;
       }
     },
@@ -2188,7 +2188,8 @@ export default {
       }
     });
   },
-  mounted() {
+  mounted() {	
+    this.getCurrentPosition();
     if (this.$route.query.id) {
       this.isLoadingItemDetails = true;
       this.foundItemId = this.$route.query.id;
@@ -2337,7 +2338,7 @@ export default {
 
 .custom-editor {
   @apply flex justify-center;
-  border: 1px solid #000000;
+  border: 1px solid #808080;
   background-color: #ffffff;
 }
 
@@ -2346,13 +2347,14 @@ export default {
     cursor: pointer;
     border: 1px solid #808080;
     border-radius: 14px;
-    margin-right: 5px;
+    margin-right: 7px;
     &:hover {
       background: #dfdfdf;
     }
     padding: 2px 10px;
     background-color: #f3f3f3;
-    margin-bottom: 5px;
+    margin-bottom: 5px;	
+    color: #ff9800;
     svg {
       width: 18px;
     }
