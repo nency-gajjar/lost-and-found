@@ -1,7 +1,6 @@
 <template>
-  <div class="wrapper-form">
-    <div
-      class="
+  <div class="wrapper">
+    <div class="
         card
         w-full
         mx-6
@@ -12,336 +11,166 @@
         bg-white
         border border-[#E1E3E6]
         rounded-lg
-      "
-      style="box-shadow: rgba(54, 28, 93, 0.04) -10px 18px 32px"
-    >
+      " style="box-shadow: rgba(54, 28, 93, 0.04) -10px 18px 32px">
       <div v-if="!isLoadingItemDetails || Object.keys(itemDetails).length > 0">
         <ValidationObserver v-slot="{ validate }" ref="observer">
           <form @submit.prevent="validate().then(onSubmit)">
             <div class="card p-6 space-y-4">
               <div class="form-title">
-                <h1
-                  class="
-                    w-full
-                    my-2
-                    text-xl
-                    font-bold
-                    leading-tight
-                    text-gray-700
-                  "
-                >
+                <h1 class="
+                  w-full
+                  my-2
+                  text-xl
+                  font-bold
+                  leading-tight
+                  text-gray-700
+                ">
                   {{ senderFormTitle }}
                 </h1>
                 <div class="flex justify-start">
-                  <span
-                    class="
-                      w-20
-                      border-t-4 border-solid border-orange-200
-                      inline-block
-                      mb-3
-                    "
-                  ></span>
+                  <span class="
+                    w-20
+                    border-t-4 border-solid border-orange-200
+                    inline-block
+                    mb-3
+                  "></span>
                 </div>
               </div>
-              <ValidationProvider
-                v-slot="{ errors }"
-                rules="required"
-                class="block"
-              >
-                <BaseSelect
-                  v-model="venue"
-                  :options="venueArr"
-                  label="Sender Affiliation"
-                  :class="errors.length > 0 && 'error'"
-                />
-                <p
-                  v-if="errors.length"
-                  class="vee-validation-error mt-2 text-sm text-red-600"
-                >
+              <ValidationProvider v-slot="{ errors }" rules="required" class="block">
+                <BaseSelect v-model="venue" :options="venueArr" label="Sender Affiliation"
+                  :class="errors.length > 0 && 'error'" />
+                <p v-if="errors.length" class="vee-validation-error mt-2 text-sm text-red-600">
                   {{ errors[0] }}
                 </p>
               </ValidationProvider>
-              <ValidationProvider
-                v-if="venueManually"
-                v-slot="{ errors }"
-                rules="required"
-                class="block"
-              >
-                <BaseInput
-                  v-model="manualVenue"
-                  type="text"
-                  label="Type here manually..."
-                  :class="errors.length > 0 && 'error'"
-                />
-                <p
-                  v-if="errors.length"
-                  class="vee-validation-error mt-2 text-sm text-red-600"
-                >
+              <ValidationProvider v-if="venueManually" v-slot="{ errors }" rules="required" class="block">
+                <BaseInput v-model="manualVenue" type="text" label="Type here manually..."
+                  :class="errors.length > 0 && 'error'" />
+                <p v-if="errors.length" class="vee-validation-error mt-2 text-sm text-red-600">
                   {{ errors[0] }}
                 </p>
               </ValidationProvider>
-              <ValidationProvider
-                v-slot="{ errors }"
-                rules="required"
-                class="block"
-              >
-                <BaseInput
-                  v-model="foundDate"
-                  type="date"
-                  label="Found Item Date"
-                  :class="errors.length > 0 && 'error'"
-                />
-                <p
-                  v-if="errors.length"
-                  class="vee-validation-error mt-2 text-sm text-red-600"
-                >
+              <ValidationProvider v-slot="{ errors }" rules="required" class="block">
+                <BaseInput v-model="foundDate" type="date" label="Found Item Date"
+                  :class="errors.length > 0 && 'error'" />
+                <p v-if="errors.length" class="vee-validation-error mt-2 text-sm text-red-600">
                   {{ errors[0] }}
                 </p>
               </ValidationProvider>
-              <ValidationProvider
-                v-slot="{ errors }"
-                rules="max:100|venueName"
-                class="block"
-              >
-                <BaseInput
-                  v-model="venueName"
-                  type="text"
-                  :label="displayVenueName"
-                  :class="errors.length > 0 && 'error'"
-                  @blur="debouncedGetData('name')"
-                />
-                <p
-                  v-if="errors.length"
-                  class="vee-validation-error mt-2 text-sm text-red-600"
-                >
+              <ValidationProvider v-slot="{ errors }" rules="max:100|venueName" class="block">
+                <BaseInput v-model="venueName" type="text" :label="displayVenueName"
+                  :class="errors.length > 0 && 'error'" @blur="debouncedGetData('name')" />
+                <p v-if="errors.length" class="vee-validation-error mt-2 text-sm text-red-600">
                   {{ errors[0] }}
                 </p>
               </ValidationProvider>
-              <ValidationProvider
-                v-slot="{ errors }"
-                name="Email"
-                rules="required|email"
-                class="block"
-              >
-                <BaseInput
-                  v-model="venueEmail"
-                  type="email"
-                  label="Venue Email"
-                  :class="errors.length > 0 && 'error'"
-                  @blur="debouncedGetData('email')"
-                />
-                <p
-                  v-if="errors.length"
-                  class="vee-validation-error mt-2 text-sm text-red-600"
-                >
+              <ValidationProvider v-slot="{ errors }" name="Email" rules="required|email" class="block">
+                <BaseInput v-model="venueEmail" type="email" label="Venue Email" :class="errors.length > 0 && 'error'"
+                  @blur="debouncedGetData('email')" />
+                <p v-if="errors.length" class="vee-validation-error mt-2 text-sm text-red-600">
                   {{ errors[0] }}
                 </p>
               </ValidationProvider>
               <div class="block relative box-content h-12">
-                <vue-tel-input
-                  :inputOptions="{ placeholder: 'Your Phone No.' }"
-                  class="
-                    relative
-                    border
-                    inline-block
-                    border-gray-300
-                    w-full
-                    rounded-lg
-                    h-full
-                  "
-                  v-model="venuePhone"
-                  @blur="
-                    validateVenuePhoneNumber();
-                    debouncedGetData('phoneno');
-                  "
-                  v-bind="bindPhoneInputProps"
-                ></vue-tel-input>
+                <vue-tel-input :inputOptions="{ placeholder: 'Your Phone No.' }" class="
+                  relative
+                  border
+                  inline-block
+                  border-gray-300
+                  w-full
+                  rounded-lg
+                  h-full
+                " v-model="venuePhone" @blur="validateVenuePhoneNumber(); debouncedGetData('phoneno')"
+                  v-bind="bindPhoneInputProps"></vue-tel-input>
               </div>
-              <div
-                v-if="!isVenuePhoneValid"
-                class="vee-validation-error top-margin-05 text-sm text-red-600"
-              >
+              <div v-if="!isVenuePhoneValid" class="vee-validation-error top-margin-05 text-sm text-red-600">
                 *Required
               </div>
               <div class="block relative box-content h-12">
-                <vue-tel-input
-                  :inputOptions="{ placeholder: 'Employee Mobile No.' }"
-                  class="
-                    relative
-                    border
-                    inline-block
-                    border-gray-300
-                    w-full
-                    rounded-lg
-                    h-full
-                  "
-                  v-model="employeePhone"
-                  v-bind="bindPhoneInputProps"
-                  @blur="validateEmployeePhoneNumber"
-                >
+                <vue-tel-input :inputOptions="{ placeholder: 'Employee Mobile No.' }" class="
+                  relative
+                  border
+                  inline-block
+                  border-gray-300
+                  w-full
+                  rounded-lg
+                  h-full
+                " v-model="employeePhone" v-bind="bindPhoneInputProps" @blur="validateEmployeePhoneNumber">
                 </vue-tel-input>
               </div>
-              <div
-                v-if="!isEmployeePhoneValid"
-                class="vee-validation-error top-margin-05 text-sm text-red-600"
-              >
+              <div v-if="!isEmployeePhoneValid" class="vee-validation-error top-margin-05 text-sm text-red-600">
                 *Required
               </div>
               <p>Address:</p>
-              <ValidationProvider
-                v-slot="{ errors }"
-                rules="required"
-                class="block"
-              >
-                <v-select
-                  v-model="address"
-                  :options="addressArr"
-                  class="rounded-lg"
-                  :class="errors.length > 0 && 'error'"
-                ></v-select>
-                <p
-                  v-if="errors.length"
-                  class="vee-validation-error mt-2 text-sm text-red-600"
-                >
+              <ValidationProvider v-slot="{ errors }" rules="required" class="block">
+                <v-select v-model="address" :options="addressArr" class="rounded-lg"
+                  :class="errors.length > 0 && 'error'"></v-select>
+                <p v-if="errors.length" class="vee-validation-error mt-2 text-sm text-red-600">
                   {{ errors[0] }}
                 </p>
               </ValidationProvider>
-              <ValidationProvider
-                v-if="manualAddressSelected"
-                v-slot="{ errors }"
-                rules="required"
-                class="block"
-              >
-                <BaseInput
-                  v-model="manualAddress"
-                  type="text"
-                  label="Address Line"
-                  :class="errors.length > 0 && 'error'"
-                />
-                <p
-                  v-if="errors.length"
-                  class="vee-validation-error mt-2 text-sm text-red-600"
-                >
+              <ValidationProvider v-if="manualAddressSelected" v-slot="{ errors }" rules="required" class="block">
+                <BaseInput v-model="manualAddress" type="text" label="Address Line"
+                  :class="errors.length > 0 && 'error'" />
+                <p v-if="errors.length" class="vee-validation-error mt-2 text-sm text-red-600">
                   {{ errors[0] }}
                 </p>
               </ValidationProvider>
               <div class="grid grid-cols-2 lg:grid-cols-3 gap-4">
-                <ValidationProvider
-                  v-slot="{ errors }"
-                  rules="max:28|required"
-                  class="block lg:col-span-2"
-                >
-                  <BaseInput
-                    v-model="city"
-                    label="City"
-                    type="text"
-                    :class="errors.length > 0 && 'error'"
-                  />
-                  <p
-                    v-if="errors.length"
-                    class="vee-validation-error mt-2 text-sm text-red-600"
-                  >
+                <ValidationProvider v-slot="{ errors }" rules="max:28|required" class="block lg:col-span-2">
+                  <BaseInput v-model="city" label="City" type="text" :class="errors.length > 0 && 'error'" />
+                  <p v-if="errors.length" class="vee-validation-error mt-2 text-sm text-red-600">
                     {{ errors[0] }}
                   </p>
                 </ValidationProvider>
-                <ValidationProvider
-                  v-slot="{ errors }"
-                  rules="required"
-                  class="block col-span-1"
-                >
-                  <BaseInput
-                    v-model="state"
-                    label="State"
-                    type="text"
-                    :class="errors.length > 0 && 'error'"
-                  />
-                  <p
-                    v-if="errors.length"
-                    class="vee-validation-error mt-2 text-sm text-red-600"
-                  >
+                <ValidationProvider v-slot="{ errors }" rules="required" class="block col-span-1">
+                  <BaseInput v-model="state" label="State" type="text" :class="errors.length > 0 && 'error'" />
+                  <p v-if="errors.length" class="vee-validation-error mt-2 text-sm text-red-600">
                     {{ errors[0] }}
                   </p>
                 </ValidationProvider>
               </div>
               <div class="grid grid-cols-2 lg:grid-cols-3 gap-4">
-                <ValidationProvider
-                  v-slot="{ errors }"
-                  rules="max:28|required"
-                  class="block lg:col-span-2"
-                >
-                  <BaseInput
-                    v-model="country"
-                    label="Country"
-                    type="text"
-                    :class="errors.length > 0 && 'error'"
-                  />
-                  <p
-                    v-if="errors.length"
-                    class="vee-validation-error mt-2 text-sm text-red-600"
-                  >
+                <ValidationProvider v-slot="{ errors }" rules="max:28|required" class="block lg:col-span-2">
+                  <BaseInput v-model="country" label="Country" type="text" :class="errors.length > 0 && 'error'" />
+                  <p v-if="errors.length" class="vee-validation-error mt-2 text-sm text-red-600">
                     {{ errors[0] }}
                   </p>
                 </ValidationProvider>
-                <ValidationProvider
-                  rules="required"
-                  v-slot="{ errors }"
-                  class="block col-span-1"
-                >
-                  <BaseInput
-                    v-model="zipcode"
-                    label="Zip Code"
-                    type="text"
-                    :class="errors.length > 0 && 'error'"
-                  />
-                  <p
-                    v-if="errors.length"
-                    class="vee-validation-error mt-2 text-sm text-red-600"
-                  >
+                <ValidationProvider rules="required" v-slot="{ errors }" class="block col-span-1">
+                  <BaseInput v-model="zipcode" label="Zip Code" type="text" :class="errors.length > 0 && 'error'" />
+                  <p v-if="errors.length" class="vee-validation-error mt-2 text-sm text-red-600">
                     {{ errors[0] }}
                   </p>
                 </ValidationProvider>
               </div>
             </div>
             <div class="flex mt-2">
-              <span
-                class="
-                  w-full
-                  border-t border-solid border-gray-200
-                  inline-block
-                "
-              ></span>
+              <span class="w-full border-t border-solid border-gray-200 inline-block"></span>
             </div>
             <div class="card p-6 space-y-4">
               <div class="form-title">
-                <h1
-                  class="
-                    w-full
-                    text-xl
-                    font-bold
-                    leading-tight
-                    text-gray-700
-                    mb-3
-                  "
-                >
+                <h1 class="
+                  w-full
+                  text-xl
+                  font-bold
+                  leading-tight
+                  text-gray-700
+                  mb-3
+                ">
                   {{ foundItemFormTitle }}
                 </h1>
                 <div class="flex justify-start">
-                  <span
-                    class="
-                      w-20
-                      border-t-4 border-solid border-orange-200
-                      inline-block
-                    "
-                  ></span>
+                  <span class="
+                    w-20
+                    border-t-4 border-solid border-orange-200
+                    inline-block
+                  "></span>
                 </div>
               </div>
 
               <div class="block">
-                <label
-                  class="block mb-2 text-sm font-medium text-gray-800"
-                  for="itemImage"
-                  >Found item image</label
-                >
+                <label class="block mb-2 text-sm font-medium text-gray-800" for="itemImage">Found item image</label>
                 <div class="h-12 flex">
                   <input
                     @change="uploadImg($event)"
@@ -371,15 +200,8 @@
                   <div v-show="image" class="flex">
                     <a
                       @click="editImage"
-                      class="
-                        text-indigo-600
-                        hover:cursor-pointer hover:text-indigo-900
-                        mr-3
-                        py-2
-                        inline-flex
-                        items-center
-                      "
-                    >
+                      class="text-indigo-600 hover:cursor-pointer hover:text-indigo-900 mr-3 py-2 inline-flex items-center"
+                      >
                       <svg
                         xmlns="http://www.w3.org/2000/svg"
                         class="w-6 h-6"
@@ -431,182 +253,118 @@
                   </div>
                 </div>
                 <div class="mt-3" v-if="previewImage">
-                  <img :src="image" alt="Item image" />
+                  <img :src="image" alt="Item image">
                 </div>
               </div>
-              <div
-                v-show="showEditor"
-                class="fixed z-50 top-0 w-full left-0"
-                id="modal"
-              >
-                <div
-                  class="
-                    flex
-                    items-center
-                    justify-center
-                    min-height-100vh
-                    pt-4
-                    px-4
-                    pb-20
-                    text-center
-                    sm:p-0
-                  "
-                >
+              <div v-show="showEditor" class="fixed z-50 top-0 w-full left-0" id="modal">
+                <div class="
+                  flex
+                  items-center
+                  justify-center
+                  min-height-100vh
+                  pt-4
+                  px-4
+                  pb-20
+                  text-center
+                  sm:p-0
+                ">
                   <div class="fixed inset-0 transition-opacity">
                     <div class="absolute inset-0 bg-gray-900 opacity-75" />
                   </div>
-                  <div
-                    class="
-                      inline-block
-                      align-middle
-                      bg-white
-                      rounded-lg
-                      text-left
-                      overflow-hidden
-                      shadow-xl
-                      transform
-                      transition-all
-                      sm:my-8 sm:align-middle sm:max-w-screen-md sm:w-full
-                    "
-                    role="dialog"
-                    aria-modal="true"
-                    aria-labelledby="modal-headline"
-                  >
+                  <div class="
+                    inline-block
+                    align-middle
+                    bg-white
+                    rounded-lg
+                    text-left
+                    overflow-hidden
+                    shadow-xl
+                    transform
+                    transition-all
+                    sm:my-8 sm:align-middle sm:max-w-screen-md sm:w-full
+                  " role="dialog" aria-modal="true" aria-labelledby="modal-headline">
+
                     <div class="relative">
                       <div class="title bg-accent-100 pl-6 py-4 mb-4">
                         <h3 class="text-white">Crop Image</h3>
                       </div>
-                      <span
-                        @click="showEditor = false"
-                        class="
-                          cursor-pointer
-                          absolute
-                          right-5
-                          top-5
-                          inline-block
-                          z-10
-                        "
-                      >
-                        <svg
-                          xmlns="http://www.w3.org/2000/svg"
-                          class="icon icon-tabler icon-tabler-x"
-                          width="24"
-                          height="24"
-                          viewBox="0 0 24 24"
-                          stroke-width="1.5"
-                          stroke="#ffffff"
-                          fill="none"
-                          stroke-linecap="round"
-                          stroke-linejoin="round"
-                        >
+                      <span @click="showEditor = false"
+                        class=" cursor-pointer absolute right-5 top-5 inline-block z-10">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-x" width="24"
+                          height="24" viewBox="0 0 24 24" stroke-width="1.5" stroke="#ffffff" fill="none"
+                          stroke-linecap="round" stroke-linejoin="round">
                           <path stroke="none" d="M0 0h24v24H0z" fill="none" />
                           <line x1="18" y1="6" x2="6" y2="18" />
                           <line x1="6" y1="6" x2="18" y2="18" />
                         </svg>
                       </span>
                     </div>
-                    <div
-                      class="
-                        w-full
-                        max-w-screen-md
-                        relative
-                        mx-auto
-                        my-auto
-                        rounded-xl
-                        shadow-lg
-                        bg-white
-                        flex
-                        justify-center
-                        items-center
-                        editor-container
-                      "
-                    >
+                    <div class="
+                      w-full
+                      max-w-screen-md
+                      relative
+                      mx-auto
+                      my-auto
+                      rounded-xl
+                      shadow-lg
+                      bg-white
+                      flex
+                      justify-center
+                      items-center
+                      editor-container
+                    ">
                       <div class="w-full">
                         <div class="px-6">
-                          <Editor
-                            :canvasWidth="canvasWidth"
-                            :canvasHeight="canvasHeight"
-                            ref="editor"
-                          />
+                          <Editor :canvasWidth="canvasWidth" :canvasHeight="canvasHeight" ref="editor" />
                         </div>
                         <div class="editor-tools mt-5 px-6 border-t pt-4">
                           <div class="icons">
                             <div class="tool-undo">
-                              <rotate-ccw-icon
-                                :size="size_icon"
-                                @click="undo()"
-                              ></rotate-ccw-icon>
+                              <rotate-ccw-icon :size="size_icon" @click="undo()"></rotate-ccw-icon>
                             </div>
                             <div class="tool-redo">
-                              <rotate-cw-icon
-                                :size="size_icon"
-                                @click="redo()"
-                              ></rotate-cw-icon>
+                              <rotate-cw-icon :size="size_icon" @click="redo()"></rotate-cw-icon>
                             </div>
                             <div class="tool-trash">
-                              <trash-2-icon
-                                :size="size_icon"
-                                @click="deleteEditable()"
-                              ></trash-2-icon>
+                              <trash-2-icon :size="size_icon" @click="deleteEditable()"></trash-2-icon>
                             </div>
-                            <!-- <div class="tool-freeDrawing">	
-                            <edit-2-icon	
-                              :size="size_icon"	
-                              @click="freeDrawing()"	
-                            ></edit-2-icon>	
-                          </div>	 -->
+                            <!-- <div class="tool-freeDrawing">
+                              <edit-2-icon :size="size_icon" @click="freeDrawing()"></edit-2-icon>
+                            </div> -->
                             <div class="tool-addCircle">
-                              <circle-icon
-                                :size="size_icon"
-                                @click="addCicle()"
-                              ></circle-icon>
+                              <circle-icon :size="size_icon" @click="addCicle()"></circle-icon>
                             </div>
                             <div class="tool-addSquare">
-                              <square-icon
-                                :size="size_icon"
-                                @click="addSquare()"
-                              ></square-icon>
+                              <square-icon :size="size_icon" @click="addSquare()"></square-icon>
                             </div>
                             <div class="tool-crop">
-                              <maximize-icon
-                                v-if="stateCrop"
-                                :size="size_icon"
-                                @click="crop()"
-                              ></maximize-icon>
-                              <check-icon
-                                v-else
-                                :size="size_icon"
-                                @click="applyCrop()"
-                              ></check-icon>
+                              <maximize-icon v-if="stateCrop" :size="size_icon" @click="crop()"></maximize-icon>
+                              <check-icon v-else :size="size_icon" @click="applyCrop()"></check-icon>
                             </div>
                           </div>
                           <div class="save-upload">
-                            <button
-                              type="button"
-                              @click="saveImg"
-                              class="
-                                font-medium
-                                text-md
-                                leading-5
-                                uppercase
-                                py-2
-                                px-6
-                                rounded-md
-                                button
-                                focus:outline-none
-                                focus:ring-2
-                                focus:ring-offset-2
-                                focus:ring-offset-primary-60
-                                transition-all
-                                font-display
-                                disabled:cursor-not-allowed
-                                bg-accent-100
-                                text-white
-                                focus:ring-accent-100
-                                shadow-accent
-                                hover:bg-accent-200
-                              "
-                            >
+                            <button type="button" :class="{ 'button--loading': isSavingImage }" @click="saveImg" class="	
+                              font-medium	
+                              text-md	
+                              leading-5	
+                              uppercase	
+                              py-2	
+                              px-6	
+                              rounded-md	
+                              button	
+                              focus:outline-none	
+                              focus:ring-2	
+                              focus:ring-offset-2	
+                              focus:ring-offset-primary-60	
+                              transition-all	
+                              font-display	
+                              disabled:cursor-not-allowed	
+                              bg-accent-100	
+                              text-white	
+                              focus:ring-accent-100	
+                              shadow-accent	
+                              hover:bg-accent-200	
+                            ">
                               <span class="button__text">
                                 <save-icon :size="size_icon"></save-icon> Save
                               </span>
@@ -618,266 +376,109 @@
                   </div>
                 </div>
               </div>
-              <ValidationProvider
-                v-slot="{ errors }"
-                rules="required"
-                class="block"
-              >
-                <BaseSelect
-                  v-model="itemDescription"
-                  :options="itemDescriptionArr"
-                  label="Item Description"
-                  :class="errors.length > 0 && 'error'"
-                  @input="setItemDetails"
-                />
-                <p
-                  v-if="errors.length"
-                  class="vee-validation-error mt-2 text-sm text-red-600"
-                >
+              <ValidationProvider v-slot="{ errors }" rules="required" class="block">
+                <BaseSelect v-model="itemDescription" :options="itemDescriptionArr" label="Item Description"
+                  :class="errors.length > 0 && 'error'" @input="setItemDetails" />
+                <p v-if="errors.length" class="vee-validation-error mt-2 text-sm text-red-600">
                   {{ errors[0] }}
                 </p>
               </ValidationProvider>
-              <ValidationProvider
-                v-slot="{ errors }"
-                rules="required"
-                class="block col-span-1"
-              >
-                <BaseSelect
-                  v-model="packageType"
-                  :options="packageTypeArr"
-                  label="Package Type"
-                  :class="errors.length > 0 && 'error'"
-                />
-                <p
-                  v-if="errors.length"
-                  class="vee-validation-error mt-2 text-sm text-red-600"
-                >
-                  {{ errors[0] }}
-                </p>
-              </ValidationProvider>
-              <label class="block mb-1 text-sm font-medium text-gray-800"
-                >Weight</label
-              >
-              <ValidationProvider
-                v-slot="{ errors }"
-                rules="max:28|required"
-                class="block"
-              >
-                <BaseInput
-                  v-model="weight"
-                  label="Pounds"
-                  type="text"
-                  :class="errors.length > 0 && 'error'"
-                />
-                <p
-                  v-if="errors.length"
-                  class="vee-validation-error mt-2 text-sm text-red-600"
-                >
-                  {{ errors[0] }}
-                </p>
-              </ValidationProvider>
-              <ValidationProvider
-                v-slot="{ errors }"
-                rules="required"
-                class="block"
-              >
-                <BaseSelect
-                  v-model="weightOunces"
-                  :options="weightOuncesArr"
-                  label="Ounces"
-                  :class="errors.length > 0 && 'error'"
-                />
-                <p
-                  v-if="errors.length"
-                  class="vee-validation-error mt-2 text-sm text-red-600"
-                >
-                  {{ errors[0] }}
-                </p>
-              </ValidationProvider>
-              <label class="block mb-1 text-sm font-medium text-gray-800"
-                >Dimensions (Inches)</label
-              >
-              <div class="flex justify-between">
-                <ValidationProvider
-                  v-slot="{ errors }"
-                  rules="max:28|required"
-                  class="block lg:col-span-2"
-                >
-                  <BaseInput
-                    v-model="itemLength"
-                    label="Length"
-                    type="text"
-                    :class="errors.length > 0 && 'error'"
-                  />
-                  <p
-                    v-if="errors.length"
-                    class="vee-validation-error mt-2 text-sm text-red-600"
-                  >
+              <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+                <ValidationProvider v-slot="{ errors }" rules="required" class="block col-span-1">
+                  <BaseSelect v-model="packageType" :options="packageTypeArr" label="Package Type"
+                    :class="errors.length > 0 && 'error'" />
+                  <p v-if="errors.length" class="vee-validation-error mt-2 text-sm text-red-600">
                     {{ errors[0] }}
                   </p>
                 </ValidationProvider>
-                <ValidationProvider
-                  v-slot="{ errors }"
-                  rules="max:28|required"
-                  class="block lg:col-span-2"
-                >
-                  <BaseInput
-                    v-model="itemWidth"
-                    label="Width"
-                    type="text"
-                    :class="errors.length > 0 && 'error'"
-                  />
-                  <p
-                    v-if="errors.length"
-                    class="vee-validation-error mt-2 text-sm text-red-600"
-                  >
-                    {{ errors[0] }}
-                  </p>
-                </ValidationProvider>
-                <ValidationProvider
-                  v-slot="{ errors }"
-                  rules="max:28|required"
-                  class="block lg:col-span-2"
-                >
-                  <BaseInput
-                    v-model="itemHeight"
-                    label="Height"
-                    type="text"
-                    :class="errors.length > 0 && 'error'"
-                  />
-                  <p
-                    v-if="errors.length"
-                    class="vee-validation-error mt-2 text-sm text-red-600"
-                  >
+                <ValidationProvider v-slot="{ errors }" rules="max:28|required" class="block lg:col-span-2">
+                  <BaseInput v-model="weight" label="Weight" type="text" :class="errors.length > 0 && 'error'" />
+                  <p v-if="errors.length" class="vee-validation-error mt-2 text-sm text-red-600">
                     {{ errors[0] }}
                   </p>
                 </ValidationProvider>
               </div>
-              <ValidationProvider
-                v-slot="{ errors }"
-                rules="required"
-                class="block"
-              >
-                <BaseSelect
-                  v-model="itemStatus"
-                  :options="itemStatusArr"
-                  label="Item Status"
-                  :class="errors.length > 0 && 'error'"
-                />
-                <p
-                  v-if="errors.length"
-                  class="vee-validation-error mt-2 text-sm text-red-600"
-                >
+              <ValidationProvider v-slot="{ errors }" rules="max:28|required" class="block lg:col-span-2">
+                <BaseInput v-model="dimension" label="Dimension" type="text" :class="errors.length > 0 && 'error'" />
+                <p v-if="errors.length" class="vee-validation-error mt-2 text-sm text-red-600">
+                  {{ errors[0] }}
+                </p>
+              </ValidationProvider>
+              <ValidationProvider v-slot="{ errors }" rules="required" class="block">
+                <BaseSelect v-model="itemStatus" :options="itemStatusArr" label="Item Status"
+                  :class="errors.length > 0 && 'error'" />
+                <p v-if="errors.length" class="vee-validation-error mt-2 text-sm text-red-600">
                   {{ errors[0] }}
                 </p>
               </ValidationProvider>
               <template v-if="showReceiverInputs">
-                <ValidationProvider
-                  v-slot="{ errors }"
-                  rules="max:100|required"
-                  class="block"
-                >
-                  <BaseInput
-                    v-model="receiverName"
-                    type="text"
-                    label="Receiver's Name"
-                    :class="errors.length > 0 && 'error'"
-                  />
-                  <p
-                    v-if="errors.length"
-                    class="vee-validation-error mt-2 text-sm text-red-600"
-                  >
+                <ValidationProvider v-slot="{ errors }" rules="max:100|required" class="block">
+                  <BaseInput v-model="receiverName" type="text" label="Receiver's Name"
+                    :class="errors.length > 0 && 'error'" />
+                  <p v-if="errors.length" class="vee-validation-error mt-2 text-sm text-red-600">
                     {{ errors[0] }}
                   </p>
                 </ValidationProvider>
-                <ValidationProvider
-                  v-slot="{ errors }"
-                  rules="required|email"
-                  class="block"
-                >
-                  <BaseInput
-                    v-model="receiverEmail"
-                    type="email"
-                    label="Receiver's Email"
-                    :class="errors.length > 0 && 'error'"
-                  />
-                  <p
-                    v-if="errors.length"
-                    class="vee-validation-error mt-2 text-sm text-red-600"
-                  >
+                <ValidationProvider v-slot="{ errors }" rules="required|email" class="block">
+                  <BaseInput v-model="receiverEmail" type="email" label="Receiver's Email"
+                    :class="errors.length > 0 && 'error'" />
+                  <p v-if="errors.length" class="vee-validation-error mt-2 text-sm text-red-600">
                     {{ errors[0] }}
                   </p>
                 </ValidationProvider>
                 <div class="block relative box-content h-12">
-                  <vue-tel-input
-                    :inputOptions="{ placeholder: 'Receiver Mobile No.' }"
-                    class="
-                      relative
-                      border
-                      inline-block
-                      border-gray-300
-                      w-full
-                      rounded-lg
-                      h-full
-                    "
-                    v-model="receiverPhone"
-                    v-bind="bindPhoneInputProps"
-                    @blur="validateReceiverPhoneNumber"
-                  >
+                  <vue-tel-input :inputOptions="{ placeholder: 'Receiver Mobile No.' }" class="
+                    relative
+                    border
+                    inline-block
+                    border-gray-300
+                    w-full
+                    rounded-lg
+                    h-full
+                  " v-model="receiverPhone" v-bind="bindPhoneInputProps" @blur="validateReceiverPhoneNumber">
                   </vue-tel-input>
-                  <div
-                    v-if="!isReceiverPhoneValid"
-                    class="vee-validation-error mt-2 text-sm text-red-600"
-                  >
+                  <div v-if="!isReceiverPhoneValid" class="vee-validation-error mt-2 text-sm text-red-600">
                     *Required
                   </div>
                 </div>
               </template>
-              <div
-                v-show="showValidateAlert"
-                class="
-                  p-4
-                  mb-4
-                  top-margin-alert
-                  text-sm text-red-700
-                  bg-red-100
-                  rounded-lg
-                  dark:bg-red-200 dark:text-red-800
-                "
-                role="alert"
-              >
+              <div v-show="showValidateAlert" class="
+                p-4
+                mb-4
+                top-margin-alert
+                text-sm text-red-700
+                bg-red-100
+                rounded-lg
+                dark:bg-red-200 dark:text-red-800
+              " role="alert">
                 <span class="font-medium">Oops!</span> Please fill all required
                 fields and try submitting again.
               </div>
               <!-- onclick="this.classList.toggle('button--loading')" -->
               <div class="flex justify-end">
-                <button
-                  :class="{ 'button--loading': isLoading }"
-                  type="submit"
-                  class="
-                    !py-3
-                    font-medium
-                    text-md
-                    leading-5
-                    uppercase
-                    py-2
-                    px-12
-                    rounded-md
-                    button
-                    focus:outline-none
-                    focus:ring-2
-                    focus:ring-offset-2
-                    focus:ring-offset-primary-60
-                    transition-all
-                    font-display
-                    disabled:cursor-not-allowed
-                    bg-accent-100
-                    text-white
-                    focus:ring-accent-100
-                    shadow-accent
-                    hover:bg-accent-200
-                  "
-                >
+                <button :class="{ 'button--loading': isLoading }" type="submit" class="
+                  !py-3
+                  font-medium
+                  text-md
+                  leading-5
+                  uppercase
+                  py-2
+                  px-12
+                  rounded-md
+                  button
+                  focus:outline-none
+                  focus:ring-2
+                  focus:ring-offset-2
+                  focus:ring-offset-primary-60
+                  transition-all
+                  font-display
+                  disabled:cursor-not-allowed
+                  bg-accent-100
+                  text-white
+                  focus:ring-accent-100
+                  shadow-accent
+                  hover:bg-accent-200
+                ">
                   <span class="button__text"> Preview </span>
                 </button>
               </div>
@@ -886,28 +487,8 @@
         </ValidationObserver>
       </div>
       <div v-else>
-        <div
-          wire:loading
-          class="
-            h-screen
-            z-50
-            overflow-hidden
-            flex flex-col
-            items-center
-            justify-center
-          "
-        >
-          <div
-            class="
-              loader
-              ease-linear
-              rounded-full
-              border-4 border-t-4 border-gray-200
-              h-12
-              w-12
-              mb-4
-            "
-          ></div>
+        <div wire:loading class="h-screen z-50 overflow-hidden flex flex-col items-center justify-center">
+          <div class="loader ease-linear rounded-full border-4 border-t-4 border-gray-200 h-12 w-12 mb-4"></div>
         </div>
       </div>
     </div>
@@ -942,7 +523,7 @@ export default {
     foundItemFormTitle: "",
     venueName: "",
     venueEmail: "",
-    manualAddressSelected: false,
+    manualAddressSelected: true,
     manualAddress: "",
     address: "",
     city: "",
@@ -957,78 +538,11 @@ export default {
     foundDate: new Date().toISOString().slice(0, 10),
     venueManually: false,
     itemDescription: "",
-    itemDescriptionArr: [
-      "Laptop",
-      "Tablet",
-      "Cell phone",
-      "Mobile Phone",
-      "Pillow",
-      "Shoes",
-      "Slipper",
-      "Socks",
-      "Headphone",
-      "Earphone",
-      "Wristwatch",
-      "ID",
-      "Credit Card",
-      "Passport",
-      "Phone charger",
-      "Charger for Laptop",
-      "Blanket",
-      "Shirt",
-      "Pant",
-      "T-shirt",
-      "Clothes",
-      "Jacket",
-      "Suit",
-      "Water bottle",
-      "Stuffed toy",
-      "Bed sheet",
-      "Towel",
-      "Tool box",
-      "Box - Shoe size",
-      "Small Box",
-      "Medium Box",
-      "Large Box",
-      "Bagpack - Carry on",
-      "Luggage - Carry on",
-      "Luggage - Check in size",
-      "Documents",
-      "Keys",
-      "Purse",
-      "Wallet",
-      "Medication Pills",
-      "Folder",
-      "Jewelery",
-      "Thermos",
-      "Other",
-    ],
+    itemDescriptionArr: ["Laptop", "Mobile Phone", "Driving Licence"],
     packageType: "",
     packageTypeArr: ["Box", "Envelope"],
     weight: "",
-    weightOunces: "",
-    weightOuncesArr: [
-      "0",
-      "1",
-      "2",
-      "3",
-      "4",
-      "5",
-      "6",
-      "7",
-      "8",
-      "9",
-      "10",
-      "11",
-      "12",
-      "13",
-      "14",
-      "15",
-      "16",
-    ],
-    itemLength: "",
-    itemWidth: "",
-    itemHeight: "",
+    dimension: "",
     itemStatus: "",
     itemStatusArr: ["Claimed", "Unclaimed"],
     showReceiverInputs: false,
@@ -1075,10 +589,11 @@ export default {
     isVenuePhoneValid: true,
     isEmployeePhoneValid: true,
     isReceiverPhoneValid: true,
+    isAdmin: false,
     currentPosition: {
       lat: null,
-      long: null,
-    },
+      long: null
+    }
   }),
   components: {
     ValidationObserver,
@@ -1118,14 +633,15 @@ export default {
           return data.json();
         })
         .then(async (data) => {
-          this.currentPosition = { lat: data.lat, long: data.lon };
-        });
+          this.currentPosition = { lat: data.lat, long: data.lon }
+        })
     },
     validateVenuePhoneNumber() {
       if (!this.venuePhone) {
         this.isVenuePhoneValid = false;
         this.debouncedGetData("phoneno");
-      } else {
+      }
+      else {
         this.isVenuePhoneValid = true;
         this.debouncedGetData("phoneno");
       }
@@ -1133,382 +649,52 @@ export default {
     validateEmployeePhoneNumber() {
       if (!this.employeePhone) {
         this.isEmployeePhoneValid = false;
-      } else {
+      }
+      else {
         this.isEmployeePhoneValid = true;
       }
     },
     validateReceiverPhoneNumber() {
       if (!this.receiverPhone) {
         this.isReceiverPhoneValid = false;
-      } else {
+      }
+      else {
         this.isReceiverPhoneValid = true;
       }
     },
     formatMobileNumber(phoneNumber) {
       let arr = phoneNumber.split(" ");
       let countryCode = arr.shift();
-      return countryCode + " " + arr.join("");
+      return countryCode + ' ' + arr.join('');
     },
     setItemDetails(value) {
       switch (value) {
         case "Laptop":
           this.packageType = "Box";
-          this.itemLength = "18";
-          this.itemWidth = "12";
-          this.itemHeight = "6";
-          this.weight = "6";
-          this.weightOunces = "0";
+          this.weight = "5.29 lbs";
+          this.dimension = "23.6 x 17.7 inch";
           break;
-        case "Tablet":
+        case "Phone":
           this.packageType = "Box";
-          this.itemLength = "12";
-          this.itemWidth = "10";
-          this.itemHeight = "6";
-          this.weight = "2";
-          this.weightOunces = "0";
-          break;
-        case "Cell phone":
-          this.packageType = "Box";
-          this.itemLength = "9";
-          this.itemWidth = "6";
-          this.itemHeight = "2";
-          this.weight = "1";
-          this.weightOunces = "0";
+          this.weight = "0.88 lbs";
+          this.dimension = "11.8 X 5.9 inch";
           break;
         case "Mobile Phone":
           this.packageType = "Box";
-          this.itemLength = "9";
-          this.itemWidth = "6";
-          this.itemHeight = "2";
-          this.weight = "1";
-          this.weightOunces = "0";
+          this.weight = "0.88 lbs";
+          this.dimension = "11.8 X 5.9 inch";
           break;
-        case "Pillow":
-          this.packageType = "Box";
-          this.itemLength = "20";
-          this.itemWidth = "12";
-          this.itemHeight = "6";
-          this.weight = "3";
-          this.weightOunces = "0";
-          break;
-        case "Shoes":
-          this.packageType = "Box";
-          this.itemLength = "14";
-          this.itemWidth = "12";
-          this.itemHeight = "7";
-          this.weight = "3";
-          this.weightOunces = "0";
-          break;
-        case "Slipper":
-          this.packageType = "Box";
-          this.itemLength = "13";
-          this.itemWidth = "8";
-          this.itemHeight = "2";
-          this.weight = "1";
-          this.weightOunces = "0";
-          break;
-        case "Socks":
-          this.packageType = "Box";
-          this.itemLength = "8";
-          this.itemWidth = "6";
-          this.itemHeight = "4";
-          this.weight = "1";
-          this.weightOunces = "0";
-          break;
-        case "Headphone":
-          this.packageType = "Box";
-          this.itemLength = "12";
-          this.itemWidth = "12";
-          this.itemHeight = "4";
-          this.weight = "2";
-          this.weightOunces = "0";
-          break;
-        case "Earphone":
-          this.packageType = "Box";
-          this.itemLength = "6";
-          this.itemWidth = "6";
-          this.itemHeight = "2";
-          this.weight = "1";
-          this.weightOunces = "0";
-          break;
-        case "Wristwatch":
-          this.packageType = "Box";
-          this.itemLength = "6";
-          this.itemWidth = "6";
-          this.itemHeight = "2";
-          this.weight = "1";
-          this.weightOunces = "0";
-          break;
-        case "ID":
-          this.packageType = "Box";
-          this.itemLength = "6";
-          this.itemWidth = "6";
-          this.itemHeight = "2";
-          this.weight = "1";
-          this.weightOunces = "0";
-          break;
-        case "Credit Card":
-          this.packageType = "Box";
-          this.itemLength = "6";
-          this.itemWidth = "6";
-          this.itemHeight = "2";
-          this.weight = "1";
-          this.weightOunces = "0";
-          break;
-        case "Passport":
-          this.packageType = "Box";
-          this.itemLength = "6";
-          this.itemWidth = "6";
-          this.itemHeight = "2";
-          this.weight = "1";
-          this.weightOunces = "0";
-          break;
-        case "Phone charger":
-          this.packageType = "Box";
-          this.itemLength = "6";
-          this.itemWidth = "6";
-          this.itemHeight = "6";
-          this.weight = "1";
-          this.weightOunces = "0";
-          break;
-        case "Charger for Laptop":
-          this.packageType = "Box";
-          this.itemLength = "8";
-          this.itemWidth = "8";
-          this.itemHeight = "6";
-          this.weight = "2";
-          this.weightOunces = "0";
-          break;
-        case "Blanket":
-          this.packageType = "Box";
-          this.itemLength = "20";
-          this.itemWidth = "12";
-          this.itemHeight = "6";
-          this.weight = "3";
-          this.weightOunces = "0";
-          break;
-        case "Shirt":
-          this.packageType = "Box";
-          this.itemLength = "12";
-          this.itemWidth = "10";
-          this.itemHeight = "6";
-          this.weight = "2";
-          this.weightOunces = "0";
-          break;
-        case "Pant":
-          this.packageType = "Box";
-          this.itemLength = "12";
-          this.itemWidth = "10";
-          this.itemHeight = "6";
-          this.weight = "2";
-          this.weightOunces = "0";
-          break;
-        case "T-shirt":
-          this.packageType = "Box";
-          this.itemLength = "12";
-          this.itemWidth = "10";
-          this.itemHeight = "6";
-          this.weight = "2";
-          this.weightOunces = "0";
-          break;
-        case "Clothes":
-          this.packageType = "Box";
-          this.itemLength = "12";
-          this.itemWidth = "10";
-          this.itemHeight = "6";
-          this.weight = "2";
-          this.weightOunces = "0";
-          break;
-        case "Jacket":
-          this.packageType = "Box";
-          this.itemLength = "18";
-          this.itemWidth = "12";
-          this.itemHeight = "6";
-          this.weight = "3";
-          this.weightOunces = "0";
-          break;
-        case "Suit":
-          this.packageType = "Box";
-          this.itemLength = "15";
-          this.itemWidth = "12";
-          this.itemHeight = "7";
-          this.weight = "4";
-          this.weightOunces = "0";
-          break;
-        case "Water bottle":
-          this.packageType = "Box";
-          this.itemLength = "13";
-          this.itemWidth = "10";
-          this.itemHeight = "5";
-          this.weight = "2";
-          this.weightOunces = "0";
-          break;
-        case "Stuffed toy":
-          this.packageType = "Box";
-          this.itemLength = "12";
-          this.itemWidth = "10";
-          this.itemHeight = "6";
-          this.weight = "2";
-          this.weightOunces = "0";
-          break;
-        case "Bed sheet":
-          this.packageType = "Box";
-          this.itemLength = "12";
-          this.itemWidth = "12";
-          this.itemHeight = "4";
-          this.weight = "4";
-          this.weightOunces = "0";
-          break;
-        case "Towel":
-          this.packageType = "Box";
-          this.itemLength = "15";
-          this.itemWidth = "12";
-          this.itemHeight = "3";
-          this.weight = "2";
-          this.weightOunces = "0";
-          break;
-        case "Tool box":
-          this.packageType = "Box";
-          this.itemLength = "15";
-          this.itemWidth = "12";
-          this.itemHeight = "10";
-          this.weight = "10";
-          this.weightOunces = "0";
-          break;
-        case "Box - Shoe size":
-          this.packageType = "Box";
-          this.itemLength = "13";
-          this.itemWidth = "12";
-          this.itemHeight = "6";
-          this.weight = "5";
-          this.weightOunces = "0";
-          break;
-        case "Small Box":
-          this.packageType = "Box";
-          this.itemLength = "15";
-          this.itemWidth = "12";
-          this.itemHeight = "12";
-          this.weight = "10";
-          this.weightOunces = "0";
-          break;
-        case "Medium Box":
-          this.packageType = "Box";
-          this.itemLength = "18";
-          this.itemWidth = "18";
-          this.itemHeight = "16";
-          this.weight = "20";
-          this.weightOunces = "0";
-          break;
-        case "Large Box":
-          this.packageType = "Box";
-          this.itemLength = "18";
-          this.itemWidth = "18";
-          this.itemHeight = "24";
-          this.weight = "30";
-          this.weightOunces = "0";
-          break;
-        case "Bagpack - Carry on":
-          this.packageType = "Box";
-          this.itemLength = "17";
-          this.itemWidth = "10";
-          this.itemHeight = "9";
-          this.weight = "10";
-          this.weightOunces = "0";
-          break;
-        case "Luggage - Carry on":
-          this.packageType = "Box";
-          this.itemLength = "22";
-          this.itemWidth = "14";
-          this.itemHeight = "9";
-          this.weight = "17";
-          this.weightOunces = "0";
-          break;
-        case "Luggage - Check in size":
-          this.packageType = "Box";
-          this.itemLength = "30";
-          this.itemWidth = "18";
-          this.itemHeight = "14";
-          this.weight = "46";
-          this.weightOunces = "0";
-          break;
-        case "Documents":
-          this.packageType = "Box";
-          this.itemLength = "13";
-          this.itemWidth = "10";
-          this.itemHeight = "1";
-          this.weight = "1";
-          this.weightOunces = "0";
-          break;
-        case "Keys":
-          this.packageType = "Box";
-          this.itemLength = "6";
-          this.itemWidth = "6";
-          this.itemHeight = "2";
-          this.weight = "1";
-          this.weightOunces = "0";
-          break;
-        case "Purse":
-          this.packageType = "Box";
-          this.itemLength = "15";
-          this.itemWidth = "11";
-          this.itemHeight = "7";
-          this.weight = "7";
-          this.weightOunces = "0";
-          break;
-        case "Wallet":
-          this.packageType = "Box";
-          this.itemLength = "6";
-          this.itemWidth = "6";
-          this.itemHeight = "2";
-          this.weight = "1";
-          this.weightOunces = "0";
-          break;
-        case "Medication Pills":
-          this.packageType = "Box";
-          this.itemLength = "6";
-          this.itemWidth = "6";
-          this.itemHeight = "6";
-          this.weight = "1";
-          this.weightOunces = "0";
-          break;
-        case "Folder":
-          this.packageType = "Box";
-          this.itemLength = "13";
-          this.itemWidth = "10";
-          this.itemHeight = "1";
-          this.weight = "1";
-          this.weightOunces = "0";
-          break;
-        case "Jewelery":
-          this.packageType = "Box";
-          this.itemLength = "6";
-          this.itemWidth = "6";
-          this.itemHeight = "2";
-          this.weight = "1";
-          this.weightOunces = "0";
-          break;
-        case "Thermos":
-          this.packageType = "Box";
-          this.itemLength = "12";
-          this.itemWidth = "10";
-          this.itemHeight = "6";
-          this.weight = "5";
-          this.weightOunces = "0";
-          break;
-        case "Other":
-          this.packageType = "";
-          this.itemLength = "";
-          this.itemWidth = "";
-          this.itemHeight = "";
-          this.weight = "";
-          this.weightOunces = "";
-          this.weightOunces = "0";
+        case "Driving Licence":
+          this.packageType = "Envelope";
+          this.weight = "0.11 lbs";
+          this.dimension = "1.9 X 3.9 inch";
           break;
       }
     },
     addressFilter(mode) {
       if (this.apiAddressData.length == 0 && !this.address) {
         this.address = "";
+        this.manualAddressSelected = true;
       }
       let addressLineArr = this.apiAddressData.map((addressObj) => {
         return addressObj.address;
@@ -1516,7 +702,7 @@ export default {
       addressLineArr.push("Other");
       if (mode != "edit") {
         if (this.address && addressLineArr.length > 1) {
-          let index = addressLineArr.findIndex((address) => {
+          let index = addressLineArr.findIndex(address => {
             return address == this.address;
           });
           if (index == -1) {
@@ -1541,18 +727,18 @@ export default {
     getData(type, mode) {
       const params = {
         lat: this.currentPosition.lat,
-        long: this.currentPosition.long,
-      };
+        long: this.currentPosition.long
+      }
       if (type === "name" && this.venueName.length > 0) {
-        params.type = "name";
+        params.type = 'name'
         params.place = this.venueName;
         this.responseData.venueName = [];
       } else if (type === "email") {
-        params.type = "email";
+        params.type = 'email'
         params.place = this.venueEmail;
         this.responseData.venueEmail = [];
       } else if (type === "phoneno") {
-        params.type = "phoneno";
+        params.type = 'phoneno'
         params.mobileno = this.venuePhone;
         this.responseData.venuePhone = [];
       }
@@ -1580,7 +766,7 @@ export default {
           );
           this.addressFilter(mode);
         }
-      });
+      })
     },
     async onSubmit() {
       this.validateVenuePhoneNumber();
@@ -1588,18 +774,13 @@ export default {
       if (this.itemStatus == "Claimed") {
         this.validateReceiverPhoneNumber();
       }
-      this.isLoading = true;
+      this.isLoading = true
       let venuePhoneNo = this.formatMobileNumber(this.venuePhone);
       let employeePhone = this.formatMobileNumber(this.employeePhone);
       const isValid = await this.$refs.observer.validate();
-      if (
-        !isValid ||
-        !this.isVenuePhoneValid ||
-        !this.isEmployeePhoneValid ||
-        !this.isReceiverPhoneValid
-      ) {
+      if (!isValid || !this.isVenuePhoneValid || !this.isEmployeePhoneValid || !this.isReceiverPhoneValid) {
         this.showValidateAlert = true;
-        this.isLoading = false;
+        this.isLoading = false
       } else {
         this.showValidateAlert = false;
         const params = {
@@ -1619,11 +800,15 @@ export default {
           item_description: this.itemDescription,
           package_type: this.packageType,
           weight: this.weight,
-          // weightOunces: this.weightOunces,
-          dimensions: `${this.itemLength} X ${this.itemWidth} X ${this.itemHeight} inch`,
+          dimensions: this.dimension,
           item_status: this.itemStatus === "Claimed" ? 0 : 1,
         };
-        params.foundItemId = this.foundItemId;
+        if (this.isAdmin) {
+          params.id = this.foundItemId;
+        }
+        else {
+          params.foundItemId = this.foundItemId;
+        }
         if (this.itemStatus === "Claimed") {
           let receiverPhone = this.formatMobileNumber(this.receiverPhone);
           params.receiver_name = this.receiverName;
@@ -1636,11 +821,17 @@ export default {
         });
 
         setTimeout(() => {
-          this.isLoading = false;
+          this.isLoading = false
           this.$nextTick(() => {
-            this.$router.push({ path: "/detail-confirmation" });
+            if (this.isAdmin) {
+              this.$router.push({ path: "admin/detail-confirmation" });
+            } else {
+              this.$router.push({ path: "/detail-confirmation" });
+            }
           });
         }, 1000);
+
+
       }
     },
     resetForm() {
@@ -1694,14 +885,18 @@ export default {
       this.$refs.editor.applyCropping();
       this.stateCrop = true;
     },
-    async editImage() {
+    async editImage(){
       this.showEditor = false;
       if (this.image) {
         const response = await fetch(this.image);
         const blob = await response.blob();
-        const file = new File([blob], "image.jpg", { type: blob.type });
+        const file = new File([blob], 'image.jpg', {type: blob.type});
         this.$refs.editor.uploadImage(file);
         this.showEditor = true;
+        this.loadingSpinner = true;
+        setTimeout(() => {
+          this.loadingSpinner = false;
+        }, 2000);
       } else {
         this.showEditor = false;
       }
@@ -1716,24 +911,15 @@ export default {
       }
     },
     saveImg() {
-      this.isSavingImage = true;
+      this.isSavingImage = true
       const file = this.$refs.editor.saveImage();
       this.$axios.post("/demo", { file }).then((response) => {
         if (response.status === 200) {
-          this.isSavingImage = false;
+          this.isSavingImage = false
           this.imageRecognitionData = response.data.data;
-          this.itemDescriptionArr = response.data.data
-            .filter((obj) => {
-              if (obj.name) {
-                return true;
-              } else {
-                return false;
-              }
-            })
-            .map((obj) => {
-              return obj.name;
-            });
-          this.itemDescription = response.data.data[0].name;
+          if (!this.isAdmin) {
+            this.itemDescription = response.data.data[0].name;
+          }
           this.image =
             this.imageRecognitionData[
               this.imageRecognitionData.length - 1
@@ -1742,7 +928,6 @@ export default {
           this.imageKey =
             this.imageRecognitionData[this.imageRecognitionData.length - 2].key;
         }
-        this.itemDescriptionArr.push("Other");
         this.showEditor = false;
       });
     },
@@ -1769,9 +954,7 @@ export default {
     address(newAddress, oldAddress) {
       if (newAddress != oldAddress) {
         if (!newAddress || newAddress == "Other") {
-          if (newAddress == "Other") {
-            this.manualAddressSelected = true;
-          }
+          this.manualAddressSelected = true;
           if (oldAddress && newAddress == "Other") {
             this.manualAddress = "";
           }
@@ -1797,356 +980,22 @@ export default {
       switch (value) {
         case "Laptop":
           this.packageType = this.packageType ? this.packageType : "Box";
-          this.itemLength = this.itemLength ? this.itemLength : "18";
-          this.itemWidth = this.itemWidth ? this.itemWidth : "12";
-          this.itemHeight = this.itemHeight ? this.itemHeight : "6";
-          this.weight = this.weight ? this.weight : "6";
-          this.weightOunces = this.weightOunces ? this.weightOunces : "0";
-          break;
-        case "Tablet":
-          this.packageType = this.packageType ? this.packageType : "Box";
-          this.itemLength = this.itemLength ? this.itemLength : "12";
-          this.itemWidth = this.itemWidth ? this.itemWidth : "10";
-          this.itemHeight = this.itemHeight ? this.itemHeight : "6";
-          this.weight = this.weight ? this.weight : "2";
-          this.weightOunces = this.weightOunces ? this.weightOunces : "0";
-          break;
-        case "Cell phone":
-          this.packageType = this.packageType ? this.packageType : "Box";
-          this.itemLength = this.itemLength ? this.itemLength : "9";
-          this.itemWidth = this.itemWidth ? this.itemWidth : "6";
-          this.itemHeight = this.itemHeight ? this.itemHeight : "2";
-          this.weight = this.weight ? this.weight : "1";
-          this.weightOunces = this.weightOunces ? this.weightOunces : "0";
+          this.weight = this.weight ? this.weight : "2.4 kg";
+          this.dimension = this.dimension ? this.dimension : "60 cm X 45 cm";
           break;
         case "Mobile Phone":
           this.packageType = this.packageType ? this.packageType : "Box";
-          this.itemLength = this.itemLength ? this.itemLength : "9";
-          this.itemWidth = this.itemWidth ? this.itemWidth : "6";
-          this.itemHeight = this.itemHeight ? this.itemHeight : "2";
-          this.weight = this.weight ? this.weight : "1";
-          this.weightOunces = this.weightOunces ? this.weightOunces : "0";
+          this.weight = this.weight ? this.weight : "0.4 kg";
+          this.dimension = this.dimension ? this.dimension : "30 cm X 15 cm";
           break;
-        case "Pillow":
+        case "Phone":
           this.packageType = this.packageType ? this.packageType : "Box";
-          this.itemLength = this.itemLength ? this.itemLength : "20";
-          this.itemWidth = this.itemWidth ? this.itemWidth : "12";
-          this.itemHeight = this.itemHeight ? this.itemHeight : "6";
-          this.weight = this.weight ? this.weight : "3";
-          this.weightOunces = this.weightOunces ? this.weightOunces : "0";
-          break;
-        case "Shoes":
-          this.packageType = this.packageType ? this.packageType : "Box";
-          this.itemLength = this.itemLength ? this.itemLength : "14";
-          this.itemWidth = this.itemWidth ? this.itemWidth : "12";
-          this.itemHeight = this.itemHeight ? this.itemHeight : "7";
-          this.weight = this.weight ? this.weight : "3";
-          this.weightOunces = this.weightOunces ? this.weightOunces : "0";
-          break;
-        case "Slipper":
-          this.packageType = this.packageType ? this.packageType : "Box";
-          this.itemLength = this.itemLength ? this.itemLength : "13";
-          this.itemWidth = this.itemWidth ? this.itemWidth : "8";
-          this.itemHeight = this.itemHeight ? this.itemHeight : "2";
-          this.weight = this.weight ? this.weight : "1";
-          this.weightOunces = this.weightOunces ? this.weightOunces : "0";
-          break;
-        case "Socks":
-          this.packageType = this.packageType ? this.packageType : "Box";
-          this.itemLength = this.itemLength ? this.itemLength : "8";
-          this.itemWidth = this.itemWidth ? this.itemWidth : "6";
-          this.itemHeight = this.itemHeight ? this.itemHeight : "4";
-          this.weight = this.weight ? this.weight : "1";
-          this.weightOunces = this.weightOunces ? this.weightOunces : "0";
-          break;
-        case "Headphone":
-          this.packageType = this.packageType ? this.packageType : "Box";
-          this.itemLength = this.itemLength ? this.itemLength : "12";
-          this.itemWidth = this.itemWidth ? this.itemWidth : "12";
-          this.itemHeight = this.itemHeight ? this.itemHeight : "4";
-          this.weight = this.weight ? this.weight : "2";
-          this.weightOunces = this.weightOunces ? this.weightOunces : "0";
-          break;
-        case "Earphone":
-          this.packageType = this.packageType ? this.packageType : "Box";
-          this.itemLength = this.itemLength ? this.itemLength : "6";
-          this.itemWidth = this.itemWidth ? this.itemWidth : "6";
-          this.itemHeight = this.itemHeight ? this.itemHeight : "2";
-          this.weight = this.weight ? this.weight : "1";
-          this.weightOunces = this.weightOunces ? this.weightOunces : "0";
-          break;
-        case "Wristwatch":
-          this.packageType = this.packageType ? this.packageType : "Box";
-          this.itemLength = this.itemLength ? this.itemLength : "6";
-          this.itemWidth = this.itemWidth ? this.itemWidth : "6";
-          this.itemHeight = this.itemHeight ? this.itemHeight : "2";
-          this.weight = this.weight ? this.weight : "1";
-          this.weightOunces = this.weightOunces ? this.weightOunces : "0";
-          break;
-        case "ID":
-          this.packageType = this.packageType ? this.packageType : "Box";
-          this.itemLength = this.itemLength ? this.itemLength : "6";
-          this.itemWidth = this.itemWidth ? this.itemWidth : "6";
-          this.itemHeight = this.itemHeight ? this.itemHeight : "2";
-          this.weight = this.weight ? this.weight : "1";
-          this.weightOunces = this.weightOunces ? this.weightOunces : "0";
-          break;
-        case "Credit Card":
-          this.packageType = this.packageType ? this.packageType : "Box";
-          this.itemLength = this.itemLength ? this.itemLength : "6";
-          this.itemWidth = this.itemWidth ? this.itemWidth : "6";
-          this.itemHeight = this.itemHeight ? this.itemHeight : "2";
-          this.weight = this.weight ? this.weight : "1";
-          this.weightOunces = this.weightOunces ? this.weightOunces : "0";
-          break;
-        case "Passport":
-          this.packageType = this.packageType ? this.packageType : "Box";
-          this.itemLength = this.itemLength ? this.itemLength : "6";
-          this.itemWidth = this.itemWidth ? this.itemWidth : "6";
-          this.itemHeight = this.itemHeight ? this.itemHeight : "2";
-          this.weight = this.weight ? this.weight : "1";
-          this.weightOunces = this.weightOunces ? this.weightOunces : "0";
-          break;
-        case "Phone charger":
-          this.packageType = this.packageType ? this.packageType : "Box";
-          this.itemLength = this.itemLength ? this.itemLength : "6";
-          this.itemWidth = this.itemWidth ? this.itemWidth : "6";
-          this.itemHeight = this.itemHeight ? this.itemHeight : "6";
-          this.weight = this.weight ? this.weight : "1";
-          this.weightOunces = this.weightOunces ? this.weightOunces : "0";
-          break;
-        case "Charger for Laptop":
-          this.packageType = this.packageType ? this.packageType : "Box";
-          this.itemLength = this.itemLength ? this.itemLength : "8";
-          this.itemWidth = this.itemWidth ? this.itemWidth : "8";
-          this.itemHeight = this.itemHeight ? this.itemHeight : "6";
-          this.weight = this.weight ? this.weight : "2";
-          this.weightOunces = this.weightOunces ? this.weightOunces : "0";
-          break;
-        case "Blanket":
-          this.packageType = this.packageType ? this.packageType : "Box";
-          this.itemLength = this.itemLength ? this.itemLength : "20";
-          this.itemWidth = this.itemWidth ? this.itemWidth : "12";
-          this.itemHeight = this.itemHeight ? this.itemHeight : "6";
-          this.weight = this.weight ? this.weight : "3";
-          this.weightOunces = this.weightOunces ? this.weightOunces : "0";
-          break;
-        case "Shirt":
-          this.packageType = this.packageType ? this.packageType : "Box";
-          this.itemLength = this.itemLength ? this.itemLength : "12";
-          this.itemWidth = this.itemWidth ? this.itemWidth : "10";
-          this.itemHeight = this.itemHeight ? this.itemHeight : "6";
-          this.weight = this.weight ? this.weight : "2";
-          this.weightOunces = this.weightOunces ? this.weightOunces : "0";
-          break;
-        case "Pant":
-          this.packageType = this.packageType ? this.packageType : "Box";
-          this.itemLength = this.itemLength ? this.itemLength : "12";
-          this.itemWidth = this.itemWidth ? this.itemWidth : "10";
-          this.itemHeight = this.itemHeight ? this.itemHeight : "6";
-          this.weight = this.weight ? this.weight : "2";
-          this.weightOunces = this.weightOunces ? this.weightOunces : "0";
-          break;
-        case "T-shirt":
-          this.packageType = this.packageType ? this.packageType : "Box";
-          this.itemLength = this.itemLength ? this.itemLength : "12";
-          this.itemWidth = this.itemWidth ? this.itemWidth : "10";
-          this.itemHeight = this.itemHeight ? this.itemHeight : "6";
-          this.weight = this.weight ? this.weight : "2";
-          this.weightOunces = this.weightOunces ? this.weightOunces : "0";
-          break;
-        case "Clothes":
-          this.packageType = this.packageType ? this.packageType : "Box";
-          this.itemLength = this.itemLength ? this.itemLength : "12";
-          this.itemWidth = this.itemWidth ? this.itemWidth : "10";
-          this.itemHeight = this.itemHeight ? this.itemHeight : "6";
-          this.weight = this.weight ? this.weight : "2";
-          this.weightOunces = this.weightOunces ? this.weightOunces : "0";
-          break;
-        case "Jacket":
-          this.packageType = this.packageType ? this.packageType : "Box";
-          this.itemLength = this.itemLength ? this.itemLength : "18";
-          this.itemWidth = this.itemWidth ? this.itemWidth : "12";
-          this.itemHeight = this.itemHeight ? this.itemHeight : "6";
-          this.weight = this.weight ? this.weight : "3";
-          this.weightOunces = this.weightOunces ? this.weightOunces : "0";
-          break;
-        case "Suit":
-          this.packageType = this.packageType ? this.packageType : "Box";
-          this.itemLength = this.itemLength ? this.itemLength : "15";
-          this.itemWidth = this.itemWidth ? this.itemWidth : "12";
-          this.itemHeight = this.itemHeight ? this.itemHeight : "7";
-          this.weight = this.weight ? this.weight : "4";
-          this.weightOunces = this.weightOunces ? this.weightOunces : "0";
-          break;
-        case "Water bottle":
-          this.packageType = this.packageType ? this.packageType : "Box";
-          this.itemLength = this.itemLength ? this.itemLength : "13";
-          this.itemWidth = this.itemWidth ? this.itemWidth : "10";
-          this.itemHeight = this.itemHeight ? this.itemHeight : "5";
-          this.weight = this.weight ? this.weight : "2";
-          this.weightOunces = this.weightOunces ? this.weightOunces : "0";
-          break;
-        case "Stuffed toy":
-          this.packageType = this.packageType ? this.packageType : "Box";
-          this.itemLength = this.itemLength ? this.itemLength : "12";
-          this.itemWidth = this.itemWidth ? this.itemWidth : "10";
-          this.itemHeight = this.itemHeight ? this.itemHeight : "6";
-          this.weight = this.weight ? this.weight : "2";
-          this.weightOunces = this.weightOunces ? this.weightOunces : "0";
-          break;
-        case "Bed sheet":
-          this.packageType = this.packageType ? this.packageType : "Box";
-          this.itemLength = this.itemLength ? this.itemLength : "12";
-          this.itemWidth = this.itemWidth ? this.itemWidth : "12";
-          this.itemHeight = this.itemHeight ? this.itemHeight : "4";
-          this.weight = this.weight ? this.weight : "4";
-          this.weightOunces = this.weightOunces ? this.weightOunces : "0";
-          break;
-        case "Towel":
-          this.packageType = this.packageType ? this.packageType : "Box";
-          this.itemLength = this.itemLength ? this.itemLength : "15";
-          this.itemWidth = this.itemWidth ? this.itemWidth : "12";
-          this.itemHeight = this.itemHeight ? this.itemHeight : "3";
-          this.weight = this.weight ? this.weight : "2";
-          this.weightOunces = this.weightOunces ? this.weightOunces : "0";
-          break;
-        case "Tool box":
-          this.packageType = this.packageType ? this.packageType : "Box";
-          this.itemLength = this.itemLength ? this.itemLength : "15";
-          this.itemWidth = this.itemWidth ? this.itemWidth : "12";
-          this.itemHeight = this.itemHeight ? this.itemHeight : "10";
-          this.weight = this.weight ? this.weight : "10";
-          this.weightOunces = this.weightOunces ? this.weightOunces : "0";
-          break;
-        case "Box - Shoe size":
-          this.packageType = this.packageType ? this.packageType : "Box";
-          this.itemLength = this.itemLength ? this.itemLength : "13";
-          this.itemWidth = this.itemWidth ? this.itemWidth : "12";
-          this.itemHeight = this.itemHeight ? this.itemHeight : "6";
-          this.weight = this.weight ? this.weight : "5";
-          this.weightOunces = this.weightOunces ? this.weightOunces : "0";
-          break;
-        case "Small Box":
-          this.packageType = this.packageType ? this.packageType : "Box";
-          this.itemLength = this.itemLength ? this.itemLength : "15";
-          this.itemWidth = this.itemWidth ? this.itemWidth : "12";
-          this.itemHeight = this.itemHeight ? this.itemHeight : "12";
-          this.weight = this.weight ? this.weight : "10";
-          this.weightOunces = this.weightOunces ? this.weightOunces : "0";
-          break;
-        case "Medium Box":
-          this.packageType = this.packageType ? this.packageType : "Box";
-          this.itemLength = this.itemLength ? this.itemLength : "18";
-          this.itemWidth = this.itemWidth ? this.itemWidth : "18";
-          this.itemHeight = this.itemHeight ? this.itemHeight : "16";
-          this.weight = this.weight ? this.weight : "20";
-          this.weightOunces = this.weightOunces ? this.weightOunces : "0";
-          break;
-        case "Large Box":
-          this.packageType = this.packageType ? this.packageType : "Box";
-          this.itemLength = this.itemLength ? this.itemLength : "18";
-          this.itemWidth = this.itemWidth ? this.itemWidth : "18";
-          this.itemHeight = this.itemHeight ? this.itemHeight : "24";
-          this.weight = this.weight ? this.weight : "30";
-          this.weightOunces = this.weightOunces ? this.weightOunces : "0";
-          break;
-        case "Bagpack - Carry on":
-          this.packageType = this.packageType ? this.packageType : "Box";
-          this.itemLength = this.itemLength ? this.itemLength : "17";
-          this.itemWidth = this.itemWidth ? this.itemWidth : "10";
-          this.itemHeight = this.itemHeight ? this.itemHeight : "9";
-          this.weight = this.weight ? this.weight : "10";
-          this.weightOunces = this.weightOunces ? this.weightOunces : "0";
-          break;
-        case "Luggage - Carry on":
-          this.packageType = this.packageType ? this.packageType : "Box";
-          this.itemLength = this.itemLength ? this.itemLength : "22";
-          this.itemWidth = this.itemWidth ? this.itemWidth : "14";
-          this.itemHeight = this.itemHeight ? this.itemHeight : "9";
-          this.weight = this.weight ? this.weight : "17";
-          this.weightOunces = this.weightOunces ? this.weightOunces : "0";
-          break;
-        case "Luggage - Check in size":
-          this.packageType = this.packageType ? this.packageType : "Box";
-          this.itemLength = this.itemLength ? this.itemLength : "30";
-          this.itemWidth = this.itemWidth ? this.itemWidth : "18";
-          this.itemHeight = this.itemHeight ? this.itemHeight : "14";
-          this.weight = this.weight ? this.weight : "46";
-          this.weightOunces = this.weightOunces ? this.weightOunces : "0";
-          break;
-        case "Documents":
-          this.packageType = this.packageType ? this.packageType : "Box";
-          this.itemLength = this.itemLength ? this.itemLength : "13";
-          this.itemWidth = this.itemWidth ? this.itemWidth : "10";
-          this.itemHeight = this.itemHeight ? this.itemHeight : "1";
-          this.weight = this.weight ? this.weight : "1";
-          this.weightOunces = this.weightOunces ? this.weightOunces : "0";
-          break;
-        case "Keys":
-          this.packageType = this.packageType ? this.packageType : "Box";
-          this.itemLength = this.itemLength ? this.itemLength : "6";
-          this.itemWidth = this.itemWidth ? this.itemWidth : "6";
-          this.itemHeight = this.itemHeight ? this.itemHeight : "2";
-          this.weight = this.weight ? this.weight : "1";
-          this.weightOunces = this.weightOunces ? this.weightOunces : "0";
-          break;
-        case "Purse":
-          this.packageType = this.packageType ? this.packageType : "Box";
-          this.itemLength = this.itemLength ? this.itemLength : "15";
-          this.itemWidth = this.itemWidth ? this.itemWidth : "11";
-          this.itemHeight = this.itemHeight ? this.itemHeight : "7";
-          this.weight = this.weight ? this.weight : "7";
-          this.weightOunces = this.weightOunces ? this.weightOunces : "0";
-          break;
-        case "Wallet":
-          this.packageType = this.packageType ? this.packageType : "Box";
-          this.itemLength = this.itemLength ? this.itemLength : "6";
-          this.itemWidth = this.itemWidth ? this.itemWidth : "6";
-          this.itemHeight = this.itemHeight ? this.itemHeight : "2";
-          this.weight = this.weight ? this.weight : "1";
-          this.weightOunces = this.weightOunces ? this.weightOunces : "0";
-          break;
-        case "Medication Pills":
-          this.packageType = this.packageType ? this.packageType : "Box";
-          this.itemLength = this.itemLength ? this.itemLength : "6";
-          this.itemWidth = this.itemWidth ? this.itemWidth : "6";
-          this.itemHeight = this.itemHeight ? this.itemHeight : "6";
-          this.weight = this.weight ? this.weight : "1";
-          this.weightOunces = this.weightOunces ? this.weightOunces : "0";
-          break;
-        case "Folder":
-          this.packageType = this.packageType ? this.packageType : "Box";
-          this.itemLength = this.itemLength ? this.itemLength : "13";
-          this.itemWidth = this.itemWidth ? this.itemWidth : "10";
-          this.itemHeight = this.itemHeight ? this.itemHeight : "1";
-          this.weight = this.weight ? this.weight : "1";
-          this.weightOunces = this.weightOunces ? this.weightOunces : "0";
-          break;
-        case "Jewelery":
-          this.packageType = this.packageType ? this.packageType : "Box";
-          this.itemLength = this.itemLength ? this.itemLength : "6";
-          this.itemWidth = this.itemWidth ? this.itemWidth : "6";
-          this.itemHeight = this.itemHeight ? this.itemHeight : "2";
-          this.weight = this.weight ? this.weight : "1";
-          this.weightOunces = this.weightOunces ? this.weightOunces : "0";
-          break;
-        case "Thermos":
-          this.packageType = this.packageType ? this.packageType : "Box";
-          this.itemLength = this.itemLength ? this.itemLength : "12";
-          this.itemWidth = this.itemWidth ? this.itemWidth : "10";
-          this.itemHeight = this.itemHeight ? this.itemHeight : "6";
-          this.weight = this.weight ? this.weight : "5";
-          this.weightOunces = this.weightOunces ? this.weightOunces : "0";
-          break;
-        case "Other":
-          this.packageType = "";
-          this.itemLength = "";
-          this.itemWidth = "";
-          this.itemHeight = "";
-          this.weight = "";
-          this.weightOunces = "";
-          this.weightOunces = this.weightOunces ? this.weightOunces : "0";
+          this.weight = this.weight ? this.weight : "0.4 kg";
+          this.dimension = this.dimension ? this.dimension : "30 cm X 15 cm";
+        case "Driving Licence":
+          this.packageType = this.packageType ? this.packageType : "Envelope";
+          this.weight = this.weight ? this.weight : "0.05 kg";
+          this.dimension = this.dimension ? this.dimension : "5 cm X 10 cm";
           break;
       }
     },
@@ -2159,9 +1008,9 @@ export default {
     });
   },
   mounted() {
-    this.getCurrentPosition();
+    this.getCurrentPosition()
     if (this.$route.query.id) {
-      this.isLoadingItemDetails = true;
+      this.isLoadingItemDetails = true
       this.foundItemId = this.$route.query.id;
       this.senderFormTitle = "EDIT SENDER'S DETAILS";
       this.foundItemFormTitle = "EDIT FOUND ITEM'S DETAILS";
@@ -2169,7 +1018,7 @@ export default {
         .get("/getsinglelostitem?id=" + this.$route.query.id)
         .then((response) => {
           if (response.status === 200) {
-            this.isLoadingItemDetails = false;
+            this.isLoadingItemDetails = false
             let responseData = response.data.data.Item;
 
             var index = this.venueArr.indexOf(responseData.venu_type) !== -1;
@@ -2193,11 +1042,7 @@ export default {
             this.itemDescription = responseData.item_description;
             this.packageType = responseData.package_type;
             this.weight = responseData.weight;
-            // this.weightOunces = responseData.weightOunces;
-            let dimensionArr = responseData.dimensions.split(" X ");
-            this.itemLength = dimensionArr[0];
-            this.itemWidth = dimensionArr[1];
-            this.itemHeight = dimensionArr[2].split(" ")[0];
+            this.dimension = responseData.dimensions;
             this.itemStatus =
               responseData.item_status == 0 ? "Claimed" : "Unclaimed";
             this.receiverName = responseData.receiver_name;
@@ -2207,6 +1052,7 @@ export default {
         })
         .catch((error) => console.log(error));
     } else if (this.$route.params?.itemDetails) {
+      if (this.$route.params?.isAdmin) this.isAdmin = true
       this.senderFormTitle = "EDIT SENDER'S DETAILS";
       this.foundItemFormTitle = "EDIT FOUND ITEM'S DETAILS";
       let data = this.$route.params.itemDetails;
@@ -2218,7 +1064,8 @@ export default {
       }
       if (data.foundItemId) {
         this.foundItemId = data.foundItemId;
-      } else {
+      }
+      else {
         this.foundItemId = data.id;
       }
       this.foundDate = data.datse;
@@ -2236,11 +1083,7 @@ export default {
       this.itemDescription = data.item_description;
       this.packageType = data.package_type;
       this.weight = data.weight;
-      // this.weightOunces = data.weightOunces;
-      let dimensionArr = data.dimensions.split(" X ");
-      this.itemLength = dimensionArr[0];
-      this.itemWidth = dimensionArr[1];
-      this.itemHeight = dimensionArr[2].split(" ")[0];
+      this.dimension = data.dimensions;
       this.itemStatus = data.item_status === 0 ? "Claimed" : "Unclaimed";
 
       if (data.item_status === 0) {
@@ -2249,28 +1092,31 @@ export default {
         this.receiverPhone = data.receiver_mobile_no;
       }
       if (this.venueName) {
-        this.getData("name", "edit");
-        this.address = data.address;
-        this.city = data.city;
-        this.state = data.states;
-        this.country = data.country;
-        this.zipcode = data.zipcode;
+        this.getData("name", "edit").then(() => {
+          this.address = data.address;
+          this.city = data.city;
+          this.state = data.states;
+          this.country = data.country;
+          this.zipcode = data.zipcode;
+        });
       }
       if (this.venueEmail) {
-        this.getData("email", "edit");
-        this.address = data.address;
-        this.city = data.city;
-        this.state = data.states;
-        this.country = data.country;
-        this.zipcode = data.zipcode;
+        this.getData("email", "edit").then(() => {
+          this.address = data.address;
+          this.city = data.city;
+          this.state = data.states;
+          this.country = data.country;
+          this.zipcode = data.zipcode;
+        });
       }
       if (this.venuePhone) {
-        this.getData("phoneno", "edit");
-        this.address = data.address;
-        this.city = data.city;
-        this.state = data.states;
-        this.country = data.country;
-        this.zipcode = data.zipcode;
+        this.getData("phoneno", "edit").then(() => {
+          this.address = data.address;
+          this.city = data.city;
+          this.state = data.states;
+          this.country = data.country;
+          this.zipcode = data.zipcode;
+        });
       }
     } else {
       this.senderFormTitle = "SENDER'S DETAILS";
@@ -2281,7 +1127,7 @@ export default {
 </script>
 
 <style lang="scss">
-.wrapper-form {
+.wrapper {
   @apply min-h-screen flex justify-center py-10 mx-auto;
 }
 
@@ -2296,11 +1142,11 @@ export default {
 }
 
 .editor-tools .icons {
-  @apply flex items-center;
+  @apply flex items-center
 }
 
 .editor-tools .save-upload .button__text {
-  @apply flex items-center;
+  @apply flex items-center
 }
 
 .editor-tools .save-upload .button__text svg {
@@ -2388,7 +1234,7 @@ canvas {
 }
 
 .error {
-  & > div {
+  &>div {
     @apply text-red-500;
   }
 
@@ -2402,6 +1248,7 @@ canvas {
 }
 
 @media only screen and (max-width: 650px) {
+
   .canvas-container,
   .upper-canvas,
   .lower-canvas {
@@ -2413,6 +1260,7 @@ canvas {
 }
 
 @media only screen and (max-width: 510px) {
+
   .canvas-container,
   .upper-canvas,
   .lower-canvas {
@@ -2424,6 +1272,7 @@ canvas {
 }
 
 @media only screen and (max-width: 410px) {
+
   .canvas-container,
   .upper-canvas,
   .lower-canvas {
@@ -2449,9 +1298,7 @@ canvas {
 
 .vue-tel-input {
   border-radius: 0.5rem;
-}
-.vti__dropdown-list {
-  z-index: 100;
+  overflow: hidden;
 }
 
 .vs__actions svg {

@@ -681,7 +681,94 @@
           </div>
         </div>
 
-        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3">
+
+          <div class="flex flex-wrap gap-2">
+                <button :class="{ 'button--loading': isLoading['approve'] }" type="submit" class="
+                  !py-3
+                  flex-auto
+                  font-medium
+                  text-md
+                  leading-5
+                  uppercase
+                  py-2
+                  px-8
+                  rounded-md
+                  button
+                  focus:outline-none
+                  focus:ring-2
+                  focus:ring-offset-2
+                  focus:ring-offset-primary-60
+                  transition-all
+                  font-display
+                  disabled:cursor-not-allowed
+                  bg-accent-100
+                  text-white
+                  focus:ring-accent-100
+                  shadow-accent
+                  hover:bg-accent-200
+                "
+                 @click="action('Approve')">
+                  <span class="button__text"> 
+                   </span>
+                </button>
+                <button  :class="{ 'button--loading': isLoading['deny'] }" type="submit"  class="
+                  !py-3
+                  flex-auto
+                  font-medium
+                  text-md
+                  leading-5
+                  uppercase
+                  py-2
+                  px-8
+                  rounded-md
+                  button
+                  focus:outline-none
+                  focus:ring-2
+                  focus:ring-offset-2
+                  focus:ring-offset-primary-60
+                  transition-all
+                  font-display
+                  disabled:cursor-not-allowed
+                  bg-accent-100
+                  text-white
+                  focus:ring-accent-100
+                  shadow-accent
+                  hover:bg-accent-200
+                "       @click="action('Deny')">>
+                  <span class="button__text"> Deny </span>
+                </button>
+                <button   :class="{ 'button--loading': isLoading['approve-without-image'] }" type="submit"  class="
+                  !py-3
+                  flex-auto
+                  font-medium
+                  text-md
+                  leading-5
+                  uppercase
+                  py-2
+                  px-8
+                  rounded-md
+                  button
+                  focus:outline-none
+                  focus:ring-2
+                  focus:ring-offset-2
+                  focus:ring-offset-primary-60
+                  transition-all
+                  font-display
+                  disabled:cursor-not-allowed
+                  bg-accent-100
+                  text-white
+                  focus:ring-accent-100
+                  shadow-accent
+                  hover:bg-accent-200
+                "
+                   @click="action('Approve without Image')">
+                  <span class="button__text"> Approve without Image </span>
+                </button>
+              </div>
+
+
+
+        <!-- <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3">
           <div
             class="
               cursor-pointer
@@ -848,7 +935,7 @@
           >
             Edit Image
           </button>
-        </div>
+        </div> -->
       </section>
     </div>
   </div>
