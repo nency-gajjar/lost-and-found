@@ -121,6 +121,7 @@
                 v-slot="{ errors }"
                 rules="required|email"
                 class="block"
+                name="Email"
               >
                 <BaseInput
                   v-model="venueEmail"
