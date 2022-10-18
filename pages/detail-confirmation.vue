@@ -515,6 +515,7 @@ export default {
       if (params.address == "Other" || !params.address) {
         params.address = params.manualAddress;
       }
+      params.is_default = "Pending";
       delete params.foundItemId;
       delete params.manualAddress;
       if (this.itemDetails.foundItemId) {
