@@ -76,6 +76,9 @@
           <div></div>
         </div>
       </div>
+      <div v-else-if="!isLoading && lostItems.length === 0">
+        No Data
+      </div>
       <div v-else>
         <div wire:loading class="loader-container z-50 overflow-hidden flex flex-col items-center justify-center">
           <div class="loader ease-linear rounded-full border-4 border-t-4 border-gray-200 h-12 w-12 mb-4"></div>
