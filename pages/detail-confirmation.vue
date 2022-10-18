@@ -340,7 +340,7 @@
                   Weight
                 </div>
                 <div class="text-gray-600 text-left md:w-7/12 sm:w-6/12">
-                  {{ itemDetails.weight }}
+                  {{ itemDetails.weight }} lbs
                 </div>
               </div>
               <div class="flex items-center mt-3 flex-wrap">
