@@ -708,8 +708,7 @@
                   hover:bg-accent-200
                 "
                  @click="action('Approve')">
-                  <span class="button__text"> 
-                   </span>
+                   <span class="button__text"> Approve </span>
                 </button>
                 <button  :class="{ 'button--loading': isLoading['deny'] }" type="submit"  class="
                   !py-3
@@ -734,7 +733,7 @@
                   focus:ring-accent-100
                   shadow-accent
                   hover:bg-accent-200
-                "       @click="action('Deny')">>
+                "  @click="action('Deny')">
                   <span class="button__text"> Deny </span>
                 </button>
                 <button   :class="{ 'button--loading': isLoading['approve-without-image'] }" type="submit"  class="
