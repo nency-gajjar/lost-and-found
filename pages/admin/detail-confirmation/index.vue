@@ -673,10 +673,10 @@
             </div>
 
             <div
-              v-if="itemDetails.image"
+              v-if="image"
               class="text-gray-600 mt-4 text-left w-full"
             >
-              <img class="w-full" :src="itemDetails.image" alt="" />
+              <img class="w-full" :src="image" alt="" />
             </div>
           </div>
         </div>
