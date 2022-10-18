@@ -4,8 +4,8 @@
       <div class="container mx-auto px-3 mx-auto flex flex-wrap flex-col md:flex-row items-center">
         <!--Left Col-->
         <div class="flex flex-col w-full md:w-2/5 justify-center items-start text-center md:text-left">
-          <div class="flex flex-col md:flex-row">
-            <div class="qr-code mr-12">
+          <div class="flex">
+            <div class="qr-code mr-3 md:mr-6 lg:mr-12">
               <img class="bg-white rounded-lg p-4" src="@/assets/images/found-items-qr.png" alt="qr code image" />
               <p class="text-white text-sm mt-4">Scan this QR to view Lost Items</p>
             </div>
