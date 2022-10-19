@@ -1,9 +1,1145 @@
 <template>
   <div class="wrapper">
+    <div
+      v-show="showFormModal"
+      class="fixed z-50 top-0 w-full left-0"
+      id="modal"
+    >
+      <div
+        class="
+          flex
+          items-center
+          justify-center
+          min-height-100vh
+          pt-4
+          px-4
+          pb-20
+          text-center
+          sm:p-0
+        "
+      >
+        <div class="fixed inset-0 transition-opacity">
+          <div class="absolute inset-0 bg-gray-900 opacity-75" />
+        </div>
+        <div
+          class="
+            inline-block
+            align-middle
+            bg-white
+            rounded-lg
+            text-left
+            shadow-xl
+            transform
+            transition-all
+            sm:my-8 sm:align-middle sm:max-w-screen-md sm:w-full
+          "
+          role="dialog"
+          aria-modal="true"
+          aria-labelledby="modal-headline"
+        >
+          <div class="relative">
+            <span
+              @click="showFormModal = false"
+              class="absolute right-5 top-5 inline-block z-10"
+            >
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                class="icon icon-tabler icon-tabler-x"
+                width="24"
+                height="24"
+                viewBox="0 0 24 24"
+                stroke-width="1.5"
+                stroke="#000000"
+                fill="none"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+              >
+                <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+                <line x1="18" y1="6" x2="6" y2="18" />
+                <line x1="6" y1="6" x2="18" y2="18" />
+              </svg>
+            </span>
+          </div>
+          <div
+            class="
+              w-full
+              max-w-screen-md
+              relative
+              relative
+              mx-auto
+              my-auto
+              form-container
+              overflow-scroll
+              py-20
+              rounded-xl
+              shadow-lg
+              bg-white
+              flex
+              justify-center
+              items-center
+              modal-container
+            "
+          >
+            <div
+              class="
+                card
+                w-full
+                mx-6
+                absolute
+                top-0
+                lg:mx-0
+                md:w-8/12
+                lg:w-7/12
+                xl:w-6/12
+                bg-white
+                border border-[#E1E3E6]
+                rounded-lg
+              "
+              style="box-shadow: rgba(54, 28, 93, 0.04) -10px 18px 32px"
+            >
+              <div
+                v-if="
+                  !isLoadingItemDetails || Object.keys(itemDetails).length > 0
+                "
+              >
+                <ValidationObserver v-slot="{ validate }" ref="observer">
+                  <form @submit.prevent="validate().then(onSubmit)">
+                    <div class="card p-6 space-y-4">
+                      <div class="form-title">
+                        <h1
+                          class="
+                            w-full
+                            my-2
+                            text-xl
+                            font-bold
+                            leading-tight
+                            text-gray-700
+                          "
+                        >
+                          {{ senderFormTitle }}
+                        </h1>
+                        <div class="flex justify-start">
+                          <span
+                            class="
+                              w-20
+                              border-t-4 border-solid border-orange-200
+                              inline-block
+                              mb-3
+                            "
+                          ></span>
+                        </div>
+                      </div>
+                      <ValidationProvider
+                        v-slot="{ errors }"
+                        rules="required"
+                        class="block"
+                      >
+                        <BaseSelect
+                          v-model="venue"
+                          :options="venueArr"
+                          label="Sender Affiliation"
+                          :class="errors.length > 0 && 'error'"
+                        />
+                        <p
+                          v-if="errors.length"
+                          class="vee-validation-error mt-2 text-sm text-red-600"
+                        >
+                          {{ errors[0] }}
+                        </p>
+                      </ValidationProvider>
+                      <ValidationProvider
+                        v-if="venueManually"
+                        v-slot="{ errors }"
+                        rules="required"
+                        class="block"
+                      >
+                        <BaseInput
+                          v-model="manualVenue"
+                          type="text"
+                          label="Type here manually..."
+                          :class="errors.length > 0 && 'error'"
+                        />
+                        <p
+                          v-if="errors.length"
+                          class="vee-validation-error mt-2 text-sm text-red-600"
+                        >
+                          {{ errors[0] }}
+                        </p>
+                      </ValidationProvider>
+                      <ValidationProvider
+                        v-slot="{ errors }"
+                        rules="required"
+                        class="block"
+                      >
+                        <BaseInput
+                          v-model="foundDate"
+                          type="date"
+                          label="Found Item Date"
+                          :class="errors.length > 0 && 'error'"
+                        />
+                        <p
+                          v-if="errors.length"
+                          class="vee-validation-error mt-2 text-sm text-red-600"
+                        >
+                          {{ errors[0] }}
+                        </p>
+                      </ValidationProvider>
+                      <ValidationProvider
+                        v-slot="{ errors }"
+                        rules="max:100|venueName"
+                        class="block"
+                      >
+                        <BaseInput
+                          v-model="venueName"
+                          type="text"
+                          :label="displayVenueName"
+                          :class="errors.length > 0 && 'error'"
+                          @blur="debouncedGetData('name')"
+                        />
+                        <p
+                          v-if="errors.length"
+                          class="vee-validation-error mt-2 text-sm text-red-600"
+                        >
+                          {{ errors[0] }}
+                        </p>
+                      </ValidationProvider>
+                      <ValidationProvider
+                        v-slot="{ errors }"
+                        rules="required|email"
+                        class="block"
+                        name="Venue Email"
+                      >
+                        <BaseInput
+                          v-model="venueEmail"
+                          type="email"
+                          label="Venue Email"
+                          :class="errors.length > 0 && 'error'"
+                          @blur="debouncedGetData('email')"
+                        />
+                        <p
+                          v-if="errors.length"
+                          class="vee-validation-error mt-2 text-sm text-red-600"
+                        >
+                          {{ errors[0] }}
+                        </p>
+                      </ValidationProvider>
+                      <ValidationProvider
+                        v-slot="{ errors }"
+                        rules="email"
+                        class="block"
+                        name="Venue Secondary Email"
+                      >
+                        <BaseInput
+                          v-model="venueSecondaryEmail"
+                          type="email"
+                          label="Venue Secondary Email (Optional)"
+                          :class="errors.length > 0 && 'error'"
+                        />
+                        <p
+                          v-if="errors.length"
+                          class="vee-validation-error mt-2 text-sm text-red-600"
+                        >
+                          {{ errors[0] }}
+                        </p>
+                      </ValidationProvider>
+                      <div class="block relative box-content h-12">
+                        <vue-tel-input
+                          :inputOptions="{ placeholder: 'Your Phone No.' }"
+                          class="
+                            relative
+                            border
+                            inline-block
+                            border-gray-300
+                            w-full
+                            rounded-lg
+                            h-full
+                          "
+                          v-model="venuePhone"
+                          @blur="validateVenuePhoneNumber"
+                          v-bind="bindPhoneInputProps"
+                          @country-changed="countryChanged"
+                        ></vue-tel-input>
+                      </div>
+                      <div
+                        v-if="!isVenuePhoneValid"
+                        class="
+                          vee-validation-error
+                          top-margin-05
+                          text-sm text-red-600
+                        "
+                      >
+                        *Required
+                      </div>
+                      <div class="block relative box-content h-12">
+                        <vue-tel-input
+                          :inputOptions="{ placeholder: 'Employee Mobile No.' }"
+                          class="
+                            relative
+                            border
+                            inline-block
+                            border-gray-300
+                            w-full
+                            rounded-lg
+                            h-full
+                          "
+                          v-model="employeePhone"
+                          v-bind="bindPhoneInputProps"
+                          @blur="validateEmployeePhoneNumber"
+                          @country-changed="countryChanged"
+                        ></vue-tel-input>
+                      </div>
+                      <div
+                        v-if="isEmployeePhoneValid"
+                        class="flex items-center"
+                      >
+                        <font-awesome-icon
+                          class="text-lime-500 shieldIcon"
+                          :icon="['fas', 'shield-alt']"
+                        />
+                        &nbsp;&nbsp;
+                        <p class="text-lime-500">
+                          Your contact will not be shared with anyone.
+                        </p>
+                      </div>
+                      <div
+                        v-if="!isEmployeePhoneValid"
+                        class="
+                          vee-validation-error
+                          top-margin-05
+                          text-sm text-red-600
+                        "
+                      >
+                        *Required
+                      </div>
+                      <p>Address:</p>
+                      <ValidationProvider
+                        v-slot="{ errors }"
+                        rules="required"
+                        class="block"
+                      >
+                        <v-select
+                          v-model="address"
+                          :options="addressArr"
+                          class="rounded-lg"
+                          :class="errors.length > 0 && 'error'"
+                        ></v-select>
+                        <p
+                          v-if="errors.length"
+                          class="vee-validation-error mt-2 text-sm text-red-600"
+                        >
+                          {{ errors[0] }}
+                        </p>
+                      </ValidationProvider>
+                      <ValidationProvider
+                        v-if="manualAddressSelected"
+                        v-slot="{ errors }"
+                        rules="required"
+                        class="block"
+                      >
+                        <BaseInput
+                          v-model="manualAddress"
+                          type="text"
+                          label="Address Line"
+                          :class="errors.length > 0 && 'error'"
+                        />
+                        <p
+                          v-if="errors.length"
+                          class="vee-validation-error mt-2 text-sm text-red-600"
+                        >
+                          {{ errors[0] }}
+                        </p>
+                      </ValidationProvider>
+                      <div class="grid grid-cols-2 lg:grid-cols-3 gap-4">
+                        <ValidationProvider
+                          v-slot="{ errors }"
+                          rules="max:28|required"
+                          class="block lg:col-span-2"
+                        >
+                          <BaseInput
+                            v-model="city"
+                            label="City"
+                            type="text"
+                            :class="errors.length > 0 && 'error'"
+                          />
+                          <p
+                            v-if="errors.length"
+                            class="
+                              vee-validation-error
+                              mt-2
+                              text-sm text-red-600
+                            "
+                          >
+                            {{ errors[0] }}
+                          </p>
+                        </ValidationProvider>
+                        <ValidationProvider
+                          v-slot="{ errors }"
+                          rules="required"
+                          class="block col-span-1"
+                        >
+                          <BaseInput
+                            v-model="state"
+                            label="State"
+                            type="text"
+                            :class="errors.length > 0 && 'error'"
+                          />
+                          <p
+                            v-if="errors.length"
+                            class="
+                              vee-validation-error
+                              mt-2
+                              text-sm text-red-600
+                            "
+                          >
+                            {{ errors[0] }}
+                          </p>
+                        </ValidationProvider>
+                      </div>
+                      <div class="grid grid-cols-2 lg:grid-cols-3 gap-4">
+                        <ValidationProvider
+                          v-slot="{ errors }"
+                          rules="max:28|required"
+                          class="block lg:col-span-2"
+                        >
+                          <BaseInput
+                            v-model="country"
+                            label="Country"
+                            type="text"
+                            :class="errors.length > 0 && 'error'"
+                          />
+                          <p
+                            v-if="errors.length"
+                            class="
+                              vee-validation-error
+                              mt-2
+                              text-sm text-red-600
+                            "
+                          >
+                            {{ errors[0] }}
+                          </p>
+                        </ValidationProvider>
+                        <ValidationProvider
+                          rules="required"
+                          v-slot="{ errors }"
+                          class="block col-span-1"
+                        >
+                          <BaseInput
+                            v-model="zipcode"
+                            label="Zip Code"
+                            type="text"
+                            :class="errors.length > 0 && 'error'"
+                          />
+                          <p
+                            v-if="errors.length"
+                            class="
+                              vee-validation-error
+                              mt-2
+                              text-sm text-red-600
+                            "
+                          >
+                            {{ errors[0] }}
+                          </p>
+                        </ValidationProvider>
+                      </div>
+                    </div>
+                    <div class="flex mt-2">
+                      <span
+                        class="
+                          w-full
+                          border-t border-solid border-gray-200
+                          inline-block
+                        "
+                      ></span>
+                    </div>
+                    <div class="card p-6 space-y-4">
+                      <div class="form-title">
+                        <h1
+                          class="
+                            w-full
+                            text-xl
+                            font-bold
+                            leading-tight
+                            text-gray-700
+                            mb-3
+                          "
+                        >
+                          {{ foundItemFormTitle }}
+                        </h1>
+                        <div class="flex justify-start">
+                          <span
+                            class="
+                              w-20
+                              border-t-4 border-solid border-orange-200
+                              inline-block
+                            "
+                          ></span>
+                        </div>
+                      </div>
+
+                      <div class="block">
+                        <label
+                          class="block mb-2 text-sm font-medium text-gray-800"
+                          for="itemImage"
+                          >Found item image</label
+                        >
+                        <div class="h-12 flex">
+                          <input
+                            @change="uploadImg($event)"
+                            class="
+                              form-control
+                              block
+                              w-full
+                              px-3
+                              py-1.5
+                              text-base
+                              font-normal
+                              text-gray-700
+                              bg-white bg-clip-padding
+                              border border-solid border-gray-300
+                              rounded-lg
+                              transition
+                              ease-in-out
+                              m-0
+                              focus:text-gray-700
+                              focus:bg-white
+                              focus:border-blue-600
+                              focus:outline-none
+                            "
+                            id="itemImage"
+                            type="file"
+                          />
+                          <div v-show="image" class="flex">
+                            <a
+                              @click="editImage"
+                              class="
+                                text-indigo-600
+                                hover:cursor-pointer hover:text-indigo-900
+                                ml-3
+                                py-2
+                                inline-flex
+                                items-center
+                              "
+                            >
+                              <svg
+                                xmlns="http://www.w3.org/2000/svg"
+                                class="w-6 h-6"
+                                fill="none"
+                                viewBox="0 0 24 24"
+                                stroke="currentColor"
+                              >
+                                <path
+                                  stroke-linecap="round"
+                                  stroke-linejoin="round"
+                                  stroke-width="2"
+                                  d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"
+                                />
+                              </svg>
+                            </a>
+                          </div>
+                        </div>
+                        <div class="mt-3" v-if="image">
+                          <img :src="image" alt="Item image" />
+                        </div>
+                      </div>
+                      <div
+                        v-show="showEditor"
+                        class="fixed z-50 top-0 w-full left-0"
+                        id="modal"
+                      >
+                        <div
+                          class="
+                            flex
+                            items-center
+                            justify-center
+                            min-height-100vh
+                            pt-4
+                            px-4
+                            pb-20
+                            text-center
+                            sm:p-0
+                          "
+                        >
+                          <div class="fixed inset-0 transition-opacity">
+                            <div
+                              class="absolute inset-0 bg-gray-900 opacity-75"
+                            />
+                          </div>
+                          <div
+                            class="
+                              inline-block
+                              align-middle
+                              bg-white
+                              rounded-lg
+                              text-left
+                              editor-modal-container
+                              shadow-xl
+                              transform
+                              transition-all
+                              sm:my-8
+                              sm:align-middle
+                              sm:max-w-screen-md
+                              sm:w-full
+                            "
+                            role="dialog"
+                            aria-modal="true"
+                            aria-labelledby="modal-headline"
+                          >
+                            <div class="relative">
+                              <div class="title bg-accent-100 pl-6 py-4 mb-4">
+                                <h3 class="text-white">Crop Image</h3>
+                              </div>
+                              <span
+                                @click="showEditor = false"
+                                class="absolute right-5 top-5 inline-block z-10"
+                              >
+                                <svg
+                                  xmlns="http://www.w3.org/2000/svg"
+                                  class="icon icon-tabler icon-tabler-x"
+                                  width="24"
+                                  height="24"
+                                  viewBox="0 0 24 24"
+                                  stroke-width="1.5"
+                                  stroke="#ffffff"
+                                  fill="none"
+                                  stroke-linecap="round"
+                                  stroke-linejoin="round"
+                                >
+                                  <path
+                                    stroke="none"
+                                    d="M0 0h24v24H0z"
+                                    fill="none"
+                                  />
+                                  <line x1="18" y1="6" x2="6" y2="18" />
+                                  <line x1="6" y1="6" x2="18" y2="18" />
+                                </svg>
+                              </span>
+                            </div>
+                            <div
+                              class="
+                                w-full
+                                max-w-screen-md
+                                relative
+                                mx-auto
+                                my-auto
+                                rounded-xl
+                                shadow-lg
+                                bg-white
+                                flex
+                                justify-center
+                                items-center
+                                editor-container
+                              "
+                            >
+                              <div
+                                class="top-margin-3 flex justify-center"
+                                v-show="loadingSpinner"
+                                role="status"
+                              >
+                                <svg
+                                  aria-hidden="true"
+                                  class="
+                                    mr-2
+                                    w-16
+                                    h-16
+                                    text-gray-200
+                                    animate-spin
+                                    fill-blue-600
+                                  "
+                                  viewBox="0 0 100 101"
+                                  fill="none"
+                                  xmlns="http://www.w3.org/2000/svg"
+                                >
+                                  <path
+                                    d="M100 50.5908C100 78.2051 77.6142 100.591 50 100.591C22.3858 100.591 0 78.2051 0 50.5908C0 22.9766 22.3858 0.59082 50 0.59082C77.6142 0.59082 100 22.9766 100 50.5908ZM9.08144 50.5908C9.08144 73.1895 27.4013 91.5094 50 91.5094C72.5987 91.5094 90.9186 73.1895 90.9186 50.5908C90.9186 27.9921 72.5987 9.67226 50 9.67226C27.4013 9.67226 9.08144 27.9921 9.08144 50.5908Z"
+                                    fill="currentColor"
+                                  />
+                                  <path
+                                    d="M93.9676 39.0409C96.393 38.4038 97.8624 35.9116 97.0079 33.5539C95.2932 28.8227 92.871 24.3692 89.8167 20.348C85.8452 15.1192 80.8826 10.7238 75.2124 7.41289C69.5422 4.10194 63.2754 1.94025 56.7698 1.05124C51.7666 0.367541 46.6976 0.446843 41.7345 1.27873C39.2613 1.69328 37.813 4.19778 38.4501 6.62326C39.0873 9.04874 41.5694 10.4717 44.0505 10.1071C47.8511 9.54855 51.7191 9.52689 55.5402 10.0491C60.8642 10.7766 65.9928 12.5457 70.6331 15.2552C75.2735 17.9648 79.3347 21.5619 82.5849 25.841C84.9175 28.9121 86.7997 32.2913 88.1811 35.8758C89.083 38.2158 91.5421 39.6781 93.9676 39.0409Z"
+                                    fill="currentFill"
+                                  />
+                                </svg>
+                                <span class="sr-only">Loading...</span>
+                              </div>
+                              <div v-show="!loadingSpinner" class="w-full">
+                                <div class="px-6">
+                                  <Editor
+                                    :canvasWidth="canvasWidth"
+                                    :canvasHeight="canvasHeight"
+                                    ref="editor"
+                                  />
+                                </div>
+                                <div
+                                  class="editor-tools mt-5 px-6 border-t pt-4"
+                                >
+                                  <div class="icons">
+                                    <div>
+                                      <div class="tool-undo">
+                                        <rotate-ccw-icon
+                                          :size="size_icon"
+                                          @click="undo()"
+                                        ></rotate-ccw-icon>
+                                      </div>
+                                      <p>Undo</p>
+                                    </div>
+                                    <div>
+                                      <div class="tool-redo">
+                                        <rotate-cw-icon
+                                          :size="size_icon"
+                                          @click="redo()"
+                                        ></rotate-cw-icon>
+                                      </div>
+                                      <p>Redo</p>
+                                    </div>
+                                    <div>
+                                      <div class="tool-trash">
+                                        <trash-2-icon
+                                          :size="size_icon"
+                                          @click="deleteEditable()"
+                                        ></trash-2-icon>
+                                      </div>
+                                      <p>Delete</p>
+                                    </div>
+                                    <!-- <div class="tool-freeDrawing">	
+                            <edit-2-icon	
+                              :size="size_icon"	
+                              @click="freeDrawing()"	
+                            ></edit-2-icon>	
+                          </div>	 -->
+                                    <div>
+                                      <div class="tool-addCircle">
+                                        <circle-icon
+                                          :size="size_icon"
+                                          @click="addCicle()"
+                                        ></circle-icon>
+                                      </div>
+                                      <p>Circle</p>
+                                    </div>
+                                    <div>
+                                      <div class="tool-addSquare">
+                                        <square-icon
+                                          :size="size_icon"
+                                          @click="addSquare()"
+                                        ></square-icon>
+                                      </div>
+                                      <p>Square</p>
+                                    </div>
+                                    <div>
+                                      <div class="tool-crop">
+                                        <maximize-icon
+                                          v-if="stateCrop"
+                                          :size="size_icon"
+                                          @click="crop()"
+                                        ></maximize-icon>
+                                        <check-icon
+                                          v-else
+                                          :size="size_icon"
+                                          @click="applyCrop()"
+                                        ></check-icon>
+                                      </div>
+                                      <p v-if="stateCrop">Crop</p>
+                                      <p v-else>Done</p>
+                                    </div>
+                                  </div>
+                                  <div class="save-upload">
+                                    <button
+                                      type="button"
+                                      :class="{
+                                        'button--loading': isSavingImage,
+                                      }"
+                                      @click="saveImg"
+                                      class="
+                                        font-medium
+                                        text-md
+                                        leading-5
+                                        uppercase
+                                        py-2
+                                        px-6
+                                        rounded-md
+                                        button
+                                        focus:outline-none
+                                        focus:ring-2
+                                        focus:ring-offset-2
+                                        focus:ring-offset-primary-60
+                                        transition-all
+                                        font-display
+                                        disabled:cursor-not-allowed
+                                        bg-accent-100
+                                        text-white
+                                        focus:ring-accent-100
+                                        shadow-accent
+                                        hover:bg-accent-200
+                                      "
+                                    >
+                                      <span class="button__text">
+                                        <save-icon
+                                          :size="size_icon"
+                                        ></save-icon>
+                                        Save
+                                      </span>
+                                    </button>
+                                  </div>
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                      <ValidationProvider
+                        v-slot="{ errors }"
+                        rules="required"
+                        class="block"
+                      >
+                        <BaseSelect
+                          v-model="itemDescription"
+                          :options="itemDescriptionArr"
+                          label="Item Description"
+                          :class="errors.length > 0 && 'error'"
+                          @input="setItemDetails"
+                        />
+                        <p
+                          v-if="errors.length"
+                          class="vee-validation-error mt-2 text-sm text-red-600"
+                        >
+                          {{ errors[0] }}
+                        </p>
+                      </ValidationProvider>
+                      <ValidationProvider
+                        v-slot="{ errors }"
+                        rules="required"
+                        class="block col-span-1"
+                      >
+                        <BaseSelect
+                          v-model="packageType"
+                          :options="packageTypeArr"
+                          label="Package Type"
+                          :class="errors.length > 0 && 'error'"
+                        />
+                        <p
+                          v-if="errors.length"
+                          class="vee-validation-error mt-2 text-sm text-red-600"
+                        >
+                          {{ errors[0] }}
+                        </p>
+                      </ValidationProvider>
+                      <label
+                        class="block mb-1 text-sm font-medium text-gray-800"
+                        >Weight</label
+                      >
+                      <ValidationProvider
+                        v-slot="{ errors }"
+                        rules="max:28|required"
+                        class="block"
+                      >
+                        <BaseInput
+                          v-model="weight"
+                          label="Pounds"
+                          type="text"
+                          :class="errors.length > 0 && 'error'"
+                        />
+                        <p
+                          v-if="errors.length"
+                          class="vee-validation-error mt-2 text-sm text-red-600"
+                        >
+                          {{ errors[0] }}
+                        </p>
+                      </ValidationProvider>
+                      <!-- <ValidationProvider
+                v-slot="{ errors }"
+                rules="required"
+                class="block"
+              >
+                <BaseSelect
+                  v-model="weightOunces"
+                  :options="weightOuncesArr"
+                  label="Ounces"
+                  :class="errors.length > 0 && 'error'"
+                />
+                <p
+                  v-if="errors.length"
+                  class="vee-validation-error mt-2 text-sm text-red-600"
+                >
+                  {{ errors[0] }}
+                </p>
+              </ValidationProvider> -->
+                      <label
+                        class="block mb-1 text-sm font-medium text-gray-800"
+                        >Dimensions (Inches)</label
+                      >
+                      <div class="flex justify-between">
+                        <ValidationProvider
+                          v-slot="{ errors }"
+                          rules="max:28|required"
+                          class="block lg:col-span-2"
+                        >
+                          <BaseInput
+                            v-model="itemLength"
+                            label="Length"
+                            type="text"
+                            :class="errors.length > 0 && 'error'"
+                          />
+                          <p
+                            v-if="errors.length"
+                            class="
+                              vee-validation-error
+                              mt-2
+                              text-sm text-red-600
+                            "
+                          >
+                            {{ errors[0] }}
+                          </p>
+                        </ValidationProvider>
+                        <ValidationProvider
+                          v-slot="{ errors }"
+                          rules="max:28|required"
+                          class="block lg:col-span-2"
+                        >
+                          <BaseInput
+                            v-model="itemWidth"
+                            label="Width"
+                            type="text"
+                            :class="errors.length > 0 && 'error'"
+                          />
+                          <p
+                            v-if="errors.length"
+                            class="
+                              vee-validation-error
+                              mt-2
+                              text-sm text-red-600
+                            "
+                          >
+                            {{ errors[0] }}
+                          </p>
+                        </ValidationProvider>
+                        <ValidationProvider
+                          v-slot="{ errors }"
+                          rules="max:28|required"
+                          class="block lg:col-span-2"
+                        >
+                          <BaseInput
+                            v-model="itemHeight"
+                            label="Height"
+                            type="text"
+                            :class="errors.length > 0 && 'error'"
+                          />
+                          <p
+                            v-if="errors.length"
+                            class="
+                              vee-validation-error
+                              mt-2
+                              text-sm text-red-600
+                            "
+                          >
+                            {{ errors[0] }}
+                          </p>
+                        </ValidationProvider>
+                      </div>
+                      <ValidationProvider
+                        v-slot="{ errors }"
+                        rules="required"
+                        class="block"
+                      >
+                        <BaseSelect
+                          v-model="itemStatus"
+                          :options="itemStatusArr"
+                          label="Item Status"
+                          :class="errors.length > 0 && 'error'"
+                        />
+                        <p
+                          v-if="errors.length"
+                          class="vee-validation-error mt-2 text-sm text-red-600"
+                        >
+                          {{ errors[0] }}
+                        </p>
+                      </ValidationProvider>
+                      <template v-if="showReceiverInputs">
+                        <ValidationProvider
+                          v-slot="{ errors }"
+                          rules="max:100|required"
+                          class="block"
+                        >
+                          <BaseInput
+                            v-model="receiverName"
+                            type="text"
+                            label="Receiver's Name"
+                            :class="errors.length > 0 && 'error'"
+                          />
+                          <p
+                            v-if="errors.length"
+                            class="
+                              vee-validation-error
+                              mt-2
+                              text-sm text-red-600
+                            "
+                          >
+                            {{ errors[0] }}
+                          </p>
+                        </ValidationProvider>
+                        <ValidationProvider
+                          v-slot="{ errors }"
+                          rules="required|email"
+                          class="block"
+                          name="Receiver's Email"
+                        >
+                          <BaseInput
+                            v-model="receiverEmail"
+                            type="email"
+                            label="Receiver's Email"
+                            :class="errors.length > 0 && 'error'"
+                          />
+                          <p
+                            v-if="errors.length"
+                            class="
+                              vee-validation-error
+                              mt-2
+                              text-sm text-red-600
+                            "
+                          >
+                            {{ errors[0] }}
+                          </p>
+                        </ValidationProvider>
+                        <ValidationProvider
+                          v-slot="{ errors }"
+                          rules="email"
+                          class="block"
+                          name="Receiver's Secondary Email"
+                        >
+                          <BaseInput
+                            v-model="receiverSecondaryEmail"
+                            type="email"
+                            label="Receiver's Secondary Email (Optional)"
+                            :class="errors.length > 0 && 'error'"
+                          />
+                          <p
+                            v-if="errors.length"
+                            class="
+                              vee-validation-error
+                              mt-2
+                              text-sm text-red-600
+                            "
+                          >
+                            {{ errors[0] }}
+                          </p>
+                        </ValidationProvider>
+                        <div class="block relative box-content h-12">
+                          <vue-tel-input
+                            :inputOptions="{
+                              placeholder: 'Receiver Mobile No.',
+                            }"
+                            class="
+                              relative
+                              border
+                              inline-block
+                              border-gray-300
+                              w-full
+                              rounded-lg
+                              h-full
+                            "
+                            v-model="receiverPhone"
+                            v-bind="bindPhoneInputProps"
+                            @blur="validateReceiverPhoneNumber"
+                            @country-changed="countryChanged"
+                          ></vue-tel-input>
+                          <div
+                            v-if="!isReceiverPhoneValid"
+                            class="
+                              vee-validation-error
+                              mt-2
+                              text-sm text-red-600
+                            "
+                          >
+                            *Required
+                          </div>
+                        </div>
+                      </template>
+                      <div
+                        v-show="showValidateAlert"
+                        class="
+                          p-4
+                          mb-4
+                          top-margin-alert
+                          text-sm text-red-700
+                          bg-red-100
+                          rounded-lg
+                          dark:bg-red-200 dark:text-red-800
+                        "
+                        role="alert"
+                      >
+                        <span class="font-medium">Oops!</span> Please fill all
+                        required fields and try submitting again.
+                      </div>
+                      <!-- onclick="this.classList.toggle('button--loading')" -->
+                      <div class="flex justify-end">
+                        <button
+                          :class="{ 'button--loading': isLoading }"
+                          type="submit"
+                          class="
+                            !py-3
+                            font-medium
+                            text-md
+                            leading-5
+                            uppercase
+                            py-2
+                            px-12
+                            rounded-md
+                            button
+                            focus:outline-none
+                            focus:ring-2
+                            focus:ring-offset-2
+                            focus:ring-offset-primary-60
+                            transition-all
+                            font-display
+                            disabled:cursor-not-allowed
+                            bg-accent-100
+                            text-white
+                            focus:ring-accent-100
+                            shadow-accent
+                            hover:bg-accent-200
+                          "
+                        >
+                          <span class="button__text"> Preview </span>
+                        </button>
+                      </div>
+                    </div>
+                  </form>
+                </ValidationObserver>
+              </div>
+              <div v-else>
+                <div
+                  wire:loading
+                  class="
+                    h-screen
+                    z-50
+                    overflow-hidden
+                    flex flex-col
+                    items-center
+                    justify-center
+                  "
+                >
+                  <div
+                    class="
+                      loader
+                      ease-linear
+                      rounded-full
+                      border-4 border-t-4 border-gray-200
+                      h-12
+                      w-12
+                      mb-4
+                    "
+                  ></div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
     <div class="container max-w-7xl mx-auto px-4">
       <div class="w-full flex justify-between mt-8 mb-5">
-        <h2 class="text-2xl font-semibold leading-tight">Found Items ({{lostItems.length}})</h2>
-        <button class="
+        <h2 class="text-2xl font-semibold leading-tight">
+          Found Items ({{ lostItems.length }})
+        </h2>
+        <button
+          class="
             !py-3
             font-medium
             text-md
@@ -24,12 +1160,21 @@
             focus:ring-accent-100
             shadow-accent
             hover:bg-accent-200
-          " @click="addNewItem">
+          "
+          @click="addNewItem"
+        >
           + Add New Item
         </button>
       </div>
-      <div v-if="!isLoading && lostItems.length > 0" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-        <div v-for="item in lostItems" :key="item.id" @click="viewItem(item)" class="
+      <div
+        v-if="!isLoading && lostItems.length > 0"
+        class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4"
+      >
+        <div
+          v-for="item in lostItems"
+          :key="item.id"
+          @click="viewItem(item)"
+          class="
             cursor-pointer
             py-4
             px-5
@@ -39,83 +1184,216 @@
             border
             shadow-md
             relative
-          ">
+          "
+        >
           <div class="w-24 h-24 mx-auto">
-            <img v-if="item.image" class="
+            <img
+              v-if="item.image"
+              class="
                 w-full
                 rounded-t-lg
                 md:h-auto md:w-48 md:rounded-none md:rounded-l-lg
-              " :src="item.image" alt="" />
-            <img v-else class="
+              "
+              :src="item.image"
+              alt=""
+            />
+            <img
+              v-else
+              class="
                 w-full
                 rounded-t-lg
                 md:h-auto md:w-48 md:rounded-none md:rounded-l-lg
-              " src="@/assets/images/not-found.png" alt="" />
+              "
+              src="@/assets/images/not-found.png"
+              alt=""
+            />
           </div>
-          <div class="
+          <div
+            class="
               flex flex-col
               items-center
               text-center
               justify-between
               py-4
               leading-normal
-            ">
-            <h5 class="
+            "
+          >
+            <h5
+              class="
                 mb-2
                 text-xl
                 font-bold
                 tracking-tight
                 text-gray-900 text-accent-100
-              ">
+              "
+            >
               {{ item.item_description }}
             </h5>
             <p class="text-sm font-normal text-gray-700 dark:text-gray-400">
-              {{ item.item_status === 0 ? 'Calimed': 'Uncalimed'}}
+              {{ item.item_status === 0 ? "Calimed" : "Uncalimed" }}
             </p>
           </div>
           <div></div>
         </div>
       </div>
-      <div v-else-if="!isLoading && lostItems.length === 0">
-        No Data
-      </div>
+      <div v-else-if="!isLoading && lostItems.length === 0">No Data</div>
       <div v-else>
-        <div wire:loading class="loader-container z-50 overflow-hidden flex flex-col items-center justify-center">
-          <div class="loader ease-linear rounded-full border-4 border-t-4 border-gray-200 h-12 w-12 mb-4"></div>
+        <div
+          wire:loading
+          class="
+            loader-container
+            z-50
+            overflow-hidden
+            flex flex-col
+            items-center
+            justify-center
+          "
+        >
+          <div
+            class="
+              loader
+              ease-linear
+              rounded-full
+              border-4 border-t-4 border-gray-200
+              h-12
+              w-12
+              mb-4
+            "
+          ></div>
         </div>
       </div>
-      <br >
+      <br />
       <hr />
-      <br >
-      <div class="overflow-x-auto rounded-tl-lg rounded-tr-lg inline-block w-full bg-white shadow-lg">
+      <br />
+      <div
+        class="
+          overflow-x-auto
+          rounded-tl-lg rounded-tr-lg
+          inline-block
+          w-full
+          bg-white
+          shadow-lg
+        "
+      >
         <div class="align-middle inline-block w-full p-4">
-            <div class="flex justify-between flex-wrap items-center">
-              <div class="inline-flex border w-60 rounded px-3 h-12 bg-transparent">
-                  <div class="flex flex-wrap items-stretch w-full h-full mb-6 relative">
-                    <div class="flex">
-                        <span class="flex items-center leading-normal bg-transparent rounded rounded-r-none border border-r-0 border-none py-2 whitespace-no-wrap text-grey-dark text-sm">
-                          <svg width="18" height="18" class="w-4 lg:w-auto" viewBox="0 0 18 18" fill="none" xmlns="http://www.w3.org/2000/svg">
-                              <path d="M8.11086 15.2217C12.0381 15.2217 15.2217 12.0381 15.2217 8.11086C15.2217 4.18364 12.0381 1 8.11086 1C4.18364 1 1 4.18364 1 8.11086C1 12.0381 4.18364 15.2217 8.11086 15.2217Z" stroke="#455A64" stroke-linecap="round" stroke-linejoin="round" />
-                              <path d="M16.9993 16.9993L13.1328 13.1328" stroke="#455A64" stroke-linecap="round" stroke-linejoin="round" />
-                          </svg>
-                        </span>
-                    </div>
-                    <input type="text" class="border-transparent focus:border-transparent focus:ring-0 flex-shrink w-full flex-grow flex-auto leading-normal tracking-wide w-px flex-1 border-0 shadow-none rounded rounded-l-none px-3 relative focus:outline-none text-xxs lg:text-xs lg:text-base text-gray-500 font-thin" placeholder="Search">
-                  </div>
-              </div>
-              <div class="h-full w-60 pt-2">
-                <select id="countries" class="border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
-                  <option selected>Sort By</option>
-                  <option value="US">Claimed</option>
-                  <option value="CA">Unclaimed</option>
-                </select>
+          <div class="flex justify-between flex-wrap items-center">
+            <div
+              class="inline-flex border w-60 rounded px-3 h-12 bg-transparent"
+            >
+              <div
+                class="flex flex-wrap items-stretch w-full h-full mb-6 relative"
+              >
+                <div class="flex">
+                  <span
+                    class="
+                      flex
+                      items-center
+                      leading-normal
+                      bg-transparent
+                      rounded rounded-r-none
+                      border border-r-0 border-none
+                      py-2
+                      whitespace-no-wrap
+                      text-grey-dark text-sm
+                    "
+                  >
+                    <svg
+                      width="18"
+                      height="18"
+                      class="w-4 lg:w-auto"
+                      viewBox="0 0 18 18"
+                      fill="none"
+                      xmlns="http://www.w3.org/2000/svg"
+                    >
+                      <path
+                        d="M8.11086 15.2217C12.0381 15.2217 15.2217 12.0381 15.2217 8.11086C15.2217 4.18364 12.0381 1 8.11086 1C4.18364 1 1 4.18364 1 8.11086C1 12.0381 4.18364 15.2217 8.11086 15.2217Z"
+                        stroke="#455A64"
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                      />
+                      <path
+                        d="M16.9993 16.9993L13.1328 13.1328"
+                        stroke="#455A64"
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                      />
+                    </svg>
+                  </span>
+                </div>
+                <input
+                  type="text"
+                  class="
+                    border-transparent
+                    focus:border-transparent focus:ring-0
+                    flex-shrink
+                    w-full
+                    flex-grow flex-auto
+                    leading-normal
+                    tracking-wide
+                    w-px
+                    flex-1
+                    border-0
+                    shadow-none
+                    rounded rounded-l-none
+                    px-3
+                    relative
+                    focus:outline-none
+                    text-xxs
+                    lg:text-xs lg:text-base
+                    text-gray-500
+                    font-thin
+                  "
+                  placeholder="Search"
+                />
               </div>
             </div>
+            <div class="h-full w-60 pt-2">
+              <select
+                id="countries"
+                class="
+                  border border-gray-300
+                  text-gray-900 text-sm
+                  rounded-lg
+                  focus:ring-blue-500 focus:border-blue-500
+                  block
+                  w-full
+                  p-2.5
+                  dark:bg-gray-700
+                  dark:border-gray-600
+                  dark:placeholder-gray-400
+                  dark:text-white
+                  dark:focus:ring-blue-500
+                  dark:focus:border-blue-500
+                "
+              >
+                <option selected>Sort By</option>
+                <option value="US">Claimed</option>
+                <option value="CA">Unclaimed</option>
+              </select>
+            </div>
+          </div>
         </div>
-        <div class="align-middle inline-block min-w-full whitespace-nowrap overflow-hiddenrounded-bl-lg rounded-br-lg">
+        <div
+          class="
+            align-middle
+            inline-block
+            min-w-full
+            whitespace-nowrap
+            overflow-hiddenrounded-bl-lg
+            rounded-br-lg
+          "
+        >
           <table class="min-w-full">
             <thead>
-              <tr class="bg-accent-100 text-white uppercase text-sm leading-normal">
+              <tr
+                class="
+                  bg-accent-100
+                  text-white
+                  uppercase
+                  text-sm
+                  leading-normal
+                "
+              >
                 <th data-priority="1" class="py-3 px-6 text-left">Item</th>
                 <th class="py-3 px-6 text-left">Found Date</th>
                 <th class="py-3 px-6 text-center">Status</th>
@@ -127,7 +1405,10 @@
                 <td class="py-3 px-6 text-left">
                   <div class="flex items-center">
                     <div class="mr-2">
-                      <img class="w-6 h-6 rounded-full" src="@/assets/images/headphones.png" />
+                      <img
+                        class="w-6 h-6 rounded-full"
+                        src="@/assets/images/headphones.png"
+                      />
                     </div>
                     <span>Headphone</span>
                   </div>
@@ -136,28 +1417,90 @@
                   <span>22-10-2022</span>
                 </td>
                 <td class="py-3 px-6 text-center">
-                  <span class="bg-blue-200 text-blue-600 py-1 px-3 rounded-full text-xs">Claimed</span>
+                  <span
+                    class="
+                      bg-blue-200
+                      text-blue-600
+                      py-1
+                      px-3
+                      rounded-full
+                      text-xs
+                    "
+                    >Claimed</span
+                  >
                 </td>
                 <td class="py-3 px-6 text-center">
                   <div class="flex item-center justify-center">
-                    <div class="w-4 mr-2 transform hover:text-blue-500 hover:scale-110">
-                      <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                          d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                          d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
+                    <div
+                      class="
+                        w-4
+                        mr-2
+                        transform
+                        hover:text-blue-500 hover:scale-110
+                      "
+                    >
+                      <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        fill="none"
+                        viewBox="0 0 24 24"
+                        stroke="currentColor"
+                      >
+                        <path
+                          stroke-linecap="round"
+                          stroke-linejoin="round"
+                          stroke-width="2"
+                          d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"
+                        />
+                        <path
+                          stroke-linecap="round"
+                          stroke-linejoin="round"
+                          stroke-width="2"
+                          d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"
+                        />
                       </svg>
                     </div>
-                    <div class="w-4 mr-2 transform hover:text-blue-500 hover:scale-110">
-                      <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                          d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z" />
+                    <div
+                      class="
+                        w-4
+                        mr-2
+                        transform
+                        hover:text-blue-500 hover:scale-110
+                      "
+                    >
+                      <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        fill="none"
+                        viewBox="0 0 24 24"
+                        stroke="currentColor"
+                      >
+                        <path
+                          stroke-linecap="round"
+                          stroke-linejoin="round"
+                          stroke-width="2"
+                          d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z"
+                        />
                       </svg>
                     </div>
-                    <div class="w-4 mr-2 transform hover:text-blue-500 hover:scale-110">
-                      <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                          d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
+                    <div
+                      class="
+                        w-4
+                        mr-2
+                        transform
+                        hover:text-blue-500 hover:scale-110
+                      "
+                    >
+                      <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        fill="none"
+                        viewBox="0 0 24 24"
+                        stroke="currentColor"
+                      >
+                        <path
+                          stroke-linecap="round"
+                          stroke-linejoin="round"
+                          stroke-width="2"
+                          d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"
+                        />
                       </svg>
                     </div>
                   </div>
@@ -167,7 +1510,10 @@
                 <td class="py-3 px-6 text-left">
                   <div class="flex items-center">
                     <div class="mr-2">
-                      <img class="w-6 h-6 rounded-full" src="@/assets/images/headphones.png" />
+                      <img
+                        class="w-6 h-6 rounded-full"
+                        src="@/assets/images/headphones.png"
+                      />
                     </div>
                     <span>Headphone</span>
                   </div>
@@ -176,28 +1522,90 @@
                   <span>22-10-2022</span>
                 </td>
                 <td class="py-3 px-6 text-center">
-                  <span class="bg-red-200 text-red-600 py-1 px-3 rounded-full text-xs">Unclaimed</span>
+                  <span
+                    class="
+                      bg-red-200
+                      text-red-600
+                      py-1
+                      px-3
+                      rounded-full
+                      text-xs
+                    "
+                    >Unclaimed</span
+                  >
                 </td>
                 <td class="py-3 px-6 text-center">
                   <div class="flex item-center justify-center">
-                    <div class="w-4 mr-2 transform hover:text-purple-500 hover:scale-110">
-                      <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                          d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                          d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
+                    <div
+                      class="
+                        w-4
+                        mr-2
+                        transform
+                        hover:text-purple-500 hover:scale-110
+                      "
+                    >
+                      <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        fill="none"
+                        viewBox="0 0 24 24"
+                        stroke="currentColor"
+                      >
+                        <path
+                          stroke-linecap="round"
+                          stroke-linejoin="round"
+                          stroke-width="2"
+                          d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"
+                        />
+                        <path
+                          stroke-linecap="round"
+                          stroke-linejoin="round"
+                          stroke-width="2"
+                          d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"
+                        />
                       </svg>
                     </div>
-                    <div class="w-4 mr-2 transform hover:text-purple-500 hover:scale-110">
-                      <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                          d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z" />
+                    <div
+                      class="
+                        w-4
+                        mr-2
+                        transform
+                        hover:text-purple-500 hover:scale-110
+                      "
+                    >
+                      <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        fill="none"
+                        viewBox="0 0 24 24"
+                        stroke="currentColor"
+                      >
+                        <path
+                          stroke-linecap="round"
+                          stroke-linejoin="round"
+                          stroke-width="2"
+                          d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z"
+                        />
                       </svg>
                     </div>
-                    <div class="w-4 mr-2 transform hover:text-purple-500 hover:scale-110">
-                      <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                          d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
+                    <div
+                      class="
+                        w-4
+                        mr-2
+                        transform
+                        hover:text-purple-500 hover:scale-110
+                      "
+                    >
+                      <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        fill="none"
+                        viewBox="0 0 24 24"
+                        stroke="currentColor"
+                      >
+                        <path
+                          stroke-linecap="round"
+                          stroke-linejoin="round"
+                          stroke-width="2"
+                          d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"
+                        />
                       </svg>
                     </div>
                   </div>
@@ -207,7 +1615,10 @@
                 <td class="py-3 px-6 text-left">
                   <div class="flex items-center">
                     <div class="mr-2">
-                      <img class="w-6 h-6 rounded-full" src="@/assets/images/headphones.png" />
+                      <img
+                        class="w-6 h-6 rounded-full"
+                        src="@/assets/images/headphones.png"
+                      />
                     </div>
                     <span>Headphone</span>
                   </div>
@@ -216,28 +1627,90 @@
                   <span>22-10-2022</span>
                 </td>
                 <td class="py-3 px-6 text-center">
-                  <span class="bg-blue-200 text-blue-600 py-1 px-3 rounded-full text-xs">Claimed</span>
+                  <span
+                    class="
+                      bg-blue-200
+                      text-blue-600
+                      py-1
+                      px-3
+                      rounded-full
+                      text-xs
+                    "
+                    >Claimed</span
+                  >
                 </td>
                 <td class="py-3 px-6 text-center">
                   <div class="flex item-center justify-center">
-                    <div class="w-4 mr-2 transform hover:text-blue-500 hover:scale-110">
-                      <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                          d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                          d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
+                    <div
+                      class="
+                        w-4
+                        mr-2
+                        transform
+                        hover:text-blue-500 hover:scale-110
+                      "
+                    >
+                      <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        fill="none"
+                        viewBox="0 0 24 24"
+                        stroke="currentColor"
+                      >
+                        <path
+                          stroke-linecap="round"
+                          stroke-linejoin="round"
+                          stroke-width="2"
+                          d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"
+                        />
+                        <path
+                          stroke-linecap="round"
+                          stroke-linejoin="round"
+                          stroke-width="2"
+                          d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"
+                        />
                       </svg>
                     </div>
-                    <div class="w-4 mr-2 transform hover:text-blue-500 hover:scale-110">
-                      <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                          d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z" />
+                    <div
+                      class="
+                        w-4
+                        mr-2
+                        transform
+                        hover:text-blue-500 hover:scale-110
+                      "
+                    >
+                      <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        fill="none"
+                        viewBox="0 0 24 24"
+                        stroke="currentColor"
+                      >
+                        <path
+                          stroke-linecap="round"
+                          stroke-linejoin="round"
+                          stroke-width="2"
+                          d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z"
+                        />
                       </svg>
                     </div>
-                    <div class="w-4 mr-2 transform hover:text-blue-500 hover:scale-110">
-                      <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                          d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
+                    <div
+                      class="
+                        w-4
+                        mr-2
+                        transform
+                        hover:text-blue-500 hover:scale-110
+                      "
+                    >
+                      <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        fill="none"
+                        viewBox="0 0 24 24"
+                        stroke="currentColor"
+                      >
+                        <path
+                          stroke-linecap="round"
+                          stroke-linejoin="round"
+                          stroke-width="2"
+                          d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"
+                        />
                       </svg>
                     </div>
                   </div>
@@ -247,7 +1720,10 @@
                 <td class="py-3 px-6 text-left">
                   <div class="flex items-center">
                     <div class="mr-2">
-                      <img class="w-6 h-6 rounded-full" src="@/assets/images/headphones.png" />
+                      <img
+                        class="w-6 h-6 rounded-full"
+                        src="@/assets/images/headphones.png"
+                      />
                     </div>
                     <span>Headphone</span>
                   </div>
@@ -256,28 +1732,90 @@
                   <span>22-10-2022</span>
                 </td>
                 <td class="py-3 px-6 text-center">
-                  <span class="bg-red-200 text-red-600 py-1 px-3 rounded-full text-xs">Unclaimed</span>
+                  <span
+                    class="
+                      bg-red-200
+                      text-red-600
+                      py-1
+                      px-3
+                      rounded-full
+                      text-xs
+                    "
+                    >Unclaimed</span
+                  >
                 </td>
                 <td class="py-3 px-6 text-center">
                   <div class="flex item-center justify-center">
-                    <div class="w-4 mr-2 transform hover:text-purple-500 hover:scale-110">
-                      <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                          d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                          d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
+                    <div
+                      class="
+                        w-4
+                        mr-2
+                        transform
+                        hover:text-purple-500 hover:scale-110
+                      "
+                    >
+                      <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        fill="none"
+                        viewBox="0 0 24 24"
+                        stroke="currentColor"
+                      >
+                        <path
+                          stroke-linecap="round"
+                          stroke-linejoin="round"
+                          stroke-width="2"
+                          d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"
+                        />
+                        <path
+                          stroke-linecap="round"
+                          stroke-linejoin="round"
+                          stroke-width="2"
+                          d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"
+                        />
                       </svg>
                     </div>
-                    <div class="w-4 mr-2 transform hover:text-purple-500 hover:scale-110">
-                      <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                          d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z" />
+                    <div
+                      class="
+                        w-4
+                        mr-2
+                        transform
+                        hover:text-purple-500 hover:scale-110
+                      "
+                    >
+                      <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        fill="none"
+                        viewBox="0 0 24 24"
+                        stroke="currentColor"
+                      >
+                        <path
+                          stroke-linecap="round"
+                          stroke-linejoin="round"
+                          stroke-width="2"
+                          d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z"
+                        />
                       </svg>
                     </div>
-                    <div class="w-4 mr-2 transform hover:text-purple-500 hover:scale-110">
-                      <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                          d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
+                    <div
+                      class="
+                        w-4
+                        mr-2
+                        transform
+                        hover:text-purple-500 hover:scale-110
+                      "
+                    >
+                      <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        fill="none"
+                        viewBox="0 0 24 24"
+                        stroke="currentColor"
+                      >
+                        <path
+                          stroke-linecap="round"
+                          stroke-linejoin="round"
+                          stroke-width="2"
+                          d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"
+                        />
                       </svg>
                     </div>
                   </div>
@@ -297,29 +1835,194 @@
             </p>
             <div>
               <nav class="relative z-0 inline-flex items-center shadow-sm">
-                <a href="#" class="relative inline-flex items-center px-2 py-2 rounded-l-md border border-gray-300 bg-white text-sm leading-5 font-medium text-gray-500 hover:text-gray-400 focus:z-10 focus:outline-none focus:border-blue-300 focus:shadow-outline-blue active:bg-gray-100 active:text-gray-500 transition ease-in-out duration-150" aria-label="Previous">
+                <a
+                  href="#"
+                  class="
+                    relative
+                    inline-flex
+                    items-center
+                    px-2
+                    py-2
+                    rounded-l-md
+                    border border-gray-300
+                    bg-white
+                    text-sm
+                    leading-5
+                    font-medium
+                    text-gray-500
+                    hover:text-gray-400
+                    focus:z-10
+                    focus:outline-none
+                    focus:border-blue-300
+                    focus:shadow-outline-blue
+                    active:bg-gray-100 active:text-gray-500
+                    transition
+                    ease-in-out
+                    duration-150
+                  "
+                  aria-label="Previous"
+                >
                   <svg class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
-                    <path fill-rule="evenodd" d="M12.707 5.293a1 1 0 010 1.414L9.414 10l3.293 3.293a1 1 0 01-1.414 1.414l-4-4a1 1 0 010-1.414l4-4a1 1 0 011.414 0z" clip-rule="evenodd" />
+                    <path
+                      fill-rule="evenodd"
+                      d="M12.707 5.293a1 1 0 010 1.414L9.414 10l3.293 3.293a1 1 0 01-1.414 1.414l-4-4a1 1 0 010-1.414l4-4a1 1 0 011.414 0z"
+                      clip-rule="evenodd"
+                    />
                   </svg>
                 </a>
                 <div>
-                  <a href="#" class="-ml-px relative inline-flex items-center px-4 py-2 border border-gray-300 bg-white text-sm leading-5 font-medium text-blue-700 focus:z-10 focus:outline-none focus:border-blue-300 focus:shadow-outline-blue active:bg-tertiary active:text-gray-700 transition ease-in-out duration-150 hover:bg-tertiary">
-                  1
+                  <a
+                    href="#"
+                    class="
+                      -ml-px
+                      relative
+                      inline-flex
+                      items-center
+                      px-4
+                      py-2
+                      border border-gray-300
+                      bg-white
+                      text-sm
+                      leading-5
+                      font-medium
+                      text-blue-700
+                      focus:z-10
+                      focus:outline-none
+                      focus:border-blue-300
+                      focus:shadow-outline-blue
+                      active:bg-tertiary active:text-gray-700
+                      transition
+                      ease-in-out
+                      duration-150
+                      hover:bg-tertiary
+                    "
+                  >
+                    1
                   </a>
-                  <a href="#" class="-ml-px relative inline-flex items-center px-4 py-2 border border-gray-300 bg-white text-sm leading-5 font-medium text-blue-600 focus:z-10 focus:outline-none focus:border-blue-300 focus:shadow-outline-blue active:bg-tertiary active:text-gray-700 transition ease-in-out duration-150 hover:bg-tertiary">
-                  2
+                  <a
+                    href="#"
+                    class="
+                      -ml-px
+                      relative
+                      inline-flex
+                      items-center
+                      px-4
+                      py-2
+                      border border-gray-300
+                      bg-white
+                      text-sm
+                      leading-5
+                      font-medium
+                      text-blue-600
+                      focus:z-10
+                      focus:outline-none
+                      focus:border-blue-300
+                      focus:shadow-outline-blue
+                      active:bg-tertiary active:text-gray-700
+                      transition
+                      ease-in-out
+                      duration-150
+                      hover:bg-tertiary
+                    "
+                  >
+                    2
                   </a>
-                  <a href="#" class="-ml-px relative inline-flex items-center px-4 py-2 border border-gray-300 bg-white text-sm leading-5 font-medium text-blue-600 focus:z-10 focus:outline-none focus:border-blue-300 focus:shadow-outline-blue active:bg-tertiary active:text-gray-700 transition ease-in-out duration-150 hover:bg-tertiary">
-                  3
+                  <a
+                    href="#"
+                    class="
+                      -ml-px
+                      relative
+                      inline-flex
+                      items-center
+                      px-4
+                      py-2
+                      border border-gray-300
+                      bg-white
+                      text-sm
+                      leading-5
+                      font-medium
+                      text-blue-600
+                      focus:z-10
+                      focus:outline-none
+                      focus:border-blue-300
+                      focus:shadow-outline-blue
+                      active:bg-tertiary active:text-gray-700
+                      transition
+                      ease-in-out
+                      duration-150
+                      hover:bg-tertiary
+                    "
+                  >
+                    3
                   </a>
-                  <a href="#" class="-ml-px relative inline-flex items-center px-4 py-2 border border-gray-300 bg-white text-sm leading-5 font-medium text-blue-600 focus:z-10 focus:outline-none focus:border-blue-300 focus:shadow-outline-blue active:bg-tertiary active:text-gray-700 transition ease-in-out duration-150 hover:bg-tertiary">
-                  4
+                  <a
+                    href="#"
+                    class="
+                      -ml-px
+                      relative
+                      inline-flex
+                      items-center
+                      px-4
+                      py-2
+                      border border-gray-300
+                      bg-white
+                      text-sm
+                      leading-5
+                      font-medium
+                      text-blue-600
+                      focus:z-10
+                      focus:outline-none
+                      focus:border-blue-300
+                      focus:shadow-outline-blue
+                      active:bg-tertiary active:text-gray-700
+                      transition
+                      ease-in-out
+                      duration-150
+                      hover:bg-tertiary
+                    "
+                  >
+                    4
                   </a>
                 </div>
                 <div>
-                  <a href="#" class="-ml-px relative inline-flex items-center px-2 py-2 rounded-r-md border border-gray-300 bg-white text-sm leading-5 font-medium text-gray-500 hover:text-gray-400 focus:z-10 focus:outline-none focus:border-blue-300 focus:shadow-outline-blue active:bg-gray-100 active:text-gray-500 transition ease-in-out duration-150" aria-label="Next">
-                    <svg class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
-                      <path fill-rule="evenodd" d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z" clip-rule="evenodd" />
+                  <a
+                    href="#"
+                    class="
+                      -ml-px
+                      relative
+                      inline-flex
+                      items-center
+                      px-2
+                      py-2
+                      rounded-r-md
+                      border border-gray-300
+                      bg-white
+                      text-sm
+                      leading-5
+                      font-medium
+                      text-gray-500
+                      hover:text-gray-400
+                      focus:z-10
+                      focus:outline-none
+                      focus:border-blue-300
+                      focus:shadow-outline-blue
+                      active:bg-gray-100 active:text-gray-500
+                      transition
+                      ease-in-out
+                      duration-150
+                    "
+                    aria-label="Next"
+                  >
+                    <svg
+                      class="h-5 w-5"
+                      viewBox="0 0 20 20"
+                      fill="currentColor"
+                    >
+                      <path
+                        fill-rule="evenodd"
+                        d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z"
+                        clip-rule="evenodd"
+                      />
                     </svg>
                   </a>
                 </div>
@@ -333,16 +2036,224 @@
 </template>
 
 <script>
+// form import
+
+import "vue-select/dist/vue-select.css";
+import { ValidationObserver, ValidationProvider } from "vee-validate";
+import BaseInput from "~/components/base/BaseInput.vue";
+import BaseSelect from "~/components/base/BaseSelect.vue";
+import { debounce } from "lodash";
+import Editor from "~/components/vueImageEditor/Editor.vue";
+import VSelect from "vue-select";
+import { mapGetters } from "vuex";
+import {
+  CircleIcon,
+  RotateCcwIcon,
+  RotateCwIcon,
+  Edit2Icon,
+  Trash2Icon,
+  SquareIcon,
+  MaximizeIcon,
+  SaveIcon,
+  CheckIcon,
+} from "vue-feather-icons";
 export default {
   data() {
     return {
       lostItems: [],
-      isLoading: false
+      isLoading: false,
+      showFormModal: false,
+
+      // form
+
+      showValidateAlert: false,
+      senderFormTitle: "",
+      foundItemFormTitle: "",
+      venueName: "",
+      venueEmail: "",
+      venueSecondaryEmail: "",
+      manualAddressSelected: false,
+      manualAddress: "",
+      address: "",
+      city: "",
+      state: "",
+      country: "",
+      zipcode: "",
+      manualVenue: "",
+      venue: "",
+      venueArr: ["Hotel", "Restaurent", "Airport", "Other"],
+      venuePhone: "",
+      employeePhone: "",
+      foundDate: new Date().toISOString().slice(0, 10),
+      venueManually: false,
+      itemDescription: "",
+      itemDescriptionArr: [
+        "Laptop",
+        "Tablet",
+        "Cell phone",
+        "Mobile Phone",
+        "Pillow",
+        "Shoes",
+        "Slipper",
+        "Socks",
+        "Headphone",
+        "Earphone",
+        "Wristwatch",
+        "ID",
+        "Credit Card",
+        "Passport",
+        "Phone charger",
+        "Charger for Laptop",
+        "Blanket",
+        "Shirt",
+        "Pant",
+        "T-shirt",
+        "Clothes",
+        "Jacket",
+        "Suit",
+        "Water bottle",
+        "Stuffed toy",
+        "Bed sheet",
+        "Towel",
+        "Tool box",
+        "Box - Shoe size",
+        "Small Box",
+        "Medium Box",
+        "Large Box",
+        "Bagpack - Carry on",
+        "Luggage - Carry on",
+        "Luggage - Check in size",
+        "Documents",
+        "Keys",
+        "Purse",
+        "Wallet",
+        "Medication Pills",
+        "Folder",
+        "Jewelery",
+        "Thermos",
+        "Other",
+      ],
+      packageType: "",
+      packageTypeArr: ["Box", "Envelope"],
+      weight: "",
+      weightOunces: "",
+      weightOuncesArr: [
+        "0",
+        "1",
+        "2",
+        "3",
+        "4",
+        "5",
+        "6",
+        "7",
+        "8",
+        "9",
+        "10",
+        "11",
+        "12",
+        "13",
+        "14",
+        "15",
+        "16",
+      ],
+      itemLength: "",
+      itemWidth: "",
+      itemHeight: "",
+      itemStatus: "",
+      itemStatusArr: ["Claimed", "Unclaimed"],
+      showReceiverInputs: false,
+      receiverName: "",
+      receiverEmail: "",
+      receiverSecondaryEmail: "",
+      receiverPhone: "",
+      responseData: {
+        venueName: [],
+        venueEmail: [],
+        venuePhone: [],
+      },
+      apiAddressData: [],
+      addressArr: [],
+      itemImage: "",
+      canvasWidth: "600",
+      canvasHeight: "400",
+      showEditor: false,
+      stateCrop: true,
+      size_icon: "2x",
+      showFilledDetails: false,
+      isSavingImage: false,
+      loadingSpinner: false,
+      imageRecognitionData: [],
+      image: "",
+      imageKey: "",
+      bindPhoneInputProps: {
+        mode: "international",
+        autoDefaultCountry: true,
+        validCharactersOnly: true,
+        autoFormat: true,
+        preferredCountries: ["US", "CN"],
+        placeholder: "Enter a phone number",
+        name: "telephone",
+        maxLen: 15,
+        // wrapperClasses: "",
+        // inputClasses: "",
+        inputOptions: {
+          showDialCode: false,
+        },
+      },
+      foundItemId: "",
+      isLoading: false,
+      isLoadingItemDetails: false,
+      isVenuePhoneValid: true,
+      isEmployeePhoneValid: true,
+      isReceiverPhoneValid: true,
+      currentPosition: {
+        lat: null,
+        long: null,
+      },
     };
   },
+
+  //form components
+
+  components: {
+    ValidationObserver,
+    ValidationProvider,
+    BaseInput,
+    BaseSelect,
+    Editor,
+    CircleIcon,
+    RotateCcwIcon,
+    RotateCwIcon,
+    Edit2Icon,
+    Trash2Icon,
+    SquareIcon,
+    MaximizeIcon,
+    CheckIcon,
+    SaveIcon,
+    VSelect,
+  },
+
+  // form computed
+
+  computed: {
+    ...mapGetters("item", ["itemDetails"]),
+    displayVenueName() {
+      if (this.venue === "Restaurent") {
+        return "Restaurent Name";
+      } else if (this.venue === "Hotel") {
+        return "Hotel Name";
+      } else if (this.venue === "Airport") {
+        return "Airport Name";
+      } else {
+        return "Venue Name";
+      }
+    },
+  },
+
   methods: {
     addNewItem() {
-      this.$router.push({ name: "item-details" });
+      // this.$router.push({ name: "item-details" });
+      this.showFormModal = true;
     },
     viewItem(item) {
       this.$store.commit("item/SET_ITEM_DETAILS", {
@@ -353,24 +2264,1464 @@ export default {
         this.$router.push({ path: "/detail-confirmation" });
       });
     },
+
+    // form methods
+
+    getCurrentPosition() {
+      fetch("http://ip-api.com/json")
+        .then((data) => {
+          return data.json();
+        })
+        .then(async (data) => {
+          this.currentPosition = { lat: data.lat, long: data.lon };
+        });
+    },
+    validateVenuePhoneNumber() {
+      if (!this.venuePhone) {
+        this.isVenuePhoneValid = false;
+        this.debouncedGetData("phoneno");
+      } else {
+        this.isVenuePhoneValid = true;
+        this.debouncedGetData("phoneno");
+      }
+    },
+    validateEmployeePhoneNumber() {
+      if (!this.employeePhone) {
+        this.isEmployeePhoneValid = false;
+      } else {
+        this.isEmployeePhoneValid = true;
+      }
+    },
+    validateReceiverPhoneNumber() {
+      if (!this.receiverPhone) {
+        this.isReceiverPhoneValid = false;
+      } else {
+        this.isReceiverPhoneValid = true;
+      }
+    },
+    formatMobileNumber(phoneNumber) {
+      let arr = phoneNumber.split(" ");
+      let countryCode = arr.shift();
+      return countryCode + " " + arr.join("");
+    },
+    countryChanged(country) {
+      // console.log("===countryChanged", country);
+    },
+    setItemDetails(value) {
+      switch (value) {
+        case "Laptop":
+          this.packageType = "Box";
+          this.itemLength = "18";
+          this.itemWidth = "12";
+          this.itemHeight = "6";
+          this.weight = "6";
+          this.weightOunces = "0";
+          break;
+        case "Tablet":
+          this.packageType = "Box";
+          this.itemLength = "12";
+          this.itemWidth = "10";
+          this.itemHeight = "6";
+          this.weight = "2";
+          this.weightOunces = "0";
+          break;
+        case "Cell phone":
+          this.packageType = "Box";
+          this.itemLength = "9";
+          this.itemWidth = "6";
+          this.itemHeight = "2";
+          this.weight = "1";
+          this.weightOunces = "0";
+          break;
+        case "Mobile Phone":
+          this.packageType = "Box";
+          this.itemLength = "9";
+          this.itemWidth = "6";
+          this.itemHeight = "2";
+          this.weight = "1";
+          this.weightOunces = "0";
+          break;
+        case "Pillow":
+          this.packageType = "Box";
+          this.itemLength = "20";
+          this.itemWidth = "12";
+          this.itemHeight = "6";
+          this.weight = "3";
+          this.weightOunces = "0";
+          break;
+        case "Shoes":
+          this.packageType = "Box";
+          this.itemLength = "14";
+          this.itemWidth = "12";
+          this.itemHeight = "7";
+          this.weight = "3";
+          this.weightOunces = "0";
+          break;
+        case "Slipper":
+          this.packageType = "Box";
+          this.itemLength = "13";
+          this.itemWidth = "8";
+          this.itemHeight = "2";
+          this.weight = "1";
+          this.weightOunces = "0";
+          break;
+        case "Socks":
+          this.packageType = "Box";
+          this.itemLength = "8";
+          this.itemWidth = "6";
+          this.itemHeight = "4";
+          this.weight = "1";
+          this.weightOunces = "0";
+          break;
+        case "Headphone":
+          this.packageType = "Box";
+          this.itemLength = "12";
+          this.itemWidth = "12";
+          this.itemHeight = "4";
+          this.weight = "2";
+          this.weightOunces = "0";
+          break;
+        case "Earphone":
+          this.packageType = "Box";
+          this.itemLength = "6";
+          this.itemWidth = "6";
+          this.itemHeight = "2";
+          this.weight = "1";
+          this.weightOunces = "0";
+          break;
+        case "Wristwatch":
+          this.packageType = "Box";
+          this.itemLength = "6";
+          this.itemWidth = "6";
+          this.itemHeight = "2";
+          this.weight = "1";
+          this.weightOunces = "0";
+          break;
+        case "ID":
+          this.packageType = "Box";
+          this.itemLength = "6";
+          this.itemWidth = "6";
+          this.itemHeight = "2";
+          this.weight = "1";
+          this.weightOunces = "0";
+          break;
+        case "Credit Card":
+          this.packageType = "Box";
+          this.itemLength = "6";
+          this.itemWidth = "6";
+          this.itemHeight = "2";
+          this.weight = "1";
+          this.weightOunces = "0";
+          break;
+        case "Passport":
+          this.packageType = "Box";
+          this.itemLength = "6";
+          this.itemWidth = "6";
+          this.itemHeight = "2";
+          this.weight = "1";
+          this.weightOunces = "0";
+          break;
+        case "Phone charger":
+          this.packageType = "Box";
+          this.itemLength = "6";
+          this.itemWidth = "6";
+          this.itemHeight = "6";
+          this.weight = "1";
+          this.weightOunces = "0";
+          break;
+        case "Charger for Laptop":
+          this.packageType = "Box";
+          this.itemLength = "8";
+          this.itemWidth = "8";
+          this.itemHeight = "6";
+          this.weight = "2";
+          this.weightOunces = "0";
+          break;
+        case "Blanket":
+          this.packageType = "Box";
+          this.itemLength = "20";
+          this.itemWidth = "12";
+          this.itemHeight = "6";
+          this.weight = "3";
+          this.weightOunces = "0";
+          break;
+        case "Shirt":
+          this.packageType = "Box";
+          this.itemLength = "12";
+          this.itemWidth = "10";
+          this.itemHeight = "6";
+          this.weight = "2";
+          this.weightOunces = "0";
+          break;
+        case "Pant":
+          this.packageType = "Box";
+          this.itemLength = "12";
+          this.itemWidth = "10";
+          this.itemHeight = "6";
+          this.weight = "2";
+          this.weightOunces = "0";
+          break;
+        case "T-shirt":
+          this.packageType = "Box";
+          this.itemLength = "12";
+          this.itemWidth = "10";
+          this.itemHeight = "6";
+          this.weight = "2";
+          this.weightOunces = "0";
+          break;
+        case "Clothes":
+          this.packageType = "Box";
+          this.itemLength = "12";
+          this.itemWidth = "10";
+          this.itemHeight = "6";
+          this.weight = "2";
+          this.weightOunces = "0";
+          break;
+        case "Jacket":
+          this.packageType = "Box";
+          this.itemLength = "18";
+          this.itemWidth = "12";
+          this.itemHeight = "6";
+          this.weight = "3";
+          this.weightOunces = "0";
+          break;
+        case "Suit":
+          this.packageType = "Box";
+          this.itemLength = "15";
+          this.itemWidth = "12";
+          this.itemHeight = "7";
+          this.weight = "4";
+          this.weightOunces = "0";
+          break;
+        case "Water bottle":
+          this.packageType = "Box";
+          this.itemLength = "13";
+          this.itemWidth = "10";
+          this.itemHeight = "5";
+          this.weight = "2";
+          this.weightOunces = "0";
+          break;
+        case "Stuffed toy":
+          this.packageType = "Box";
+          this.itemLength = "12";
+          this.itemWidth = "10";
+          this.itemHeight = "6";
+          this.weight = "2";
+          this.weightOunces = "0";
+          break;
+        case "Bed sheet":
+          this.packageType = "Box";
+          this.itemLength = "12";
+          this.itemWidth = "12";
+          this.itemHeight = "4";
+          this.weight = "4";
+          this.weightOunces = "0";
+          break;
+        case "Towel":
+          this.packageType = "Box";
+          this.itemLength = "15";
+          this.itemWidth = "12";
+          this.itemHeight = "3";
+          this.weight = "2";
+          this.weightOunces = "0";
+          break;
+        case "Tool box":
+          this.packageType = "Box";
+          this.itemLength = "15";
+          this.itemWidth = "12";
+          this.itemHeight = "10";
+          this.weight = "10";
+          this.weightOunces = "0";
+          break;
+        case "Box - Shoe size":
+          this.packageType = "Box";
+          this.itemLength = "13";
+          this.itemWidth = "12";
+          this.itemHeight = "6";
+          this.weight = "5";
+          this.weightOunces = "0";
+          break;
+        case "Small Box":
+          this.packageType = "Box";
+          this.itemLength = "15";
+          this.itemWidth = "12";
+          this.itemHeight = "12";
+          this.weight = "10";
+          this.weightOunces = "0";
+          break;
+        case "Medium Box":
+          this.packageType = "Box";
+          this.itemLength = "18";
+          this.itemWidth = "18";
+          this.itemHeight = "16";
+          this.weight = "20";
+          this.weightOunces = "0";
+          break;
+        case "Large Box":
+          this.packageType = "Box";
+          this.itemLength = "18";
+          this.itemWidth = "18";
+          this.itemHeight = "24";
+          this.weight = "30";
+          this.weightOunces = "0";
+          break;
+        case "Bagpack - Carry on":
+          this.packageType = "Box";
+          this.itemLength = "17";
+          this.itemWidth = "10";
+          this.itemHeight = "9";
+          this.weight = "10";
+          this.weightOunces = "0";
+          break;
+        case "Luggage - Carry on":
+          this.packageType = "Box";
+          this.itemLength = "22";
+          this.itemWidth = "14";
+          this.itemHeight = "9";
+          this.weight = "17";
+          this.weightOunces = "0";
+          break;
+        case "Luggage - Check in size":
+          this.packageType = "Box";
+          this.itemLength = "30";
+          this.itemWidth = "18";
+          this.itemHeight = "14";
+          this.weight = "46";
+          this.weightOunces = "0";
+          break;
+        case "Documents":
+          this.packageType = "Box";
+          this.itemLength = "13";
+          this.itemWidth = "10";
+          this.itemHeight = "1";
+          this.weight = "1";
+          this.weightOunces = "0";
+          break;
+        case "Keys":
+          this.packageType = "Box";
+          this.itemLength = "6";
+          this.itemWidth = "6";
+          this.itemHeight = "2";
+          this.weight = "1";
+          this.weightOunces = "0";
+          break;
+        case "Purse":
+          this.packageType = "Box";
+          this.itemLength = "15";
+          this.itemWidth = "11";
+          this.itemHeight = "7";
+          this.weight = "7";
+          this.weightOunces = "0";
+          break;
+        case "Wallet":
+          this.packageType = "Box";
+          this.itemLength = "6";
+          this.itemWidth = "6";
+          this.itemHeight = "2";
+          this.weight = "1";
+          this.weightOunces = "0";
+          break;
+        case "Medication Pills":
+          this.packageType = "Box";
+          this.itemLength = "6";
+          this.itemWidth = "6";
+          this.itemHeight = "6";
+          this.weight = "1";
+          this.weightOunces = "0";
+          break;
+        case "Folder":
+          this.packageType = "Box";
+          this.itemLength = "13";
+          this.itemWidth = "10";
+          this.itemHeight = "1";
+          this.weight = "1";
+          this.weightOunces = "0";
+          break;
+        case "Jewelery":
+          this.packageType = "Box";
+          this.itemLength = "6";
+          this.itemWidth = "6";
+          this.itemHeight = "2";
+          this.weight = "1";
+          this.weightOunces = "0";
+          break;
+        case "Thermos":
+          this.packageType = "Box";
+          this.itemLength = "12";
+          this.itemWidth = "10";
+          this.itemHeight = "6";
+          this.weight = "5";
+          this.weightOunces = "0";
+          break;
+        case "Other":
+          this.packageType = "";
+          this.itemLength = "";
+          this.itemWidth = "";
+          this.itemHeight = "";
+          this.weight = "";
+          this.weightOunces = "0";
+          break;
+      }
+    },
+    addressFilter(mode) {
+      if (this.apiAddressData.length == 0 && !this.address) {
+        this.address = "";
+      }
+      let addressLineArr = this.apiAddressData.map((addressObj) => {
+        return addressObj.address;
+      });
+      addressLineArr.push("Other");
+      if (mode != "edit") {
+        if (this.address && addressLineArr.length > 1) {
+          let index = addressLineArr.findIndex((address) => {
+            return address == this.address;
+          });
+          if (index == -1) {
+            this.address = addressLineArr[0];
+          }
+        }
+        if (!this.address && addressLineArr.length > 1) {
+          this.manualAddressSelected = false;
+          this.address = addressLineArr[0];
+        }
+        if (this.apiAddressData.length < 1) {
+          this.address = "";
+        }
+      }
+      this.addressArr = addressLineArr;
+    },
+    debouncedGetData: debounce(function (type) {
+      this.getData(type, "");
+    }, 1000),
+
+    getData(type, mode) {
+      const params = {
+        lat: this.currentPosition.lat,
+        long: this.currentPosition.long,
+      };
+      if (type === "name" && this.venueName.length > 0) {
+        params.type = "name";
+        params.place = this.venueName;
+        this.responseData.venueName = [];
+      } else if (type === "email") {
+        params.type = "email";
+        params.place = this.venueEmail;
+        this.responseData.venueEmail = [];
+      } else if (type === "phoneno") {
+        params.type = "phoneno";
+        params.mobileno = this.venuePhone;
+        this.responseData.venuePhone = [];
+      }
+      this.$axios.get("/autofilladdress", { params }).then(({ data }) => {
+        if (!data.error) {
+          if (type === "name") {
+            if (this.venueName) {
+              this.responseData.venueName.push(...data.data);
+            }
+          } else if (type === "email") {
+            if (this.venueEmail) {
+              this.responseData.venueEmail.push(...data.data);
+            }
+          } else if (type === "phoneno") {
+            if (this.venuePhone) {
+              this.responseData.venuePhone.push(...data.data);
+            }
+          }
+          this.apiAddressData = [];
+          this.apiAddressData.push(
+            ...this.responseData.venueName,
+            ...this.responseData.venuePhone,
+            ...this.responseData.venueEmail
+          );
+          this.addressFilter(mode);
+        }
+      });
+    },
+    async onSubmit() {
+      this.validateVenuePhoneNumber();
+      this.validateEmployeePhoneNumber();
+      if (this.itemStatus == "Claimed") {
+        this.validateReceiverPhoneNumber();
+      }
+      this.isLoading = true;
+      let venuePhoneNo = this.formatMobileNumber(this.venuePhone);
+      let employeePhone = this.formatMobileNumber(this.employeePhone);
+      const isValid = await this.$refs.observer.validate();
+      if (
+        !isValid ||
+        !this.isVenuePhoneValid ||
+        !this.isEmployeePhoneValid ||
+        !this.isReceiverPhoneValid
+      ) {
+        this.showValidateAlert = true;
+        this.isLoading = false;
+      } else {
+        this.showValidateAlert = false;
+        const params = {
+          venu_type: this.venue === "Other" ? this.manualVenue : this.venue,
+          datse: this.foundDate,
+          venue_name: this.venueName,
+          venue_email: this.venueEmail,
+          venue_phone_no: venuePhoneNo,
+          employee_mobile_no: employeePhone,
+          address: this.address,
+          manualAddress: this.manualAddress,
+          city: this.city,
+          states: this.state,
+          country: this.country,
+          zipcode: this.zipcode,
+          image: this.image,
+          item_description: this.itemDescription,
+          package_type: this.packageType,
+          weight: this.weight,
+          // weightOunces: this.weightOunces,
+          dimensions: `${this.itemLength} X ${this.itemWidth} X ${this.itemHeight} inch`,
+          item_status: this.itemStatus === "Claimed" ? 0 : 1,
+        };
+        params.foundItemId = this.foundItemId;
+        if (this.itemStatus === "Claimed") {
+          let receiverPhone = this.formatMobileNumber(this.receiverPhone);
+          params.receiver_name = this.receiverName;
+          params.receiver_email = this.receiverEmail;
+          params.receiver_mobile_no = receiverPhone;
+        }
+        this.$store.commit("item/SET_ITEM_DETAILS", {
+          ...params,
+          image: this.image,
+        });
+
+        setTimeout(() => {
+          this.isLoading = false;
+          this.$nextTick(() => {
+            this.$router.push({ path: "/detail-confirmation" });
+          });
+        }, 1000);
+      }
+    },
+    resetForm() {
+      console.log("======Reset");
+    },
+    undo() {
+      this.$refs.editor.undo();
+    },
+    redo() {
+      this.$refs.editor.redo();
+    },
+    deleteEditable() {
+      this.$axios
+        .post("/removes3files", { key: this.imageKey })
+        .then((response) => {
+          if (response.status === 200) {
+            console.log("===remove file response", response);
+          }
+        });
+      this.$refs.editor.clear();
+      this.showEditor = false;
+      this.stateCrop = true;
+    },
+    // freeDrawing() {
+    //   let customizeFreeDrawing = { stroke: "black", strokeWidth: "5" };
+    //   this.$refs.editor.set("freeDrawing", customizeFreeDrawing);
+    // },
+    addCicle() {
+      let circleModeParams = { fill: "black", stroke: "black" };
+      this.$refs.editor.set("circle", circleModeParams);
+    },
+    addSquare() {
+      let customizeRectangle = {
+        fill: "black",
+        stroke: "black",
+        strokeWidth: 1,
+      };
+      this.$refs.editor.set("rect", customizeRectangle);
+    },
+    crop() {
+      let cropModeOptions = {
+        width: "100",
+        height: "100",
+        overlayOpacity: "0",
+        hasControls: true,
+      };
+      this.$refs.editor.set("crop", cropModeOptions);
+      this.stateCrop = false;
+    },
+    applyCrop() {
+      this.$refs.editor.applyCropping();
+      this.stateCrop = true;
+    },
+    async editImage() {
+      this.showEditor = false;
+      if (this.image) {
+        const response = await fetch(this.image);
+        const blob = await response.blob();
+        const file = new File([blob], "image.jpg", { type: blob.type });
+        this.$refs.editor.uploadImage(file);
+        this.showEditor = true;
+        this.loadingSpinner = true;
+        setTimeout(() => {
+          this.loadingSpinner = false;
+        }, 2000);
+      } else {
+        this.showEditor = false;
+      }
+    },
+    async uploadImg(event) {
+      this.showEditor = false;
+      if (event.target.files[0]) {
+        this.$refs.editor.uploadImage(event.target.files[0]);
+        this.showEditor = true;
+        this.loadingSpinner = true;
+        setTimeout(() => {
+          this.loadingSpinner = false;
+        }, 2000);
+      } else {
+        this.showEditor = false;
+      }
+    },
+    saveImg() {
+      this.isSavingImage = true;
+      const file = this.$refs.editor.saveImage();
+      this.$axios.post("/demo", { file }).then((response) => {
+        if (response.status === 200) {
+          this.isSavingImage = false;
+          this.imageRecognitionData = response.data.data;
+          this.itemDescriptionArr = response.data.data
+            .filter((obj) => {
+              if (obj.name) {
+                return true;
+              } else {
+                return false;
+              }
+            })
+            .map((obj) => {
+              return obj.name;
+            });
+          this.itemDescription = response.data.data[0].name;
+          this.image =
+            this.imageRecognitionData[
+              this.imageRecognitionData.length - 1
+            ].image;
+
+          this.imageKey =
+            this.imageRecognitionData[this.imageRecognitionData.length - 2].key;
+        }
+        this.itemDescriptionArr.push("Other");
+        this.showEditor = false;
+      });
+    },
   },
+
+  // form watch
+
+  watch: {
+    venue(newValue, oldValue) {
+      if (newValue != oldValue) {
+        if (newValue == "Other") {
+          this.venueManually = true;
+        } else {
+          this.venueManually = false;
+        }
+      }
+    },
+    itemStatus(newValue, oldValue) {
+      if (newValue != oldValue) {
+        if (newValue == "Claimed") {
+          this.showReceiverInputs = true;
+        } else {
+          this.showReceiverInputs = false;
+        }
+      }
+    },
+    address(newAddress, oldAddress) {
+      if (newAddress != oldAddress) {
+        if (!newAddress || newAddress == "Other") {
+          if (newAddress == "Other") {
+            this.manualAddressSelected = true;
+          }
+          if (oldAddress && newAddress == "Other") {
+            this.manualAddress = "";
+          }
+          this.city = "";
+          this.state = "";
+          this.country = "";
+          this.zipcode = "";
+        } else {
+          this.manualAddressSelected = false;
+          let index = this.apiAddressData.findIndex((addressObj) => {
+            return addressObj.address == newAddress;
+          });
+          if (index != -1) {
+            this.city = this.apiAddressData[index].city;
+            this.state = this.apiAddressData[index].state;
+            this.country = this.apiAddressData[index].country;
+            this.zipcode = this.apiAddressData[index].zipcode;
+          }
+        }
+      }
+    },
+    itemDescription(value) {
+      switch (value) {
+        case "Laptop":
+          this.packageType = this.packageType ? this.packageType : "Box";
+          this.itemLength = this.itemLength ? this.itemLength : "18";
+          this.itemWidth = this.itemWidth ? this.itemWidth : "12";
+          this.itemHeight = this.itemHeight ? this.itemHeight : "6";
+          this.weight = this.weight ? this.weight : "6";
+          this.weightOunces = this.weightOunces ? this.weightOunces : "0";
+          break;
+        case "Tablet":
+          this.packageType = this.packageType ? this.packageType : "Box";
+          this.itemLength = this.itemLength ? this.itemLength : "12";
+          this.itemWidth = this.itemWidth ? this.itemWidth : "10";
+          this.itemHeight = this.itemHeight ? this.itemHeight : "6";
+          this.weight = this.weight ? this.weight : "2";
+          this.weightOunces = this.weightOunces ? this.weightOunces : "0";
+          break;
+        case "Cell phone":
+          this.packageType = this.packageType ? this.packageType : "Box";
+          this.itemLength = this.itemLength ? this.itemLength : "9";
+          this.itemWidth = this.itemWidth ? this.itemWidth : "6";
+          this.itemHeight = this.itemHeight ? this.itemHeight : "2";
+          this.weight = this.weight ? this.weight : "1";
+          this.weightOunces = this.weightOunces ? this.weightOunces : "0";
+          break;
+        case "Mobile Phone":
+          this.packageType = this.packageType ? this.packageType : "Box";
+          this.itemLength = this.itemLength ? this.itemLength : "9";
+          this.itemWidth = this.itemWidth ? this.itemWidth : "6";
+          this.itemHeight = this.itemHeight ? this.itemHeight : "2";
+          this.weight = this.weight ? this.weight : "1";
+          this.weightOunces = this.weightOunces ? this.weightOunces : "0";
+          break;
+        case "Pillow":
+          this.packageType = this.packageType ? this.packageType : "Box";
+          this.itemLength = this.itemLength ? this.itemLength : "20";
+          this.itemWidth = this.itemWidth ? this.itemWidth : "12";
+          this.itemHeight = this.itemHeight ? this.itemHeight : "6";
+          this.weight = this.weight ? this.weight : "3";
+          this.weightOunces = this.weightOunces ? this.weightOunces : "0";
+          break;
+        case "Shoes":
+          this.packageType = this.packageType ? this.packageType : "Box";
+          this.itemLength = this.itemLength ? this.itemLength : "14";
+          this.itemWidth = this.itemWidth ? this.itemWidth : "12";
+          this.itemHeight = this.itemHeight ? this.itemHeight : "7";
+          this.weight = this.weight ? this.weight : "3";
+          this.weightOunces = this.weightOunces ? this.weightOunces : "0";
+          break;
+        case "Slipper":
+          this.packageType = this.packageType ? this.packageType : "Box";
+          this.itemLength = this.itemLength ? this.itemLength : "13";
+          this.itemWidth = this.itemWidth ? this.itemWidth : "8";
+          this.itemHeight = this.itemHeight ? this.itemHeight : "2";
+          this.weight = this.weight ? this.weight : "1";
+          this.weightOunces = this.weightOunces ? this.weightOunces : "0";
+          break;
+        case "Socks":
+          this.packageType = this.packageType ? this.packageType : "Box";
+          this.itemLength = this.itemLength ? this.itemLength : "8";
+          this.itemWidth = this.itemWidth ? this.itemWidth : "6";
+          this.itemHeight = this.itemHeight ? this.itemHeight : "4";
+          this.weight = this.weight ? this.weight : "1";
+          this.weightOunces = this.weightOunces ? this.weightOunces : "0";
+          break;
+        case "Headphone":
+          this.packageType = this.packageType ? this.packageType : "Box";
+          this.itemLength = this.itemLength ? this.itemLength : "12";
+          this.itemWidth = this.itemWidth ? this.itemWidth : "12";
+          this.itemHeight = this.itemHeight ? this.itemHeight : "4";
+          this.weight = this.weight ? this.weight : "2";
+          this.weightOunces = this.weightOunces ? this.weightOunces : "0";
+          break;
+        case "Earphone":
+          this.packageType = this.packageType ? this.packageType : "Box";
+          this.itemLength = this.itemLength ? this.itemLength : "6";
+          this.itemWidth = this.itemWidth ? this.itemWidth : "6";
+          this.itemHeight = this.itemHeight ? this.itemHeight : "2";
+          this.weight = this.weight ? this.weight : "1";
+          this.weightOunces = this.weightOunces ? this.weightOunces : "0";
+          break;
+        case "Wristwatch":
+          this.packageType = this.packageType ? this.packageType : "Box";
+          this.itemLength = this.itemLength ? this.itemLength : "6";
+          this.itemWidth = this.itemWidth ? this.itemWidth : "6";
+          this.itemHeight = this.itemHeight ? this.itemHeight : "2";
+          this.weight = this.weight ? this.weight : "1";
+          this.weightOunces = this.weightOunces ? this.weightOunces : "0";
+          break;
+        case "ID":
+          this.packageType = this.packageType ? this.packageType : "Box";
+          this.itemLength = this.itemLength ? this.itemLength : "6";
+          this.itemWidth = this.itemWidth ? this.itemWidth : "6";
+          this.itemHeight = this.itemHeight ? this.itemHeight : "2";
+          this.weight = this.weight ? this.weight : "1";
+          this.weightOunces = this.weightOunces ? this.weightOunces : "0";
+          break;
+        case "Credit Card":
+          this.packageType = this.packageType ? this.packageType : "Box";
+          this.itemLength = this.itemLength ? this.itemLength : "6";
+          this.itemWidth = this.itemWidth ? this.itemWidth : "6";
+          this.itemHeight = this.itemHeight ? this.itemHeight : "2";
+          this.weight = this.weight ? this.weight : "1";
+          this.weightOunces = this.weightOunces ? this.weightOunces : "0";
+          break;
+        case "Passport":
+          this.packageType = this.packageType ? this.packageType : "Box";
+          this.itemLength = this.itemLength ? this.itemLength : "6";
+          this.itemWidth = this.itemWidth ? this.itemWidth : "6";
+          this.itemHeight = this.itemHeight ? this.itemHeight : "2";
+          this.weight = this.weight ? this.weight : "1";
+          this.weightOunces = this.weightOunces ? this.weightOunces : "0";
+          break;
+        case "Phone charger":
+          this.packageType = this.packageType ? this.packageType : "Box";
+          this.itemLength = this.itemLength ? this.itemLength : "6";
+          this.itemWidth = this.itemWidth ? this.itemWidth : "6";
+          this.itemHeight = this.itemHeight ? this.itemHeight : "6";
+          this.weight = this.weight ? this.weight : "1";
+          this.weightOunces = this.weightOunces ? this.weightOunces : "0";
+          break;
+        case "Charger for Laptop":
+          this.packageType = this.packageType ? this.packageType : "Box";
+          this.itemLength = this.itemLength ? this.itemLength : "8";
+          this.itemWidth = this.itemWidth ? this.itemWidth : "8";
+          this.itemHeight = this.itemHeight ? this.itemHeight : "6";
+          this.weight = this.weight ? this.weight : "2";
+          this.weightOunces = this.weightOunces ? this.weightOunces : "0";
+          break;
+        case "Blanket":
+          this.packageType = this.packageType ? this.packageType : "Box";
+          this.itemLength = this.itemLength ? this.itemLength : "20";
+          this.itemWidth = this.itemWidth ? this.itemWidth : "12";
+          this.itemHeight = this.itemHeight ? this.itemHeight : "6";
+          this.weight = this.weight ? this.weight : "3";
+          this.weightOunces = this.weightOunces ? this.weightOunces : "0";
+          break;
+        case "Shirt":
+          this.packageType = this.packageType ? this.packageType : "Box";
+          this.itemLength = this.itemLength ? this.itemLength : "12";
+          this.itemWidth = this.itemWidth ? this.itemWidth : "10";
+          this.itemHeight = this.itemHeight ? this.itemHeight : "6";
+          this.weight = this.weight ? this.weight : "2";
+          this.weightOunces = this.weightOunces ? this.weightOunces : "0";
+          break;
+        case "Pant":
+          this.packageType = this.packageType ? this.packageType : "Box";
+          this.itemLength = this.itemLength ? this.itemLength : "12";
+          this.itemWidth = this.itemWidth ? this.itemWidth : "10";
+          this.itemHeight = this.itemHeight ? this.itemHeight : "6";
+          this.weight = this.weight ? this.weight : "2";
+          this.weightOunces = this.weightOunces ? this.weightOunces : "0";
+          break;
+        case "T-shirt":
+          this.packageType = this.packageType ? this.packageType : "Box";
+          this.itemLength = this.itemLength ? this.itemLength : "12";
+          this.itemWidth = this.itemWidth ? this.itemWidth : "10";
+          this.itemHeight = this.itemHeight ? this.itemHeight : "6";
+          this.weight = this.weight ? this.weight : "2";
+          this.weightOunces = this.weightOunces ? this.weightOunces : "0";
+          break;
+        case "Clothes":
+          this.packageType = this.packageType ? this.packageType : "Box";
+          this.itemLength = this.itemLength ? this.itemLength : "12";
+          this.itemWidth = this.itemWidth ? this.itemWidth : "10";
+          this.itemHeight = this.itemHeight ? this.itemHeight : "6";
+          this.weight = this.weight ? this.weight : "2";
+          this.weightOunces = this.weightOunces ? this.weightOunces : "0";
+          break;
+        case "Jacket":
+          this.packageType = this.packageType ? this.packageType : "Box";
+          this.itemLength = this.itemLength ? this.itemLength : "18";
+          this.itemWidth = this.itemWidth ? this.itemWidth : "12";
+          this.itemHeight = this.itemHeight ? this.itemHeight : "6";
+          this.weight = this.weight ? this.weight : "3";
+          this.weightOunces = this.weightOunces ? this.weightOunces : "0";
+          break;
+        case "Suit":
+          this.packageType = this.packageType ? this.packageType : "Box";
+          this.itemLength = this.itemLength ? this.itemLength : "15";
+          this.itemWidth = this.itemWidth ? this.itemWidth : "12";
+          this.itemHeight = this.itemHeight ? this.itemHeight : "7";
+          this.weight = this.weight ? this.weight : "4";
+          this.weightOunces = this.weightOunces ? this.weightOunces : "0";
+          break;
+        case "Water bottle":
+          this.packageType = this.packageType ? this.packageType : "Box";
+          this.itemLength = this.itemLength ? this.itemLength : "13";
+          this.itemWidth = this.itemWidth ? this.itemWidth : "10";
+          this.itemHeight = this.itemHeight ? this.itemHeight : "5";
+          this.weight = this.weight ? this.weight : "2";
+          this.weightOunces = this.weightOunces ? this.weightOunces : "0";
+          break;
+        case "Stuffed toy":
+          this.packageType = this.packageType ? this.packageType : "Box";
+          this.itemLength = this.itemLength ? this.itemLength : "12";
+          this.itemWidth = this.itemWidth ? this.itemWidth : "10";
+          this.itemHeight = this.itemHeight ? this.itemHeight : "6";
+          this.weight = this.weight ? this.weight : "2";
+          this.weightOunces = this.weightOunces ? this.weightOunces : "0";
+          break;
+        case "Bed sheet":
+          this.packageType = this.packageType ? this.packageType : "Box";
+          this.itemLength = this.itemLength ? this.itemLength : "12";
+          this.itemWidth = this.itemWidth ? this.itemWidth : "12";
+          this.itemHeight = this.itemHeight ? this.itemHeight : "4";
+          this.weight = this.weight ? this.weight : "4";
+          this.weightOunces = this.weightOunces ? this.weightOunces : "0";
+          break;
+        case "Towel":
+          this.packageType = this.packageType ? this.packageType : "Box";
+          this.itemLength = this.itemLength ? this.itemLength : "15";
+          this.itemWidth = this.itemWidth ? this.itemWidth : "12";
+          this.itemHeight = this.itemHeight ? this.itemHeight : "3";
+          this.weight = this.weight ? this.weight : "2";
+          this.weightOunces = this.weightOunces ? this.weightOunces : "0";
+          break;
+        case "Tool box":
+          this.packageType = this.packageType ? this.packageType : "Box";
+          this.itemLength = this.itemLength ? this.itemLength : "15";
+          this.itemWidth = this.itemWidth ? this.itemWidth : "12";
+          this.itemHeight = this.itemHeight ? this.itemHeight : "10";
+          this.weight = this.weight ? this.weight : "10";
+          this.weightOunces = this.weightOunces ? this.weightOunces : "0";
+          break;
+        case "Box - Shoe size":
+          this.packageType = this.packageType ? this.packageType : "Box";
+          this.itemLength = this.itemLength ? this.itemLength : "13";
+          this.itemWidth = this.itemWidth ? this.itemWidth : "12";
+          this.itemHeight = this.itemHeight ? this.itemHeight : "6";
+          this.weight = this.weight ? this.weight : "5";
+          this.weightOunces = this.weightOunces ? this.weightOunces : "0";
+          break;
+        case "Small Box":
+          this.packageType = this.packageType ? this.packageType : "Box";
+          this.itemLength = this.itemLength ? this.itemLength : "15";
+          this.itemWidth = this.itemWidth ? this.itemWidth : "12";
+          this.itemHeight = this.itemHeight ? this.itemHeight : "12";
+          this.weight = this.weight ? this.weight : "10";
+          this.weightOunces = this.weightOunces ? this.weightOunces : "0";
+          break;
+        case "Medium Box":
+          this.packageType = this.packageType ? this.packageType : "Box";
+          this.itemLength = this.itemLength ? this.itemLength : "18";
+          this.itemWidth = this.itemWidth ? this.itemWidth : "18";
+          this.itemHeight = this.itemHeight ? this.itemHeight : "16";
+          this.weight = this.weight ? this.weight : "20";
+          this.weightOunces = this.weightOunces ? this.weightOunces : "0";
+          break;
+        case "Large Box":
+          this.packageType = this.packageType ? this.packageType : "Box";
+          this.itemLength = this.itemLength ? this.itemLength : "18";
+          this.itemWidth = this.itemWidth ? this.itemWidth : "18";
+          this.itemHeight = this.itemHeight ? this.itemHeight : "24";
+          this.weight = this.weight ? this.weight : "30";
+          this.weightOunces = this.weightOunces ? this.weightOunces : "0";
+          break;
+        case "Bagpack - Carry on":
+          this.packageType = this.packageType ? this.packageType : "Box";
+          this.itemLength = this.itemLength ? this.itemLength : "17";
+          this.itemWidth = this.itemWidth ? this.itemWidth : "10";
+          this.itemHeight = this.itemHeight ? this.itemHeight : "9";
+          this.weight = this.weight ? this.weight : "10";
+          this.weightOunces = this.weightOunces ? this.weightOunces : "0";
+          break;
+        case "Luggage - Carry on":
+          this.packageType = this.packageType ? this.packageType : "Box";
+          this.itemLength = this.itemLength ? this.itemLength : "22";
+          this.itemWidth = this.itemWidth ? this.itemWidth : "14";
+          this.itemHeight = this.itemHeight ? this.itemHeight : "9";
+          this.weight = this.weight ? this.weight : "17";
+          this.weightOunces = this.weightOunces ? this.weightOunces : "0";
+          break;
+        case "Luggage - Check in size":
+          this.packageType = this.packageType ? this.packageType : "Box";
+          this.itemLength = this.itemLength ? this.itemLength : "30";
+          this.itemWidth = this.itemWidth ? this.itemWidth : "18";
+          this.itemHeight = this.itemHeight ? this.itemHeight : "14";
+          this.weight = this.weight ? this.weight : "46";
+          this.weightOunces = this.weightOunces ? this.weightOunces : "0";
+          break;
+        case "Documents":
+          this.packageType = this.packageType ? this.packageType : "Box";
+          this.itemLength = this.itemLength ? this.itemLength : "13";
+          this.itemWidth = this.itemWidth ? this.itemWidth : "10";
+          this.itemHeight = this.itemHeight ? this.itemHeight : "1";
+          this.weight = this.weight ? this.weight : "1";
+          this.weightOunces = this.weightOunces ? this.weightOunces : "0";
+          break;
+        case "Keys":
+          this.packageType = this.packageType ? this.packageType : "Box";
+          this.itemLength = this.itemLength ? this.itemLength : "6";
+          this.itemWidth = this.itemWidth ? this.itemWidth : "6";
+          this.itemHeight = this.itemHeight ? this.itemHeight : "2";
+          this.weight = this.weight ? this.weight : "1";
+          this.weightOunces = this.weightOunces ? this.weightOunces : "0";
+          break;
+        case "Purse":
+          this.packageType = this.packageType ? this.packageType : "Box";
+          this.itemLength = this.itemLength ? this.itemLength : "15";
+          this.itemWidth = this.itemWidth ? this.itemWidth : "11";
+          this.itemHeight = this.itemHeight ? this.itemHeight : "7";
+          this.weight = this.weight ? this.weight : "7";
+          this.weightOunces = this.weightOunces ? this.weightOunces : "0";
+          break;
+        case "Wallet":
+          this.packageType = this.packageType ? this.packageType : "Box";
+          this.itemLength = this.itemLength ? this.itemLength : "6";
+          this.itemWidth = this.itemWidth ? this.itemWidth : "6";
+          this.itemHeight = this.itemHeight ? this.itemHeight : "2";
+          this.weight = this.weight ? this.weight : "1";
+          this.weightOunces = this.weightOunces ? this.weightOunces : "0";
+          break;
+        case "Medication Pills":
+          this.packageType = this.packageType ? this.packageType : "Box";
+          this.itemLength = this.itemLength ? this.itemLength : "6";
+          this.itemWidth = this.itemWidth ? this.itemWidth : "6";
+          this.itemHeight = this.itemHeight ? this.itemHeight : "6";
+          this.weight = this.weight ? this.weight : "1";
+          this.weightOunces = this.weightOunces ? this.weightOunces : "0";
+          break;
+        case "Folder":
+          this.packageType = this.packageType ? this.packageType : "Box";
+          this.itemLength = this.itemLength ? this.itemLength : "13";
+          this.itemWidth = this.itemWidth ? this.itemWidth : "10";
+          this.itemHeight = this.itemHeight ? this.itemHeight : "1";
+          this.weight = this.weight ? this.weight : "1";
+          this.weightOunces = this.weightOunces ? this.weightOunces : "0";
+          break;
+        case "Jewelery":
+          this.packageType = this.packageType ? this.packageType : "Box";
+          this.itemLength = this.itemLength ? this.itemLength : "6";
+          this.itemWidth = this.itemWidth ? this.itemWidth : "6";
+          this.itemHeight = this.itemHeight ? this.itemHeight : "2";
+          this.weight = this.weight ? this.weight : "1";
+          this.weightOunces = this.weightOunces ? this.weightOunces : "0";
+          break;
+        case "Thermos":
+          this.packageType = this.packageType ? this.packageType : "Box";
+          this.itemLength = this.itemLength ? this.itemLength : "12";
+          this.itemWidth = this.itemWidth ? this.itemWidth : "10";
+          this.itemHeight = this.itemHeight ? this.itemHeight : "6";
+          this.weight = this.weight ? this.weight : "5";
+          this.weightOunces = this.weightOunces ? this.weightOunces : "0";
+          break;
+        case "Other":
+          this.packageType = "";
+          this.itemLength = "";
+          this.itemWidth = "";
+          this.itemHeight = "";
+          this.weight = "";
+          this.weightOunces = "0";
+          break;
+      }
+    },
+  },
+
   created() {
-    this.isLoading = true
+    this.isLoading = true;
     this.$axios
       .get("/getalllostitem")
       .then((response) => {
         if (response.status === 200) {
-          this.isLoading = false
+          this.isLoading = false;
           this.lostItems = response?.data?.data;
         }
       })
       .catch((err) => {
-        this.isLoading = false
+        this.isLoading = false;
         console.log(err);
       });
+
+    // form created
+
+    this.$root.$on("detail-submitted", (data) => {
+      if (data) {
+        this.resetForm();
+      }
+    });
+  },
+
+  // form mounted
+
+  mounted() {
+    this.getCurrentPosition();
+    if (this.$route.query.id) {
+      this.isLoadingItemDetails = true;
+      this.foundItemId = this.$route.query.id;
+      this.senderFormTitle = "EDIT SENDER'S DETAILS";
+      this.foundItemFormTitle = "EDIT FOUND ITEM'S DETAILS";
+      this.$axios
+        .get("/getsinglelostitem?id=" + this.$route.query.id)
+        .then((response) => {
+          if (response.status === 200) {
+            this.isLoadingItemDetails = false;
+            let responseData = response.data.data.Item;
+
+            var index = this.venueArr.indexOf(responseData.venu_type) !== -1;
+            if (index) this.venue = responseData.venu_type;
+            else {
+              this.venue = "Other";
+              this.manualVenue = responseData.venu_type;
+            }
+            this.venueName = responseData.venue_name;
+            this.venueEmail = responseData.venue_email;
+            this.address = responseData.address;
+            this.manualAddress = responseData.address;
+            this.city = responseData.city;
+            this.image = responseData.image;
+            this.state = responseData.states;
+            this.country = responseData.country;
+            this.zipcode = responseData.zipcode;
+            this.venuePhone = responseData.venue_phone_no;
+            this.employeePhone = responseData.employee_mobile_no;
+            this.foundDate = new Date().toISOString().slice(0, 10);
+            this.itemDescription = responseData.item_description;
+            this.packageType = responseData.package_type;
+            this.weight = responseData.weight;
+            // this.weightOunces = responseData.weightOunces;
+            let dimensionArr = responseData.dimensions.split(" X ");
+            this.itemLength = dimensionArr[0];
+            this.itemWidth = dimensionArr[1];
+            this.itemHeight = dimensionArr[2].split(" ")[0];
+            this.itemStatus =
+              responseData.item_status == 0 ? "Claimed" : "Unclaimed";
+            this.receiverName = responseData.receiver_name;
+            this.receiverEmail = responseData.receiver_email;
+            this.receiverPhone = responseData.receiver_mobile_no;
+          }
+        })
+        .catch((error) => console.log(error));
+    } else if (this.$route.params?.itemDetails) {
+      this.senderFormTitle = "EDIT SENDER'S DETAILS";
+      this.foundItemFormTitle = "EDIT FOUND ITEM'S DETAILS";
+      let data = this.$route.params.itemDetails;
+      var index = this.venueArr.indexOf(data.venu_type) !== -1;
+      if (index) this.venue = data.venu_type;
+      else {
+        this.venue = "Other";
+        this.manualVenue = data.venu_type;
+      }
+      if (data.foundItemId) {
+        this.foundItemId = data.foundItemId;
+      } else {
+        this.foundItemId = data.id;
+      }
+      this.foundDate = data.datse;
+      this.venueName = data.venue_name;
+      this.venueEmail = data.venue_email;
+      this.venuePhone = data.venue_phone_no;
+      this.employeePhone = data.employee_mobile_no;
+      this.address = data.address;
+      this.manualAddress = data.manualAddress;
+      this.city = data.city;
+      this.state = data.states;
+      this.country = data.country;
+      this.zipcode = data.zipcode;
+      this.image = data.image;
+      this.itemDescription = data.item_description;
+      this.packageType = data.package_type;
+      this.weight = data.weight;
+      // this.weightOunces = data.weightOunces;
+      let dimensionArr = data.dimensions.split(" X ");
+      this.itemLength = dimensionArr[0];
+      this.itemWidth = dimensionArr[1];
+      this.itemHeight = dimensionArr[2].split(" ")[0];
+      this.itemStatus = data.item_status === 0 ? "Claimed" : "Unclaimed";
+
+      if (data.item_status === 0) {
+        this.receiverName = data.receiver_name;
+        this.receiverEmail = data.receiver_email;
+        this.receiverPhone = data.receiver_mobile_no;
+      }
+      if (this.venueName) {
+        this.getData("name", "edit");
+        this.address = data.address;
+        this.city = data.city;
+        this.state = data.states;
+        this.country = data.country;
+        this.zipcode = data.zipcode;
+      }
+      if (this.venueEmail) {
+        this.getData("email", "edit");
+        this.address = data.address;
+        this.city = data.city;
+        this.state = data.states;
+        this.country = data.country;
+        this.zipcode = data.zipcode;
+      }
+      if (this.venuePhone) {
+        this.getData("phoneno", "edit");
+        this.address = data.address;
+        this.city = data.city;
+        this.state = data.states;
+        this.country = data.country;
+        this.zipcode = data.zipcode;
+      }
+    } else {
+      this.senderFormTitle = "SENDER'S DETAILS";
+      this.foundItemFormTitle = "FOUND ITEM'S DETAILS";
+    }
   },
 };
 </script>
+
+<style lang="scss">
+.editor-modal-container{
+  margin-top: -15px;
+}
+
+.form-container{
+  height: 590px;
+}
+
+.wrapper-form {
+  @apply min-h-screen flex justify-center py-10 mx-auto;
+}
+
+.editor-container {
+  min-width: 200px;
+  min-height: 200px;
+}
+
+.editor-tools {
+  @apply flex flex-wrap w-full justify-between;
+  margin-bottom: 20px;
+}
+
+.editor-tools .icons {
+  @apply flex items-center;
+}
+.editor-tools .save-upload .button__text {
+  @apply flex items-center;
+}
+.editor-tools .save-upload .button__text svg {
+  margin-right: 10px;
+  width: 18px;
+}
+
+.custom-editor {
+  @apply flex justify-center;
+  border: 1px solid #808080;
+  background-color: #ffffff;
+}
+
+.editor-tools .icons {
+  div {
+    padding-right: 7px;
+    p {
+      font-size: 12px;
+      text-align: center;
+    }
+    div {
+      cursor: pointer;
+      border: 1px solid #808080;
+      border-radius: 14px;
+      &:hover {
+        background: #dfdfdf;
+      }
+      padding: 2px 10px;
+      background-color: #f3f3f3;
+      margin-bottom: 5px;
+      color: #ff9800;
+      svg {
+        width: 18px;
+      }
+    }
+  }
+}
+
+.top-margin-05 {
+  margin-top: 0.5rem !important;
+}
+
+.top-margin-alert {
+  margin-top: 2.5rem !important;
+}
+
+.previewCard h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  font-size: revert;
+  font-weight: revert;
+}
+
+canvas {
+  width: 0 !important;
+  object-fit: contain;
+}
+.canvas-container {
+  width: 100% !important;
+}
+.canvas-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-width: 500px !important;
+  min-height: 384px;
+}
+.upper-canvas {
+  margin: 0px 0px;
+  min-width: 500px !important;
+  min-height: 384px;
+}
+.lower-canvas {
+  min-width: 500px !important;
+  min-height: 384px;
+  position: static !important;
+}
+
+.vs__dropdown-toggle {
+  @apply h-12 rounded-lg;
+}
+
+.error {
+  & > div {
+    @apply text-red-500;
+  }
+  .vs__dropdown-toggle {
+    @apply border-red-500 border-2 ring-4 ring-red-500 ring-opacity-10 transition-none;
+  }
+}
+
+.top-margin-3 {
+  margin-top: 3px !important;
+}
+
+.shieldIcon {
+  max-width: 15px;
+}
+
+@media only screen and (max-width: 650px) {
+  .canvas-container,
+  .upper-canvas,
+  .lower-canvas {
+    min-width: 0 !important;
+    min-height: 0 !important;
+    width: 500px !important;
+    height: 384px !important;
+  }
+}
+
+@media only screen and (max-width: 510px) {
+  .canvas-container,
+  .upper-canvas,
+  .lower-canvas {
+    min-width: 0 !important;
+    min-height: 0 !important;
+    width: 350px !important;
+    height: 350px !important;
+  }
+}
+
+@media only screen and (max-width: 410px) {
+  .canvas-container,
+  .upper-canvas,
+  .lower-canvas {
+    min-width: 0 !important;
+    min-height: 0 !important;
+    width: 300px !important;
+    height: 300px !important;
+  }
+}
+
+.fade-enter {
+  opacity: 0;
+}
+
+.fade-enter-active,
+.fade-leave-active {
+  transition: opacity 500ms ease-out;
+}
+
+.fade-leave-to {
+  opacity: 0;
+}
+.vue-tel-input {
+  border-radius: 0.5rem;
+}
+.vti__dropdown-list {
+  z-index: 100;
+}
+.vs__actions svg {
+  display: none;
+}
+.vs__actions {
+  background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 20 20'%3e%3cpath stroke='%23737373' stroke-linecap='round' stroke-linejoin='round' stroke-width='1.5' d='M6 8l4 4 4-4'/%3e%3c/svg%3e");
+  background-position: right 0.5rem center;
+  background-repeat: no-repeat;
+  background-size: 1.5em 1.5em;
+  width: 26px;
+}
+.button {
+  position: relative;
+  border: none;
+  outline: none;
+  cursor: pointer;
+}
+
+.button__text {
+  color: #ffffff;
+  transition: all 0.2s;
+}
+
+.button--loading .button__text {
+  visibility: hidden;
+  opacity: 0;
+}
+
+.button--loading::after {
+  content: "";
+  position: absolute;
+  width: 16px;
+  height: 16px;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  margin: auto;
+  border: 4px solid transparent;
+  border-top-color: #ffffff;
+  border-radius: 50%;
+  animation: button-loading-spinner 1s ease infinite;
+}
+
+@keyframes button-loading-spinner {
+  from {
+    transform: rotate(0turn);
+  }
+
+  to {
+    transform: rotate(1turn);
+  }
+}
+
+.loader {
+  border-top-color: orange;
+  -webkit-animation: spinner 1.5s linear infinite;
+  animation: spinner 1.5s linear infinite;
+}
+
+@-webkit-keyframes spinner {
+  0% {
+    -webkit-transform: rotate(0deg);
+  }
+  100% {
+    -webkit-transform: rotate(360deg);
+  }
+}
+
+@keyframes spinner {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}
+</style>
 
 <style scoped>
 .wrapper {
@@ -378,7 +3729,11 @@ export default {
 }
 
 .loader-container {
-  height: calc(100vh - theme('spacing.52'));
+  height: calc(100vh - theme("spacing.52"));
+}
+
+.modal-container {
+  min-width: 350px;
 }
 
 .loader {
