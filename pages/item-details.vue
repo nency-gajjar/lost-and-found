@@ -121,7 +121,7 @@
                 v-slot="{ errors }"
                 rules="required|email"
                 class="block"
-                name="Email"
+                name="Venue Email"
               >
                 <BaseInput
                   v-model="venueEmail"
@@ -129,6 +129,25 @@
                   label="Venue Email"
                   :class="errors.length > 0 && 'error'"
                   @blur="debouncedGetData('email')"
+                />
+                <p
+                  v-if="errors.length"
+                  class="vee-validation-error mt-2 text-sm text-red-600"
+                >
+                  {{ errors[0] }}
+                </p>
+              </ValidationProvider>
+              <ValidationProvider
+                v-slot="{ errors }"
+                rules="email"
+                class="block"
+                name="Venue Secondary Email"
+              >
+                <BaseInput
+                  v-model="venueSecondaryEmail"
+                  type="email"
+                  label="Venue Secondary Email (Optional)"
+                  :class="errors.length > 0 && 'error'"
                 />
                 <p
                   v-if="errors.length"
@@ -178,6 +197,11 @@
                   @blur="validateEmployeePhoneNumber"
                   @country-changed="countryChanged"
                 ></vue-tel-input>
+              </div>
+              <div v-if="isEmployeePhoneValid" class="flex items-center">
+                <font-awesome-icon class="text-lime-500 shieldIcon" :icon="['fas', 'shield-alt']" />
+                &nbsp;&nbsp;
+                <p class="text-lime-500">Your contact will not be shared with anyone.</p>
               </div>
               <div
                 v-if="!isEmployeePhoneValid"
@@ -372,7 +396,7 @@
                       class="
                         text-indigo-600
                         hover:cursor-pointer hover:text-indigo-900
-                        mr-3
+                        ml-3
                         py-2
                         inline-flex
                         items-center
@@ -393,42 +417,9 @@
                         />
                       </svg>
                     </a>
-                    <a
-                      @click="previewImage = !previewImage"
-                      class="
-                        hover:cursor-pointer
-                        text-gray-600
-                        hover:text-gray-900
-                        ml-3
-                        py-2
-                        inline-flex
-                        items-center
-                      "
-                    >
-                      <svg
-                        xmlns="http://www.w3.org/2000/svg"
-                        class="w-6 h-6"
-                        fill="none"
-                        viewBox="0 0 24 24"
-                        stroke="currentColor"
-                      >
-                        <path
-                          stroke-linecap="round"
-                          stroke-linejoin="round"
-                          stroke-width="2"
-                          d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"
-                        />
-                        <path
-                          stroke-linecap="round"
-                          stroke-linejoin="round"
-                          stroke-width="2"
-                          d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"
-                        />
-                      </svg>
-                    </a>
                   </div>
                 </div>
-                <div class="mt-3" v-if="previewImage">
+                <div class="mt-3" v-if="image">
                   <img :src="image" alt="Item image" />
                 </div>
               </div>
@@ -552,23 +543,32 @@
                         </div>
                         <div class="editor-tools mt-5 px-6 border-t pt-4">
                           <div class="icons">
-                            <div class="tool-undo">
-                              <rotate-ccw-icon
-                                :size="size_icon"
-                                @click="undo()"
-                              ></rotate-ccw-icon>
+                            <div>
+                              <div class="tool-undo">
+                                <rotate-ccw-icon
+                                  :size="size_icon"
+                                  @click="undo()"
+                                ></rotate-ccw-icon>
+                              </div>
+                              <p>Undo</p>
                             </div>
-                            <div class="tool-redo">
-                              <rotate-cw-icon
-                                :size="size_icon"
-                                @click="redo()"
-                              ></rotate-cw-icon>
+                            <div>
+                              <div class="tool-redo">
+                                <rotate-cw-icon
+                                  :size="size_icon"
+                                  @click="redo()"
+                                ></rotate-cw-icon>
+                              </div>
+                              <p>Redo</p>
                             </div>
-                            <div class="tool-trash">
-                              <trash-2-icon
-                                :size="size_icon"
-                                @click="deleteEditable()"
-                              ></trash-2-icon>
+                            <div>
+                              <div class="tool-trash">
+                                <trash-2-icon
+                                  :size="size_icon"
+                                  @click="deleteEditable()"
+                                ></trash-2-icon>
+                              </div>
+                              <p>Delete</p>
                             </div>
                             <!-- <div class="tool-freeDrawing">	
                             <edit-2-icon	
@@ -576,29 +576,39 @@
                               @click="freeDrawing()"	
                             ></edit-2-icon>	
                           </div>	 -->
-                            <div class="tool-addCircle">
-                              <circle-icon
-                                :size="size_icon"
-                                @click="addCicle()"
-                              ></circle-icon>
+                            <div>
+                              <div class="tool-addCircle">
+                                <circle-icon
+                                  :size="size_icon"
+                                  @click="addCicle()"
+                                ></circle-icon>
+                              </div>
+                              <p>Circle</p>
                             </div>
-                            <div class="tool-addSquare">
-                              <square-icon
-                                :size="size_icon"
-                                @click="addSquare()"
-                              ></square-icon>
+                            <div>
+                              <div class="tool-addSquare">
+                                <square-icon
+                                  :size="size_icon"
+                                  @click="addSquare()"
+                                ></square-icon>
+                              </div>
+                              <p>Square</p>
                             </div>
-                            <div class="tool-crop">
-                              <maximize-icon
-                                v-if="stateCrop"
-                                :size="size_icon"
-                                @click="crop()"
-                              ></maximize-icon>
-                              <check-icon
-                                v-else
-                                :size="size_icon"
-                                @click="applyCrop()"
-                              ></check-icon>
+                            <div>
+                              <div class="tool-crop">
+                                <maximize-icon
+                                  v-if="stateCrop"
+                                  :size="size_icon"
+                                  @click="crop()"
+                                ></maximize-icon>
+                                <check-icon
+                                  v-else
+                                  :size="size_icon"
+                                  @click="applyCrop()"
+                                ></check-icon>
+                              </div>
+                              <p v-if="stateCrop">Crop</p>
+                              <p v-else>Done</p>
                             </div>
                           </div>
                           <div class="save-upload">
@@ -816,11 +826,31 @@
                   v-slot="{ errors }"
                   rules="required|email"
                   class="block"
+                  name="Receiver's Email"
                 >
                   <BaseInput
                     v-model="receiverEmail"
                     type="email"
                     label="Receiver's Email"
+                    :class="errors.length > 0 && 'error'"
+                  />
+                  <p
+                    v-if="errors.length"
+                    class="vee-validation-error mt-2 text-sm text-red-600"
+                  >
+                    {{ errors[0] }}
+                  </p>
+                </ValidationProvider>
+                <ValidationProvider
+                  v-slot="{ errors }"
+                  rules="email"
+                  class="block"
+                  name="Receiver's Secondary Email"
+                >
+                  <BaseInput
+                    v-model="receiverSecondaryEmail"
+                    type="email"
+                    label="Receiver's Secondary Email (Optional)"
                     :class="errors.length > 0 && 'error'"
                   />
                   <p
@@ -964,6 +994,7 @@ export default {
     foundItemFormTitle: "",
     venueName: "",
     venueEmail: "",
+    venueSecondaryEmail: "",
     manualAddressSelected: false,
     manualAddress: "",
     address: "",
@@ -1056,6 +1087,7 @@ export default {
     showReceiverInputs: false,
     receiverName: "",
     receiverEmail: "",
+    receiverSecondaryEmail: "",
     receiverPhone: "",
     responseData: {
       venueName: [],
@@ -1076,7 +1108,6 @@ export default {
     imageRecognitionData: [],
     image: "",
     imageKey: "",
-    previewImage: false,
     bindPhoneInputProps: {
       mode: "international",
       autoDefaultCountry: true,
@@ -2343,20 +2374,26 @@ export default {
 }
 
 .editor-tools .icons {
-  div {
-    cursor: pointer;
-    border: 1px solid #808080;
-    border-radius: 14px;
-    margin-right: 7px;
-    &:hover {
-      background: #dfdfdf;
+  div{
+    padding-right: 7px;
+    p{
+      font-size: 12px;
+      text-align: center;
     }
-    padding: 2px 10px;
-    background-color: #f3f3f3;
-    margin-bottom: 5px;	
-    color: #ff9800;
-    svg {
-      width: 18px;
+    div {
+      cursor: pointer;
+      border: 1px solid #808080;
+      border-radius: 14px;
+      &:hover {
+        background: #dfdfdf;
+      }
+      padding: 2px 10px;
+      background-color: #f3f3f3;
+      margin-bottom: 5px;	
+      color: #ff9800;
+      svg {
+        width: 18px;
+      }
     }
   }
 }
@@ -2419,6 +2456,10 @@ canvas {
 
 .top-margin-3 {
   margin-top: 3px !important;
+}
+
+.shieldIcon{
+  max-width: 15px;
 }
 
 @media only screen and (max-width: 650px) {
