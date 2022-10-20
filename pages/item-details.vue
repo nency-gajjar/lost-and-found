@@ -158,7 +158,7 @@
               </ValidationProvider>
               <div class="block relative box-content h-12">
                 <vue-tel-input
-                  :inputOptions="{ placeholder: 'Your Phone No.' }"
+                  :inputOptions="{ placeholder: `Venue's Phone No.` }"
                   class="
                     relative
                     border

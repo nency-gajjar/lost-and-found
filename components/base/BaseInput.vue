@@ -4,8 +4,8 @@
       <div
         :class="[
           'absolute px-4 transition-all text-gray-500 z-10',
-          active && 'my-2 text-[0.625rem] leading-3',
-          !active && 'my-3.5 text-sm',
+          (active || type=='date') && 'my-2 text-[0.625rem] leading-3',
+          (!active && type!='date') && 'my-3.5 text-sm',
         ]"
       >
         {{ label }}
