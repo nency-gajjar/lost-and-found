@@ -98,18 +98,33 @@
                   {{ errors[0] }}
                 </p>
               </ValidationProvider>
+
               <ValidationProvider
                 v-slot="{ errors }"
-                rules="max:100|venueName"
+                rules="required"
                 class="block"
               >
                 <BaseInput
-                  v-model="venueName"
+                  v-model="address"
+                  id="autocomplete"
                   type="text"
-                  :label="displayVenueName"
+                  label="Address"
                   :class="errors.length > 0 && 'error'"
-                  @blur="debouncedGetData('name')"
-                />
+                  @input="getAddress"
+                >
+                  <!-- <template v-slot:icon>
+                    <div
+                      class="absolute inset-y-0 right-0 pr-3 flex items-center"
+                    >
+                      <img
+                        v-if="!isLoadingAddresses"
+                        class="addres-icon"
+                        src="@/assets/icons/location_cursor_solid.svg"
+                        alt
+                      />
+                    </div>
+                  </template> -->
+                </BaseInput>
                 <p
                   v-if="errors.length"
                   class="vee-validation-error mt-2 text-sm text-red-600"
@@ -117,6 +132,7 @@
                   {{ errors[0] }}
                 </p>
               </ValidationProvider>
+
               <ValidationProvider
                 v-slot="{ errors }"
                 rules="required|email"
@@ -128,7 +144,6 @@
                   type="email"
                   label="Venue Email"
                   :class="errors.length > 0 && 'error'"
-                  @blur="debouncedGetData('email')"
                 />
                 <p
                   v-if="errors.length"
@@ -137,11 +152,12 @@
                   {{ errors[0] }}
                 </p>
               </ValidationProvider>
+
               <ValidationProvider
                 v-slot="{ errors }"
                 rules="email"
                 class="block"
-                name="Venue Secondary Email"
+                name="Secondary Email"
               >
                 <BaseInput
                   v-model="venueSecondaryEmail"
@@ -158,30 +174,6 @@
               </ValidationProvider>
               <div class="block relative box-content h-12">
                 <vue-tel-input
-                  :inputOptions="{ placeholder: 'Your Phone No.' }"
-                  class="
-                    relative
-                    border
-                    inline-block
-                    border-gray-300
-                    w-full
-                    rounded-lg
-                    h-full
-                  "
-                  v-model="venuePhone"
-                  @blur="validateVenuePhoneNumber"
-                  v-bind="bindPhoneInputProps"
-                  @country-changed="countryChanged"
-                ></vue-tel-input>
-              </div>
-              <div
-                v-if="!isVenuePhoneValid"
-                class="vee-validation-error top-margin-05 text-sm text-red-600"
-              >
-                *Required
-              </div>
-              <div class="block relative box-content h-12">
-                <vue-tel-input
                   :inputOptions="{ placeholder: 'Employee Mobile No.' }"
                   class="
                     relative
@@ -195,13 +187,17 @@
                   v-model="employeePhone"
                   v-bind="bindPhoneInputProps"
                   @blur="validateEmployeePhoneNumber"
-                  @country-changed="countryChanged"
                 ></vue-tel-input>
               </div>
               <div v-if="isEmployeePhoneValid" class="flex items-center">
-                <font-awesome-icon class="text-lime-500 shieldIcon" :icon="['fas', 'shield-alt']" />
+                <font-awesome-icon
+                  class="text-lime-500 shieldIcon"
+                  :icon="['fas', 'shield-alt']"
+                />
                 &nbsp;&nbsp;
-                <p class="text-lime-500">Your contact will not be shared with anyone.</p>
+                <p class="text-lime-500">
+                  Your contact will not be shared with anyone.
+                </p>
               </div>
               <div
                 v-if="!isEmployeePhoneValid"
@@ -215,12 +211,13 @@
                 rules="required"
                 class="block"
               >
-                <v-select
-                  v-model="address"
+                <BaseSelect
+                  v-model="autoCompleteAddress.address"
                   :options="addressArr"
-                  class="rounded-lg"
+                  label="Auto select address"
                   :class="errors.length > 0 && 'error'"
-                ></v-select>
+                  @input="updateAddress"
+                />
                 <p
                   v-if="errors.length"
                   class="vee-validation-error mt-2 text-sm text-red-600"
@@ -247,17 +244,23 @@
                   {{ errors[0] }}
                 </p>
               </ValidationProvider>
-              <div class="grid grid-cols-2 lg:grid-cols-3 gap-4">
+              <div class="grid grid-cols-3 lg:grid-cols-3 gap-4">
                 <ValidationProvider
                   v-slot="{ errors }"
                   rules="max:28|required"
-                  class="block lg:col-span-2"
+                  class="block col-span-1"
                 >
                   <BaseInput
-                    v-model="city"
+                    v-model="autoCompleteAddress.city"
                     label="City"
                     type="text"
-                    :class="errors.length > 0 && 'error'"
+                    :class="{
+                      error: errors.length > 0,
+                      readonly: autoCompleteAddress.city && autoAddressSelected,
+                    }"
+                    :readonly="
+                      autoCompleteAddress.city !== '' && autoAddressSelected
+                    "
                   />
                   <p
                     v-if="errors.length"
@@ -272,10 +275,42 @@
                   class="block col-span-1"
                 >
                   <BaseInput
-                    v-model="state"
+                    v-model="autoCompleteAddress.state"
                     label="State"
                     type="text"
-                    :class="errors.length > 0 && 'error'"
+                    :class="{
+                      error: errors.length > 0,
+                      readonly:
+                        autoCompleteAddress.state && autoAddressSelected,
+                    }"
+                    :readonly="
+                      autoCompleteAddress.state !== '' && autoAddressSelected
+                    "
+                  />
+                  <p
+                    v-if="errors.length"
+                    class="vee-validation-error mt-2 text-sm text-red-600"
+                  >
+                    {{ errors[0] }}
+                  </p>
+                </ValidationProvider>
+                <ValidationProvider
+                  v-slot="{ errors }"
+                  rules="required"
+                  class="block col-span-1"
+                >
+                  <BaseInput
+                    v-model="autoCompleteAddress.zipcode"
+                    label="Zipcode"
+                    type="text"
+                    :class="{
+                      error: errors.length > 0,
+                      readonly:
+                        autoCompleteAddress.zipcode && autoAddressSelected,
+                    }"
+                    :readonly="
+                      autoCompleteAddress.zipcode !== '' && autoAddressSelected
+                    "
                   />
                   <p
                     v-if="errors.length"
@@ -285,35 +320,24 @@
                   </p>
                 </ValidationProvider>
               </div>
-              <div class="grid grid-cols-2 lg:grid-cols-3 gap-4">
+              <div class="grid lg:grid-cols-2 gap-4">
                 <ValidationProvider
                   v-slot="{ errors }"
                   rules="max:28|required"
-                  class="block lg:col-span-2"
-                >
-                  <BaseInput
-                    v-model="country"
-                    label="Country"
-                    type="text"
-                    :class="errors.length > 0 && 'error'"
-                  />
-                  <p
-                    v-if="errors.length"
-                    class="vee-validation-error mt-2 text-sm text-red-600"
-                  >
-                    {{ errors[0] }}
-                  </p>
-                </ValidationProvider>
-                <ValidationProvider
-                  rules="required"
-                  v-slot="{ errors }"
                   class="block col-span-1"
                 >
                   <BaseInput
-                    v-model="zipcode"
-                    label="Zip Code"
+                    v-model="autoCompleteAddress.country"
+                    label="Country"
                     type="text"
-                    :class="errors.length > 0 && 'error'"
+                    :class="{
+                      error: errors.length > 0,
+                      readonly:
+                        autoCompleteAddress.country && autoAddressSelected,
+                    }"
+                    :readonly="
+                      autoCompleteAddress.country !== '' && autoAddressSelected
+                    "
                   />
                   <p
                     v-if="errors.length"
@@ -322,6 +346,41 @@
                     {{ errors[0] }}
                   </p>
                 </ValidationProvider>
+                <div class="block relative box-content h-12">
+                  <vue-tel-input
+                    :inputOptions="{ placeholder: 'Phone Number' }"
+                    class="
+                      relative
+                      border
+                      inline-block
+                      border-gray-300
+                      w-full
+                      rounded-lg
+                      h-full
+                    "
+                    :class="{
+                      readonly:
+                        autoCompleteAddress.phoneNumber && autoAddressSelected,
+                    }"
+                    :disabled="
+                      autoCompleteAddress.phoneNumber !== '' &&
+                      autoAddressSelected
+                    "
+                    v-model="autoCompleteAddress.phoneNumber"
+                    @blur="validateVenuePhoneNumber"
+                    v-bind="bindPhoneInputProps"
+                  ></vue-tel-input>
+                </div>
+                <div
+                  v-if="!isVenuePhoneValid"
+                  class="
+                    vee-validation-error
+                    top-margin-05
+                    text-sm text-red-600
+                  "
+                >
+                  *Required
+                </div>
               </div>
             </div>
             <div class="flex mt-2">
@@ -841,25 +900,6 @@
                     {{ errors[0] }}
                   </p>
                 </ValidationProvider>
-                <ValidationProvider
-                  v-slot="{ errors }"
-                  rules="email"
-                  class="block"
-                  name="Receiver's Secondary Email"
-                >
-                  <BaseInput
-                    v-model="receiverSecondaryEmail"
-                    type="email"
-                    label="Receiver's Secondary Email (Optional)"
-                    :class="errors.length > 0 && 'error'"
-                  />
-                  <p
-                    v-if="errors.length"
-                    class="vee-validation-error mt-2 text-sm text-red-600"
-                  >
-                    {{ errors[0] }}
-                  </p>
-                </ValidationProvider>
                 <div class="block relative box-content h-12">
                   <vue-tel-input
                     :inputOptions="{ placeholder: 'Receiver Mobile No.' }"
@@ -875,7 +915,6 @@
                     v-model="receiverPhone"
                     v-bind="bindPhoneInputProps"
                     @blur="validateReceiverPhoneNumber"
-                    @country-changed="countryChanged"
                   ></vue-tel-input>
                   <div
                     v-if="!isReceiverPhoneValid"
@@ -967,14 +1006,12 @@
 </template>
 
 <script>
-import "vue-select/dist/vue-select.css";
 import { ValidationObserver, ValidationProvider } from "vee-validate";
 import BaseInput from "~/components/base/BaseInput.vue";
 import BaseSelect from "~/components/base/BaseSelect.vue";
-import { debounce } from "lodash";
 import Editor from "~/components/vueImageEditor/Editor.vue";
-import VSelect from "vue-select";
 import { mapGetters } from "vuex";
+
 import {
   CircleIcon,
   RotateCcwIcon,
@@ -998,14 +1035,14 @@ export default {
     manualAddressSelected: false,
     manualAddress: "",
     address: "",
-    city: "",
-    state: "",
-    country: "",
-    zipcode: "",
+    // city: "",
+    // state: "",
+    // country: "",
+    // zipcode: "",
     manualVenue: "",
     venue: "",
     venueArr: ["Hotel", "Restaurent", "Airport", "Other"],
-    venuePhone: "",
+    // venuePhone: "",
     employeePhone: "",
     foundDate: new Date().toISOString().slice(0, 10),
     venueManually: false,
@@ -1087,22 +1124,19 @@ export default {
     showReceiverInputs: false,
     receiverName: "",
     receiverEmail: "",
-    receiverSecondaryEmail: "",
     receiverPhone: "",
     responseData: {
       venueName: [],
       venueEmail: [],
       venuePhone: [],
     },
-    apiAddressData: [],
-    addressArr: [],
+    addressArr: ["Other"],
     itemImage: "",
     canvasWidth: "600",
     canvasHeight: "400",
     showEditor: false,
     stateCrop: true,
     size_icon: "2x",
-    showFilledDetails: false,	
     isSavingImage: false,
     loadingSpinner: false,
     imageRecognitionData: [],
@@ -1128,10 +1162,19 @@ export default {
     isLoadingItemDetails: false,
     isVenuePhoneValid: true,
     isEmployeePhoneValid: true,
-    isReceiverPhoneValid: true,	
-    currentPosition: {	
-      lat: null,	
-      long: null,	
+    isReceiverPhoneValid: true,
+    currentPosition: {
+      lat: null,
+      long: null,
+    },
+    isLoadingAddresses: true,
+    autoCompleteAddress: {
+      address: "",
+      city: "",
+      state: "",
+      country: "",
+      zipcode: "",
+      phoneNumber: "",
     },
   }),
   components: {
@@ -1149,7 +1192,6 @@ export default {
     MaximizeIcon,
     CheckIcon,
     SaveIcon,
-    VSelect,
   },
   computed: {
     ...mapGetters("item", ["itemDetails"]),
@@ -1164,24 +1206,88 @@ export default {
         return "Venue Name";
       }
     },
+    autoAddressSelected() {
+      return this.autoCompleteAddress.address !== "Other";
+    },
   },
   methods: {
-    getCurrentPosition() {	
-      fetch("http://ip-api.com/json")	
-        .then((data) => {	
-          return data.json();	
-        })	
-        .then(async (data) => {	
-          this.currentPosition = { lat: data.lat, long: data.lon };	
-        });	
+    getCurrentPosition() {
+      fetch("http://ip-api.com/json")
+        .then((data) => {
+          return data.json();
+        })
+        .then(async (data) => {
+          this.currentPosition = { lat: data.lat, long: data.lon };
+        });
+    },
+    getAddress() {
+      // this.autoCompleteAddress = {};
+      // this.isLoadingAddresses = true;
+      const autocomplete = new google.maps.places.Autocomplete(
+        document.getElementById("autocomplete")
+        // {
+        //   bounds: new google.maps.LatLngBounds(
+        //     new google.maps.LatLng(
+        //       this.currentPosition.lat,
+        //       this.currentPosition.long
+        //     )
+        //   ),
+        // }
+        // {
+        //   types: ["address"],
+        //   fields: ["address_components", "geometry"],
+        // }
+      );
+      autocomplete.addListener("place_changed", () => {
+        let address = autocomplete.getPlace();
+        this.addressArr.unshift(address.formatted_address);
+        this.autoCompleteAddress.address = this.addressArr[0];
+        this.autoCompleteAddress.phoneNumber =
+          address.international_phone_number || address.formatted_phone_number;
+        ("");
+
+        address.address_components.forEach((component) => {
+          component.types.forEach((type) => {
+            if (type === "locality") {
+              this.autoCompleteAddress.city = component.long_name;
+            }
+            if (type === "administrative_area_level_1") {
+              this.autoCompleteAddress.state = component.long_name;
+            }
+            if (type === "country") {
+              this.autoCompleteAddress.country = component.long_name;
+            }
+            if (type === "postal_code") {
+              this.autoCompleteAddress.zipcode = component.long_name;
+            }
+          });
+        });
+      });
+      // console.log("=====this.autoCompleteAddress", this.autoCompleteAddress);
+    },
+    updateAddress(value) {
+      if (value === "Other") {
+        this.manualAddressSelected = true;
+        this.resetAddressFields();
+      } else {
+        this.manualAddressSelected = false;
+      }
+    },
+    resetAddressFields() {
+      this.autoCompleteAddress = {
+        address: "",
+        city: "",
+        state: "",
+        country: "",
+        zipcode: "",
+        phoneNumber: "",
+      };
     },
     validateVenuePhoneNumber() {
-      if (!this.venuePhone) {
+      if (!this.autoCompleteAddress.phoneNumber) {
         this.isVenuePhoneValid = false;
-        this.debouncedGetData("phoneno");
       } else {
         this.isVenuePhoneValid = true;
-        this.debouncedGetData("phoneno");
       }
     },
     validateEmployeePhoneNumber() {
@@ -1202,9 +1308,6 @@ export default {
       let arr = phoneNumber.split(" ");
       let countryCode = arr.shift();
       return countryCode + " " + arr.join("");
-    },
-    countryChanged(country) {
-      // console.log("===countryChanged", country);
     },
     setItemDetails(value) {
       switch (value) {
@@ -1562,80 +1665,6 @@ export default {
           break;
       }
     },
-    addressFilter(mode) {
-      if (this.apiAddressData.length == 0 && !this.address) {
-        this.address = "";
-      }
-      let addressLineArr = this.apiAddressData.map((addressObj) => {
-        return addressObj.address;
-      });
-      addressLineArr.push("Other");
-      if (mode != "edit") {
-        if (this.address && addressLineArr.length > 1) {
-          let index = addressLineArr.findIndex((address) => {
-            return address == this.address;
-          });
-          if (index == -1) {
-            this.address = addressLineArr[0];
-          }
-        }
-        if (!this.address && addressLineArr.length > 1) {
-          this.manualAddressSelected = false;
-          this.address = addressLineArr[0];
-        }
-        if (this.apiAddressData.length < 1) {
-          this.address = "";
-        }
-      }
-      this.addressArr = addressLineArr;
-    },
-    debouncedGetData: debounce(function (type) {
-      this.getData(type, "");
-    }, 1000),
-
-    getData(type, mode) {	
-      const params = {	
-        lat: this.currentPosition.lat,	
-        long: this.currentPosition.long,	
-      };	
-      if (type === "name" && this.venueName.length > 0) {	
-        params.type = "name";	
-        params.place = this.venueName;	
-        this.responseData.venueName = [];	
-      } else if (type === "email") {	
-        params.type = "email";	
-        params.place = this.venueEmail;	
-        this.responseData.venueEmail = [];	
-      } else if (type === "phoneno") {	
-        params.type = "phoneno";	
-        params.mobileno = this.venuePhone;	
-        this.responseData.venuePhone = [];	
-      }	
-      this.$axios.get("/autofilladdress", { params }).then(({ data }) => {	
-        if (!data.error) {	
-          if (type === "name") {	
-            if (this.venueName) {	
-              this.responseData.venueName.push(...data.data);	
-            }	
-          } else if (type === "email") {	
-            if (this.venueEmail) {	
-              this.responseData.venueEmail.push(...data.data);	
-            }	
-          } else if (type === "phoneno") {	
-            if (this.venuePhone) {	
-              this.responseData.venuePhone.push(...data.data);	
-            }	
-          }	
-          this.apiAddressData = [];	
-          this.apiAddressData.push(	
-            ...this.responseData.venueName,	
-            ...this.responseData.venuePhone,	
-            ...this.responseData.venueEmail	
-          );	
-          this.addressFilter(mode);	
-        }	
-      });
-    },
     async onSubmit() {
       this.validateVenuePhoneNumber();
       this.validateEmployeePhoneNumber();
@@ -1643,7 +1672,9 @@ export default {
         this.validateReceiverPhoneNumber();
       }
       this.isLoading = true;
-      let venuePhoneNo = this.formatMobileNumber(this.venuePhone);
+      let venuePhoneNo = this.formatMobileNumber(
+        this.autoCompleteAddress.phoneNumber
+      );
       let employeePhone = this.formatMobileNumber(this.employeePhone);
       const isValid = await this.$refs.observer.validate();
       if (
@@ -1659,22 +1690,27 @@ export default {
         const params = {
           venu_type: this.venue === "Other" ? this.manualVenue : this.venue,
           datse: this.foundDate,
-          venue_name: this.venueName,
+          // venue_name: this.venueName,
           venue_email: this.venueEmail,
+          secondary_email: this.venueSecondaryEmail,
           venue_phone_no: venuePhoneNo,
           employee_mobile_no: employeePhone,
-          address: this.address,
-          manualAddress: this.manualAddress,
-          city: this.city,
-          states: this.state,
-          country: this.country,
-          zipcode: this.zipcode,
+          address:
+            this.autoCompleteAddress.address === "Other"
+              ? this.manualAddress
+              : this.autoCompleteAddress.address,
+          city: this.autoCompleteAddress.city,
+          states: this.autoCompleteAddress.state,
+          country: this.autoCompleteAddress.country,
+          zipcode: this.autoCompleteAddress.zipcode,
           image: this.image,
           item_description: this.itemDescription,
           package_type: this.packageType,
-          weight: this.weight,
-          // weightOunces: this.weightOunces,
-          dimensions: `${this.itemLength} X ${this.itemWidth} X ${this.itemHeight} inch`,
+          weight_pounds: this.weight,
+          // weight_ounces: this.this.weightOunces,
+          length: this.itemLength,
+          width: this.itemWidth,
+          height: this.itemHeight,
           item_status: this.itemStatus === "Claimed" ? 0 : 1,
         };
         params.foundItemId = this.foundItemId;
@@ -1684,6 +1720,8 @@ export default {
           params.receiver_email = this.receiverEmail;
           params.receiver_mobile_no = receiverPhone;
         }
+
+        console.log("===params", params);
         this.$store.commit("item/SET_ITEM_DETAILS", {
           ...params,
           image: this.image,
@@ -1777,11 +1815,11 @@ export default {
         this.showEditor = false;
       }
     },
-    saveImg() {	
+    saveImg() {
       this.isSavingImage = true;
       const file = this.$refs.editor.saveImage();
       this.$axios.post("/demo", { file }).then((response) => {
-        if (response.status === 200) {	
+        if (response.status === 200) {
           this.isSavingImage = false;
           this.imageRecognitionData = response.data.data;
           this.itemDescriptionArr = response.data.data
@@ -1825,33 +1863,6 @@ export default {
           this.showReceiverInputs = true;
         } else {
           this.showReceiverInputs = false;
-        }
-      }
-    },
-    address(newAddress, oldAddress) {
-      if (newAddress != oldAddress) {
-        if (!newAddress || newAddress == "Other") {
-          if (newAddress == "Other") {
-            this.manualAddressSelected = true;
-          }
-          if (oldAddress && newAddress == "Other") {
-            this.manualAddress = "";
-          }
-          this.city = "";
-          this.state = "";
-          this.country = "";
-          this.zipcode = "";
-        } else {
-          this.manualAddressSelected = false;
-          let index = this.apiAddressData.findIndex((addressObj) => {
-            return addressObj.address == newAddress;
-          });
-          if (index != -1) {
-            this.city = this.apiAddressData[index].city;
-            this.state = this.apiAddressData[index].state;
-            this.country = this.apiAddressData[index].country;
-            this.zipcode = this.apiAddressData[index].zipcode;
-          }
         }
       }
     },
@@ -2219,7 +2230,7 @@ export default {
       }
     });
   },
-  mounted() {	
+  mounted() {
     this.getCurrentPosition();
     if (this.$route.query.id) {
       this.isLoadingItemDetails = true;
@@ -2231,39 +2242,41 @@ export default {
         .then((response) => {
           if (response.status === 200) {
             this.isLoadingItemDetails = false;
-            let responseData = response.data.data.Item;
-
-            var index = this.venueArr.indexOf(responseData.venu_type) !== -1;
-            if (index) this.venue = responseData.venu_type;
+            let data = response.data.data.Item;
+            let index = this.venueArr.indexOf(data.venu_type) !== -1;
+            if (index) this.venue = data.venu_type;
             else {
               this.venue = "Other";
-              this.manualVenue = responseData.venu_type;
+              this.manualVenue = data.venu_type;
             }
-            this.venueName = responseData.venue_name;
-            this.venueEmail = responseData.venue_email;
-            this.address = responseData.address;
-            this.manualAddress = responseData.address;
-            this.city = responseData.city;
-            this.image = responseData.image;
-            this.state = responseData.states;
-            this.country = responseData.country;
-            this.zipcode = responseData.zipcode;
-            this.venuePhone = responseData.venue_phone_no;
-            this.employeePhone = responseData.employee_mobile_no;
             this.foundDate = new Date().toISOString().slice(0, 10);
-            this.itemDescription = responseData.item_description;
-            this.packageType = responseData.package_type;
-            this.weight = responseData.weight;
-            // this.weightOunces = responseData.weightOunces;
-            let dimensionArr = responseData.dimensions.split(" X ");
-            this.itemLength = dimensionArr[0];
-            this.itemWidth = dimensionArr[1];
-            this.itemHeight = dimensionArr[2].split(" ")[0];
-            this.itemStatus =
-              responseData.item_status == 0 ? "Claimed" : "Unclaimed";
-            this.receiverName = responseData.receiver_name;
-            this.receiverEmail = responseData.receiver_email;
-            this.receiverPhone = responseData.receiver_mobile_no;
+            this.venueEmail = data.venue_email;
+            this.venueSecondaryEmail = data.secondary_email;
+            this.employeePhone = data.employee_mobile_no;
+            this.addressArr.unshift(data.address);
+            this.address = data.address;
+            this.autoCompleteAddress.address = this.addressArr[0];
+            // this.manualAddress = data.address;
+            this.autoCompleteAddress.phoneNumber = data.venue_phone_no;
+            this.autoCompleteAddress.city = data.city;
+            this.autoCompleteAddress.state = data.states;
+            this.autoCompleteAddress.country = data.country;
+            this.autoCompleteAddress.zipcode = data.zipcode;
+            this.image = data.image;
+            this.itemDescription = data.item_description;
+            this.packageType = data.package_type;
+            this.weight = data.weight;
+            // this.weightOunces = data.weightOunces;
+            this.itemLength = data.length;
+            this.itemWidth = data.width;
+            this.itemHeight = data.height;
+            this.itemStatus = data.item_status === 0 ? "Claimed" : "Unclaimed";
+
+            if (data.item_status === 0) {
+              this.receiverName = data.receiver_name;
+              this.receiverEmail = data.receiver_email;
+              this.receiverPhone = data.receiver_mobile_no;
+            }
           }
         })
         .catch((error) => console.log(error));
@@ -2283,55 +2296,32 @@ export default {
         this.foundItemId = data.id;
       }
       this.foundDate = data.datse;
-      this.venueName = data.venue_name;
       this.venueEmail = data.venue_email;
-      this.venuePhone = data.venue_phone_no;
+      this.venueSecondaryEmail = data.secondary_email;
       this.employeePhone = data.employee_mobile_no;
+      this.addressArr.unshift(data.address);
       this.address = data.address;
-      this.manualAddress = data.manualAddress;
-      this.city = data.city;
-      this.state = data.states;
-      this.country = data.country;
-      this.zipcode = data.zipcode;
+      this.autoCompleteAddress.address = this.addressArr[0];
+      // this.manualAddress = data.manualAddress;
+      this.autoCompleteAddress.phoneNumber = data.venue_phone_no;
+      this.autoCompleteAddress.city = data.city;
+      this.autoCompleteAddress.state = data.states;
+      this.autoCompleteAddress.country = data.country;
+      this.autoCompleteAddress.zipcode = data.zipcode;
       this.image = data.image;
       this.itemDescription = data.item_description;
       this.packageType = data.package_type;
-      this.weight = data.weight;
+      this.weight = data.weight_pounds;
       // this.weightOunces = data.weightOunces;
-      let dimensionArr = data.dimensions.split(" X ");
-      this.itemLength = dimensionArr[0];
-      this.itemWidth = dimensionArr[1];
-      this.itemHeight = dimensionArr[2].split(" ")[0];
+      this.itemLength = data.length;
+      this.itemWidth = data.width;
+      this.itemHeight = data.height;
       this.itemStatus = data.item_status === 0 ? "Claimed" : "Unclaimed";
 
       if (data.item_status === 0) {
         this.receiverName = data.receiver_name;
         this.receiverEmail = data.receiver_email;
         this.receiverPhone = data.receiver_mobile_no;
-      }
-      if (this.venueName) {
-        this.getData("name", "edit");
-        this.address = data.address;
-        this.city = data.city;
-        this.state = data.states;
-        this.country = data.country;
-        this.zipcode = data.zipcode;
-      }
-      if (this.venueEmail) {
-        this.getData("email", "edit");
-        this.address = data.address;
-        this.city = data.city;
-        this.state = data.states;
-        this.country = data.country;
-        this.zipcode = data.zipcode;
-      }
-      if (this.venuePhone) {
-        this.getData("phoneno", "edit");
-        this.address = data.address;
-        this.city = data.city;
-        this.state = data.states;
-        this.country = data.country;
-        this.zipcode = data.zipcode;
       }
     } else {
       this.senderFormTitle = "SENDER'S DETAILS";
@@ -2374,9 +2364,9 @@ export default {
 }
 
 .editor-tools .icons {
-  div{
+  div {
     padding-right: 7px;
-    p{
+    p {
       font-size: 12px;
       text-align: center;
     }
@@ -2389,7 +2379,7 @@ export default {
       }
       padding: 2px 10px;
       background-color: #f3f3f3;
-      margin-bottom: 5px;	
+      margin-bottom: 5px;
       color: #ff9800;
       svg {
         width: 18px;
@@ -2458,7 +2448,7 @@ canvas {
   margin-top: 3px !important;
 }
 
-.shieldIcon{
+.shieldIcon {
   max-width: 15px;
 }
 
@@ -2588,5 +2578,24 @@ canvas {
   100% {
     transform: rotate(360deg);
   }
+}
+
+.pac-item {
+  padding: 6px;
+  font-size: 14px;
+  cursor: pointer;
+
+  &:hover {
+    background-color: #ececec;
+  }
+}
+
+.pac-item-query {
+  font-size: 14px;
+}
+
+.readonly .vti__dropdown,
+.readonly input {
+  @apply bg-gray-100 cursor-pointer;
 }
 </style>
