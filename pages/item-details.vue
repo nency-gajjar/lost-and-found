@@ -108,13 +108,13 @@
                   v-model="address"
                   id="autocomplete"
                   type="text"
-                  label="Address"
+                  :label="displayVenueName"
                   :class="errors.length > 0 && 'error'"
                   @input="getAddress"
                 >
                   <!-- <template v-slot:icon>
                     <div
-                      class="absolute inset-y-0 right-0 pr-3 flex items-center"
+                      class="absolute inset-y-0 right-0 pr-5 flex items-center"
                     >
                       <img
                         v-if="!isLoadingAddresses"
@@ -162,7 +162,7 @@
                 <BaseInput
                   v-model="venueSecondaryEmail"
                   type="email"
-                  label="Venue Secondary Email (Optional)"
+                  label="Secondary Venue Email (Optional)"
                   :class="errors.length > 0 && 'error'"
                 />
                 <p
@@ -189,13 +189,13 @@
                   @blur="validateEmployeePhoneNumber"
                 ></vue-tel-input>
               </div>
-              <div v-if="isEmployeePhoneValid" class="flex items-center">
+              <div class="flex items-center" style="margin: 2px 2px !important">
                 <font-awesome-icon
-                  class="text-lime-500 shieldIcon"
+                  class="shieldIcon"
                   :icon="['fas', 'shield-alt']"
                 />
                 &nbsp;&nbsp;
-                <p class="text-lime-500">
+                <p style="color: #16a34a; font-size: 14px">
                   Your contact will not be shared with anyone.
                 </p>
               </div>
@@ -1201,9 +1201,9 @@ export default {
       } else if (this.venue === "Hotel") {
         return "Hotel Name";
       } else if (this.venue === "Airport") {
-        return "Airport Name";
+        return "Airport Code";
       } else {
-        return "Venue Name";
+        return "Venue Address";
       }
     },
     autoAddressSelected() {
@@ -1240,7 +1240,12 @@ export default {
       );
       autocomplete.addListener("place_changed", () => {
         let address = autocomplete.getPlace();
-        this.addressArr.unshift(address.formatted_address);
+        let index = this.addressArr.findIndex((addressObj) => {
+          return addressObj == address.formatted_address;
+        });
+        if (index == "-1") {
+          this.addressArr.unshift(address.formatted_address);
+        }
         this.autoCompleteAddress.address = this.addressArr[0];
         this.autoCompleteAddress.phoneNumber =
           address.international_phone_number || address.formatted_phone_number;
@@ -1263,7 +1268,6 @@ export default {
           });
         });
       });
-      // console.log("=====this.autoCompleteAddress", this.autoCompleteAddress);
     },
     updateAddress(value) {
       if (value === "Other") {
@@ -1721,7 +1725,6 @@ export default {
           params.receiver_mobile_no = receiverPhone;
         }
 
-        console.log("===params", params);
         this.$store.commit("item/SET_ITEM_DETAILS", {
           ...params,
           image: this.image,
@@ -2450,6 +2453,8 @@ canvas {
 
 .shieldIcon {
   max-width: 15px;
+  color: #16a34a;
+  opacity: 0.75;
 }
 
 @media only screen and (max-width: 650px) {
