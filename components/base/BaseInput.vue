@@ -35,6 +35,7 @@
           icon && 'pr-10',
           hideValue && '!text-transparent',
         ]"
+        :readonly="readonly"
         @blur="
           active = value !== '';
           $emit('blur', $event);
@@ -47,6 +48,7 @@
         @keydown="$emit('keydown', $event)"
         @input="updateValue"
       />
+      <slot name="icon" />
       <!-- <UiSpinner
         v-if="loading"
         class="!h-6 !w-6 absolute inset-y-3 right-[50%] !border-4"
@@ -86,6 +88,7 @@ export default {
     inputClasses: { type: String | Array },
     icon: { type: String, default: "" },
     hideValue: { type: Boolean, default: false },
+    readonly: { type: Boolean, default: false },
   },
   data() {
     return {
@@ -115,5 +118,8 @@ export default {
 <style scoped>
 .error input {
   @apply border-red-500 border-2 ring-4 ring-red-500 ring-opacity-10 transition-none;
+}
+.readonly input {
+  @apply bg-gray-100 cursor-pointer;
 }
 </style>

@@ -295,13 +295,16 @@
                 sm:w-6/12
               "
             >
-              Venue Name
+              Venue Email
             </div>
             <div class="text-gray-600 text-left md:w-7/12 sm:w-6/12">
-              {{ itemDetails.venue_name }}
+              {{ itemDetails.venue_email }}
             </div>
           </div>
-          <div class="flex items-center mt-3 flex-wrap">
+          <div
+            v-if="itemDetails.secondary_email"
+            class="flex items-center mt-3 flex-wrap"
+          >
             <div
               class="
                 text-left text-gray-600
@@ -312,10 +315,10 @@
                 sm:w-6/12
               "
             >
-              Venue Email
+              Venue Secondary Email
             </div>
             <div class="text-gray-600 text-left md:w-7/12 sm:w-6/12">
-              {{ itemDetails.venue_email }}
+              {{ itemDetails.secondary_email }}
             </div>
           </div>
           <div class="flex items-center mt-3 flex-wrap">
@@ -590,7 +593,7 @@
                   Weight
                 </div>
                 <div class="text-gray-600 text-left md:w-7/12 sm:w-6/12">
-                  {{ itemDetails.weight }} lbs
+                  {{ itemDetails.weight_pounds }} lbs
                 </div>
               </div>
               <div class="flex items-center mt-3 flex-wrap">
@@ -607,7 +610,8 @@
                   Dimension
                 </div>
                 <div class="text-gray-600 text-left md:w-7/12 sm:w-6/12">
-                  {{ itemDetails.dimensions }}
+                  {{ itemDetails.length }}(l) x {{ itemDetails.width }}(w) x
+                  {{ itemDetails.height }}(h) inches
                 </div>
               </div>
               <div class="flex items-center mt-3 flex-wrap">
