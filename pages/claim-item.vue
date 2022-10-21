@@ -43,16 +43,18 @@
                   ></span>
                 </div>
               </div>
-              <p><strong> Personal Details: </strong></p>
+              <label class="block mb-1 text-sm font-medium text-gray-800"
+                >Personal Details:</label
+              >
               <ValidationProvider
                 v-slot="{ errors }"
                 rules="max:100|required"
                 class="block"
               >
                 <BaseInput
-                  v-model="userName"
+                  v-model="claimPersonName"
                   type="text"
-                  label="Name"
+                  label="Your Name"
                   :class="errors.length > 0 && 'error'"
                 />
                 <p
@@ -69,9 +71,9 @@
                 name="Email"
               >
                 <BaseInput
-                  v-model="userEmail"
+                  v-model="claimPersonEmail"
                   type="email"
-                  label="Email"
+                  label="Your Email"
                   :class="errors.length > 0 && 'error'"
                 />
                 <p
@@ -83,7 +85,7 @@
               </ValidationProvider>
               <div class="block relative box-content h-12">
                 <vue-tel-input
-                  :inputOptions="{ placeholder: 'Mobile No.' }"
+                  :inputOptions="{ placeholder: 'Mobile Number' }"
                   class="
                     relative
                     border
@@ -93,19 +95,20 @@
                     rounded-lg
                     h-full
                   "
-                  v-model="userPhone"
+                  v-model="claimPersonPhoneNo"
                   v-bind="bindPhoneInputProps"
                   @blur="validateUserPhone"
-                  @country-changed="countryChanged"
                 ></vue-tel-input>
                 <div
-                  v-if="!isUserPhoneValid"
+                  v-if="!isPhoneNoValid"
                   class="vee-validation-error mt-2 text-sm text-red-600"
                 >
                   *Required
                 </div>
               </div>
-              <p><strong> Item Details: </strong></p>
+              <label class="block mb-1 !mt-10 text-sm font-medium text-gray-800"
+                >Item Details:</label
+              >
               <ValidationProvider
                 v-slot="{ errors }"
                 rules="max:100|required"
@@ -114,7 +117,7 @@
                 <BaseInput
                   v-model="itemName"
                   type="text"
-                  label="Name"
+                  label="Item Name"
                   :class="errors.length > 0 && 'error'"
                 />
                 <p
@@ -129,9 +132,9 @@
                 rules="required"
                 class="block"
               >
-                <BaseSelect
+                <BaseInput
                   v-model="itemDescription"
-                  :options="itemDescriptionArr"
+                  type="text"
                   label="Item Description"
                   :class="errors.length > 0 && 'error'"
                 />
@@ -148,7 +151,7 @@
                 class="block"
               >
                 <BaseInput
-                  v-model="lostDate"
+                  v-model="itemLostDate"
                   type="date"
                   label="Date of Lost"
                   :class="errors.length > 0 && 'error'"
@@ -160,14 +163,16 @@
                   {{ errors[0] }}
                 </p>
               </ValidationProvider>
-              <p><strong> Address of Lost: </strong></p>
+              <label class="block mb-1 !mt-10 text-sm font-medium text-gray-800"
+                >Lost Item Address:</label
+              >
               <ValidationProvider
                 v-slot="{ errors }"
                 rules="required"
                 class="block"
               >
                 <BaseInput
-                  v-model="addressLine"
+                  v-model="address"
                   type="text"
                   label="Address Line"
                   :class="errors.length > 0 && 'error'"
@@ -255,6 +260,45 @@
                   </p>
                 </ValidationProvider>
               </div>
+
+              <ValidationProvider
+                v-slot="{ errors }"
+                rules="required|email"
+                class="block"
+                name="Venue Email"
+              >
+                <BaseInput
+                  v-model="venueEmail"
+                  type="email"
+                  label="Venue Email"
+                  :class="errors.length > 0 && 'error'"
+                />
+                <p
+                  v-if="errors.length"
+                  class="vee-validation-error mt-2 text-sm text-red-600"
+                >
+                  {{ errors[0] }}
+                </p>
+              </ValidationProvider>
+              <ValidationProvider
+                v-slot="{ errors }"
+                rules="email"
+                class="block"
+                name="Secondary Email"
+              >
+                <BaseInput
+                  v-model="secondaryEmail"
+                  type="text"
+                  label="Secondary Email (optional)"
+                  :class="errors.length > 0 && 'error'"
+                />
+                <p
+                  v-if="errors.length"
+                  class="vee-validation-error mt-2 text-sm text-red-600"
+                >
+                  {{ errors[0] }}
+                </p>
+              </ValidationProvider>
               <div
                 v-show="showValidateAlert"
                 class="
@@ -327,9 +371,9 @@ export default {
   },
   data() {
     return {
-      userName: "",
-      userEmail: "",
-      userPhone: "",
+      claimPersonName: "",
+      claimPersonEmail: "",
+      claimPersonPhoneNo: "",
       bindPhoneInputProps: {
         mode: "international",
         autoDefaultCountry: true,
@@ -345,75 +389,69 @@ export default {
           showDialCode: false,
         },
       },
-      isUserPhoneValid: true,
+      isPhoneNoValid: true,
       isLoading: false,
       itemName: "",
       itemDescription: "",
-      itemDescriptionArr: [
-        "Laptop",
-        "Tablet",
-        "Cell phone",
-        "Mobile Phone",
-        "Pillow",
-        "Shoes",
-        "Slipper",
-        "Socks",
-        "Headphone",
-        "Earphone",
-        "Wristwatch",
-        "ID",
-        "Credit Card",
-        "Passport",
-        "Phone charger",
-        "Charger for Laptop",
-        "Blanket",
-        "Shirt",
-        "Pant",
-        "T-shirt",
-        "Clothes",
-        "Jacket",
-        "Suit",
-        "Water bottle",
-        "Stuffed toy",
-        "Bed sheet",
-        "Towel",
-        "Tool box",
-        "Box - Shoe size",
-        "Small Box",
-        "Medium Box",
-        "Large Box",
-        "Bagpack - Carry on",
-        "Luggage - Carry on",
-        "Luggage - Check in size",
-        "Documents",
-        "Keys",
-        "Purse",
-        "Wallet",
-        "Medication Pills",
-        "Folder",
-        "Jewelery",
-        "Thermos",
-        "Other",
-      ],
-      lostDate: "",
-      addressLine: "",
-      city: "",
-      state: "",
-      country: "",
-      zipcode: "",
+      itemLostDate: "",
+      location: "",
+      venueEmail: "",
+      secondaryEmail: "",
+      autoCompleteAddress: {
+        address: "",
+        city: "",
+        state: "",
+        country: "",
+        zipcode: "",
+        phoneNumber: "",
+      },
+
       showValidateAlert: false,
     };
   },
   methods: {
-    validateUserPhone() {
-      if (!this.userPhone) {
-        this.isUserPhoneValid = false;
-      } else {
-        this.isUserPhoneValid = true;
-      }
+    getAddress() {
+      const autocomplete = new google.maps.places.Autocomplete(
+        document.getElementById("autocomplete")
+      );
+      autocomplete.addListener("place_changed", () => {
+        let address = autocomplete.getPlace();
+        let index = this.addressArr.findIndex((addressObj) => {
+          return addressObj == address.formatted_address;
+        });
+        if (index == "-1") {
+          this.addressArr.unshift(address.formatted_address);
+        }
+        this.autoCompleteAddress.address = this.addressArr[0];
+        this.autoCompleteAddress.phoneNumber =
+          address.international_phone_number || address.formatted_phone_number;
+        ("");
+
+        address.address_components.forEach((component) => {
+          component.types.forEach((type) => {
+            if (type === "locality") {
+              this.autoCompleteAddress.city = component.long_name;
+            }
+            if (type === "administrative_area_level_1") {
+              this.autoCompleteAddress.state = component.long_name;
+            }
+            if (type === "country") {
+              this.autoCompleteAddress.country = component.long_name;
+            }
+            if (type === "postal_code") {
+              this.autoCompleteAddress.zipcode = component.long_name;
+            }
+          });
+        });
+      });
     },
-    countryChanged(country) {
-      // console.log("===countryChanged", country);
+
+    validateUserPhone() {
+      if (!this.claimPersonPhoneNo) {
+        this.isPhoneNoValid = false;
+      } else {
+        this.isPhoneNoValid = true;
+      }
     },
     formatMobileNumber(phoneNumber) {
       let arr = phoneNumber.split(" ");
@@ -421,26 +459,41 @@ export default {
       return countryCode + " " + arr.join("");
     },
     async onSubmit() {
+      this.isLoading = true;
       this.validateUserPhone();
-      let userPhone = this.formatMobileNumber(this.userPhone);
+      let claimPersonPhoneNo = this.formatMobileNumber(this.claimPersonPhoneNo);
       const isValid = await this.$refs.observer.validate();
-      if (!isValid || !this.isUserPhoneValid) {
+      if (!isValid || !this.isPhoneNoValid) {
         this.showValidateAlert = true;
         console.log("in valid");
+        this.isLoading = false;
       } else {
         this.showValidateAlert = false;
-        console.log("valid");
-        console.log(this.userName);
-        console.log(this.userEmail);
-        console.log(userPhone);
-        console.log(this.itemName);
-        console.log(this.itemDescription);
-        console.log(this.lostDate);
-        console.log(this.addressLine);
-        console.log(this.city);
-        console.log(this.state);
-        console.log(this.country);
-        console.log(this.zipcode);
+
+        const params = {
+          claimpersonname: this.claimPersonName,
+          claimpersonemail: this.claimPersonEmail,
+          claimpersonmobileno: claimPersonPhoneNo,
+          claimpersonitemname: this.itemName,
+          claimpersondescription: this.itemDescription,
+          claimpersondatelost: this.itemLostDate,
+          claimpersonlocation: this.location,
+          itemid: "f4ce3ad5-9e3f-4f71-84d5-b94e505225c5",
+          venue_email: this.venueEmail,
+          secondary_email: this.secondary_email,
+        };
+
+        this.$axios
+          .post("/sendclaimitemmail", params)
+          .then((response) => {
+            if (response.status === 200) {
+              this.isLoading = false;
+            }
+          })
+          .catch((error) => {
+            this.isLoading = false;
+            console.log(error);
+          });
       }
     },
   },

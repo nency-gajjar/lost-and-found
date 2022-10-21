@@ -1,0 +1,776 @@
+<template>
+  <!-- v-if="Object.keys(itemDetails).length > 0" -->
+  <div>
+    <div
+      class="wrapper"
+      v-if="!isLoadingItemDetails || Object.keys(itemDetails).length > 0"
+    >
+      <div
+        class="
+          card
+          w-full
+          mx-6
+          lg:mx-0
+          md:w-8/12
+          lg:w-7/12
+          xl:w-6/12
+          overflow-hidden
+          bg-white
+          border border-[#E1E3E6]
+          rounded-lg
+        "
+        style="box-shadow: rgba(54, 28, 93, 0.04) -10px 18px 32px"
+      >
+        <section class="bg-white">
+          <div class="main-title bg-accent-100 text-white mb-3">
+            <h1
+              class="
+                w-full
+                py-3
+                text-2xl
+                font-bold
+                leading-tight
+                text-center text-white
+              "
+            >
+              ITEM DETAILS
+            </h1>
+          </div>
+          <div class="sections py-4 px-6">
+            <div class="form-title">
+              <h2
+                class="
+                  text-lg text-accent-100
+                  font-medium
+                  leading-tight
+                  text-left text-gray-800
+                "
+              >
+                Claim Person's Details:
+              </h2>
+
+              <span
+                class="
+                  w-20
+                  border-t-4 border-solid border-gray-300
+                  inline-block
+                  mb-1
+                "
+              ></span>
+            </div>
+            <div class="flex items-center mt-3 flex-wrap">
+              <div
+                class="
+                  text-left text-gray-600
+                  font-medium
+                  w-full
+                  lg:w-4/12
+                  md:w-5/12
+                  sm:w-6/12
+                "
+              >
+                Person Name
+              </div>
+              <div class="text-gray-600 text-left md:w-7/12 sm:w-6/12">
+                <!-- {{ itemDetails.venu_type }} -->
+                Nency
+              </div>
+            </div>
+            <div class="flex items-center mt-3 flex-wrap">
+              <div
+                class="
+                  text-left text-gray-600
+                  font-medium
+                  w-full
+                  lg:w-4/12
+                  md:w-5/12
+                  sm:w-6/12
+                "
+              >
+                Email
+              </div>
+              <div class="text-gray-600 text-left md:w-7/12 sm:w-6/12">
+                nency@gmail.com
+              </div>
+            </div>
+            <div class="flex items-center mt-3 flex-wrap">
+              <div
+                class="
+                  text-left text-gray-600
+                  font-medium
+                  w-full
+                  lg:w-4/12
+                  md:w-5/12
+                  sm:w-6/12
+                "
+              >
+                Mobile Number
+              </div>
+              <div class="text-gray-600 text-left md:w-7/12 sm:w-6/12">
+                9048164313
+              </div>
+            </div>
+
+            <div class="flex items-center mt-3 flex-wrap">
+              <div
+                class="
+                  text-left text-gray-600
+                  font-medium
+                  w-full
+                  lg:w-4/12
+                  md:w-5/12
+                  sm:w-6/12
+                "
+              >
+                Lost Item Date
+              </div>
+              <div class="text-gray-600 text-left md:w-7/12 sm:w-6/12">
+                <!-- {{ itemDetails.datse }} -->
+                20-10-2022
+              </div>
+            </div>
+            <div class="flex items-center mt-3 flex-wrap">
+              <div
+                class="
+                  text-left text-gray-600
+                  font-medium
+                  w-full
+                  lg:w-4/12
+                  md:w-5/12
+                  sm:w-6/12
+                "
+              >
+                Item Name
+              </div>
+              <div class="text-gray-600 text-left md:w-7/12 sm:w-6/12">
+                Laptop
+              </div>
+            </div>
+
+            <div class="flex items-center mt-3 flex-wrap">
+              <div
+                class="
+                  text-left text-gray-600
+                  font-medium
+                  w-full
+                  lg:w-4/12
+                  md:w-5/12
+                  sm:w-6/12
+                "
+              >
+                Item Description
+              </div>
+              <div class="text-gray-600 text-left md:w-7/12 sm:w-6/12">
+                Laptop
+              </div>
+            </div>
+
+            <div class="flex items-center mt-3 flex-wrap">
+              <div
+                class="
+                  text-left text-gray-600
+                  font-medium
+                  w-full
+                  lg:w-4/12
+                  md:w-5/12
+                  sm:w-6/12
+                "
+              >
+                Lost Location
+              </div>
+              <div class="text-gray-600 text-left md:w-7/12 sm:w-6/12">
+                Hotel
+              </div>
+            </div>
+          </div>
+
+          <div data-v-272705a6="" class="flex items-center my-2">
+            <div
+              class="
+                h-6
+                w-6
+                box-content
+                border-r border-[#E1E3E6]
+                rounded-r-full
+                relative
+                right-3.5
+                bg-primary-60
+              "
+            ></div>
+            <hr class="flex-grow border-dashed border border-[#E1E3E6]" />
+            <div
+              class="
+                h-6
+                w-6
+                box-border
+                border-l border-[#E1E3E6]
+                rounded-l-full
+                relative
+                left-3.5
+                bg-primary-60
+              "
+            ></div>
+          </div>
+
+          <div class="sections py-4 px-6">
+            <div class="form-title">
+              <h2
+                class="
+                  text-lg text-accent-100
+                  font-medium
+                  leading-tight
+                  text-left text-gray-800
+                "
+              >
+                Item Details:
+              </h2>
+
+              <span
+                class="
+                  w-20
+                  border-t-4 border-solid border-gray-300
+                  inline-block
+                  mb-1
+                "
+              ></span>
+            </div>
+            <div class="flex foundItemContainer flex-col">
+              <div class="flex items-center mt-3 flex-wrap">
+                <div
+                  class="
+                    text-left text-gray-600
+                    font-medium
+                    w-full
+                    lg:w-4/12
+                    md:w-5/12
+                    sm:w-6/12
+                  "
+                >
+                  Venue Email
+                </div>
+                <div class="text-gray-600 text-left md:w-7/12 sm:w-6/12">
+                  <!-- {{ filterAddressLine(itemDetails) }} -->
+                  gmail.com
+                </div>
+              </div>
+              <div class="flex items-center mt-3 flex-wrap">
+                <div
+                  class="
+                    text-left text-gray-600
+                    font-medium
+                    w-full
+                    lg:w-4/12
+                    md:w-5/12
+                    sm:w-6/12
+                  "
+                >
+                  Found Item Datw
+                </div>
+                <div class="text-gray-600 text-left md:w-7/12 sm:w-6/12">
+                  <!-- {{ filterAddressLine(itemDetails) }} -->
+                  gmail.com
+                </div>
+              </div>
+              <div class="flex items-center mt-3 flex-wrap">
+                <div
+                  class="
+                    text-left text-gray-600
+                    font-medium
+                    w-full
+                    lg:w-4/12
+                    md:w-5/12
+                    sm:w-6/12
+                  "
+                >
+                  Venue Phone number
+                </div>
+                <div class="text-gray-600 text-left md:w-7/12 sm:w-6/12">
+                  <!-- {{ filterAddressLine(itemDetails) }} -->
+                  1234
+                </div>
+              </div>
+              <div class="flex flex-col w-full">
+                <div class="flex items-center mt-3 flex-wrap">
+                  <div
+                    class="
+                      text-left text-gray-600
+                      font-medium
+                      w-full
+                      lg:w-4/12
+                      md:w-5/12
+                      sm:w-6/12
+                    "
+                  >
+                    Employee Mobile Numer
+                  </div>
+                  <div class="text-gray-600 text-left md:w-7/12 sm:w-6/12">
+                    <!-- {{ itemDetails.item_description }} -->
+                    123456
+                  </div>
+                </div>
+                <div class="flex items-center mt-3 flex-wrap">
+                  <div
+                    class="
+                      text-left text-gray-600
+                      font-medium
+                      w-full
+                      lg:w-4/12
+                      md:w-5/12
+                      sm:w-6/12
+                    "
+                  >
+                    Item Description
+                  </div>
+                  <div class="text-gray-600 text-left md:w-7/12 sm:w-6/12">
+                    <!-- {{ itemDetails.item_description }} -->
+                    Laptop
+                  </div>
+                </div>
+                <div class="flex items-center mt-3 flex-wrap">
+                  <div
+                    class="
+                      text-left text-gray-600
+                      font-medium
+                      w-full
+                      lg:w-4/12
+                      md:w-5/12
+                      sm:w-6/12
+                    "
+                  >
+                    Package Type
+                  </div>
+                  <div class="text-gray-600 text-left md:w-7/12 sm:w-6/12">
+                    <!-- {{ itemDetails.package_type }} -->
+                    Box
+                  </div>
+                </div>
+                <div class="flex items-center mt-3 flex-wrap">
+                  <div
+                    class="
+                      text-left text-gray-600
+                      font-medium
+                      w-full
+                      lg:w-4/12
+                      md:w-5/12
+                      sm:w-6/12
+                    "
+                  >
+                    Weight
+                  </div>
+                  <div class="text-gray-600 text-left md:w-7/12 sm:w-6/12">
+                    <!-- {{ itemDetails.weight_pounds }} lbs -->
+                    1
+                  </div>
+                </div>
+                <div class="flex items-center mt-3 flex-wrap">
+                  <div
+                    class="
+                      text-left text-gray-600
+                      font-medium
+                      w-full
+                      lg:w-4/12
+                      md:w-5/12
+                      sm:w-6/12
+                    "
+                  >
+                    Dimension
+                  </div>
+                  <div class="text-gray-600 text-left md:w-7/12 sm:w-6/12">
+                    <!-- {{ itemDetails.length }}(l) x {{ itemDetails.width }}(w) x
+                    {{ itemDetails.height }}(h) inches -->
+                    1
+                  </div>
+                </div>
+                <div class="flex items-center mt-3 flex-wrap">
+                  <div
+                    class="
+                      text-left text-gray-600
+                      font-medium
+                      w-full
+                      lg:w-4/12
+                      md:w-5/12
+                      sm:w-6/12
+                    "
+                  >
+                    Item Status
+                  </div>
+                  <div class="text-gray-600 text-left md:w-7/12 sm:w-6/12">
+                    <!-- {{
+                      itemDetails.item_status === 0 ? "Claimed" : "Unclaimed"
+                    }} -->
+                    Claimed
+                  </div>
+                </div>
+              </div>
+
+              <div class="text-gray-600 mt-4 text-left w-full">
+                <img
+                  v-if="itemDetails.image"
+                  class="w-full"
+                  :src="itemDetails.image"
+                  alt=""
+                />
+              </div>
+            </div>
+          </div>
+          <div data-v-272705a6="" class="flex items-center my-2">
+            <div
+              class="
+                h-6
+                w-6
+                box-content
+                border-r border-[#E1E3E6]
+                rounded-r-full
+                relative
+                right-3.5
+                bg-primary-60
+              "
+            ></div>
+            <hr class="flex-grow border-dashed border border-[#E1E3E6]" />
+            <div
+              class="
+                h-6
+                w-6
+                box-border
+                border-l border-[#E1E3E6]
+                rounded-l-full
+                relative
+                left-3.5
+                bg-primary-60
+              "
+            ></div>
+          </div>
+          <div class="sections py-4 px-6">
+            <div class="form-title">
+              <h2
+                class="
+                  text-lg text-accent-100
+                  font-medium
+                  leading-tight
+                  text-left text-gray-800
+                "
+              >
+                Found Item Address:
+              </h2>
+
+              <span
+                class="
+                  w-20
+                  border-t-4 border-solid border-gray-300
+                  inline-block
+                  mb-1
+                "
+              ></span>
+            </div>
+
+            <div class="flex items-center mt-3 flex-wrap">
+              <div
+                class="
+                  text-left text-gray-600
+                  font-medium
+                  w-full
+                  lg:w-4/12
+                  md:w-5/12
+                  sm:w-6/12
+                "
+              >
+                Address
+              </div>
+              <div class="text-gray-600 text-left md:w-7/12 sm:w-6/12">
+                <!-- {{ filterAddressLine(itemDetails) }} -->
+                Hotel
+              </div>
+            </div>
+            <div class="flex items-center mt-3 flex-wrap">
+              <div
+                class="
+                  text-left text-gray-600
+                  font-medium
+                  w-full
+                  lg:w-4/12
+                  md:w-5/12
+                  sm:w-6/12
+                "
+              >
+                City
+              </div>
+              <div class="text-gray-600 text-left md:w-7/12 sm:w-6/12">
+                <!-- {{ itemDetails.city }} -->
+                Rajkot
+              </div>
+            </div>
+            <div class="flex items-center mt-3 flex-wrap">
+              <div
+                class="
+                  text-left text-gray-600
+                  font-medium
+                  w-full
+                  lg:w-4/12
+                  md:w-5/12
+                  sm:w-6/12
+                "
+              >
+                State
+              </div>
+              <div class="text-gray-600 text-left md:w-7/12 sm:w-6/12">
+                <!-- {{ itemDetails.states }} -->
+                Gujurat
+              </div>
+            </div>
+            <div class="flex items-center mt-3 flex-wrap">
+              <div
+                class="
+                  text-left text-gray-600
+                  font-medium
+                  w-full
+                  lg:w-4/12
+                  md:w-5/12
+                  sm:w-6/12
+                "
+              >
+                Country
+              </div>
+              <div class="text-gray-600 text-left md:w-7/12 sm:w-6/12">
+                <!-- {{ itemDetails.country }} -->
+                India
+              </div>
+            </div>
+            <div class="flex items-center mt-3 flex-wrap">
+              <div
+                class="
+                  text-left text-gray-600
+                  font-medium
+                  w-full
+                  lg:w-4/12
+                  md:w-5/12
+                  sm:w-6/12
+                "
+              >
+                Zipcode
+              </div>
+              <div class="text-gray-600 text-left md:w-7/12 sm:w-6/12">
+                <!-- {{ itemDetails.zipcode }} -->
+                360002
+              </div>
+            </div>
+          </div>
+
+          <div class="flex flex-wrap gap-2 m-5">
+            <button
+              :class="{ 'button--loading': isLoading['approve'] }"
+              type="submit"
+              class="
+                !py-3
+                flex-auto
+                font-medium
+                text-md
+                leading-5
+                uppercase
+                py-2
+                px-8
+                rounded-md
+                button
+                focus:outline-none
+                focus:ring-2
+                focus:ring-offset-2
+                focus:ring-offset-primary-60
+                transition-all
+                font-display
+                disabled:cursor-not-allowed
+                bg-accent-100
+                text-white
+                focus:ring-accent-100
+                shadow-accent
+                hover:bg-accent-200
+              "
+              @click="action('Approve')"
+            >
+              <span class="button__text"> Approve </span>
+            </button>
+            <button
+              :class="{ 'button--loading': isLoading['deny'] }"
+              type="submit"
+              class="
+                !py-3
+                flex-auto
+                font-medium
+                text-md
+                leading-5
+                uppercase
+                py-2
+                px-8
+                rounded-md
+                button
+                focus:outline-none
+                focus:ring-2
+                focus:ring-offset-2
+                focus:ring-offset-primary-60
+                transition-all
+                font-display
+                disabled:cursor-not-allowed
+                bg-accent-100
+                text-white
+                focus:ring-accent-100
+                shadow-accent
+                hover:bg-accent-200
+              "
+              @click="action('Deny')"
+            >
+              <span class="button__text"> Deny </span>
+            </button>
+          </div>
+        </section>
+      </div>
+    </div>
+    <div v-else>
+      <div
+        wire:loading
+        class="
+          h-screen
+          z-50
+          overflow-hidden
+          flex flex-col
+          items-center
+          justify-center
+        "
+      >
+        <div
+          class="
+            loader
+            ease-linear
+            rounded-full
+            border-4 border-t-4 border-gray-200
+            h-12
+            w-12
+            mb-4
+          "
+        ></div>
+      </div>
+    </div>
+  </div>
+</template>
+
+<script>
+export default {
+  data() {
+    return {
+      isLoading: {
+        approve: false,
+        deny: false,
+      },
+      isLoadingItemDetails: false,
+      itemDetails: {},
+      itemId: "",
+    };
+  },
+  mounted() {
+    if (this.$route.query.id) {
+      this.isLoadingItemDetails = true;
+      this.itemId = this.$route.query.id;
+      this.$axios
+        .get("/getsingleclaimitemdetail?id=" + this.itemId)
+        .then((response) => {
+          if (response.status === 200) {
+            this.isLoadingItemDetails = false;
+            this.itemDetails = response.data;
+          }
+        })
+        .catch((error) => {
+          this.isLoadingItemDetails = false;
+          console.log(error);
+        });
+    }
+  },
+  methods: {
+    action(type) {
+      this.isLoading[type] = true;
+      let params = {
+        sender_approval: type === "approve" ? true : false,
+      };
+      this.$axios
+        .post("/updatesinglelostitem?id=" + this.itemId, params)
+        .then((response) => {
+          if (response.status === 200) {
+            this.isLoading[type] = false;
+          }
+        })
+        .catch((error) => console.log(error));
+    },
+  },
+};
+</script>
+
+<style lang="scss" scoped>
+.wrapper {
+  @apply min-h-screen flex justify-center py-10 mx-auto;
+}
+
+.card {
+  @apply rounded-lg text-indigo-500;
+
+  .title {
+    @apply text-6xl font-bold;
+  }
+}
+
+// .text-gray-600 {
+//   @apply sm: px-3;
+// }
+
+.button {
+  position: relative;
+  border: none;
+  outline: none;
+  cursor: pointer;
+}
+
+.button__text {
+  color: #ffffff;
+  transition: all 0.2s;
+}
+
+.button--loading .button__text {
+  visibility: hidden;
+  opacity: 0;
+}
+
+.button--loading::after {
+  content: "";
+  position: absolute;
+  width: 16px;
+  height: 16px;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  margin: auto;
+  border: 4px solid transparent;
+  border-top-color: #ffffff;
+  border-radius: 50%;
+  animation: button-loading-spinner 1s ease infinite;
+}
+
+@keyframes button-loading-spinner {
+  from {
+    transform: rotate(0turn);
+  }
+
+  to {
+    transform: rotate(1turn);
+  }
+}
+
+@media only screen and (max-width: 650px) {
+  .foundItemContainer {
+    @apply flex-col;
+  }
+
+  .img-container {
+    @apply mt-3;
+  }
+
+  .text-gray-600 {
+    @apply pr-2;
+  }
+}
+</style>

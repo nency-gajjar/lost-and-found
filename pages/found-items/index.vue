@@ -1,7 +1,10 @@
 <template>
   <div class="wrapper">
     <div class="container max-w-7xl mx-auto px-4">
-      <div class="w-full flex justify-between mt-8 mb-5">
+      <div
+        v-if="!isLoading && lostItems.length > 0"
+        class="w-full flex justify-between mt-8 mb-5"
+      >
         <h2 class="text-2xl font-semibold leading-tight">
           Found Items ({{ lostItems.length }})
         </h2>
@@ -33,7 +36,7 @@
           + Add New Item
         </button>
       </div>
-      <div
+      <!-- <div
         v-if="!isLoading && lostItems.length > 0"
         class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4"
       >
@@ -102,9 +105,9 @@
           </div>
           <div></div>
         </div>
-      </div>
-      <div v-else-if="!isLoading && lostItems.length === 0">No Data</div>
-      <div v-else>
+      </div> -->
+      <!-- <div v-else-if="!isLoading && lostItems.length === 0">No Data</div> -->
+      <!-- <div v-else>
         <div
           wire:loading
           class="
@@ -128,10 +131,10 @@
             "
           ></div>
         </div>
-      </div>
-      <br />
+      </div> -->
+      <!-- <br />
       <hr />
-      <br />
+      <br /> -->
       <div
         v-if="!isLoading && lostItems.length > 0"
         class="
@@ -276,7 +279,7 @@
               >
                 <td class="py-3 px-6 text-left">
                   <div class="flex items-center">
-                    <div class="mr-2">
+                    <div v-if="item.image" class="mr-2">
                       <img class="w-6 h-6 rounded-full" :src="item.image" />
                     </div>
                     <span>{{ item.item_description }}</span>
@@ -287,29 +290,61 @@
                 </td>
                 <td class="py-3 px-6 text-center">
                   <span
-                    class="
-                      bg-blue-200
-                      text-blue-600
-                      py-1
-                      px-3
-                      rounded-full
-                      text-xs
-                    "
+                    :class="[
+                      item.item_status == 0
+                        ? 'bg-blue-200 text-blue-600'
+                        : 'bg-indigo-200 text-indigo-600',
+                    ]"
+                    class="py-1 px-3 rounded-full text-xs"
                     >{{ item.item_status == 0 ? "Claimed" : "Unclaimed" }}</span
                   >
                 </td>
                 <td class="py-3 px-6 text-center">
-                  <div class="flex item-center justify-center">
+                  <div class="flex item-center justify-center gap-2">
                     <button
+                      class="
+                        font-medium
+                        text-sm
+                        px-5
+                        py-2
+                        rounded-md
+                        border-gray-500 border
+                        text-gray-600
+                        transition
+                        duration-300
+                        hover:bg-gray-500 hover:text-white
+                        focus:outline-none
+                      "
+                      @click="viewItem(item)"
+                    >
+                      View Item
+                    </button>
+                    <button
+                      class="
+                        font-medium
+                        text-sm
+                        px-5
+                        py-2
+                        rounded-md
+                        border-accent-100 border
+                        text-accent-100
+                        transition
+                        duration-300
+                        hover:bg-accent-200 hover:text-white
+                        focus:outline-none
+                      "
+                      @click="claimItem(item)"
+                    >
+                      Claim Item
+                    </button>
+                    <!-- <button
                       class="
                         !py-3
                         font-medium
-                        text-md
-                        leading-3
-                        uppercase
+                        text-sm
+                        px-5
                         py-2
-                        px-6
-                        rounded-md
+                        rounded-lg
                         button
                         focus:outline-none
                         focus:ring-2
@@ -326,7 +361,7 @@
                       @click="claimItem"
                     >
                       Claim Item
-                    </button>
+                    </button> -->
                   </div>
                 </td>
               </tr>
@@ -540,6 +575,32 @@
           </div>
         </div>
       </div>
+      <div v-else-if="!isLoading && lostItems.length === 0">No Data</div>
+      <div v-else>
+        <div
+          wire:loading
+          class="
+            loader-container
+            z-50
+            overflow-hidden
+            flex flex-col
+            items-center
+            justify-center
+          "
+        >
+          <div
+            class="
+              loader
+              ease-linear
+              rounded-full
+              border-4 border-t-4 border-gray-200
+              h-12
+              w-12
+              mb-4
+            "
+          ></div>
+        </div>
+      </div>
     </div>
   </div>
 </template>
@@ -565,8 +626,8 @@ export default {
         this.$router.push({ path: "/detail-confirmation" });
       });
     },
-    claimItem() {
-      this.$router.push({ name: "claim-item" });
+    claimItem(item) {
+      this.$router.push({ name: "claim-item", params: item.id });
     },
   },
   created() {

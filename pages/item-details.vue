@@ -195,7 +195,7 @@
                   :icon="['fas', 'shield-alt']"
                 />
                 &nbsp;&nbsp;
-                <p style="color: #16a34a; font-size: 14px">
+                <p style="color: #03993b; font-size: 14px">
                   Your contact will not be shared with anyone.
                 </p>
               </div>
@@ -526,7 +526,14 @@
                       </div>
                       <span
                         @click="showEditor = false"
-                        class="absolute right-5 top-5 inline-block z-10"
+                        class="
+                          absolute
+                          right-5
+                          top-5
+                          inline-block
+                          z-10
+                          cursor-pointer
+                        "
                       >
                         <svg
                           xmlns="http://www.w3.org/2000/svg"
@@ -562,7 +569,7 @@
                         editor-container
                       "
                     >
-                      <div
+                      <!-- <div
                         class="top-margin-3 flex justify-center"
                         v-show="loadingSpinner"
                         role="status"
@@ -591,8 +598,8 @@
                           />
                         </svg>
                         <span class="sr-only">Loading...</span>
-                      </div>
-                      <div v-show="!loadingSpinner" class="w-full">
+                      </div> -->
+                      <div class="w-full">
                         <div class="px-6">
                           <Editor
                             :canvasWidth="canvasWidth"
@@ -635,7 +642,7 @@
                               @click="freeDrawing()"	
                             ></edit-2-icon>	
                           </div>	 -->
-                            <div>
+                            <!-- <div>
                               <div class="tool-addCircle">
                                 <circle-icon
                                   :size="size_icon"
@@ -643,7 +650,7 @@
                                 ></circle-icon>
                               </div>
                               <p>Circle</p>
-                            </div>
+                            </div> -->
                             <div>
                               <div class="tool-addSquare">
                                 <square-icon
@@ -1138,7 +1145,7 @@ export default {
     stateCrop: true,
     size_icon: "2x",
     isSavingImage: false,
-    loadingSpinner: false,
+    // loadingSpinner: false,
     imageRecognitionData: [],
     image: "",
     imageKey: "",
@@ -1763,10 +1770,10 @@ export default {
     //   let customizeFreeDrawing = { stroke: "black", strokeWidth: "5" };
     //   this.$refs.editor.set("freeDrawing", customizeFreeDrawing);
     // },
-    addCicle() {
-      let circleModeParams = { fill: "black", stroke: "black" };
-      this.$refs.editor.set("circle", circleModeParams);
-    },
+    // addCicle() {
+    //   let circleModeParams = { fill: "black", stroke: "black" };
+    //   this.$refs.editor.set("circle", circleModeParams);
+    // },
     addSquare() {
       let customizeRectangle = {
         fill: "black",
@@ -1797,10 +1804,10 @@ export default {
         const file = new File([blob], "image.jpg", { type: blob.type });
         this.$refs.editor.uploadImage(file);
         this.showEditor = true;
-        this.loadingSpinner = true;
-        setTimeout(() => {
-          this.loadingSpinner = false;
-        }, 2000);
+        // this.loadingSpinner = true;
+        // setTimeout(() => {
+        //   this.loadingSpinner = false;
+        // }, 2000);
       } else {
         this.showEditor = false;
       }
@@ -1810,10 +1817,10 @@ export default {
       if (event.target.files[0]) {
         this.$refs.editor.uploadImage(event.target.files[0]);
         this.showEditor = true;
-        this.loadingSpinner = true;
-        setTimeout(() => {
-          this.loadingSpinner = false;
-        }, 2000);
+        // this.loadingSpinner = true;
+        // setTimeout(() => {
+        //   this.loadingSpinner = false;
+        // }, 2000);
       } else {
         this.showEditor = false;
       }
@@ -2453,7 +2460,7 @@ canvas {
 
 .shieldIcon {
   max-width: 15px;
-  color: #16a34a;
+  color: #03993b;
   opacity: 0.75;
 }
 
