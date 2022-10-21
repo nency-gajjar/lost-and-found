@@ -72,8 +72,7 @@
                 Person Name
               </div>
               <div class="text-gray-600 text-left md:w-7/12 sm:w-6/12">
-                <!-- {{ itemDetails.venu_type }} -->
-                Nency
+                {{ claimDetails.claimpersonname }}
               </div>
             </div>
             <div class="flex items-center mt-3 flex-wrap">
@@ -90,7 +89,7 @@
                 Email
               </div>
               <div class="text-gray-600 text-left md:w-7/12 sm:w-6/12">
-                nency@gmail.com
+                {{ claimDetails.claimpersonemail }}
               </div>
             </div>
             <div class="flex items-center mt-3 flex-wrap">
@@ -107,7 +106,7 @@
                 Mobile Number
               </div>
               <div class="text-gray-600 text-left md:w-7/12 sm:w-6/12">
-                9048164313
+                {{ claimDetails.claimpersonmobileno }}
               </div>
             </div>
 
@@ -125,8 +124,7 @@
                 Lost Item Date
               </div>
               <div class="text-gray-600 text-left md:w-7/12 sm:w-6/12">
-                <!-- {{ itemDetails.datse }} -->
-                20-10-2022
+                {{ claimDetails.claimpersondatelost }}
               </div>
             </div>
             <div class="flex items-center mt-3 flex-wrap">
@@ -143,7 +141,7 @@
                 Item Name
               </div>
               <div class="text-gray-600 text-left md:w-7/12 sm:w-6/12">
-                Laptop
+                {{ claimDetails.claimpersonitemname }}
               </div>
             </div>
 
@@ -161,7 +159,7 @@
                 Item Description
               </div>
               <div class="text-gray-600 text-left md:w-7/12 sm:w-6/12">
-                Laptop
+                {{ claimDetails.claimpersondescription }}
               </div>
             </div>
 
@@ -179,7 +177,7 @@
                 Lost Location
               </div>
               <div class="text-gray-600 text-left md:w-7/12 sm:w-6/12">
-                Hotel
+                {{ claimDetails.claimpersonlocation }}
               </div>
             </div>
           </div>
@@ -249,8 +247,7 @@
                   Venue Email
                 </div>
                 <div class="text-gray-600 text-left md:w-7/12 sm:w-6/12">
-                  <!-- {{ filterAddressLine(itemDetails) }} -->
-                  gmail.com
+                  {{ itemDetails.venue_email }}
                 </div>
               </div>
               <div class="flex items-center mt-3 flex-wrap">
@@ -264,11 +261,10 @@
                     sm:w-6/12
                   "
                 >
-                  Found Item Datw
+                  Found Item Date
                 </div>
                 <div class="text-gray-600 text-left md:w-7/12 sm:w-6/12">
-                  <!-- {{ filterAddressLine(itemDetails) }} -->
-                  gmail.com
+                  {{ itemDetails.datse }}
                 </div>
               </div>
               <div class="flex items-center mt-3 flex-wrap">
@@ -285,8 +281,7 @@
                   Venue Phone number
                 </div>
                 <div class="text-gray-600 text-left md:w-7/12 sm:w-6/12">
-                  <!-- {{ filterAddressLine(itemDetails) }} -->
-                  1234
+                  {{ itemDetails.venue_phone_no }}
                 </div>
               </div>
               <div class="flex flex-col w-full">
@@ -304,8 +299,7 @@
                     Employee Mobile Numer
                   </div>
                   <div class="text-gray-600 text-left md:w-7/12 sm:w-6/12">
-                    <!-- {{ itemDetails.item_description }} -->
-                    123456
+                    {{ itemDetails.employee_mobile_no }}
                   </div>
                 </div>
                 <div class="flex items-center mt-3 flex-wrap">
@@ -322,8 +316,7 @@
                     Item Description
                   </div>
                   <div class="text-gray-600 text-left md:w-7/12 sm:w-6/12">
-                    <!-- {{ itemDetails.item_description }} -->
-                    Laptop
+                    {{ itemDetails.item_description }}
                   </div>
                 </div>
                 <div class="flex items-center mt-3 flex-wrap">
@@ -340,8 +333,7 @@
                     Package Type
                   </div>
                   <div class="text-gray-600 text-left md:w-7/12 sm:w-6/12">
-                    <!-- {{ itemDetails.package_type }} -->
-                    Box
+                  {{ itemDetails.package_type }}
                   </div>
                 </div>
                 <div class="flex items-center mt-3 flex-wrap">
@@ -358,8 +350,7 @@
                     Weight
                   </div>
                   <div class="text-gray-600 text-left md:w-7/12 sm:w-6/12">
-                    <!-- {{ itemDetails.weight_pounds }} lbs -->
-                    1
+                  {{ itemDetails.weight_pounds }} lbs
                   </div>
                 </div>
                 <div class="flex items-center mt-3 flex-wrap">
@@ -376,9 +367,8 @@
                     Dimension
                   </div>
                   <div class="text-gray-600 text-left md:w-7/12 sm:w-6/12">
-                    <!-- {{ itemDetails.length }}(l) x {{ itemDetails.width }}(w) x
-                    {{ itemDetails.height }}(h) inches -->
-                    1
+                    {{ itemDetails.item_length }}(l) x {{ itemDetails.item_width }}(w) x
+                    {{ itemDetails.item_height }}(h) inches
                   </div>
                 </div>
                 <div class="flex items-center mt-3 flex-wrap">
@@ -395,10 +385,7 @@
                     Item Status
                   </div>
                   <div class="text-gray-600 text-left md:w-7/12 sm:w-6/12">
-                    <!-- {{
-                      itemDetails.item_status === 0 ? "Claimed" : "Unclaimed"
-                    }} -->
-                    Claimed
+                  {{ itemDetails.item_status == 0 ? "Claimed" : "Unclaimed" }}
                   </div>
                 </div>
               </div>
@@ -477,8 +464,7 @@
                 Address
               </div>
               <div class="text-gray-600 text-left md:w-7/12 sm:w-6/12">
-                <!-- {{ filterAddressLine(itemDetails) }} -->
-                Hotel
+                  {{ itemDetails.address }}
               </div>
             </div>
             <div class="flex items-center mt-3 flex-wrap">
@@ -495,8 +481,7 @@
                 City
               </div>
               <div class="text-gray-600 text-left md:w-7/12 sm:w-6/12">
-                <!-- {{ itemDetails.city }} -->
-                Rajkot
+                  {{ itemDetails.city }}
               </div>
             </div>
             <div class="flex items-center mt-3 flex-wrap">
@@ -513,8 +498,7 @@
                 State
               </div>
               <div class="text-gray-600 text-left md:w-7/12 sm:w-6/12">
-                <!-- {{ itemDetails.states }} -->
-                Gujurat
+                  {{ itemDetails.states }}
               </div>
             </div>
             <div class="flex items-center mt-3 flex-wrap">
@@ -531,8 +515,7 @@
                 Country
               </div>
               <div class="text-gray-600 text-left md:w-7/12 sm:w-6/12">
-                <!-- {{ itemDetails.country }} -->
-                India
+                  {{ itemDetails.country }}
               </div>
             </div>
             <div class="flex items-center mt-3 flex-wrap">
@@ -549,8 +532,7 @@
                 Zipcode
               </div>
               <div class="text-gray-600 text-left md:w-7/12 sm:w-6/12">
-                <!-- {{ itemDetails.zipcode }} -->
-                360002
+                  {{ itemDetails.zipcode }}
               </div>
             </div>
           </div>
@@ -659,6 +641,7 @@ export default {
         deny: false,
       },
       isLoadingItemDetails: false,
+      claimDetails: {},
       itemDetails: {},
       itemId: "",
     };
@@ -672,7 +655,9 @@ export default {
         .then((response) => {
           if (response.status === 200) {
             this.isLoadingItemDetails = false;
-            this.itemDetails = response.data;
+            this.itemDetails = response.data.data.data1.Item;
+            this.claimDetails = response.data.data.data.Item;
+            this.itemId = this.itemDetails.id;
           }
         })
         .catch((error) => {
@@ -685,7 +670,7 @@ export default {
     action(type) {
       this.isLoading[type] = true;
       let params = {
-        sender_approval: type === "approve" ? true : false,
+        sender_approval: type == "Approve" ? true : false,
       };
       this.$axios
         .post("/updatesinglelostitem?id=" + this.itemId, params)

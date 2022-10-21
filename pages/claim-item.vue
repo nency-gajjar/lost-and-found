@@ -396,7 +396,6 @@ export default {
       itemName: "",
       itemDescription: "",
       itemLostDate: "",
-      location: "",
       venueEmail: "",
       secondaryEmail: "",
       autoCompleteAddress: {
@@ -480,7 +479,7 @@ export default {
           claimpersonitemname: this.itemName,
           claimpersondescription: this.itemDescription,
           claimpersondatelost: this.itemLostDate,
-          claimpersonlocation: this.location,
+          claimpersonlocation: this.autoCompleteAddress.address,
           itemid: this.itemId,
           venue_email: this.venueEmail,
           secondary_email: this.secondary_email,
