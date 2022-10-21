@@ -13,7 +13,6 @@
             !py-3
             font-medium
             text-md
-            leading-3
             uppercase
             py-2
             px-6
@@ -38,7 +37,6 @@
       </div>
       <!-- <div
         v-if="!isLoading && lostItems.length > 0"
-        class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4"
       >
         <div
           v-for="item in lostItems"
@@ -48,7 +46,11 @@
             cursor-pointer
             py-4
             px-5
-            flex flex-col
+            mt-5
+            flex
+            sm:flex-row
+            flex-col
+            justify-between
             bg-white
             rounded-lg
             border
@@ -56,54 +58,83 @@
             relative
           "
         >
-          <div class="w-24 h-24 mx-auto">
-            <img
-              v-if="item.image"
+          <div class="flex items-center sm:justify-left justify-around sm:gap-4">
+            <div class="w-24 h-24 flex items-center">
+              <img
+                v-if="item.image"
+                class="
+                  w-full
+                  rounded-t-lg
+                  md:h-auto md:w-48 md:rounded-none md:rounded-l-lg
+                "
+                :src="item.image"
+                alt=""
+              />
+              <img
+                v-else
+                class="
+                  w-full
+                  rounded-t-lg
+                  md:h-auto md:w-48 md:rounded-none md:rounded-l-lg
+                "
+                src="@/assets/images/not-found.png"
+                alt=""
+              />
+            </div>
+            <div
               class="
-                w-full
-                rounded-t-lg
-                md:h-auto md:w-48 md:rounded-none md:rounded-l-lg
-              "
-              :src="item.image"
-              alt=""
-            />
-            <img
-              v-else
-              class="
-                w-full
-                rounded-t-lg
-                md:h-auto md:w-48 md:rounded-none md:rounded-l-lg
-              "
-              src="@/assets/images/not-found.png"
-              alt=""
-            />
-          </div>
-          <div
-            class="
-              flex flex-col
-              items-center
-              text-center
-              justify-between
-              py-4
-              leading-normal
-            "
-          >
-            <h5
-              class="
-                mb-2
-                text-xl
-                font-bold
-                tracking-tight
-                text-gray-900 text-accent-100
+                flex flex-col
+                items-center
+                text-center
+                justify-between
+                py-4
+                leading-normal
               "
             >
-              {{ item.item_description }}
-            </h5>
-            <p class="text-sm font-normal text-gray-700 dark:text-gray-400">
-              {{ item.item_status === 0 ? "Calimed" : "Uncalimed" }}
-            </p>
+              <h5
+                class="
+                  mb-2
+                  text-xl
+                  font-bold
+                  tracking-tight
+                  text-gray-900 text-accent-100
+                "
+              >
+                {{ item.item_description }}
+              </h5>
+              <p class="text-sm font-normal text-gray-700 dark:text-gray-400">
+                {{ item.item_status === 0 ? "Calimed" : "Uncalimed" }}
+              </p>
+            </div>
           </div>
-          <div></div>
+          <div class="flex items-center justify-center">
+            <button
+              class="
+                !py-3
+                font-medium
+                text-md
+                uppercase
+                py-2
+                px-6
+                rounded-md
+                button
+                focus:outline-none
+                focus:ring-2
+                focus:ring-offset-2
+                focus:ring-offset-primary-60
+                transition-all
+                font-display
+                bg-accent-100
+                text-white
+                focus:ring-accent-100
+                shadow-accent
+                hover:bg-accent-200
+              "
+              @click.stop="claimItem"
+            >
+              Claim Item
+            </button>
+          </div>
         </div>
       </div> -->
       <!-- <div v-else-if="!isLoading && lostItems.length === 0">No Data</div> -->
