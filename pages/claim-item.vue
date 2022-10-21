@@ -426,21 +426,21 @@ export default {
       const isValid = await this.$refs.observer.validate();
       if (!isValid || !this.isUserPhoneValid) {
         this.showValidateAlert = true;
-        console.log("in valid");
+        // console.log("in valid");
       } else {
         this.showValidateAlert = false;
-        console.log("valid");
-        console.log(this.userName);
-        console.log(this.userEmail);
-        console.log(userPhone);
-        console.log(this.itemName);
-        console.log(this.itemDescription);
-        console.log(this.lostDate);
-        console.log(this.addressLine);
-        console.log(this.city);
-        console.log(this.state);
-        console.log(this.country);
-        console.log(this.zipcode);
+        // console.log("valid");
+        // console.log(this.userName);
+        // console.log(this.userEmail);
+        // console.log(userPhone);
+        // console.log(this.itemName);
+        // console.log(this.itemDescription);
+        // console.log(this.lostDate);
+        // console.log(this.addressLine);
+        // console.log(this.city);
+        // console.log(this.state);
+        // console.log(this.country);
+        // console.log(this.zipcode);
       }
     },
   },
