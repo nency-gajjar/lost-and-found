@@ -35,7 +35,7 @@
           + Add New Item
         </button>
       </div>
-      <!-- <div
+      <div
         v-if="!isLoading && lostItems.length > 0"
       >
         <div
@@ -136,9 +136,9 @@
             </button>
           </div>
         </div>
-      </div> -->
-      <!-- <div v-else-if="!isLoading && lostItems.length === 0">No Data</div> -->
-      <!-- <div v-else>
+      </div>
+      <div v-else-if="!isLoading && lostItems.length === 0">No Data</div>
+      <div v-else>
         <div
           wire:loading
           class="
@@ -162,10 +162,10 @@
             "
           ></div>
         </div>
-      </div> -->
-      <!-- <br />
+      </div>
+      <br />
       <hr />
-      <br /> -->
+      <br />
       <div
         v-if="!isLoading && lostItems.length > 0"
         class="

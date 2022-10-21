@@ -172,9 +172,11 @@
                 class="block"
               >
                 <BaseInput
-                  v-model="address"
+                  v-model="autoCompleteAddress.address"
                   type="text"
+                  id="autocomplete"
                   label="Address Line"
+                  @input="getAddress"
                   :class="errors.length > 0 && 'error'"
                 />
                 <p
@@ -191,7 +193,7 @@
                   class="block lg:col-span-2"
                 >
                   <BaseInput
-                    v-model="city"
+                    v-model="autoCompleteAddress.city"
                     label="City"
                     type="text"
                     :class="errors.length > 0 && 'error'"
@@ -209,7 +211,7 @@
                   class="block col-span-1"
                 >
                   <BaseInput
-                    v-model="state"
+                    v-model="autoCompleteAddress.state"
                     label="State"
                     type="text"
                     :class="errors.length > 0 && 'error'"
@@ -229,7 +231,7 @@
                   class="block lg:col-span-2"
                 >
                   <BaseInput
-                    v-model="country"
+                    v-model="autoCompleteAddress.country"
                     label="Country"
                     type="text"
                     :class="errors.length > 0 && 'error'"
@@ -247,7 +249,7 @@
                   class="block col-span-1"
                 >
                   <BaseInput
-                    v-model="zipcode"
+                    v-model="autoCompleteAddress.zipcode"
                     label="Zip Code"
                     type="text"
                     :class="errors.length > 0 && 'error'"
@@ -405,7 +407,7 @@ export default {
         zipcode: "",
         phoneNumber: "",
       },
-
+      addressArr: ["Other"],
       showValidateAlert: false,
     };
   },
