@@ -1,6 +1,7 @@
 <template>
   <div class="wrapper" v-if="Object.keys(itemDetails).length > 0">
-    <div class="
+    <div
+      class="
         card
         w-full
         mx-6
@@ -12,47 +13,57 @@
         bg-white
         border border-[#E1E3E6]
         rounded-lg
-      " style="box-shadow: rgba(54, 28, 93, 0.04) -10px 18px 32px">
+      "
+      style="box-shadow: rgba(54, 28, 93, 0.04) -10px 18px 32px"
+    >
       <section class="bg-white">
         <div class="main-title bg-accent-100 text-white mb-3">
-          <h1 class="
+          <h1
+            class="
               w-full
               py-3
               text-2xl
               font-bold
               leading-tight
               text-center text-white
-            ">
+            "
+          >
             PREVIEW DETAILS
           </h1>
         </div>
         <div class="sections py-4 px-6">
           <div class="form-title">
-            <h2 class="
+            <h2
+              class="
                 text-lg text-accent-100
                 font-medium
                 leading-tight
                 text-left text-gray-800
-              ">
+              "
+            >
               Sender's Details:
             </h2>
 
-            <span class="
+            <span
+              class="
                 w-20
                 border-t-4 border-solid border-gray-300
                 inline-block
                 mb-1
-              "></span>
+              "
+            ></span>
           </div>
           <div class="flex items-center mt-3 flex-wrap">
-            <div class="
+            <div
+              class="
                 text-left text-gray-600
                 font-medium
                 w-full
                 lg:w-4/12
                 md:w-5/12
                 sm:w-6/12
-              ">
+              "
+            >
               Sender Affiliation
             </div>
             <div class="text-gray-600 text-left md:w-7/12 sm:w-6/12">
@@ -60,14 +71,16 @@
             </div>
           </div>
           <div class="flex items-center mt-3 flex-wrap">
-            <div class="
+            <div
+              class="
                 text-left text-gray-600
                 font-medium
                 w-full
                 lg:w-4/12
                 md:w-5/12
                 sm:w-6/12
-              ">
+              "
+            >
               Found Item Date
             </div>
             <div class="text-gray-600 text-left md:w-7/12 sm:w-6/12">
@@ -75,44 +88,53 @@
             </div>
           </div>
           <div class="flex items-center mt-3 flex-wrap">
-            <div class="
+            <div
+              class="
                 text-left text-gray-600
                 font-medium
                 w-full
                 lg:w-4/12
                 md:w-5/12
                 sm:w-6/12
-              ">
-              Venue Name
-            </div>
-            <div class="text-gray-600 text-left md:w-7/12 sm:w-6/12">
-              {{ itemDetails.venue_name }}
-            </div>
-          </div>
-          <div class="flex items-center mt-3 flex-wrap">
-            <div class="
-                text-left text-gray-600
-                font-medium
-                w-full
-                lg:w-4/12
-                md:w-5/12
-                sm:w-6/12
-              ">
+              "
+            >
               Venue Email
             </div>
             <div class="text-gray-600 text-left md:w-7/12 sm:w-6/12">
               {{ itemDetails.venue_email }}
             </div>
           </div>
-          <div class="flex items-center mt-3 flex-wrap">
-            <div class="
+          <div
+            v-if="itemDetails.secondary_email"
+            class="flex items-center mt-3 flex-wrap"
+          >
+            <div
+              class="
                 text-left text-gray-600
                 font-medium
                 w-full
                 lg:w-4/12
                 md:w-5/12
                 sm:w-6/12
-              ">
+              "
+            >
+              Venue Secondary Email
+            </div>
+            <div class="text-gray-600 text-left md:w-7/12 sm:w-6/12">
+              {{ itemDetails.secondary_email }}
+            </div>
+          </div>
+          <div class="flex items-center mt-3 flex-wrap">
+            <div
+              class="
+                text-left text-gray-600
+                font-medium
+                w-full
+                lg:w-4/12
+                md:w-5/12
+                sm:w-6/12
+              "
+            >
               Venue Phone No.
             </div>
             <div class="text-gray-600 text-left md:w-7/12 sm:w-6/12">
@@ -120,14 +142,16 @@
             </div>
           </div>
           <div class="flex items-center mt-3 flex-wrap">
-            <div class="
+            <div
+              class="
                 text-left text-gray-600
                 font-medium
                 w-full
                 lg:w-4/12
                 md:w-5/12
                 sm:w-6/12
-              ">
+              "
+            >
               Employee Mobile No.
             </div>
             <div class="text-gray-600 text-left md:w-7/12 sm:w-6/12">
@@ -137,7 +161,8 @@
         </div>
 
         <div data-v-272705a6="" class="flex items-center my-2">
-          <div class="
+          <div
+            class="
               h-6
               w-6
               box-content
@@ -146,9 +171,11 @@
               relative
               right-3.5
               bg-primary-60
-            "></div>
+            "
+          ></div>
           <hr class="flex-grow border-dashed border border-[#E1E3E6]" />
-          <div class="
+          <div
+            class="
               h-6
               w-6
               box-border
@@ -157,36 +184,43 @@
               relative
               left-3.5
               bg-primary-60
-            "></div>
+            "
+          ></div>
         </div>
 
         <div class="sections px-6 py-4">
           <div class="form-title">
-            <h2 class="
+            <h2
+              class="
                 text-lg text-accent-100
                 font-medium
                 leading-tight
                 text-left text-gray-800
-              ">
+              "
+            >
               Address Details:
             </h2>
-            <span class="
+            <span
+              class="
                 w-20
                 border-t-4 border-solid border-gray-300
                 inline-block
                 mb-1
-              "></span>
+              "
+            ></span>
           </div>
 
           <div class="flex items-center mt-3 flex-wrap">
-            <div class="
+            <div
+              class="
                 text-left text-gray-600
                 font-medium
                 w-full
                 lg:w-4/12
                 md:w-5/12
                 sm:w-6/12
-              ">
+              "
+            >
               Address
             </div>
             <div class="text-gray-600 text-left md:w-7/12 sm:w-6/12">
@@ -194,14 +228,16 @@
             </div>
           </div>
           <div class="flex items-center mt-3 flex-wrap">
-            <div class="
+            <div
+              class="
                 text-left text-gray-600
                 font-medium
                 w-full
                 lg:w-4/12
                 md:w-5/12
                 sm:w-6/12
-              ">
+              "
+            >
               City
             </div>
             <div class="text-gray-600 text-left md:w-7/12 sm:w-6/12">
@@ -209,14 +245,16 @@
             </div>
           </div>
           <div class="flex items-center mt-3 flex-wrap">
-            <div class="
+            <div
+              class="
                 text-left text-gray-600
                 font-medium
                 w-full
                 lg:w-4/12
                 md:w-5/12
                 sm:w-6/12
-              ">
+              "
+            >
               State
             </div>
             <div class="text-gray-600 text-left md:w-7/12 sm:w-6/12">
@@ -224,14 +262,16 @@
             </div>
           </div>
           <div class="flex items-center mt-3 flex-wrap">
-            <div class="
+            <div
+              class="
                 text-left text-gray-600
                 font-medium
                 w-full
                 lg:w-4/12
                 md:w-5/12
                 sm:w-6/12
-              ">
+              "
+            >
               Country
             </div>
             <div class="text-gray-600 text-left md:w-7/12 sm:w-6/12">
@@ -239,14 +279,16 @@
             </div>
           </div>
           <div class="flex items-center mt-3 flex-wrap">
-            <div class="
+            <div
+              class="
                 text-left text-gray-600
                 font-medium
                 w-full
                 lg:w-4/12
                 md:w-5/12
                 sm:w-6/12
-              ">
+              "
+            >
               Zipcode
             </div>
             <div class="text-gray-600 text-left md:w-7/12 sm:w-6/12">
@@ -256,7 +298,8 @@
         </div>
 
         <div data-v-272705a6="" class="flex items-center my-2">
-          <div class="
+          <div
+            class="
               h-6
               w-6
               box-content
@@ -265,9 +308,11 @@
               relative
               right-3.5
               bg-primary-60
-            "></div>
+            "
+          ></div>
           <hr class="flex-grow border-dashed border border-[#E1E3E6]" />
-          <div class="
+          <div
+            class="
               h-6
               w-6
               box-border
@@ -276,37 +321,44 @@
               relative
               left-3.5
               bg-primary-60
-            "></div>
+            "
+          ></div>
         </div>
         <div class="sections px-6 py-4">
           <div class="form-title">
-            <h2 class="
+            <h2
+              class="
                 text-lg text-accent-100
                 font-medium
                 leading-tight
                 text-left text-gray-800
-              ">
+              "
+            >
               Found Item's Details:
             </h2>
-            <span class="
+            <span
+              class="
                 w-20
                 border-t-4 border-solid border-gray-300
                 inline-block
                 mb-1
-              "></span>
+              "
+            ></span>
           </div>
 
           <div class="flex foundItemContainer flex-col">
             <div class="flex flex-col w-full">
               <div class="flex items-center mt-3 flex-wrap">
-                <div class="
+                <div
+                  class="
                     text-left text-gray-600
                     font-medium
                     w-full
                     lg:w-4/12
                     md:w-5/12
                     sm:w-6/12
-                  ">
+                  "
+                >
                   Item Description
                 </div>
                 <div class="text-gray-600 text-left md:w-7/12 sm:w-6/12">
@@ -314,14 +366,16 @@
                 </div>
               </div>
               <div class="flex items-center mt-3 flex-wrap">
-                <div class="
+                <div
+                  class="
                     text-left text-gray-600
                     font-medium
                     w-full
                     lg:w-4/12
                     md:w-5/12
                     sm:w-6/12
-                  ">
+                  "
+                >
                   Package Type
                 </div>
                 <div class="text-gray-600 text-left md:w-7/12 sm:w-6/12">
@@ -329,44 +383,51 @@
                 </div>
               </div>
               <div class="flex items-center mt-3 flex-wrap">
-                <div class="
+                <div
+                  class="
                     text-left text-gray-600
                     font-medium
                     w-full
                     lg:w-4/12
                     md:w-5/12
                     sm:w-6/12
-                  ">
+                  "
+                >
                   Weight
                 </div>
                 <div class="text-gray-600 text-left md:w-7/12 sm:w-6/12">
-                  {{ itemDetails.weight }} lbs
+                  {{ itemDetails.weight_pounds }} lbs
                 </div>
               </div>
               <div class="flex items-center mt-3 flex-wrap">
-                <div class="
+                <div
+                  class="
                     text-left text-gray-600
                     font-medium
                     w-full
                     lg:w-4/12
                     md:w-5/12
                     sm:w-6/12
-                  ">
+                  "
+                >
                   Dimension
                 </div>
                 <div class="text-gray-600 text-left md:w-7/12 sm:w-6/12">
-                  {{ itemDetails.dimensions }}
+                  {{ itemDetails.length }}(l) x {{ itemDetails.width }}(w) x
+                  {{ itemDetails.height }}(h) inches
                 </div>
               </div>
               <div class="flex items-center mt-3 flex-wrap">
-                <div class="
+                <div
+                  class="
                     text-left text-gray-600
                     font-medium
                     w-full
                     lg:w-4/12
                     md:w-5/12
                     sm:w-6/12
-                  ">
+                  "
+                >
                   Item Status
                 </div>
                 <div class="text-gray-600 text-left md:w-7/12 sm:w-6/12">
@@ -375,14 +436,16 @@
               </div>
               <template v-if="itemDetails.item_status === 0">
                 <div class="flex items-center mt-3 flex-wrap">
-                  <div class="
+                  <div
+                    class="
                       text-left text-gray-600
                       font-medium
                       w-full
                       lg:w-4/12
                       md:w-5/12
                       sm:w-6/12
-                    ">
+                    "
+                  >
                     Receiver's Name
                   </div>
                   <div class="text-gray-600 text-left md:w-7/12 sm:w-6/12">
@@ -391,14 +454,16 @@
                 </div>
 
                 <div class="flex items-center mt-3 flex-wrap">
-                  <div class="
+                  <div
+                    class="
                       text-left text-gray-600
                       font-medium
                       w-full
                       lg:w-4/12
                       md:w-5/12
                       sm:w-6/12
-                    ">
+                    "
+                  >
                     Receiver's Email
                   </div>
                   <div class="text-gray-600 text-left md:w-7/12 sm:w-6/12">
@@ -407,14 +472,16 @@
                 </div>
 
                 <div class="flex items-center mt-3 flex-wrap">
-                  <div class="
+                  <div
+                    class="
                       text-left text-gray-600
                       font-medium
                       w-full
                       lg:w-4/12
                       md:w-5/12
                       sm:w-6/12
-                    ">
+                    "
+                  >
                     Receiver's Mobile No.
                   </div>
                   <div class="text-gray-600 text-left md:w-7/12 sm:w-6/12">
@@ -425,13 +492,24 @@
             </div>
 
             <div class="text-gray-600 mt-4 text-left w-full">
-              <img v-if="itemDetails.image" class="w-full" :src="itemDetails.image" alt="" />
+              <img
+                v-if="itemDetails.image"
+                class="w-full"
+                :src="itemDetails.image"
+                alt=""
+              />
             </div>
           </div>
         </div>
 
-        <div v-show="!itemDetails.onlyDisplay" class="text-left sm:w-12/12 px-6 pb-6 pt-4">
-          <button type="submit" :class="{ 'button--loading': isLoading }" class="
+        <div
+          v-show="!itemDetails.onlyDisplay"
+          class="text-left sm:w-12/12 px-6 pb-6 pt-4"
+        >
+          <button
+            type="submit"
+            :class="{ 'button--loading': isLoading }"
+            class="
               !py-3
               font-medium
               text-md
@@ -454,20 +532,26 @@
               focus:ring-accent-100
               shadow-accent
               hover:bg-accent-200
-            " @click="submitDetails">
-            <span class="button__text"> {{ btnName}} </span>
+            "
+            @click="submitDetails"
+          >
+            <span class="button__text"> {{ btnName }} </span>
           </button>
 
-          <div class="
+          <div
+            class="
               flex
               items-center
               my-4
               before:flex-1 before:border-t before:border-gray-300 before:mt-0.5
               after:flex-1 after:border-t after:border-gray-300 after:mt-0.5
-            ">
+            "
+          >
             <p class="text-center text-gray-400 font-medium mx-4 mb-0">OR</p>
           </div>
-          <button type="submit" class="
+          <button
+            type="submit"
+            class="
               inline-block
               px-7
               py-3
@@ -483,7 +567,9 @@
               ease-in-out
               w-full
               border border-gray-300
-            " @click="editDetails()">
+            "
+            @click="editDetails()"
+          >
             Edit
           </button>
         </div>
@@ -497,8 +583,8 @@ import { mapGetters } from "vuex";
 export default {
   data() {
     return {
-      isLoading: false
-    }
+      isLoading: false,
+    };
   },
   computed: {
     ...mapGetters("item", ["itemDetails"]),
@@ -508,7 +594,9 @@ export default {
   },
   methods: {
     filterAddressLine(itemDetails) {
-      return itemDetails.address == "Other" || !itemDetails.address ? itemDetails.manualAddress : itemDetails.address;
+      return itemDetails.address == "Other" || !itemDetails.address
+        ? itemDetails.manualAddress
+        : itemDetails.address;
     },
     submitDetails() {
       let params = { ...this.itemDetails };
@@ -543,7 +631,7 @@ export default {
           })
           .catch((error) => console.log(error));
       } else {
-        this.isLoading = true
+        this.isLoading = true;
         this.$axios
           .post("/storelostitem", params, {
             responseType: "arraybuffer",
@@ -554,7 +642,7 @@ export default {
           })
           .then((response) => {
             if (response.status === 200) {
-              this.isLoading = false
+              this.isLoading = false;
               const url = window.URL.createObjectURL(new Blob([response.data]));
               const link = document.createElement("a");
               link.href = url;
@@ -569,8 +657,8 @@ export default {
             });
           })
           .catch((error) => {
-            this.isLoading = false
-            console.log(error)
+            this.isLoading = false;
+            console.log(error);
           });
       }
     },
