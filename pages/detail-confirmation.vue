@@ -413,8 +413,8 @@
                   Dimension
                 </div>
                 <div class="text-gray-600 text-left md:w-7/12 sm:w-6/12">
-                  {{ itemDetails.length }}(l) x {{ itemDetails.width }}(w) x
-                  {{ itemDetails.height }}(h) inches
+                  {{ itemDetails.item_length }}(l) x {{ itemDetails.item_width }}(w) x
+                  {{ itemDetails.item_height }}(h) inches
                 </div>
               </div>
               <div class="flex items-center mt-3 flex-wrap">
