@@ -1737,9 +1737,9 @@ export default {
           package_type: this.packageType,
           weight_pounds: this.weight,
           // weight_ounces: this.this.weightOunces,
-          length: this.itemLength,
-          width: this.itemWidth,
-          height: this.itemHeight,
+          item_length: this.itemLength,
+          item_width: this.itemWidth,
+          item_height: this.itemHeight,
           item_status: this.itemStatus === "Claimed" ? 0 : 1,
         };
         params.foundItemId = this.foundItemId;
@@ -2295,9 +2295,9 @@ export default {
             this.packageType = data.package_type;
             this.weight = data.weight;
             // this.weightOunces = data.weightOunces;
-            this.itemLength = data.length;
-            this.itemWidth = data.width;
-            this.itemHeight = data.height;
+            this.itemLength = data.item_length;
+            this.itemWidth = data.item_width;
+            this.itemHeight = data.item_height;
             this.itemStatus = data.item_status === 0 ? "Claimed" : "Unclaimed";
 
             if (data.item_status === 0) {
@@ -2341,9 +2341,9 @@ export default {
       this.packageType = data.package_type;
       this.weight = data.weight_pounds;
       // this.weightOunces = data.weightOunces;
-      this.itemLength = data.length;
-      this.itemWidth = data.width;
-      this.itemHeight = data.height;
+      this.itemLength = data.item_length;
+      this.itemWidth = data.item_width;
+      this.itemHeight = data.item_height;
       this.itemStatus = data.item_status === 0 ? "Claimed" : "Unclaimed";
 
       if (data.item_status === 0) {
