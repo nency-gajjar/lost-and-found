@@ -409,6 +409,7 @@ export default {
       },
       addressArr: ["Other"],
       showValidateAlert: false,
+      itemId: "",
     };
   },
   methods: {
@@ -480,7 +481,7 @@ export default {
           claimpersondescription: this.itemDescription,
           claimpersondatelost: this.itemLostDate,
           claimpersonlocation: this.location,
-          itemid: "f4ce3ad5-9e3f-4f71-84d5-b94e505225c5",
+          itemid: this.itemId,
           venue_email: this.venueEmail,
           secondary_email: this.secondary_email,
         };
@@ -499,6 +500,9 @@ export default {
       }
     },
   },
+  mounted(){
+    this.itemId = this.$route.params.id;
+  }
 };
 </script>
 

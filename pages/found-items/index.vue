@@ -130,7 +130,7 @@
                 shadow-accent
                 hover:bg-accent-200
               "
-              @click.stop="claimItem"
+              @click.stop="claimItem(item)"
             >
               Claim Item
             </button>
@@ -658,7 +658,7 @@ export default {
       });
     },
     claimItem(item) {
-      this.$router.push({ name: "claim-item", params: item.id });
+      this.$router.push({ name: "claim-item", params: { id: item.id } });
     },
   },
   created() {
