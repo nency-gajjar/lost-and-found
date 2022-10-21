@@ -1849,6 +1849,7 @@ export default {
       this.$axios.post("/demo", { file }).then((response) => {
         if (response.status === 200) {
           this.isSavingImage = false;
+          let tempItemDescriptionArr = this.itemDescriptionArr;
           this.imageRecognitionData = response.data.data;
           this.itemDescriptionArr = response.data.data
             .filter((obj) => {
@@ -1861,7 +1862,21 @@ export default {
             .map((obj) => {
               return obj.name;
             });
-          this.itemDescription = response.data.data[0].name;
+          this.itemDescriptionArr = this.itemDescriptionArr.map(apiDescription => {
+            let description = "";
+            for(let i = 0; i < tempItemDescriptionArr.length; i++){
+              let staticDescription = tempItemDescriptionArr[i];
+              if(apiDescription.toLowerCase().includes(staticDescription.toLowerCase()) || staticDescription.toLowerCase().includes(apiDescription.toLowerCase())){
+                description = staticDescription;
+                break;
+              }
+              else{
+                description =  apiDescription;
+              }
+            }
+            return description;
+          })
+          this.itemDescription = this.itemDescriptionArr[0];
           this.image =
             this.imageRecognitionData[
               this.imageRecognitionData.length - 1
