@@ -103,7 +103,7 @@
                 {{ item.item_description }}
               </h5>
               <p class="text-sm font-normal text-gray-700 dark:text-gray-400">
-                {{ item.item_status === 0 ? "Calimed" : "Uncalimed" }}
+                {{ item.item_status === 0 ? "Claimed" : "Unclaimed" }}
               </p>
             </div>
           </div>
