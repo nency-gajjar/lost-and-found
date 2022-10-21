@@ -413,7 +413,8 @@
                   Dimension
                 </div>
                 <div class="text-gray-600 text-left md:w-7/12 sm:w-6/12">
-                  {{ itemDetails.item_length }}(l) x {{ itemDetails.item_width }}(w) x
+                  {{ itemDetails.item_length }}(l) x
+                  {{ itemDetails.item_width }}(w) x
                   {{ itemDetails.item_height }}(h) inches
                 </div>
               </div>

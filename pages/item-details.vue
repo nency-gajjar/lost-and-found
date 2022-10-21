@@ -770,7 +770,7 @@
                   {{ errors[0] }}
                 </p>
               </ValidationProvider>
-              <!-- <ValidationProvider
+              <ValidationProvider
                 v-slot="{ errors }"
                 rules="required"
                 class="block"
@@ -787,11 +787,11 @@
                 >
                   {{ errors[0] }}
                 </p>
-              </ValidationProvider> -->
+              </ValidationProvider>
               <label class="block mb-1 text-sm font-medium text-gray-800"
                 >Dimensions (Inches)</label
               >
-              <div class="flex justify-between">
+              <div class="flex justify-between gap-4">
                 <ValidationProvider
                   v-slot="{ errors }"
                   rules="max:28|required"
@@ -1295,8 +1295,8 @@ export default {
         this.resetAddressFields();
       } else {
         this.manualAddressSelected = false;
-        this.autoCompleteAddressArr.forEach(addressObj => {
-          if(value == addressObj.address){
+        this.autoCompleteAddressArr.forEach((addressObj) => {
+          if (value == addressObj.address) {
             this.autoCompleteAddress = {
               address: addressObj.address,
               city: addressObj.city,
@@ -1743,7 +1743,7 @@ export default {
           item_description: this.itemDescription,
           package_type: this.packageType,
           weight_pounds: this.weight,
-          // weight_ounces: this.this.weightOunces,
+          weight_ounces: this.weightOunces,
           item_length: this.itemLength,
           item_width: this.itemWidth,
           item_height: this.itemHeight,
@@ -1869,20 +1869,28 @@ export default {
             .map((obj) => {
               return obj.name;
             });
-          this.itemDescriptionArr = this.itemDescriptionArr.map(apiDescription => {
-            let description = "";
-            for(let i = 0; i < tempItemDescriptionArr.length; i++){
-              let staticDescription = tempItemDescriptionArr[i];
-              if(apiDescription.toLowerCase().includes(staticDescription.toLowerCase()) || staticDescription.toLowerCase().includes(apiDescription.toLowerCase())){
-                description = staticDescription;
-                break;
+          this.itemDescriptionArr = this.itemDescriptionArr.map(
+            (apiDescription) => {
+              let description = "";
+              for (let i = 0; i < tempItemDescriptionArr.length; i++) {
+                let staticDescription = tempItemDescriptionArr[i];
+                if (
+                  apiDescription
+                    .toLowerCase()
+                    .includes(staticDescription.toLowerCase()) ||
+                  staticDescription
+                    .toLowerCase()
+                    .includes(apiDescription.toLowerCase())
+                ) {
+                  description = staticDescription;
+                  break;
+                } else {
+                  description = apiDescription;
+                }
               }
-              else{
-                description =  apiDescription;
-              }
+              return description;
             }
-            return description;
-          })
+          );
           this.itemDescription = this.itemDescriptionArr[0];
           this.image =
             this.imageRecognitionData[
@@ -2315,8 +2323,8 @@ export default {
             this.image = data.image;
             this.itemDescription = data.item_description;
             this.packageType = data.package_type;
-            this.weight = data.weight;
-            // this.weightOunces = data.weightOunces;
+            this.weight = data.weight_pounds;
+            this.weightOunces = data.weight_ounces;
             this.itemLength = data.item_length;
             this.itemWidth = data.item_width;
             this.itemHeight = data.item_height;
@@ -2362,7 +2370,7 @@ export default {
       this.itemDescription = data.item_description;
       this.packageType = data.package_type;
       this.weight = data.weight_pounds;
-      // this.weightOunces = data.weightOunces;
+      this.weightOunces = data.weight_ounces;
       this.itemLength = data.item_length;
       this.itemWidth = data.item_width;
       this.itemHeight = data.item_height;

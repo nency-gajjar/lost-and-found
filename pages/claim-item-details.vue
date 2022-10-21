@@ -333,7 +333,7 @@
                     Package Type
                   </div>
                   <div class="text-gray-600 text-left md:w-7/12 sm:w-6/12">
-                  {{ itemDetails.package_type }}
+                    {{ itemDetails.package_type }}
                   </div>
                 </div>
                 <div class="flex items-center mt-3 flex-wrap">
@@ -350,7 +350,7 @@
                     Weight
                   </div>
                   <div class="text-gray-600 text-left md:w-7/12 sm:w-6/12">
-                  {{ itemDetails.weight_pounds }} lbs
+                    {{ itemDetails.weight_pounds }} lbs
                   </div>
                 </div>
                 <div class="flex items-center mt-3 flex-wrap">
@@ -367,7 +367,8 @@
                     Dimension
                   </div>
                   <div class="text-gray-600 text-left md:w-7/12 sm:w-6/12">
-                    {{ itemDetails.item_length }}(l) x {{ itemDetails.item_width }}(w) x
+                    {{ itemDetails.item_length }}(l) x
+                    {{ itemDetails.item_width }}(w) x
                     {{ itemDetails.item_height }}(h) inches
                   </div>
                 </div>
@@ -385,7 +386,7 @@
                     Item Status
                   </div>
                   <div class="text-gray-600 text-left md:w-7/12 sm:w-6/12">
-                  {{ itemDetails.item_status == 0 ? "Claimed" : "Unclaimed" }}
+                    {{ itemDetails.item_status == 0 ? "Claimed" : "Unclaimed" }}
                   </div>
                 </div>
               </div>
@@ -464,7 +465,7 @@
                 Address
               </div>
               <div class="text-gray-600 text-left md:w-7/12 sm:w-6/12">
-                  {{ itemDetails.address }}
+                {{ itemDetails.address }}
               </div>
             </div>
             <div class="flex items-center mt-3 flex-wrap">
@@ -481,7 +482,7 @@
                 City
               </div>
               <div class="text-gray-600 text-left md:w-7/12 sm:w-6/12">
-                  {{ itemDetails.city }}
+                {{ itemDetails.city }}
               </div>
             </div>
             <div class="flex items-center mt-3 flex-wrap">
@@ -498,7 +499,7 @@
                 State
               </div>
               <div class="text-gray-600 text-left md:w-7/12 sm:w-6/12">
-                  {{ itemDetails.states }}
+                {{ itemDetails.states }}
               </div>
             </div>
             <div class="flex items-center mt-3 flex-wrap">
@@ -515,7 +516,7 @@
                 Country
               </div>
               <div class="text-gray-600 text-left md:w-7/12 sm:w-6/12">
-                  {{ itemDetails.country }}
+                {{ itemDetails.country }}
               </div>
             </div>
             <div class="flex items-center mt-3 flex-wrap">
@@ -532,14 +533,14 @@
                 Zipcode
               </div>
               <div class="text-gray-600 text-left md:w-7/12 sm:w-6/12">
-                  {{ itemDetails.zipcode }}
+                {{ itemDetails.zipcode }}
               </div>
             </div>
           </div>
 
           <div class="flex flex-wrap gap-2 m-5">
             <button
-              :class="{ 'button--loading': isLoading['approve'] }"
+              :class="{ 'button--loading': isLoading['Approve'] }"
               type="submit"
               class="
                 !py-3
@@ -570,7 +571,7 @@
               <span class="button__text"> Approve </span>
             </button>
             <button
-              :class="{ 'button--loading': isLoading['deny'] }"
+              :class="{ 'button--loading': isLoading['Deny'] }"
               type="submit"
               class="
                 !py-3
@@ -637,8 +638,8 @@ export default {
   data() {
     return {
       isLoading: {
-        approve: false,
-        deny: false,
+        Approve: false,
+        Deny: false,
       },
       isLoadingItemDetails: false,
       claimDetails: {},
@@ -668,15 +669,17 @@ export default {
   },
   methods: {
     action(type) {
+      console.log("===type", type);
       this.isLoading[type] = true;
       let params = {
-        sender_approval: type == "Approve" ? true : false,
+        sender_approval: type === "Approve" ? true : false,
       };
       this.$axios
         .post("/updatesinglelostitem?id=" + this.itemId, params)
         .then((response) => {
           if (response.status === 200) {
             this.isLoading[type] = false;
+            this.$router.push({ path: "/found-items" });
           }
         })
         .catch((error) => console.log(error));

@@ -35,9 +35,7 @@
           + Add New Item
         </button>
       </div>
-      <div
-        v-if="!isLoading && lostItems.length > 0"
-      >
+      <div v-if="!isLoading && lostItems.length > 0">
         <div
           v-for="item in lostItems"
           :key="item.id"
@@ -58,7 +56,9 @@
             relative
           "
         >
-          <div class="flex items-center sm:justify-left justify-around sm:gap-4">
+          <div
+            class="flex items-center sm:justify-left justify-around sm:gap-4"
+          >
             <div class="w-24 h-24 flex items-center">
               <img
                 v-if="item.image"
@@ -110,25 +110,17 @@
           <div class="flex items-center justify-center">
             <button
               class="
-                !py-3
                 font-medium
-                text-md
-                uppercase
+                text-sm
+                px-5
                 py-2
-                px-6
                 rounded-md
-                button
+                border-accent-100 border
+                text-accent-100
+                transition
+                duration-300
+                hover:bg-accent-200 hover:text-white
                 focus:outline-none
-                focus:ring-2
-                focus:ring-offset-2
-                focus:ring-offset-primary-60
-                transition-all
-                font-display
-                bg-accent-100
-                text-white
-                focus:ring-accent-100
-                shadow-accent
-                hover:bg-accent-200
               "
               @click.stop="claimItem(item)"
             >

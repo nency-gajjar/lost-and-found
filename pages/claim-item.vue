@@ -175,7 +175,7 @@
                   v-model="autoCompleteAddress.address"
                   type="text"
                   id="autocomplete"
-                  label="Address Line"
+                  label="Lost Location"
                   @input="getAddress"
                   :class="errors.length > 0 && 'error'"
                 />
@@ -499,9 +499,9 @@ export default {
       }
     },
   },
-  mounted(){
+  mounted() {
     this.itemId = this.$route.params.id;
-  }
+  },
 };
 </script>
 
