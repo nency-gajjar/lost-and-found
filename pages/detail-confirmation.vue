@@ -576,17 +576,50 @@
         </div>
       </section>
     </div>
+    <BaseDialog
+      :showDialog="showDialog"
+      :icon="{ name: 'circle-check', color: 'green', size: '3x' }"
+      @close="showDialog = false"
+      title="Details submitted successfully!"
+      message="Wait for admin to review your details."
+      buttonTitle="Close"
+    >
+      <!-- <template v-slot:action>
+        <button
+          class="
+            mb-2
+            md:mb-0
+            bg-accent-100
+            border border-accent-100
+            px-5
+            py-2
+            text-sm
+            shadow-sm
+            font-medium
+            tracking-wider
+            text-white
+            rounded-md
+            hover:shadow-lg hover:bg-accent-200
+          "
+        >
+          Generate Label Tag
+        </button>
+      </template> -->
+    </BaseDialog>
   </div>
 </template>
 
 <script>
 import { mapGetters } from "vuex";
+import BaseDialog from "@/components/base/BaseDialog.vue";
 export default {
   data() {
     return {
       isLoading: false,
+      showDialog: false,
     };
   },
+  components: { BaseDialog },
   computed: {
     ...mapGetters("item", ["itemDetails"]),
     btnName() {
@@ -644,6 +677,7 @@ export default {
           .then((response) => {
             if (response.status === 200) {
               this.isLoading = false;
+              this.showDialog = true;
               const url = window.URL.createObjectURL(new Blob([response.data]));
               const link = document.createElement("a");
               link.href = url;
@@ -653,9 +687,9 @@ export default {
 
               this.$root.$emit("detail-submitted", true);
             }
-            this.$nextTick(() => {
-              this.$router.push({ path: "/detail-confirmation" });
-            });
+            // this.$nextTick(() => {
+            //   this.$router.push({ path: "/detail-confirmation" });
+            // });
           })
           .catch((error) => {
             this.isLoading = false;

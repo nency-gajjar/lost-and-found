@@ -42,5 +42,8 @@ export default {
   &.blue {
     color: #3b82f6;
   }
+  &.green {
+    color: green;
+  }
 }
 </style>
