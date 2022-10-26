@@ -5,6 +5,92 @@
       class="wrapper"
       v-if="!isLoadingItemDetails || Object.keys(itemDetails).length > 0"
     >
+      <base-dialog v-show="actionModal">
+        <div class="relative">
+          <div class="title bg-accent-100 pl-6 py-4 mb-4">
+            <h3 class="text-white">{{ actionTitle }}</h3>
+          </div>
+          <span
+            @click="actionModal = false"
+            class="
+              absolute
+              right-5
+              top-5
+              inline-block
+              z-10
+              cursor-pointer
+            "
+          >
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              class="icon icon-tabler icon-tabler-x"
+              width="24"
+              height="24"
+              viewBox="0 0 24 24"
+              stroke-width="1.5"
+              stroke="#ffffff"
+              fill="none"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+            >
+              <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+              <line x1="18" y1="6" x2="6" y2="18" />
+              <line x1="6" y1="6" x2="18" y2="18" />
+            </svg>
+          </span>
+        </div>
+        <div
+          class="
+            w-full
+            max-w-screen-md
+            relative
+            mx-auto
+            my-auto
+            rounded-xl
+            shadow-lg
+            bg-white
+            flex
+            flex-col
+            justify-around
+            items-center
+            editor-container
+          "
+        >
+          <div class="w-full text-center px-4 text-xl">
+            {{ actionMessage }}
+          </div>
+          <div class="w-full flex justify-end mr-10">
+            <button
+              type="button"
+              @click="actionModal = false"
+              class="
+                font-medium
+                text-md
+                leading-5
+                uppercase
+                py-2
+                px-6
+                rounded-md
+                button
+                focus:outline-none
+                focus:ring-2
+                focus:ring-offset-2
+                focus:ring-offset-primary-60
+                transition-all
+                font-display
+                disabled:cursor-not-allowed
+                bg-accent-100
+                text-white
+                focus:ring-accent-100
+                shadow-accent
+                hover:bg-accent-200
+              "
+            >
+              Close
+            </button>
+          </div>
+        </div>
+      </base-dialog>
       <div
         class="
           card
@@ -634,9 +720,16 @@
 </template>
 
 <script>
+import BaseDialog from "~/components/base/BaseDialog.vue";
 export default {
+  components: {
+    BaseDialog,
+  },
   data() {
     return {
+      actionModal: false,
+      actionMessage: "",
+      actionTitle: "",
       isLoading: {
         Approve: false,
         Deny: false,
@@ -669,6 +762,7 @@ export default {
   },
   methods: {
     action(type) {
+      this.actionModal = false;
       console.log("===type", type);
       this.isLoading[type] = true;
       let params = {
@@ -680,9 +774,22 @@ export default {
           if (response.status === 200) {
             this.isLoading[type] = false;
             this.$router.push({ path: "/found-items" });
+            if(type === "Approve"){
+              this.actionMessage = "Details Approved successfully!";
+            }
+            else if(type === "Deny"){
+              this.actionMessage = "Details Rejected successfully!";
+            }
+            this.actionTitle = "Success";
+            this.actionModal = true;
           }
         })
-        .catch((error) => console.log(error));
+        .catch((error) => {
+          console.log(error);
+          this.actionMessage = "Something went wrong! Please try again.";
+          this.actionTitle = "Error";
+          this.actionModal = true;
+        });
     },
   },
 };
