@@ -117,7 +117,7 @@
                 <BaseInput
                   v-model="itemName"
                   type="text"
-                  label="Item Name"
+                  label="Item Description"
                   :class="errors.length > 0 && 'error'"
                 />
                 <p
@@ -132,12 +132,26 @@
                 rules="required"
                 class="block"
               >
-                <BaseInput
+                <textarea
                   v-model="itemDescription"
-                  type="text"
-                  label="Item Description"
+                  placeholder="Description"
+                  class="
+                    border
+                    inline-block
+                    border-gray-300
+                    w-full
+                    rounded-lg
+                    px-4
+                    h-full
+                    text-sm
+                    pt-4
+                    pb-2
+                    transition-shadow
+                    text-gray-800
+                  "
                   :class="errors.length > 0 && 'error'"
-                />
+                ></textarea>
+
                 <p
                   v-if="errors.length"
                   class="vee-validation-error mt-2 text-sm text-red-600"
@@ -262,45 +276,6 @@
                   </p>
                 </ValidationProvider>
               </div>
-
-              <ValidationProvider
-                v-slot="{ errors }"
-                rules="required|email"
-                class="block"
-                name="Venue Email"
-              >
-                <BaseInput
-                  v-model="venueEmail"
-                  type="email"
-                  label="Venue Email"
-                  :class="errors.length > 0 && 'error'"
-                />
-                <p
-                  v-if="errors.length"
-                  class="vee-validation-error mt-2 text-sm text-red-600"
-                >
-                  {{ errors[0] }}
-                </p>
-              </ValidationProvider>
-              <ValidationProvider
-                v-slot="{ errors }"
-                rules="email"
-                class="block"
-                name="Secondary Email"
-              >
-                <BaseInput
-                  v-model="secondaryEmail"
-                  type="text"
-                  label="Secondary Email (optional)"
-                  :class="errors.length > 0 && 'error'"
-                />
-                <p
-                  v-if="errors.length"
-                  class="vee-validation-error mt-2 text-sm text-red-600"
-                >
-                  {{ errors[0] }}
-                </p>
-              </ValidationProvider>
               <div
                 v-show="showValidateAlert"
                 class="
@@ -385,8 +360,6 @@ export default {
         placeholder: "Enter a phone number",
         name: "telephone",
         maxLen: 15,
-        // wrapperClasses: "",
-        // inputClasses: "",
         inputOptions: {
           showDialCode: false,
         },
@@ -396,8 +369,6 @@ export default {
       itemName: "",
       itemDescription: "",
       itemLostDate: "",
-      venueEmail: "",
-      secondaryEmail: "",
       autoCompleteAddress: {
         address: "",
         city: "",
@@ -481,8 +452,6 @@ export default {
           claimpersondatelost: this.itemLostDate,
           claimpersonlocation: this.autoCompleteAddress.address,
           itemid: this.itemId,
-          venue_email: this.venueEmail,
-          secondary_email: this.secondary_email,
         };
 
         this.$axios
@@ -560,5 +529,23 @@ export default {
   to {
     transform: rotate(1turn);
   }
+}
+
+.pac-item {
+  padding: 6px;
+  font-size: 14px;
+  cursor: pointer;
+
+  &:hover {
+    background-color: #ececec;
+  }
+}
+
+.pac-item-query {
+  font-size: 14px;
+}
+
+textarea.error {
+  @apply border-red-500 border-2 ring-4 ring-red-500 ring-opacity-10 transition-none;
 }
 </style>

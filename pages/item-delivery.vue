@@ -54,7 +54,7 @@
               "
             >
               <input
-                v-model="delivery"
+                v-model="deliveryType"
                 id="bordered-radio-1"
                 type="radio"
                 value="0"
@@ -96,7 +96,7 @@
               "
             >
               <input
-                v-model="delivery"
+                v-model="deliveryType"
                 checked
                 id="bordered-radio-2"
                 type="radio"
@@ -129,10 +129,10 @@
               >
             </div>
 
-            <div class="!mt-5" v-show="delivery === '1'">
+            <div class="!mt-5" v-show="deliveryType === '1'">
               <ValidationProvider
                 v-slot="{ errors }"
-                rules="max:100|venueName"
+                rules="required"
                 class="block mb-4"
               >
                 <BaseInput
@@ -152,7 +152,7 @@
                 <BaseInput
                   v-model="additionalPersonName"
                   type="text"
-                  label="Additional Person Name"
+                  label="Additional Person Name (optional)"
                 />
               </div>
               <ValidationProvider
@@ -215,25 +215,45 @@
 <script>
 export default {
   data: () => ({
-    // openTab: 1,
-    delivery: null,
+    deliveryType: "0",
     pickupPersonName: "",
     additionalPersonName: "",
     expectedPickupDate: new Date().toISOString().slice(0, 10),
     isLoading: false,
+    itemId: "",
   }),
+  mounted() {
+    if (this.$route.query.id) {
+      this.itemId = this.$route.query.id;
+    }
+  },
   methods: {
     toggleTabs: function (tabNumber) {
       this.openTab = tabNumber;
     },
     async onSubmit() {
-      const isValid = await this.$refs.observer.validate();
-      console.log("===isValid", isValid);
-      if (!isValid) {
-        this.isLoading = false;
-      } else {
-        this.isLoading = true;
+      if (this.deliveryType === "1") {
+        const isValid = await this.$refs.observer.validate();
+        if (!isValid) return;
       }
+      this.isLoading = true;
+      let params = {
+        delivery_type: this.deliveryType,
+      };
+      if (this.deliveryType === "1") {
+        params.pickup_person_name = this.pickupPersonName;
+        params.additional_person_name = this.additionalPersonName;
+        params.pickup_date = this.expectedPickupDate;
+      }
+      this.$axios
+        .post("/updatesinglelostitem?id=" + this.itemId, params)
+        .then((response) => {
+          if (response.status === 200) {
+            this.isLoading = false;
+            this.$router.push({ path: "/found-items" });
+          }
+        })
+        .catch((error) => console.log(error));
     },
   },
 };
