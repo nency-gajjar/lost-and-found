@@ -673,6 +673,9 @@ export default {
       this.isLoading[type] = true;
       let params = {
         sender_approval: type === "Approve" ? true : false,
+        receiver_name: this.claimDetails.claimpersonitemname,
+        receiver_email: this.claimDetails.claimpersonemail,
+        receiver_mobile_no: this.claimDetails.claimpersonmobileno,
       };
       this.$axios
         .post("/updatesinglelostitem?id=" + this.itemId, params)
