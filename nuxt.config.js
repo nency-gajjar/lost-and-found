@@ -17,6 +17,8 @@ export default {
     script: [{ src: "https://maps.googleapis.com/maps/api/js?key=AIzaSyBQjLdAdHmmA6Noz2HY5UuWWrORp38vblI&libraries=places "}],
   },
 
+  loading: { color: 'orange', height: '3px' },
+
   // Global CSS: https://go.nuxtjs.dev/config-css
   css: [
   ],

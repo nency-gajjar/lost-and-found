@@ -171,14 +171,14 @@
             <div
               class="
                 flex flex-col
-                items-center
+                items-start
                 text-center
                 justify-between
                 py-4
                 leading-normal
               "
             >
-              <h5
+              <div
                 class="
                   mb-2
                   text-xl
@@ -188,10 +188,22 @@
                 "
               >
                 {{ item.item_description }}
-              </h5>
-              <p class="text-sm font-normal text-gray-700">
+              </div>
+              <!-- <p class="text-sm font-normal text-gray-700">
                 {{ item.item_status === 0 ? "Claimed" : "Unclaimed" }}
-              </p>
+              </p> -->
+              <div class="text-left">
+                <BaseIcon icon="calendar-days" color="gray" />
+                <span class="text-sm font-normal text-gray-700">
+                  {{ item.datse }}
+                </span>
+                <div>
+                  <BaseIcon icon="location-dot" color="red" />
+                  <span class="text-sm font-normal text-gray-700">
+                    {{ item.address }}
+                  </span>
+                </div>
+              </div>
             </div>
           </div>
           <div class="flex items-center justify-center">
@@ -247,12 +259,17 @@
 </template>
 
 <script>
+import BaseIcon from "@/components/base/BaseIcon.vue";
+
 export default {
   data() {
     return {
       lostItems: [],
       isLoading: false,
     };
+  },
+  components: {
+    BaseIcon,
   },
   methods: {
     addNewItem() {

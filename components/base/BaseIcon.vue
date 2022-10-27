@@ -45,5 +45,11 @@ export default {
   &.green {
     color: green;
   }
+  &.red {
+    color: #f34242;
+  }
+  &.gray {
+    color: gray;
+  }
 }
 </style>
