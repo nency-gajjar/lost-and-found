@@ -1,48 +1,67 @@
 <template>
-  <div class="wrapper-form">
+  <section class="bg-gray-100 shadow-lg dark:bg-gray-900">
     <div
       class="
-        card
-        w-full
-        mx-6
-        lg:mx-0
-        md:w-8/12
-        lg:w-7/12
-        xl:w-6/12
-        bg-white
-        border border-[#E1E3E6]
-        rounded-lg
+        flex flex-col
+        items-center
+        justify-center
+        px-6
+        py-8
+        mx-auto
+        md:h-screen
+        lg:py-0
       "
-      style="box-shadow: rgba(54, 28, 93, 0.04) -10px 18px 32px"
     >
-      <div>
-        <ValidationObserver v-slot="{ validate }" ref="observer">
-          <form @submit.prevent="validate().then(onSubmit)">
-            <div class="card p-6 space-y-4">
-              <div class="form-title">
-                <h1
-                  class="
-                    w-full
-                    my-2
-                    text-xl
-                    font-bold
-                    leading-tight
-                    text-gray-700
-                  "
-                >
-                  Reset Password
-                </h1>
-                <div class="flex justify-start">
-                  <span
-                    class="
-                      w-20
-                      border-t-4 border-solid border-orange-200
-                      inline-block
-                      mb-3
-                    "
-                  ></span>
-                </div>
-              </div>
+      <a
+        href="#"
+        class="
+          flex
+          items-center
+          mb-6
+          text-2xl
+          font-semibold
+          text-gray-900
+          dark:text-white
+        "
+      >
+        Lost & Found
+      </a>
+      <div
+        class="
+          w-full
+          bg-white
+          rounded-lg
+          shadow
+          dark:border
+          md:mt-0
+          sm:max-w-md
+          xl:p-0
+          dark:bg-gray-800 dark:border-gray-700
+        "
+      >
+        <div class="p-6 space-y-4 md:space-y-6 sm:p-8">
+          <div class="form-title">
+            <h1
+              class="w-full my-2 text-xl font-bold leading-tight text-gray-700"
+            >
+              Reset Password
+            </h1>
+            <div class="flex justify-start">
+              <span
+                class="
+                  w-20
+                  border-t-4 border-solid border-orange-200
+                  inline-block
+                  mb-3
+                "
+              ></span>
+            </div>
+          </div>
+          <ValidationObserver v-slot="{ validate }" ref="observer">
+            <form
+              class="space-y-4 md:space-y-6 mt-5"
+              @submit.prevent="validate().then(onSubmit)"
+            >
               <ValidationProvider
                 v-slot="{ errors }"
                 rules="required"
@@ -96,110 +115,88 @@
               >
                 <span class="font-medium">Oops!</span> {{ alertMessage }}
               </div>
-              <div class="flex justify-end">
-                <button
-                  :class="{ 'button--loading': isLoading }"
-                  type="submit"
-                  class="
-                    !py-3
-                    font-medium
-                    text-md
-                    leading-5
-                    uppercase
-                    py-2
-                    px-12
-                    rounded-md
-                    button
-                    focus:outline-none
-                    focus:ring-2
-                    focus:ring-offset-2
-                    focus:ring-offset-primary-60
-                    transition-all
-                    font-display
-                    disabled:cursor-not-allowed
-                    bg-accent-100
-                    text-white
-                    focus:ring-accent-100
-                    shadow-accent
-                    hover:bg-accent-200
-                  "
-                >
-                  <span class="button__text"> Reset </span>
-                </button>
-              </div>
-            </div>
-          </form>
-        </ValidationObserver>
+              <button
+                type="submit"
+                :class="{ 'button--loading': isLoading }"
+                class="
+                  font-medium
+                  text-md
+                  leading-5
+                  w-full
+                  px-5
+                  py-2.5
+                  text-white
+                  rounded-md
+                  button
+                  focus:outline-none
+                  focus:ring-2
+                  focus:ring-offset-2
+                  focus:ring-offset-primary-60
+                  transition-all
+                  bg-accent-100
+                  focus:ring-accent-100
+                  shadow-accent
+                  hover:bg-accent-200
+                  rounded-lg
+                  text-center
+                "
+              >
+                <span class="button__text"> Reset Password </span>
+              </button>
+            </form>
+          </ValidationObserver>
+        </div>
       </div>
     </div>
-  </div>
+  </section>
 </template>
 
 <script>
 import { ValidationObserver, ValidationProvider } from "vee-validate";
 import BaseInput from "~/components/base/BaseInput.vue";
-    export default {
-        components: {
-            ValidationObserver,
-            ValidationProvider,
-            BaseInput,
-        },
-        data(){
-            return{
-                password: "",
-                confirmPassword: "",
-                alertMessage: "",
-                isLoading: false,
-                showValidateAlert: false
-            }
-        },
-        methods: {
-            async onSubmit(){
-                this.isLoading = true;
-                const isValid = await this.$refs.observer.validate();
-                if (!isValid || this.password != this.confirmPassword) {
-                    if(this.password != this.confirmPassword && ( this.password != "" && this.confirmPassword != "") ){
-                        this.alertMessage = "Password and Confirm Password doesn't match";
-                    }
-                    else{
-                        this.alertMessage = "Please fill all required fields and try submitting again.";
-                    }
-                    this.showValidateAlert = true;
-                    this.isLoading = false;
-                } else {
-                    this.showValidateAlert = false;
-                    setTimeout(()=>{
-                        this.isLoading = false;
-                    }, 3000);
-                    console.log(this.password);
-                    console.log(this.confirmPassword);
-
-                    // const params = {
-                    //     claimpersonname: this.claimPersonName,
-                    //     claimpersonemail: this.claimPersonEmail,
-                    //     claimpersonmobileno: claimPersonPhoneNo,
-                    //     claimpersonitemname: this.itemName,
-                    //     claimpersondescription: this.itemDescription,
-                    //     claimpersondatelost: this.itemLostDate,
-                    //     claimpersonlocation: this.autoCompleteAddress.address,
-                    //     itemid: this.itemId,
-                    // };
-
-                    // this.$axios
-                    // .post("/sendclaimitemmail", params)
-                    // .then((response) => {
-                    //     if (response.status === 200) {
-                    //     this.isLoading = false;
-                    //     }
-                    // })
-                    // .catch((error) => {
-                    //     this.isLoading = false;
-                    //     console.log(error);
-                    // });
-                }
-            },
-        },
-    }
+export default {
+  components: {
+    ValidationObserver,
+    ValidationProvider,
+    BaseInput,
+  },
+  data() {
+    return {
+      password: "",
+      confirmPassword: "",
+      alertMessage: "",
+      isLoading: false,
+      showValidateAlert: false,
+    };
+  },
+  methods: {
+    async onSubmit() {
+      this.isLoading = true;
+      const isValid = await this.$refs.observer.validate();
+      if (!isValid || this.password != this.confirmPassword) {
+        if (
+          this.password != this.confirmPassword &&
+          this.password != "" &&
+          this.confirmPassword != ""
+        ) {
+          this.alertMessage = "Password and Confirm Password doesn't match";
+        } else {
+          this.alertMessage =
+            "Please fill all required fields and try submitting again.";
+        }
+        this.showValidateAlert = true;
+        this.isLoading = false;
+      } else {
+        this.showValidateAlert = false;
+        setTimeout(() => {
+          this.isLoading = false;
+        }, 3000);
+        console.log(this.password);
+        console.log(this.confirmPassword);
+      }
+    },
+  },
+};
 </script>
 
 <style scoped>
