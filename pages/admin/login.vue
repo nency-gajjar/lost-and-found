@@ -14,28 +14,11 @@
     >
       <a
         href="#"
-        class="
-          flex
-          items-center
-          mb-6
-          text-2xl
-          font-semibold
-          text-gray-900
-        "
+        class="flex items-center mb-6 text-2xl font-semibold text-gray-900"
       >
         Lost & Found
       </a>
-      <div
-        class="
-          w-full
-          bg-white
-          rounded-lg
-          shadow
-          md:mt-0
-          sm:max-w-md
-          xl:p-0
-        "
-      >
+      <div class="w-full bg-white rounded-lg shadow md:mt-0 sm:max-w-md xl:p-0">
         <div class="p-6 space-y-4 md:space-y-6 sm:p-8">
           <div class="form-title">
             <h1
@@ -131,9 +114,7 @@
                     />
                   </div>
                   <div class="ml-3 text-sm">
-                    <label
-                      for="remember"
-                      class="text-gray-500"
+                    <label for="remember" class="text-gray-500"
                       >Remember me</label
                     >
                   </div>
@@ -178,7 +159,7 @@
               >
                 <span class="button__text"> Login </span>
               </button>
-              <p
+              <!-- <p
                 class="
                   text-sm
                   font-light
@@ -196,7 +177,7 @@
                   "
                   >Register</a
                 >
-              </p>
+              </p> -->
             </form>
           </ValidationObserver>
         </div>

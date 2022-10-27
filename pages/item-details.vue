@@ -453,8 +453,7 @@
                         hover:cursor-pointer hover:text-indigo-900
                         ml-3
                         inline-flex
-                        flex
-                        flex-col
+                        flex flex-col
                         items-center
                       "
                     >
@@ -475,11 +474,17 @@
                       </svg>
                       <p class="text-xs text-center">Edit Image</p>
                     </div>
-                    <div v-if="imageKey" @click="deleteEditable()" class="flex flex-col text-red-600 hover:text-red-900 hover:cursor-pointer">
+                    <div
+                      v-if="imageKey"
+                      @click="deleteEditable()"
+                      class="
+                        flex flex-col
+                        text-red-600
+                        hover:text-red-900 hover:cursor-pointer
+                      "
+                    >
                       <div class="tool-trash flex justify-center">
-                        <trash-2-icon
-                          size="1x"
-                        ></trash-2-icon>
+                        <trash-2-icon size="1x"></trash-2-icon>
                       </div>
                       <p class="text-xs text-center">Remove Image</p>
                     </div>
@@ -1054,7 +1059,7 @@ export default {
     // zipcode: "",
     manualVenue: "",
     venue: "",
-    venueArr: ["Hotel", "Restaurent", "Airport", "Other"],
+    venueArr: ["Hotel", "Restaurant", "Airport", "Other"],
     // venuePhone: "",
     employeePhone: "",
     foundDate: new Date().toISOString().slice(0, 10),
@@ -1789,7 +1794,7 @@ export default {
     redo() {
       this.$refs.editor.redo();
     },
-    closeEditor(){
+    closeEditor() {
       this.$refs.editor.clear();
       this.showEditor = false;
       this.stateCrop = true;
