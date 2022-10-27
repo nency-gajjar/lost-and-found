@@ -43,15 +43,7 @@
               </div>
             </div>
 
-            <div
-              class="
-                flex
-                items-center
-                pl-4
-                rounded
-                border border-gray-200
-              "
-            >
+            <div class="flex items-center pl-4 rounded border border-gray-200">
               <input
                 v-model="deliveryType"
                 id="bordered-radio-1"
@@ -64,32 +56,16 @@
                   text-accent-100
                   bg-gray-100
                   border-gray-300
-                  focus:ring-accent-200
-                  focus:ring-2
+                  focus:ring-accent-200 focus:ring-2
                 "
               />
               <label
                 for="bordered-radio-1"
-                class="
-                  py-4
-                  ml-2
-                  w-full
-                  text-sm
-                  font-medium
-                  text-gray-900
-                "
+                class="py-4 ml-2 w-full text-sm font-medium text-gray-900"
                 >Ship it to Me</label
               >
             </div>
-            <div
-              class="
-                flex
-                items-center
-                pl-4
-                rounded
-                border border-gray-200
-              "
-            >
+            <div class="flex items-center pl-4 rounded border border-gray-200">
               <input
                 v-model="deliveryType"
                 checked
@@ -103,20 +79,12 @@
                   text-accent-100
                   bg-gray-100
                   border-gray-300
-                  focus:ring-accent-200
-                  focus:ring-2
+                  focus:ring-accent-200 focus:ring-2
                 "
               />
               <label
                 for="bordered-radio-2"
-                class="
-                  py-4
-                  ml-2
-                  w-full
-                  text-sm
-                  font-medium
-                  text-gray-900
-                "
+                class="py-4 ml-2 w-full text-sm font-medium text-gray-900"
                 >Hold for pickup</label
               >
             </div>
@@ -260,8 +228,18 @@ export default {
         .post("/updatesinglelostitem?id=" + this.itemId, params)
         .then((response) => {
           if (response.status === 200) {
-            this.showDialog = true;
-            this.isLoading = false;
+            this.$axios
+              .post("/holdforpickupmail?id=" + this.itemId)
+              .then((response) => {
+                if (response.status === 200) {
+                  this.showDialog = true;
+                  this.isLoading = false;
+                }
+              })
+              .catch((error) => {
+                console.log(error);
+                this.isLoading = false;
+              });
           }
         })
         .catch((error) => {
