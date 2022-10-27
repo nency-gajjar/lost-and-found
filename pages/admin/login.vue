@@ -1,5 +1,5 @@
 <template>
-  <section class="bg-gray-100 shadow-lg dark:bg-gray-900">
+  <section class="bg-gray-100 shadow-lg">
     <div
       class="
         flex flex-col
@@ -21,7 +21,6 @@
           text-2xl
           font-semibold
           text-gray-900
-          dark:text-white
         "
       >
         Lost & Found
@@ -32,11 +31,9 @@
           bg-white
           rounded-lg
           shadow
-          dark:border
           md:mt-0
           sm:max-w-md
           xl:p-0
-          dark:bg-gray-800 dark:border-gray-700
         "
       >
         <div class="p-6 space-y-4 md:space-y-6 sm:p-8">
@@ -110,7 +107,6 @@
                   text-sm text-red-700
                   bg-red-100
                   rounded-lg
-                  dark:bg-red-200 dark:text-red-800
                 "
                 role="alert"
               >
@@ -131,17 +127,13 @@
                         rounded
                         bg-gray-50
                         focus:ring-3 focus:ring-primary-300
-                        dark:bg-gray-700
-                        dark:border-gray-600
-                        dark:focus:ring-primary-600
-                        dark:ring-offset-gray-800
                       "
                     />
                   </div>
                   <div class="ml-3 text-sm">
                     <label
                       for="remember"
-                      class="text-gray-500 dark:text-gray-300"
+                      class="text-gray-500"
                       >Remember me</label
                     >
                   </div>
@@ -153,7 +145,6 @@
                     font-medium
                     text-gray-600
                     hover:underline
-                    dark:text-gray-500
                     cursor-pointer
                   "
                   >Forgot password?</a
@@ -192,7 +183,6 @@
                   text-sm
                   font-light
                   text-gray-500
-                  dark:text-gray-400
                   cursor-pointer
                 "
               >
@@ -203,7 +193,6 @@
                     font-medium
                     text-gray-600
                     hover:underline
-                    dark:text-gray-500
                   "
                   >Register</a
                 >
