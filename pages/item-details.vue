@@ -1805,11 +1805,12 @@ export default {
         .then((response) => {
           if (response.status === 200) {
             console.log("===remove file response", response);
+            this.$refs.editor.clear();
+            this.showEditor = false;
+            this.stateCrop = true;
+            this.image = "";
           }
         });
-      this.$refs.editor.clear();
-      this.showEditor = false;
-      this.stateCrop = true;
     },
     // freeDrawing() {
     //   let customizeFreeDrawing = { stroke: "black", strokeWidth: "5" };
