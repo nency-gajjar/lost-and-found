@@ -579,9 +579,11 @@
     <BaseDialog
       :showDialog="showDialog"
       :icon="{ name: 'circle-check', color: 'green', size: '3x' }"
-      @close="showDialog = false"
+      @close="closeDialog"
       title="Details submitted successfully!"
-      message="Wait for admin to review your details."
+      :message="
+        itemDetails.image ? 'Wait for admin to review your details.' : ''
+      "
       buttonTitle="Close"
     >
       <!-- <template v-slot:action>
@@ -631,6 +633,12 @@ export default {
       return itemDetails.address == "Other" || !itemDetails.address
         ? itemDetails.manualAddress
         : itemDetails.address;
+    },
+    closeDialog() {
+      this.showDialog = false;
+      this.$nextTick(() => {
+        this.$router.push({ path: "/found-items" });
+      });
     },
     submitDetails() {
       let params = { ...this.itemDetails };

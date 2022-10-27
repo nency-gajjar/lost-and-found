@@ -274,7 +274,7 @@ export default {
       });
     },
     claimItem(item) {
-      this.$router.push({ name: "claim-item", params: { id: item.id } });
+      this.$router.push({ name: "claim-item", params: { item: item } });
     },
   },
   created() {

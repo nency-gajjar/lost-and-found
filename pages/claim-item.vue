@@ -127,11 +127,7 @@
                   {{ errors[0] }}
                 </p>
               </ValidationProvider>
-              <ValidationProvider
-                v-slot="{ errors }"
-                rules="required"
-                class="block"
-              >
+              <div class="block">
                 <textarea
                   v-model="itemDescription"
                   placeholder="Description"
@@ -149,16 +145,8 @@
                     transition-shadow
                     text-gray-800
                   "
-                  :class="errors.length > 0 && 'error'"
                 ></textarea>
-
-                <p
-                  v-if="errors.length"
-                  class="vee-validation-error mt-2 text-sm text-red-600"
-                >
-                  {{ errors[0] }}
-                </p>
-              </ValidationProvider>
+              </div>
               <ValidationProvider
                 v-slot="{ errors }"
                 rules="required"
@@ -380,6 +368,8 @@ export default {
       addressArr: ["Other"],
       showValidateAlert: false,
       itemId: "",
+      venueEmail: "",
+      secondaryEmail: "",
     };
   },
   methods: {
@@ -469,7 +459,11 @@ export default {
     },
   },
   mounted() {
-    this.itemId = this.$route.params.id;
+    if (this.$route.params.item) {
+      this.itemId = this.$route.params.item.id;
+      this.venueEmail = this.$route.params.item.venue_email;
+      this.secondaryEmail = this.$route.params.item?.secondaryEmail;
+    }
   },
 };
 </script>

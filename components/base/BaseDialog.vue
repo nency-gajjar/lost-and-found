@@ -65,7 +65,7 @@
               <h2 class="text-xl font-semibold py-4 text-gray-800">
                 {{ title }}
               </h2>
-              <p class="text-md text-gray-600 px-8">
+              <p v-if="message" class="text-md text-gray-600 px-8">
                 {{ message }}
               </p>
             </div>
