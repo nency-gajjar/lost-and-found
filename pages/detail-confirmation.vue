@@ -641,6 +641,7 @@ export default {
       delete params.foundItemId;
       delete params.manualAddress;
       if (this.itemDetails.foundItemId) {
+        this.isLoading = true;
         this.$axios
           .post(
             "/updatesinglelostitem?id=" + this.itemDetails.foundItemId,
@@ -655,6 +656,7 @@ export default {
           )
           .then((response) => {
             if (response.status === 200) {
+              this.isLoading = false;
               const url = window.URL.createObjectURL(new Blob([response.data]));
               const link = document.createElement("a");
               link.href = url;
@@ -663,7 +665,10 @@ export default {
               link.click();
             }
           })
-          .catch((error) => console.log(error));
+          .catch((error) => {
+            console.log(error);
+            this.isLoading = false;
+          });
       } else {
         this.isLoading = true;
         this.$axios

@@ -253,7 +253,10 @@ export default {
             this.$router.push({ path: "/found-items" });
           }
         })
-        .catch((error) => console.log(error));
+        .catch((error) => {
+          console.log(error);
+          this.isLoading = false;
+        });
     },
   },
 };

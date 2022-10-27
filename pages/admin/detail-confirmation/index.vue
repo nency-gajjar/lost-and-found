@@ -696,7 +696,7 @@
 
         <div class="flex flex-wrap gap-2">
           <button
-            :class="{ 'button--loading': isLoading['approve'] }"
+            :class="{ 'button--loading': isLoading['Approve'] }"
             type="submit"
             class="
               !py-3
@@ -727,7 +727,7 @@
             <span class="button__text"> Approve </span>
           </button>
           <button
-            :class="{ 'button--loading': isLoading['deny'] }"
+            :class="{ 'button--loading': isLoading['Deny'] }"
             type="submit"
             class="
               !py-3
@@ -758,7 +758,7 @@
             <span class="button__text"> Deny </span>
           </button>
           <button
-            :class="{ 'button--loading': isLoading['approve-without-image'] }"
+            :class="{ 'button--loading': isLoading['Approve without Image'] }"
             type="submit"
             class="
               !py-3
@@ -1032,9 +1032,9 @@ export default {
       canvasHeight: "400",
       size_icon: "2x",
       isLoading: {
-        approve: false,
-        deny: false,
-        "approve-without-image": false,
+        Approve: false,
+        Deny: false,
+        "Approve without Image": false,
       },
       isLoadingItemDetails: false,
       foundItemId: "",
@@ -1181,7 +1181,10 @@ export default {
               this.isLoading[type] = false;
             }
           })
-          .catch((error) => console.log(error));
+          .catch((error) => {
+            console.log(error);
+            this.isLoading[type] = false;
+          });
       }
     },
   },
