@@ -579,12 +579,13 @@
     <BaseDialog
       :showDialog="showDialog"
       :icon="{ name: 'circle-check', color: 'green', size: '3x' }"
-      @close="showDialog = false"
-      title="Details submitted successfully!"
-      message="Wait for admin to review your details."
-      buttonTitle="Close"
+      :title="dialogTitle"
+      :message="
+        itemDetails.image ? 'Wait for admin to review your details.' : ''
+      "
+      :showClose="false"
     >
-      <!-- <template v-slot:action>
+      <template v-slot:action>
         <button
           class="
             mb-2
@@ -601,10 +602,11 @@
             rounded-md
             hover:shadow-lg hover:bg-accent-200
           "
+          @click="downloadPDF"
         >
-          Generate Label Tag
+          Download Pdf
         </button>
-      </template> -->
+      </template>
     </BaseDialog>
   </div>
 </template>
@@ -618,6 +620,8 @@ export default {
     return {
       isLoading: false,
       showDialog: false,
+      responseData: null,
+      dialogTitle: "",
     };
   },
   components: { BaseDialog },
@@ -632,6 +636,18 @@ export default {
       return itemDetails.address == "Other" || !itemDetails.address
         ? itemDetails.manualAddress
         : itemDetails.address;
+    },
+    downloadPDF() {
+      const url = window.URL.createObjectURL(new Blob([this.responseData]));
+      const link = document.createElement("a");
+      link.href = url;
+      link.setAttribute("download", "file.pdf");
+      document.body.appendChild(link);
+      link.click();
+      this.showDialog = false;
+      this.$nextTick(() => {
+        this.$router.push({ path: "/found-items" });
+      });
     },
     submitDetails() {
       let params = { ...this.itemDetails };
@@ -689,20 +705,19 @@ export default {
                 )
                 .then((response) => {
                   if (response.status === 200) {
+                    this.dialogTitle = "Your details updated successfully!";
                     this.isLoading = false;
-                    const url = window.URL.createObjectURL(
-                      new Blob([response.data])
-                    );
-                    const link = document.createElement("a");
-                    link.href = url;
-                    link.setAttribute("download", "file.pdf");
-                    document.body.appendChild(link);
-                    link.click();
+                    this.responseData = response.data;
+                    this.showDialog = true;
                   }
                 })
                 .catch((error) => {
-                  console.log(error);
                   this.isLoading = false;
+                  this.showDialog = false;
+                  this.$toast.error("Something went wrong! Please try again.", {
+                    hideProgressBar: true,
+                  });
+                  console.log(error);
                 });
             }
           })
@@ -722,23 +737,19 @@ export default {
           })
           .then((response) => {
             if (response.status === 200) {
+              this.dialogTitle = "Your details submitted successfully!";
               this.isLoading = false;
+              this.responseData = response.data;
               this.showDialog = true;
-              const url = window.URL.createObjectURL(new Blob([response.data]));
-              const link = document.createElement("a");
-              link.href = url;
-              link.setAttribute("download", "file.pdf");
-              document.body.appendChild(link);
-              link.click();
-
-              this.$root.$emit("detail-submitted", true);
             }
-            // this.$nextTick(() => {
-            //   this.$router.push({ path: "/detail-confirmation" });
-            // });
           })
           .catch((error) => {
             this.isLoading = false;
+            this.showDialog = false;
+            this.$toast.error("Something went wrong! Please try again.", {
+              hideProgressBar: true,
+            });
+
             console.log(error);
           });
       }
