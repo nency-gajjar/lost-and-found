@@ -583,7 +583,9 @@
       :message="
         itemDetails.image ? 'Wait for admin to review your details.' : ''
       "
-      :showClose="false"
+      buttonTitle="Close"
+      :showClose="true"
+      @close="closeDialog"
     >
       <template v-slot:action>
         <button
@@ -632,6 +634,12 @@ export default {
     },
   },
   methods: {
+    closeDialog(){
+      this.showDialog = false;
+      this.$nextTick(() => {
+        this.$router.push({ path: "/found-items" });
+      });
+    },
     filterAddressLine(itemDetails) {
       return itemDetails.address == "Other" || !itemDetails.address
         ? itemDetails.manualAddress
