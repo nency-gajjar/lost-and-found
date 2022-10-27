@@ -10,6 +10,9 @@
         <div class="link-container">
           <NuxtLink to="/found-items" class="btn">Found Items</NuxtLink>
         </div>
+        <div class="link-container">
+          <NuxtLink to="/admin/login" class="btn">Login</NuxtLink>
+        </div>
         <div class="drawer-container">
           <div class="icon-container" @click="toggleMenu">
             <div class="bar1"></div>
@@ -21,6 +24,9 @@
       <div v-show="menuVisible" class="mobile-menu">
         <div>
           <NuxtLink to="/found-items" class="opacity-100">Found Items</NuxtLink>
+        </div>
+        <div>
+          <NuxtLink to="/admin/login" class="opacity-100">Login</NuxtLink>
         </div>
       </div>
     </nav>

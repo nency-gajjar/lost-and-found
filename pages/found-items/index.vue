@@ -113,12 +113,6 @@
                 block
                 w-full
                 p-2.5
-                dark:bg-gray-700
-                dark:border-gray-600
-                dark:placeholder-gray-400
-                dark:text-white
-                dark:focus:ring-blue-500
-                dark:focus:border-blue-500
               "
             >
               <option selected>Sort By</option>
@@ -195,7 +189,7 @@
               >
                 {{ item.item_description }}
               </h5>
-              <p class="text-sm font-normal text-gray-700 dark:text-gray-400">
+              <p class="text-sm font-normal text-gray-700">
                 {{ item.item_status === 0 ? "Claimed" : "Unclaimed" }}
               </p>
             </div>

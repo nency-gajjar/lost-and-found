@@ -446,20 +446,22 @@
                     type="file"
                   />
                   <div v-show="image" class="flex">
-                    <a
+                    <div
                       @click="editImage"
                       class="
                         text-indigo-600
                         hover:cursor-pointer hover:text-indigo-900
                         ml-3
-                        py-2
                         inline-flex
+                        flex
+                        flex-col
                         items-center
                       "
                     >
                       <svg
                         xmlns="http://www.w3.org/2000/svg"
-                        class="w-6 h-6"
+                        width="1em"
+                        height="1em"
                         fill="none"
                         viewBox="0 0 24 24"
                         stroke="currentColor"
@@ -471,7 +473,16 @@
                           d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"
                         />
                       </svg>
-                    </a>
+                      <p class="text-xs text-center">Edit Image</p>
+                    </div>
+                    <div v-if="imageKey" @click="deleteEditable()" class="flex flex-col text-red-600 hover:text-red-900 hover:cursor-pointer">
+                      <div class="tool-trash flex justify-center">
+                        <trash-2-icon
+                          size="1x"
+                        ></trash-2-icon>
+                      </div>
+                      <p class="text-xs text-center">Remove Image</p>
+                    </div>
                   </div>
                 </div>
                 <div class="mt-3" v-if="image">
@@ -521,7 +532,7 @@
                         <h3 class="text-white">Crop Image</h3>
                       </div>
                       <span
-                        @click="showEditor = false"
+                        @click="closeEditor"
                         class="
                           absolute
                           right-5
@@ -623,7 +634,7 @@
                               </div>
                               <p>Redo</p>
                             </div>
-                            <div>
+                            <!-- <div>
                               <div class="tool-trash">
                                 <trash-2-icon
                                   :size="size_icon"
@@ -631,7 +642,7 @@
                                 ></trash-2-icon>
                               </div>
                               <p>Delete</p>
-                            </div>
+                            </div> -->
                             <!-- <div class="tool-freeDrawing">	
                             <edit-2-icon	
                               :size="size_icon"	
@@ -936,7 +947,6 @@
                   text-sm text-red-700
                   bg-red-100
                   rounded-lg
-                  dark:bg-red-200 dark:text-red-800
                 "
                 role="alert"
               >
@@ -1779,6 +1789,11 @@ export default {
     redo() {
       this.$refs.editor.redo();
     },
+    closeEditor(){
+      this.$refs.editor.clear();
+      this.showEditor = false;
+      this.stateCrop = true;
+    },
     deleteEditable() {
       this.$axios
         .post("/removes3files", { key: this.imageKey })
@@ -1904,7 +1919,9 @@ export default {
             this.imageRecognitionData[this.imageRecognitionData.length - 2].key;
         }
         this.itemDescriptionArr.push("Other");
+        this.$refs.editor.clear();
         this.showEditor = false;
+        this.stateCrop = true;
       });
     },
   },

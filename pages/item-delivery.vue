@@ -50,7 +50,6 @@
                 pl-4
                 rounded
                 border border-gray-200
-                dark:border-gray-700
               "
             >
               <input
@@ -66,9 +65,7 @@
                   bg-gray-100
                   border-gray-300
                   focus:ring-accent-200
-                  dark:focus:ring-accent-600 dark:ring-offset-gray-800
                   focus:ring-2
-                  dark:bg-gray-700 dark:border-gray-600
                 "
               />
               <label
@@ -80,7 +77,6 @@
                   text-sm
                   font-medium
                   text-gray-900
-                  dark:text-gray-300
                 "
                 >Ship it to Me</label
               >
@@ -92,7 +88,6 @@
                 pl-4
                 rounded
                 border border-gray-200
-                dark:border-gray-700
               "
             >
               <input
@@ -109,9 +104,7 @@
                   bg-gray-100
                   border-gray-300
                   focus:ring-accent-200
-                  dark:focus:ring-accent-600 dark:ring-offset-gray-800
                   focus:ring-2
-                  dark:bg-gray-700 dark:border-gray-600
                 "
               />
               <label
@@ -123,7 +116,6 @@
                   text-sm
                   font-medium
                   text-gray-900
-                  dark:text-gray-300
                 "
                 >Hold for pickup</label
               >
@@ -272,7 +264,10 @@ export default {
             this.isLoading = false;
           }
         })
-        .catch((error) => console.log(error));
+        .catch((error) => {
+          console.log(error);
+          this.isLoading = false;
+        });
     },
   },
 };

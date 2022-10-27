@@ -710,7 +710,10 @@ export default {
             this.isLoading[type] = false;
           }
         })
-        .catch((error) => console.log(error));
+        .catch((error) => {
+          console.log(error);
+          this.isLoading[type] = false;
+        });
     },
   },
 };

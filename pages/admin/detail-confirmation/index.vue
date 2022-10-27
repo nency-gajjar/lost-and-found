@@ -39,7 +39,7 @@
               <h3 class="text-white">Crop Image</h3>
             </div>
             <span
-              @click="showEditor = false"
+              @click="closeEditor"
               class="absolute right-5 top-5 inline-block z-10"
             >
               <svg
@@ -121,12 +121,12 @@
                       @click="redo()"
                     ></rotate-cw-icon>
                   </div>
-                  <div class="tool-trash">
+                  <!-- <div class="tool-trash">
                     <trash-2-icon
                       :size="size_icon"
                       @click="deleteEditable()"
                     ></trash-2-icon>
-                  </div>
+                  </div> -->
                   <!-- <div class="tool-freeDrawing">	
                     <edit-2-icon	
                       :size="size_icon"	
@@ -697,7 +697,7 @@
 
         <div class="flex flex-wrap gap-2 mx-4">
           <button
-            :class="{ 'button--loading': isLoading['approve'] }"
+            :class="{ 'button--loading': isLoading['Approve'] }"
             type="submit"
             class="
               !py-3
@@ -728,7 +728,7 @@
             <span class="button__text"> Approve </span>
           </button>
           <button
-            :class="{ 'button--loading': isLoading['deny'] }"
+            :class="{ 'button--loading': isLoading['Deny'] }"
             type="submit"
             class="
               !py-3
@@ -759,7 +759,7 @@
             <span class="button__text"> Deny </span>
           </button>
           <button
-            :class="{ 'button--loading': isLoading['approve-without-image'] }"
+            :class="{ 'button--loading': isLoading['Approve without Image'] }"
             type="submit"
             class="
               !py-3
@@ -790,7 +790,7 @@
             <span class="button__text"> Approve without Image </span>
           </button>
         </div>
-        <div class="text-left sm:w-12/12 px-6 pb-6 pt-4">
+        <div v-if="image" class="text-left sm:w-12/12 px-6 pb-6 pt-4">
           <div
             class="
               flex
@@ -1033,9 +1033,9 @@ export default {
       canvasHeight: "400",
       size_icon: "2x",
       isLoading: {
-        approve: false,
-        deny: false,
-        "approve-without-image": false,
+        Approve: false,
+        Deny: false,
+        "Approve without Image": false,
       },
       isLoadingItemDetails: false,
       foundItemId: "",
@@ -1078,18 +1078,6 @@ export default {
     },
     redo() {
       this.$refs.editor.redo();
-    },
-    deleteEditable() {
-      this.$axios
-        .post("/removes3files", { key: this.imageKey })
-        .then((response) => {
-          if (response.status === 200) {
-            console.log("===remove file response", response);
-          }
-        });
-      this.$refs.editor.clear();
-      this.showEditor = false;
-      this.stateCrop = true;
     },
     // freeDrawing() {
     //   let customizeFreeDrawing = { stroke: "black", strokeWidth: "5" };
@@ -1137,6 +1125,11 @@ export default {
         this.showEditor = false;
       }
     },
+    closeEditor(){
+      this.$refs.editor.clear();
+      this.showEditor = false;
+      this.stateCrop = true;
+    },
     saveImg() {
       this.isSavingImage = true;
       const file = this.$refs.editor.saveImage();
@@ -1152,7 +1145,9 @@ export default {
           this.imageKey =
             this.imageRecognitionData[this.imageRecognitionData.length - 2].key;
         }
+        this.$refs.editor.clear();
         this.showEditor = false;
+        this.stateCrop = true;
         this.isImageEdited = true;
       });
     },
@@ -1182,7 +1177,10 @@ export default {
               this.isLoading[type] = false;
             }
           })
-          .catch((error) => console.log(error));
+          .catch((error) => {
+            console.log(error);
+            this.isLoading[type] = false;
+          });
       }
     },
   },
