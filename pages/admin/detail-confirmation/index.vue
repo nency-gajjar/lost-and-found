@@ -76,7 +76,7 @@
               editor-container
             "
           >
-            <div
+            <!-- <div
               class="top-margin-3 flex justify-center"
               v-show="loadingSpinner"
               role="status"
@@ -98,8 +98,8 @@
                 />
               </svg>
               <span class="sr-only">Loading...</span>
-            </div>
-            <div v-show="!loadingSpinner" class="w-full">
+            </div> -->
+            <div class="w-full">
               <div class="px-6">
                 <Editor
                   :canvasWidth="canvasWidth"
@@ -109,53 +109,72 @@
               </div>
               <div class="editor-tools mt-5 px-6 border-t pt-4">
                 <div class="icons">
-                  <div class="tool-undo">
-                    <rotate-ccw-icon
-                      :size="size_icon"
-                      @click="undo()"
-                    ></rotate-ccw-icon>
+                  <div>
+                    <div class="tool-undo">
+                      <rotate-ccw-icon
+                        :size="size_icon"
+                        @click="undo()"
+                      ></rotate-ccw-icon>
+                    </div>
+                    <p>Undo</p>
                   </div>
-                  <div class="tool-redo">
-                    <rotate-cw-icon
-                      :size="size_icon"
-                      @click="redo()"
-                    ></rotate-cw-icon>
+                  <div>
+                    <div class="tool-redo">
+                      <rotate-cw-icon
+                        :size="size_icon"
+                        @click="redo()"
+                      ></rotate-cw-icon>
+                    </div>
+                    <p>Redo</p>
                   </div>
-                  <!-- <div class="tool-trash">
-                    <trash-2-icon
-                      :size="size_icon"
-                      @click="deleteEditable()"
-                    ></trash-2-icon>
+                  <!-- <div>
+                    <div class="tool-trash">
+                      <trash-2-icon
+                        :size="size_icon"
+                        @click="deleteEditable()"
+                      ></trash-2-icon>
+                    </div>
+                    <p>Delete</p>
                   </div> -->
                   <!-- <div class="tool-freeDrawing">	
-                    <edit-2-icon	
-                      :size="size_icon"	
-                      @click="freeDrawing()"	
-                    ></edit-2-icon>	
-                  </div>	 -->
-                  <div class="tool-addCircle">
-                    <circle-icon
-                      :size="size_icon"
-                      @click="addCicle()"
-                    ></circle-icon>
+                  <edit-2-icon	
+                    :size="size_icon"	
+                    @click="freeDrawing()"	
+                  ></edit-2-icon>	
+                </div>	 -->
+                  <!-- <div>
+                    <div class="tool-addCircle">
+                      <circle-icon
+                        :size="size_icon"
+                        @click="addCicle()"
+                      ></circle-icon>
+                    </div>
+                    <p>Circle</p>
+                  </div> -->
+                  <div>
+                    <div class="tool-addSquare">
+                      <square-icon
+                        :size="size_icon"
+                        @click="addSquare()"
+                      ></square-icon>
+                    </div>
+                    <p>Square</p>
                   </div>
-                  <div class="tool-addSquare">
-                    <square-icon
-                      :size="size_icon"
-                      @click="addSquare()"
-                    ></square-icon>
-                  </div>
-                  <div class="tool-crop">
-                    <maximize-icon
-                      v-if="stateCrop"
-                      :size="size_icon"
-                      @click="crop()"
-                    ></maximize-icon>
-                    <check-icon
-                      v-else
-                      :size="size_icon"
-                      @click="applyCrop()"
-                    ></check-icon>
+                  <div>
+                    <div class="tool-crop">
+                      <maximize-icon
+                        v-if="stateCrop"
+                        :size="size_icon"
+                        @click="crop()"
+                      ></maximize-icon>
+                      <check-icon
+                        v-else
+                        :size="size_icon"
+                        @click="applyCrop()"
+                      ></check-icon>
+                    </div>
+                    <p v-if="stateCrop">Crop</p>
+                    <p v-else>Done</p>
                   </div>
                 </div>
                 <div class="save-upload">
@@ -1214,31 +1233,35 @@ export default {
 
 .custom-editor {
   @apply flex justify-center;
-  border: 1px solid #000000;
+  border: 1px solid #808080;
   background-color: #ffffff;
 }
 
 .editor-tools .icons {
   div {
-    cursor: pointer;
-    border: 1px solid #808080;
-    border-radius: 14px;
-    margin-right: 7px;
-
-    &:hover {
-      background: #dfdfdf;
+    padding-right: 7px;
+    p {
+      font-size: 12px;
+      text-align: center;
     }
-
-    padding: 2px 10px;
-    background-color: #f3f3f3;
-    margin-bottom: 5px;
-    color: #ff9800;
-
-    svg {
-      width: 18px;
+    div {
+      cursor: pointer;
+      border: 1px solid #808080;
+      border-radius: 14px;
+      &:hover {
+        background: #dfdfdf;
+      }
+      padding: 2px 10px;
+      background-color: #f3f3f3;
+      margin-bottom: 5px;
+      color: #ff9800;
+      svg {
+        width: 18px;
+      }
     }
   }
 }
+
 canvas {
   width: 0 !important;
   object-fit: contain;
