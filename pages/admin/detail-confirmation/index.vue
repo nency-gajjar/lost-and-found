@@ -39,7 +39,7 @@
               <h3 class="text-white">Crop Image</h3>
             </div>
             <span
-              @click="showEditor = false"
+              @click="closeEditor"
               class="absolute right-5 top-5 inline-block z-10"
             >
               <svg
@@ -121,12 +121,12 @@
                       @click="redo()"
                     ></rotate-cw-icon>
                   </div>
-                  <div class="tool-trash">
+                  <!-- <div class="tool-trash">
                     <trash-2-icon
                       :size="size_icon"
                       @click="deleteEditable()"
                     ></trash-2-icon>
-                  </div>
+                  </div> -->
                   <!-- <div class="tool-freeDrawing">	
                     <edit-2-icon	
                       :size="size_icon"	
@@ -610,7 +610,8 @@
                   Dimension
                 </div>
                 <div class="text-gray-600 text-left md:w-7/12 sm:w-6/12">
-                  {{ itemDetails.item_length }}(l) x {{ itemDetails.item_width }}(w) x
+                  {{ itemDetails.item_length }}(l) x
+                  {{ itemDetails.item_width }}(w) x
                   {{ itemDetails.item_height }}(h) inches
                 </div>
               </div>
@@ -694,7 +695,7 @@
           </div>
         </div>
 
-        <div class="flex flex-wrap gap-2">
+        <div class="flex flex-wrap gap-2 mx-4">
           <button
             :class="{ 'button--loading': isLoading['Approve'] }"
             type="submit"
@@ -789,12 +790,12 @@
             <span class="button__text"> Approve without Image </span>
           </button>
         </div>
-        <div class="text-left sm:w-12/12 px-6 pb-6 pt-4">
+        <div v-if="image" class="text-left sm:w-12/12 px-6 pb-6 pt-4">
           <div
             class="
               flex
               items-center
-              my-4
+              mb-4
               before:flex-1 before:border-t before:border-gray-300 before:mt-0.5
               after:flex-1 after:border-t after:border-gray-300 after:mt-0.5
             "
@@ -1078,18 +1079,6 @@ export default {
     redo() {
       this.$refs.editor.redo();
     },
-    deleteEditable() {
-      this.$axios
-        .post("/removes3files", { key: this.imageKey })
-        .then((response) => {
-          if (response.status === 200) {
-            console.log("===remove file response", response);
-          }
-        });
-      this.$refs.editor.clear();
-      this.showEditor = false;
-      this.stateCrop = true;
-    },
     // freeDrawing() {
     //   let customizeFreeDrawing = { stroke: "black", strokeWidth: "5" };
     //   this.$refs.editor.set("freeDrawing", customizeFreeDrawing);
@@ -1136,6 +1125,11 @@ export default {
         this.showEditor = false;
       }
     },
+    closeEditor(){
+      this.$refs.editor.clear();
+      this.showEditor = false;
+      this.stateCrop = true;
+    },
     saveImg() {
       this.isSavingImage = true;
       const file = this.$refs.editor.saveImage();
@@ -1151,7 +1145,9 @@ export default {
           this.imageKey =
             this.imageRecognitionData[this.imageRecognitionData.length - 2].key;
         }
+        this.$refs.editor.clear();
         this.showEditor = false;
+        this.stateCrop = true;
         this.isImageEdited = true;
       });
     },

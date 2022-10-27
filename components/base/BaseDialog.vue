@@ -57,20 +57,22 @@
             <div class="text-center p-3 flex-auto justify-center leading-6">
               <!-- <img src="@/assets/icons/alert-circle.svg" class="m-auto" /> -->
               <BaseIcon
+                v-if="icon"
                 :icon="icon.name"
                 :color="icon.color"
                 :size="icon.size"
               />
 
-              <h2 class="text-xl font-semibold py-4 text-gray-800">
+              <h2 v-if="title" class="text-xl font-semibold py-4 text-gray-800">
                 {{ title }}
               </h2>
-              <p class="text-md text-gray-600 px-8">
+              <p v-if="message" class="text-md text-gray-600 px-8">
                 {{ message }}
               </p>
             </div>
             <div class="p-3 mt-2 text-center space-x-4 md:block">
               <button
+                v-if="showClose"
                 class="
                   mb-2
                   md:mb-0
@@ -110,30 +112,32 @@ export default {
     showDialog: {
       type: Boolean,
       default: false,
+      required: true,
     },
     icon: {
       type: Object,
       default: () => ({}),
-    },
-    iconColor: {
-      type: String,
-      default: null,
-    },
-    iconSize: {
-      type: String,
-      default: null,
+      required: false,
     },
     title: {
       type: String,
       default: null,
+      required: true,
     },
     message: {
       type: String,
       default: null,
+      required: false,
     },
     buttonTitle: {
       type: String,
       default: null,
+      required: false,
+    },
+    showClose: {
+      type: Boolean,
+      default: true,
+      required: false,
     },
   },
 };

@@ -127,11 +127,7 @@
                   {{ errors[0] }}
                 </p>
               </ValidationProvider>
-              <ValidationProvider
-                v-slot="{ errors }"
-                rules="required"
-                class="block"
-              >
+              <div class="block">
                 <textarea
                   v-model="itemDescription"
                   placeholder="Description"
@@ -149,16 +145,8 @@
                     transition-shadow
                     text-gray-800
                   "
-                  :class="errors.length > 0 && 'error'"
                 ></textarea>
-
-                <p
-                  v-if="errors.length"
-                  class="vee-validation-error mt-2 text-sm text-red-600"
-                >
-                  {{ errors[0] }}
-                </p>
-              </ValidationProvider>
+              </div>
               <ValidationProvider
                 v-slot="{ errors }"
                 rules="required"
@@ -328,6 +316,14 @@
         </ValidationObserver>
       </div>
     </div>
+
+    <BaseDialog
+      :showDialog="showDialog"
+      :icon="{ name: 'circle-check', color: 'green', size: '3x' }"
+      title="Your details submitted successfully!"
+      buttonTitle="Close"
+      @close="closeDialog"
+    />
   </div>
 </template>
 
@@ -336,6 +332,7 @@ import "vue-select/dist/vue-select.css";
 import { ValidationObserver, ValidationProvider } from "vee-validate";
 import BaseInput from "~/components/base/BaseInput.vue";
 import BaseSelect from "~/components/base/BaseSelect.vue";
+import BaseDialog from "@/components/base/BaseDialog.vue";
 import VSelect from "vue-select";
 
 export default {
@@ -344,10 +341,12 @@ export default {
     ValidationProvider,
     BaseInput,
     BaseSelect,
+    BaseDialog,
     VSelect,
   },
   data() {
     return {
+      showDialog: false,
       claimPersonName: "",
       claimPersonEmail: "",
       claimPersonPhoneNo: "",
@@ -380,6 +379,8 @@ export default {
       addressArr: ["Other"],
       showValidateAlert: false,
       itemId: "",
+      venueEmail: "",
+      secondaryEmail: "",
     };
   },
   methods: {
@@ -418,7 +419,12 @@ export default {
         });
       });
     },
-
+    closeDialog() {
+      this.showDialog = false;
+      this.$nextTick(() => {
+        this.$router.push({ path: "/found-items" });
+      });
+    },
     validateUserPhone() {
       if (!this.claimPersonPhoneNo) {
         this.isPhoneNoValid = false;
@@ -452,12 +458,16 @@ export default {
           claimpersondatelost: this.itemLostDate,
           claimpersonlocation: this.autoCompleteAddress.address,
           itemid: this.itemId,
+          venue_email: this.venueEmail,
         };
-
+        if (this.secondaryEmail) {
+          params.secondary_email = this.secondaryEmail;
+        }
         this.$axios
           .post("/sendclaimitemmail", params)
           .then((response) => {
             if (response.status === 200) {
+              this.showDialog = true;
               this.isLoading = false;
             }
           })
@@ -469,7 +479,11 @@ export default {
     },
   },
   mounted() {
-    this.itemId = this.$route.params.id;
+    if (this.$route.params.item) {
+      this.itemId = this.$route.params.item.id;
+      this.venueEmail = this.$route.params.item.venue_email;
+      this.secondaryEmail = this.$route.params.item?.secondaryEmail;
+    }
   },
 };
 </script>

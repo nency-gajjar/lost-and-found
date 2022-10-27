@@ -579,12 +579,13 @@
     <BaseDialog
       :showDialog="showDialog"
       :icon="{ name: 'circle-check', color: 'green', size: '3x' }"
-      @close="showDialog = false"
-      title="Details submitted successfully!"
-      message="Wait for admin to review your details."
-      buttonTitle="Close"
+      :title="dialogTitle"
+      :message="
+        itemDetails.image ? 'Wait for admin to review your details.' : ''
+      "
+      :showClose="false"
     >
-      <!-- <template v-slot:action>
+      <template v-slot:action>
         <button
           class="
             mb-2
@@ -601,22 +602,26 @@
             rounded-md
             hover:shadow-lg hover:bg-accent-200
           "
+          @click="downloadPDF"
         >
-          Generate Label Tag
+          Download Pdf
         </button>
-      </template> -->
+      </template>
     </BaseDialog>
   </div>
 </template>
 
 <script>
 import { mapGetters } from "vuex";
+import _ from "lodash";
 import BaseDialog from "@/components/base/BaseDialog.vue";
 export default {
   data() {
     return {
       isLoading: false,
       showDialog: false,
+      responseData: null,
+      dialogTitle: "",
     };
   },
   components: { BaseDialog },
@@ -632,41 +637,92 @@ export default {
         ? itemDetails.manualAddress
         : itemDetails.address;
     },
+    downloadPDF() {
+      const url = window.URL.createObjectURL(new Blob([this.responseData]));
+      const link = document.createElement("a");
+      link.href = url;
+      link.setAttribute("download", "file.pdf");
+      document.body.appendChild(link);
+      link.click();
+      this.showDialog = false;
+      this.$nextTick(() => {
+        this.$router.push({ path: "/found-items" });
+      });
+    },
     submitDetails() {
       let params = { ...this.itemDetails };
       if (params.address == "Other" || !params.address) {
         params.address = params.manualAddress;
       }
-      params.is_default = "Pending";
       delete params.foundItemId;
       delete params.manualAddress;
+
       if (this.itemDetails.foundItemId) {
         this.isLoading = true;
         this.$axios
-          .post(
-            "/updatesinglelostitem?id=" + this.itemDetails.foundItemId,
-            params,
-            {
-              responseType: "arraybuffer",
-              headers: {
-                "Content-Type": "application/json",
-                Accept: "application/pdf",
-              },
-            }
-          )
+          .get("/getsinglelostitem?id=" + this.itemDetails.foundItemId)
           .then((response) => {
             if (response.status === 200) {
-              this.isLoading = false;
-              const url = window.URL.createObjectURL(new Blob([response.data]));
-              const link = document.createElement("a");
-              link.href = url;
-              link.setAttribute("download", "file.pdf");
-              document.body.appendChild(link);
-              link.click();
+              this.isLoadingItemDetails = false;
+              let obj1 = response.data.data.Item;
+              const diff = Object.keys(obj1).reduce((result, key) => {
+                if (!params.hasOwnProperty(key)) {
+                  result.push(key);
+                } else if (_.isEqual(obj1[key], params[key])) {
+                  const resultKeyIndex = result.indexOf(key);
+                  result.splice(resultKeyIndex, 1);
+                }
+                return result;
+              }, Object.keys(params));
+              const index = diff.indexOf("is_default");
+              if (index > -1) {
+                diff.splice(index, 1);
+              }
+              const index2 = diff.indexOf("id");
+              if (index2 > -1) {
+                diff.splice(index2, 1);
+              }
+              let requestData = {};
+              if (diff.includes("image")) {
+                requestData.is_default = "Pending";
+              }
+              diff.forEach((key) => {
+                if(params[key] != undefined){
+                  requestData[key] = params[key];
+                }
+              });
+              this.$axios
+                .post(
+                  "/updatesinglelostitem?id=" + this.itemDetails.foundItemId,
+                  requestData,
+                  {
+                    responseType: "arraybuffer",
+                    headers: {
+                      "Content-Type": "application/json",
+                      Accept: "application/pdf",
+                    },
+                  }
+                )
+                .then((response) => {
+                  if (response.status === 200) {
+                    this.dialogTitle = "Your details updated successfully!";
+                    this.isLoading = false;
+                    this.responseData = response.data;
+                    this.showDialog = true;
+                  }
+                })
+                .catch((error) => {
+                  this.isLoading = false;
+                  this.showDialog = false;
+                  this.$toast.error("Something went wrong! Please try again.", {
+                    hideProgressBar: true,
+                  });
+                  console.log(error);
+                });
             }
           })
-          .catch((error) => {
-            console.log(error);
+          .catch((err) => {
+            console.log(err);
             this.isLoading = false;
           });
       } else {
@@ -681,23 +737,19 @@ export default {
           })
           .then((response) => {
             if (response.status === 200) {
+              this.dialogTitle = "Your details submitted successfully!";
               this.isLoading = false;
+              this.responseData = response.data;
               this.showDialog = true;
-              const url = window.URL.createObjectURL(new Blob([response.data]));
-              const link = document.createElement("a");
-              link.href = url;
-              link.setAttribute("download", "file.pdf");
-              document.body.appendChild(link);
-              link.click();
-
-              this.$root.$emit("detail-submitted", true);
             }
-            // this.$nextTick(() => {
-            //   this.$router.push({ path: "/detail-confirmation" });
-            // });
           })
           .catch((error) => {
             this.isLoading = false;
+            this.showDialog = false;
+            this.$toast.error("Something went wrong! Please try again.", {
+              hideProgressBar: true,
+            });
+
             console.log(error);
           });
       }
