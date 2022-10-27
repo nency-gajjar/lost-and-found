@@ -138,14 +138,17 @@
                   sm:w-6/12
                 "
               >
-                Item Name
+                Item Description
               </div>
               <div class="text-gray-600 text-left md:w-7/12 sm:w-6/12">
                 {{ claimDetails.claimpersonitemname }}
               </div>
             </div>
 
-            <div class="flex items-center mt-3 flex-wrap">
+            <div
+              v-if="claimDetails.claimpersondescription"
+              class="flex items-center mt-3 flex-wrap"
+            >
               <div
                 class="
                   text-left text-gray-600
@@ -156,7 +159,7 @@
                   sm:w-6/12
                 "
               >
-                Item Description
+                Description
               </div>
               <div class="text-gray-600 text-left md:w-7/12 sm:w-6/12">
                 {{ claimDetails.claimpersondescription }}
@@ -630,13 +633,25 @@
         ></div>
       </div>
     </div>
+    <BaseDialog
+      :showDialog="showDialog"
+      :icon="{ name: 'circle-check', color: 'green', size: '3x' }"
+      :title="dialogTitle"
+      buttonTitle="Close"
+      @close="closeDialog"
+    />
   </div>
 </template>
 
 <script>
+import BaseDialog from "@/components/base/BaseDialog.vue";
+
 export default {
+  components: { BaseDialog },
   data() {
     return {
+      showDialog: false,
+      dialogTitle: "",
       isLoading: {
         Approve: false,
         Deny: false,
@@ -668,8 +683,13 @@ export default {
     }
   },
   methods: {
+    closeDialog() {
+      this.showDialog = false;
+      this.$nextTick(() => {
+        this.$router.push({ path: "/found-items" });
+      });
+    },
     action(type) {
-      console.log("===type", type);
       this.isLoading[type] = true;
       let params = {
         sender_approval: type === "Approve" ? true : false,
@@ -681,8 +701,13 @@ export default {
         .post("/updatesinglelostitem?id=" + this.itemId, params)
         .then((response) => {
           if (response.status === 200) {
+            this.dialogTitle =
+              type === "Approve"
+                ? "Details approved successfully!"
+                : "Details denied successfully!";
+
+            this.showDialog = true;
             this.isLoading[type] = false;
-            this.$router.push({ path: "/found-items" });
           }
         })
         .catch((error) => console.log(error));

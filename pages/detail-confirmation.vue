@@ -579,14 +579,13 @@
     <BaseDialog
       :showDialog="showDialog"
       :icon="{ name: 'circle-check', color: 'green', size: '3x' }"
-      @close="closeDialog"
-      title="Details submitted successfully!"
+      :title="dialogTitle"
       :message="
         itemDetails.image ? 'Wait for admin to review your details.' : ''
       "
-      buttonTitle="Close"
+      :showClose="false"
     >
-      <!-- <template v-slot:action>
+      <template v-slot:action>
         <button
           class="
             mb-2
@@ -603,10 +602,11 @@
             rounded-md
             hover:shadow-lg hover:bg-accent-200
           "
+          @click="downloadPDF"
         >
-          Generate Label Tag
+          Download Pdf
         </button>
-      </template> -->
+      </template>
     </BaseDialog>
   </div>
 </template>
@@ -619,6 +619,8 @@ export default {
     return {
       isLoading: false,
       showDialog: false,
+      responseData: null,
+      dialogTitle: "",
     };
   },
   components: { BaseDialog },
@@ -634,7 +636,13 @@ export default {
         ? itemDetails.manualAddress
         : itemDetails.address;
     },
-    closeDialog() {
+    downloadPDF() {
+      const url = window.URL.createObjectURL(new Blob([this.responseData]));
+      const link = document.createElement("a");
+      link.href = url;
+      link.setAttribute("download", "file.pdf");
+      document.body.appendChild(link);
+      link.click();
       this.showDialog = false;
       this.$nextTick(() => {
         this.$router.push({ path: "/found-items" });
@@ -649,6 +657,7 @@ export default {
       delete params.foundItemId;
       delete params.manualAddress;
       if (this.itemDetails.foundItemId) {
+        this.isLoading = true;
         this.$axios
           .post(
             "/updatesinglelostitem?id=" + this.itemDetails.foundItemId,
@@ -663,15 +672,21 @@ export default {
           )
           .then((response) => {
             if (response.status === 200) {
-              const url = window.URL.createObjectURL(new Blob([response.data]));
-              const link = document.createElement("a");
-              link.href = url;
-              link.setAttribute("download", "file.pdf");
-              document.body.appendChild(link);
-              link.click();
+              this.dialogTitle = "Your details updated successfully!";
+              this.isLoading = false;
+              this.responseData = response.data;
+              this.showDialog = true;
             }
           })
-          .catch((error) => console.log(error));
+          .catch((error) => {
+            this.isLoading = false;
+            this.showDialog = false;
+            this.$toast.error("Something went wrong! Please try again.", {
+              hideProgressBar: true,
+            });
+
+            console.log(error);
+          });
       } else {
         this.isLoading = true;
         this.$axios
@@ -684,23 +699,19 @@ export default {
           })
           .then((response) => {
             if (response.status === 200) {
+              this.dialogTitle = "Your details submitted successfully!";
               this.isLoading = false;
+              this.responseData = response.data;
               this.showDialog = true;
-              const url = window.URL.createObjectURL(new Blob([response.data]));
-              const link = document.createElement("a");
-              link.href = url;
-              link.setAttribute("download", "file.pdf");
-              document.body.appendChild(link);
-              link.click();
-
-              this.$root.$emit("detail-submitted", true);
             }
-            // this.$nextTick(() => {
-            //   this.$router.push({ path: "/detail-confirmation" });
-            // });
           })
           .catch((error) => {
             this.isLoading = false;
+            this.showDialog = false;
+            this.$toast.error("Something went wrong! Please try again.", {
+              hideProgressBar: true,
+            });
+
             console.log(error);
           });
       }

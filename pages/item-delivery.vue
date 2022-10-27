@@ -209,12 +209,22 @@
         </form>
       </ValidationObserver>
     </div>
+    <BaseDialog
+      :showDialog="showDialog"
+      :icon="{ name: 'circle-check', color: 'green', size: '3x' }"
+      title="Your details submitted successfully!"
+      buttonTitle="Close"
+      @close="closeDialog"
+    />
   </div>
 </template>
   
 <script>
+import BaseDialog from "@/components/base/BaseDialog.vue";
+
 export default {
   data: () => ({
+    showDialog: false,
     deliveryType: "0",
     pickupPersonName: "",
     additionalPersonName: "",
@@ -222,6 +232,9 @@ export default {
     isLoading: false,
     itemId: "",
   }),
+  components: {
+    BaseDialog,
+  },
   mounted() {
     if (this.$route.query.id) {
       this.itemId = this.$route.query.id;
@@ -230,6 +243,12 @@ export default {
   methods: {
     toggleTabs: function (tabNumber) {
       this.openTab = tabNumber;
+    },
+    closeDialog() {
+      this.showDialog = false;
+      this.$nextTick(() => {
+        this.$router.push({ path: "/found-items" });
+      });
     },
     async onSubmit() {
       if (this.deliveryType === "1") {
@@ -249,8 +268,8 @@ export default {
         .post("/updatesinglelostitem?id=" + this.itemId, params)
         .then((response) => {
           if (response.status === 200) {
+            this.showDialog = true;
             this.isLoading = false;
-            this.$router.push({ path: "/found-items" });
           }
         })
         .catch((error) => console.log(error));

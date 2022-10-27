@@ -610,7 +610,8 @@
                   Dimension
                 </div>
                 <div class="text-gray-600 text-left md:w-7/12 sm:w-6/12">
-                  {{ itemDetails.item_length }}(l) x {{ itemDetails.item_width }}(w) x
+                  {{ itemDetails.item_length }}(l) x
+                  {{ itemDetails.item_width }}(w) x
                   {{ itemDetails.item_height }}(h) inches
                 </div>
               </div>
@@ -694,7 +695,7 @@
           </div>
         </div>
 
-        <div class="flex flex-wrap gap-2">
+        <div class="flex flex-wrap gap-2 mx-4">
           <button
             :class="{ 'button--loading': isLoading['approve'] }"
             type="submit"
@@ -794,7 +795,7 @@
             class="
               flex
               items-center
-              my-4
+              mb-4
               before:flex-1 before:border-t before:border-gray-300 before:mt-0.5
               after:flex-1 after:border-t after:border-gray-300 after:mt-0.5
             "

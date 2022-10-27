@@ -316,6 +316,14 @@
         </ValidationObserver>
       </div>
     </div>
+
+    <BaseDialog
+      :showDialog="showDialog"
+      :icon="{ name: 'circle-check', color: 'green', size: '3x' }"
+      title="Your details submitted successfully!"
+      buttonTitle="Close"
+      @close="closeDialog"
+    />
   </div>
 </template>
 
@@ -324,6 +332,7 @@ import "vue-select/dist/vue-select.css";
 import { ValidationObserver, ValidationProvider } from "vee-validate";
 import BaseInput from "~/components/base/BaseInput.vue";
 import BaseSelect from "~/components/base/BaseSelect.vue";
+import BaseDialog from "@/components/base/BaseDialog.vue";
 import VSelect from "vue-select";
 
 export default {
@@ -332,10 +341,12 @@ export default {
     ValidationProvider,
     BaseInput,
     BaseSelect,
+    BaseDialog,
     VSelect,
   },
   data() {
     return {
+      showDialog: false,
       claimPersonName: "",
       claimPersonEmail: "",
       claimPersonPhoneNo: "",
@@ -408,7 +419,12 @@ export default {
         });
       });
     },
-
+    closeDialog() {
+      this.showDialog = false;
+      this.$nextTick(() => {
+        this.$router.push({ path: "/found-items" });
+      });
+    },
     validateUserPhone() {
       if (!this.claimPersonPhoneNo) {
         this.isPhoneNoValid = false;
@@ -451,6 +467,7 @@ export default {
           .post("/sendclaimitemmail", params)
           .then((response) => {
             if (response.status === 200) {
+              this.showDialog = true;
               this.isLoading = false;
             }
           })
