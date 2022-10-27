@@ -442,8 +442,11 @@ export default {
           claimpersondatelost: this.itemLostDate,
           claimpersonlocation: this.autoCompleteAddress.address,
           itemid: this.itemId,
+          venue_email: this.venueEmail,
         };
-
+        if (this.secondaryEmail) {
+          params.secondary_email = this.secondaryEmail;
+        }
         this.$axios
           .post("/sendclaimitemmail", params)
           .then((response) => {
