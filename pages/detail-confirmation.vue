@@ -611,6 +611,7 @@
 
 <script>
 import { mapGetters } from "vuex";
+import _ from "lodash";
 import BaseDialog from "@/components/base/BaseDialog.vue";
 export default {
   data() {
@@ -637,36 +638,76 @@ export default {
       if (params.address == "Other" || !params.address) {
         params.address = params.manualAddress;
       }
-      params.is_default = "Pending";
       delete params.foundItemId;
       delete params.manualAddress;
+
       if (this.itemDetails.foundItemId) {
         this.isLoading = true;
         this.$axios
-          .post(
-            "/updatesinglelostitem?id=" + this.itemDetails.foundItemId,
-            params,
-            {
-              responseType: "arraybuffer",
-              headers: {
-                "Content-Type": "application/json",
-                Accept: "application/pdf",
-              },
-            }
-          )
+          .get("/getsinglelostitem?id=" + this.itemDetails.foundItemId)
           .then((response) => {
             if (response.status === 200) {
-              this.isLoading = false;
-              const url = window.URL.createObjectURL(new Blob([response.data]));
-              const link = document.createElement("a");
-              link.href = url;
-              link.setAttribute("download", "file.pdf");
-              document.body.appendChild(link);
-              link.click();
+              this.isLoadingItemDetails = false;
+              let obj1 = response.data.data.Item;
+              const diff = Object.keys(obj1).reduce((result, key) => {
+                if (!params.hasOwnProperty(key)) {
+                  result.push(key);
+                } else if (_.isEqual(obj1[key], params[key])) {
+                  const resultKeyIndex = result.indexOf(key);
+                  result.splice(resultKeyIndex, 1);
+                }
+                return result;
+              }, Object.keys(params));
+              const index = diff.indexOf("is_default");
+              if (index > -1) {
+                diff.splice(index, 1);
+              }
+              const index2 = diff.indexOf("id");
+              if (index2 > -1) {
+                diff.splice(index2, 1);
+              }
+              let requestData = {};
+              if (diff.includes("image")) {
+                requestData.is_default = "Pending";
+              }
+              diff.forEach((key) => {
+                if(params[key] != undefined){
+                  requestData[key] = params[key];
+                }
+              });
+              this.$axios
+                .post(
+                  "/updatesinglelostitem?id=" + this.itemDetails.foundItemId,
+                  requestData,
+                  {
+                    responseType: "arraybuffer",
+                    headers: {
+                      "Content-Type": "application/json",
+                      Accept: "application/pdf",
+                    },
+                  }
+                )
+                .then((response) => {
+                  if (response.status === 200) {
+                    this.isLoading = false;
+                    const url = window.URL.createObjectURL(
+                      new Blob([response.data])
+                    );
+                    const link = document.createElement("a");
+                    link.href = url;
+                    link.setAttribute("download", "file.pdf");
+                    document.body.appendChild(link);
+                    link.click();
+                  }
+                })
+                .catch((error) => {
+                  console.log(error);
+                  this.isLoading = false;
+                });
             }
           })
-          .catch((error) => {
-            console.log(error);
+          .catch((err) => {
+            console.log(err);
             this.isLoading = false;
           });
       } else {
