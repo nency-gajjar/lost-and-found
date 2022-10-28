@@ -419,33 +419,65 @@
                   for="itemImage"
                   >Found item image</label
                 >
-                <div class="h-12 flex">
-                  <input
-                    @change="uploadImg($event)"
-                    class="
-                      form-control
-                      block
-                      w-full
-                      px-3
-                      py-1.5
-                      text-base
-                      font-normal
-                      text-gray-700
-                      bg-white bg-clip-padding
-                      border border-solid border-gray-300
-                      rounded-lg
-                      transition
-                      ease-in-out
-                      m-0
-                      focus:text-gray-700
-                      focus:bg-white
-                      focus:border-blue-600
-                      focus:outline-none
-                    "
-                    id="itemImage"
-                    type="file"
-                  />
-                  <div v-show="image" class="flex">
+                <div class="flex">
+                  <div class="flex flex-col w-full sm:flex-row">
+                    <input
+                      @change="uploadImg($event)"
+                      class="
+                        form-control
+                        block
+                        w-full
+                        px-3
+                        py-1.5
+                        text-base
+                        font-normal
+                        text-gray-700
+                        bg-white bg-clip-padding
+                        border border-solid border-gray-300
+                        rounded-lg
+                        transition
+                        ease-in-out
+                        m-0
+                        focus:text-gray-700
+                        focus:bg-white
+                        focus:border-blue-600
+                        focus:outline-none
+                      "
+                      id="itemImage"
+                      type="file"
+                    />
+                    <p class="flex justify-center items-center px-5">OR</p>
+                    <label class="flex items-center justify-center w-full px-3 py-1.5 border border-solid border-gray-300 rounded-lg transition ease-in-out m-0 focus:text-gray-700 focus:bg-white focus:border-blue-600 focus:outline-none" for="itemImageCamera"><p>Take Picture</p></label>
+                    <input
+                      @change="uploadImg($event)"
+                      class="
+                        hidden
+                        form-control
+                        block
+                        w-full
+                        px-3
+                        py-1.5
+                        text-base
+                        font-normal
+                        text-gray-700
+                        bg-white bg-clip-padding
+                        border border-solid border-gray-300
+                        rounded-lg
+                        transition
+                        ease-in-out
+                        m-0
+                        focus:text-gray-700
+                        focus:bg-white
+                        focus:border-blue-600
+                        focus:outline-none
+                      "
+                      accept="image/*"
+                      capture="camera"
+                      id="itemImageCamera"
+                      type="file"
+                    />
+                  </div>
+                  <div v-show="image" class="flex items-center">
                     <div
                       @click="editImage"
                       class="
