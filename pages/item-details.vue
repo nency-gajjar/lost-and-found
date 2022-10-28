@@ -172,7 +172,7 @@
                   {{ errors[0] }}
                 </p>
               </ValidationProvider>
-              <div class="block relative box-content h-12">
+              <div class="block relative box-content h-12" :class="!isEmployeePhoneValid && 'error'">
                 <vue-tel-input
                   :inputOptions="{ placeholder: 'Employee Mobile No.' }"
                   class="
@@ -346,7 +346,7 @@
                     {{ errors[0] }}
                   </p>
                 </ValidationProvider>
-                <div class="block relative box-content h-12">
+                <div class="block relative box-content h-12" :class="!isVenuePhoneValid && 'error'">
                   <vue-tel-input
                     :inputOptions="{ placeholder: 'Phone Number' }"
                     class="
@@ -366,16 +366,16 @@
                     @blur="validateVenuePhoneNumber"
                     v-bind="bindPhoneInputProps"
                   ></vue-tel-input>
-                </div>
-                <div
-                  v-if="!isVenuePhoneValid"
-                  class="
-                    vee-validation-error
-                    top-margin-05
-                    text-sm text-red-600
-                  "
-                >
-                  *Required
+                  <div
+                    v-if="!isVenuePhoneValid"
+                    class="
+                      vee-validation-error
+                      top-margin-05
+                      text-sm text-red-600
+                    "
+                  >
+                    *Required
+                  </div>
                 </div>
               </div>
             </div>
@@ -951,7 +951,7 @@
                     {{ errors[0] }}
                   </p>
                 </ValidationProvider>
-                <div class="block relative box-content h-12">
+                <div class="block relative box-content h-12" :class="!isReceiverPhoneValid && 'error'">
                   <vue-tel-input
                     :inputOptions="{ placeholder: 'Receiver Mobile No.' }"
                     class="
@@ -1755,10 +1755,6 @@ export default {
         this.validateReceiverPhoneNumber();
       }
       this.isLoading = true;
-      let venuePhoneNo = this.formatMobileNumber(
-        this.autoCompleteAddress.phoneNumber
-      );
-      let employeePhone = this.formatMobileNumber(this.employeePhone);
       const isValid = await this.$refs.observer.validate();
       if (
         !isValid ||
@@ -1769,6 +1765,10 @@ export default {
         this.showValidateAlert = true;
         this.isLoading = false;
       } else {
+        let venuePhoneNo = this.formatMobileNumber(
+          this.autoCompleteAddress.phoneNumber
+        );
+        let employeePhone = this.formatMobileNumber(this.employeePhone);
         this.showValidateAlert = false;
         const params = {
           venu_type: this.venue === "Other" ? this.manualVenue : this.venue,
@@ -2347,6 +2347,12 @@ export default {
     });
   },
   mounted() {
+    window.addEventListener('keydown', () => {
+      this.showValidateAlert = false;
+    });
+    window.addEventListener('click', () => {
+      this.showValidateAlert = false;
+    });
     this.getCurrentPosition();
     if (this.$route.query.id) {
       this.isLoadingItemDetails = true;
@@ -2443,6 +2449,10 @@ export default {
       this.senderFormTitle = "SENDER'S DETAILS";
       this.foundItemFormTitle = "FOUND ITEM'S DETAILS";
     }
+  },
+  beforeDestroy() {
+    window.removeEventListener('click', () => {});
+    window.removeEventListener('keydown', () => {});
   },
 };
 </script>
@@ -2552,10 +2562,7 @@ canvas {
 }
 
 .error {
-  & > div {
-    @apply text-red-500;
-  }
-  .vs__dropdown-toggle {
+  & > .vue-tel-input {
     @apply border-red-500 border-2 ring-4 ring-red-500 ring-opacity-10 transition-none;
   }
 }

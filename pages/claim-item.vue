@@ -443,7 +443,7 @@ export default {
       const isValid = await this.$refs.observer.validate();
       if (!isValid || !this.isPhoneNoValid) {
         this.showValidateAlert = true;
-        console.log("in valid");
+        // console.log("in valid");
         this.isLoading = false;
       } else {
         this.showValidateAlert = false;
@@ -478,11 +478,21 @@ export default {
     },
   },
   mounted() {
+    window.addEventListener('keydown', () => {
+      this.showValidateAlert = false;
+    });
+    window.addEventListener('click', () => {
+      this.showValidateAlert = false;
+    });
     if (this.$route.params.item) {
       this.itemId = this.$route.params.item.id;
       this.venueEmail = this.$route.params.item.venue_email;
       this.secondaryEmail = this.$route.params.item?.secondaryEmail;
     }
+  },
+  beforeDestroy() {
+    window.removeEventListener('click', () => {});
+    window.removeEventListener('keydown', () => {});
   },
 };
 </script>
