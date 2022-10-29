@@ -40,7 +40,7 @@
             </div>
             <span
               @click="closeEditor"
-              class="absolute right-5 top-5 inline-block z-10"
+              class="absolute right-5 top-5 inline-block z-10 cursor-pointer"
             >
               <svg
                 xmlns="http://www.w3.org/2000/svg"
@@ -100,16 +100,38 @@
               <span class="sr-only">Loading...</span>
             </div> -->
             <div class="w-full">
-              <div class="px-6">
-                <Editor
-                  :canvasWidth="canvasWidth"
-                  :canvasHeight="canvasHeight"
-                  ref="editor"
+              <div class="px-6 flex justify-center">
+                <img class="previewImage" v-show="!showCrop & !showDraw" :src="imgSrc" />
+                <div v-if="showCrop" class="vue-cropper-container">
+                  <VueCropper
+                    ref="cropper"
+                    :src="imgForEditor"
+                    alt="Source Image"
+                    :responsive="true"
+                  ></VueCropper>
+                </div>
+                <RedactImage
+                  v-if="showDraw"
+                  class="redact"
+                  ref="redacter"
+                  max-width="400px"
+                  :src="imgForEditor"
                 />
               </div>
               <div class="editor-tools mt-5 px-6 border-t pt-4">
-                <div class="icons">
+                <div v-show="!enableEdit" class="icons">
                   <div>
+                    <div class="tool-freeDrawing">	
+                      <edit-2-icon	
+                        :size="size_icon"	
+                        @click="editMode()"
+                      ></edit-2-icon>	
+                    </div>
+                    <p>Edit</p>
+                  </div>
+                </div>
+                <div v-show="enableEdit" class="icons">
+                  <div v-show="enableEdit && showDraw">
                     <div class="tool-undo">
                       <rotate-ccw-icon
                         :size="size_icon"
@@ -119,61 +141,35 @@
                     <p>Undo</p>
                   </div>
                   <div>
-                    <div class="tool-redo">
-                      <rotate-cw-icon
-                        :size="size_icon"
-                        @click="redo()"
-                      ></rotate-cw-icon>
-                    </div>
-                    <p>Redo</p>
-                  </div>
-                  <!-- <div>
-                    <div class="tool-trash">
-                      <trash-2-icon
-                        :size="size_icon"
-                        @click="deleteEditable()"
-                      ></trash-2-icon>
-                    </div>
-                    <p>Delete</p>
-                  </div> -->
-                  <!-- <div class="tool-freeDrawing">	
-                  <edit-2-icon	
-                    :size="size_icon"	
-                    @click="freeDrawing()"	
-                  ></edit-2-icon>	
-                </div>	 -->
-                  <!-- <div>
-                    <div class="tool-addCircle">
-                      <circle-icon
-                        :size="size_icon"
-                        @click="addCicle()"
-                      ></circle-icon>
-                    </div>
-                    <p>Circle</p>
-                  </div> -->
-                  <div>
                     <div class="tool-addSquare">
                       <square-icon
+                        v-if="!showDraw"
                         :size="size_icon"
                         @click="addSquare()"
                       ></square-icon>
+                      <check-icon
+                        v-else
+                        :size="size_icon"
+                        @click="applyEdit()"
+                      ></check-icon>
                     </div>
-                    <p>Square</p>
+                    <p v-if="!showDraw">Square</p>
+                    <p v-else>Done</p>
                   </div>
                   <div>
                     <div class="tool-crop">
                       <maximize-icon
-                        v-if="stateCrop"
+                        v-if="!showCrop"
                         :size="size_icon"
                         @click="crop()"
                       ></maximize-icon>
                       <check-icon
                         v-else
                         :size="size_icon"
-                        @click="applyCrop()"
+                        @click="applyEdit()"
                       ></check-icon>
                     </div>
-                    <p v-if="stateCrop">Crop</p>
+                    <p v-if="!showCrop">Crop</p>
                     <p v-else>Done</p>
                   </div>
                 </div>
@@ -1020,11 +1016,8 @@
 </template>
   
 <script>
-import Editor from "~/components/vueImageEditor/Editor.vue";
 import {
-  CircleIcon,
   RotateCcwIcon,
-  RotateCwIcon,
   Edit2Icon,
   Trash2Icon,
   SquareIcon,
@@ -1033,12 +1026,15 @@ import {
   CheckIcon,
 } from "vue-feather-icons";
 
+import RedactImage from "~/components/redactEditor/RedactImage.vue";
+import VueCropper from "vue-cropperjs";
+import "cropperjs/dist/cropper.css";
+
 export default {
   components: {
-    Editor,
-    CircleIcon,
+    RedactImage,
+    VueCropper,
     RotateCcwIcon,
-    RotateCwIcon,
     Edit2Icon,
     Trash2Icon,
     SquareIcon,
@@ -1048,8 +1044,14 @@ export default {
   },
   data() {
     return {
-      canvasWidth: "600",
-      canvasHeight: "400",
+      imgSrc: "",
+      imgForEditor: "",
+      showCrop: false,
+      showDraw: false,
+      enableEdit: false,
+
+      // canvasWidth: "600",
+      // canvasHeight: "400",
       size_icon: "2x",
       isLoading: {
         Approve: false,
@@ -1064,7 +1066,7 @@ export default {
       isSavingImage: false,
       isImageEdited: false,
       showEditor: false,
-      stateCrop: true,
+      // stateCrop: true,
       loadingSpinner: false,
       imageRecognitionData: [],
       imageKey: "",
@@ -1092,66 +1094,65 @@ export default {
     }
   },
   methods: {
+    editMode(){
+      this.enableEdit = true;
+      this.imgForEditor = this.imgSrc;
+    },
     undo() {
-      this.$refs.editor.undo();
-    },
-    redo() {
-      this.$refs.editor.redo();
-    },
-    // freeDrawing() {
-    //   let customizeFreeDrawing = { stroke: "black", strokeWidth: "5" };
-    //   this.$refs.editor.set("freeDrawing", customizeFreeDrawing);
-    // },
-    addCicle() {
-      let circleModeParams = { fill: "black", stroke: "black" };
-      this.$refs.editor.set("circle", circleModeParams);
+      this.$refs.redacter.revert();
     },
     addSquare() {
-      let customizeRectangle = {
-        fill: "black",
-        stroke: "black",
-        strokeWidth: 1,
-      };
-      this.$refs.editor.set("rect", customizeRectangle);
+      this.showDraw = true;
+      this.showCrop = false;
     },
     crop() {
-      let cropModeOptions = {
-        width: "100",
-        height: "100",
-        overlayOpacity: "0",
-        hasControls: true,
-      };
-      this.$refs.editor.set("crop", cropModeOptions);
-      this.stateCrop = false;
+      this.showCrop = true;
+      this.showDraw = false; 
     },
-    applyCrop() {
-      this.$refs.editor.applyCropping();
-      this.stateCrop = true;
+    applyEdit() {
+      if(this.showDraw){
+        this.imgForEditor = this.$refs.redacter.canvas().toDataURL();
+      }
+      else{
+        this.imgForEditor = this.$refs.cropper.getCroppedCanvas().toDataURL();
+      }
     },
-    async editImage() {
+    editImage() {
       this.showEditor = false;
       if (this.image) {
-        const response = await fetch(this.image);
-        const blob = await response.blob();
-        const file = new File([blob], "image.jpg", { type: blob.type });
-        this.$refs.editor.uploadImage(file);
+        // const response = await fetch(this.image);
+        // const blob = await response.blob();
+        // const file = new File([blob], "image.jpg", { type: blob.type });
+        this.imgSrc = this.image;
         this.showEditor = true;
-        this.loadingSpinner = true;
-        setTimeout(() => {
-          this.loadingSpinner = false;
-        }, 2000);
+        // this.loadingSpinner = true;
+        // setTimeout(() => {
+        //   this.loadingSpinner = false;
+        // }, 2000);
       } else {
         this.showEditor = false;
       }
     },
-    closeEditor(){
-      this.$refs.editor.clear();
+    closeEditor() {
       this.showEditor = false;
-      this.stateCrop = true;
+      this.imggSrc = "";
+      this.imgForEditor = "";
+      this.showCrop = false;
+      this.showDraw = false;
+      this.enableEdit = false;
     },
     saveImg() {
       this.isSavingImage = true;
-      const file = this.$refs.editor.saveImage();
+      let file = null;
+      if(this.showDraw){
+        file = this.$refs.redacter.canvas().toDataURL();
+      }
+      else if(this.showCrop){
+        file = this.$refs.cropper.getCroppedCanvas().toDataURL();
+      }
+      else{
+        file = this.imgSrc;
+      }
       this.$axios.post("/demo", { file }).then((response) => {
         if (response.status === 200) {
           this.isSavingImage = false;
@@ -1164,9 +1165,12 @@ export default {
           this.imageKey =
             this.imageRecognitionData[this.imageRecognitionData.length - 2].key;
         }
-        this.$refs.editor.clear();
         this.showEditor = false;
-        this.stateCrop = true;
+        this.imggSrc = "";
+        this.imgForEditor = "";
+        this.showCrop = false;
+        this.showDraw = false;
+        this.enableEdit = false;
         this.isImageEdited = true;
       });
     },
@@ -1263,28 +1267,7 @@ export default {
 }
 
 canvas {
-  width: 0 !important;
   object-fit: contain;
-}
-.canvas-container {
-  width: 100% !important;
-}
-.canvas-container {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  min-width: 500px !important;
-  min-height: 384px;
-}
-.upper-canvas {
-  margin: 0px 0px;
-  min-width: 500px !important;
-  min-height: 384px;
-}
-.lower-canvas {
-  min-width: 500px !important;
-  min-height: 384px;
-  position: static !important;
 }
 .card {
   @apply rounded-lg text-indigo-500;
@@ -1329,6 +1312,20 @@ canvas {
   animation: button-loading-spinner 1s ease infinite;
 }
 
+.vue-cropper-container{
+  min-width: 40vw;
+}
+
+.previewImage{
+  max-height: 300px;
+}
+
+.vue-cropper-container{
+  img{
+    max-height: 300px !important;
+  }
+}
+
 @keyframes button-loading-spinner {
   from {
     transform: rotate(0turn);
@@ -1349,35 +1346,35 @@ canvas {
   .text-gray-600 {
     @apply pr-2;
   }
-  .canvas-container,
-  .upper-canvas,
-  .lower-canvas {
-    min-width: 0 !important;
-    min-height: 0 !important;
-    width: 500px !important;
-    height: 384px !important;
+  .redact {
+    canvas {
+      min-width: 0 !important;
+      min-height: 0 !important;
+      width: 500px !important;
+      height: 100% !important;
+    }
   }
 }
 
 @media only screen and (max-width: 510px) {
-  .canvas-container,
-  .upper-canvas,
-  .lower-canvas {
-    min-width: 0 !important;
-    min-height: 0 !important;
-    width: 350px !important;
-    height: 350px !important;
+  .redact {
+    canvas {
+      min-width: 0 !important;
+      min-height: 0 !important;
+      width: 350px !important;
+      height: 100% !important;
+    }
   }
 }
 
 @media only screen and (max-width: 410px) {
-  .canvas-container,
-  .upper-canvas,
-  .lower-canvas {
-    min-width: 0 !important;
-    min-height: 0 !important;
-    width: 300px !important;
-    height: 300px !important;
+  .redact {
+    canvas {
+      min-width: 0 !important;
+      min-height: 0 !important;
+      width: 300px !important;
+      height: 100% !important;
+    }
   }
 }
 </style>
