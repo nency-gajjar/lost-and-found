@@ -16,7 +16,7 @@
       "
       style="box-shadow: rgba(54, 28, 93, 0.04) -10px 18px 32px"
     >
-      <section class="bg-white">
+      <section id="printMe" class="bg-white">
         <div class="main-title bg-accent-100 text-white mb-3">
           <h1
             class="
@@ -28,8 +28,16 @@
               text-center text-white
             "
           >
-            PREVIEW DETAILS
+            DETAIL CONFIRMATION
           </h1>
+        </div>
+        <div class="h-48 w-48 m-auto">
+          <img
+            v-if="itemDetails.link"
+            class="w-full"
+            :src="itemDetails.link"
+            alt=""
+          />
         </div>
         <div class="sections py-4 px-6">
           <div class="form-title">
@@ -84,7 +92,7 @@
               Found Item Date
             </div>
             <div class="text-gray-600 text-left md:w-7/12 sm:w-6/12">
-              {{ itemDetails.datse }}
+              {{ itemDetails.date }}
             </div>
           </div>
           <div class="flex items-center mt-3 flex-wrap">
@@ -224,7 +232,8 @@
               Address
             </div>
             <div class="text-gray-600 text-left md:w-7/12 sm:w-6/12">
-              {{ filterAddressLine(itemDetails) }}
+              <!-- {{ filterAddressLine(itemDetails) }} -->
+              {{ itemDetails.address }}
             </div>
           </div>
           <div class="flex items-center mt-3 flex-wrap">
@@ -258,7 +267,7 @@
               State
             </div>
             <div class="text-gray-600 text-left md:w-7/12 sm:w-6/12">
-              {{ itemDetails.states }}
+              {{ itemDetails.state }}
             </div>
           </div>
           <div class="flex items-center mt-3 flex-wrap">
@@ -432,10 +441,11 @@
                   Item Status
                 </div>
                 <div class="text-gray-600 text-left md:w-7/12 sm:w-6/12">
-                  {{ itemDetails.item_status === 0 ? "Claimed" : "Unclaimed" }}
+                  <!-- {{ itemDetails.item_status === 0 ? "Claimed" : "Unclaimed" }} -->
+                  {{ itemDetails.item_status }}
                 </div>
               </div>
-              <template v-if="itemDetails.item_status === 0">
+              <template v-if="itemDetails.item_status === 'claimed'">
                 <div class="flex items-center mt-3 flex-wrap">
                   <div
                     class="
@@ -491,6 +501,7 @@
                 </div>
               </template>
             </div>
+
             <div class="h-auto w-52 mt-5 mx-auto">
               <img
                 v-if="itemDetails.image"
@@ -501,288 +512,133 @@
             </div>
           </div>
         </div>
-
-        <div
-          v-show="!itemDetails.onlyDisplay"
-          class="text-left sm:w-12/12 px-6 pb-6 pt-4"
-        >
-          <button
-            type="submit"
-            :class="{ 'button--loading': isLoading }"
-            class="
-              !py-3
-              font-medium
-              text-md
-              leading-5
-              uppercase
-              py-2
-              px-12
-              rounded-md
-              button
-              w-full
-              focus:outline-none
-              focus:ring-2
-              focus:ring-offset-2
-              focus:ring-offset-primary-60
-              transition-all
-              font-display
-              disabled:cursor-not-allowed
-              bg-accent-100
-              text-white
-              focus:ring-accent-100
-              shadow-accent
-              hover:bg-accent-200
-            "
-            @click="submitDetails"
-          >
-            <span class="button__text"> {{ btnName }} </span>
-          </button>
-
-          <div
-            class="
-              flex
-              items-center
-              my-4
-              before:flex-1 before:border-t before:border-gray-300 before:mt-0.5
-              after:flex-1 after:border-t after:border-gray-300 after:mt-0.5
-            "
-          >
-            <p class="text-center text-gray-400 font-medium mx-4 mb-0">OR</p>
-          </div>
-          <button
-            type="submit"
-            class="
-              inline-block
-              px-7
-              py-3
-              bg-gray
-              hover:shadow-lg hover:bg-gray-100
-              text-gray-600 text-sm
-              leading-snug
-              uppercase
-              rounded-md
-              font-medium
-              transition
-              duration-150
-              ease-in-out
-              w-full
-              border border-gray-300
-            "
-            @click="editDetails()"
-          >
-            Edit
-          </button>
-        </div>
       </section>
-    </div>
-    <BaseDialog
-      :showDialog="showDialog"
-      :icon="{ name: 'circle-check', color: 'green', size: '3x' }"
-      :title="dialogTitle"
-      :message="
-        itemDetails.image ? 'Wait for admin to review your details.' : ''
-      "
-      buttonTitle="Close"
-      :showClose="true"
-      @close="closeDialog"
-    >
-      <template v-slot:action>
+      <div class="flex flex-wrap gap-2 m-5">
         <button
+          type="submit"
           class="
-            mb-2
-            md:mb-0
-            bg-accent-100
-            border border-accent-100
-            px-5
-            py-2
-            text-sm
-            shadow-sm
+            !py-3
+            flex-auto
             font-medium
-            tracking-wider
-            text-white
+            text-md
+            leading-5
+            uppercase
+            py-2
+            px-8
             rounded-md
-            hover:shadow-lg hover:bg-accent-200
+            button
+            focus:outline-none
+            focus:ring-2
+            focus:ring-offset-2
+            focus:ring-offset-primary-60
+            transition-all
+            font-display
+            disabled:cursor-not-allowed
+            bg-accent-100
+            text-white
+            focus:ring-accent-100
+            shadow-accent
+            hover:bg-accent-200
           "
-          @click="downloadPDF"
+          @click="printDetails"
         >
-          Download Pdf
+          <span class="button__text"> Print Details </span>
         </button>
-      </template>
-    </BaseDialog>
+      </div>
+    </div>
   </div>
 </template>
 
 <script>
 import { mapGetters } from "vuex";
-import _ from "lodash";
-import BaseDialog from "@/components/base/BaseDialog.vue";
 export default {
   data() {
     return {
-      isLoading: false,
-      showDialog: false,
-      responseData: null,
-      dialogTitle: "",
+      itemDetails: {},
     };
   },
-  components: { BaseDialog },
   computed: {
-    ...mapGetters("item", ["itemDetails"]),
-    btnName() {
-      return this.itemDetails.foundItemId ? "Update" : "Submit";
-    },
+    ...mapGetters("item", ["itemConfirmationDetails"]),
+  },
+  created() {
+    if (Object.keys(this.itemConfirmationDetails).length > 0) {
+      this.itemDetails = this.itemConfirmationDetails;
+    } else {
+      this.$axios
+        .get("/getsinglelostitem?id=" + this.$route.query.id)
+        .then((response) => {
+          if (response.status === 200) {
+            this.itemDetails = response.data.data.Item;
+          }
+        })
+        .catch((error) => console.log(error));
+    }
   },
   methods: {
-    closeDialog() {
-      this.showDialog = false;
-      this.$nextTick(() => {
-        this.$router.push({ path: "/found-items" });
-      });
-    },
-    filterAddressLine(itemDetails) {
-      return itemDetails.address == "Other" || !itemDetails.address
-        ? itemDetails.manualAddress
-        : itemDetails.address;
-    },
-    downloadPDF() {
-      const url = window.URL.createObjectURL(new Blob([this.responseData]));
-      const link = document.createElement("a");
-      link.href = url;
-      link.setAttribute("download", "file.pdf");
-      document.body.appendChild(link);
-      link.click();
-      this.showDialog = false;
-      this.$nextTick(() => {
-        this.$router.push({ path: "/found-items" });
-      });
-    },
-    submitDetails() {
-      let params = { ...this.itemDetails };
-      if (params.address == "Other" || !params.address) {
-        params.address = params.manualAddress;
-      }
-      delete params.foundItemId;
-      delete params.manualAddress;
+    async printDetails() {
+      console.log("====here");
+      // this.$htmlToPaper("printMe");
+      // let printContents = document.getElementById("printMe").innerHTML;
+      // let originalContents = document.body.innerHTML;
+      // document.body.innerHTML = printContents;
+      // window.print();
+      // this.$router.push({ path: "/found-items" });
+      // document.body.innerHTML = originalContents;
+      // this.$nextTick(() => {
+      //   //  this.$router.push({ path: "/found-items" });
+      //   document.location.reload();
+      // });
 
-      if (this.itemDetails.foundItemId) {
-        this.isLoading = true;
-        this.$axios
-          .get("/getsinglelostitem?id=" + this.itemDetails.foundItemId)
-          .then((response) => {
-            if (response.status === 200) {
-              this.isLoadingItemDetails = false;
-              let obj1 = response.data.data.Item;
-              const diff = Object.keys(obj1).reduce((result, key) => {
-                if (!params.hasOwnProperty(key)) {
-                  result.push(key);
-                } else if (_.isEqual(obj1[key], params[key])) {
-                  const resultKeyIndex = result.indexOf(key);
-                  result.splice(resultKeyIndex, 1);
-                }
-                return result;
-              }, Object.keys(params));
-              const index = diff.indexOf("is_default");
-              if (index > -1) {
-                diff.splice(index, 1);
-              }
-              const index2 = diff.indexOf("id");
-              if (index2 > -1) {
-                diff.splice(index2, 1);
-              }
-              let requestData = {};
-              if (diff.includes("image")) {
-                requestData.is_default = "Pending";
-              }
-              diff.forEach((key) => {
-                if (params[key] != undefined) {
-                  requestData[key] = params[key];
-                }
-              });
-              this.$axios
-                .post(
-                  "/updatesinglelostitem?id=" + this.itemDetails.foundItemId,
-                  requestData
-                )
-                .then((response) => {
-                  if (response.status === 200) {
-                    // this.dialogTitle = "Your details updated successfully!";
-                    this.isLoading = false;
-                    this.responseData = response.data.data;
-                    // this.showDialog = true;
-                    this.$store.commit("item/SET_ITEM_CONFIRMATION_DETAILS", {
-                      ...this.responseData,
-                    });
+      // var mywindow = window.open("", "invoice-box", "height=1000,width=1000");
+      // mywindow.document.write("<html><head><title>invoice-box</title>");
+      // mywindow.document.write(
+      //   '<link rel="stylesheet" href="printstyle.css" type="text/css" />'
+      // );
+      // mywindow.document.write("</head><body >");
+      // mywindow.document.write(data);
+      // mywindow.document.write("</body></html>");
 
-                    this.$router.push({
-                      path: "/confirmation",
-                      params: { data: this.responseData },
-                      query: { id: this.responseData.id },
-                    });
-                  }
-                })
-                .catch((error) => {
-                  this.isLoading = false;
-                  // this.showDialog = false;
-                  this.$toast.error("Something went wrong! Please try again.", {
-                    hideProgressBar: true,
-                  });
-                  console.log(error);
-                });
-            }
-          })
-          .catch((err) => {
-            console.log(err);
-            this.isLoading = false;
-          });
-      } else {
-        this.isLoading = true;
-        this.$axios
-          .post("/storelostitem", params)
-          .then((response) => {
-            if (response.status === 200) {
-              // this.dialogTitle = "Your details submitted successfully!";
-              this.isLoading = false;
-              this.responseData = response.data.data;
+      // setTimeout(function () {
+      //   mywindow.print();
+      //   mywindow.close();
+      // }, 1000);
+      // return true;
+      const mywindow = window.open("", "PRINT", "height=1200,width=600");
 
-              this.$store.commit("item/SET_ITEM_CONFIRMATION_DETAILS", {
-                ...this.responseData,
-              });
+      mywindow.document.write("<html><head>");
+      // mywindow.document.write(
+      //   '<link rel="stylesheet" href="printstyle.css" type="text/css" />'
+      // );
+      mywindow.document.write(
+        '\x3Cscript src="https://cdn.tailwindcss.com">\x3C/script>'
+      );
+      mywindow.document.write("</head><body>");
+      // mywindow.document.write("<h1>" + document.title + "</h1>");
+      mywindow.document.write(document.getElementById("printMe").innerHTML);
+      mywindow.document.write("</body></html>");
+      mywindow.print();
+      mywindow.close();
 
-              localStorage.setItem("itemId", this.responseData.id);
-              // this.showDialog = true;
-              this.$router.push({
-                path: "/confirmation",
-                params: { data: this.responseData },
-                query: { id: this.responseData.id },
-              });
-            }
-          })
-          .catch((error) => {
-            this.isLoading = false;
-            // this.showDialog = false;
-            this.$toast.error("Something went wrong! Please try again.", {
-              hideProgressBar: true,
-            });
-
-            console.log(error);
-          });
-      }
-    },
-    editDetails() {
-      this.$nextTick(() => {
-        this.$router.push({
-          name: "item-details",
-          params: { itemDetails: this.itemDetails },
-        });
-      });
+      // this.$nextTick(() => {
+      //   this.$router.push({ path: "/found-items" });
+      // });
+      // return true;
     },
   },
 };
 </script>
 
+
 <style lang="scss" scoped>
 .wrapper {
-  @apply min-h-screen flex justify-center py-10 mx-auto;
+  // @apply min-h-screen flex justify-center py-10 mx-auto;
+  margin-left: auto;
+  margin-right: auto;
+  display: flex;
+  min-height: 100vh;
+  justify-content: center;
+  padding-top: 2.5rem;
+  padding-bottom: 2.5rem;
 }
 
 .card {
