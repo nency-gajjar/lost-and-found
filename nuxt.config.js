@@ -44,8 +44,27 @@ export default {
   modules: [
     // https://go.nuxtjs.dev/axios
     '@nuxtjs/axios',
-    "vue-toastification/nuxt"
+    '@nuxtjs/toast',
   ],
+
+  // Toast notifications Configuration
+  toast: {
+    position: 'top-right',
+    iconPack: 'fontawesome',
+    duration: 10000,
+    keepOnHover: true,
+    closeOnSwipe: true,
+    containerClass: 'sm:!right-8 sm:!top-8',
+    className: '!py-2 !px-4 sm:!rounded sm:!shadow cursor-pointer',
+    action: {
+      icon: 'xmark',
+      // text : 'Cancel',
+      class: '!fill-current !text-white',
+      onClick: (e, toastObject) => {
+        toastObject.goAway(0)
+      },
+    },
+  },
 
   // Axios module configuration: https://go.nuxtjs.dev/config-axios
   axios: {

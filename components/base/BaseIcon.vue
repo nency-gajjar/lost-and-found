@@ -51,5 +51,8 @@ export default {
   &.gray {
     color: gray;
   }
+  &.lightgray {
+    color: #939393;
+  }
 }
 </style>
