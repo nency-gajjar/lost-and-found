@@ -125,17 +125,17 @@
                       v-if="address"
                       class="absolute inset-y-0 right-0 flex items-center p-5"
                     >
-                      <BaseIcon icon="circle-xmark" color="gray" />
+                      <BaseIcon
+                        icon="circle-xmark"
+                        color="gray"
+                        @click="clearAddress"
+                      />
                     </div>
                     <div
                       v-else
                       class="absolute inset-y-0 right-0 flex items-center p-5"
                     >
-                      <img
-                        class="addres-icon"
-                        src="@/assets/icons/location_cursor_solid.svg"
-                        alt
-                      />
+                      <BaseIcon icon="location-arrow" color="lightgray" />
                     </div>
                   </template>
                 </BaseInput>
@@ -208,7 +208,11 @@
                 ></vue-tel-input>
               </div>
               <div class="flex items-center" style="margin: 2px 5px !important">
-                <BaseIcon icon="shield-alt" color="lightgray" size="sm" />
+                <BaseIcon
+                  icon="shield-alt"
+                  color="lightgray"
+                  style="max-width: 15px"
+                />
                 &nbsp;&nbsp;
                 <p style="color: #939393; font-size: 14px">
                   Your contact will not be shared with anyone.
@@ -227,7 +231,7 @@
                 <BaseIcon
                   icon="circle-info"
                   color="gray"
-                  size="sm"
+                  style="max-width: 15px"
                   data-toggle="tooltip"
                   title="Address will selected automatically as you type 'Venue Address' above"
                 />
@@ -1122,29 +1126,7 @@
         </ValidationObserver>
       </div>
       <div v-else>
-        <div
-          wire:loading
-          class="
-            h-screen
-            z-50
-            overflow-hidden
-            flex flex-col
-            items-center
-            justify-center
-          "
-        >
-          <div
-            class="
-              loader
-              ease-linear
-              rounded-full
-              border-4 border-t-4 border-gray-200
-              h-12
-              w-12
-              mb-4
-            "
-          ></div>
-        </div>
+        <BaseLoader />
       </div>
     </div>
   </div>
@@ -1152,11 +1134,13 @@
 
 <script>
 import { ValidationObserver, ValidationProvider } from "vee-validate";
-import BaseInput from "~/components/base/BaseInput.vue";
-import BaseSelect from "~/components/base/BaseSelect.vue";
 import Editor from "~/components/vueImageEditor/Editor.vue";
 import { mapGetters } from "vuex";
-
+import {
+  itemDescriptionOptions,
+  weightOuncesOptions,
+  venueOptions,
+} from "static/defaults.js";
 import {
   CircleIcon,
   RotateCcwIcon,
@@ -1182,80 +1166,17 @@ export default {
     address: "",
     manualVenue: "",
     venueType: "",
-    venueOptions: ["Hotel", "Restaurant", "Airport", "Other"],
+    venueOptions: venueOptions,
     employeeMobileNo: "",
     foundDate: new Date().toISOString().slice(0, 10),
     venueManually: false,
     itemDescription: "",
-    itemDescriptionOptions: [
-      "Laptop",
-      "Tablet",
-      "Cell phone",
-      "Mobile Phone",
-      "Pillow",
-      "Shoes",
-      "Slipper",
-      "Socks",
-      "Headphone",
-      "Earphone",
-      "Wristwatch",
-      "ID",
-      "Credit Card",
-      "Passport",
-      "Phone charger",
-      "Charger for Laptop",
-      "Blanket",
-      "Shirt",
-      "Pant",
-      "T-shirt",
-      "Clothes",
-      "Jacket",
-      "Suit",
-      "Water bottle",
-      "Stuffed toy",
-      "Bed sheet",
-      "Towel",
-      "Tool box",
-      "Box - Shoe size",
-      "Small Box",
-      "Medium Box",
-      "Large Box",
-      "Bagpack - Carry on",
-      "Luggage - Carry on",
-      "Luggage - Check in size",
-      "Documents",
-      "Keys",
-      "Purse",
-      "Wallet",
-      "Medication Pills",
-      "Folder",
-      "Jewelery",
-      "Thermos",
-      "Other",
-    ],
+    itemDescriptionOptions: itemDescriptionOptions,
     packageType: "",
     packageTypeOptions: ["Box", "Envelope"],
     weight: "",
     weightOunces: "",
-    weightOuncesOptions: [
-      "0",
-      "1",
-      "2",
-      "3",
-      "4",
-      "5",
-      "6",
-      "7",
-      "8",
-      "9",
-      "10",
-      "11",
-      "12",
-      "13",
-      "14",
-      "15",
-      "16",
-    ],
+    weightOuncesOptions: weightOuncesOptions,
     itemLength: "",
     itemWidth: "",
     itemHeight: "",
@@ -1308,8 +1229,6 @@ export default {
   components: {
     ValidationObserver,
     ValidationProvider,
-    BaseInput,
-    BaseSelect,
     Editor,
     CircleIcon,
     RotateCcwIcon,
@@ -1408,6 +1327,10 @@ export default {
           }
         });
       }
+    },
+    clearAddress() {
+      this.address = "";
+      this.resetAddressFields();
     },
     resetAddressFields() {
       this.autoCompleteAddress = {
@@ -1958,9 +1881,7 @@ export default {
       this.$axios.post("/demo", { file }).then((response) => {
         if (response.status === 200) {
           this.isSavingImage = false;
-          this.$toast.info("Image Saved Successfully!", {
-            hideProgressBar: true,
-          });
+          this.$toast.info("Image Saved Successfully!");
           let tempItemDescriptionArr = this.itemDescriptionOptions;
           this.imageRecognitionData = response.data.data;
           this.itemDescriptionOptions = response.data.data

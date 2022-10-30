@@ -329,19 +329,11 @@
 <script>
 import "vue-select/dist/vue-select.css";
 import { ValidationObserver, ValidationProvider } from "vee-validate";
-import BaseInput from "~/components/base/BaseInput.vue";
-import BaseSelect from "~/components/base/BaseSelect.vue";
-import BaseDialog from "@/components/base/BaseDialog.vue";
-import VSelect from "vue-select";
 
 export default {
   components: {
     ValidationObserver,
     ValidationProvider,
-    BaseInput,
-    BaseSelect,
-    BaseDialog,
-    VSelect,
   },
   data() {
     return {
