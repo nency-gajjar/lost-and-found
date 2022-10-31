@@ -101,25 +101,26 @@
             </div> -->
             <div class="w-full">
               <div class="px-6 flex justify-center">
-                <img class="previewImage" v-show="!showCrop & !showDraw" :src="imgSrc" />
-                <div v-if="showCrop" class="vue-cropper-container">
+                <img class="previewImage" v-show="(!showCrop & !showDraw) || imgPreview" :src="imgSrc" />
+                <div v-if="showCrop && !imgPreview" class="vue-cropper-container">
                   <VueCropper
                     ref="cropper"
-                    :src="imgForEditor"
+                    :src="imgSrc"
                     alt="Source Image"
                     :responsive="true"
                   ></VueCropper>
                 </div>
                 <RedactImage
-                  v-if="showDraw"
+                  v-if="showDraw && !imgPreview"
                   class="redact"
                   ref="redacter"
+                  @changeConditonOfUndo="toggleUndo"
                   max-width="400px"
-                  :src="imgForEditor"
+                  :src="imgSrc"
                 />
               </div>
               <div class="editor-tools mt-5 px-6 border-t pt-4">
-                <div v-show="!enableEdit" class="icons">
+                <!-- <div v-show="!enableEdit" class="icons">
                   <div>
                     <div class="tool-freeDrawing">	
                       <edit-2-icon	
@@ -129,9 +130,9 @@
                     </div>
                     <p>Edit</p>
                   </div>
-                </div>
-                <div v-show="enableEdit" class="icons">
-                  <div v-show="enableEdit && showDraw">
+                </div> -->
+                <div class="icons">
+                  <div v-show="showDraw && showUndo">
                     <div class="tool-undo">
                       <rotate-ccw-icon
                         :size="size_icon"
@@ -1045,10 +1046,11 @@ export default {
   data() {
     return {
       imgSrc: "",
-      imgForEditor: "",
       showCrop: false,
       showDraw: false,
-      enableEdit: false,
+      imgPreview: false,
+      showUndo: false,
+      // enableEdit: false,
 
       // canvasWidth: "600",
       // canvasHeight: "400",
@@ -1094,28 +1096,41 @@ export default {
     }
   },
   methods: {
-    editMode(){
-      this.enableEdit = true;
-      this.imgForEditor = this.imgSrc;
-    },
+    // editMode(){
+    //   this.enableEdit = true;
+    //   this.imgForEditor = this.imgSrc;
+    // },
     undo() {
       this.$refs.redacter.revert();
     },
+    toggleUndo(length){
+      if(length > 0){
+        this.showUndo = true;
+      }
+      else{
+        this.showUndo = false;
+      }
+    },
     addSquare() {
+      this.imgPreview = false;
       this.showDraw = true;
       this.showCrop = false;
     },
     crop() {
+      this.imgPreview = false;
       this.showCrop = true;
       this.showDraw = false; 
     },
     applyEdit() {
       if(this.showDraw){
-        this.imgForEditor = this.$refs.redacter.canvas().toDataURL();
+        this.imgSrc = this.$refs.redacter.canvas().toDataURL();
       }
       else{
-        this.imgForEditor = this.$refs.cropper.getCroppedCanvas().toDataURL();
+        this.imgSrc = this.$refs.cropper.getCroppedCanvas().toDataURL();
       }
+      this.showCrop = false;
+      this.showDraw = false;
+      this.imgPreview = true;
     },
     editImage() {
       this.showEditor = false;
@@ -1135,11 +1150,11 @@ export default {
     },
     closeEditor() {
       this.showEditor = false;
-      this.imggSrc = "";
-      this.imgForEditor = "";
+      this.imgSrc = "";
       this.showCrop = false;
       this.showDraw = false;
-      this.enableEdit = false;
+      this.imgPreview = false;
+      // this.enableEdit = false;
     },
     saveImg() {
       this.isSavingImage = true;
@@ -1166,11 +1181,11 @@ export default {
             this.imageRecognitionData[this.imageRecognitionData.length - 2].key;
         }
         this.showEditor = false;
-        this.imggSrc = "";
-        this.imgForEditor = "";
+        this.imgSrc = "";
         this.showCrop = false;
         this.showDraw = false;
-        this.enableEdit = false;
+        this.imgPreview = false;
+        // this.enableEdit = false;
         this.isImageEdited = true;
       });
     },

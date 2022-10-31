@@ -53,6 +53,12 @@ export default {
     if (this.height) {
       canvas.height = this.height;
     }
+    this.$emit("changeConditonOfUndo", this.rects.length);
+  },
+  watch: {
+    rects(newArr, oldArr){
+      this.$emit("changeConditonOfUndo", newArr.length);
+    }
   },
   methods: {
     canvas() {
