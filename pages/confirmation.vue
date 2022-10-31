@@ -515,7 +515,7 @@
       </section>
       <div class="flex flex-wrap gap-2 m-5">
         <button
-          type="submit"
+          type="button"
           class="
             !py-3
             flex-auto
@@ -551,6 +551,7 @@
 
 <script>
 import { mapGetters } from "vuex";
+import jsPDF from 'jspdf'
 export default {
   data() {
     return {
@@ -575,54 +576,36 @@ export default {
     }
   },
   methods: {
-    async printDetails() {
-      console.log("====here");
-      // this.$htmlToPaper("printMe");
-      // let printContents = document.getElementById("printMe").innerHTML;
-      // let originalContents = document.body.innerHTML;
-      // document.body.innerHTML = printContents;
-      // window.print();
-      // this.$router.push({ path: "/found-items" });
-      // document.body.innerHTML = originalContents;
-      // this.$nextTick(() => {
-      //   //  this.$router.push({ path: "/found-items" });
-      //   document.location.reload();
-      // });
+    printDetails() {
+      let userAgent = navigator.userAgent.toLowerCase();
+      console.log(userAgent);
+      let mobile = userAgent.indexOf("mobile") > -1;
+      let android = userAgent.indexOf("android") > -1;
+                  
+      if(mobile || android) {
+        console.log("phone");
+        var doc = new jsPDF('p', 'pt', 'a4');
+        doc.html(document.getElementById("printMe"), {
+                callback: function () {
+                    doc.save("item-details.pdf");
+                }
+            });
+      }
+      else{
+        const mywindow = window.open("", "PRINT", "height=1200,width=600");
 
-      // var mywindow = window.open("", "invoice-box", "height=1000,width=1000");
-      // mywindow.document.write("<html><head><title>invoice-box</title>");
-      // mywindow.document.write(
-      //   '<link rel="stylesheet" href="printstyle.css" type="text/css" />'
-      // );
-      // mywindow.document.write("</head><body >");
-      // mywindow.document.write(data);
-      // mywindow.document.write("</body></html>");
-
-      // setTimeout(function () {
-      //   mywindow.print();
-      //   mywindow.close();
-      // }, 1000);
-      // return true;
-      const mywindow = window.open("", "PRINT", "height=1200,width=600");
-
-      mywindow.document.write("<html><head>");
-      // mywindow.document.write(
-      //   '<link rel="stylesheet" href="printstyle.css" type="text/css" />'
-      // );
-      mywindow.document.write(
-        '\x3Cscript src="https://cdn.tailwindcss.com">\x3C/script>'
-      );
-      mywindow.document.write("</head><body>");
-      // mywindow.document.write("<h1>" + document.title + "</h1>");
-      mywindow.document.write(document.getElementById("printMe").innerHTML);
-      mywindow.document.write("</body></html>");
-      mywindow.print();
-      mywindow.close();
-
-      // this.$nextTick(() => {
-      //   this.$router.push({ path: "/found-items" });
-      // });
-      // return true;
+        mywindow.document.write("<html><head>");
+        // mywindow.document.write(
+        //   '<link rel="stylesheet" href="https://unpkg.com/tailwindcss@2.2.19/dist/tailwind.min.css" />'
+        // );
+        // mywindow.document.write("<script src='https://cdn.tailwindcss.com'><script>");
+        mywindow.document.write("</head><body>");
+        // mywindow.document.write("<h1>" + document.title + "</h1>");
+        mywindow.document.write(document.getElementById("printMe").innerHTML);
+        mywindow.document.write("</body></html>");
+        mywindow.print();
+        mywindow.close();
+      }
     },
   },
 };
