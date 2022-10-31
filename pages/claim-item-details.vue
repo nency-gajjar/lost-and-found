@@ -574,7 +574,7 @@
               <span class="button__text"> Approve </span>
             </button>
             <button
-              :class="{ 'button--loading': isLoading['Deny'] }"
+              :class="{ 'button--loading': isLoading['Reject'] }"
               type="submit"
               class="
                 !py-3
@@ -600,9 +600,9 @@
                 shadow-accent
                 hover:bg-accent-200
               "
-              @click="action('Deny')"
+              @click="action('Reject')"
             >
-              <span class="button__text"> Deny </span>
+              <span class="button__text"> Reject </span>
             </button>
           </div>
         </section>
@@ -615,6 +615,7 @@
       :showDialog="showDialog"
       :icon="{ name: 'circle-check', color: 'green', size: '3x' }"
       :title="dialogTitle"
+      :message="dialogMessage"
       buttonTitle="Close"
       @close="closeDialog"
     />
@@ -627,9 +628,10 @@ export default {
     return {
       showDialog: false,
       dialogTitle: "",
+      dialogMessage: "",
       isLoading: {
         Approve: false,
-        Deny: false,
+        Reject: false,
       },
       isLoadingItemDetails: false,
       claimDetails: {},
@@ -676,11 +678,15 @@ export default {
         .post("/updatesinglelostitem?id=" + this.itemId, params)
         .then((response) => {
           if (response.status === 200) {
-            this.dialogTitle =
-              type === "Approve"
-                ? "Details approved successfully!"
-                : "Details denied successfully!";
-
+            if (type === "Approve") {
+              this.dialogTitle = "Claim request approved successfully!";
+              this.dialogMessage =
+                "Claim request has been approved successfully. Item owner will be notified via email for their claim request approval. Post that, the owner will have to select the Item Delivery to proceed further.";
+            } else {
+              this.dialogTitle = "Claim request rejected successfully!";
+              this.dialogMessage =
+                "Claim request has been rejected successfully. Item owner will be notified via email for their claim request rejection along with the rejection reason.";
+            }
             this.showDialog = true;
             this.isLoading[type] = false;
           }
