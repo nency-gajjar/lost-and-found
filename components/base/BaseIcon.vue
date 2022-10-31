@@ -3,6 +3,7 @@
     :icon="[type, icon]"
     class="base-icon"
     :class="color"
+    :size="size"
     v-bind="$attrs"
     v-on="listeners"
   />
@@ -15,6 +16,7 @@ export default {
     icon: { type: String, default: "account" },
     color: { type: String, default: "white" },
     type: { type: String, default: "fas" },
+    size: { type: String, default: "lg" },
   },
   computed: {
     listeners() {
@@ -50,6 +52,12 @@ export default {
   }
   &.gray {
     color: gray;
+  }
+  &.black {
+    color: rgb(20, 20, 20);
+  }
+  &.purple {
+    color: #4f46e5;
   }
 }
 </style>

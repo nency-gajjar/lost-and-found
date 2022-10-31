@@ -419,113 +419,190 @@
                   for="itemImage"
                   >Found item image</label
                 >
-                <div class="flex">
-                  <div class="flex flex-col w-full sm:flex-row">
-                    <input
-                      @change="uploadImg($event)"
-                      class="
-                        form-control
-                        block
-                        w-full
-                        px-3
-                        py-1.5
-                        text-base
-                        font-normal
-                        text-gray-700
-                        bg-white bg-clip-padding
-                        border border-solid border-gray-300
-                        rounded-lg
-                        transition
-                        ease-in-out
-                        m-0
-                        focus:text-gray-700
-                        focus:bg-white
-                        focus:border-blue-600
-                        focus:outline-none
-                      "
-                      id="itemImage"
-                      type="file"
-                    />
-                    <p class="flex justify-center items-center px-5">OR</p>
-                    <label class="flex items-center justify-center w-full px-3 py-1.5 border border-solid border-gray-300 rounded-lg transition ease-in-out m-0 focus:text-gray-700 focus:bg-white focus:border-blue-600 focus:outline-none" for="itemImageCamera"><p>Take Picture</p></label>
-                    <input
-                      @change="uploadImg($event)"
-                      class="
-                        hidden
-                        form-control
-                        block
-                        w-full
-                        px-3
-                        py-1.5
-                        text-base
-                        font-normal
-                        text-gray-700
-                        bg-white bg-clip-padding
-                        border border-solid border-gray-300
-                        rounded-lg
-                        transition
-                        ease-in-out
-                        m-0
-                        focus:text-gray-700
-                        focus:bg-white
-                        focus:border-blue-600
-                        focus:outline-none
-                      "
-                      accept="image/*"
-                      capture="camera"
-                      id="itemImageCamera"
-                      type="file"
-                    />
-                  </div>
-                  <div v-show="image" class="flex items-center">
+                <div
+                  class="
+                    flex
+                    items-center
+                    justify-center
+                    bg-gray-50
+                    rounded-lg
+                    h-40
+                    w-full
+                    border-2 border-gray-300 border-dashed
+                    hover:bg-gray-100
+                  "
+                >
+                  <div
+                    v-if="!image"
+                    class="flex flex-col justify-center items-center"
+                  >
                     <div
-                      @click="editImage"
                       class="
-                        text-indigo-600
-                        hover:cursor-pointer hover:text-indigo-900
-                        ml-3
-                        inline-flex
                         flex flex-col
+                        justify-center
                         items-center
+                        pt-5
+                        pb-6
                       "
                     >
-                      <svg
-                        xmlns="http://www.w3.org/2000/svg"
-                        width="1em"
-                        height="1em"
-                        fill="none"
-                        viewBox="0 0 24 24"
-                        stroke="currentColor"
-                      >
-                        <path
-                          stroke-linecap="round"
-                          stroke-linejoin="round"
-                          stroke-width="2"
-                          d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"
+                      <span>
+                        <input
+                          type="file"
+                          id="choose-file"
+                          name="files"
+                          class="hidden"
+                          @change="uploadImg($event)"
                         />
-                      </svg>
-                      <p class="text-xs text-center">Edit Image</p>
-                    </div>
-                    <div
-                      v-if="imageKey"
-                      @click="deleteEditable()"
-                      class="
-                        flex flex-col
-                        text-red-600
-                        hover:text-red-900 hover:cursor-pointer
-                      "
-                    >
-                      <div class="tool-trash flex justify-center">
-                        <trash-2-icon size="1x"></trash-2-icon>
-                      </div>
-                      <p class="text-xs text-center">Remove Image</p>
+                        <label
+                          for="choose-file"
+                          id="chooseFile"
+                          class="
+                            cursor-pointer
+                            bg-accent-100
+                            text-white
+                            font-bold
+                            text-xs
+                            px-4
+                            py-2
+                            rounded-full
+                            border-accent-100 border
+                            hover:bg-accent-200 hover:text-white
+                          "
+                        >
+                          <BaseIcon
+                            icon="arrow-up-from-bracket"
+                            color="white"
+                            class="mr-1"
+                          />
+                          Choose a file
+                        </label>
+                        <span class="m-2 text-md text-gray-500">or</span>
+                        <input
+                          type="file"
+                          id="take-picture"
+                          name="files"
+                          class="hidden"
+                          accept="image/*"
+                          capture="camera"
+                          @change="uploadImg($event)"
+                        />
+                        <label
+                          for="take-picture"
+                          id="takePicture"
+                          class="
+                            cursor-pointer
+                            bg-indigo-600
+                            text-white
+                            font-bold
+                            text-xs
+                            px-4
+                            py-2
+                            rounded-full
+                            border-indigo-600 border
+                            hover:bg-indigo-500 hover:text-white
+                          "
+                        >
+                          <BaseIcon icon="camera" color="white" class="mr-1" />
+                          Take a Picture
+                        </label>
+                      </span>
+                      <p class="mt-3 text-xs text-gray-500">
+                        SVG, PNG, JPG (MAX. 800x400px)
+                      </p>
                     </div>
                   </div>
-                </div>
-                <div class="mt-3" v-if="image">
-                  <img :src="image" alt="Item image" />
+
+                  <div v-else class="file-content flex items-center">
+                    <div
+                      class="image-card"
+                      style="
+                        flex: 1;
+                        max-width: 166px;
+                        max-height: 145px;
+                        margin: 15px;
+                      "
+                    >
+                      <img :src="image" alt="Item image" />
+                    </div>
+                    <div class="flex justify-between">
+                      <button
+                        v-if="imageKey"
+                        @click="deleteEditable"
+                        type="button"
+                        class="
+                          inline-flex
+                          items-center
+                          px-4
+                          py-2
+                          bg-red-600
+                          hover:bg-red-500
+                          text-white text-sm
+                          font-medium
+                          rounded-md
+                        "
+                      >
+                        <BaseIcon
+                          icon="trash-can"
+                          color="white"
+                          size="1x"
+                          class="mr-2"
+                        />
+
+                        Remove Image
+                      </button>
+
+                      <button
+                        @click="editImage"
+                        type="button"
+                        class="
+                          inline-flex
+                          items-center
+                          px-4
+                          py-2
+                          bg-indigo-500
+                          hover:bg-indigo-600
+                          text-white text-sm
+                          font-medium
+                          rounded-md
+                        "
+                      >
+                        <BaseIcon
+                          icon="pen-to-square"
+                          size="1x"
+                          color="white"
+                          class="mr-2"
+                        />
+                        Edit Image
+                      </button>
+
+                      <button
+                        @change="uploadImg($event)"
+                        type="button"
+                        class="
+                          inline-flex
+                          items-center
+                          px-4
+                          py-2
+                          bg-accent-100
+                          text-white text-sm
+                          font-medium
+                          rounded-md
+                          hover:bg-accent-200
+                        "
+                      >
+                        <BaseIcon
+                          icon="arrow-up-from-bracket"
+                          size="1x"
+                          color="white"
+                          class="mr-2"
+                        />
+                        Choose another file
+                      </button>
+                    </div>
+                  </div>
                 </div>
               </div>
+
               <div
                 v-show="showEditor"
                 class="fixed z-50 top-0 w-full left-0"
@@ -579,22 +656,7 @@
                           cursor-pointer
                         "
                       >
-                        <svg
-                          xmlns="http://www.w3.org/2000/svg"
-                          class="icon icon-tabler icon-tabler-x"
-                          width="24"
-                          height="24"
-                          viewBox="0 0 24 24"
-                          stroke-width="1.5"
-                          stroke="#ffffff"
-                          fill="none"
-                          stroke-linecap="round"
-                          stroke-linejoin="round"
-                        >
-                          <path stroke="none" d="M0 0h24v24H0z" fill="none" />
-                          <line x1="18" y1="6" x2="6" y2="18" />
-                          <line x1="6" y1="6" x2="18" y2="18" />
-                        </svg>
+                        <BaseIcon icon="xmark" size="lg" />
                       </span>
                     </div>
                     <div
@@ -613,40 +675,17 @@
                         editor-container
                       "
                     >
-                      <!-- <div
-                        class="top-margin-3 flex justify-center"
-                        v-show="loadingSpinner"
-                        role="status"
-                      >
-                        <svg
-                          aria-hidden="true"
-                          class="
-                            mr-2
-                            w-16
-                            h-16
-                            text-gray-200
-                            animate-spin
-                            fill-blue-600
-                          "
-                          viewBox="0 0 100 101"
-                          fill="none"
-                          xmlns="http://www.w3.org/2000/svg"
-                        >
-                          <path
-                            d="M100 50.5908C100 78.2051 77.6142 100.591 50 100.591C22.3858 100.591 0 78.2051 0 50.5908C0 22.9766 22.3858 0.59082 50 0.59082C77.6142 0.59082 100 22.9766 100 50.5908ZM9.08144 50.5908C9.08144 73.1895 27.4013 91.5094 50 91.5094C72.5987 91.5094 90.9186 73.1895 90.9186 50.5908C90.9186 27.9921 72.5987 9.67226 50 9.67226C27.4013 9.67226 9.08144 27.9921 9.08144 50.5908Z"
-                            fill="currentColor"
-                          />
-                          <path
-                            d="M93.9676 39.0409C96.393 38.4038 97.8624 35.9116 97.0079 33.5539C95.2932 28.8227 92.871 24.3692 89.8167 20.348C85.8452 15.1192 80.8826 10.7238 75.2124 7.41289C69.5422 4.10194 63.2754 1.94025 56.7698 1.05124C51.7666 0.367541 46.6976 0.446843 41.7345 1.27873C39.2613 1.69328 37.813 4.19778 38.4501 6.62326C39.0873 9.04874 41.5694 10.4717 44.0505 10.1071C47.8511 9.54855 51.7191 9.52689 55.5402 10.0491C60.8642 10.7766 65.9928 12.5457 70.6331 15.2552C75.2735 17.9648 79.3347 21.5619 82.5849 25.841C84.9175 28.9121 86.7997 32.2913 88.1811 35.8758C89.083 38.2158 91.5421 39.6781 93.9676 39.0409Z"
-                            fill="currentFill"
-                          />
-                        </svg>
-                        <span class="sr-only">Loading...</span>
-                      </div> -->
                       <div class="w-full">
                         <div class="px-6 flex justify-center">
-                          <img class="previewImage" v-show="(!showCrop & !showDraw) || imgPreview" :src="imgSrc" />
-                          <div v-if="showCrop && !imgPreview" class="vue-cropper-container">
+                          <img
+                            class="previewImage"
+                            v-show="!showCrop & !showDraw || imgPreview"
+                            :src="imgSrc"
+                          />
+                          <div
+                            v-if="showCrop && !imgPreview"
+                            class="vue-cropper-container"
+                          >
                             <VueCropper
                               ref="cropper"
                               :src="imgSrc"
@@ -664,55 +703,54 @@
                           />
                         </div>
                         <div class="editor-tools mt-5 px-6 border-t pt-4">
-                          <!-- <div v-show="!enableEdit" class="icons">
-                            <div>
-                              <div class="tool-freeDrawing">	
-                                <edit-2-icon	
-                                  :size="size_icon"	
-                                  @click="editMode()"
-                                ></edit-2-icon>	
-                              </div>
-                              <p>Edit</p>
-                            </div>
-                          </div> -->
                           <div class="icons">
                             <div v-show="showDraw && showUndo">
                               <div class="tool-undo">
-                                <rotate-ccw-icon
-                                  :size="size_icon"
+                                <BaseIcon
+                                  icon="undo"
+                                  size="lg"
+                                  color="lightblack"
                                   @click="undo()"
-                                ></rotate-ccw-icon>
+                                />
                               </div>
                               <p>Undo</p>
                             </div>
                             <div>
                               <div class="tool-addSquare">
-                                <square-icon
+                                <BaseIcon
                                   v-if="!showDraw"
-                                  :size="size_icon"
+                                  icon="square"
+                                  size="lg"
+                                  color="lightblack"
                                   @click="addSquare()"
-                                ></square-icon>
-                                <check-icon
+                                />
+                                <BaseIcon
                                   v-else
-                                  :size="size_icon"
+                                  icon="check"
+                                  size="lg"
+                                  color="lightblack"
                                   @click="applyEdit()"
-                                ></check-icon>
+                                />
                               </div>
                               <p v-if="!showDraw">Square</p>
                               <p v-else>Done</p>
                             </div>
                             <div>
                               <div class="tool-crop">
-                                <maximize-icon
+                                <BaseIcon
                                   v-if="!showCrop"
-                                  :size="size_icon"
+                                  icon="crop-simple"
+                                  size="lg"
+                                  color="lightblack"
                                   @click="crop()"
-                                ></maximize-icon>
-                                <check-icon
+                                />
+                                <BaseIcon
                                   v-else
-                                  :size="size_icon"
+                                  icon="check"
+                                  size="lg"
+                                  color="lightblack"
                                   @click="applyEdit()"
-                                ></check-icon>
+                                />
                               </div>
                               <p v-if="!showCrop">Crop</p>
                               <p v-else>Done</p>
@@ -747,7 +785,12 @@
                               "
                             >
                               <span class="button__text">
-                                <save-icon :size="size_icon"></save-icon> Save
+                                <BaseIcon
+                                  icon="floppy-disk"
+                                  type="far"
+                                  size="2x"
+                                />
+                                Save
                               </span>
                             </button>
                           </div>
@@ -991,7 +1034,7 @@
               <div class="flex justify-end">
                 <button
                   :class="{ 'button--loading': isLoading }"
-                  type="submit"
+                  type="button"
                   class="
                     !py-3
                     font-medium
@@ -1060,16 +1103,6 @@ import { mapGetters } from "vuex";
 import RedactImage from "~/components/redactEditor/RedactImage.vue";
 import VueCropper from "vue-cropperjs";
 import "cropperjs/dist/cropper.css";
-
-import {
-  RotateCcwIcon,
-  Edit2Icon,
-  Trash2Icon,
-  SquareIcon,
-  MaximizeIcon,
-  SaveIcon,
-  CheckIcon,
-} from "vue-feather-icons";
 
 export default {
   data: () => ({
@@ -1239,13 +1272,6 @@ export default {
     ValidationProvider,
     BaseInput,
     BaseSelect,
-    RotateCcwIcon,
-    Edit2Icon,
-    Trash2Icon,
-    SquareIcon,
-    MaximizeIcon,
-    CheckIcon,
-    SaveIcon,
   },
   computed: {
     ...mapGetters("item", ["itemDetails"]),
@@ -1830,11 +1856,10 @@ export default {
     undo() {
       this.$refs.redacter.revert();
     },
-    toggleUndo(length){
-      if(length > 0){
+    toggleUndo(length) {
+      if (length > 0) {
         this.showUndo = true;
-      }
-      else{
+      } else {
         this.showUndo = false;
       }
     },
@@ -1870,13 +1895,12 @@ export default {
     crop() {
       this.imgPreview = false;
       this.showCrop = true;
-      this.showDraw = false; 
+      this.showDraw = false;
     },
     applyEdit() {
-      if(this.showDraw){
+      if (this.showDraw) {
         this.imgSrc = this.$refs.redacter.canvas().toDataURL();
-      }
-      else{
+      } else {
         this.imgSrc = this.$refs.cropper.getCroppedCanvas().toDataURL();
       }
       this.showCrop = false;
@@ -1915,13 +1939,11 @@ export default {
     saveImg() {
       this.isSavingImage = true;
       let file = null;
-      if(this.showDraw){
+      if (this.showDraw) {
         file = this.$refs.redacter.canvas().toDataURL();
-      }
-      else if(this.showCrop){
+      } else if (this.showCrop) {
         file = this.$refs.cropper.getCroppedCanvas().toDataURL();
-      }
-      else{
+      } else {
         file = this.imgSrc;
       }
       this.$axios.post("/demo", { file }).then((response) => {
@@ -2509,15 +2531,12 @@ export default {
     }
     div {
       cursor: pointer;
-      border: 1px solid #808080;
-      border-radius: 14px;
       &:hover {
         background: #dfdfdf;
+        border-radius: 14px;
       }
-      padding: 2px 10px;
-      background-color: #f3f3f3;
+      padding: 5px 15px;
       margin-bottom: 5px;
-      color: #ff9800;
       svg {
         width: 18px;
       }
@@ -2570,16 +2589,16 @@ canvas {
   opacity: 0.75;
 }
 
-.vue-cropper-container{
+.vue-cropper-container {
   min-width: 40vw;
 }
 
-.previewImage{
+.previewImage {
   max-height: 300px;
 }
 
-.vue-cropper-container{
-  img{
+.vue-cropper-container {
+  img {
     max-height: 300px !important;
   }
 }

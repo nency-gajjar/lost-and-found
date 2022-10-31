@@ -101,8 +101,15 @@
             </div> -->
             <div class="w-full">
               <div class="px-6 flex justify-center">
-                <img class="previewImage" v-show="(!showCrop & !showDraw) || imgPreview" :src="imgSrc" />
-                <div v-if="showCrop && !imgPreview" class="vue-cropper-container">
+                <img
+                  class="previewImage"
+                  v-show="!showCrop & !showDraw || imgPreview"
+                  :src="imgSrc"
+                />
+                <div
+                  v-if="showCrop && !imgPreview"
+                  class="vue-cropper-container"
+                >
                   <VueCropper
                     ref="cropper"
                     :src="imgSrc"
@@ -120,55 +127,54 @@
                 />
               </div>
               <div class="editor-tools mt-5 px-6 border-t pt-4">
-                <!-- <div v-show="!enableEdit" class="icons">
-                  <div>
-                    <div class="tool-freeDrawing">	
-                      <edit-2-icon	
-                        :size="size_icon"	
-                        @click="editMode()"
-                      ></edit-2-icon>	
-                    </div>
-                    <p>Edit</p>
-                  </div>
-                </div> -->
                 <div class="icons">
                   <div v-show="showDraw && showUndo">
                     <div class="tool-undo">
-                      <rotate-ccw-icon
-                        :size="size_icon"
+                      <BaseIcon
+                        icon="undo"
+                        size="lg"
+                        color="lightblack"
                         @click="undo()"
-                      ></rotate-ccw-icon>
+                      />
                     </div>
                     <p>Undo</p>
                   </div>
                   <div>
                     <div class="tool-addSquare">
-                      <square-icon
+                      <BaseIcon
                         v-if="!showDraw"
-                        :size="size_icon"
+                        icon="square"
+                        size="lg"
+                        color="lightblack"
                         @click="addSquare()"
-                      ></square-icon>
-                      <check-icon
+                      />
+                      <BaseIcon
                         v-else
-                        :size="size_icon"
+                        icon="check"
+                        size="lg"
+                        color="lightblack"
                         @click="applyEdit()"
-                      ></check-icon>
+                      />
                     </div>
                     <p v-if="!showDraw">Square</p>
                     <p v-else>Done</p>
                   </div>
                   <div>
                     <div class="tool-crop">
-                      <maximize-icon
+                      <BaseIcon
                         v-if="!showCrop"
-                        :size="size_icon"
+                        icon="crop-simple"
+                        size="lg"
+                        color="lightblack"
                         @click="crop()"
-                      ></maximize-icon>
-                      <check-icon
+                      />
+                      <BaseIcon
                         v-else
-                        :size="size_icon"
+                        icon="check"
+                        size="lg"
+                        color="lightblack"
                         @click="applyEdit()"
-                      ></check-icon>
+                      />
                     </div>
                     <p v-if="!showCrop">Crop</p>
                     <p v-else>Done</p>
@@ -203,7 +209,8 @@
                     "
                   >
                     <span class="button__text">
-                      <save-icon :size="size_icon"></save-icon> Save
+                      <BaseIcon icon="floppy-disk" type="far" size="2x" />
+                      Save
                     </span>
                   </button>
                 </div>
@@ -1017,16 +1024,6 @@
 </template>
   
 <script>
-import {
-  RotateCcwIcon,
-  Edit2Icon,
-  Trash2Icon,
-  SquareIcon,
-  MaximizeIcon,
-  SaveIcon,
-  CheckIcon,
-} from "vue-feather-icons";
-
 import RedactImage from "~/components/redactEditor/RedactImage.vue";
 import VueCropper from "vue-cropperjs";
 import "cropperjs/dist/cropper.css";
@@ -1035,13 +1032,6 @@ export default {
   components: {
     RedactImage,
     VueCropper,
-    RotateCcwIcon,
-    Edit2Icon,
-    Trash2Icon,
-    SquareIcon,
-    MaximizeIcon,
-    CheckIcon,
-    SaveIcon,
   },
   data() {
     return {
@@ -1103,11 +1093,10 @@ export default {
     undo() {
       this.$refs.redacter.revert();
     },
-    toggleUndo(length){
-      if(length > 0){
+    toggleUndo(length) {
+      if (length > 0) {
         this.showUndo = true;
-      }
-      else{
+      } else {
         this.showUndo = false;
       }
     },
@@ -1119,13 +1108,12 @@ export default {
     crop() {
       this.imgPreview = false;
       this.showCrop = true;
-      this.showDraw = false; 
+      this.showDraw = false;
     },
     applyEdit() {
-      if(this.showDraw){
+      if (this.showDraw) {
         this.imgSrc = this.$refs.redacter.canvas().toDataURL();
-      }
-      else{
+      } else {
         this.imgSrc = this.$refs.cropper.getCroppedCanvas().toDataURL();
       }
       this.showCrop = false;
@@ -1159,13 +1147,11 @@ export default {
     saveImg() {
       this.isSavingImage = true;
       let file = null;
-      if(this.showDraw){
+      if (this.showDraw) {
         file = this.$refs.redacter.canvas().toDataURL();
-      }
-      else if(this.showCrop){
+      } else if (this.showCrop) {
         file = this.$refs.cropper.getCroppedCanvas().toDataURL();
-      }
-      else{
+      } else {
         file = this.imgSrc;
       }
       this.$axios.post("/demo", { file }).then((response) => {
@@ -1327,16 +1313,16 @@ canvas {
   animation: button-loading-spinner 1s ease infinite;
 }
 
-.vue-cropper-container{
+.vue-cropper-container {
   min-width: 40vw;
 }
 
-.previewImage{
+.previewImage {
   max-height: 300px;
 }
 
-.vue-cropper-container{
-  img{
+.vue-cropper-container {
+  img {
     max-height: 300px !important;
   }
 }
