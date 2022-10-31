@@ -180,8 +180,6 @@
 </template>
   
 <script>
-import BaseDialog from "@/components/base/BaseDialog.vue";
-
 export default {
   data: () => ({
     showDialog: false,
@@ -192,9 +190,6 @@ export default {
     isLoading: false,
     itemId: "",
   }),
-  components: {
-    BaseDialog,
-  },
   mounted() {
     if (this.$route.query.id) {
       this.itemId = this.$route.query.id;

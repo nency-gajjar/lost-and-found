@@ -2,8 +2,8 @@
   <font-awesome-icon
     :icon="[type, icon]"
     class="base-icon"
-    :class="color"
     :size="size"
+    :class="color"
     v-bind="$attrs"
     v-on="listeners"
   />
@@ -16,7 +16,26 @@ export default {
     icon: { type: String, default: "account" },
     color: { type: String, default: "white" },
     type: { type: String, default: "fas" },
-    size: { type: String, default: "lg" },
+    size: {
+      type: String,
+      default: "1x",
+      validator: (value) =>
+        [
+          "lg",
+          "xs",
+          "sm",
+          "1x",
+          "2x",
+          "3x",
+          "4x",
+          "5x",
+          "6x",
+          "7x",
+          "8x",
+          "9x",
+          "10x",
+        ].indexOf(value) > -1,
+    },
   },
   computed: {
     listeners() {
@@ -58,6 +77,9 @@ export default {
   }
   &.purple {
     color: #4f46e5;
+  }
+  &.lightgray {
+    color: #939393;
   }
 }
 </style>

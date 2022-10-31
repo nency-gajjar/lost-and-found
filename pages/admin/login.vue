@@ -188,12 +188,10 @@
 
 <script>
 import { ValidationObserver, ValidationProvider } from "vee-validate";
-import BaseInput from "~/components/base/BaseInput.vue";
 export default {
   components: {
     ValidationObserver,
     ValidationProvider,
-    BaseInput,
   },
   data() {
     return {

@@ -43,14 +43,17 @@
                   ></span>
                 </div>
               </div>
+
+              <!-- SENDER'S DETAILS -->
+              <!-- Sender Affiliation - Venue Type  -->
               <ValidationProvider
                 v-slot="{ errors }"
                 rules="required"
                 class="block"
               >
                 <BaseSelect
-                  v-model="venue"
-                  :options="venueArr"
+                  v-model="venueType"
+                  :options="venueOptions"
                   label="Sender Affiliation"
                   :class="errors.length > 0 && 'error'"
                 />
@@ -61,6 +64,8 @@
                   {{ errors[0] }}
                 </p>
               </ValidationProvider>
+
+              <!-- Manual Venue -->
               <ValidationProvider
                 v-if="venueManually"
                 v-slot="{ errors }"
@@ -70,7 +75,7 @@
                 <BaseInput
                   v-model="manualVenue"
                   type="text"
-                  label="Type here manually..."
+                  label="Type manually"
                   :class="errors.length > 0 && 'error'"
                 />
                 <p
@@ -80,6 +85,8 @@
                   {{ errors[0] }}
                 </p>
               </ValidationProvider>
+
+              <!-- Found Item Date -->
               <ValidationProvider
                 v-slot="{ errors }"
                 rules="required"
@@ -99,6 +106,7 @@
                 </p>
               </ValidationProvider>
 
+              <!-- Address -->
               <ValidationProvider
                 v-slot="{ errors }"
                 rules="required"
@@ -108,22 +116,28 @@
                   v-model="address"
                   id="autocomplete"
                   type="text"
-                  :label="displayVenueName"
+                  :label="venueLabel"
                   :class="errors.length > 0 && 'error'"
                   @input="getAddress"
                 >
-                  <!-- <template v-slot:icon>
+                  <template v-slot:icon>
                     <div
-                      class="absolute inset-y-0 right-0 pr-5 flex items-center"
+                      v-if="address"
+                      class="absolute inset-y-0 right-0 flex items-center p-5"
                     >
-                      <img
-                        v-if="!isLoadingAddresses"
-                        class="addres-icon"
-                        src="@/assets/icons/location_cursor_solid.svg"
-                        alt
+                      <BaseIcon
+                        icon="circle-xmark"
+                        color="gray"
+                        @click="clearAddress"
                       />
                     </div>
-                  </template> -->
+                    <div
+                      v-else
+                      class="absolute inset-y-0 right-0 flex items-center p-5"
+                    >
+                      <BaseIcon icon="location-arrow" color="lightgray" />
+                    </div>
+                  </template>
                 </BaseInput>
                 <p
                   v-if="errors.length"
@@ -133,6 +147,7 @@
                 </p>
               </ValidationProvider>
 
+              <!-- Venue Email -->
               <ValidationProvider
                 v-slot="{ errors }"
                 rules="required|email"
@@ -153,6 +168,7 @@
                 </p>
               </ValidationProvider>
 
+              <!-- Venue Secondary Email -->
               <ValidationProvider
                 v-slot="{ errors }"
                 rules="email"
@@ -172,6 +188,8 @@
                   {{ errors[0] }}
                 </p>
               </ValidationProvider>
+
+              <!-- Employee Mobile No -->
               <div class="block relative box-content h-12">
                 <vue-tel-input
                   :inputOptions="{ placeholder: 'Employee Mobile No.' }"
@@ -184,28 +202,42 @@
                     rounded-lg
                     h-full
                   "
-                  v-model="employeePhone"
+                  v-model="employeeMobileNo"
                   v-bind="bindPhoneInputProps"
-                  @blur="validateEmployeePhoneNumber"
+                  @blur="validateEmployeeMobileNo"
                 ></vue-tel-input>
               </div>
-              <div class="flex items-center" style="margin: 2px 2px !important">
-                <font-awesome-icon
-                  class="shieldIcon"
-                  :icon="['fas', 'shield-alt']"
+              <div class="flex items-center" style="margin: 2px 5px !important">
+                <BaseIcon
+                  icon="shield-alt"
+                  color="lightgray"
+                  style="max-width: 15px"
                 />
                 &nbsp;&nbsp;
-                <p style="color: #03993b; font-size: 14px">
+                <p style="color: #939393; font-size: 14px">
                   Your contact will not be shared with anyone.
                 </p>
               </div>
               <div
-                v-if="!isEmployeePhoneValid"
+                v-if="!isEmployeeMobileNoValid"
                 class="vee-validation-error top-margin-05 text-sm text-red-600"
               >
                 *Required
               </div>
-              <p>Address:</p>
+
+              <!-- AUTOCOMPLETE ADDRESS DETAILS -->
+              <div class="flex items-center gap-1">
+                <span class="text-md font-medium text-gray-800">Address:</span>
+                <BaseIcon
+                  icon="circle-info"
+                  color="gray"
+                  style="max-width: 15px"
+                  data-toggle="tooltip"
+                  title="Address will selected automatically as you type 'Venue Address' above"
+                />
+              </div>
+
+              <!-- Address -->
               <ValidationProvider
                 v-slot="{ errors }"
                 rules="required"
@@ -214,7 +246,7 @@
                 <BaseSelect
                   v-model="autoCompleteAddress.address"
                   :options="addressArr"
-                  label="Auto select address"
+                  label="Auto complete address"
                   :class="errors.length > 0 && 'error'"
                   @input="updateAddress"
                 />
@@ -225,6 +257,8 @@
                   {{ errors[0] }}
                 </p>
               </ValidationProvider>
+
+              <!-- Manual address -->
               <ValidationProvider
                 v-if="manualAddressSelected"
                 v-slot="{ errors }"
@@ -244,7 +278,9 @@
                   {{ errors[0] }}
                 </p>
               </ValidationProvider>
+
               <div class="grid grid-cols-3 lg:grid-cols-3 gap-4">
+                <!-- City -->
                 <ValidationProvider
                   v-slot="{ errors }"
                   rules="max:28|required"
@@ -269,6 +305,8 @@
                     {{ errors[0] }}
                   </p>
                 </ValidationProvider>
+
+                <!-- State -->
                 <ValidationProvider
                   v-slot="{ errors }"
                   rules="required"
@@ -294,6 +332,8 @@
                     {{ errors[0] }}
                   </p>
                 </ValidationProvider>
+
+                <!-- Zip -->
                 <ValidationProvider
                   v-slot="{ errors }"
                   rules="required"
@@ -320,7 +360,9 @@
                   </p>
                 </ValidationProvider>
               </div>
+
               <div class="grid lg:grid-cols-2 gap-4">
+                <!-- Country -->
                 <ValidationProvider
                   v-slot="{ errors }"
                   rules="max:28|required"
@@ -346,6 +388,8 @@
                     {{ errors[0] }}
                   </p>
                 </ValidationProvider>
+
+                <!-- Phone Number -->
                 <div class="block relative box-content h-12">
                   <vue-tel-input
                     :inputOptions="{ placeholder: 'Phone Number' }"
@@ -360,10 +404,10 @@
                     "
                     :class="{
                       readonly:
-                        autoCompleteAddress.phoneNumber && autoAddressSelected,
+                        autoCompleteAddress.phoneNo && autoAddressSelected,
                     }"
-                    v-model="autoCompleteAddress.phoneNumber"
-                    @blur="validateVenuePhoneNumber"
+                    v-model="autoCompleteAddress.phoneNo"
+                    @blur="validateVenuePhoneNo"
                     v-bind="bindPhoneInputProps"
                   ></vue-tel-input>
                 </div>
@@ -388,6 +432,8 @@
                 "
               ></span>
             </div>
+
+            <!-- FOUND ITEM'S DETAILS -->
             <div class="card p-6 space-y-4">
               <div class="form-title">
                 <h1
@@ -415,7 +461,7 @@
 
               <div class="block">
                 <label
-                  class="block mb-2 text-sm font-medium text-gray-800"
+                  class="block text-md font-medium text-gray-800"
                   for="itemImage"
                   >Found item image</label
                 >
@@ -800,6 +846,8 @@
                   </div>
                 </div>
               </div>
+
+              <!-- Item Description -->
               <ValidationProvider
                 v-slot="{ errors }"
                 rules="required"
@@ -807,7 +855,7 @@
               >
                 <BaseSelect
                   v-model="itemDescription"
-                  :options="itemDescriptionArr"
+                  :options="itemDescriptionOptions"
                   label="Item Description"
                   :class="errors.length > 0 && 'error'"
                   @input="setItemDetails"
@@ -819,6 +867,8 @@
                   {{ errors[0] }}
                 </p>
               </ValidationProvider>
+
+              <!-- Package Type -->
               <ValidationProvider
                 v-slot="{ errors }"
                 rules="required"
@@ -826,7 +876,7 @@
               >
                 <BaseSelect
                   v-model="packageType"
-                  :options="packageTypeArr"
+                  :options="packageTypeOptions"
                   label="Package Type"
                   :class="errors.length > 0 && 'error'"
                 />
@@ -837,53 +887,66 @@
                   {{ errors[0] }}
                 </p>
               </ValidationProvider>
-              <label class="block mb-1 text-sm font-medium text-gray-800"
+
+              <!-- WEIGHT -->
+              <label class="block text-md font-medium text-gray-800"
                 >Weight</label
               >
-              <ValidationProvider
-                v-slot="{ errors }"
-                rules="max:28|required"
-                class="block"
-              >
-                <BaseInput
-                  v-model="weight"
-                  label="Pounds"
-                  type="text"
-                  :class="errors.length > 0 && 'error'"
-                />
-                <p
-                  v-if="errors.length"
-                  class="vee-validation-error mt-2 text-sm text-red-600"
+              <div class="grid lg:grid-cols-2 gap-4">
+                <!-- Weight Pounds-->
+                <ValidationProvider
+                  v-slot="{ errors }"
+                  rules="int|weight:@ounces"
+                  class="block"
+                  name="Pounds"
                 >
-                  {{ errors[0] }}
-                </p>
-              </ValidationProvider>
-              <ValidationProvider
-                v-slot="{ errors }"
-                rules="required"
-                class="block"
-              >
-                <BaseSelect
-                  v-model="weightOunces"
-                  :options="weightOuncesArr"
-                  label="Ounces"
-                  :class="errors.length > 0 && 'error'"
-                />
-                <p
-                  v-if="errors.length"
-                  class="vee-validation-error mt-2 text-sm text-red-600"
+                  <BaseInput
+                    v-model="weight"
+                    label="Pounds"
+                    type="text"
+                    :class="errors.length > 0 && 'error'"
+                  />
+                  <p
+                    v-if="errors.length"
+                    class="vee-validation-error mt-2 text-sm text-red-600"
+                  >
+                    {{ errors[0] }}
+                  </p>
+                </ValidationProvider>
+
+                <!-- Weight Ounces -->
+                <ValidationProvider
+                  v-slot="{ errors }"
+                  rules="int|weight:@pounds"
+                  class="block"
+                  name="Ounces"
                 >
-                  {{ errors[0] }}
-                </p>
-              </ValidationProvider>
-              <label class="block mb-1 text-sm font-medium text-gray-800"
+                  <BaseSelect
+                    v-model="weightOunces"
+                    :options="weightOuncesOptions"
+                    label="Ounces"
+                    :class="errors.length > 0 && 'error'"
+                  />
+                  <p
+                    v-if="errors.length"
+                    class="vee-validation-error mt-2 text-sm text-red-600"
+                  >
+                    {{ errors[0] }}
+                  </p>
+                </ValidationProvider>
+              </div>
+
+              <!-- DIMENSIONS -->
+              <label class="block text-md font-medium text-gray-800"
                 >Dimensions (Inches)</label
               >
               <div class="flex justify-between gap-4">
+                <!-- Length -->
                 <ValidationProvider
                   v-slot="{ errors }"
-                  rules="max:28|required"
+                  rules="required|float|positiveNumber"
                   class="block lg:col-span-2"
+                  name="Length"
                 >
                   <BaseInput
                     v-model="itemLength"
@@ -898,10 +961,13 @@
                     {{ errors[0] }}
                   </p>
                 </ValidationProvider>
+
+                <!-- Width -->
                 <ValidationProvider
                   v-slot="{ errors }"
-                  rules="max:28|required"
+                  rules="required|float|positiveNumber"
                   class="block lg:col-span-2"
+                  name="Width"
                 >
                   <BaseInput
                     v-model="itemWidth"
@@ -916,10 +982,13 @@
                     {{ errors[0] }}
                   </p>
                 </ValidationProvider>
+
+                <!-- Height -->
                 <ValidationProvider
                   v-slot="{ errors }"
-                  rules="max:28|required"
+                  rules="required|float|positiveNumber"
                   class="block lg:col-span-2"
+                  name="Height"
                 >
                   <BaseInput
                     v-model="itemHeight"
@@ -935,6 +1004,8 @@
                   </p>
                 </ValidationProvider>
               </div>
+
+              <!-- Item Status -->
               <ValidationProvider
                 v-slot="{ errors }"
                 rules="required"
@@ -942,7 +1013,7 @@
               >
                 <BaseSelect
                   v-model="itemStatus"
-                  :options="itemStatusArr"
+                  :options="itemStatusOptions"
                   label="Item Status"
                   :class="errors.length > 0 && 'error'"
                 />
@@ -953,7 +1024,10 @@
                   {{ errors[0] }}
                 </p>
               </ValidationProvider>
+
+              <!-- RECEIVER DETAILS -->
               <template v-if="showReceiverInputs">
+                <!-- Receiver Name -->
                 <ValidationProvider
                   v-slot="{ errors }"
                   rules="max:100|required"
@@ -972,6 +1046,8 @@
                     {{ errors[0] }}
                   </p>
                 </ValidationProvider>
+
+                <!-- Receiver Email -->
                 <ValidationProvider
                   v-slot="{ errors }"
                   rules="required|email"
@@ -991,6 +1067,8 @@
                     {{ errors[0] }}
                   </p>
                 </ValidationProvider>
+
+                <!-- Receiver Mobile Number -->
                 <div class="block relative box-content h-12">
                   <vue-tel-input
                     :inputOptions="{ placeholder: 'Receiver Mobile No.' }"
@@ -1003,18 +1081,19 @@
                       rounded-lg
                       h-full
                     "
-                    v-model="receiverPhone"
+                    v-model="receiverMobileNo"
                     v-bind="bindPhoneInputProps"
-                    @blur="validateReceiverPhoneNumber"
+                    @blur="validateReceiverMobileNo"
                   ></vue-tel-input>
                   <div
-                    v-if="!isReceiverPhoneValid"
+                    v-if="!isReceiverMobileNoValid"
                     class="vee-validation-error mt-2 text-sm text-red-600"
                   >
                     *Required
                   </div>
                 </div>
               </template>
+
               <div
                 v-show="showValidateAlert"
                 class="
@@ -1030,7 +1109,7 @@
                 <span class="font-medium">Oops!</span> Please fill all required
                 fields and try submitting again.
               </div>
-              <!-- onclick="this.classList.toggle('button--loading')" -->
+
               <div class="flex justify-end">
                 <button
                   :class="{ 'button--loading': isLoading }"
@@ -1067,29 +1146,7 @@
         </ValidationObserver>
       </div>
       <div v-else>
-        <div
-          wire:loading
-          class="
-            h-screen
-            z-50
-            overflow-hidden
-            flex flex-col
-            items-center
-            justify-center
-          "
-        >
-          <div
-            class="
-              loader
-              ease-linear
-              rounded-full
-              border-4 border-t-4 border-gray-200
-              h-12
-              w-12
-              mb-4
-            "
-          ></div>
-        </div>
+        <BaseLoader />
       </div>
     </div>
   </div>
@@ -1097,12 +1154,15 @@
 
 <script>
 import { ValidationObserver, ValidationProvider } from "vee-validate";
-import BaseInput from "~/components/base/BaseInput.vue";
-import BaseSelect from "~/components/base/BaseSelect.vue";
 import { mapGetters } from "vuex";
 import RedactImage from "~/components/redactEditor/RedactImage.vue";
 import VueCropper from "vue-cropperjs";
 import "cropperjs/dist/cropper.css";
+import {
+  itemDescriptionOptions,
+  weightOuncesOptions,
+  venueOptions,
+} from "static/defaults.js";
 
 export default {
   data: () => ({
@@ -1122,101 +1182,28 @@ export default {
     manualAddressSelected: false,
     manualAddress: "",
     address: "",
-    // city: "",
-    // state: "",
-    // country: "",
-    // zipcode: "",
     manualVenue: "",
-    venue: "",
-    venueArr: ["Hotel", "Restaurant", "Airport", "Other"],
-    // venuePhone: "",
-    employeePhone: "",
+    venueType: "",
+    venueOptions: venueOptions,
+    employeeMobileNo: "",
     foundDate: new Date().toISOString().slice(0, 10),
     venueManually: false,
     itemDescription: "",
-    itemDescriptionArr: [
-      "Laptop",
-      "Tablet",
-      "Cell phone",
-      "Mobile Phone",
-      "Pillow",
-      "Shoes",
-      "Slipper",
-      "Socks",
-      "Headphone",
-      "Earphone",
-      "Wristwatch",
-      "ID",
-      "Credit Card",
-      "Passport",
-      "Phone charger",
-      "Charger for Laptop",
-      "Blanket",
-      "Shirt",
-      "Pant",
-      "T-shirt",
-      "Clothes",
-      "Jacket",
-      "Suit",
-      "Water bottle",
-      "Stuffed toy",
-      "Bed sheet",
-      "Towel",
-      "Tool box",
-      "Box - Shoe size",
-      "Small Box",
-      "Medium Box",
-      "Large Box",
-      "Bagpack - Carry on",
-      "Luggage - Carry on",
-      "Luggage - Check in size",
-      "Documents",
-      "Keys",
-      "Purse",
-      "Wallet",
-      "Medication Pills",
-      "Folder",
-      "Jewelery",
-      "Thermos",
-      "Other",
-    ],
+    itemDescriptionOptions: itemDescriptionOptions,
     packageType: "",
-    packageTypeArr: ["Box", "Envelope"],
+    packageTypeOptions: ["Box", "Envelope"],
     weight: "",
     weightOunces: "",
-    weightOuncesArr: [
-      "0",
-      "1",
-      "2",
-      "3",
-      "4",
-      "5",
-      "6",
-      "7",
-      "8",
-      "9",
-      "10",
-      "11",
-      "12",
-      "13",
-      "14",
-      "15",
-      "16",
-    ],
+    weightOuncesOptions: weightOuncesOptions,
     itemLength: "",
     itemWidth: "",
     itemHeight: "",
     itemStatus: "",
-    itemStatusArr: ["Claimed", "Unclaimed"],
+    itemStatusOptions: ["Claimed", "Unclaimed"],
     showReceiverInputs: false,
     receiverName: "",
     receiverEmail: "",
-    receiverPhone: "",
-    responseData: {
-      venueName: [],
-      venueEmail: [],
-      venuePhone: [],
-    },
+    receiverMobileNo: "",
     addressArr: ["Other"],
     itemImage: "",
     // canvasWidth: "600",
@@ -1225,7 +1212,6 @@ export default {
     // stateCrop: true,
     size_icon: "2x",
     isSavingImage: false,
-    // loadingSpinner: false,
     imageRecognitionData: [],
     image: "",
     imageKey: "",
@@ -1238,8 +1224,6 @@ export default {
       placeholder: "Enter a phone number",
       name: "telephone",
       maxLen: 15,
-      // wrapperClasses: "",
-      // inputClasses: "",
       inputOptions: {
         showDialCode: false,
       },
@@ -1248,20 +1232,15 @@ export default {
     isLoading: false,
     isLoadingItemDetails: false,
     isVenuePhoneValid: true,
-    isEmployeePhoneValid: true,
-    isReceiverPhoneValid: true,
-    currentPosition: {
-      lat: null,
-      long: null,
-    },
-    isLoadingAddresses: true,
+    isEmployeeMobileNoValid: true,
+    isReceiverMobileNoValid: true,
     autoCompleteAddress: {
       address: "",
       city: "",
       state: "",
       country: "",
       zipcode: "",
-      phoneNumber: "",
+      phoneNo: "",
     },
     autoCompleteAddressArr: [],
   }),
@@ -1270,17 +1249,15 @@ export default {
     VueCropper,
     ValidationObserver,
     ValidationProvider,
-    BaseInput,
-    BaseSelect,
   },
   computed: {
     ...mapGetters("item", ["itemDetails"]),
-    displayVenueName() {
-      if (this.venue === "Restaurent") {
-        return "Restaurent Name";
-      } else if (this.venue === "Hotel") {
+    venueLabel() {
+      if (this.venueType === "Restaurant") {
+        return "Restaurant Name";
+      } else if (this.venueType === "Hotel") {
         return "Hotel Name";
-      } else if (this.venue === "Airport") {
+      } else if (this.venueType === "Airport") {
         return "Airport Code";
       } else {
         return "Venue Address";
@@ -1291,32 +1268,9 @@ export default {
     },
   },
   methods: {
-    getCurrentPosition() {
-      fetch("http://ip-api.com/json")
-        .then((data) => {
-          return data.json();
-        })
-        .then(async (data) => {
-          this.currentPosition = { lat: data.lat, long: data.lon };
-        });
-    },
     getAddress() {
-      // this.autoCompleteAddress = {};
-      // this.isLoadingAddresses = true;
       const autocomplete = new google.maps.places.Autocomplete(
         document.getElementById("autocomplete")
-        // {
-        //   bounds: new google.maps.LatLngBounds(
-        //     new google.maps.LatLng(
-        //       this.currentPosition.lat,
-        //       this.currentPosition.long
-        //     )
-        //   ),
-        // }
-        // {
-        //   types: ["address"],
-        //   fields: ["address_components", "geometry"],
-        // }
       );
       autocomplete.addListener("place_changed", () => {
         this.autoCompleteAddress = {
@@ -1325,7 +1279,7 @@ export default {
           state: "",
           country: "",
           zipcode: "",
-          phoneNumber: "",
+          phoneNo: "",
         };
         let address = autocomplete.getPlace();
         let index = this.addressArr.findIndex((addressObj) => {
@@ -1337,10 +1291,9 @@ export default {
         let obj = {};
         this.autoCompleteAddress.address = this.addressArr[0];
         obj.address = this.addressArr[0];
-        this.autoCompleteAddress.phoneNumber =
+        this.autoCompleteAddress.phoneNo =
           address.international_phone_number || address.formatted_phone_number;
-        ("");
-        obj.phoneNumber = this.autoCompleteAddress.phoneNumber;
+        obj.phoneNo = this.autoCompleteAddress.phoneNo;
 
         address.address_components.forEach((component) => {
           component.types.forEach((type) => {
@@ -1379,11 +1332,15 @@ export default {
               state: addressObj.state,
               country: addressObj.country,
               zipcode: addressObj.zipcode,
-              phoneNumber: addressObj.phoneNumber,
+              phoneNo: addressObj.phoneNo,
             };
           }
         });
       }
+    },
+    clearAddress() {
+      this.address = "";
+      this.resetAddressFields();
     },
     resetAddressFields() {
       this.autoCompleteAddress = {
@@ -1392,28 +1349,28 @@ export default {
         state: "",
         country: "",
         zipcode: "",
-        phoneNumber: "",
+        phoneNo: "",
       };
     },
-    validateVenuePhoneNumber() {
-      if (!this.autoCompleteAddress.phoneNumber) {
+    validateVenuePhoneNo() {
+      if (!this.autoCompleteAddress.phoneNo) {
         this.isVenuePhoneValid = false;
       } else {
         this.isVenuePhoneValid = true;
       }
     },
-    validateEmployeePhoneNumber() {
-      if (!this.employeePhone) {
-        this.isEmployeePhoneValid = false;
+    validateEmployeeMobileNo() {
+      if (!this.employeeMobileNo) {
+        this.isEmployeeMobileNoValid = false;
       } else {
-        this.isEmployeePhoneValid = true;
+        this.isEmployeeMobileNoValid = true;
       }
     },
-    validateReceiverPhoneNumber() {
-      if (!this.receiverPhone) {
-        this.isReceiverPhoneValid = false;
+    validateReceiverMobileNo() {
+      if (!this.receiverMobileNo) {
+        this.isReceiverMobileNoValid = false;
       } else {
-        this.isReceiverPhoneValid = true;
+        this.isReceiverMobileNoValid = true;
       }
     },
     formatMobileNumber(phoneNumber) {
@@ -1778,35 +1735,34 @@ export default {
       }
     },
     async onSubmit() {
-      this.validateVenuePhoneNumber();
-      this.validateEmployeePhoneNumber();
-      if (this.itemStatus == "Claimed") {
-        this.validateReceiverPhoneNumber();
-      }
+      this.validateVenuePhoneNo();
+      this.validateEmployeeMobileNo();
+      if (this.itemStatus == "Claimed") this.validateReceiverMobileNo();
+
       this.isLoading = true;
       let venuePhoneNo = this.formatMobileNumber(
-        this.autoCompleteAddress.phoneNumber
+        this.autoCompleteAddress.phoneNo
       );
-      let employeePhone = this.formatMobileNumber(this.employeePhone);
+      let employeeMobileNo = this.formatMobileNumber(this.employeeMobileNo);
       const isValid = await this.$refs.observer.validate();
       if (
         !isValid ||
         !this.isVenuePhoneValid ||
-        !this.isEmployeePhoneValid ||
-        !this.isReceiverPhoneValid
+        !this.isEmployeeMobileNoValid ||
+        !this.isReceiverMobileNoValid
       ) {
         this.showValidateAlert = true;
         this.isLoading = false;
       } else {
         this.showValidateAlert = false;
         const params = {
-          venu_type: this.venue === "Other" ? this.manualVenue : this.venue,
+          venu_type:
+            this.venueType === "Other" ? this.manualVenue : this.venueType,
           datse: this.foundDate,
-          // venue_name: this.venueName,
           venue_email: this.venueEmail,
           secondary_email: this.venueSecondaryEmail,
           venue_phone_no: venuePhoneNo,
-          employee_mobile_no: employeePhone,
+          employee_mobile_no: employeeMobileNo,
           address:
             this.autoCompleteAddress.address === "Other"
               ? this.manualAddress
@@ -1827,10 +1783,10 @@ export default {
         };
         params.foundItemId = this.foundItemId;
         if (this.itemStatus === "Claimed") {
-          let receiverPhone = this.formatMobileNumber(this.receiverPhone);
+          let receiverMobileNo = this.formatMobileNumber(this.receiverMobileNo);
           params.receiver_name = this.receiverName;
           params.receiver_email = this.receiverEmail;
-          params.receiver_mobile_no = receiverPhone;
+          params.receiver_mobile_no = receiverMobileNo;
         }
 
         this.$store.commit("item/SET_ITEM_DETAILS", {
@@ -1843,16 +1799,9 @@ export default {
           this.$nextTick(() => {
             this.$router.push({ path: "/detail-confirmation" });
           });
-        }, 1000);
+        }, 300);
       }
     },
-    resetForm() {
-      console.log("======Reset");
-    },
-    // editMode(){
-    //   // this.enableEdit = true;
-    //   this.imgForEditor = this.imgSrc;
-    // },
     undo() {
       this.$refs.redacter.revert();
     },
@@ -1949,12 +1898,10 @@ export default {
       this.$axios.post("/demo", { file }).then((response) => {
         if (response.status === 200) {
           this.isSavingImage = false;
-          this.$toast.info("Image Saved Successfully!", {
-            hideProgressBar: true,
-          });
-          let tempItemDescriptionArr = this.itemDescriptionArr;
+          this.$toast.info("Image Saved Successfully!");
+          let tempItemDescriptionArr = this.itemDescriptionOptions;
           this.imageRecognitionData = response.data.data;
-          this.itemDescriptionArr = response.data.data
+          this.itemDescriptionOptions = response.data.data
             .filter((obj) => {
               if (obj.name) {
                 return true;
@@ -1965,7 +1912,7 @@ export default {
             .map((obj) => {
               return obj.name;
             });
-          this.itemDescriptionArr = this.itemDescriptionArr.map(
+          this.itemDescriptionOptions = this.itemDescriptionOptions.map(
             (apiDescription) => {
               let description = "";
               for (let i = 0; i < tempItemDescriptionArr.length; i++) {
@@ -1987,7 +1934,7 @@ export default {
               return description;
             }
           );
-          this.itemDescription = this.itemDescriptionArr[0];
+          this.itemDescription = this.itemDescriptionOptions[0];
           this.image =
             this.imageRecognitionData[
               this.imageRecognitionData.length - 1
@@ -2007,7 +1954,7 @@ export default {
     },
   },
   watch: {
-    venue(newValue, oldValue) {
+    venueType(newValue, oldValue) {
       if (newValue != oldValue) {
         if (newValue == "Other") {
           this.venueManually = true;
@@ -2382,15 +2329,7 @@ export default {
       }
     },
   },
-  created() {
-    this.$root.$on("detail-submitted", (data) => {
-      if (data) {
-        this.resetForm();
-      }
-    });
-  },
   mounted() {
-    this.getCurrentPosition();
     if (this.$route.query.id) {
       this.isLoadingItemDetails = true;
       this.foundItemId = this.$route.query.id;
@@ -2402,21 +2341,21 @@ export default {
           if (response.status === 200) {
             this.isLoadingItemDetails = false;
             let data = response.data.data.Item;
-            let index = this.venueArr.indexOf(data.venu_type) !== -1;
-            if (index) this.venue = data.venu_type;
+            let index = this.venueOptions.indexOf(data.venu_type) !== -1;
+            if (index) this.venueType = data.venu_type;
             else {
-              this.venue = "Other";
+              this.venueType = "Other";
               this.manualVenue = data.venu_type;
             }
             this.foundDate = new Date().toISOString().slice(0, 10);
             this.venueEmail = data.venue_email;
             this.venueSecondaryEmail = data.secondary_email;
-            this.employeePhone = data.employee_mobile_no;
+            this.employeeMobileNo = data.employee_mobile_no;
             this.addressArr.unshift(data.address);
             this.address = data.address;
             this.autoCompleteAddress.address = this.addressArr[0];
             // this.manualAddress = data.address;
-            this.autoCompleteAddress.phoneNumber = data.venue_phone_no;
+            this.autoCompleteAddress.phoneNo = data.venue_phone_no;
             this.autoCompleteAddress.city = data.city;
             this.autoCompleteAddress.state = data.states;
             this.autoCompleteAddress.country = data.country;
@@ -2434,7 +2373,7 @@ export default {
             if (data.item_status === 0) {
               this.receiverName = data.receiver_name;
               this.receiverEmail = data.receiver_email;
-              this.receiverPhone = data.receiver_mobile_no;
+              this.receiverMobileNo = data.receiver_mobile_no;
             }
           }
         })
@@ -2443,10 +2382,10 @@ export default {
       this.senderFormTitle = "EDIT SENDER'S DETAILS";
       this.foundItemFormTitle = "EDIT FOUND ITEM'S DETAILS";
       let data = this.$route.params.itemDetails;
-      var index = this.venueArr.indexOf(data.venu_type) !== -1;
-      if (index) this.venue = data.venu_type;
+      var index = this.venueOptions.indexOf(data.venu_type) !== -1;
+      if (index) this.venueType = data.venu_type;
       else {
-        this.venue = "Other";
+        this.venueType = "Other";
         this.manualVenue = data.venu_type;
       }
       if (data.foundItemId) {
@@ -2457,12 +2396,12 @@ export default {
       this.foundDate = data.datse;
       this.venueEmail = data.venue_email;
       this.venueSecondaryEmail = data.secondary_email;
-      this.employeePhone = data.employee_mobile_no;
+      this.employeeMobileNo = data.employee_mobile_no;
       this.addressArr.unshift(data.address);
       this.address = data.address;
       this.autoCompleteAddress.address = this.addressArr[0];
       // this.manualAddress = data.manualAddress;
-      this.autoCompleteAddress.phoneNumber = data.venue_phone_no;
+      this.autoCompleteAddress.phoneNo = data.venue_phone_no;
       this.autoCompleteAddress.city = data.city;
       this.autoCompleteAddress.state = data.states;
       this.autoCompleteAddress.country = data.country;
@@ -2480,7 +2419,7 @@ export default {
       if (data.item_status === 0) {
         this.receiverName = data.receiver_name;
         this.receiverEmail = data.receiver_email;
-        this.receiverPhone = data.receiver_mobile_no;
+        this.receiverMobileNo = data.receiver_mobile_no;
       }
     } else {
       this.senderFormTitle = "SENDER'S DETAILS";
@@ -2581,12 +2520,6 @@ canvas {
 
 .top-margin-3 {
   margin-top: 3px !important;
-}
-
-.shieldIcon {
-  max-width: 15px;
-  color: #03993b;
-  opacity: 0.75;
 }
 
 .vue-cropper-container {
@@ -2748,5 +2681,9 @@ canvas {
 .readonly .vti__dropdown,
 .readonly input {
   @apply bg-gray-100 cursor-pointer;
+}
+
+.toasted-container .toasted .action.icon svg {
+  font-size: 16px;
 }
 </style>

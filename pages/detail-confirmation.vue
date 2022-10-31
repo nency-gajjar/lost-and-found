@@ -616,7 +616,6 @@
 <script>
 import { mapGetters } from "vuex";
 import _ from "lodash";
-import BaseDialog from "@/components/base/BaseDialog.vue";
 export default {
   data() {
     return {
@@ -626,7 +625,6 @@ export default {
       dialogTitle: "",
     };
   },
-  components: { BaseDialog },
   computed: {
     ...mapGetters("item", ["itemDetails"]),
     btnName() {
@@ -634,7 +632,7 @@ export default {
     },
   },
   methods: {
-    closeDialog(){
+    closeDialog() {
       this.showDialog = false;
       this.$nextTick(() => {
         this.$router.push({ path: "/found-items" });
@@ -695,7 +693,7 @@ export default {
                 requestData.is_default = "Pending";
               }
               diff.forEach((key) => {
-                if(params[key] != undefined){
+                if (params[key] != undefined) {
                   requestData[key] = params[key];
                 }
               });
