@@ -234,6 +234,9 @@ export default {
         .post("/loginAdmin", params)
         .then((response) => {
             if (response.status === 200) {
+              this.$store.commit("admin/SET_TOKEN", {
+                token: response.data.data.AuthenticationResult.IdToken
+              });
               this.isLoading = false;
               this.$toast.info("Login successfully!", {
                 hideProgressBar: true,

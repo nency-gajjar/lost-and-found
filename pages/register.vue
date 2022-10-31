@@ -171,6 +171,11 @@
 import { ValidationObserver, ValidationProvider } from "vee-validate";
 import BaseInput from "~/components/base/BaseInput.vue";
 export default {
+  middleware(context) {
+    if (!context.app.$cookiz.get('token')) {
+      return context.redirect('/login');
+    }
+  },
   components: {
     ValidationObserver,
     ValidationProvider,
@@ -201,28 +206,28 @@ export default {
         // console.log(this.email);
         // console.log(this.password);
 
-        // const params = {
-        //   email: this.email,
-        //   password: this.password
-        // };
+        const params = {
+          email: this.email,
+          password: this.password
+        };
 
-        // this.$axios
-        // .post("/registerAdmin", params)
-        // .then((response) => {
-        //     if (response.status === 200) {
-        //       this.isLoading = false;
-        //       this.$toast.info("Register successfully!", {
-        //         hideProgressBar: true,
-        //       });
-        //     }
-        // })
-        // .catch((error) => {
-        //     this.isLoading = false;
-        //     this.$toast.error("Something went wrong! Please try again.", {
-        //       hideProgressBar: true,
-        //     });
-        //     console.log(error);
-        // });
+        this.$axios
+        .post("/registerAdmin", params)
+        .then((response) => {
+            if (response.status === 200) {
+              this.isLoading = false;
+              this.$toast.info("Register successfully!", {
+                hideProgressBar: true,
+              });
+            }
+        })
+        .catch((error) => {
+            this.isLoading = false;
+            this.$toast.error("Something went wrong! Please try again.", {
+              hideProgressBar: true,
+            });
+            console.log(error);
+        });
       }
     },
   },

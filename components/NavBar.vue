@@ -10,6 +10,9 @@
         <div class="link-container">
           <NuxtLink to="/found-items" class="btn">Found Items</NuxtLink>
         </div>
+        <div v-show="isAdminLogin" class="link-container">
+          <NuxtLink to="/register" class="btn">Register</NuxtLink>
+        </div>
         <div class="link-container">
           <NuxtLink to="/login" class="btn">Login</NuxtLink>
         </div>
@@ -24,6 +27,9 @@
       <div v-show="menuVisible" class="mobile-menu">
         <div>
           <NuxtLink to="/found-items" class="opacity-100">Found Items</NuxtLink>
+        </div>
+        <div v-show="isAdminLogin">
+          <NuxtLink to="/register" class="opacity-100">Register</NuxtLink>
         </div>
         <div>
           <NuxtLink to="/login" class="opacity-100">Login</NuxtLink>
@@ -45,6 +51,14 @@ export default {
       this.menuVisible = !this.menuVisible;
     },
   },
+  computed: {
+    isAdminLogin(){
+      if (this.$cookiz.get('token') || this.$store.getters['admin/token']) {
+        return true;
+      }
+      return false;
+    }
+  }
 };
 </script>
 
