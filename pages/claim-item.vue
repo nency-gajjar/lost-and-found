@@ -319,8 +319,9 @@
     <BaseDialog
       :showDialog="showDialog"
       :icon="{ name: 'circle-check', color: 'green', size: '3x' }"
-      title="Your details submitted successfully!"
-      buttonTitle="Close"
+      title="Details submitted successfully!"
+      :message="dialogMessage"
+      buttonTitle="Okay"
       @close="closeDialog"
     />
   </div>
@@ -329,19 +330,11 @@
 <script>
 import "vue-select/dist/vue-select.css";
 import { ValidationObserver, ValidationProvider } from "vee-validate";
-import BaseInput from "~/components/base/BaseInput.vue";
-import BaseSelect from "~/components/base/BaseSelect.vue";
-import BaseDialog from "@/components/base/BaseDialog.vue";
-import VSelect from "vue-select";
 
 export default {
   components: {
     ValidationObserver,
     ValidationProvider,
-    BaseInput,
-    BaseSelect,
-    BaseDialog,
-    VSelect,
   },
   data() {
     return {
@@ -381,6 +374,11 @@ export default {
       venueEmail: "",
       secondaryEmail: "",
     };
+  },
+  computed: {
+    dialogMessage() {
+      return "We have sent the notification to the person who has uploaded the item with the entered Claim details. Please wait for the person to perform the necessary action on your claim request. We will notify you once they have taken appropriate actions for your claim request.";
+    },
   },
   methods: {
     getAddress() {

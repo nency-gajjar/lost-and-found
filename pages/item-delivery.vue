@@ -172,16 +172,15 @@
     <BaseDialog
       :showDialog="showDialog"
       :icon="{ name: 'circle-check', color: 'green', size: '3x' }"
-      title="Your details submitted successfully!"
-      buttonTitle="Close"
+      :message="dialogMessage"
+      title="Details submitted successfully!"
+      buttonTitle="Okay"
       @close="closeDialog"
     />
   </div>
 </template>
   
 <script>
-import BaseDialog from "@/components/base/BaseDialog.vue";
-
 export default {
   data: () => ({
     showDialog: false,
@@ -192,13 +191,19 @@ export default {
     isLoading: false,
     itemId: "",
   }),
-  components: {
-    BaseDialog,
-  },
   mounted() {
     if (this.$route.query.id) {
       this.itemId = this.$route.query.id;
     }
+  },
+  computed: {
+    dialogMessage() {
+      if (this.deliveryType === "0") {
+        return "We have sent the notification link on your email. You can click on the link received on the mail to proceed further with the shipping.";
+      } else {
+        return " We have sent the notification to the person who has uploaded the item, with the entered Pickup details. You can pickup your item accordingly at the scheduled time.";
+      }
+    },
   },
   methods: {
     toggleTabs: function (tabNumber) {

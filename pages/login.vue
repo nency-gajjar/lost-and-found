@@ -187,12 +187,15 @@
 
 <script>
 import { ValidationObserver, ValidationProvider } from "vee-validate";
-import BaseInput from "~/components/base/BaseInput.vue";
 export default {
+  middleware(context) {
+    if (context.app.$cookiz.get('token')) {
+      return context.redirect('/found-items');
+    }
+  },
   components: {
     ValidationObserver,
     ValidationProvider,
-    BaseInput,
   },
   data() {
     return {
@@ -240,6 +243,9 @@ export default {
               this.isLoading = false;
               this.$toast.info("Login successfully!", {
                 hideProgressBar: true,
+              });
+              this.$nextTick(() => {
+                this.$router.push({ path: "/found-items" });
               });
             }
         })

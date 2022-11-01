@@ -13,8 +13,11 @@
         <div v-show="isAdminLogin" class="link-container">
           <NuxtLink to="/register" class="btn">Register</NuxtLink>
         </div>
-        <div class="link-container">
+        <div v-show="!isAdminLogin" class="link-container">
           <NuxtLink to="/login" class="btn">Login</NuxtLink>
+        </div>
+        <div v-show="isAdminLogin" class="link-container">
+          <div class="btn" @click="logoutAdmin">Logout</div>
         </div>
         <div class="drawer-container">
           <div class="icon-container" @click="toggleMenu">
@@ -26,13 +29,21 @@
       </div>
       <div v-show="menuVisible" class="mobile-menu">
         <div>
-          <NuxtLink to="/found-items" class="opacity-100">Found Items</NuxtLink>
+          <NuxtLink
+            to="/found-items"
+            @click.native="toggleMenu"
+            class="opacity-100"
+            >Found Items</NuxtLink
+          >
         </div>
         <div v-show="isAdminLogin">
-          <NuxtLink to="/register" class="opacity-100">Register</NuxtLink>
+          <NuxtLink to="/register" @click.native="toggleMenu" class="opacity-100">Register</NuxtLink>
         </div>
-        <div>
-          <NuxtLink to="/login" class="opacity-100">Login</NuxtLink>
+        <div v-show="!isAdminLogin">
+          <NuxtLink to="/login" @click.native="toggleMenu" class="opacity-100">Login</NuxtLink>
+        </div>
+        <div v-show="!isAdminLogin">
+          <div @click="logoutAdmin" class="opacity-100">Logout</div>
         </div>
       </div>
     </nav>
@@ -44,19 +55,32 @@ export default {
   data() {
     return {
       menuVisible: false,
+      isLogin: false,
     };
   },
   methods: {
     toggleMenu() {
       this.menuVisible = !this.menuVisible;
     },
+    logoutAdmin(){
+      this.$cookiz.remove('token');
+      this.isAdminLogin = false;
+      this.toggleMenu();
+    },
   },
   computed: {
-    isAdminLogin(){
-      if (this.$cookiz.get('token') || this.$store.getters['admin/token']) {
-        return true;
+    isAdminLogin: {
+      get(){
+        if (this.$cookiz.get('token') || this.$store.getters['admin/token']) {
+          this.isLogin = true;
+          return this.isLogin;
+        }
+        this.isLogin = false;
+        return false;
+      },
+      set(value){
+        this.isLogin = value;
       }
-      return false;
     }
   }
 };
@@ -122,7 +146,13 @@ export default {
   .mobile-menu {
     z-index: 99;
     @apply border-t;
-    @apply block py-3 fixed w-full bg-white shadow-lg px-6;
+    @apply block w-full bg-white shadow-lg;
+  }
+  .mobile-menu > div {
+    @apply px-6 py-3;
+  }
+  .mobile-menu > div:not(:last-child) {
+    border-bottom: 1px solid #ececee;
   }
 }
 </style>
