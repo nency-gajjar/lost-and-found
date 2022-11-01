@@ -197,11 +197,12 @@
               <img
                 v-else
                 class="
-                  w-full
+                  w-20
+                  contain
                   rounded-t-lg
-                  md:h-auto md:w-48 md:rounded-none md:rounded-l-lg
+                  md:rounded-none md:rounded-l-lg
                 "
-                src="@/assets/images/no-image.png"
+                src="@/assets/images/no-image4.png"
                 alt=""
               />
             </div>
@@ -227,16 +228,24 @@
                 >
                   {{ item.item_description }}
                 </div>
-                <div class="date text-[12px] ml-2">
+                <!-- <div class="date text-[12px] ml-2">
                   <BaseIcon icon="calendar-days" color="gray" />
                   <span class="font-normal text-gray-700">
                     {{ item.datse }}
                   </span>
-                </div>
+                </div> -->
               </div>
               <!-- <p class="text-sm font-normal text-gray-700">
                 {{ item.item_status === 0 ? "Claimed" : "Unclaimed" }}
               </p> -->
+              <div class="sm:text-left">
+                <div>
+                  <BaseIcon icon="calendar-days" color="gray" />
+                  <span class="text-sm font-normal text-gray-700">
+                    {{ item.datse }}
+                  </span>
+                </div>
+              </div>
               <div class="sm:text-left">
                 <div>
                   <BaseIcon icon="location-dot" color="red" />
@@ -247,7 +256,9 @@
               </div>
             </div>
           </div>
-          <div class="flex items-center justify-center my-4 sm:my-0">
+          <div class="flex items-center justify-center my-4 sm:my-0 gap-3">
+            <!-- border-accent-100 border  hover:bg-accent-200 hover:text-white -->
+            <!-- text-accent-100 -->
             <button
               class="
                 whitespace-nowrap
@@ -256,16 +267,35 @@
                 px-5
                 py-2
                 rounded-md
-                border-accent-100 border
-                text-accent-100
+                border-indigo-600 border
+                text-indigo-600
                 transition
                 duration-300
-                hover:bg-accent-200 hover:text-white
+                hover:bg-indigo-600 hover:text-white
                 focus:outline-none
               "
               @click.stop="claimItem(item)"
             >
               Claim Item
+            </button>
+            <button
+              class="
+                whitespace-nowrap
+                font-medium
+                text-sm
+                px-5
+                py-2
+                rounded-md
+                border-red-600 border
+                text-red-600
+                transition
+                duration-300
+                hover:bg-red-600 hover:text-white
+                focus:outline-none
+              "
+              @click.stop="claimItem(item)"
+            >
+              Delete Item
             </button>
           </div>
         </div>
@@ -358,6 +388,14 @@
               <!-- <p class="text-sm font-normal text-gray-700">
                 {{ item.item_status === 0 ? "Claimed" : "Unclaimed" }}
               </p> -->
+              <!-- <div class="sm:text-left">
+                <div>
+                  <BaseIcon icon="location-dot" color="red" />
+                  <span class="text-sm font-normal text-gray-700">
+                    {{ item.address }}
+                  </span>
+                </div>
+              </div> -->
               <div class="sm:text-left">
                 <div>
                   <BaseIcon icon="location-dot" color="red" />
