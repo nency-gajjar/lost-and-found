@@ -461,7 +461,7 @@
 
               <div class="block">
                 <label
-                  class="block text-md font-medium text-gray-800"
+                  class="block text-md mb-3 font-medium text-gray-800"
                   for="itemImage"
                   >Found item image</label
                 >
@@ -472,7 +472,6 @@
                     justify-center
                     bg-gray-50
                     rounded-lg
-                    h-40
                     w-full
                     border-2 border-gray-300 border-dashed
                     hover:bg-gray-100
@@ -491,7 +490,7 @@
                         pb-6
                       "
                     >
-                      <span>
+                      <span class="flex flex-col items-center sm:flex-row">
                         <input
                           type="file"
                           id="choose-file"
@@ -552,25 +551,33 @@
                           Take a Picture
                         </label>
                       </span>
-                      <p class="mt-3 text-xs text-gray-500">
-                        SVG, PNG, JPG (MAX. 800x400px)
-                      </p>
+                      <p class="mt-3 text-xs text-gray-500">PNG, JPEG, JPG.</p>
                     </div>
                   </div>
 
-                  <div v-else class="file-content flex items-center">
-                    <div
-                      class="image-card"
-                      style="
-                        flex: 1;
-                        max-width: 166px;
-                        max-height: 145px;
-                        margin: 15px;
-                      "
-                    >
+                  <div
+                    v-else
+                    class="
+                      w-full
+                      justify-between
+                      flex flex-col
+                      sm:flex-row
+                      p-2
+                      sm:p-4 sm:items-center
+                    "
+                  >
+                    <div class="m-auto sm:m-0 image-card max-w-[166px]">
                       <img :src="image" alt="Item image" />
                     </div>
-                    <div class="flex justify-between">
+                    <div
+                      class="
+                        flex flex-col
+                        gap-4
+                        justify-between
+                        mt-4
+                        sm:mt-0 sm:flex-row
+                      "
+                    >
                       <button
                         v-if="imageKey"
                         @click="deleteEditable"
