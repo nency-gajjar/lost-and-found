@@ -349,6 +349,9 @@ export default {
         if (response.status === 200) {
           this.isLoading = false;
           this.lostItems = response?.data?.data;
+          if(!this.lostItems){
+            this.lostItems = [];
+          }
         }
       })
       .catch((err) => {

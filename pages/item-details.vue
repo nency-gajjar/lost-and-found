@@ -188,7 +188,7 @@
                   {{ errors[0] }}
                 </p>
               </ValidationProvider>
-              <div class="block relative box-content h-12" :class="!isEmployeePhoneValid && 'error'">
+              <div class="block relative box-content h-12" :class="!isEmployeeMobileNoValid && 'error'">
                 <vue-tel-input
                   :inputOptions="{ placeholder: 'Employee Mobile No.' }"
                   class="
@@ -1043,7 +1043,7 @@
                     {{ errors[0] }}
                   </p>
                 </ValidationProvider>
-                <div class="block relative box-content h-12" :class="!isReceiverPhoneValid && 'error'">
+                <div class="block relative box-content h-12" :class="!isReceiverMobileNoValid && 'error'">
                   <vue-tel-input
                     :inputOptions="{ placeholder: 'Receiver Mobile No.' }"
                     class="
@@ -1359,6 +1359,7 @@ export default {
     },
     formatMobileNumber(phoneNumber) {
       let arr = phoneNumber.split(" ");
+      console.log(arr);
       let countryCode = arr.shift();
       return countryCode + " " + arr.join("");
     },
@@ -1735,7 +1736,7 @@ export default {
         this.isLoading = false;
       } else {
         let venuePhoneNo = this.formatMobileNumber(
-          this.autoCompleteAddress.phoneNumber
+          this.autoCompleteAddress.phoneNo
         );
         let employeeMobileNo = this.formatMobileNumber(this.employeeMobileNo);
         this.showValidateAlert = false;
