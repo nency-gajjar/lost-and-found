@@ -233,7 +233,7 @@
                   color="gray"
                   style="max-width: 15px"
                   data-toggle="tooltip"
-                  title="Address will selected automatically as you type 'Venue Address' above"
+                  title="Address will be selected automatically as you type & select the 'Venue Address' above"
                 />
               </div>
 

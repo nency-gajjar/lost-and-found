@@ -566,8 +566,8 @@
             ></span>
           </div>
 
-          <div class="flex foundItemContainer flex-col">
-            <div class="flex flex-col w-full">
+          <div class="flex foundItemContainer">
+            <div class="flex flex-col grow">
               <div class="flex items-center mt-3 flex-wrap">
                 <div
                   class="
@@ -581,7 +581,9 @@
                 >
                   Item Description
                 </div>
-                <div class="text-gray-600 text-left md:w-7/12 sm:w-6/12">
+                <div
+                  class="text-gray-600 text-left md:w-7/12 sm:w-6/12 sm:pl-3"
+                >
                   {{ itemDetails.item_description }}
                 </div>
               </div>
@@ -598,7 +600,9 @@
                 >
                   Package Type
                 </div>
-                <div class="text-gray-600 text-left md:w-7/12 sm:w-6/12">
+                <div
+                  class="text-gray-600 text-left md:w-7/12 sm:w-6/12 sm:pl-3"
+                >
                   {{ itemDetails.package_type }}
                 </div>
               </div>
@@ -615,7 +619,9 @@
                 >
                   Weight
                 </div>
-                <div class="text-gray-600 text-left md:w-7/12 sm:w-6/12">
+                <div
+                  class="text-gray-600 text-left md:w-7/12 sm:w-6/12 sm:pl-3"
+                >
                   {{ itemDetails.weight_pounds }} lbs
                 </div>
               </div>
@@ -632,7 +638,9 @@
                 >
                   Dimension
                 </div>
-                <div class="text-gray-600 text-left md:w-7/12 sm:w-6/12">
+                <div
+                  class="text-gray-600 text-left md:w-7/12 sm:w-6/12 sm:pl-3"
+                >
                   {{ itemDetails.item_length }}(l) x
                   {{ itemDetails.item_width }}(w) x
                   {{ itemDetails.item_height }}(h) inches
@@ -651,7 +659,9 @@
                 >
                   Item Status
                 </div>
-                <div class="text-gray-600 text-left md:w-7/12 sm:w-6/12">
+                <div
+                  class="text-gray-600 text-left md:w-7/12 sm:w-6/12 sm:pl-3"
+                >
                   {{ itemDetails.item_status === 0 ? "Claimed" : "Unclaimed" }}
                 </div>
               </div>
@@ -669,7 +679,9 @@
                   >
                     Receiver's Name
                   </div>
-                  <div class="text-gray-600 text-left md:w-7/12 sm:w-6/12">
+                  <div
+                    class="text-gray-600 text-left md:w-7/12 sm:w-6/12 sm:pl-3"
+                  >
                     {{ itemDetails.receiver_name }}
                   </div>
                 </div>
@@ -687,7 +699,9 @@
                   >
                     Receiver's Email
                   </div>
-                  <div class="text-gray-600 text-left md:w-7/12 sm:w-6/12">
+                  <div
+                    class="text-gray-600 text-left md:w-7/12 sm:w-6/12 sm:pl-3"
+                  >
                     {{ itemDetails.receiver_email }}
                   </div>
                 </div>
@@ -705,14 +719,16 @@
                   >
                     Receiver's Mobile No.
                   </div>
-                  <div class="text-gray-600 text-left md:w-7/12 sm:w-6/12">
+                  <div
+                    class="text-gray-600 text-left md:w-7/12 sm:w-6/12 sm:pl-3"
+                  >
                     {{ itemDetails.receiver_mobile_no }}
                   </div>
                 </div>
               </template>
             </div>
 
-            <div v-if="image" class="text-gray-600 mt-4 text-left w-full">
+            <div v-if="image" class="mt-4 sm:mt-0 sm:w-60 w-full">
               <img class="w-full" :src="image" alt="" />
             </div>
           </div>
