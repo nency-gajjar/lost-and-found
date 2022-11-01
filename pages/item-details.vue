@@ -410,16 +410,16 @@
                     @blur="validateVenuePhoneNo"
                     v-bind="bindPhoneInputProps"
                   ></vue-tel-input>
-                </div>
-                <div
-                  v-if="!isVenuePhoneValid"
-                  class="
-                    vee-validation-error
-                    top-margin-05
-                    text-sm text-red-600
-                  "
-                >
-                  *Required
+                  <div
+                    v-if="!isVenuePhoneValid"
+                    class="
+                      vee-validation-error
+                      top-margin-05
+                      text-sm text-red-600
+                    "
+                  >
+                    *Required
+                  </div>
                 </div>
               </div>
             </div>
@@ -579,7 +579,6 @@
                       "
                     >
                       <button
-                        v-if="imageKey"
                         @click="deleteEditable"
                         type="button"
                         class="
@@ -594,7 +593,30 @@
                           rounded-md
                         "
                       >
+                        <svg
+                          v-if="isLoadingRemoveImage"
+                          class="w-5 h-5 mr-3 -ml-1 text-white animate-spin"
+                          xmlns="http://www.w3.org/2000/svg"
+                          fill="none"
+                          viewBox="0 0 24 24"
+                        >
+                          <circle
+                            class="opacity-25"
+                            cx="12"
+                            cy="12"
+                            r="10"
+                            stroke="currentColor"
+                            stroke-width="4"
+                          ></circle>
+                          <path
+                            class="opacity-75"
+                            fill="currentColor"
+                            d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
+                          ></path>
+                        </svg>
+
                         <BaseIcon
+                          v-else
                           icon="trash-can"
                           color="white"
                           size="1x"
@@ -749,8 +771,11 @@
                             <VueCropper
                               ref="cropper"
                               :src="imgSrc"
-                              alt="Source Image"
+                              :guides="false"
                               :responsive="true"
+                              :min-container-width="250"
+                              :min-container-height="300"
+                              alt="Source Image"
                             ></VueCropper>
                           </div>
                           <RedactImage
@@ -758,7 +783,6 @@
                             class="redact"
                             ref="redacter"
                             @changeConditonOfUndo="toggleUndo"
-                            max-width="400px"
                             :src="imgSrc"
                           />
                         </div>
@@ -837,7 +861,6 @@
                                 font-medium
                                 text-md
                                 leading-5
-                                uppercase
                                 py-2
                                 px-6
                                 rounded-md
@@ -1139,7 +1162,7 @@
               <div class="flex justify-end">
                 <button
                   :class="{ 'button--loading': isLoading }"
-                  type="button"
+                  type="submit"
                   class="
                     !py-3
                     font-medium
@@ -1241,6 +1264,7 @@ export default {
     imageRecognitionData: [],
     image: "",
     imageKey: "",
+    isLoadingRemoveImage: false,
     bindPhoneInputProps: {
       mode: "international",
       autoDefaultCountry: true,
@@ -1798,6 +1822,7 @@ export default {
           country: this.autoCompleteAddress.country,
           zipcode: this.autoCompleteAddress.zipcode,
           image: this.image,
+          image_key: this.imageKey,
           item_description: this.itemDescription,
           package_type: this.packageType,
           weight_pounds: this.weight,
@@ -1848,11 +1873,12 @@ export default {
     },
     deleteEditable() {
       if (this.imageKey) {
+        this.isLoadingRemoveImage = true;
         this.$axios
           .post("/removes3files", { key: this.imageKey })
           .then((response) => {
             if (response.status === 200) {
-              console.log("===remove file response", response);
+              this.isLoadingRemoveImage = false;
               this.showEditor = false;
               this.imgSrc = "";
               this.showCrop = false;
@@ -1860,8 +1886,17 @@ export default {
               this.imgPreview = false;
               // this.enableEdit = false;
               this.image = "";
+              this.$toast.info("Image Removed Successfully!");
             }
+          })
+          .catch((error) => {
+            this.$toast.error("Something went wrong! Please try again.");
+            this.isLoadingRemoveImage = false;
+            console.log(error);
           });
+      } else {
+        this.imgSrc = "";
+        this.image = "";
       }
     },
     addSquare() {
@@ -2449,6 +2484,7 @@ export default {
       this.autoCompleteAddress.state = data.states;
       this.autoCompleteAddress.country = data.country;
       this.autoCompleteAddress.zipcode = data.zipcode;
+      this.imageKey = data.image_key;
       this.image = data.image;
       this.itemDescription = data.item_description;
       this.packageType = data.package_type;

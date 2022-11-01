@@ -113,8 +113,11 @@
                   <VueCropper
                     ref="cropper"
                     :src="imgSrc"
-                    alt="Source Image"
+                    :guides="false"
                     :responsive="true"
+                    :min-container-width="250"
+                    :min-container-height="300"
+                    alt="Source Image"
                   ></VueCropper>
                 </div>
                 <RedactImage
@@ -122,24 +125,27 @@
                   class="redact"
                   ref="redacter"
                   @changeConditonOfUndo="toggleUndo"
-                  max-width="400px"
                   :src="imgSrc"
                 />
               </div>
               <div class="editor-tools mt-5 px-6 border-t pt-4">
-                <div class="icons">
-                  <div v-show="showDraw && showUndo">
+                <div class="icons gap-5">
+                  <div
+                    class="flex flex-col justify-center items-center"
+                    v-show="showDraw && showUndo"
+                  >
                     <div class="tool-undo">
                       <BaseIcon
                         icon="undo"
                         size="lg"
                         color="lightblack"
                         @click="undo()"
+                        style="padding: 10px"
                       />
                     </div>
                     <p>Undo</p>
                   </div>
-                  <div>
+                  <div class="flex flex-col justify-center items-center">
                     <div class="tool-addSquare">
                       <BaseIcon
                         v-if="!showDraw"
@@ -147,6 +153,7 @@
                         size="lg"
                         color="lightblack"
                         @click="addSquare()"
+                        style="padding: 10px"
                       />
                       <BaseIcon
                         v-else
@@ -154,12 +161,13 @@
                         size="lg"
                         color="lightblack"
                         @click="applyEdit()"
+                        style="padding: 10px"
                       />
                     </div>
                     <p v-if="!showDraw">Blackout</p>
                     <p v-else>Done</p>
                   </div>
-                  <div>
+                  <div class="flex flex-col justify-center items-center">
                     <div class="tool-crop">
                       <BaseIcon
                         v-if="!showCrop"
@@ -167,6 +175,7 @@
                         size="lg"
                         color="lightblack"
                         @click="crop()"
+                        style="padding: 10px"
                       />
                       <BaseIcon
                         v-else
@@ -174,6 +183,7 @@
                         size="lg"
                         color="lightblack"
                         @click="applyEdit()"
+                        style="padding: 10px"
                       />
                     </div>
                     <p v-if="!showCrop">Crop</p>
@@ -189,7 +199,6 @@
                       font-medium
                       text-md
                       leading-5
-                      uppercase
                       py-2
                       px-6
                       rounded-md
@@ -1170,26 +1179,36 @@ export default {
       } else {
         file = this.imgSrc;
       }
-      this.$axios.post("/demo", { file }).then((response) => {
-        if (response.status === 200) {
-          this.isSavingImage = false;
-          this.imageRecognitionData = response.data.data;
-          this.image =
-            this.imageRecognitionData[
-              this.imageRecognitionData.length - 1
-            ].image;
+      this.$axios
+        .post("/demo", { file })
+        .then((response) => {
+          if (response.status === 200) {
+            this.isSavingImage = false;
+            this.$toast.info("Image Updated Successfully!");
+            this.imageRecognitionData = response.data.data;
+            this.image =
+              this.imageRecognitionData[
+                this.imageRecognitionData.length - 1
+              ].image;
 
-          this.imageKey =
-            this.imageRecognitionData[this.imageRecognitionData.length - 2].key;
-        }
-        this.showEditor = false;
-        this.imgSrc = "";
-        this.showCrop = false;
-        this.showDraw = false;
-        this.imgPreview = false;
-        // this.enableEdit = false;
-        this.isImageEdited = true;
-      });
+            this.imageKey =
+              this.imageRecognitionData[
+                this.imageRecognitionData.length - 2
+              ].key;
+          }
+          this.showEditor = false;
+          this.imgSrc = "";
+          this.showCrop = false;
+          this.showDraw = false;
+          this.imgPreview = false;
+          // this.enableEdit = false;
+          this.isImageEdited = true;
+        })
+        .catch((error) => {
+          this.$toast.error("Something went wrong! Please try again.");
+          this.isSavingImage = false;
+          console.log(error);
+        });
     },
     filterAddressLine(itemDetails) {
       return itemDetails.address == "Other" || !itemDetails.address
@@ -1260,22 +1279,19 @@ export default {
 
 .editor-tools .icons {
   div {
-    padding-right: 7px;
+    // padding-right: 7px;
     p {
       font-size: 12px;
       text-align: center;
     }
     div {
       cursor: pointer;
-      border: 1px solid #808080;
-      border-radius: 14px;
       &:hover {
         background: #dfdfdf;
+        border-radius: 14px;
       }
-      padding: 2px 10px;
-      background-color: #f3f3f3;
-      margin-bottom: 5px;
-      color: #ff9800;
+      // padding: 5px 15px;
+      // margin-bottom: 5px;
       svg {
         width: 18px;
       }
