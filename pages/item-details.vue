@@ -627,7 +627,7 @@
                         />
                         Edit Image
                       </button>
-                      
+
                       <input
                         type="file"
                         id="choose-another-file"
@@ -763,19 +763,25 @@
                           />
                         </div>
                         <div class="editor-tools mt-5 px-6 border-t pt-4">
-                          <div class="icons">
-                            <div v-show="showDraw && showUndo">
+                          <div class="icons gap-5">
+                            <div
+                              class="flex flex-col justify-center items-center"
+                              v-show="showDraw && showUndo"
+                            >
                               <div class="tool-undo">
                                 <BaseIcon
                                   icon="undo"
                                   size="lg"
                                   color="lightblack"
                                   @click="undo()"
+                                  style="padding: 10px"
                                 />
                               </div>
                               <p>Undo</p>
                             </div>
-                            <div>
+                            <div
+                              class="flex flex-col justify-center items-center"
+                            >
                               <div class="tool-addSquare">
                                 <BaseIcon
                                   v-if="!showDraw"
@@ -783,6 +789,7 @@
                                   size="lg"
                                   color="lightblack"
                                   @click="addSquare()"
+                                  style="padding: 10px"
                                 />
                                 <BaseIcon
                                   v-else
@@ -790,12 +797,15 @@
                                   size="lg"
                                   color="lightblack"
                                   @click="applyEdit()"
+                                  style="padding: 10px"
                                 />
                               </div>
-                              <p v-if="!showDraw">Square</p>
+                              <p v-if="!showDraw">Blackout</p>
                               <p v-else>Done</p>
                             </div>
-                            <div>
+                            <div
+                              class="flex flex-col justify-center items-center"
+                            >
                               <div class="tool-crop">
                                 <BaseIcon
                                   v-if="!showCrop"
@@ -803,6 +813,7 @@
                                   size="lg"
                                   color="lightblack"
                                   @click="crop()"
+                                  style="padding: 10px"
                                 />
                                 <BaseIcon
                                   v-else
@@ -810,6 +821,7 @@
                                   size="lg"
                                   color="lightblack"
                                   @click="applyEdit()"
+                                  style="padding: 10px"
                                 />
                               </div>
                               <p v-if="!showCrop">Crop</p>
@@ -1835,7 +1847,7 @@ export default {
       // this.enableEdit = false;
     },
     deleteEditable() {
-      if(this.imageKey){
+      if (this.imageKey) {
         this.$axios
           .post("/removes3files", { key: this.imageKey })
           .then((response) => {
@@ -1896,7 +1908,7 @@ export default {
         reader.onloadend = () => {
           this.imgSrc = reader.result;
           this.showEditor = true;
-        }
+        };
         reader.readAsDataURL(file);
         // this.loadingSpinner = true;
         // setTimeout(() => {
@@ -1917,62 +1929,71 @@ export default {
       } else {
         file = this.imgSrc;
       }
-      this.$axios.post("/demo", { file }).then((response) => {
-        if (response.status === 200) {
-          this.isSavingImage = false;
-          this.$toast.info("Image Saved Successfully!");
-          let tempItemDescriptionArr = this.itemDescriptionOptions;
-          this.imageRecognitionData = response.data.data;
-          this.itemDescriptionOptions = response.data.data
-            .filter((obj) => {
-              if (obj.name) {
-                return true;
-              } else {
-                return false;
-              }
-            })
-            .map((obj) => {
-              return obj.name;
-            });
-          this.itemDescriptionOptions = this.itemDescriptionOptions.map(
-            (apiDescription) => {
-              let description = "";
-              for (let i = 0; i < tempItemDescriptionArr.length; i++) {
-                let staticDescription = tempItemDescriptionArr[i];
-                if (
-                  apiDescription
-                    .toLowerCase()
-                    .includes(staticDescription.toLowerCase()) ||
-                  staticDescription
-                    .toLowerCase()
-                    .includes(apiDescription.toLowerCase())
-                ) {
-                  description = staticDescription;
-                  break;
+      this.$axios
+        .post("/demo", { file })
+        .then((response) => {
+          if (response.status === 200) {
+            this.isSavingImage = false;
+            this.$toast.info("Image Saved Successfully!");
+            let tempItemDescriptionArr = this.itemDescriptionOptions;
+            this.imageRecognitionData = response.data.data;
+            this.itemDescriptionOptions = response.data.data
+              .filter((obj) => {
+                if (obj.name) {
+                  return true;
                 } else {
-                  description = apiDescription;
+                  return false;
                 }
+              })
+              .map((obj) => {
+                return obj.name;
+              });
+            this.itemDescriptionOptions = this.itemDescriptionOptions.map(
+              (apiDescription) => {
+                let description = "";
+                for (let i = 0; i < tempItemDescriptionArr.length; i++) {
+                  let staticDescription = tempItemDescriptionArr[i];
+                  if (
+                    apiDescription
+                      .toLowerCase()
+                      .includes(staticDescription.toLowerCase()) ||
+                    staticDescription
+                      .toLowerCase()
+                      .includes(apiDescription.toLowerCase())
+                  ) {
+                    description = staticDescription;
+                    break;
+                  } else {
+                    description = apiDescription;
+                  }
+                }
+                return description;
               }
-              return description;
-            }
-          );
-          this.itemDescription = this.itemDescriptionOptions[0];
-          this.image =
-            this.imageRecognitionData[
-              this.imageRecognitionData.length - 1
-            ].image;
+            );
+            this.itemDescription = this.itemDescriptionOptions[0];
+            this.image =
+              this.imageRecognitionData[
+                this.imageRecognitionData.length - 1
+              ].image;
 
-          this.imageKey =
-            this.imageRecognitionData[this.imageRecognitionData.length - 2].key;
-        }
-        this.itemDescriptionOptions.push("Other");
-        this.showEditor = false;
-        this.imgSrc = "";
-        this.showCrop = false;
-        this.showDraw = false;
-        this.imgPreview = false;
-        // this.enableEdit = false;
-      });
+            this.imageKey =
+              this.imageRecognitionData[
+                this.imageRecognitionData.length - 2
+              ].key;
+          }
+          this.itemDescriptionOptions.push("Other");
+          this.showEditor = false;
+          this.imgSrc = "";
+          this.showCrop = false;
+          this.showDraw = false;
+          this.imgPreview = false;
+          // this.enableEdit = false;
+        })
+        .catch((error) => {
+          this.$toast.error("Something went wrong! Please try again.");
+          this.isSavingImage = false;
+          console.log(error);
+        });
     },
   },
   watch: {
@@ -2485,7 +2506,7 @@ export default {
 
 .editor-tools .icons {
   div {
-    padding-right: 7px;
+    // padding-right: 7px;
     p {
       font-size: 12px;
       text-align: center;
@@ -2496,8 +2517,8 @@ export default {
         background: #dfdfdf;
         border-radius: 14px;
       }
-      padding: 5px 15px;
-      margin-bottom: 5px;
+      // padding: 5px 15px;
+      // margin-bottom: 5px;
       svg {
         width: 18px;
       }

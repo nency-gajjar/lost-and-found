@@ -736,9 +736,7 @@ export default {
                 .catch((error) => {
                   this.isLoading = false;
                   this.showDialog = false;
-                  this.$toast.error("Something went wrong! Please try again.", {
-                    hideProgressBar: true,
-                  });
+                  this.$toast.error("Something went wrong! Please try again.");
                   console.log(error);
                 });
             }

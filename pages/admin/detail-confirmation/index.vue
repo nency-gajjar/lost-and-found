@@ -156,7 +156,7 @@
                         @click="applyEdit()"
                       />
                     </div>
-                    <p v-if="!showDraw">Square</p>
+                    <p v-if="!showDraw">Blackout</p>
                     <p v-else>Done</p>
                   </div>
                   <div>
