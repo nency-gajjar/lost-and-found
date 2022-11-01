@@ -627,10 +627,17 @@
                         />
                         Edit Image
                       </button>
-
-                      <button
+                      
+                      <input
+                        type="file"
+                        id="choose-another-file"
+                        name="files"
+                        class="hidden"
                         @change="uploadImg($event)"
-                        type="button"
+                      />
+
+                      <label
+                        for="choose-another-file"
                         class="
                           inline-flex
                           items-center
@@ -650,7 +657,7 @@
                           class="mr-2"
                         />
                         Choose another file
-                      </button>
+                      </label>
                     </div>
                   </div>
                 </div>
@@ -1828,20 +1835,22 @@ export default {
       // this.enableEdit = false;
     },
     deleteEditable() {
-      this.$axios
-        .post("/removes3files", { key: this.imageKey })
-        .then((response) => {
-          if (response.status === 200) {
-            console.log("===remove file response", response);
-            this.showEditor = false;
-            this.imgSrc = "";
-            this.showCrop = false;
-            this.showDraw = false;
-            this.imgPreview = false;
-            // this.enableEdit = false;
-            this.image = "";
-          }
-        });
+      if(this.imageKey){
+        this.$axios
+          .post("/removes3files", { key: this.imageKey })
+          .then((response) => {
+            if (response.status === 200) {
+              console.log("===remove file response", response);
+              this.showEditor = false;
+              this.imgSrc = "";
+              this.showCrop = false;
+              this.showDraw = false;
+              this.imgPreview = false;
+              // this.enableEdit = false;
+              this.image = "";
+            }
+          });
+      }
     },
     addSquare() {
       this.imgPreview = false;
@@ -1882,8 +1891,13 @@ export default {
     uploadImg(event) {
       this.showEditor = false;
       if (event.target.files[0]) {
-        this.imgSrc = URL.createObjectURL(event.target.files[0]);
-        this.showEditor = true;
+        let file = event.target.files[0];
+        let reader = new FileReader();
+        reader.onloadend = () => {
+          this.imgSrc = reader.result;
+          this.showEditor = true;
+        }
+        reader.readAsDataURL(file);
         // this.loadingSpinner = true;
         // setTimeout(() => {
         //   this.loadingSpinner = false;
@@ -1893,6 +1907,7 @@ export default {
       }
     },
     saveImg() {
+      this.deleteEditable();
       this.isSavingImage = true;
       let file = null;
       if (this.showDraw) {
@@ -1950,7 +1965,7 @@ export default {
           this.imageKey =
             this.imageRecognitionData[this.imageRecognitionData.length - 2].key;
         }
-        this.itemDescriptionArr.push("Other");
+        this.itemDescriptionOptions.push("Other");
         this.showEditor = false;
         this.imgSrc = "";
         this.showCrop = false;
