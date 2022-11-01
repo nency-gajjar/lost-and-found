@@ -4,7 +4,7 @@
       class="
         card
         w-full
-        mx-6
+        mx-4
         lg:mx-0
         md:w-8/12
         lg:w-7/12
@@ -18,7 +18,7 @@
       <div v-if="!isLoadingItemDetails || Object.keys(itemDetails).length > 0">
         <ValidationObserver v-slot="{ validate }" ref="observer">
           <form @submit.prevent="validate().then(onSubmit)">
-            <div class="card p-6 space-y-4">
+            <div class="card sm:p-6 p-4 space-y-4">
               <div class="form-title">
                 <h1
                   class="
@@ -1982,11 +1982,11 @@ export default {
               .map((obj) => {
                 return obj.name;
               });
-              responseItemData.forEach(item => {
-                if(!this.itemDescriptionOptions.includes(item)){
-                  this.itemDescriptionOptions.unshift(item);
-                }
-              })
+            responseItemData.forEach((item) => {
+              if (!this.itemDescriptionOptions.includes(item)) {
+                this.itemDescriptionOptions.unshift(item);
+              }
+            });
             this.itemDescription = this.itemDescriptionOptions[0];
             this.image =
               this.imageRecognitionData[
