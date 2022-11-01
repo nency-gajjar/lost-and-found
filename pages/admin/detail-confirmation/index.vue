@@ -40,7 +40,7 @@
             </div>
             <span
               @click="closeEditor"
-              class="absolute right-5 top-5 inline-block z-10"
+              class="absolute right-5 top-5 inline-block z-10 cursor-pointer"
             >
               <svg
                 xmlns="http://www.w3.org/2000/svg"
@@ -100,80 +100,93 @@
               <span class="sr-only">Loading...</span>
             </div> -->
             <div class="w-full">
-              <div class="px-6">
-                <Editor
-                  :canvasWidth="canvasWidth"
-                  :canvasHeight="canvasHeight"
-                  ref="editor"
+              <div class="px-6 flex justify-center">
+                <img
+                  class="previewImage"
+                  v-show="!showCrop & !showDraw || imgPreview"
+                  :src="imgSrc"
+                />
+                <div
+                  v-if="showCrop && !imgPreview"
+                  class="vue-cropper-container"
+                >
+                  <VueCropper
+                    ref="cropper"
+                    :src="imgSrc"
+                    :guides="false"
+                    :responsive="true"
+                    :min-container-width="250"
+                    :min-container-height="300"
+                    alt="Source Image"
+                  ></VueCropper>
+                </div>
+                <RedactImage
+                  v-if="showDraw && !imgPreview"
+                  class="redact"
+                  ref="redacter"
+                  @changeConditonOfUndo="toggleUndo"
+                  :src="imgSrc"
                 />
               </div>
               <div class="editor-tools mt-5 px-6 border-t pt-4">
-                <div class="icons">
-                  <div>
+                <div class="icons gap-5">
+                  <div
+                    class="flex flex-col justify-center items-center"
+                    v-show="showDraw && showUndo"
+                  >
                     <div class="tool-undo">
-                      <rotate-ccw-icon
-                        :size="size_icon"
+                      <BaseIcon
+                        icon="undo"
+                        size="lg"
+                        color="lightblack"
                         @click="undo()"
-                      ></rotate-ccw-icon>
+                        style="padding: 10px"
+                      />
                     </div>
                     <p>Undo</p>
                   </div>
-                  <div>
-                    <div class="tool-redo">
-                      <rotate-cw-icon
-                        :size="size_icon"
-                        @click="redo()"
-                      ></rotate-cw-icon>
-                    </div>
-                    <p>Redo</p>
-                  </div>
-                  <!-- <div>
-                    <div class="tool-trash">
-                      <trash-2-icon
-                        :size="size_icon"
-                        @click="deleteEditable()"
-                      ></trash-2-icon>
-                    </div>
-                    <p>Delete</p>
-                  </div> -->
-                  <!-- <div class="tool-freeDrawing">	
-                  <edit-2-icon	
-                    :size="size_icon"	
-                    @click="freeDrawing()"	
-                  ></edit-2-icon>	
-                </div>	 -->
-                  <!-- <div>
-                    <div class="tool-addCircle">
-                      <circle-icon
-                        :size="size_icon"
-                        @click="addCicle()"
-                      ></circle-icon>
-                    </div>
-                    <p>Circle</p>
-                  </div> -->
-                  <div>
+                  <div class="flex flex-col justify-center items-center">
                     <div class="tool-addSquare">
-                      <square-icon
-                        :size="size_icon"
+                      <BaseIcon
+                        v-if="!showDraw"
+                        icon="square"
+                        size="lg"
+                        color="lightblack"
                         @click="addSquare()"
-                      ></square-icon>
-                    </div>
-                    <p>Square</p>
-                  </div>
-                  <div>
-                    <div class="tool-crop">
-                      <maximize-icon
-                        v-if="stateCrop"
-                        :size="size_icon"
-                        @click="crop()"
-                      ></maximize-icon>
-                      <check-icon
+                        style="padding: 10px"
+                      />
+                      <BaseIcon
                         v-else
-                        :size="size_icon"
-                        @click="applyCrop()"
-                      ></check-icon>
+                        icon="check"
+                        size="lg"
+                        color="lightblack"
+                        @click="applyEdit()"
+                        style="padding: 10px"
+                      />
                     </div>
-                    <p v-if="stateCrop">Crop</p>
+                    <p v-if="!showDraw">Blackout</p>
+                    <p v-else>Done</p>
+                  </div>
+                  <div class="flex flex-col justify-center items-center">
+                    <div class="tool-crop">
+                      <BaseIcon
+                        v-if="!showCrop"
+                        icon="crop-simple"
+                        size="lg"
+                        color="lightblack"
+                        @click="crop()"
+                        style="padding: 10px"
+                      />
+                      <BaseIcon
+                        v-else
+                        icon="check"
+                        size="lg"
+                        color="lightblack"
+                        @click="applyEdit()"
+                        style="padding: 10px"
+                      />
+                    </div>
+                    <p v-if="!showCrop">Crop</p>
                     <p v-else>Done</p>
                   </div>
                 </div>
@@ -186,7 +199,6 @@
                       font-medium
                       text-md
                       leading-5
-                      uppercase
                       py-2
                       px-6
                       rounded-md
@@ -206,7 +218,8 @@
                     "
                   >
                     <span class="button__text">
-                      <save-icon :size="size_icon"></save-icon> Save
+                      <BaseIcon icon="floppy-disk" type="far" size="2x" />
+                      Save
                     </span>
                   </button>
                 </div>
@@ -1036,36 +1049,26 @@
 </template>
   
 <script>
-import Editor from "~/components/vueImageEditor/Editor.vue";
-import {
-  CircleIcon,
-  RotateCcwIcon,
-  RotateCwIcon,
-  Edit2Icon,
-  Trash2Icon,
-  SquareIcon,
-  MaximizeIcon,
-  SaveIcon,
-  CheckIcon,
-} from "vue-feather-icons";
+import RedactImage from "~/components/redactEditor/RedactImage.vue";
+import VueCropper from "vue-cropperjs";
+import "cropperjs/dist/cropper.css";
 
 export default {
   components: {
-    Editor,
-    CircleIcon,
-    RotateCcwIcon,
-    RotateCwIcon,
-    Edit2Icon,
-    Trash2Icon,
-    SquareIcon,
-    MaximizeIcon,
-    CheckIcon,
-    SaveIcon,
+    RedactImage,
+    VueCropper,
   },
   data() {
     return {
-      canvasWidth: "600",
-      canvasHeight: "400",
+      imgSrc: "",
+      showCrop: false,
+      showDraw: false,
+      imgPreview: false,
+      showUndo: false,
+      // enableEdit: false,
+
+      // canvasWidth: "600",
+      // canvasHeight: "400",
       size_icon: "2x",
       isLoading: {
         Approve: false,
@@ -1080,7 +1083,7 @@ export default {
       isSavingImage: false,
       isImageEdited: false,
       showEditor: false,
-      stateCrop: true,
+      // stateCrop: true,
       loadingSpinner: false,
       imageRecognitionData: [],
       imageKey: "",
@@ -1108,83 +1111,104 @@ export default {
     }
   },
   methods: {
-    undo() {
-      this.$refs.editor.undo();
-    },
-    redo() {
-      this.$refs.editor.redo();
-    },
-    // freeDrawing() {
-    //   let customizeFreeDrawing = { stroke: "black", strokeWidth: "5" };
-    //   this.$refs.editor.set("freeDrawing", customizeFreeDrawing);
+    // editMode(){
+    //   this.enableEdit = true;
+    //   this.imgForEditor = this.imgSrc;
     // },
-    addCicle() {
-      let circleModeParams = { fill: "black", stroke: "black" };
-      this.$refs.editor.set("circle", circleModeParams);
+    undo() {
+      this.$refs.redacter.revert();
+    },
+    toggleUndo(length) {
+      if (length > 0) {
+        this.showUndo = true;
+      } else {
+        this.showUndo = false;
+      }
     },
     addSquare() {
-      let customizeRectangle = {
-        fill: "black",
-        stroke: "black",
-        strokeWidth: 1,
-      };
-      this.$refs.editor.set("rect", customizeRectangle);
+      this.imgPreview = false;
+      this.showDraw = true;
+      this.showCrop = false;
     },
     crop() {
-      let cropModeOptions = {
-        width: "100",
-        height: "100",
-        overlayOpacity: "0",
-        hasControls: true,
-      };
-      this.$refs.editor.set("crop", cropModeOptions);
-      this.stateCrop = false;
+      this.imgPreview = false;
+      this.showCrop = true;
+      this.showDraw = false;
     },
-    applyCrop() {
-      this.$refs.editor.applyCropping();
-      this.stateCrop = true;
+    applyEdit() {
+      if (this.showDraw) {
+        this.imgSrc = this.$refs.redacter.canvas().toDataURL();
+      } else {
+        this.imgSrc = this.$refs.cropper.getCroppedCanvas().toDataURL();
+      }
+      this.showCrop = false;
+      this.showDraw = false;
+      this.imgPreview = true;
     },
-    async editImage() {
+    editImage() {
       this.showEditor = false;
       if (this.image) {
-        const response = await fetch(this.image);
-        const blob = await response.blob();
-        const file = new File([blob], "image.jpg", { type: blob.type });
-        this.$refs.editor.uploadImage(file);
+        // const response = await fetch(this.image);
+        // const blob = await response.blob();
+        // const file = new File([blob], "image.jpg", { type: blob.type });
+        this.imgSrc = this.image;
         this.showEditor = true;
-        this.loadingSpinner = true;
-        setTimeout(() => {
-          this.loadingSpinner = false;
-        }, 2000);
+        // this.loadingSpinner = true;
+        // setTimeout(() => {
+        //   this.loadingSpinner = false;
+        // }, 2000);
       } else {
         this.showEditor = false;
       }
     },
     closeEditor() {
-      this.$refs.editor.clear();
       this.showEditor = false;
-      this.stateCrop = true;
+      this.imgSrc = "";
+      this.showCrop = false;
+      this.showDraw = false;
+      this.imgPreview = false;
+      // this.enableEdit = false;
     },
     saveImg() {
       this.isSavingImage = true;
-      const file = this.$refs.editor.saveImage();
-      this.$axios.post("/demo", { file }).then((response) => {
-        if (response.status === 200) {
-          this.isSavingImage = false;
-          this.imageRecognitionData = response.data.data;
-          this.image =
-            this.imageRecognitionData[
-              this.imageRecognitionData.length - 1
-            ].image;
+      let file = null;
+      if (this.showDraw) {
+        file = this.$refs.redacter.canvas().toDataURL();
+      } else if (this.showCrop) {
+        file = this.$refs.cropper.getCroppedCanvas().toDataURL();
+      } else {
+        file = this.imgSrc;
+      }
+      this.$axios
+        .post("/demo", { file })
+        .then((response) => {
+          if (response.status === 200) {
+            this.isSavingImage = false;
+            this.$toast.info("Image Updated Successfully!");
+            this.imageRecognitionData = response.data.data;
+            this.image =
+              this.imageRecognitionData[
+                this.imageRecognitionData.length - 1
+              ].image;
 
-          this.imageKey =
-            this.imageRecognitionData[this.imageRecognitionData.length - 2].key;
-        }
-        this.$refs.editor.clear();
-        this.showEditor = false;
-        this.stateCrop = true;
-        this.isImageEdited = true;
-      });
+            this.imageKey =
+              this.imageRecognitionData[
+                this.imageRecognitionData.length - 2
+              ].key;
+          }
+          this.showEditor = false;
+          this.imgSrc = "";
+          this.showCrop = false;
+          this.showDraw = false;
+          this.imgPreview = false;
+          // this.enableEdit = false;
+          this.isImageEdited = true;
+        })
+        .catch((error) => {
+          this.$toast.error("Something went wrong! Please try again.");
+          this.isSavingImage = false;
+          console.log(error);
+        });
     },
     filterAddressLine(itemDetails) {
       return itemDetails.address == "Other" || !itemDetails.address
@@ -1255,22 +1279,19 @@ export default {
 
 .editor-tools .icons {
   div {
-    padding-right: 7px;
+    // padding-right: 7px;
     p {
       font-size: 12px;
       text-align: center;
     }
     div {
       cursor: pointer;
-      border: 1px solid #808080;
-      border-radius: 14px;
       &:hover {
         background: #dfdfdf;
+        border-radius: 14px;
       }
-      padding: 2px 10px;
-      background-color: #f3f3f3;
-      margin-bottom: 5px;
-      color: #ff9800;
+      // padding: 5px 15px;
+      // margin-bottom: 5px;
       svg {
         width: 18px;
       }
@@ -1279,28 +1300,7 @@ export default {
 }
 
 canvas {
-  width: 0 !important;
   object-fit: contain;
-}
-.canvas-container {
-  width: 100% !important;
-}
-.canvas-container {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  min-width: 500px !important;
-  min-height: 384px;
-}
-.upper-canvas {
-  margin: 0px 0px;
-  min-width: 500px !important;
-  min-height: 384px;
-}
-.lower-canvas {
-  min-width: 500px !important;
-  min-height: 384px;
-  position: static !important;
 }
 .card {
   @apply rounded-lg text-indigo-500;
@@ -1345,6 +1345,20 @@ canvas {
   animation: button-loading-spinner 1s ease infinite;
 }
 
+.vue-cropper-container {
+  min-width: 40vw;
+}
+
+.previewImage {
+  max-height: 300px;
+}
+
+.vue-cropper-container {
+  img {
+    max-height: 300px !important;
+  }
+}
+
 @keyframes button-loading-spinner {
   from {
     transform: rotate(0turn);
@@ -1365,35 +1379,35 @@ canvas {
   .text-gray-600 {
     @apply pr-2;
   }
-  .canvas-container,
-  .upper-canvas,
-  .lower-canvas {
-    min-width: 0 !important;
-    min-height: 0 !important;
-    width: 500px !important;
-    height: 384px !important;
+  .redact {
+    canvas {
+      min-width: 0 !important;
+      min-height: 0 !important;
+      width: 500px !important;
+      height: 100% !important;
+    }
   }
 }
 
 @media only screen and (max-width: 510px) {
-  .canvas-container,
-  .upper-canvas,
-  .lower-canvas {
-    min-width: 0 !important;
-    min-height: 0 !important;
-    width: 350px !important;
-    height: 350px !important;
+  .redact {
+    canvas {
+      min-width: 0 !important;
+      min-height: 0 !important;
+      width: 350px !important;
+      height: 100% !important;
+    }
   }
 }
 
 @media only screen and (max-width: 410px) {
-  .canvas-container,
-  .upper-canvas,
-  .lower-canvas {
-    min-width: 0 !important;
-    min-height: 0 !important;
-    width: 300px !important;
-    height: 300px !important;
+  .redact {
+    canvas {
+      min-width: 0 !important;
+      min-height: 0 !important;
+      width: 300px !important;
+      height: 100% !important;
+    }
   }
 }
 </style>
