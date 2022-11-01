@@ -1139,7 +1139,7 @@
               <div class="flex justify-end">
                 <button
                   :class="{ 'button--loading': isLoading }"
-                  type="button"
+                  type="submit"
                   class="
                     !py-3
                     font-medium
@@ -1935,9 +1935,8 @@ export default {
           if (response.status === 200) {
             this.isSavingImage = false;
             this.$toast.info("Image Saved Successfully!");
-            let tempItemDescriptionArr = this.itemDescriptionOptions;
             this.imageRecognitionData = response.data.data;
-            this.itemDescriptionOptions = response.data.data
+            let responseItemData = response.data.data
               .filter((obj) => {
                 if (obj.name) {
                   return true;
@@ -1948,28 +1947,11 @@ export default {
               .map((obj) => {
                 return obj.name;
               });
-            this.itemDescriptionOptions = this.itemDescriptionOptions.map(
-              (apiDescription) => {
-                let description = "";
-                for (let i = 0; i < tempItemDescriptionArr.length; i++) {
-                  let staticDescription = tempItemDescriptionArr[i];
-                  if (
-                    apiDescription
-                      .toLowerCase()
-                      .includes(staticDescription.toLowerCase()) ||
-                    staticDescription
-                      .toLowerCase()
-                      .includes(apiDescription.toLowerCase())
-                  ) {
-                    description = staticDescription;
-                    break;
-                  } else {
-                    description = apiDescription;
-                  }
+              responseItemData.forEach(item => {
+                if(!this.itemDescriptionOptions.includes(item)){
+                  this.itemDescriptionOptions.unshift(item);
                 }
-                return description;
-              }
-            );
+              })
             this.itemDescription = this.itemDescriptionOptions[0];
             this.image =
               this.imageRecognitionData[
@@ -1981,7 +1963,6 @@ export default {
                 this.imageRecognitionData.length - 2
               ].key;
           }
-          this.itemDescriptionOptions.push("Other");
           this.showEditor = false;
           this.imgSrc = "";
           this.showCrop = false;
