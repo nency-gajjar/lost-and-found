@@ -55,7 +55,6 @@
         >
           <div>
             <div class="text-center p-3 flex-auto justify-center leading-6">
-              <!-- <img src="@/assets/icons/alert-circle.svg" class="m-auto" /> -->
               <BaseIcon
                 v-if="icon"
                 :icon="icon.name"
@@ -102,12 +101,7 @@
 </template>
 
 <script>
-import BaseIcon from "@/components/base/BaseIcon.vue";
-
 export default {
-  components: {
-    BaseIcon,
-  },
   props: {
     showDialog: {
       type: Boolean,

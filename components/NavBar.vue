@@ -23,10 +23,20 @@
       </div>
       <div v-show="menuVisible" class="mobile-menu">
         <div>
-          <NuxtLink to="/found-items" class="opacity-100">Found Items</NuxtLink>
+          <NuxtLink
+            to="/found-items"
+            @click.native="toggleMenu"
+            class="opacity-100"
+            >Found Items</NuxtLink
+          >
         </div>
         <div>
-          <NuxtLink to="/admin/login" class="opacity-100">Login</NuxtLink>
+          <NuxtLink
+            to="/admin/login"
+            @click.native="toggleMenu"
+            class="opacity-100"
+            >Login</NuxtLink
+          >
         </div>
       </div>
     </nav>
@@ -108,7 +118,13 @@ export default {
   .mobile-menu {
     z-index: 99;
     @apply border-t;
-    @apply block py-3 fixed w-full bg-white shadow-lg px-6;
+    @apply block w-full bg-white shadow-lg;
+  }
+  .mobile-menu > div {
+    @apply px-6 py-3;
+  }
+  .mobile-menu > div:not(:last-child) {
+    border-bottom: 1px solid #ececee;
   }
 }
 </style>

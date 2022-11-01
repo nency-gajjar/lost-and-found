@@ -1,8 +1,26 @@
 <template>
   <div class="wrapper">
     <div class="container max-w-7xl mx-auto px-4">
-      <div class="w-full flex justify-between mt-8 mb-5">
-        <h2 class="text-2xl font-semibold leading-tight">
+      <div
+        :class="
+          !isLoading && lostItems.length > 0
+            ? ' justify-between'
+            : 'justify-end'
+        "
+        class="
+          w-full
+          flex flex-col
+          sm:flex-row
+          flex-wrap
+          sm:flex-nowrap
+          mt-8
+          mb-5
+        "
+      >
+        <h2
+          v-if="!isLoading && lostItems.length > 0"
+          class="text-2xl font-semibold leading-tight"
+        >
           Found Items ({{ lostItems.length }})
         </h2>
         <button
@@ -13,6 +31,10 @@
             uppercase
             py-2
             px-6
+            sm:ml-2
+            grow
+            mt-3
+            sm:mt-0 sm:grow-0
             rounded-md
             button
             focus:outline-none
@@ -33,8 +55,19 @@
         </button>
       </div>
       <div class="align-middle inline-block w-full">
-        <div class="flex justify-between flex-wrap items-center">
-          <div class="inline-flex border w-3/5 rounded px-3 h-12 bg-white">
+        <div class="flex justify-between flex-col sm:flex-row items-center">
+          <div
+            class="
+              inline-flex
+              border
+              w-full
+              sm:w-3/5
+              rounded
+              px-3
+              h-12
+              bg-white
+            "
+          >
             <div
               class="flex flex-wrap items-stretch w-full h-full mb-6 relative"
             >
@@ -102,10 +135,11 @@
               />
             </div>
           </div>
-          <div class="h-full w-60 pt-2">
+          <div class="h-full w-full mt-3 sm:mt-0 sm:w-60">
             <select
               id="countries"
               class="
+                h-12
                 border border-gray-300
                 text-gray-900 text-sm
                 rounded-lg
@@ -129,7 +163,7 @@
           @click="viewItem(item)"
           class="
             cursor-pointer
-            py-4
+            py-2
             px-5
             mt-5
             flex
@@ -144,59 +178,69 @@
           "
         >
           <div
-            class="flex items-center sm:justify-left justify-around sm:gap-4"
+            class="
+              flex
+              sm:items-center
+              flex-col
+              sm:flex-row
+              justify-left justify-around
+              sm:gap-4
+            "
           >
-            <div class="w-24 h-24 flex items-center">
+            <div
+              class="
+                w-20
+                min-w-[80px]
+                mx-auto
+                sm:mx-0
+                flex
+                items-center
+                mb-3
+                sm:mb-0
+              "
+            >
               <img
                 v-if="item.image"
-                class="
-                  w-full
-                  rounded-t-lg
-                  md:h-auto md:w-48 md:rounded-none md:rounded-l-lg
-                "
+                class="w-full rounded-t-lg md:rounded-none md:rounded-l-lg"
                 :src="item.image"
                 alt=""
               />
               <img
                 v-else
                 class="
-                  w-full
+                  w-20
+                  contain
                   rounded-t-lg
-                  md:h-auto md:w-48 md:rounded-none md:rounded-l-lg
+                  md:rounded-none md:rounded-l-lg
                 "
-                src="@/assets/images/no-image.png"
+                src="@/assets/images/no-image4.png"
                 alt=""
               />
             </div>
             <div
-              class="
-                flex flex-col
-                items-start
-                text-center
-                justify-between
-                py-4
-                leading-normal
-              "
+              class="flex flex-col text-center justify-between leading-normal"
             >
-              <div
-                class="
-                  mb-2
-                  text-xl
-                  font-bold
-                  tracking-tight
-                  text-gray-900 text-accent-100
-                "
-              >
-                {{ item.item_description }}
+              <div class="mb-1 flex items-center">
+                <div
+                  class="
+                    text-xl
+                    font-bold
+                    tracking-tight
+                    text-gray-900 text-accent-100
+                  "
+                >
+                  {{ item.item_description }}
+                </div>
               </div>
-              <!-- <p class="text-sm font-normal text-gray-700">
-                {{ item.item_status === 0 ? "Claimed" : "Unclaimed" }}
-              </p> -->
               <div class="text-left">
-                <BaseIcon icon="calendar-days" color="gray" />
-                <span class="text-sm font-normal text-gray-700">
-                  {{ item.datse }}
-                </span>
+                <div>
+                  <BaseIcon icon="calendar-days" color="gray" />
+                  <span class="text-sm font-normal text-gray-700">
+                    {{ item.datse }}
+                  </span>
+                </div>
+              </div>
+              <div class="text-left">
                 <div>
                   <BaseIcon icon="location-dot" color="red" />
                   <span class="text-sm font-normal text-gray-700">
@@ -206,70 +250,63 @@
               </div>
             </div>
           </div>
-          <div class="flex items-center justify-center">
+          <div class="flex items-center my-4 sm:my-0 gap-3">
             <button
               class="
+                whitespace-nowrap
                 font-medium
                 text-sm
                 px-5
                 py-2
                 rounded-md
-                border-accent-100 border
-                text-accent-100
+                border-indigo-600 border
+                text-indigo-600
                 transition
                 duration-300
-                hover:bg-accent-200 hover:text-white
+                hover:bg-indigo-600 hover:text-white
                 focus:outline-none
               "
               @click.stop="claimItem(item)"
             >
               Claim Item
             </button>
+            <button
+              class="
+                whitespace-nowrap
+                font-medium
+                text-sm
+                px-5
+                py-2
+                rounded-md
+                border-red-600 border
+                text-red-600
+                transition
+                duration-300
+                hover:bg-red-600 hover:text-white
+                focus:outline-none
+              "
+              @click.stop="claimItem(item)"
+            >
+              Delete Item
+            </button>
           </div>
         </div>
       </div>
       <div v-else-if="!isLoading && lostItems.length === 0">No Data</div>
       <div v-else>
-        <div
-          wire:loading
-          class="
-            loader-container
-            z-50
-            overflow-hidden
-            flex flex-col
-            items-center
-            justify-center
-          "
-        >
-          <div
-            class="
-              loader
-              ease-linear
-              rounded-full
-              border-4 border-t-4 border-gray-200
-              h-12
-              w-12
-              mb-4
-            "
-          ></div>
-        </div>
+        <BaseLoader />
       </div>
     </div>
   </div>
 </template>
 
 <script>
-import BaseIcon from "@/components/base/BaseIcon.vue";
-
 export default {
   data() {
     return {
       lostItems: [],
       isLoading: false,
     };
-  },
-  components: {
-    BaseIcon,
   },
   methods: {
     addNewItem() {
@@ -281,11 +318,18 @@ export default {
         onlyDisplay: true,
       });
       this.$nextTick(() => {
-        this.$router.push({ path: "/detail-confirmation" });
+        this.$router.push({
+          path: "/detail-confirmation",
+          query: { id: item.id },
+        });
       });
     },
     claimItem(item) {
-      this.$router.push({ name: "claim-item", params: { item: item } });
+      this.$router.push({
+        name: "claim-item",
+        query: { id: item.id },
+        params: { item: item },
+      });
     },
   },
   created() {

@@ -226,7 +226,7 @@
               </table>
             </td>
           </tr>
-          <tr>
+          <tr class="border-b">
             <td class="px-6 py-4">
               <table width="100%" cellspacing="0" cellpadding="0">
                 <tr>

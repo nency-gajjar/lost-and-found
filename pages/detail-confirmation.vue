@@ -346,8 +346,8 @@
             ></span>
           </div>
 
-          <div class="flex foundItemContainer flex-col">
-            <div class="flex flex-col w-full">
+          <div class="flex foundItemContainer">
+            <div class="flex flex-col grow">
               <div class="flex items-center mt-3 flex-wrap">
                 <div
                   class="
@@ -361,7 +361,9 @@
                 >
                   Item Description
                 </div>
-                <div class="text-gray-600 text-left md:w-7/12 sm:w-6/12">
+                <div
+                  class="text-gray-600 text-left md:w-7/12 sm:w-6/12 sm:pl-3"
+                >
                   {{ itemDetails.item_description }}
                 </div>
               </div>
@@ -378,7 +380,9 @@
                 >
                   Package Type
                 </div>
-                <div class="text-gray-600 text-left md:w-7/12 sm:w-6/12">
+                <div
+                  class="text-gray-600 text-left md:w-7/12 sm:w-6/12 sm:pl-3"
+                >
                   {{ itemDetails.package_type }}
                 </div>
               </div>
@@ -395,7 +399,9 @@
                 >
                   Weight
                 </div>
-                <div class="text-gray-600 text-left md:w-7/12 sm:w-6/12">
+                <div
+                  class="text-gray-600 text-left md:w-7/12 sm:w-6/12 sm:pl-3"
+                >
                   {{ itemDetails.weight_pounds }} lbs
                 </div>
               </div>
@@ -412,7 +418,9 @@
                 >
                   Dimension
                 </div>
-                <div class="text-gray-600 text-left md:w-7/12 sm:w-6/12">
+                <div
+                  class="text-gray-600 text-left md:w-7/12 sm:w-6/12 sm:pl-3"
+                >
                   {{ itemDetails.item_length }}(l) x
                   {{ itemDetails.item_width }}(w) x
                   {{ itemDetails.item_height }}(h) inches
@@ -431,7 +439,9 @@
                 >
                   Item Status
                 </div>
-                <div class="text-gray-600 text-left md:w-7/12 sm:w-6/12">
+                <div
+                  class="text-gray-600 text-left md:w-7/12 sm:w-6/12 sm:pl-3"
+                >
                   {{ itemDetails.item_status === 0 ? "Claimed" : "Unclaimed" }}
                 </div>
               </div>
@@ -449,7 +459,9 @@
                   >
                     Receiver's Name
                   </div>
-                  <div class="text-gray-600 text-left md:w-7/12 sm:w-6/12">
+                  <div
+                    class="text-gray-600 text-left md:w-7/12 sm:w-6/12 sm:pl-3"
+                  >
                     {{ itemDetails.receiver_name }}
                   </div>
                 </div>
@@ -467,7 +479,9 @@
                   >
                     Receiver's Email
                   </div>
-                  <div class="text-gray-600 text-left md:w-7/12 sm:w-6/12">
+                  <div
+                    class="text-gray-600 text-left md:w-7/12 sm:w-6/12 sm:pl-3"
+                  >
                     {{ itemDetails.receiver_email }}
                   </div>
                 </div>
@@ -485,19 +499,17 @@
                   >
                     Receiver's Mobile No.
                   </div>
-                  <div class="text-gray-600 text-left md:w-7/12 sm:w-6/12">
+                  <div
+                    class="text-gray-600 text-left md:w-7/12 sm:w-6/12 sm:pl-3"
+                  >
                     {{ itemDetails.receiver_mobile_no }}
                   </div>
                 </div>
               </template>
             </div>
-            <div class="h-auto w-52 mt-5 mx-auto">
-              <img
-                v-if="itemDetails.image"
-                class="w-full"
-                :src="itemDetails.image"
-                alt=""
-              />
+
+            <div v-if="itemDetails.image" class="mt-4 sm:mt-0 sm:w-60 w-full">
+              <img class="w-full" :src="itemDetails.image" alt="" />
             </div>
           </div>
         </div>
@@ -575,57 +587,19 @@
         </div>
       </section>
     </div>
-    <BaseDialog
-      :showDialog="showDialog"
-      :icon="{ name: 'circle-check', color: 'green', size: '3x' }"
-      :title="dialogTitle"
-      :message="
-        itemDetails.image ? 'Wait for admin to review your details.' : ''
-      "
-      buttonTitle="Close"
-      :showClose="true"
-      @close="closeDialog"
-    >
-      <template v-slot:action>
-        <button
-          class="
-            mb-2
-            md:mb-0
-            bg-accent-100
-            border border-accent-100
-            px-5
-            py-2
-            text-sm
-            shadow-sm
-            font-medium
-            tracking-wider
-            text-white
-            rounded-md
-            hover:shadow-lg hover:bg-accent-200
-          "
-          @click="downloadPDF"
-        >
-          Download Pdf
-        </button>
-      </template>
-    </BaseDialog>
   </div>
 </template>
 
 <script>
 import { mapGetters } from "vuex";
 import _ from "lodash";
-import BaseDialog from "@/components/base/BaseDialog.vue";
 export default {
   data() {
     return {
       isLoading: false,
-      showDialog: false,
       responseData: null,
-      dialogTitle: "",
     };
   },
-  components: { BaseDialog },
   computed: {
     ...mapGetters("item", ["itemDetails"]),
     btnName() {
@@ -633,28 +607,10 @@ export default {
     },
   },
   methods: {
-    closeDialog() {
-      this.showDialog = false;
-      this.$nextTick(() => {
-        this.$router.push({ path: "/found-items" });
-      });
-    },
     filterAddressLine(itemDetails) {
       return itemDetails.address == "Other" || !itemDetails.address
         ? itemDetails.manualAddress
         : itemDetails.address;
-    },
-    downloadPDF() {
-      const url = window.URL.createObjectURL(new Blob([this.responseData]));
-      const link = document.createElement("a");
-      link.href = url;
-      link.setAttribute("download", "file.pdf");
-      document.body.appendChild(link);
-      link.click();
-      this.showDialog = false;
-      this.$nextTick(() => {
-        this.$router.push({ path: "/found-items" });
-      });
     },
     submitDetails() {
       let params = { ...this.itemDetails };
@@ -705,10 +661,8 @@ export default {
                 )
                 .then((response) => {
                   if (response.status === 200) {
-                    // this.dialogTitle = "Your details updated successfully!";
                     this.isLoading = false;
                     this.responseData = response.data.data;
-                    // this.showDialog = true;
                     this.$store.commit("item/SET_ITEM_CONFIRMATION_DETAILS", {
                       ...this.responseData,
                     });
@@ -722,10 +676,7 @@ export default {
                 })
                 .catch((error) => {
                   this.isLoading = false;
-                  // this.showDialog = false;
-                  this.$toast.error("Something went wrong! Please try again.", {
-                    hideProgressBar: true,
-                  });
+                  this.$toast.error("Something went wrong! Please try again.");
                   console.log(error);
                 });
             }
@@ -740,7 +691,6 @@ export default {
           .post("/storelostitem", params)
           .then((response) => {
             if (response.status === 200) {
-              // this.dialogTitle = "Your details submitted successfully!";
               this.isLoading = false;
               this.responseData = response.data.data;
 
@@ -749,7 +699,6 @@ export default {
               });
 
               localStorage.setItem("itemId", this.responseData.id);
-              // this.showDialog = true;
               this.$router.push({
                 path: "/confirmation",
                 params: { data: this.responseData },
@@ -759,11 +708,7 @@ export default {
           })
           .catch((error) => {
             this.isLoading = false;
-            // this.showDialog = false;
-            this.$toast.error("Something went wrong! Please try again.", {
-              hideProgressBar: true,
-            });
-
+            this.$toast.error("Something went wrong! Please try again.");
             console.log(error);
           });
       }

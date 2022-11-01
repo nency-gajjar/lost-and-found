@@ -14,28 +14,11 @@
     >
       <a
         href="#"
-        class="
-          flex
-          items-center
-          mb-6
-          text-2xl
-          font-semibold
-          text-gray-900
-        "
+        class="flex items-center mb-6 text-2xl font-semibold text-gray-900"
       >
         Lost & Found
       </a>
-      <div
-        class="
-          w-full
-          bg-white
-          rounded-lg
-          shadow
-          md:mt-0
-          sm:max-w-md
-          xl:p-0
-        "
-      >
+      <div class="w-full bg-white rounded-lg shadow md:mt-0 sm:max-w-md xl:p-0">
         <div class="p-6 space-y-4 md:space-y-6 sm:p-8">
           <div class="form-title">
             <h1
@@ -131,12 +114,10 @@
 
 <script>
 import { ValidationObserver, ValidationProvider } from "vee-validate";
-import BaseInput from "~/components/base/BaseInput.vue";
 export default {
   components: {
     ValidationObserver,
     ValidationProvider,
-    BaseInput,
   },
   data() {
     return {
