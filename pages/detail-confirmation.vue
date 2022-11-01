@@ -508,13 +508,8 @@
               </template>
             </div>
 
-            <div class="mt-4 sm:mt-0 sm:w-60 w-full">
-              <img
-                v-if="itemDetails.image"
-                class="w-full"
-                :src="itemDetails.image"
-                alt=""
-              />
+            <div v-if="itemDetails.image" class="mt-4 sm:mt-0 sm:w-60 w-full">
+              <img class="w-full" :src="itemDetails.image" alt="" />
             </div>
           </div>
         </div>
@@ -592,40 +587,6 @@
         </div>
       </section>
     </div>
-    <BaseDialog
-      :showDialog="showDialog"
-      :icon="{ name: 'circle-check', color: 'green', size: '3x' }"
-      :title="dialogTitle"
-      :message="
-        itemDetails.image ? 'Wait for admin to review your details.' : ''
-      "
-      buttonTitle="Okay"
-      :showClose="true"
-      @close="closeDialog"
-    >
-      <template v-slot:action>
-        <button
-          class="
-            mb-2
-            md:mb-0
-            bg-accent-100
-            border border-accent-100
-            px-5
-            py-2
-            text-sm
-            shadow-sm
-            font-medium
-            tracking-wider
-            text-white
-            rounded-md
-            hover:shadow-lg hover:bg-accent-200
-          "
-          @click="downloadPDF"
-        >
-          Download Pdf
-        </button>
-      </template>
-    </BaseDialog>
   </div>
 </template>
 
@@ -636,9 +597,7 @@ export default {
   data() {
     return {
       isLoading: false,
-      showDialog: false,
       responseData: null,
-      dialogTitle: "",
     };
   },
   computed: {
@@ -648,28 +607,10 @@ export default {
     },
   },
   methods: {
-    closeDialog() {
-      this.showDialog = false;
-      this.$nextTick(() => {
-        this.$router.push({ path: "/found-items" });
-      });
-    },
     filterAddressLine(itemDetails) {
       return itemDetails.address == "Other" || !itemDetails.address
         ? itemDetails.manualAddress
         : itemDetails.address;
-    },
-    downloadPDF() {
-      const url = window.URL.createObjectURL(new Blob([this.responseData]));
-      const link = document.createElement("a");
-      link.href = url;
-      link.setAttribute("download", "file.pdf");
-      document.body.appendChild(link);
-      link.click();
-      this.showDialog = false;
-      this.$nextTick(() => {
-        this.$router.push({ path: "/found-items" });
-      });
     },
     submitDetails() {
       let params = { ...this.itemDetails };
@@ -716,26 +657,25 @@ export default {
               this.$axios
                 .post(
                   "/updatesinglelostitem?id=" + this.itemDetails.foundItemId,
-                  requestData,
-                  {
-                    responseType: "arraybuffer",
-                    headers: {
-                      "Content-Type": "application/json",
-                      Accept: "application/pdf",
-                    },
-                  }
+                  requestData
                 )
                 .then((response) => {
                   if (response.status === 200) {
-                    this.dialogTitle = "Your details updated successfully!";
                     this.isLoading = false;
-                    this.responseData = response.data;
-                    this.showDialog = true;
+                    this.responseData = response.data.data;
+                    this.$store.commit("item/SET_ITEM_CONFIRMATION_DETAILS", {
+                      ...this.responseData,
+                    });
+
+                    this.$router.push({
+                      path: "/confirmation",
+                      params: { data: this.responseData },
+                      query: { id: this.responseData.id },
+                    });
                   }
                 })
                 .catch((error) => {
                   this.isLoading = false;
-                  this.showDialog = false;
                   this.$toast.error("Something went wrong! Please try again.");
                   console.log(error);
                 });
@@ -748,28 +688,27 @@ export default {
       } else {
         this.isLoading = true;
         this.$axios
-          .post("/storelostitem", params, {
-            responseType: "arraybuffer",
-            headers: {
-              "Content-Type": "application/json",
-              Accept: "application/pdf",
-            },
-          })
+          .post("/storelostitem", params)
           .then((response) => {
             if (response.status === 200) {
-              this.dialogTitle = "Details submitted successfully!";
               this.isLoading = false;
-              this.responseData = response.data;
-              this.showDialog = true;
+              this.responseData = response.data.data;
+
+              this.$store.commit("item/SET_ITEM_CONFIRMATION_DETAILS", {
+                ...this.responseData,
+              });
+
+              localStorage.setItem("itemId", this.responseData.id);
+              this.$router.push({
+                path: "/confirmation",
+                params: { data: this.responseData },
+                query: { id: this.responseData.id },
+              });
             }
           })
           .catch((error) => {
             this.isLoading = false;
-            this.showDialog = false;
-            this.$toast.error("Something went wrong! Please try again.", {
-              hideProgressBar: true,
-            });
-
+            this.$toast.error("Something went wrong! Please try again.");
             console.log(error);
           });
       }
