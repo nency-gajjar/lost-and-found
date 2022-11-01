@@ -434,7 +434,7 @@
             </div>
 
             <!-- FOUND ITEM'S DETAILS -->
-            <div class="card p-6 space-y-4">
+            <div class="card sm:p-6 p-4 space-y-4">
               <div class="form-title">
                 <h1
                   class="
