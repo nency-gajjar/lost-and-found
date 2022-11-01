@@ -321,7 +321,7 @@
       :icon="{ name: 'circle-check', color: 'green', size: '3x' }"
       title="Details submitted successfully!"
       :message="dialogMessage"
-      buttonTitle="Close"
+      buttonTitle="Okay"
       @close="closeDialog"
     />
   </div>

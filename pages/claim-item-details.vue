@@ -235,166 +235,211 @@
                 "
               ></span>
             </div>
-            <div class="flex foundItemContainer flex-col">
-              <div class="flex items-center mt-3 flex-wrap">
-                <div
-                  class="
-                    text-left text-gray-600
-                    font-medium
-                    w-full
-                    lg:w-4/12
-                    md:w-5/12
-                    sm:w-6/12
-                  "
-                >
-                  Venue Email
+            <div class="flex foundItemContainer">
+              <div class="flex flex-col grow">
+                <div class="flex items-center mt-3 flex-wrap">
+                  <div
+                    class="
+                      text-left text-gray-600
+                      font-medium
+                      w-full
+                      lg:w-4/12
+                      md:w-5/12
+                      sm:w-6/12
+                    "
+                  >
+                    Venue Email
+                  </div>
+                  <div
+                    class="text-gray-600 text-left md:w-7/12 sm:w-6/12 sm:pl-3"
+                  >
+                    {{ itemDetails.venue_email }}
+                  </div>
                 </div>
-                <div class="text-gray-600 text-left md:w-7/12 sm:w-6/12">
-                  {{ itemDetails.venue_email }}
+                <div class="flex items-center mt-3 flex-wrap">
+                  <div
+                    class="
+                      text-left text-gray-600
+                      font-medium
+                      w-full
+                      lg:w-4/12
+                      md:w-5/12
+                      sm:w-6/12
+                    "
+                  >
+                    Found Item Date
+                  </div>
+                  <div
+                    class="text-gray-600 text-left md:w-7/12 sm:w-6/12 sm:pl-3"
+                  >
+                    {{ itemDetails.datse }}
+                  </div>
+                </div>
+                <div class="flex items-center mt-3 flex-wrap">
+                  <div
+                    class="
+                      text-left text-gray-600
+                      font-medium
+                      w-full
+                      lg:w-4/12
+                      md:w-5/12
+                      sm:w-6/12
+                    "
+                  >
+                    Venue Phone number
+                  </div>
+                  <div
+                    class="text-gray-600 text-left md:w-7/12 sm:w-6/12 sm:pl-3"
+                  >
+                    {{ itemDetails.venue_phone_no }}
+                  </div>
+                </div>
+                <div class="flex flex-col w-full">
+                  <div class="flex items-center mt-3 flex-wrap">
+                    <div
+                      class="
+                        text-left text-gray-600
+                        font-medium
+                        w-full
+                        lg:w-4/12
+                        md:w-5/12
+                        sm:w-6/12
+                      "
+                    >
+                      Employee Mobile Numer
+                    </div>
+                    <div
+                      class="
+                        text-gray-600 text-left
+                        md:w-7/12
+                        sm:w-6/12 sm:pl-3
+                      "
+                    >
+                      {{ itemDetails.employee_mobile_no }}
+                    </div>
+                  </div>
+                  <div class="flex items-center mt-3 flex-wrap">
+                    <div
+                      class="
+                        text-left text-gray-600
+                        font-medium
+                        w-full
+                        lg:w-4/12
+                        md:w-5/12
+                        sm:w-6/12
+                      "
+                    >
+                      Item Description
+                    </div>
+                    <div
+                      class="
+                        text-gray-600 text-left
+                        md:w-7/12
+                        sm:w-6/12 sm:pl-3
+                      "
+                    >
+                      {{ itemDetails.item_description }}
+                    </div>
+                  </div>
+                  <div class="flex items-center mt-3 flex-wrap">
+                    <div
+                      class="
+                        text-left text-gray-600
+                        font-medium
+                        w-full
+                        lg:w-4/12
+                        md:w-5/12
+                        sm:w-6/12
+                      "
+                    >
+                      Package Type
+                    </div>
+                    <div
+                      class="
+                        text-gray-600 text-left
+                        md:w-7/12
+                        sm:w-6/12 sm:pl-3
+                      "
+                    >
+                      {{ itemDetails.package_type }}
+                    </div>
+                  </div>
+                  <div class="flex items-center mt-3 flex-wrap">
+                    <div
+                      class="
+                        text-left text-gray-600
+                        font-medium
+                        w-full
+                        lg:w-4/12
+                        md:w-5/12
+                        sm:w-6/12
+                      "
+                    >
+                      Weight
+                    </div>
+                    <div
+                      class="
+                        text-gray-600 text-left
+                        md:w-7/12
+                        sm:w-6/12 sm:pl-3
+                      "
+                    >
+                      {{ itemDetails.weight_pounds }} lbs
+                    </div>
+                  </div>
+                  <div class="flex items-center mt-3 flex-wrap">
+                    <div
+                      class="
+                        text-left text-gray-600
+                        font-medium
+                        w-full
+                        lg:w-4/12
+                        md:w-5/12
+                        sm:w-6/12
+                      "
+                    >
+                      Dimension
+                    </div>
+                    <div
+                      class="
+                        text-gray-600 text-left
+                        md:w-7/12
+                        sm:w-6/12 sm:pl-3
+                      "
+                    >
+                      {{ itemDetails.item_length }}(l) x
+                      {{ itemDetails.item_width }}(w) x
+                      {{ itemDetails.item_height }}(h) inches
+                    </div>
+                  </div>
+                  <div class="flex items-center mt-3 flex-wrap">
+                    <div
+                      class="
+                        text-left text-gray-600
+                        font-medium
+                        w-full
+                        lg:w-4/12
+                        md:w-5/12
+                        sm:w-6/12
+                      "
+                    >
+                      Item Status
+                    </div>
+                    <div
+                      class="
+                        text-gray-600 text-left
+                        md:w-7/12
+                        sm:w-6/12 sm:pl-3
+                      "
+                    >
+                      {{
+                        itemDetails.item_status == 0 ? "Claimed" : "Unclaimed"
+                      }}
+                    </div>
+                  </div>
                 </div>
               </div>
-              <div class="flex items-center mt-3 flex-wrap">
-                <div
-                  class="
-                    text-left text-gray-600
-                    font-medium
-                    w-full
-                    lg:w-4/12
-                    md:w-5/12
-                    sm:w-6/12
-                  "
-                >
-                  Found Item Date
-                </div>
-                <div class="text-gray-600 text-left md:w-7/12 sm:w-6/12">
-                  {{ itemDetails.datse }}
-                </div>
-              </div>
-              <div class="flex items-center mt-3 flex-wrap">
-                <div
-                  class="
-                    text-left text-gray-600
-                    font-medium
-                    w-full
-                    lg:w-4/12
-                    md:w-5/12
-                    sm:w-6/12
-                  "
-                >
-                  Venue Phone number
-                </div>
-                <div class="text-gray-600 text-left md:w-7/12 sm:w-6/12">
-                  {{ itemDetails.venue_phone_no }}
-                </div>
-              </div>
-              <div class="flex flex-col w-full">
-                <div class="flex items-center mt-3 flex-wrap">
-                  <div
-                    class="
-                      text-left text-gray-600
-                      font-medium
-                      w-full
-                      lg:w-4/12
-                      md:w-5/12
-                      sm:w-6/12
-                    "
-                  >
-                    Employee Mobile Numer
-                  </div>
-                  <div class="text-gray-600 text-left md:w-7/12 sm:w-6/12">
-                    {{ itemDetails.employee_mobile_no }}
-                  </div>
-                </div>
-                <div class="flex items-center mt-3 flex-wrap">
-                  <div
-                    class="
-                      text-left text-gray-600
-                      font-medium
-                      w-full
-                      lg:w-4/12
-                      md:w-5/12
-                      sm:w-6/12
-                    "
-                  >
-                    Item Description
-                  </div>
-                  <div class="text-gray-600 text-left md:w-7/12 sm:w-6/12">
-                    {{ itemDetails.item_description }}
-                  </div>
-                </div>
-                <div class="flex items-center mt-3 flex-wrap">
-                  <div
-                    class="
-                      text-left text-gray-600
-                      font-medium
-                      w-full
-                      lg:w-4/12
-                      md:w-5/12
-                      sm:w-6/12
-                    "
-                  >
-                    Package Type
-                  </div>
-                  <div class="text-gray-600 text-left md:w-7/12 sm:w-6/12">
-                    {{ itemDetails.package_type }}
-                  </div>
-                </div>
-                <div class="flex items-center mt-3 flex-wrap">
-                  <div
-                    class="
-                      text-left text-gray-600
-                      font-medium
-                      w-full
-                      lg:w-4/12
-                      md:w-5/12
-                      sm:w-6/12
-                    "
-                  >
-                    Weight
-                  </div>
-                  <div class="text-gray-600 text-left md:w-7/12 sm:w-6/12">
-                    {{ itemDetails.weight_pounds }} lbs
-                  </div>
-                </div>
-                <div class="flex items-center mt-3 flex-wrap">
-                  <div
-                    class="
-                      text-left text-gray-600
-                      font-medium
-                      w-full
-                      lg:w-4/12
-                      md:w-5/12
-                      sm:w-6/12
-                    "
-                  >
-                    Dimension
-                  </div>
-                  <div class="text-gray-600 text-left md:w-7/12 sm:w-6/12">
-                    {{ itemDetails.item_length }}(l) x
-                    {{ itemDetails.item_width }}(w) x
-                    {{ itemDetails.item_height }}(h) inches
-                  </div>
-                </div>
-                <div class="flex items-center mt-3 flex-wrap">
-                  <div
-                    class="
-                      text-left text-gray-600
-                      font-medium
-                      w-full
-                      lg:w-4/12
-                      md:w-5/12
-                      sm:w-6/12
-                    "
-                  >
-                    Item Status
-                  </div>
-                  <div class="text-gray-600 text-left md:w-7/12 sm:w-6/12">
-                    {{ itemDetails.item_status == 0 ? "Claimed" : "Unclaimed" }}
-                  </div>
-                </div>
-              </div>
-
-              <div class="text-gray-600 mt-4 text-left w-full">
+              <div class="mt-4 sm:mt-0 sm:w-60 w-full">
                 <img
                   v-if="itemDetails.image"
                   class="w-full"
@@ -616,7 +661,7 @@
       :icon="{ name: 'circle-check', color: 'green', size: '3x' }"
       :title="dialogTitle"
       :message="dialogMessage"
-      buttonTitle="Close"
+      buttonTitle="Okay"
       @close="closeDialog"
     />
   </div>

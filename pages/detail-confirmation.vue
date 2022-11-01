@@ -599,7 +599,7 @@
       :message="
         itemDetails.image ? 'Wait for admin to review your details.' : ''
       "
-      buttonTitle="Close"
+      buttonTitle="Okay"
       :showClose="true"
       @close="closeDialog"
     >

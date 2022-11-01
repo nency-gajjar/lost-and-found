@@ -2,11 +2,15 @@
   <div class="wrapper">
     <div class="container max-w-7xl mx-auto px-4">
       <div
+        :class="
+          !isLoading && lostItems.length > 0
+            ? ' justify-between'
+            : 'justify-end'
+        "
         class="
           w-full
           flex flex-col
           sm:flex-row
-          justify-between
           flex-wrap
           sm:flex-nowrap
           mt-8
@@ -176,21 +180,28 @@
           <div
             class="
               flex
-              items-center
+              sm:items-center
               flex-col
-              sm:flex-row sm:justify-left
-              justify-around
+              sm:flex-row
+              justify-left justify-around
               sm:gap-4
             "
           >
-            <div class="w-24 h-24 flex items-center">
+            <div
+              class="
+                w-20
+                min-w-[80px]
+                mx-auto
+                sm:mx-0
+                flex
+                items-center
+                mb-3
+                sm:mb-0
+              "
+            >
               <img
                 v-if="item.image"
-                class="
-                  w-full
-                  rounded-t-lg
-                  md:h-auto md:w-48 md:rounded-none md:rounded-l-lg
-                "
+                class="w-full rounded-t-lg md:rounded-none md:rounded-l-lg"
                 :src="item.image"
                 alt=""
               />
@@ -207,15 +218,7 @@
               />
             </div>
             <div
-              class="
-                flex flex-col
-                items-start
-                text-center
-                justify-between
-                items-center
-                sm:items-start
-                leading-normal
-              "
+              class="flex flex-col text-center justify-between leading-normal"
             >
               <div class="mb-1 flex items-center">
                 <div
@@ -228,17 +231,8 @@
                 >
                   {{ item.item_description }}
                 </div>
-                <!-- <div class="date text-[12px] ml-2">
-                  <BaseIcon icon="calendar-days" color="gray" />
-                  <span class="font-normal text-gray-700">
-                    {{ item.datse }}
-                  </span>
-                </div> -->
               </div>
-              <!-- <p class="text-sm font-normal text-gray-700">
-                {{ item.item_status === 0 ? "Claimed" : "Unclaimed" }}
-              </p> -->
-              <div class="sm:text-left">
+              <div class="text-left">
                 <div>
                   <BaseIcon icon="calendar-days" color="gray" />
                   <span class="text-sm font-normal text-gray-700">
@@ -246,7 +240,7 @@
                   </span>
                 </div>
               </div>
-              <div class="sm:text-left">
+              <div class="text-left">
                 <div>
                   <BaseIcon icon="location-dot" color="red" />
                   <span class="text-sm font-normal text-gray-700">
@@ -256,9 +250,7 @@
               </div>
             </div>
           </div>
-          <div class="flex items-center justify-center my-4 sm:my-0 gap-3">
-            <!-- border-accent-100 border  hover:bg-accent-200 hover:text-white -->
-            <!-- text-accent-100 -->
+          <div class="flex items-center my-4 sm:my-0 gap-3">
             <button
               class="
                 whitespace-nowrap
@@ -296,135 +288,6 @@
               @click.stop="claimItem(item)"
             >
               Delete Item
-            </button>
-          </div>
-        </div>
-      </div>
-
-      <div
-        class="grid mt-4 lg:grid-cols-2 gap-4"
-        v-if="!isLoading && lostItems.length > 0"
-      >
-        <div
-          v-for="item in lostItems"
-          :key="item.id"
-          @click="viewItem(item)"
-          class="
-            cursor-pointer
-            py-2
-            px-5
-            flex
-            sm:flex-row
-            flex-col
-            justify-between
-            bg-white
-            rounded-lg
-            border
-            shadow-md
-            relative
-          "
-        >
-          <div
-            class="
-              flex
-              items-center
-              flex-col
-              sm:flex-row sm:justify-left
-              justify-around
-              sm:gap-4
-            "
-          >
-            <div class="w-24 h-24 flex items-center">
-              <img
-                v-if="item.image"
-                class="
-                  w-full
-                  rounded-t-lg
-                  md:h-auto md:w-48 md:rounded-none md:rounded-l-lg
-                "
-                :src="item.image"
-                alt=""
-              />
-              <img
-                v-else
-                class="
-                  w-full
-                  rounded-t-lg
-                  md:h-auto md:w-48 md:rounded-none md:rounded-l-lg
-                "
-                src="@/assets/images/no-image.png"
-                alt=""
-              />
-            </div>
-            <div
-              class="
-                flex flex-col
-                items-start
-                text-center
-                justify-between
-                items-center
-                sm:items-start
-                leading-normal
-              "
-            >
-              <div class="mb-1 flex items-center">
-                <div
-                  class="
-                    text-xl
-                    font-bold
-                    tracking-tight
-                    text-gray-900 text-accent-100
-                  "
-                >
-                  {{ item.item_description }}
-                </div>
-                <div class="date text-[12px] ml-2">
-                  <BaseIcon icon="calendar-days" color="gray" />
-                  <span class="font-normal text-gray-700">
-                    {{ item.datse }}
-                  </span>
-                </div>
-              </div>
-              <!-- <p class="text-sm font-normal text-gray-700">
-                {{ item.item_status === 0 ? "Claimed" : "Unclaimed" }}
-              </p> -->
-              <!-- <div class="sm:text-left">
-                <div>
-                  <BaseIcon icon="location-dot" color="red" />
-                  <span class="text-sm font-normal text-gray-700">
-                    {{ item.address }}
-                  </span>
-                </div>
-              </div> -->
-              <div class="sm:text-left">
-                <div>
-                  <BaseIcon icon="location-dot" color="red" />
-                  <span class="text-sm font-normal text-gray-700">
-                    {{ item.address }}
-                  </span>
-                </div>
-              </div>
-            </div>
-          </div>
-          <div class="flex items-center justify-center my-4 sm:my-0">
-            <button
-              class="
-                whitespace-nowrap
-                font-medium
-                text-sm
-                px-5
-                py-2
-                rounded-md
-                border-accent-100 border
-                text-accent-100
-                transition
-                duration-300
-                hover:bg-accent-200 hover:text-white
-                focus:outline-none
-              "
-              @click.stop="claimItem(item)"
-            >
-              Claim Item
             </button>
           </div>
         </div>
