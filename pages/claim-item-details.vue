@@ -439,13 +439,8 @@
                   </div>
                 </div>
               </div>
-              <div class="mt-4 sm:mt-0 sm:w-60 w-full">
-                <img
-                  v-if="itemDetails.image"
-                  class="w-full"
-                  :src="itemDetails.image"
-                  alt=""
-                />
+              <div v-if="itemDetails.image" class="mt-4 sm:mt-0 sm:w-60 w-full">
+                <img class="w-full" :src="itemDetails.image" alt="" />
               </div>
             </div>
           </div>
