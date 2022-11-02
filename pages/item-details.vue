@@ -1884,6 +1884,7 @@ export default {
               this.showCrop = false;
               this.showDraw = false;
               this.imgPreview = false;
+              this.imageKey = "";
               // this.enableEdit = false;
               this.image = "";
               this.$toast.info("Image Removed Successfully!");
@@ -1895,8 +1896,8 @@ export default {
             console.log(error);
           });
       } else {
-        this.imgSrc = "";
-        this.image = "";
+        // this.imgSrc = "";
+        // this.image = "";
       }
     },
     addSquare() {
