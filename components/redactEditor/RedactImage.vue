@@ -8,7 +8,8 @@
       tabindex="1"
       @keyup.delete="deleteActives"
       :style="{
-        maxWidth, maxHeight
+        maxWidth,
+        maxHeight,
       }"
     ></canvas>
   </div>
@@ -16,7 +17,7 @@
 
 <script>
 export default {
-  name: 'RedactImage',
+  name: "RedactImage",
   props: {
     src: {
       type: String,
@@ -39,8 +40,8 @@ export default {
   },
   created() {
     const image = new Image();
-    image.crossOrigin = 'Anonymous';
-    image.addEventListener('load', this.imageLoaded, false);
+    image.crossOrigin = "Anonymous";
+    image.addEventListener("load", this.imageLoaded, false);
     image.src = this.src;
     this.image = image;
   },
@@ -56,9 +57,9 @@ export default {
     this.$emit("changeConditonOfUndo", this.rects.length);
   },
   watch: {
-    rects(newArr, oldArr){
+    rects(newArr, oldArr) {
       this.$emit("changeConditonOfUndo", newArr.length);
-    }
+    },
   },
   methods: {
     canvas() {
@@ -68,19 +69,19 @@ export default {
       const { canvas } = this.$refs;
       canvas.width = this.image.width;
       canvas.height = this.image.height;
-      const ctx = canvas.getContext('2d');
+      const ctx = canvas.getContext("2d");
       ctx.drawImage(this.image, 0, 0, canvas.width, canvas.height);
     },
     renderCanvas() {
       const { canvas } = this.$refs;
-      const ctx = canvas.getContext('2d');
+      const ctx = canvas.getContext("2d");
       ctx.clearRect(0, 0, canvas.width, canvas.height); // clear canvas
       ctx.drawImage(this.image, 0, 0, canvas.width, canvas.height);
       if (this.rects.length > 0) {
         this.rects.forEach(({ topLeft, width, height }) => {
           ctx.beginPath();
           ctx.rect(topLeft.x, topLeft.y, width, height);
-          ctx.fillStyle = 'black';
+          ctx.fillStyle = "black";
           ctx.fill();
         });
       }
@@ -173,3 +174,9 @@ export default {
   },
 };
 </script>
+
+<style scoped>
+.redact canvas {
+  height: 300px;
+}
+</style>

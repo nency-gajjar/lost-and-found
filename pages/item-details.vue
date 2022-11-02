@@ -758,7 +758,10 @@
                       "
                     >
                       <div class="w-full">
-                        <div class="px-6 flex justify-center">
+                        <div
+                          class="px-6 flex justify-center"
+                          style="height: 300px"
+                        >
                           <img
                             class="previewImage"
                             v-show="!showCrop & !showDraw || imgPreview"
@@ -775,6 +778,7 @@
                               :responsive="true"
                               :min-container-width="250"
                               :min-container-height="300"
+                              :scalable="true"
                               alt="Source Image"
                             ></VueCropper>
                           </div>
