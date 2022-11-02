@@ -72,6 +72,12 @@ export default {
   &.gray {
     color: gray;
   }
+  &.black {
+    color: rgb(20, 20, 20);
+  }
+  &.purple {
+    color: #4f46e5;
+  }
   &.lightgray {
     color: #939393;
   }
