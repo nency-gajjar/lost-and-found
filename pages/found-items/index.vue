@@ -24,6 +24,7 @@
           Found Items ({{ lostItems.length }})
         </h2>
         <button
+          v-if="!isAdminLogin"
           class="
             !py-3
             font-medium
@@ -311,7 +312,7 @@ export default {
   },
   computed: {
     isAdminLogin(){
-      if (this.$cookiz.get('token') || this.$store.getters['admin/token']) {
+      if (this.$auth.loggedIn) {
         return true;
       }
       return false;

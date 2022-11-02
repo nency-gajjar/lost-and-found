@@ -16,7 +16,7 @@
         <div v-show="!isAdminLogin" class="link-container">
           <NuxtLink to="/login" class="btn">Login</NuxtLink>
         </div>
-        <div v-show="isAdminLogin" class="link-container">
+        <div v-if="isAdminLogin" class="link-container">
           <div class="btn" @click="logoutAdmin('desktop')">Logout</div>
         </div>
         <div class="drawer-container">
@@ -42,7 +42,7 @@
         <div v-show="!isAdminLogin">
           <NuxtLink to="/login" @click.native="toggleMenu" class="opacity-100">Login</NuxtLink>
         </div>
-        <div v-show="!isAdminLogin">
+        <div v-show="isAdminLogin">
           <div @click="logoutAdmin('mobile')" class="opacity-100">Logout</div>
         </div>
       </div>
@@ -62,28 +62,19 @@ export default {
     toggleMenu() {
       this.menuVisible = !this.menuVisible;
     },
-    logoutAdmin(device){
-      this.$cookiz.remove('token');
-      this.isAdminLogin = false;
+    async logoutAdmin(device){
+      await this.$auth.logout();
       if(device === "mobile"){
         this.toggleMenu();
       }
-      location.reload();
     },
   },
   computed: {
-    isAdminLogin: {
-      get(){
-        if (this.$cookiz.get('token') || this.$store.getters['admin/token']) {
-          this.isLogin = true;
-          return this.isLogin;
-        }
-        this.isLogin = false;
-        return false;
-      },
-      set(value){
-        this.isLogin = value;
+    isAdminLogin() {
+      if(this.$auth.loggedIn){
+        return true;
       }
+      return false;
     }
   }
 };

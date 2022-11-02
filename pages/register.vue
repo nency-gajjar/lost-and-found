@@ -142,9 +142,9 @@
 <script>
 import { ValidationObserver, ValidationProvider } from "vee-validate";
 export default {
-  middleware(context) {
-    if (!context.app.$cookiz.get('token')) {
-      return context.redirect('/login');
+  middleware({$auth, redirect}) {
+    if (!$auth.loggedIn) {
+      return redirect('/login');
     }
   },
   components: {

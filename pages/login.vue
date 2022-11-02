@@ -188,9 +188,9 @@
 <script>
 import { ValidationObserver, ValidationProvider } from "vee-validate";
 export default {
-  middleware(context) {
-    if (context.app.$cookiz.get('token')) {
-      return context.redirect('/found-items');
+  middleware({$auth, redirect}) {
+    if ($auth.loggedIn) {
+      return redirect('/found-items');
     }
   },
   components: {
@@ -233,21 +233,24 @@ export default {
           password: this.password
         };
 
-        this.$axios
-        .post("/loginAdmin", params)
-        .then((response) => {
-            if (response.status === 200) {
-              this.$store.commit("admin/SET_TOKEN", {
-                token: response.data.data.AuthenticationResult.IdToken
-              });
-              this.isLoading = false;
-              this.$toast.info("Login successfully!", {
-                hideProgressBar: true,
-              });
-              this.$nextTick(() => {
-                this.$router.push({ path: "/found-items" });
-              });
-            }
+        this.$auth.loginWith("local", {
+          data: params
+        })
+        .then( async (response) => {
+          console.log(response);
+          if(response.status === 200){
+            await this.$auth.setUser({
+              email: params.email,
+              password: params.password,
+            })
+            this.isLoading = false;
+            this.$toast.info("Login successfully!", {
+              hideProgressBar: true,
+            });
+            this.$nextTick(() => {
+              this.$router.push({ path: "/found-items" });
+            });
+          }
         })
         .catch((error) => {
             this.isLoading = false;

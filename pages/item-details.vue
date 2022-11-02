@@ -1148,6 +1148,7 @@ import {
 } from "vue-feather-icons";
 
 export default {
+  middleware: ['auth-admin'],
   data: () => ({
     showValidateAlert: false,
     senderFormTitle: "",

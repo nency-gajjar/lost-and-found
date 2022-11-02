@@ -45,7 +45,7 @@ export default {
   modules: [
     // https://go.nuxtjs.dev/axios
     '@nuxtjs/axios',
-    ['cookie-universal-nuxt', { alias: 'cookiz' }],
+    '@nuxtjs/auth',
     '@nuxtjs/toast',
   ],
 
@@ -78,4 +78,16 @@ export default {
   build: {
     transpile: ['vee-validate/dist/rules'],
   },
+
+  auth: {
+    strategies: {
+      local: {
+        endpoints: {
+          login: { url: '/loginAdmin', method: 'post', propertyName: 'token' },
+          logout: true,
+          user: false
+        }
+      }
+    }
+  }
 }
