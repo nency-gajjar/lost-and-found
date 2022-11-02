@@ -7,14 +7,14 @@
             <NuxtLink to="/" class="logo">Lost & Found</NuxtLink>
           </div>
         </div>
-        <div class="link-container">
+        <div v-if="isAdminLogin" class="link-container">
+          <NuxtLink to="/dashboard" class="btn">Dashboard</NuxtLink>
+        </div>
+        <div v-else class="link-container">
           <NuxtLink to="/found-items" class="btn">Found Items</NuxtLink>
         </div>
         <div v-show="isAdminLogin" class="link-container">
           <NuxtLink to="/register" class="btn">Register</NuxtLink>
-        </div>
-        <div v-show="!isAdminLogin" class="link-container">
-          <NuxtLink to="/login" class="btn">Login</NuxtLink>
         </div>
         <div v-if="isAdminLogin" class="link-container">
           <div class="btn" @click="logoutAdmin('desktop')">Logout</div>
@@ -28,7 +28,15 @@
         </div>
       </div>
       <div v-show="menuVisible" class="mobile-menu">
-        <div>
+        <div v-if="isAdminLogin">
+          <NuxtLink
+            to="/dashboard"
+            @click.native="toggleMenu"
+            class="opacity-100"
+            >Dashboard</NuxtLink
+          >
+        </div>
+        <div v-else>
           <NuxtLink
             to="/found-items"
             @click.native="toggleMenu"
@@ -37,10 +45,12 @@
           >
         </div>
         <div v-show="isAdminLogin">
-          <NuxtLink to="/register" @click.native="toggleMenu" class="opacity-100">Register</NuxtLink>
-        </div>
-        <div v-show="!isAdminLogin">
-          <NuxtLink to="/login" @click.native="toggleMenu" class="opacity-100">Login</NuxtLink>
+          <NuxtLink
+            to="/register"
+            @click.native="toggleMenu"
+            class="opacity-100"
+            >Register</NuxtLink
+          >
         </div>
         <div v-show="isAdminLogin">
           <div @click="logoutAdmin('mobile')" class="opacity-100">Logout</div>
@@ -62,21 +72,21 @@ export default {
     toggleMenu() {
       this.menuVisible = !this.menuVisible;
     },
-    async logoutAdmin(device){
+    async logoutAdmin(device) {
       await this.$auth.logout();
-      if(device === "mobile"){
+      if (device === "mobile") {
         this.toggleMenu();
       }
     },
   },
   computed: {
     isAdminLogin() {
-      if(this.$auth.loggedIn){
+      if (this.$auth.loggedIn) {
         return true;
       }
       return false;
-    }
-  }
+    },
+  },
 };
 </script>
 

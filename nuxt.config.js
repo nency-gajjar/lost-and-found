@@ -53,7 +53,7 @@ export default {
   toast: {
     position: 'top-right',
     iconPack: 'fontawesome',
-    duration: 10000,
+    duration: 5000,
     keepOnHover: true,
     closeOnSwipe: true,
     containerClass: 'sm:!right-8 sm:!top-8',

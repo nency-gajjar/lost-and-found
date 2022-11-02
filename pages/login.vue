@@ -1,15 +1,7 @@
 <template>
-  <section class="bg-gray-100 shadow-lg">
+  <section class="bg-gray-100">
     <div
-      class="
-        flex flex-col
-        items-center
-        px-6
-        py-8
-        mx-auto
-        md:h-screen
-        lg:py-0
-      "
+      class="flex flex-col items-center px-6 py-8 mx-auto md:h-screen lg:py-0"
     >
       <a
         href="#"
@@ -188,9 +180,9 @@
 <script>
 import { ValidationObserver, ValidationProvider } from "vee-validate";
 export default {
-  middleware({$auth, redirect}) {
+  middleware({ $auth, redirect }) {
     if ($auth.loggedIn) {
-      return redirect('/found-items');
+      return redirect("/found-items");
     }
   },
   components: {
@@ -226,53 +218,49 @@ export default {
         this.showValidateAlert = false;
         // console.log(this.email);
         // console.log(this.password);
-        
 
         const params = {
           email: this.email,
-          password: this.password
+          password: this.password,
         };
 
-        this.$auth.loginWith("local", {
-          data: params
-        })
-        .then( async (response) => {
-          console.log(response);
-          if(response.status === 200){
-            await this.$auth.setUser({
-              email: params.email,
-              password: params.password,
-            })
+        this.$auth
+          .loginWith("local", {
+            data: params,
+          })
+          .then(async (response) => {
+            console.log(response);
+            if (response.status === 200) {
+              await this.$auth.setUser({
+                email: params.email,
+                password: params.password,
+              });
+              this.isLoading = false;
+              this.$toast.info("Login successfully!");
+              this.$nextTick(() => {
+                this.$router.push({ path: "/dashboard" });
+              });
+            }
+          })
+          .catch((error) => {
             this.isLoading = false;
-            this.$toast.info("Login successfully!", {
-              hideProgressBar: true,
-            });
-            this.$nextTick(() => {
-              this.$router.push({ path: "/found-items" });
-            });
-          }
-        })
-        .catch((error) => {
-            this.isLoading = false;
-            this.$toast.error("Something went wrong! Please try again.", {
-              hideProgressBar: true,
-            });
+            this.$toast.error("Email or Password is incorrect");
             console.log(error);
-        });
+          });
       }
     },
   },
   mounted() {
-    window.addEventListener('keydown', () => {
+    window.addEventListener("keydown", () => {
       this.showValidateAlert = false;
     });
-    window.addEventListener('click', () => {
+    window.addEventListener("click", () => {
       this.showValidateAlert = false;
     });
   },
   beforeDestroy() {
-    window.removeEventListener('click', () => {});
-    window.removeEventListener('keydown', () => {});
+    window.removeEventListener("click", () => {});
+    window.removeEventListener("keydown", () => {});
   },
 };
 </script>

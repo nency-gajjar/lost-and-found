@@ -633,7 +633,6 @@
 import { mapGetters } from "vuex";
 import _ from "lodash";
 export default {
-  middleware: ['auth-admin'],
   data() {
     return {
       isLoading: false,
@@ -737,9 +736,7 @@ export default {
                 .catch((error) => {
                   this.isLoading = false;
                   this.showDialog = false;
-                  this.$toast.error("Something went wrong! Please try again.", {
-                    hideProgressBar: true,
-                  });
+                  this.$toast.error("Something went wrong! Please try again.");
                   console.log(error);
                 });
             }
@@ -769,9 +766,7 @@ export default {
           .catch((error) => {
             this.isLoading = false;
             this.showDialog = false;
-            this.$toast.error("Something went wrong! Please try again.", {
-              hideProgressBar: true,
-            });
+            this.$toast.error("Something went wrong! Please try again.");
 
             console.log(error);
           });

@@ -1,15 +1,7 @@
 <template>
-  <section class="bg-gray-100 shadow-lg">
+  <section class="bg-gray-100">
     <div
-      class="
-        flex flex-col
-        items-center
-        px-6
-        py-8
-        mx-auto
-        md:h-screen
-        lg:py-0
-      "
+      class="flex flex-col items-center px-6 py-8 mx-auto md:h-screen lg:py-0"
     >
       <a
         href="#"
@@ -89,7 +81,7 @@
                   id="password"
                   v-model="password"
                   type="password"
-                  label="Password"
+                  label="New Password"
                   :class="errors.length > 0 && 'error'"
                 />
                 <p
@@ -108,7 +100,7 @@
                   id="confirmPassword"
                   v-model="confirmPassword"
                   type="password"
-                  label="Confirm Password"
+                  label="Confirm New Password"
                   :class="errors.length > 0 && 'error'"
                 />
                 <p
@@ -171,9 +163,9 @@
 <script>
 import { ValidationObserver, ValidationProvider } from "vee-validate";
 export default {
-  middleware({$auth, redirect}) {
+  middleware({ $auth, redirect }) {
     if ($auth.loggedIn) {
-      return redirect('/found-items');
+      return redirect("/found-items");
     }
   },
   components: {
@@ -215,53 +207,49 @@ export default {
         // console.log(this.confirmPassword);
         // console.log(this.verificationCode);
         // console.log(this.email);
-        
+
         const params = {
           email: this.email,
           newPassword: this.password,
-          verificationCode: this.verificationCode
+          verificationCode: this.verificationCode,
         };
 
         this.$axios
-        .post("/resetpassword", params)
-        .then((response) => {
+          .post("/resetpassword", params)
+          .then((response) => {
             if (response.status === 200) {
               this.isLoading = false;
-              this.$toast.info("Password Reset successfully!", {
-                hideProgressBar: true,
-              });
+              this.$toast.info("Password Reset successfully!");
               this.$nextTick(() => {
                 this.$router.push({
-                  name: "login"
+                  name: "login",
                 });
               });
             }
-        })
-        .catch((error) => {
+          })
+          .catch((error) => {
             this.isLoading = false;
-            this.$toast.error("Something went wrong! Please try again.", {
-              hideProgressBar: true,
-            });
+            this.$toast.error("Something went wrong! Please try again.");
             console.log(error);
-        });
+          });
       }
     },
   },
-  mounted(){
-    window.addEventListener('keydown', () => {
+  mounted() {
+    window.addEventListener("keydown", () => {
       this.showValidateAlert = false;
     });
-    window.addEventListener('click', () => {
+    window.addEventListener("click", () => {
       this.showValidateAlert = false;
     });
     this.email = this.$route.params.email;
-    if(!this.email){
+    if (!this.email) {
       this.showEmail = true;
     }
   },
   beforeDestroy() {
-    window.removeEventListener('click', () => {});
-    window.removeEventListener('keydown', () => {});
+    window.removeEventListener("click", () => {});
+    window.removeEventListener("keydown", () => {});
   },
 };
 </script>
