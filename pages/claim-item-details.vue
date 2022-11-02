@@ -664,6 +664,7 @@
 
 <script>
 export default {
+  middleware: ['auth-admin'],
   data() {
     return {
       showDialog: false,

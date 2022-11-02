@@ -1,16 +1,7 @@
 <template>
-  <section class="bg-gray-100 shadow-lg">
+  <section class="bg-gray-100">
     <div
-      class="
-        flex flex-col
-        items-center
-        justify-center
-        px-6
-        py-8
-        mx-auto
-        md:h-screen
-        lg:py-0
-      "
+      class="flex flex-col items-center px-6 py-8 mx-auto md:h-screen lg:py-0"
     >
       <a
         href="#"
@@ -24,7 +15,7 @@
             <h1
               class="w-full my-2 text-xl font-bold leading-tight text-gray-700"
             >
-              Forgot Password
+              Register New Admin
             </h1>
             <div class="flex justify-start">
               <span
@@ -49,9 +40,29 @@
                 name="Email"
               >
                 <BaseInput
+                  id="email"
                   v-model="email"
                   type="email"
                   label="Email"
+                  :class="errors.length > 0 && 'error'"
+                />
+                <p
+                  v-if="errors.length"
+                  class="vee-validation-error mt-2 text-sm text-red-600"
+                >
+                  {{ errors[0] }}
+                </p>
+              </ValidationProvider>
+              <ValidationProvider
+                id="password"
+                v-slot="{ errors }"
+                rules="required|strongPassword"
+                class="block"
+              >
+                <BaseInput
+                  v-model="password"
+                  type="password"
+                  label="Password"
                   :class="errors.length > 0 && 'error'"
                 />
                 <p
@@ -102,8 +113,16 @@
                   text-center
                 "
               >
-                <span class="button__text"> Send Email </span>
+                <span class="button__text"> Register </span>
               </button>
+              <p class="text-sm font-light text-gray-500 cursor-pointer">
+                Already have an account?
+                <a
+                  @click="routeToLogin"
+                  class="font-medium text-gray-600 hover:underline"
+                  >Login</a
+                >
+              </p>
             </form>
           </ValidationObserver>
         </div>
@@ -115,6 +134,11 @@
 <script>
 import { ValidationObserver, ValidationProvider } from "vee-validate";
 export default {
+  middleware({ $auth, redirect }) {
+    if (!$auth.loggedIn) {
+      return redirect("/login");
+    }
+  },
   components: {
     ValidationObserver,
     ValidationProvider,
@@ -122,11 +146,17 @@ export default {
   data() {
     return {
       email: "",
+      password: "",
       isLoading: false,
       showValidateAlert: false,
     };
   },
   methods: {
+    routeToLogin() {
+      this.$nextTick(() => {
+        this.$router.push("/login");
+      });
+    },
     async onSubmit() {
       this.isLoading = true;
       const isValid = await this.$refs.observer.validate();
@@ -135,12 +165,47 @@ export default {
         this.isLoading = false;
       } else {
         this.showValidateAlert = false;
-        setTimeout(() => {
-          this.isLoading = false;
-        }, 3000);
-        console.log(this.email);
+        // console.log(this.email);
+        // console.log(this.password);
+
+        const params = {
+          email: this.email,
+          password: this.password,
+        };
+
+        this.$axios
+          .post("/registerAdmin", params)
+          .then(async (response) => {
+            if (response.status === 200) {
+              this.isLoading = false;
+              this.$toast.info("Register successfully!");
+              await this.$auth.logout();
+              this.$nextTick(() => {
+                this.$router.push({
+                  name: "login",
+                });
+              });
+            }
+          })
+          .catch((error) => {
+            this.isLoading = false;
+            this.$toast.error("Something went wrong! Please try again.");
+            console.log(error);
+          });
       }
     },
+  },
+  mounted() {
+    window.addEventListener("keydown", () => {
+      this.showValidateAlert = false;
+    });
+    window.addEventListener("click", () => {
+      this.showValidateAlert = false;
+    });
+  },
+  beforeDestroy() {
+    window.removeEventListener("click", () => {});
+    window.removeEventListener("keydown", () => {});
   },
 };
 </script>

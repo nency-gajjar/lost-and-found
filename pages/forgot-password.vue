@@ -1,16 +1,7 @@
 <template>
-  <section class="bg-gray-100 shadow-lg">
+  <section class="bg-gray-100">
     <div
-      class="
-        flex flex-col
-        items-center
-        justify-center
-        px-6
-        py-8
-        mx-auto
-        md:h-screen
-        lg:py-0
-      "
+      class="flex flex-col items-center px-6 py-8 mx-auto md:h-screen lg:py-0"
     >
       <a
         href="#"
@@ -24,7 +15,7 @@
             <h1
               class="w-full my-2 text-xl font-bold leading-tight text-gray-700"
             >
-              Login to your account
+              Forgot Password
             </h1>
             <div class="flex justify-start">
               <span
@@ -44,7 +35,6 @@
             >
               <ValidationProvider
                 v-slot="{ errors }"
-                id="email"
                 rules="required|email"
                 class="block"
                 name="Email"
@@ -52,26 +42,7 @@
                 <BaseInput
                   v-model="email"
                   type="email"
-                  label="Your Email"
-                  :class="errors.length > 0 && 'error'"
-                />
-                <p
-                  v-if="errors.length"
-                  class="vee-validation-error mt-2 text-sm text-red-600"
-                >
-                  {{ errors[0] }}
-                </p>
-              </ValidationProvider>
-              <ValidationProvider
-                id="password"
-                v-slot="{ errors }"
-                rules="required"
-                class="block"
-              >
-                <BaseInput
-                  v-model="password"
-                  type="password"
-                  label="Password"
+                  label="Email"
                   :class="errors.length > 0 && 'error'"
                 />
                 <p
@@ -95,41 +66,6 @@
               >
                 <span class="font-medium">Oops!</span> Please fill all required
                 fields and try submitting again.
-              </div>
-              <div class="flex items-center justify-between">
-                <div class="flex items-start">
-                  <div class="flex items-center h-5">
-                    <input
-                      id="remember"
-                      aria-describedby="remember"
-                      type="checkbox"
-                      class="
-                        w-4
-                        h-4
-                        border border-gray-300
-                        rounded
-                        bg-gray-50
-                        focus:ring-3 focus:ring-primary-300
-                      "
-                    />
-                  </div>
-                  <div class="ml-3 text-sm">
-                    <label for="remember" class="text-gray-500"
-                      >Remember me</label
-                    >
-                  </div>
-                </div>
-                <a
-                  @click="forgotPassword"
-                  class="
-                    text-sm
-                    font-medium
-                    text-gray-600
-                    hover:underline
-                    cursor-pointer
-                  "
-                  >Forgot password?</a
-                >
               </div>
               <button
                 type="submit"
@@ -157,38 +93,32 @@
                   text-center
                 "
               >
-                <span class="button__text"> Login </span>
+                <span class="button__text"> Send Email </span>
               </button>
-              <!-- <p
-                class="
-                  text-sm
-                  font-light
-                  text-gray-500
-                  cursor-pointer
-                "
-              >
-                Don’t have an account yet?
-                <a
-                  @click="routeToRegister"
-                  class="
-                    font-medium
-                    text-gray-600
-                    hover:underline
-                  "
-                  >Register</a
-                >
-              </p> -->
             </form>
           </ValidationObserver>
         </div>
       </div>
     </div>
+    <BaseDialog
+      :showDialog="showDialog"
+      :icon="{ name: 'circle-check', color: 'green', size: '3x' }"
+      title="Email Sent successfully!"
+      message="Please check your email to get the varification code"
+      buttonTitle="Okay"
+      @close="closeDialog"
+    />
   </section>
 </template>
 
 <script>
 import { ValidationObserver, ValidationProvider } from "vee-validate";
 export default {
+  middleware({ $auth, redirect }) {
+    if ($auth.loggedIn) {
+      return redirect("/found-items");
+    }
+  },
   components: {
     ValidationObserver,
     ValidationProvider,
@@ -196,22 +126,12 @@ export default {
   data() {
     return {
       email: "",
-      password: "",
       isLoading: false,
       showValidateAlert: false,
+      showDialog: false,
     };
   },
   methods: {
-    forgotPassword() {
-      this.$nextTick(() => {
-        this.$router.push("/admin/forgot-password");
-      });
-    },
-    routeToRegister() {
-      this.$nextTick(() => {
-        this.$router.push("/admin/register");
-      });
-    },
     async onSubmit() {
       this.isLoading = true;
       const isValid = await this.$refs.observer.validate();
@@ -220,13 +140,47 @@ export default {
         this.isLoading = false;
       } else {
         this.showValidateAlert = false;
-        setTimeout(() => {
-          this.isLoading = false;
-        }, 3000);
-        console.log(this.email);
-        console.log(this.password);
+        const params = {
+          email: this.email,
+        };
+
+        this.$axios
+          .post("/forgotpassword", params)
+          .then((response) => {
+            if (response.status === 200) {
+              this.isLoading = false;
+              this.showDialog = true;
+            }
+          })
+          .catch((error) => {
+            this.isLoading = false;
+            this.$toast.error("Something went wrong! Please try again.");
+            console.log(error);
+          });
       }
     },
+    closeDialog() {
+      this.showDialog = false;
+      this.$toast.info("Email sent successfully!");
+      this.$nextTick(() => {
+        this.$router.push({
+          name: "reset-password",
+          params: { email: this.email },
+        });
+      });
+    },
+  },
+  mounted() {
+    window.addEventListener("keydown", () => {
+      this.showValidateAlert = false;
+    });
+    window.addEventListener("click", () => {
+      this.showValidateAlert = false;
+    });
+  },
+  beforeDestroy() {
+    window.removeEventListener("click", () => {});
+    window.removeEventListener("keydown", () => {});
   },
 };
 </script>

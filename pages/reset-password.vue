@@ -1,16 +1,7 @@
 <template>
-  <section class="bg-gray-100 shadow-lg">
+  <section class="bg-gray-100">
     <div
-      class="
-        flex flex-col
-        items-center
-        justify-center
-        px-6
-        py-8
-        mx-auto
-        md:h-screen
-        lg:py-0
-      "
+      class="flex flex-col items-center px-6 py-8 mx-auto md:h-screen lg:py-0"
     >
       <a
         href="#"
@@ -43,15 +34,16 @@
               @submit.prevent="validate().then(onSubmit)"
             >
               <ValidationProvider
+                v-show="showEmail"
                 v-slot="{ errors }"
-                rules="required"
+                rules="required|email"
                 class="block"
+                name="Email"
               >
                 <BaseInput
-                  id="password"
-                  v-model="password"
-                  type="password"
-                  label="Password"
+                  v-model="email"
+                  type="email"
+                  label="Email"
                   :class="errors.length > 0 && 'error'"
                 />
                 <p
@@ -67,10 +59,48 @@
                 class="block"
               >
                 <BaseInput
+                  id="verificationCode"
+                  v-model="verificationCode"
+                  type="text"
+                  label="Verification Code"
+                  :class="errors.length > 0 && 'error'"
+                />
+                <p
+                  v-if="errors.length"
+                  class="vee-validation-error mt-2 text-sm text-red-600"
+                >
+                  {{ errors[0] }}
+                </p>
+              </ValidationProvider>
+              <ValidationProvider
+                v-slot="{ errors }"
+                rules="required|strongPassword"
+                class="block"
+              >
+                <BaseInput
+                  id="password"
+                  v-model="password"
+                  type="password"
+                  label="New Password"
+                  :class="errors.length > 0 && 'error'"
+                />
+                <p
+                  v-if="errors.length"
+                  class="vee-validation-error mt-2 text-sm text-red-600"
+                >
+                  {{ errors[0] }}
+                </p>
+              </ValidationProvider>
+              <ValidationProvider
+                v-slot="{ errors }"
+                rules="required|strongPassword"
+                class="block"
+              >
+                <BaseInput
                   id="confirmPassword"
                   v-model="confirmPassword"
                   type="password"
-                  label="Confirm Password"
+                  label="Confirm New Password"
                   :class="errors.length > 0 && 'error'"
                 />
                 <p
@@ -133,12 +163,20 @@
 <script>
 import { ValidationObserver, ValidationProvider } from "vee-validate";
 export default {
+  middleware({ $auth, redirect }) {
+    if ($auth.loggedIn) {
+      return redirect("/found-items");
+    }
+  },
   components: {
     ValidationObserver,
     ValidationProvider,
   },
   data() {
     return {
+      showEmail: false,
+      verificationCode: "",
+      email: "",
       password: "",
       confirmPassword: "",
       alertMessage: "",
@@ -165,13 +203,53 @@ export default {
         this.isLoading = false;
       } else {
         this.showValidateAlert = false;
-        setTimeout(() => {
-          this.isLoading = false;
-        }, 3000);
-        console.log(this.password);
-        console.log(this.confirmPassword);
+        // console.log(this.password);
+        // console.log(this.confirmPassword);
+        // console.log(this.verificationCode);
+        // console.log(this.email);
+
+        const params = {
+          email: this.email,
+          newPassword: this.password,
+          verificationCode: this.verificationCode,
+        };
+
+        this.$axios
+          .post("/resetpassword", params)
+          .then((response) => {
+            if (response.status === 200) {
+              this.isLoading = false;
+              this.$toast.info("Password Reset successfully!");
+              this.$nextTick(() => {
+                this.$router.push({
+                  name: "login",
+                });
+              });
+            }
+          })
+          .catch((error) => {
+            this.isLoading = false;
+            this.$toast.error("Something went wrong! Please try again.");
+            console.log(error);
+          });
       }
     },
+  },
+  mounted() {
+    window.addEventListener("keydown", () => {
+      this.showValidateAlert = false;
+    });
+    window.addEventListener("click", () => {
+      this.showValidateAlert = false;
+    });
+    this.email = this.$route.params.email;
+    if (!this.email) {
+      this.showEmail = true;
+    }
+  },
+  beforeDestroy() {
+    window.removeEventListener("click", () => {});
+    window.removeEventListener("keydown", () => {});
   },
 };
 </script>

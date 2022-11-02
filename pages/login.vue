@@ -1,16 +1,7 @@
 <template>
-  <section class="bg-gray-100 shadow-lg">
+  <section class="bg-gray-100">
     <div
-      class="
-        flex flex-col
-        items-center
-        justify-center
-        px-6
-        py-8
-        mx-auto
-        md:h-screen
-        lg:py-0
-      "
+      class="flex flex-col items-center px-6 py-8 mx-auto md:h-screen lg:py-0"
     >
       <a
         href="#"
@@ -24,7 +15,7 @@
             <h1
               class="w-full my-2 text-xl font-bold leading-tight text-gray-700"
             >
-              Register
+              Login to your account
             </h1>
             <div class="flex justify-start">
               <span
@@ -49,10 +40,10 @@
                 name="Email"
               >
                 <BaseInput
-                  id="email"
                   v-model="email"
+                  id="email"
                   type="email"
-                  label="Email"
+                  label="Your Email"
                   :class="errors.length > 0 && 'error'"
                 />
                 <p
@@ -63,13 +54,13 @@
                 </p>
               </ValidationProvider>
               <ValidationProvider
-                id="password"
                 v-slot="{ errors }"
-                rules="required"
+                rules="required|strongPassword"
                 class="block"
               >
                 <BaseInput
                   v-model="password"
+                  id="password"
                   type="password"
                   label="Password"
                   :class="errors.length > 0 && 'error'"
@@ -95,6 +86,41 @@
               >
                 <span class="font-medium">Oops!</span> Please fill all required
                 fields and try submitting again.
+              </div>
+              <div class="flex items-center justify-between">
+                <div class="flex items-start">
+                  <div class="flex items-center h-5">
+                    <input
+                      id="remember"
+                      aria-describedby="remember"
+                      type="checkbox"
+                      class="
+                        w-4
+                        h-4
+                        border border-gray-300
+                        rounded
+                        bg-gray-50
+                        focus:ring-3 focus:ring-primary-300
+                      "
+                    />
+                  </div>
+                  <div class="ml-3 text-sm">
+                    <label for="remember" class="text-gray-500"
+                      >Remember me</label
+                    >
+                  </div>
+                </div>
+                <a
+                  @click="forgotPassword"
+                  class="
+                    text-sm
+                    font-medium
+                    text-gray-600
+                    hover:underline
+                    cursor-pointer
+                  "
+                  >Forgot password?</a
+                >
               </div>
               <button
                 type="submit"
@@ -122,16 +148,27 @@
                   text-center
                 "
               >
-                <span class="button__text"> Register </span>
+                <span class="button__text"> Login </span>
               </button>
-              <p class="text-sm font-light text-gray-500 cursor-pointer">
-                Already have an account?
+              <!-- <p
+                class="
+                  text-sm
+                  font-light
+                  text-gray-500
+                  cursor-pointer
+                "
+              >
+                Don’t have an account yet?
                 <a
-                  @click="routeToLogin"
-                  class="font-medium text-gray-600 hover:underline"
-                  >Login</a
+                  @click="routeToRegister"
+                  class="
+                    font-medium
+                    text-gray-600
+                    hover:underline
+                  "
+                  >Register</a
                 >
-              </p>
+              </p> -->
             </form>
           </ValidationObserver>
         </div>
@@ -143,6 +180,11 @@
 <script>
 import { ValidationObserver, ValidationProvider } from "vee-validate";
 export default {
+  middleware({ $auth, redirect }) {
+    if ($auth.loggedIn) {
+      return redirect("/found-items");
+    }
+  },
   components: {
     ValidationObserver,
     ValidationProvider,
@@ -156,9 +198,14 @@ export default {
     };
   },
   methods: {
-    routeToLogin() {
+    forgotPassword() {
       this.$nextTick(() => {
-        this.$router.push("/admin/login");
+        this.$router.push("/forgot-password");
+      });
+    },
+    routeToRegister() {
+      this.$nextTick(() => {
+        this.$router.push("/register");
       });
     },
     async onSubmit() {
@@ -169,36 +216,51 @@ export default {
         this.isLoading = false;
       } else {
         this.showValidateAlert = false;
-        setTimeout(() => {
-          this.isLoading = false;
-        }, 3000);
-        console.log(this.email);
-        console.log(this.password);
+        // console.log(this.email);
+        // console.log(this.password);
 
-        // const params = {
-        //     claimpersonname: this.claimPersonName,
-        //     claimpersonemail: this.claimPersonEmail,
-        //     claimpersonmobileno: claimPersonPhoneNo,
-        //     claimpersonitemname: this.itemName,
-        //     claimpersondescription: this.itemDescription,
-        //     claimpersondatelost: this.itemLostDate,
-        //     claimpersonlocation: this.autoCompleteAddress.address,
-        //     itemid: this.itemId,
-        // };
+        const params = {
+          email: this.email,
+          password: this.password,
+        };
 
-        // this.$axios
-        // .post("/sendclaimitemmail", params)
-        // .then((response) => {
-        //     if (response.status === 200) {
-        //     this.isLoading = false;
-        //     }
-        // })
-        // .catch((error) => {
-        //     this.isLoading = false;
-        //     console.log(error);
-        // });
+        this.$auth
+          .loginWith("local", {
+            data: params,
+          })
+          .then(async (response) => {
+            console.log(response);
+            if (response.status === 200) {
+              await this.$auth.setUser({
+                email: params.email,
+                password: params.password,
+              });
+              this.isLoading = false;
+              this.$toast.info("Login successfully!");
+              this.$nextTick(() => {
+                this.$router.push({ path: "/dashboard" });
+              });
+            }
+          })
+          .catch((error) => {
+            this.isLoading = false;
+            this.$toast.error("Email or Password is incorrect");
+            console.log(error);
+          });
       }
     },
+  },
+  mounted() {
+    window.addEventListener("keydown", () => {
+      this.showValidateAlert = false;
+    });
+    window.addEventListener("click", () => {
+      this.showValidateAlert = false;
+    });
+  },
+  beforeDestroy() {
+    window.removeEventListener("click", () => {});
+    window.removeEventListener("keydown", () => {});
   },
 };
 </script>

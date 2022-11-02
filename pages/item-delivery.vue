@@ -182,6 +182,7 @@
   
 <script>
 export default {
+  middleware: ['auth-admin'],
   data: () => ({
     showDialog: false,
     deliveryType: "0",

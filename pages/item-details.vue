@@ -188,9 +188,7 @@
                   {{ errors[0] }}
                 </p>
               </ValidationProvider>
-
-              <!-- Employee Mobile No -->
-              <div class="block relative box-content h-12">
+              <div class="block relative box-content h-12" :class="!isEmployeeMobileNoValid && 'error'">
                 <vue-tel-input
                   :inputOptions="{ placeholder: 'Employee Mobile No.' }"
                   class="
@@ -388,9 +386,7 @@
                     {{ errors[0] }}
                   </p>
                 </ValidationProvider>
-
-                <!-- Phone Number -->
-                <div class="block relative box-content h-12">
+                <div class="block relative box-content h-12" :class="!isVenuePhoneValid && 'error'">
                   <vue-tel-input
                     :inputOptions="{ placeholder: 'Phone Number' }"
                     class="
@@ -1125,9 +1121,7 @@
                     {{ errors[0] }}
                   </p>
                 </ValidationProvider>
-
-                <!-- Receiver Mobile Number -->
-                <div class="block relative box-content h-12">
+                <div class="block relative box-content h-12" :class="!isReceiverMobileNoValid && 'error'">
                   <vue-tel-input
                     :inputOptions="{ placeholder: 'Receiver Mobile No.' }"
                     class="
@@ -1223,6 +1217,7 @@ import {
 } from "static/defaults.js";
 
 export default {
+  middleware: ['auth-admin'],
   data: () => ({
     imgSrc: "",
     showCrop: false,
@@ -1434,6 +1429,7 @@ export default {
     },
     formatMobileNumber(phoneNumber) {
       let arr = phoneNumber.split(" ");
+      console.log(arr);
       let countryCode = arr.shift();
       return countryCode + " " + arr.join("");
     },
@@ -1799,10 +1795,6 @@ export default {
       if (this.itemStatus == "Claimed") this.validateReceiverMobileNo();
 
       this.isLoading = true;
-      let venuePhoneNo = this.formatMobileNumber(
-        this.autoCompleteAddress.phoneNo
-      );
-      let employeeMobileNo = this.formatMobileNumber(this.employeeMobileNo);
       const isValid = await this.$refs.observer.validate();
       if (
         !isValid ||
@@ -1813,6 +1805,10 @@ export default {
         this.showValidateAlert = true;
         this.isLoading = false;
       } else {
+        let venuePhoneNo = this.formatMobileNumber(
+          this.autoCompleteAddress.phoneNo
+        );
+        let employeeMobileNo = this.formatMobileNumber(this.employeeMobileNo);
         this.showValidateAlert = false;
         const params = {
           venu_type:
@@ -2399,6 +2395,12 @@ export default {
     },
   },
   mounted() {
+    window.addEventListener('keydown', () => {
+      this.showValidateAlert = false;
+    });
+    window.addEventListener('click', () => {
+      this.showValidateAlert = false;
+    });
     if (this.$route.query.id) {
       this.isLoadingItemDetails = true;
       this.foundItemId = this.$route.query.id;
@@ -2496,6 +2498,10 @@ export default {
       this.foundItemFormTitle = "FOUND ITEM'S DETAILS";
     }
   },
+  beforeDestroy() {
+    window.removeEventListener('click', () => {});
+    window.removeEventListener('keydown', () => {});
+  },
 };
 </script>
 
@@ -2580,10 +2586,7 @@ canvas {
 }
 
 .error {
-  & > div {
-    @apply text-red-500;
-  }
-  .vs__dropdown-toggle {
+  & > .vue-tel-input {
     @apply border-red-500 border-2 ring-4 ring-red-500 ring-opacity-10 transition-none;
   }
 }

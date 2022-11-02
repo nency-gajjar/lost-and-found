@@ -24,6 +24,7 @@
           Found Items ({{ lostItems.length }})
         </h2>
         <button
+          v-if="!isAdminLogin"
           class="
             !py-3
             font-medium
@@ -271,6 +272,7 @@
               Claim Item
             </button>
             <button
+              v-if="isAdminLogin"
               class="
                 whitespace-nowrap
                 font-medium
@@ -308,6 +310,14 @@ export default {
       isLoading: false,
     };
   },
+  computed: {
+    isAdminLogin(){
+      if (this.$auth.loggedIn) {
+        return true;
+      }
+      return false;
+    }
+  },
   methods: {
     addNewItem() {
       this.$router.push({ name: "item-details" });
@@ -340,6 +350,9 @@ export default {
         if (response.status === 200) {
           this.isLoading = false;
           this.lostItems = response?.data?.data;
+          if(!this.lostItems){
+            this.lostItems = [];
+          }
         }
       })
       .catch((err) => {

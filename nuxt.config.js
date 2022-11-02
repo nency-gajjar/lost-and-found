@@ -45,6 +45,7 @@ export default {
   modules: [
     // https://go.nuxtjs.dev/axios
     '@nuxtjs/axios',
+    '@nuxtjs/auth',
     '@nuxtjs/toast',
   ],
 
@@ -52,7 +53,7 @@ export default {
   toast: {
     position: 'top-right',
     iconPack: 'fontawesome',
-    duration: 10000,
+    duration: 5000,
     keepOnHover: true,
     closeOnSwipe: true,
     containerClass: 'sm:!right-8 sm:!top-8',
@@ -77,4 +78,16 @@ export default {
   build: {
     transpile: ['vee-validate/dist/rules'],
   },
+
+  auth: {
+    strategies: {
+      local: {
+        endpoints: {
+          login: { url: '/loginAdmin', method: 'post', propertyName: 'token' },
+          logout: true,
+          user: false
+        }
+      }
+    }
+  }
 }
