@@ -113,10 +113,15 @@
                   <VueCropper
                     ref="cropper"
                     :src="imgSrc"
-                    :guides="false"
                     :responsive="true"
                     :min-container-width="250"
                     :min-container-height="300"
+                    :scalable="true"
+                    drag-mode="none"
+                    :movable="false"
+                    :zoomable="false"
+                    :zoomOnTouch="false"
+                    :zoomOnWheel="false"
                     alt="Source Image"
                   ></VueCropper>
                 </div>

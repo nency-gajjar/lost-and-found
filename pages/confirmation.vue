@@ -14,13 +14,7 @@
         overflow-hidden
       "
     >
-      <table
-        id="printMe"
-        width="100%"
-        class="table-style"
-        cellspacing="0"
-        cellpadding="0"
-      >
+      <table id="printMe" width="100%" class="table-style">
         <tbody>
           <tr>
             <td class="padding-1rem">
@@ -35,7 +29,7 @@
               </table>
             </td>
           </tr>
-          <tr v-if="itemDetails.link">
+          <tr v-if="itemDetails.link" class="qr-code-container">
             <td align="center" class="pt-3 pb-5 px-3">
               <div class="w-40 h-40">
                 <img :src="itemDetails.link" alt="" />
@@ -44,7 +38,7 @@
           </tr>
           <tr class="border-b">
             <td class="px-6 py-4">
-              <table width="100%" cellspacing="0" cellpadding="0">
+              <table width="100%">
                 <tr>
                   <td colspan="2" class="pb-2">
                     <h2
@@ -144,7 +138,7 @@
           </tr>
           <tr class="border-b">
             <td class="px-6 py-4">
-              <table width="100%" cellspacing="0" cellpadding="0">
+              <table width="100%">
                 <tr>
                   <td colspan="2" class="pb-2">
                     <h2
@@ -467,7 +461,7 @@ export default {
     },
   },
   mounted() {
-    this.showDialog = true;
+    // this.showDialog = true;
   },
   created() {
     if (Object.keys(this.itemConfirmationDetails).length > 0) {
@@ -501,171 +495,157 @@ export default {
         });
       } else {
         const mywindow = window.open("", "PRINT", "height=1200,width=600");
-
         mywindow.document.write("<html><head>");
-        // mywindow.document.write(
-        //   '<link rel="stylesheet" href="https://unpkg.com/tailwindcss@2.2.19/dist/tailwind.min.css" />'
-        // );
         mywindow.document.write(`<style>
-                    td{
-                        padding-right: 5px;
+                    tr td:first-child {
+                      width: 250px;
                     }
-                    .table-style{
-                        background-color: #ffffff;
-                        margin: 0 auto;
+                    .qr-code-container td {
+                      width: 100% !important;
+                    }
+                    th,
+                    td {
+                      overflow: hidden;
+                      word-break: normal;
+                    }
+                    .table-style {
+                      background-color: #ffffff;
+                      margin: 0 auto;
                     }
                     .pb-5 {
-                        padding-bottom: 1.25rem;
+                      padding-bottom: 1.25rem;
                     }
                     .pt-3 {
-                        padding-top: 0.75rem;
+                      padding-top: 0.75rem;
                     }
                     .px-3 {
-                        padding-left: 0.75rem;
-                        padding-right: 0.75rem;
+                      padding-left: 0.75rem;
+                      padding-right: 0.75rem;
                     }
                     .py-4 {
-                        padding-top: 1rem;
-                        padding-bottom: 1rem;
+                      padding-top: 1rem;
+                      padding-bottom: 1rem;
                     }
                     .px-6 {
-                        padding-left: 1.5rem;
-                        padding-right: 1.5rem;
+                      padding-left: 1.5rem;
+                      padding-right: 1.5rem;
                     }
                     .pb-2 {
-                        padding-bottom: 0.5rem;
+                      padding-bottom: 0.5rem;
                     }
-                    .padding-1rem{
-                        padding: 1rem;
+                    .padding-1rem {
+                      padding: 1rem;
                     }
                     .text-2xl {
-                        font-size: 1.5rem;
-                        line-height: 2rem;
+                      font-size: 1.5rem;
+                      line-height: 2rem;
                     }
                     .text-lg {
-                        font-size: 1.125rem;
-                        line-height: 1.75rem;
+                      font-size: 1.125rem;
+                      line-height: 1.75rem;
                     }
                     .font-bold {
-                        font-weight: 700;
+                      font-weight: 700;
                     }
                     .text-gray-800 {
-                        --tw-text-opacity: 1;
-                        color: rgb(38 38 38 / var(--tw-text-opacity));
+                      --tw-text-opacity: 1;
+                      color: rgb(38 38 38 / var(--tw-text-opacity));
                     }
                     .text-accent-100 {
-                        color: rgb(240 107 4);
+                      color: rgb(240 107 4);
                     }
                     .border-b {
-                        border-bottom-width: 1px;
+                      border-bottom-width: 1px;
                     }
                     .border-t-4 {
-                        border-top-width: 4px;
+                      border-top-width: 4px;
                     }
                     .border-solid {
-                        border-style: solid;
+                      border-style: solid;
                     }
                     .border-gray-300 {
-                        border-color: rgb(212 212 212);
+                      border-color: rgb(212 212 212);
                     }
                     .w-40 {
-                        width: 10rem;
+                      width: 10rem;
                     }
                     .w-20 {
-                        width: 5rem;
+                      width: 5rem;
                     }
                     .text-left {
-                        text-align: left;
+                      text-align: left;
                     }
                     .font-medium {
-                        font-weight: 500;
+                      font-weight: 500;
                     }
                     .h-40 {
-                        height: 10rem;
+                      height: 10rem;
                     }
                     .h-9 {
-                        height: 2.25rem;
+                      height: 2.25rem;
                     }
                     .text-gray-600 {
-                        color: rgb(82 82 82);
+                      color: rgb(82 82 82);
                     }
                     .leading-tight {
-                        line-height: 1.25;
+                      line-height: 1.25;
                     }
                     .inline-block {
-                        display: inline-block;
+                      display: inline-block;
                     }
                     .mb-1 {
-                        margin-bottom: 0.25rem;
+                      margin-bottom: 0.25rem;
                     }
-                    .item-img-container{
-                        max-width: 450px;
-                        margin-top: 1.25rem;
-                        margin-left: auto;
-                        margin-right: auto;
-                    }
-                    .button {
-                        position: relative;
-                        border: none;
-                        outline: none;
-                        cursor: pointer;
+                    
+                    .item-img-container {
+                      max-width: 450px;
+                      margin-top: 1.25rem;
+                      margin-left: auto;
+                      margin-right: auto;
                     }
 
-                    .button__text {
-                        color: #ffffff;
-                        transition: all 0.2s;
-                    }
-
-                    .button--loading .button__text {
-                        visibility: hidden;
-                        opacity: 0;
-                    }
-
-                    .button--loading::after {
-                        content: "";
-                        position: absolute;
-                        width: 16px;
-                        height: 16px;
-                        top: 0;
-                        left: 0;
-                        right: 0;
-                        bottom: 0;
-                        margin: auto;
-                        border: 4px solid transparent;
-                        border-top-color: #ffffff;
-                        border-radius: 50%;
-                        animation: button-loading-spinner 1s ease infinite;
-                    }
-
-                    @keyframes button-loading-spinner {
-                        from {
-                            transform: rotate(0turn);
-                        }
-
-                        to {
-                            transform: rotate(1turn);
-                        }
-                    }
                     @media (min-width: 640px) {
-                        .sm\:w-40 {
-                            width: 10rem;
-                        }
+                      .sm\:w-40 {
+                        width: 10rem;
+                      }
+                    }
+                    @media all and (max-width: 479px) {
+                      table,
+                      thead,
+                      tbody,
+                      th,
+                      td,
+                      tr {
+                        display: block;
+                      }
+                      tr {
+                        margin-top: 25px;
+                      }
                     }
                 </style>`);
         mywindow.document.write("</head><body>");
-        // mywindow.document.write("<h1>" + document.title + "</h1>");
         mywindow.document.write(document.getElementById("printMe").innerHTML);
         mywindow.document.write("</body></html>");
-        mywindow.print();
-        mywindow.close();
+        setTimeout(() => {
+          mywindow.print();
+          mywindow.close();
+        }, 250);
       }
     },
   },
 };
 </script>
-<style scoped>
+<style lang="scss" scoped>
+tr td:first-child {
+  width: 250px;
+}
+.qr-code-container td {
+  width: 100% !important;
+}
+th,
 td {
-  padding-right: 5px;
+  overflow: hidden;
+  word-break: normal;
 }
 .table-style {
   background-color: #ffffff;
@@ -807,6 +787,19 @@ td {
 @media (min-width: 640px) {
   .sm\:w-40 {
     width: 10rem;
+  }
+}
+@media all and (max-width: 479px) {
+  table,
+  thead,
+  tbody,
+  th,
+  td,
+  tr {
+    display: block;
+  }
+  tr {
+    margin-top: 25px;
   }
 }
 </style>
