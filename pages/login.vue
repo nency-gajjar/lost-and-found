@@ -87,8 +87,8 @@
                 <span class="font-medium">Oops!</span> Please fill all required
                 fields and try submitting again.
               </div>
-              <div class="flex items-center justify-between">
-                <div class="flex items-start">
+              <div class="flex items-center justify-end">
+                <!-- <div class="flex items-start">
                   <div class="flex items-center h-5">
                     <input
                       id="remember"
@@ -109,7 +109,7 @@
                       >Remember me</label
                     >
                   </div>
-                </div>
+                </div> -->
                 <a
                   @click="forgotPassword"
                   class="

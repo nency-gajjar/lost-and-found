@@ -270,6 +270,7 @@
           </div>
           <div class="flex items-center my-4 sm:my-0 gap-3">
             <button
+              type="button"
               class="
                 whitespace-nowrap
                 font-medium

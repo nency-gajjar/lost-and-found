@@ -461,7 +461,7 @@ export default {
     },
   },
   mounted() {
-    // this.showDialog = true;
+    this.showDialog = true;
   },
   created() {
     if (Object.keys(this.itemConfirmationDetails).length > 0) {
