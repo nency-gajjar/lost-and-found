@@ -798,18 +798,31 @@
                           <div class="icons gap-5">
                             <div
                               class="flex flex-col justify-center items-center"
-                              v-show="showDraw && showUndo"
                             >
-                              <div class="tool-undo">
-                                <BaseIcon
-                                  icon="undo"
-                                  size="lg"
-                                  color="lightblack"
-                                  @click="undo()"
-                                  style="padding: 10px"
-                                />
+                              <div v-show="showDraw && showUndo">
+                                <div class="tool-undo">
+                                  <BaseIcon
+                                    icon="undo"
+                                    size="lg"
+                                    color="lightblack"
+                                    @click="undo()"
+                                    style="padding: 10px"
+                                  />
+                                </div>
+                                <p>Undo</p>
                               </div>
-                              <p>Undo</p>
+                              <div v-show="isCropUndo">
+                                <div class="tool-undo">
+                                  <BaseIcon
+                                    icon="undo"
+                                    size="lg"
+                                    color="lightblack"
+                                    @click="undoCrop()"
+                                    style="padding: 10px"
+                                  />
+                                </div>
+                                <p>Undo</p>
+                              </div>
                             </div>
                             <div
                               class="flex flex-col justify-center items-center"
@@ -1228,6 +1241,7 @@ export default {
     showDraw: false,
     imgPreview: false,
     showUndo: false,
+    isCropUndo: false,
     // enableEdit: false,
 
     showValidateAlert: false,
@@ -1892,6 +1906,7 @@ export default {
               this.showCrop = false;
               this.showDraw = false;
               this.imgPreview = false;
+              this.isCropUndo = false;
               this.imageKey = "";
               // this.enableEdit = false;
               this.image = "";
@@ -1909,19 +1924,28 @@ export default {
       }
     },
     addSquare() {
+      this.isCropUndo = false;
       this.imgPreview = false;
       this.showDraw = true;
       this.showCrop = false;
     },
     crop() {
+      this.isCropUndo = false;
       this.imgPreview = false;
       this.showCrop = true;
       this.showDraw = false;
+    },
+    undoCrop(){
+      this.imgSrc = this.tempImg;
+      this.tempImg = "";
+      this.isCropUndo = false;
     },
     applyEdit() {
       if (this.showDraw) {
         this.imgSrc = this.$refs.redacter.canvas().toDataURL();
       } else {
+        this.isCropUndo = true;
+        this.tempImg = this.imgSrc;
         this.imgSrc = this.$refs.cropper.getCroppedCanvas().toDataURL();
       }
       this.showCrop = false;
@@ -2011,6 +2035,7 @@ export default {
           this.imgSrc = "";
           this.showCrop = false;
           this.showDraw = false;
+          this.isCropUndo = false;
           this.imgPreview = false;
           // this.enableEdit = false;
         })
