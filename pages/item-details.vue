@@ -767,11 +767,12 @@
                             v-show="!showCrop & !showDraw || imgPreview"
                             :src="imgSrc"
                           />
-                          <div
+                          <!-- <div
                             v-if="showCrop && !imgPreview"
                             class="vue-cropper-container"
-                          >
+                          > -->
                             <VueCropper
+                              v-if="showCrop && !imgPreview"
                               ref="cropper"
                               :src="imgSrc"
                               :responsive="true"
@@ -785,7 +786,7 @@
                               :zoomOnWheel="false"
                               alt="Source Image"
                             ></VueCropper>
-                          </div>
+                          <!-- </div> -->
                           <RedactImage
                             v-if="showDraw && !imgPreview"
                             class="redact"
