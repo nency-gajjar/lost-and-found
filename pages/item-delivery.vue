@@ -115,17 +115,15 @@
                   label="Additional Person Name (optional)"
                 />
               </div>
+              <p>Expected Pickup Date:</p>
               <ValidationProvider
                 v-slot="{ errors }"
                 rules="required"
                 class="block mb-4"
               >
-                <BaseInput
-                  v-model="expectedPickupDate"
-                  type="date"
-                  label="Expected Pickup Date"
-                  :class="errors.length > 0 && 'error'"
-                />
+                <div :class="errors.length && 'error'">
+                  <date-picker v-model="expectedPickupDate" formate="YYYY-MM-DD"></date-picker>
+                </div>
                 <p
                   v-if="errors.length"
                   class="vee-validation-error mt-2 text-sm text-red-600"
@@ -181,6 +179,9 @@
 </template>
   
 <script>
+import DatePicker from 'vue2-datepicker';
+import 'vue2-datepicker/index.css';
+
 export default {
   middleware: ['auth-admin'],
   data: () => ({
@@ -188,10 +189,11 @@ export default {
     deliveryType: "0",
     pickupPersonName: "",
     additionalPersonName: "",
-    expectedPickupDate: new Date().toISOString().slice(0, 10),
+    expectedPickupDate: new Date(),
     isLoading: false,
     itemId: "",
   }),
+  components: { DatePicker },
   mounted() {
     if (this.$route.query.id) {
       this.itemId = this.$route.query.id;
@@ -258,6 +260,12 @@ export default {
 </script>
   
 <style lang="scss">
+.mx-datepicker{
+  width: 100% !important;
+}
+.mx-datepicker input{
+  height: 3rem;
+}
 .wrapper {
   @apply min-h-screen flex justify-center py-10 mx-auto;
 }
@@ -362,6 +370,12 @@ canvas {
 
 .vs__dropdown-toggle {
   @apply h-12 rounded-lg;
+}
+
+.error {
+  & > .mx-datepicker {
+    @apply border-red-500 border-2 ring-4 ring-red-500 ring-opacity-10 transition-none;
+  }
 }
 
 .error {

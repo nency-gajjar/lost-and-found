@@ -87,17 +87,15 @@
               </ValidationProvider>
 
               <!-- Found Item Date -->
+              <p>Found Item Date:</p>
               <ValidationProvider
                 v-slot="{ errors }"
                 rules="required"
                 class="block"
               >
-                <BaseInput
-                  v-model="foundDate"
-                  type="date"
-                  label="Found Item Date"
-                  :class="errors.length > 0 && 'error'"
-                />
+                <div :class="errors.length && 'error'">
+                  <date-picker v-model="foundDate" formate="YYYY-MM-DD"></date-picker>
+                </div>
                 <p
                   v-if="errors.length"
                   class="vee-validation-error mt-2 text-sm text-red-600"
@@ -680,6 +678,7 @@
                   </div>
                 </div>
               </div>
+              <p v-show="!isImageValid" class="text-red-600">Uploaded image is not supported. Allowed types: .png, .jpeg, .jpg</p>
 
               <div
                 v-show="showEditor"
@@ -1215,6 +1214,8 @@ import {
   weightOuncesOptions,
   venueOptions,
 } from "static/defaults.js";
+import DatePicker from 'vue2-datepicker';
+import 'vue2-datepicker/index.css';
 
 export default {
   middleware: ['auth-admin'],
@@ -1239,7 +1240,7 @@ export default {
     venueType: "",
     venueOptions: venueOptions,
     employeeMobileNo: "",
-    foundDate: new Date().toISOString().slice(0, 10),
+    foundDate: new Date(),
     venueManually: false,
     itemDescription: "",
     itemDescriptionOptions: itemDescriptionOptions,
@@ -1268,6 +1269,7 @@ export default {
     imageRecognitionData: [],
     image: "",
     imageKey: "",
+    isImageValid: true,
     isLoadingRemoveImage: false,
     bindPhoneInputProps: {
       mode: "international",
@@ -1299,6 +1301,7 @@ export default {
     autoCompleteAddressArr: [],
   }),
   components: {
+    DatePicker,
     RedactImage,
     VueCropper,
     ValidationObserver,
@@ -1942,7 +1945,12 @@ export default {
       }
     },
     uploadImg(event) {
+      if( !(event.target.files[0].name.includes(".png") || event.target.files[0].name.includes(".jpg") || event.target.files[0].name.includes(".jpeg")) ){
+        this.isImageValid = false;
+        return;
+      }
       this.showEditor = false;
+      this.isImageValid = true;
       if (event.target.files[0]) {
         let file = event.target.files[0];
         let reader = new FileReader();
@@ -2506,6 +2514,12 @@ export default {
 </script>
 
 <style lang="scss">
+.mx-datepicker{
+  width: 100% !important;
+}
+.mx-datepicker input{
+  height: 3rem;
+}
 .wrapper-form {
   @apply min-h-screen flex justify-center py-10 mx-auto;
 }
@@ -2583,6 +2597,12 @@ canvas {
 
 .vs__dropdown-toggle {
   @apply h-12 rounded-lg;
+}
+
+.error {
+  & > .mx-datepicker {
+    @apply border-red-500 border-2 ring-4 ring-red-500 ring-opacity-10 transition-none;
+  }
 }
 
 .error {
