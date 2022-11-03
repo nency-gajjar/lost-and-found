@@ -678,7 +678,7 @@
                   </div>
                 </div>
               </div>
-              <p v-show="!isImageValid" class="text-red-600">Uploaded image is not supported. Allowed types: .png, .jpeg, .jpg</p>
+              <p v-show="!isImageValid" class="text-red-600">{{ imageValidationMessage }}</p>
 
               <div
                 v-show="showEditor"
@@ -1270,6 +1270,7 @@ export default {
     image: "",
     imageKey: "",
     isImageValid: true,
+    imageValidationMessage: "",
     isLoadingRemoveImage: false,
     bindPhoneInputProps: {
       mode: "international",
@@ -1945,12 +1946,20 @@ export default {
       }
     },
     uploadImg(event) {
-      if( !(event.target.files[0].name.includes(".png") || event.target.files[0].name.includes(".jpg") || event.target.files[0].name.includes(".jpeg")) ){
+      const fileSize = event.target.files[0].size / 1024 / 1024;
+      if( !(event.target.files[0].name.toLowerCase().includes(".png") || event.target.files[0].name.toLowerCase().includes(".jpg") || event.target.files[0].name.toLowerCase().includes(".jpeg")) ){
+        this.imageValidationMessage = "Uploaded image is not supported. Allowed types: .png, .jpeg, .jpg";
+        this.isImageValid = false;
+        return;
+      }
+      if(fileSize > 2){
+        this.imageValidationMessage = "File size must under 2MB";
         this.isImageValid = false;
         return;
       }
       this.showEditor = false;
       this.isImageValid = true;
+      this.imageValidationMessage = "";
       if (event.target.files[0]) {
         let file = event.target.files[0];
         let reader = new FileReader();
