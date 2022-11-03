@@ -311,12 +311,12 @@ export default {
     };
   },
   computed: {
-    isAdminLogin(){
+    isAdminLogin() {
       if (this.$auth.loggedIn) {
         return true;
       }
       return false;
-    }
+    },
   },
   methods: {
     addNewItem() {
@@ -350,7 +350,7 @@ export default {
         if (response.status === 200) {
           this.isLoading = false;
           this.lostItems = response?.data?.data;
-          if(!this.lostItems){
+          if (!this.lostItems) {
             this.lostItems = [];
           }
         }

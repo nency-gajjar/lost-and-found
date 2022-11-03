@@ -437,6 +437,23 @@ export default {
       showDialog: false,
     };
   },
+  created() {
+    if (Object.keys(this.itemConfirmationDetails).length > 0) {
+      this.itemDetails = this.itemConfirmationDetails;
+    } else {
+      this.$axios
+        .get("/getsinglelostitem?id=" + this.$route.query.id)
+        .then((response) => {
+          if (response.status === 200) {
+            this.itemDetails = response.data.data.Item;
+          }
+        })
+        .catch((error) => console.log(error));
+    }
+  },
+  mounted() {
+    this.showDialog = true;
+  },
   computed: {
     ...mapGetters("item", ["itemConfirmationDetails"]),
     dialogMessage() {
@@ -459,23 +476,6 @@ export default {
       }
       return false;
     },
-  },
-  mounted() {
-    this.showDialog = true;
-  },
-  created() {
-    if (Object.keys(this.itemConfirmationDetails).length > 0) {
-      this.itemDetails = this.itemConfirmationDetails;
-    } else {
-      this.$axios
-        .get("/getsinglelostitem?id=" + this.$route.query.id)
-        .then((response) => {
-          if (response.status === 200) {
-            this.itemDetails = response.data.data.Item;
-          }
-        })
-        .catch((error) => console.log(error));
-    }
   },
   methods: {
     routeToListing() {

@@ -4,8 +4,8 @@
       <div
         :class="[
           'absolute px-4 transition-all text-gray-500 z-10',
-          (active || type=='date') && 'my-2 text-[0.625rem] leading-3',
-          (!active && type!='date') && 'my-3.5 text-sm',
+          (active || type == 'date') && 'my-2 text-[0.725rem] leading-3',
+          !active && type != 'date' && 'my-3.5 text-sm',
         ]"
       >
         {{ label }}
@@ -49,20 +49,6 @@
         @input="updateValue"
       />
       <slot name="icon" />
-      <!-- <UiSpinner
-        v-if="loading"
-        class="!h-6 !w-6 absolute inset-y-3 right-[50%] !border-4"
-      />
-      <div
-        v-if="icon"
-        :class="[
-          iconWrapperClasses,
-          'absolute inset-y-0 right-0 pr-3 flex items-center',
-        ]"
-        @click="$emit('icon:click', $event)"
-      >
-        <UiIcon :name="icon" :class="iconClasses" />
-      </div> -->
     </label>
     <!-- <button
       v-if="iconSearch"

@@ -266,14 +266,7 @@
               </div>
               <div
                 v-show="showValidateAlert"
-                class="
-                  p-4
-                  mb-4
-                  top-margin-alert
-                  text-sm text-red-700
-                  bg-red-100
-                  rounded-lg
-                "
+                class="p-4 mb-4 text-sm text-red-700 bg-red-100 rounded-lg"
                 role="alert"
               >
                 <span class="font-medium">Oops!</span> Please fill all required
@@ -328,11 +321,10 @@
 </template>
 
 <script>
-import "vue-select/dist/vue-select.css";
 import { ValidationObserver, ValidationProvider } from "vee-validate";
 
 export default {
-  middleware: ['auth-admin'],
+  middleware: ["auth-admin"],
   components: {
     ValidationObserver,
     ValidationProvider,
@@ -376,6 +368,19 @@ export default {
       secondaryEmail: "",
     };
   },
+  mounted() {
+    window.addEventListener("keydown", () => {
+      this.showValidateAlert = false;
+    });
+    window.addEventListener("click", () => {
+      this.showValidateAlert = false;
+    });
+    if (this.$route.params.item) {
+      this.itemId = this.$route.params.item.id;
+      this.venueEmail = this.$route.params.item.venue_email;
+      this.secondaryEmail = this.$route.params.item?.secondaryEmail;
+    }
+  },
   computed: {
     dialogMessage() {
       return "We have sent the notification to the person who has uploaded the item with the entered Claim details. Please wait for the person to perform the necessary action on your claim request. We will notify you once they have taken appropriate actions for your claim request.";
@@ -417,12 +422,6 @@ export default {
         });
       });
     },
-    closeDialog() {
-      this.showDialog = false;
-      this.$nextTick(() => {
-        this.$router.push({ path: "/found-items" });
-      });
-    },
     validateUserPhone() {
       if (!this.claimPersonPhoneNo) {
         this.isPhoneNoValid = false;
@@ -442,7 +441,6 @@ export default {
       const isValid = await this.$refs.observer.validate();
       if (!isValid || !this.isPhoneNoValid) {
         this.showValidateAlert = true;
-        // console.log("in valid");
         this.isLoading = false;
       } else {
         this.showValidateAlert = false;
@@ -475,36 +473,33 @@ export default {
           });
       }
     },
-  },
-  mounted() {
-    window.addEventListener('keydown', () => {
-      this.showValidateAlert = false;
-    });
-    window.addEventListener('click', () => {
-      this.showValidateAlert = false;
-    });
-    if (this.$route.params.item) {
-      this.itemId = this.$route.params.item.id;
-      this.venueEmail = this.$route.params.item.venue_email;
-      this.secondaryEmail = this.$route.params.item?.secondaryEmail;
-    }
+    closeDialog() {
+      this.showDialog = false;
+      this.$nextTick(() => {
+        this.$router.push({ path: "/found-items" });
+      });
+    },
   },
   beforeDestroy() {
-    window.removeEventListener('click', () => {});
-    window.removeEventListener('keydown', () => {});
+    window.removeEventListener("click", () => {});
+    window.removeEventListener("keydown", () => {});
   },
 };
 </script>
 
-<style lang="scss" scoped>
+<style lang="scss">
 .wrapper-form {
   @apply min-h-screen flex justify-center py-10 mx-auto;
 }
 .vue-tel-input {
   border-radius: 0.5rem;
+  border: 1px solid #cccccc;
 }
 .vti__dropdown-list {
   z-index: 100;
+}
+.vti__input {
+  border-radius: 50px;
 }
 .button {
   position: relative;
@@ -537,10 +532,6 @@ export default {
   border-top-color: #ffffff;
   border-radius: 50%;
   animation: button-loading-spinner 1s ease infinite;
-}
-
-.top-margin-alert {
-  margin-top: 2.5rem !important;
 }
 
 @keyframes button-loading-spinner {

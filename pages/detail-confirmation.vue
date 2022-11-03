@@ -2,7 +2,6 @@
   <div class="wrapper" v-if="Object.keys(itemDetails).length > 0">
     <div
       class="
-        card
         w-full
         mx-6
         lg:mx-0
@@ -728,14 +727,6 @@ export default {
 <style lang="scss" scoped>
 .wrapper {
   @apply min-h-screen flex justify-center py-10 mx-auto;
-}
-
-.card {
-  @apply rounded-lg text-indigo-500;
-
-  .title {
-    @apply text-6xl font-bold;
-  }
 }
 
 // .text-gray-600 {

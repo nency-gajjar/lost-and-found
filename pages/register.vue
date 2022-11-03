@@ -1,8 +1,6 @@
 <template>
-  <section class="bg-gray-100">
-    <div
-      class="flex flex-col items-center px-6 py-8 mx-auto md:h-screen lg:py-0"
-    >
+  <section>
+    <div class="flex flex-col items-center px-6 mt-16 md:h-screen">
       <a
         href="#"
         class="flex items-center mb-6 text-2xl font-semibold text-gray-900"
@@ -74,14 +72,7 @@
               </ValidationProvider>
               <div
                 v-show="showValidateAlert"
-                class="
-                  p-4
-                  mb-4
-                  top-margin-alert
-                  text-sm text-red-700
-                  bg-red-100
-                  rounded-lg
-                "
+                class="p-4 mb-4 text-sm text-red-700 bg-red-100 rounded-lg"
                 role="alert"
               >
                 <span class="font-medium">Oops!</span> Please fill all required
@@ -89,8 +80,9 @@
               </div>
               <button
                 type="submit"
-                :class="{ 'button--loading': isLoading }"
                 class="
+                  flex
+                  justify-center
                   font-medium
                   text-md
                   leading-5
@@ -104,7 +96,6 @@
                   focus:ring-2
                   focus:ring-offset-2
                   focus:ring-offset-primary-60
-                  transition-all
                   bg-accent-100
                   focus:ring-accent-100
                   shadow-accent
@@ -113,10 +104,31 @@
                   text-center
                 "
               >
-                <span class="button__text"> Register </span>
+                <svg
+                  v-if="isLoading"
+                  class="w-5 h-5 text-white animate-spin"
+                  xmlns="http://www.w3.org/2000/svg"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                >
+                  <circle
+                    class="opacity-25"
+                    cx="12"
+                    cy="12"
+                    r="10"
+                    stroke="currentColor"
+                    stroke-width="4"
+                  ></circle>
+                  <path
+                    class="opacity-75"
+                    fill="currentColor"
+                    d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
+                  ></path>
+                </svg>
+                <span v-else class="button__text"> Register </span>
               </button>
               <p class="text-sm font-light text-gray-500 cursor-pointer">
-                Already have an account?
+                Back to login?
                 <a
                   @click="routeToLogin"
                   class="font-medium text-gray-600 hover:underline"
@@ -151,12 +163,15 @@ export default {
       showValidateAlert: false,
     };
   },
+  mounted() {
+    window.addEventListener("keydown", () => {
+      this.showValidateAlert = false;
+    });
+    window.addEventListener("click", () => {
+      this.showValidateAlert = false;
+    });
+  },
   methods: {
-    routeToLogin() {
-      this.$nextTick(() => {
-        this.$router.push("/login");
-      });
-    },
     async onSubmit() {
       this.isLoading = true;
       const isValid = await this.$refs.observer.validate();
@@ -165,9 +180,6 @@ export default {
         this.isLoading = false;
       } else {
         this.showValidateAlert = false;
-        // console.log(this.email);
-        // console.log(this.password);
-
         const params = {
           email: this.email,
           password: this.password,
@@ -194,14 +206,11 @@ export default {
           });
       }
     },
-  },
-  mounted() {
-    window.addEventListener("keydown", () => {
-      this.showValidateAlert = false;
-    });
-    window.addEventListener("click", () => {
-      this.showValidateAlert = false;
-    });
+    routeToLogin() {
+      this.$nextTick(() => {
+        this.$router.push("/login");
+      });
+    },
   },
   beforeDestroy() {
     window.removeEventListener("click", () => {});
@@ -209,60 +218,3 @@ export default {
   },
 };
 </script>
-
-<style scoped>
-.wrapper-form {
-  @apply min-h-screen flex justify-center py-10 mx-auto;
-}
-
-.vue-tel-input {
-  border-radius: 0.5rem;
-}
-
-.button {
-  position: relative;
-  border: none;
-  outline: none;
-  cursor: pointer;
-}
-
-.button__text {
-  color: #ffffff;
-  transition: all 0.2s;
-}
-
-.button--loading .button__text {
-  visibility: hidden;
-  opacity: 0;
-}
-
-.button--loading::after {
-  content: "";
-  position: absolute;
-  width: 16px;
-  height: 16px;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  margin: auto;
-  border: 4px solid transparent;
-  border-top-color: #ffffff;
-  border-radius: 50%;
-  animation: button-loading-spinner 1s ease infinite;
-}
-
-.top-margin-alert {
-  margin-top: 2.5rem !important;
-}
-
-@keyframes button-loading-spinner {
-  from {
-    transform: rotate(0turn);
-  }
-
-  to {
-    transform: rotate(1turn);
-  }
-}
-</style>
