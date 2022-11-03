@@ -727,7 +727,7 @@
                   >
                     <div class="relative">
                       <div class="title bg-accent-100 pl-6 py-4 mb-4">
-                        <h3 class="text-white">Crop Image</h3>
+                        <h3 class="text-white">Upload Image</h3>
                       </div>
                       <span
                         @click="closeEditor"
@@ -863,42 +863,13 @@
                               <p v-else>Done</p>
                             </div>
                           </div>
-                          <div class="save-upload">
-                            <button
-                              type="button"
-                              :class="{ 'button--loading': isSavingImage }"
+                          <div class="save-upload flex items-center">
+                            <BaseButton
+                              :is-loading="isSavingImage"
                               @click="saveImg"
-                              class="
-                                font-medium
-                                text-md
-                                leading-5
-                                py-2
-                                px-6
-                                rounded-md
-                                button
-                                focus:outline-none
-                                focus:ring-2
-                                focus:ring-offset-2
-                                focus:ring-offset-primary-60
-                                transition-all
-                                font-display
-                                disabled:cursor-not-allowed
-                                bg-accent-100
-                                text-white
-                                focus:ring-accent-100
-                                shadow-accent
-                                hover:bg-accent-200
-                              "
                             >
-                              <span class="button__text">
-                                <BaseIcon
-                                  icon="floppy-disk"
-                                  type="far"
-                                  size="2x"
-                                />
-                                Save
-                              </span>
-                            </button>
+                              Save
+                            </BaseButton>
                           </div>
                         </div>
                       </div>
@@ -1066,6 +1037,9 @@
               </div>
 
               <!-- Item Status -->
+              <label class="block text-md font-medium text-gray-800"
+                >Item Status</label
+              >
               <ValidationProvider
                 v-slot="{ errors }"
                 rules="required"
@@ -1165,35 +1139,9 @@
               </div>
 
               <div class="flex justify-end">
-                <button
-                  :class="{ 'button--loading': isLoading }"
-                  type="submit"
-                  class="
-                    !py-3
-                    font-medium
-                    text-md
-                    leading-5
-                    uppercase
-                    py-2
-                    px-12
-                    rounded-md
-                    button
-                    focus:outline-none
-                    focus:ring-2
-                    focus:ring-offset-2
-                    focus:ring-offset-primary-60
-                    transition-all
-                    font-display
-                    disabled:cursor-not-allowed
-                    bg-accent-100
-                    text-white
-                    focus:ring-accent-100
-                    shadow-accent
-                    hover:bg-accent-200
-                  "
-                >
-                  <span class="button__text"> Preview </span>
-                </button>
+                <BaseButton :is-loading="isLoading" button-type="submit">
+                  Preview
+                </BaseButton>
               </div>
             </div>
           </form>
@@ -2645,49 +2593,6 @@ canvas {
 }
 .vti__input {
   border-radius: 50px;
-}
-
-.button {
-  position: relative;
-  border: none;
-  outline: none;
-  cursor: pointer;
-}
-
-.button__text {
-  color: #ffffff;
-  transition: all 0.2s;
-}
-
-.button--loading .button__text {
-  visibility: hidden;
-  opacity: 0;
-}
-
-.button--loading::after {
-  content: "";
-  position: absolute;
-  width: 16px;
-  height: 16px;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  margin: auto;
-  border: 4px solid transparent;
-  border-top-color: #ffffff;
-  border-radius: 50%;
-  animation: button-loading-spinner 1s ease infinite;
-}
-
-@keyframes button-loading-spinner {
-  from {
-    transform: rotate(0turn);
-  }
-
-  to {
-    transform: rotate(1turn);
-  }
 }
 
 .loader {

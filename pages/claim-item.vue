@@ -273,35 +273,9 @@
                 fields and try submitting again.
               </div>
               <div class="flex justify-end">
-                <button
-                  :class="{ 'button--loading': isLoading }"
-                  type="submit"
-                  class="
-                    !py-3
-                    font-medium
-                    text-md
-                    leading-5
-                    uppercase
-                    py-2
-                    px-12
-                    rounded-md
-                    button
-                    focus:outline-none
-                    focus:ring-2
-                    focus:ring-offset-2
-                    focus:ring-offset-primary-60
-                    transition-all
-                    font-display
-                    disabled:cursor-not-allowed
-                    bg-accent-100
-                    text-white
-                    focus:ring-accent-100
-                    shadow-accent
-                    hover:bg-accent-200
-                  "
-                >
-                  <span class="button__text"> Submit </span>
-                </button>
+                <BaseButton :is-loading="isLoading" button-type="submit">
+                  Submit
+                </BaseButton>
               </div>
             </div>
           </form>
@@ -500,48 +474,6 @@ export default {
 }
 .vti__input {
   border-radius: 50px;
-}
-.button {
-  position: relative;
-  border: none;
-  outline: none;
-  cursor: pointer;
-}
-
-.button__text {
-  color: #ffffff;
-  transition: all 0.2s;
-}
-
-.button--loading .button__text {
-  visibility: hidden;
-  opacity: 0;
-}
-
-.button--loading::after {
-  content: "";
-  position: absolute;
-  width: 16px;
-  height: 16px;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  margin: auto;
-  border: 4px solid transparent;
-  border-top-color: #ffffff;
-  border-radius: 50%;
-  animation: button-loading-spinner 1s ease infinite;
-}
-
-@keyframes button-loading-spinner {
-  from {
-    transform: rotate(0turn);
-  }
-
-  to {
-    transform: rotate(1turn);
-  }
 }
 
 .pac-item {

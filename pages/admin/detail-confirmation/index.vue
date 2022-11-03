@@ -36,7 +36,7 @@
         >
           <div class="relative">
             <div class="title bg-accent-100 pl-6 py-4 mb-4">
-              <h3 class="text-white">Crop Image</h3>
+              <h3 class="text-white">Upload Image</h3>
             </div>
             <span
               @click="closeEditor"
@@ -172,38 +172,10 @@
                     <p v-else>Done</p>
                   </div>
                 </div>
-                <div class="save-upload">
-                  <button
-                    type="button"
-                    :class="{ 'button--loading': isSavingImage }"
-                    @click="saveImg"
-                    class="
-                      font-medium
-                      text-md
-                      leading-5
-                      py-2
-                      px-6
-                      rounded-md
-                      button
-                      focus:outline-none
-                      focus:ring-2
-                      focus:ring-offset-2
-                      focus:ring-offset-primary-60
-                      transition-all
-                      font-display
-                      disabled:cursor-not-allowed
-                      bg-accent-100
-                      text-white
-                      focus:ring-accent-100
-                      shadow-accent
-                      hover:bg-accent-200
-                    "
-                  >
-                    <span class="button__text">
-                      <BaseIcon icon="floppy-disk" type="far" size="2x" />
-                      Save
-                    </span>
-                  </button>
+                <div class="save-upload flex items-center">
+                  <BaseButton :is-loading="isSavingImage" @click="saveImg">
+                    Save
+                  </BaseButton>
                 </div>
               </div>
             </div>
@@ -725,100 +697,28 @@
           </div>
         </div>
 
-        <div class="flex flex-wrap gap-2 mx-4">
-          <button
-            :class="{ 'button--loading': isLoading['Approve'] }"
-            type="submit"
-            class="
-              !py-3
-              flex-auto
-              font-medium
-              text-md
-              leading-5
-              uppercase
-              py-2
-              px-8
-              rounded-md
-              button
-              focus:outline-none
-              focus:ring-2
-              focus:ring-offset-2
-              focus:ring-offset-primary-60
-              transition-all
-              font-display
-              disabled:cursor-not-allowed
-              bg-accent-100
-              text-white
-              focus:ring-accent-100
-              shadow-accent
-              hover:bg-accent-200
-            "
+        <div class="flex flex-wrap gap-2 m-5">
+          <BaseButton
+            :is-loading="isLoading['Approve']"
+            class="flex-1"
             @click="action('Approve')"
           >
-            <span class="button__text"> Approve </span>
-          </button>
-          <button
-            :class="{ 'button--loading': isLoading['Deny'] }"
-            type="submit"
-            class="
-              !py-3
-              flex-auto
-              font-medium
-              text-md
-              leading-5
-              uppercase
-              py-2
-              px-8
-              rounded-md
-              button
-              focus:outline-none
-              focus:ring-2
-              focus:ring-offset-2
-              focus:ring-offset-primary-60
-              transition-all
-              font-display
-              disabled:cursor-not-allowed
-              bg-accent-100
-              text-white
-              focus:ring-accent-100
-              shadow-accent
-              hover:bg-accent-200
-            "
+            Approve
+          </BaseButton>
+          <BaseButton
+            :is-loading="isLoading['Deny']"
+            class="flex-1"
             @click="action('Deny')"
           >
-            <span class="button__text"> Deny </span>
-          </button>
-          <button
-            :class="{ 'button--loading': isLoading['Approve without Image'] }"
-            type="submit"
-            class="
-              !py-3
-              flex-auto
-              font-medium
-              text-md
-              leading-5
-              uppercase
-              py-2
-              px-8
-              rounded-md
-              button
-              focus:outline-none
-              focus:ring-2
-              focus:ring-offset-2
-              focus:ring-offset-primary-60
-              transition-all
-              font-display
-              disabled:cursor-not-allowed
-              bg-accent-100
-              text-white
-              focus:ring-accent-100
-              shadow-accent
-              hover:bg-accent-200
-            "
+            Reject
+          </BaseButton>
+          <BaseButton
+            :is-loading="isLoading['Approve without Image']"
+            class="flex-auto"
             @click="action('Approve without Image')"
           >
-            <span class="button__text"> Approve without Image </span>
-          </button>
+            Approve without Image
+          </BaseButton>
         </div>
         <div v-if="image" class="text-left sm:w-12/12 px-6 pb-6 pt-4">
           <div
@@ -867,6 +767,7 @@ import VueCropper from "vue-cropperjs";
 import "cropperjs/dist/cropper.css";
 
 export default {
+  middleware: ["auth-admin"],
   components: {
     RedactImage,
     VueCropper,
@@ -878,10 +779,6 @@ export default {
       showDraw: false,
       imgPreview: false,
       showUndo: false,
-      // enableEdit: false,
-
-      // canvasWidth: "600",
-      // canvasHeight: "400",
       size_icon: "2x",
       isLoading: {
         Approve: false,
@@ -896,7 +793,6 @@ export default {
       isSavingImage: false,
       isImageEdited: false,
       showEditor: false,
-      // stateCrop: true,
       loadingSpinner: false,
       imageRecognitionData: [],
       imageKey: "",
@@ -924,10 +820,6 @@ export default {
     }
   },
   methods: {
-    // editMode(){
-    //   this.enableEdit = true;
-    //   this.imgForEditor = this.imgSrc;
-    // },
     undo() {
       this.$refs.redacter.revert();
     },
@@ -961,15 +853,8 @@ export default {
     editImage() {
       this.showEditor = false;
       if (this.image) {
-        // const response = await fetch(this.image);
-        // const blob = await response.blob();
-        // const file = new File([blob], "image.jpg", { type: blob.type });
         this.imgSrc = this.image;
         this.showEditor = true;
-        // this.loadingSpinner = true;
-        // setTimeout(() => {
-        //   this.loadingSpinner = false;
-        // }, 2000);
       } else {
         this.showEditor = false;
       }
@@ -980,7 +865,6 @@ export default {
       this.showCrop = false;
       this.showDraw = false;
       this.imgPreview = false;
-      // this.enableEdit = false;
     },
     saveImg() {
       this.isSavingImage = true;
@@ -1014,7 +898,6 @@ export default {
           this.showCrop = false;
           this.showDraw = false;
           this.imgPreview = false;
-          // this.enableEdit = false;
           this.isImageEdited = true;
         })
         .catch((error) => {
@@ -1125,39 +1008,6 @@ canvas {
   @apply sm:px-3;
 }
 
-.button {
-  position: relative;
-  border: none;
-  outline: none;
-  cursor: pointer;
-}
-
-.button__text {
-  color: #ffffff;
-  transition: all 0.2s;
-}
-
-.button--loading .button__text {
-  visibility: hidden;
-  opacity: 0;
-}
-
-.button--loading::after {
-  content: "";
-  position: absolute;
-  width: 16px;
-  height: 16px;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  margin: auto;
-  border: 4px solid transparent;
-  border-top-color: #ffffff;
-  border-radius: 50%;
-  animation: button-loading-spinner 1s ease infinite;
-}
-
 .vue-cropper-container {
   min-width: 40vw;
 }
@@ -1169,16 +1019,6 @@ canvas {
 .vue-cropper-container {
   img {
     max-height: 300px !important;
-  }
-}
-
-@keyframes button-loading-spinner {
-  from {
-    transform: rotate(0turn);
-  }
-
-  to {
-    transform: rotate(1turn);
   }
 }
 
