@@ -14,6 +14,12 @@
             <h1 class="text-3xl font-semibold mb-2">Admin Dashboard</h1>
             <!-- <h2 class="text-gray-600 ml-0.5">Content here</h2> -->
           </div>
+          <BaseButton
+            class="sm:ml-2 grow mt-3 sm:mt-0 sm:grow-0"
+            @click="showAddNewItemDescription = true"
+          >
+            + Add New Item Description
+          </BaseButton>
         </div>
         <section class="grid md:grid-cols-2 xl:grid-cols-4 gap-6">
           <div
@@ -326,23 +332,31 @@
       <div v-else>
         <BaseLoader />
       </div>
+      <AddNewItemDescription
+        v-if="showAddNewItemDescription"
+        :show-modal="showAddNewItemDescription"
+        @close="showAddNewItemDescription = false"
+      />
     </div>
   </div>
 </template>
 
 <script>
+import AddNewItemDescription from "~/components/admin/AddNewItemDescription.vue";
 export default {
   middleware({ $auth, redirect }) {
     if (!$auth.loggedIn) {
       return redirect("/found-items");
     }
   },
+  components: { AddNewItemDescription },
   data() {
     return {
       dashboardDetails: [],
       isLoadingRemoveImage: {},
       isLoading: false,
       tabSelected: 1,
+      showAddNewItemDescription: false,
     };
   },
   created() {
