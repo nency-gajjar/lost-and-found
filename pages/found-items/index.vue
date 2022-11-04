@@ -351,12 +351,6 @@ export default {
 </script>
 
 <style>
-.mx-input {
-  height: 3rem !important;
-}
-</style>
-
-<style scoped>
 .wrapper {
   @apply flex flex-col justify-start pt-0 items-center text-center mx-auto;
 }
@@ -374,7 +368,9 @@ export default {
 .mx-datepicker-range {
   width: 100% !important;
 }
-
+.mx-input {
+  height: 3rem !important;
+}
 @-webkit-keyframes spinner {
   0% {
     -webkit-transform: rotate(0deg);

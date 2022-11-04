@@ -196,7 +196,7 @@ export default {
 
     .base-modal-footer {
       display: flex;
-      justify-content: end;
+      justify-content: flex-end;
       gap: 8px;
       border-top: 2px solid #ddd;
       padding: 15px;

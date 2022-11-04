@@ -93,7 +93,10 @@
                 class="block"
               >
                 <div :class="errors.length && 'error'">
-                  <date-picker v-model="foundDate" formate="YYYY-MM-DD"></date-picker>
+                  <date-picker
+                    v-model="foundDate"
+                    formate="YYYY-MM-DD"
+                  ></date-picker>
                 </div>
                 <p
                   v-if="errors.length"
@@ -684,7 +687,9 @@
                   </div>
                 </div>
               </div>
-              <p v-show="!isImageValid" class="text-red-600">{{ imageValidationMessage }}</p>
+              <p v-show="!isImageValid" class="text-red-600">
+                {{ imageValidationMessage }}
+              </p>
 
               <div
                 v-show="showEditor"
@@ -1164,8 +1169,8 @@ import {
   weightOuncesOptions,
   venueOptions,
 } from "static/defaults.js";
-import DatePicker from 'vue2-datepicker';
-import 'vue2-datepicker/index.css';
+import DatePicker from "vue2-datepicker";
+import "vue2-datepicker/index.css";
 
 export default {
   middleware: ["auth-admin"],
@@ -1896,32 +1901,32 @@ export default {
       }
     },
     uploadImg(event) {
-      const fileSize = event.target.files[0].size / 1024 / 1024;
-      if( !(event.target.files[0].name.toLowerCase().includes(".png") || event.target.files[0].name.toLowerCase().includes(".jpg") || event.target.files[0].name.toLowerCase().includes(".jpeg")) ){
-        this.imageValidationMessage = "Uploaded image is not supported. Allowed types: .png, .jpeg, .jpg";
-        this.isImageValid = false;
-        return;
-      }
-      if(fileSize > 2){
-        this.imageValidationMessage = "File size must under 2MB";
-        this.isImageValid = false;
-        return;
-      }
-      this.showEditor = false;
-      this.isImageValid = true;
-      this.imageValidationMessage = "";
-      if (event.target.files[0]) {
-        let file = event.target.files[0];
-        let reader = new FileReader();
-        reader.onloadend = () => {
-          this.imgSrc = reader.result;
-          this.showEditor = true;
-        };
-        reader.readAsDataURL(file);
-        // this.loadingSpinner = true;
-        // setTimeout(() => {
-        //   this.loadingSpinner = false;
-        // }, 2000);
+      const allowedExtensions = /(\.jpg|\.jpeg|\.png)$/i;
+      const filePath = event.target?.files[0];
+      if (filePath) {
+        const fileSize = event.target?.files[0]?.size / 1024 / 1024;
+        if (allowedExtensions.exec(filePath.name)) {
+          if (fileSize < 2) {
+            this.isImageValid = true;
+            this.imageValidationMessage = "";
+            let file = filePath;
+            let reader = new FileReader();
+            reader.onloadend = () => {
+              this.imgSrc = reader.result;
+              this.showEditor = true;
+            };
+            reader.readAsDataURL(file);
+          } else {
+            this.imageValidationMessage = "File size must under 2MB";
+            this.isImageValid = false;
+            return;
+          }
+        } else {
+          this.imageValidationMessage =
+            "Uploaded file is not supported. Allowed file types: .png, .jpeg, .jpg";
+          this.isImageValid = false;
+          return;
+        }
       } else {
         this.showEditor = false;
       }
@@ -2473,10 +2478,10 @@ export default {
 </script>
 
 <style lang="scss">
-.mx-datepicker{
+.mx-datepicker {
   width: 100% !important;
 }
-.mx-datepicker input{
+.mx-datepicker input {
   height: 3rem;
 }
 .wrapper-form {
