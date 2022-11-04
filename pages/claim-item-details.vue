@@ -675,6 +675,13 @@ export default {
           console.log(error);
         });
     }
+    else{
+      this.$nextTick(() => {
+        this.$router.push({
+          name: "found-items",
+        });
+      });
+    }
   },
   methods: {
     async handleItemApprove(type) {

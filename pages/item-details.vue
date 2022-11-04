@@ -1202,7 +1202,7 @@ export default {
     itemWidth: "",
     itemHeight: "",
     itemStatus: "",
-    itemStatusOptions: ["Claimed", "Unclaimed"],
+    itemStatusOptions: ["Claimed (You know the actual owner of this item)", "Unclaimed (You do not know the actual owner of this item)"],
     showReceiverInputs: false,
     receiverName: "",
     receiverEmail: "",
@@ -1747,9 +1747,16 @@ export default {
       }
     },
     async onSubmit() {
+      let itemStatus = "";
+      if(this.itemStatus === "Claimed (You know the actual owner of this item)"){
+        itemStatus = "Claimed";
+      }
+      else if(this.itemStatus === "Unclaimed (You do not know the actual owner of this item)"){
+        itemStatus = "Unclaimed";
+      }
       this.validateVenuePhoneNo();
       this.validateEmployeeMobileNo();
-      if (this.itemStatus == "Claimed") this.validateReceiverMobileNo();
+      if (itemStatus == "Claimed") this.validateReceiverMobileNo();
 
       this.isLoading = true;
       const isValid = await this.$refs.observer.validate();
@@ -1792,10 +1799,10 @@ export default {
           item_length: this.itemLength,
           item_width: this.itemWidth,
           item_height: this.itemHeight,
-          item_status: this.itemStatus === "Claimed" ? 0 : 1,
+          item_status: itemStatus === "Claimed" ? 0 : 1,
         };
         params.foundItemId = this.foundItemId;
-        if (this.itemStatus === "Claimed") {
+        if (itemStatus === "Claimed") {
           let receiverMobileNo = this.formatMobileNumber(this.receiverMobileNo);
           params.receiver_name = this.receiverName;
           params.receiver_email = this.receiverEmail;
@@ -1987,7 +1994,7 @@ export default {
     },
     itemStatus(newValue, oldValue) {
       if (newValue != oldValue) {
-        if (newValue == "Claimed") {
+        if (newValue == "Claimed (You know the actual owner of this item)") {
           this.showReceiverInputs = true;
         } else {
           this.showReceiverInputs = false;

@@ -894,6 +894,13 @@ export default {
           });
         });
     }
+    else{
+      this.$nextTick(() => {
+        this.$router.push({
+          name: "found-items",
+        });
+      });
+    }
   },
   methods: {
     undo() {
@@ -926,9 +933,17 @@ export default {
       this.showDraw = false;
       this.imgPreview = true;
     },
-    editImage() {
+    async editImage() {
       this.showEditor = false;
       if (this.image) {
+        // const data = await fetch(this.image);
+        // const blob = await data.blob();
+        // let reader = new FileReader();
+        // reader.onloadend = () => {
+        //   this.imgSrc = reader.result;
+        //   this.showEditor = true;
+        // };
+        // reader.readAsDataURL(blob);
         this.imgSrc = this.image;
         this.showEditor = true;
       } else {
