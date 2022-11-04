@@ -626,6 +626,13 @@ export default {
           });
         });
     }
+    else{
+      this.$nextTick(() => {
+        this.$router.push({
+          name: "found-items",
+        });
+      });
+    }
   },
   methods: {
     action(type) {

@@ -24,6 +24,7 @@
           Found Items ({{ lostItems.length }})
         </h2>
         <BaseButton
+        v-show="isAdminLogin"
           class="sm:ml-2 grow mt-3 sm:mt-0 sm:grow-0"
           @click="addNewItem"
         >
@@ -264,6 +265,14 @@ export default {
       lostItems: [],
       isLoading: false,
     };
+  },
+  computed: {
+    isAdminLogin() {
+      if (this.$auth.loggedIn) {
+        return false;
+      }
+      return true;
+    },
   },
   methods: {
     addNewItem() {
