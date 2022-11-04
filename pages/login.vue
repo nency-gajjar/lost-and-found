@@ -1,8 +1,6 @@
 <template>
-  <section class="bg-gray-100">
-    <div
-      class="flex flex-col items-center px-6 py-8 mx-auto md:h-screen lg:py-0"
-    >
+  <section>
+    <div class="flex flex-col items-center px-6 mt-16 md:h-screen">
       <a
         href="#"
         class="flex items-center mb-6 text-2xl font-semibold text-gray-900"
@@ -74,14 +72,7 @@
               </ValidationProvider>
               <div
                 v-show="showValidateAlert"
-                class="
-                  p-4
-                  mb-4
-                  top-margin-alert
-                  text-sm text-red-700
-                  bg-red-100
-                  rounded-lg
-                "
+                class="p-4 mb-4 text-sm text-red-700 bg-red-100 rounded-lg"
                 role="alert"
               >
                 <span class="font-medium">Oops!</span> Please fill all required
@@ -122,53 +113,13 @@
                   >Forgot password?</a
                 >
               </div>
-              <button
-                type="submit"
-                :class="{ 'button--loading': isLoading }"
-                class="
-                  font-medium
-                  text-md
-                  leading-5
-                  w-full
-                  px-5
-                  py-2.5
-                  text-white
-                  rounded-md
-                  button
-                  focus:outline-none
-                  focus:ring-2
-                  focus:ring-offset-2
-                  focus:ring-offset-primary-60
-                  transition-all
-                  bg-accent-100
-                  focus:ring-accent-100
-                  shadow-accent
-                  hover:bg-accent-200
-                  rounded-lg
-                  text-center
-                "
+              <BaseButton
+                :is-loading="isLoading"
+                button-type="submit"
+                class="w-full"
               >
-                <span class="button__text"> Login </span>
-              </button>
-              <!-- <p
-                class="
-                  text-sm
-                  font-light
-                  text-gray-500
-                  cursor-pointer
-                "
-              >
-                Don’t have an account yet?
-                <a
-                  @click="routeToRegister"
-                  class="
-                    font-medium
-                    text-gray-600
-                    hover:underline
-                  "
-                  >Register</a
-                >
-              </p> -->
+                Login
+              </BaseButton>
             </form>
           </ValidationObserver>
         </div>
@@ -182,7 +133,7 @@ import { ValidationObserver, ValidationProvider } from "vee-validate";
 export default {
   middleware({ $auth, redirect }) {
     if ($auth.loggedIn) {
-      return redirect("/found-items");
+      return redirect("/dashboard");
     }
   },
   components: {
@@ -197,17 +148,15 @@ export default {
       showValidateAlert: false,
     };
   },
+  mounted() {
+    window.addEventListener("keydown", () => {
+      this.showValidateAlert = false;
+    });
+    window.addEventListener("click", () => {
+      this.showValidateAlert = false;
+    });
+  },
   methods: {
-    forgotPassword() {
-      this.$nextTick(() => {
-        this.$router.push("/forgot-password");
-      });
-    },
-    routeToRegister() {
-      this.$nextTick(() => {
-        this.$router.push("/register");
-      });
-    },
     async onSubmit() {
       this.isLoading = true;
       const isValid = await this.$refs.observer.validate();
@@ -216,8 +165,6 @@ export default {
         this.isLoading = false;
       } else {
         this.showValidateAlert = false;
-        // console.log(this.email);
-        // console.log(this.password);
 
         const params = {
           email: this.email,
@@ -249,14 +196,16 @@ export default {
           });
       }
     },
-  },
-  mounted() {
-    window.addEventListener("keydown", () => {
-      this.showValidateAlert = false;
-    });
-    window.addEventListener("click", () => {
-      this.showValidateAlert = false;
-    });
+    routeToRegister() {
+      this.$nextTick(() => {
+        this.$router.push("/register");
+      });
+    },
+    forgotPassword() {
+      this.$nextTick(() => {
+        this.$router.push("/forgot-password");
+      });
+    },
   },
   beforeDestroy() {
     window.removeEventListener("click", () => {});
@@ -264,60 +213,3 @@ export default {
   },
 };
 </script>
-
-<style scoped>
-.wrapper-form {
-  @apply min-h-screen flex justify-center py-10 mx-auto;
-}
-
-.vue-tel-input {
-  border-radius: 0.5rem;
-}
-
-.button {
-  position: relative;
-  border: none;
-  outline: none;
-  cursor: pointer;
-}
-
-.button__text {
-  color: #ffffff;
-  transition: all 0.2s;
-}
-
-.button--loading .button__text {
-  visibility: hidden;
-  opacity: 0;
-}
-
-.button--loading::after {
-  content: "";
-  position: absolute;
-  width: 16px;
-  height: 16px;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  margin: auto;
-  border: 4px solid transparent;
-  border-top-color: #ffffff;
-  border-radius: 50%;
-  animation: button-loading-spinner 1s ease infinite;
-}
-
-.top-margin-alert {
-  margin-top: 2.5rem !important;
-}
-
-@keyframes button-loading-spinner {
-  from {
-    transform: rotate(0turn);
-  }
-
-  to {
-    transform: rotate(1turn);
-  }
-}
-</style>

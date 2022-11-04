@@ -356,64 +356,12 @@
         </div>
       </table>
       <div class="flex flex-wrap gap-2 m-5">
-        <button
-          type="button"
-          class="
-            !py-3
-            flex-auto
-            font-medium
-            text-md
-            leading-5
-            py-2
-            px-8
-            rounded-md
-            button
-            focus:outline-none
-            focus:ring-2
-            focus:ring-offset-2
-            focus:ring-offset-primary-60
-            transition-all
-            font-display
-            disabled:cursor-not-allowed
-            bg-accent-100
-            text-white
-            focus:ring-accent-100
-            shadow-accent
-            hover:bg-accent-200
-          "
-          @click="printDetails"
-        >
-          <span class="button__text"> Print Details </span>
-        </button>
-        <button
-          type="button"
-          class="
-            !py-3
-            flex-auto
-            font-medium
-            text-md
-            leading-5
-            py-2
-            px-8
-            rounded-md
-            button
-            focus:outline-none
-            focus:ring-2
-            focus:ring-offset-2
-            focus:ring-offset-primary-60
-            transition-all
-            font-display
-            disabled:cursor-not-allowed
-            bg-accent-100
-            text-white
-            focus:ring-accent-100
-            shadow-accent
-            hover:bg-accent-200
-          "
-          @click="routeToListing"
-        >
-          <span class="button__text"> Back To Listing </span>
-        </button>
+        <BaseButton class="flex-auto" @click="printDetails">
+          Print Details
+        </BaseButton>
+        <BaseButton class="flex-auto" @click="routeToListing">
+          Back To Listing
+        </BaseButton>
       </div>
     </div>
     <BaseDialog
@@ -437,6 +385,23 @@ export default {
       showDialog: false,
     };
   },
+  created() {
+    if (Object.keys(this.itemConfirmationDetails).length > 0) {
+      this.itemDetails = this.itemConfirmationDetails;
+    } else {
+      this.$axios
+        .get("/getsinglelostitem?id=" + this.$route.query.id)
+        .then((response) => {
+          if (response.status === 200) {
+            this.itemDetails = response.data.data.Item;
+          }
+        })
+        .catch((error) => console.log(error));
+    }
+  },
+  mounted() {
+    this.showDialog = true;
+  },
   computed: {
     ...mapGetters("item", ["itemConfirmationDetails"]),
     dialogMessage() {
@@ -459,23 +424,6 @@ export default {
       }
       return false;
     },
-  },
-  mounted() {
-    this.showDialog = true;
-  },
-  created() {
-    if (Object.keys(this.itemConfirmationDetails).length > 0) {
-      this.itemDetails = this.itemConfirmationDetails;
-    } else {
-      this.$axios
-        .get("/getsinglelostitem?id=" + this.$route.query.id)
-        .then((response) => {
-          if (response.status === 200) {
-            this.itemDetails = response.data.data.Item;
-          }
-        })
-        .catch((error) => console.log(error));
-    }
   },
   methods: {
     routeToListing() {
@@ -735,38 +683,6 @@ td {
 .mb-1 {
   margin-bottom: 0.25rem;
 }
-.button {
-  position: relative;
-  border: none;
-  outline: none;
-  cursor: pointer;
-}
-
-.button__text {
-  color: #ffffff;
-  transition: all 0.2s;
-}
-
-.button--loading .button__text {
-  visibility: hidden;
-  opacity: 0;
-}
-
-.button--loading::after {
-  content: "";
-  position: absolute;
-  width: 16px;
-  height: 16px;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  margin: auto;
-  border: 4px solid transparent;
-  border-top-color: #ffffff;
-  border-radius: 50%;
-  animation: button-loading-spinner 1s ease infinite;
-}
 
 .item-img-container {
   max-width: 450px;
@@ -775,15 +691,6 @@ td {
   margin-right: auto;
 }
 
-@keyframes button-loading-spinner {
-  from {
-    transform: rotate(0turn);
-  }
-
-  to {
-    transform: rotate(1turn);
-  }
-}
 @media (min-width: 640px) {
   .sm\:w-40 {
     width: 10rem;

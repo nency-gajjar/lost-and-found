@@ -1,655 +1,574 @@
 <template>
-  <!-- v-if="Object.keys(itemDetails).length > 0" -->
-  <div>
+  <div
+    class="wrapper"
+    v-if="!isLoadingItemDetails || Object.keys(itemDetails).length > 0"
+  >
     <div
-      class="wrapper"
-      v-if="!isLoadingItemDetails || Object.keys(itemDetails).length > 0"
+      class="
+        w-full
+        mx-6
+        lg:mx-0
+        md:w-8/12
+        lg:w-7/12
+        xl:w-6/12
+        overflow-hidden
+        bg-white
+        border border-[#E1E3E6]
+        rounded-lg
+      "
+      style="box-shadow: rgba(54, 28, 93, 0.04) -10px 18px 32px"
     >
-      <div
-        class="
-          card
-          w-full
-          mx-6
-          lg:mx-0
-          md:w-8/12
-          lg:w-7/12
-          xl:w-6/12
-          overflow-hidden
-          bg-white
-          border border-[#E1E3E6]
-          rounded-lg
-        "
-        style="box-shadow: rgba(54, 28, 93, 0.04) -10px 18px 32px"
-      >
-        <section class="bg-white">
-          <div class="main-title bg-accent-100 text-white mb-3">
-            <h1
+      <section class="bg-white">
+        <div class="main-title bg-accent-100 text-white mb-3">
+          <h1
+            class="
+              w-full
+              py-3
+              text-2xl
+              font-bold
+              leading-tight
+              text-center text-white
+            "
+          >
+            ITEM DETAILS
+          </h1>
+        </div>
+        <div class="sections py-4 px-6">
+          <div class="form-title">
+            <h2
               class="
-                w-full
-                py-3
-                text-2xl
-                font-bold
+                text-lg text-accent-100
+                font-medium
                 leading-tight
-                text-center text-white
+                text-left text-gray-800
               "
             >
-              ITEM DETAILS
-            </h1>
-          </div>
-          <div class="sections py-4 px-6">
-            <div class="form-title">
-              <h2
-                class="
-                  text-lg text-accent-100
-                  font-medium
-                  leading-tight
-                  text-left text-gray-800
-                "
-              >
-                Claim Person's Details:
-              </h2>
+              Claim Person's Details:
+            </h2>
 
-              <span
-                class="
-                  w-20
-                  border-t-4 border-solid border-gray-300
-                  inline-block
-                  mb-1
-                "
-              ></span>
-            </div>
-            <div class="flex items-center mt-3 flex-wrap">
-              <div
-                class="
-                  text-left text-gray-600
-                  font-medium
-                  w-full
-                  lg:w-4/12
-                  md:w-5/12
-                  sm:w-6/12
-                "
-              >
-                Person Name
-              </div>
-              <div class="text-gray-600 text-left md:w-7/12 sm:w-6/12">
-                {{ claimDetails.claimpersonname }}
-              </div>
-            </div>
-            <div class="flex items-center mt-3 flex-wrap">
-              <div
-                class="
-                  text-left text-gray-600
-                  font-medium
-                  w-full
-                  lg:w-4/12
-                  md:w-5/12
-                  sm:w-6/12
-                "
-              >
-                Email
-              </div>
-              <div class="text-gray-600 text-left md:w-7/12 sm:w-6/12">
-                {{ claimDetails.claimpersonemail }}
-              </div>
-            </div>
-            <div class="flex items-center mt-3 flex-wrap">
-              <div
-                class="
-                  text-left text-gray-600
-                  font-medium
-                  w-full
-                  lg:w-4/12
-                  md:w-5/12
-                  sm:w-6/12
-                "
-              >
-                Mobile Number
-              </div>
-              <div class="text-gray-600 text-left md:w-7/12 sm:w-6/12">
-                {{ claimDetails.claimpersonmobileno }}
-              </div>
-            </div>
-
-            <div class="flex items-center mt-3 flex-wrap">
-              <div
-                class="
-                  text-left text-gray-600
-                  font-medium
-                  w-full
-                  lg:w-4/12
-                  md:w-5/12
-                  sm:w-6/12
-                "
-              >
-                Lost Item Date
-              </div>
-              <div class="text-gray-600 text-left md:w-7/12 sm:w-6/12">
-                {{ claimDetails.claimpersondatelost }}
-              </div>
-            </div>
-            <div class="flex items-center mt-3 flex-wrap">
-              <div
-                class="
-                  text-left text-gray-600
-                  font-medium
-                  w-full
-                  lg:w-4/12
-                  md:w-5/12
-                  sm:w-6/12
-                "
-              >
-                Item Description
-              </div>
-              <div class="text-gray-600 text-left md:w-7/12 sm:w-6/12">
-                {{ claimDetails.claimpersonitemname }}
-              </div>
-            </div>
-
-            <div
-              v-if="claimDetails.claimpersondescription"
-              class="flex items-center mt-3 flex-wrap"
-            >
-              <div
-                class="
-                  text-left text-gray-600
-                  font-medium
-                  w-full
-                  lg:w-4/12
-                  md:w-5/12
-                  sm:w-6/12
-                "
-              >
-                Description
-              </div>
-              <div class="text-gray-600 text-left md:w-7/12 sm:w-6/12">
-                {{ claimDetails.claimpersondescription }}
-              </div>
-            </div>
-
-            <div class="flex items-center mt-3 flex-wrap">
-              <div
-                class="
-                  text-left text-gray-600
-                  font-medium
-                  w-full
-                  lg:w-4/12
-                  md:w-5/12
-                  sm:w-6/12
-                "
-              >
-                Lost Location
-              </div>
-              <div class="text-gray-600 text-left md:w-7/12 sm:w-6/12">
-                {{ claimDetails.claimpersonlocation }}
-              </div>
-            </div>
-          </div>
-
-          <div data-v-272705a6="" class="flex items-center my-2">
-            <div
+            <span
               class="
-                h-6
-                w-6
-                box-content
-                border-r border-[#E1E3E6]
-                rounded-r-full
-                relative
-                right-3.5
-                bg-primary-60
+                w-20
+                border-t-4 border-solid border-gray-300
+                inline-block
+                mb-1
               "
-            ></div>
-            <hr class="flex-grow border-dashed border border-[#E1E3E6]" />
+            ></span>
+          </div>
+          <div class="flex items-center mt-3 flex-wrap">
             <div
               class="
-                h-6
-                w-6
-                box-border
-                border-l border-[#E1E3E6]
-                rounded-l-full
-                relative
-                left-3.5
-                bg-primary-60
-              "
-            ></div>
-          </div>
-
-          <div class="sections py-4 px-6">
-            <div class="form-title">
-              <h2
-                class="
-                  text-lg text-accent-100
-                  font-medium
-                  leading-tight
-                  text-left text-gray-800
-                "
-              >
-                Item Details:
-              </h2>
-
-              <span
-                class="
-                  w-20
-                  border-t-4 border-solid border-gray-300
-                  inline-block
-                  mb-1
-                "
-              ></span>
-            </div>
-            <div class="flex foundItemContainer">
-              <div class="flex flex-col grow">
-                <div class="flex items-center mt-3 flex-wrap">
-                  <div
-                    class="
-                      text-left text-gray-600
-                      font-medium
-                      w-full
-                      lg:w-4/12
-                      md:w-5/12
-                      sm:w-6/12
-                    "
-                  >
-                    Venue Email
-                  </div>
-                  <div
-                    class="text-gray-600 text-left md:w-7/12 sm:w-6/12 sm:pl-3"
-                  >
-                    {{ itemDetails.venue_email }}
-                  </div>
-                </div>
-                <div class="flex items-center mt-3 flex-wrap">
-                  <div
-                    class="
-                      text-left text-gray-600
-                      font-medium
-                      w-full
-                      lg:w-4/12
-                      md:w-5/12
-                      sm:w-6/12
-                    "
-                  >
-                    Found Item Date
-                  </div>
-                  <div
-                    class="text-gray-600 text-left md:w-7/12 sm:w-6/12 sm:pl-3"
-                  >
-                    {{ itemDetails.datse }}
-                  </div>
-                </div>
-                <div class="flex items-center mt-3 flex-wrap">
-                  <div
-                    class="
-                      text-left text-gray-600
-                      font-medium
-                      w-full
-                      lg:w-4/12
-                      md:w-5/12
-                      sm:w-6/12
-                    "
-                  >
-                    Venue Phone number
-                  </div>
-                  <div
-                    class="text-gray-600 text-left md:w-7/12 sm:w-6/12 sm:pl-3"
-                  >
-                    {{ itemDetails.venue_phone_no }}
-                  </div>
-                </div>
-                <div class="flex flex-col w-full">
-                  <div class="flex items-center mt-3 flex-wrap">
-                    <div
-                      class="
-                        text-left text-gray-600
-                        font-medium
-                        w-full
-                        lg:w-4/12
-                        md:w-5/12
-                        sm:w-6/12
-                      "
-                    >
-                      Employee Mobile Numer
-                    </div>
-                    <div
-                      class="
-                        text-gray-600 text-left
-                        md:w-7/12
-                        sm:w-6/12 sm:pl-3
-                      "
-                    >
-                      {{ itemDetails.employee_mobile_no }}
-                    </div>
-                  </div>
-                  <div class="flex items-center mt-3 flex-wrap">
-                    <div
-                      class="
-                        text-left text-gray-600
-                        font-medium
-                        w-full
-                        lg:w-4/12
-                        md:w-5/12
-                        sm:w-6/12
-                      "
-                    >
-                      Item Description
-                    </div>
-                    <div
-                      class="
-                        text-gray-600 text-left
-                        md:w-7/12
-                        sm:w-6/12 sm:pl-3
-                      "
-                    >
-                      {{ itemDetails.item_description }}
-                    </div>
-                  </div>
-                  <div class="flex items-center mt-3 flex-wrap">
-                    <div
-                      class="
-                        text-left text-gray-600
-                        font-medium
-                        w-full
-                        lg:w-4/12
-                        md:w-5/12
-                        sm:w-6/12
-                      "
-                    >
-                      Package Type
-                    </div>
-                    <div
-                      class="
-                        text-gray-600 text-left
-                        md:w-7/12
-                        sm:w-6/12 sm:pl-3
-                      "
-                    >
-                      {{ itemDetails.package_type }}
-                    </div>
-                  </div>
-                  <div class="flex items-center mt-3 flex-wrap">
-                    <div
-                      class="
-                        text-left text-gray-600
-                        font-medium
-                        w-full
-                        lg:w-4/12
-                        md:w-5/12
-                        sm:w-6/12
-                      "
-                    >
-                      Weight
-                    </div>
-                    <div
-                      class="
-                        text-gray-600 text-left
-                        md:w-7/12
-                        sm:w-6/12 sm:pl-3
-                      "
-                    >
-                      {{ itemDetails.weight_pounds }} lbs
-                    </div>
-                  </div>
-                  <div class="flex items-center mt-3 flex-wrap">
-                    <div
-                      class="
-                        text-left text-gray-600
-                        font-medium
-                        w-full
-                        lg:w-4/12
-                        md:w-5/12
-                        sm:w-6/12
-                      "
-                    >
-                      Dimension
-                    </div>
-                    <div
-                      class="
-                        text-gray-600 text-left
-                        md:w-7/12
-                        sm:w-6/12 sm:pl-3
-                      "
-                    >
-                      {{ itemDetails.item_length }}(l) x
-                      {{ itemDetails.item_width }}(w) x
-                      {{ itemDetails.item_height }}(h) inches
-                    </div>
-                  </div>
-                  <div class="flex items-center mt-3 flex-wrap">
-                    <div
-                      class="
-                        text-left text-gray-600
-                        font-medium
-                        w-full
-                        lg:w-4/12
-                        md:w-5/12
-                        sm:w-6/12
-                      "
-                    >
-                      Item Status
-                    </div>
-                    <div
-                      class="
-                        text-gray-600 text-left
-                        md:w-7/12
-                        sm:w-6/12 sm:pl-3
-                      "
-                    >
-                      {{
-                        itemDetails.item_status == 0 ? "Claimed" : "Unclaimed"
-                      }}
-                    </div>
-                  </div>
-                </div>
-              </div>
-              <div v-if="itemDetails.image" class="mt-4 sm:mt-0 sm:w-60 w-full">
-                <img class="w-full" :src="itemDetails.image" alt="" />
-              </div>
-            </div>
-          </div>
-          <div data-v-272705a6="" class="flex items-center my-2">
-            <div
-              class="
-                h-6
-                w-6
-                box-content
-                border-r border-[#E1E3E6]
-                rounded-r-full
-                relative
-                right-3.5
-                bg-primary-60
-              "
-            ></div>
-            <hr class="flex-grow border-dashed border border-[#E1E3E6]" />
-            <div
-              class="
-                h-6
-                w-6
-                box-border
-                border-l border-[#E1E3E6]
-                rounded-l-full
-                relative
-                left-3.5
-                bg-primary-60
-              "
-            ></div>
-          </div>
-          <div class="sections py-4 px-6">
-            <div class="form-title">
-              <h2
-                class="
-                  text-lg text-accent-100
-                  font-medium
-                  leading-tight
-                  text-left text-gray-800
-                "
-              >
-                Found Item Address:
-              </h2>
-
-              <span
-                class="
-                  w-20
-                  border-t-4 border-solid border-gray-300
-                  inline-block
-                  mb-1
-                "
-              ></span>
-            </div>
-
-            <div class="flex items-center mt-3 flex-wrap">
-              <div
-                class="
-                  text-left text-gray-600
-                  font-medium
-                  w-full
-                  lg:w-4/12
-                  md:w-5/12
-                  sm:w-6/12
-                "
-              >
-                Address
-              </div>
-              <div class="text-gray-600 text-left md:w-7/12 sm:w-6/12">
-                {{ itemDetails.address }}
-              </div>
-            </div>
-            <div class="flex items-center mt-3 flex-wrap">
-              <div
-                class="
-                  text-left text-gray-600
-                  font-medium
-                  w-full
-                  lg:w-4/12
-                  md:w-5/12
-                  sm:w-6/12
-                "
-              >
-                City
-              </div>
-              <div class="text-gray-600 text-left md:w-7/12 sm:w-6/12">
-                {{ itemDetails.city }}
-              </div>
-            </div>
-            <div class="flex items-center mt-3 flex-wrap">
-              <div
-                class="
-                  text-left text-gray-600
-                  font-medium
-                  w-full
-                  lg:w-4/12
-                  md:w-5/12
-                  sm:w-6/12
-                "
-              >
-                State
-              </div>
-              <div class="text-gray-600 text-left md:w-7/12 sm:w-6/12">
-                {{ itemDetails.states }}
-              </div>
-            </div>
-            <div class="flex items-center mt-3 flex-wrap">
-              <div
-                class="
-                  text-left text-gray-600
-                  font-medium
-                  w-full
-                  lg:w-4/12
-                  md:w-5/12
-                  sm:w-6/12
-                "
-              >
-                Country
-              </div>
-              <div class="text-gray-600 text-left md:w-7/12 sm:w-6/12">
-                {{ itemDetails.country }}
-              </div>
-            </div>
-            <div class="flex items-center mt-3 flex-wrap">
-              <div
-                class="
-                  text-left text-gray-600
-                  font-medium
-                  w-full
-                  lg:w-4/12
-                  md:w-5/12
-                  sm:w-6/12
-                "
-              >
-                Zipcode
-              </div>
-              <div class="text-gray-600 text-left md:w-7/12 sm:w-6/12">
-                {{ itemDetails.zipcode }}
-              </div>
-            </div>
-          </div>
-
-          <div class="flex flex-wrap gap-2 m-5">
-            <button
-              :class="{ 'button--loading': isLoading['Approve'] }"
-              type="submit"
-              class="
-                !py-3
-                flex-auto
+                text-left text-gray-600
                 font-medium
-                text-md
-                leading-5
-                uppercase
-                py-2
-                px-8
-                rounded-md
-                button
-                focus:outline-none
-                focus:ring-2
-                focus:ring-offset-2
-                focus:ring-offset-primary-60
-                transition-all
-                font-display
-                disabled:cursor-not-allowed
-                bg-accent-100
-                text-white
-                focus:ring-accent-100
-                shadow-accent
-                hover:bg-accent-200
+                w-full
+                lg:w-4/12
+                md:w-5/12
+                sm:w-6/12
               "
-              @click="action('Approve')"
             >
-              <span class="button__text"> Approve </span>
-            </button>
-            <button
-              :class="{ 'button--loading': isLoading['Reject'] }"
-              type="submit"
-              class="
-                !py-3
-                flex-auto
-                font-medium
-                text-md
-                leading-5
-                uppercase
-                py-2
-                px-8
-                rounded-md
-                button
-                focus:outline-none
-                focus:ring-2
-                focus:ring-offset-2
-                focus:ring-offset-primary-60
-                transition-all
-                font-display
-                disabled:cursor-not-allowed
-                bg-accent-100
-                text-white
-                focus:ring-accent-100
-                shadow-accent
-                hover:bg-accent-200
-              "
-              @click="action('Reject')"
-            >
-              <span class="button__text"> Reject </span>
-            </button>
+              Person Name
+            </div>
+            <div class="text-gray-600 text-left md:w-7/12 sm:w-6/12">
+              {{ claimDetails.claimpersonname }}
+            </div>
           </div>
-        </section>
-      </div>
-    </div>
-    <div v-else>
-      <BaseLoader />
+          <div class="flex items-center mt-3 flex-wrap">
+            <div
+              class="
+                text-left text-gray-600
+                font-medium
+                w-full
+                lg:w-4/12
+                md:w-5/12
+                sm:w-6/12
+              "
+            >
+              Email
+            </div>
+            <div class="text-gray-600 text-left md:w-7/12 sm:w-6/12">
+              {{ claimDetails.claimpersonemail }}
+            </div>
+          </div>
+          <div class="flex items-center mt-3 flex-wrap">
+            <div
+              class="
+                text-left text-gray-600
+                font-medium
+                w-full
+                lg:w-4/12
+                md:w-5/12
+                sm:w-6/12
+              "
+            >
+              Mobile Number
+            </div>
+            <div class="text-gray-600 text-left md:w-7/12 sm:w-6/12">
+              {{ claimDetails.claimpersonmobileno }}
+            </div>
+          </div>
+
+          <div class="flex items-center mt-3 flex-wrap">
+            <div
+              class="
+                text-left text-gray-600
+                font-medium
+                w-full
+                lg:w-4/12
+                md:w-5/12
+                sm:w-6/12
+              "
+            >
+              Lost Item Date
+            </div>
+            <div class="text-gray-600 text-left md:w-7/12 sm:w-6/12">
+              {{ claimDetails.claimpersondatelost }}
+            </div>
+          </div>
+          <div class="flex items-center mt-3 flex-wrap">
+            <div
+              class="
+                text-left text-gray-600
+                font-medium
+                w-full
+                lg:w-4/12
+                md:w-5/12
+                sm:w-6/12
+              "
+            >
+              Item Description
+            </div>
+            <div class="text-gray-600 text-left md:w-7/12 sm:w-6/12">
+              {{ claimDetails.claimpersonitemname }}
+            </div>
+          </div>
+
+          <div
+            v-if="claimDetails.claimpersondescription"
+            class="flex items-center mt-3 flex-wrap"
+          >
+            <div
+              class="
+                text-left text-gray-600
+                font-medium
+                w-full
+                lg:w-4/12
+                md:w-5/12
+                sm:w-6/12
+              "
+            >
+              Description
+            </div>
+            <div class="text-gray-600 text-left md:w-7/12 sm:w-6/12">
+              {{ claimDetails.claimpersondescription }}
+            </div>
+          </div>
+
+          <div class="flex items-center mt-3 flex-wrap">
+            <div
+              class="
+                text-left text-gray-600
+                font-medium
+                w-full
+                lg:w-4/12
+                md:w-5/12
+                sm:w-6/12
+              "
+            >
+              Lost Location
+            </div>
+            <div class="text-gray-600 text-left md:w-7/12 sm:w-6/12">
+              {{ claimDetails.claimpersonlocation }}
+            </div>
+          </div>
+        </div>
+
+        <div data-v-272705a6="" class="flex items-center my-2">
+          <div
+            class="
+              h-6
+              w-6
+              box-content
+              border-r border-[#E1E3E6]
+              rounded-r-full
+              relative
+              right-3.5
+              bg-primary-60
+            "
+          ></div>
+          <hr class="flex-grow border-dashed border border-[#E1E3E6]" />
+          <div
+            class="
+              h-6
+              w-6
+              box-border
+              border-l border-[#E1E3E6]
+              rounded-l-full
+              relative
+              left-3.5
+              bg-primary-60
+            "
+          ></div>
+        </div>
+
+        <div class="sections py-4 px-6">
+          <div class="form-title">
+            <h2
+              class="
+                text-lg text-accent-100
+                font-medium
+                leading-tight
+                text-left text-gray-800
+              "
+            >
+              Item Details:
+            </h2>
+
+            <span
+              class="
+                w-20
+                border-t-4 border-solid border-gray-300
+                inline-block
+                mb-1
+              "
+            ></span>
+          </div>
+          <div class="flex foundItemContainer">
+            <div class="flex flex-col grow">
+              <div class="flex items-center mt-3 flex-wrap">
+                <div
+                  class="
+                    text-left text-gray-600
+                    font-medium
+                    w-full
+                    lg:w-4/12
+                    md:w-5/12
+                    sm:w-6/12
+                  "
+                >
+                  Venue Email
+                </div>
+                <div
+                  class="text-gray-600 text-left md:w-7/12 sm:w-6/12 sm:pl-3"
+                >
+                  {{ itemDetails.venue_email }}
+                </div>
+              </div>
+              <div class="flex items-center mt-3 flex-wrap">
+                <div
+                  class="
+                    text-left text-gray-600
+                    font-medium
+                    w-full
+                    lg:w-4/12
+                    md:w-5/12
+                    sm:w-6/12
+                  "
+                >
+                  Found Item Date
+                </div>
+                <div
+                  class="text-gray-600 text-left md:w-7/12 sm:w-6/12 sm:pl-3"
+                >
+                  {{ itemDetails.datse }}
+                </div>
+              </div>
+              <div class="flex items-center mt-3 flex-wrap">
+                <div
+                  class="
+                    text-left text-gray-600
+                    font-medium
+                    w-full
+                    lg:w-4/12
+                    md:w-5/12
+                    sm:w-6/12
+                  "
+                >
+                  Venue Phone number
+                </div>
+                <div
+                  class="text-gray-600 text-left md:w-7/12 sm:w-6/12 sm:pl-3"
+                >
+                  {{ itemDetails.venue_phone_no }}
+                </div>
+              </div>
+              <div class="flex flex-col w-full">
+                <div class="flex items-center mt-3 flex-wrap">
+                  <div
+                    class="
+                      text-left text-gray-600
+                      font-medium
+                      w-full
+                      lg:w-4/12
+                      md:w-5/12
+                      sm:w-6/12
+                    "
+                  >
+                    Employee Mobile Numer
+                  </div>
+                  <div
+                    class="text-gray-600 text-left md:w-7/12 sm:w-6/12 sm:pl-3"
+                  >
+                    {{ itemDetails.employee_mobile_no }}
+                  </div>
+                </div>
+                <div class="flex items-center mt-3 flex-wrap">
+                  <div
+                    class="
+                      text-left text-gray-600
+                      font-medium
+                      w-full
+                      lg:w-4/12
+                      md:w-5/12
+                      sm:w-6/12
+                    "
+                  >
+                    Item Description
+                  </div>
+                  <div
+                    class="text-gray-600 text-left md:w-7/12 sm:w-6/12 sm:pl-3"
+                  >
+                    {{ itemDetails.item_description }}
+                  </div>
+                </div>
+                <div class="flex items-center mt-3 flex-wrap">
+                  <div
+                    class="
+                      text-left text-gray-600
+                      font-medium
+                      w-full
+                      lg:w-4/12
+                      md:w-5/12
+                      sm:w-6/12
+                    "
+                  >
+                    Package Type
+                  </div>
+                  <div
+                    class="text-gray-600 text-left md:w-7/12 sm:w-6/12 sm:pl-3"
+                  >
+                    {{ itemDetails.package_type }}
+                  </div>
+                </div>
+                <div class="flex items-center mt-3 flex-wrap">
+                  <div
+                    class="
+                      text-left text-gray-600
+                      font-medium
+                      w-full
+                      lg:w-4/12
+                      md:w-5/12
+                      sm:w-6/12
+                    "
+                  >
+                    Weight
+                  </div>
+                  <div
+                    class="text-gray-600 text-left md:w-7/12 sm:w-6/12 sm:pl-3"
+                  >
+                    {{ itemDetails.weight_pounds }} lbs
+                  </div>
+                </div>
+                <div class="flex items-center mt-3 flex-wrap">
+                  <div
+                    class="
+                      text-left text-gray-600
+                      font-medium
+                      w-full
+                      lg:w-4/12
+                      md:w-5/12
+                      sm:w-6/12
+                    "
+                  >
+                    Dimension
+                  </div>
+                  <div
+                    class="text-gray-600 text-left md:w-7/12 sm:w-6/12 sm:pl-3"
+                  >
+                    {{ itemDetails.item_length }}(l) x
+                    {{ itemDetails.item_width }}(w) x
+                    {{ itemDetails.item_height }}(h) inches
+                  </div>
+                </div>
+                <div class="flex items-center mt-3 flex-wrap">
+                  <div
+                    class="
+                      text-left text-gray-600
+                      font-medium
+                      w-full
+                      lg:w-4/12
+                      md:w-5/12
+                      sm:w-6/12
+                    "
+                  >
+                    Item Status
+                  </div>
+                  <div
+                    class="text-gray-600 text-left md:w-7/12 sm:w-6/12 sm:pl-3"
+                  >
+                    {{ itemDetails.item_status == 0 ? "Claimed" : "Unclaimed" }}
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div v-if="itemDetails.image" class="mt-4 sm:mt-0 sm:w-60 w-full">
+              <img class="w-full" :src="itemDetails.image" alt="" />
+            </div>
+          </div>
+        </div>
+        <div data-v-272705a6="" class="flex items-center my-2">
+          <div
+            class="
+              h-6
+              w-6
+              box-content
+              border-r border-[#E1E3E6]
+              rounded-r-full
+              relative
+              right-3.5
+              bg-primary-60
+            "
+          ></div>
+          <hr class="flex-grow border-dashed border border-[#E1E3E6]" />
+          <div
+            class="
+              h-6
+              w-6
+              box-border
+              border-l border-[#E1E3E6]
+              rounded-l-full
+              relative
+              left-3.5
+              bg-primary-60
+            "
+          ></div>
+        </div>
+        <div class="sections py-4 px-6">
+          <div class="form-title">
+            <h2
+              class="
+                text-lg text-accent-100
+                font-medium
+                leading-tight
+                text-left text-gray-800
+              "
+            >
+              Found Item Address:
+            </h2>
+
+            <span
+              class="
+                w-20
+                border-t-4 border-solid border-gray-300
+                inline-block
+                mb-1
+              "
+            ></span>
+          </div>
+
+          <div class="flex items-center mt-3 flex-wrap">
+            <div
+              class="
+                text-left text-gray-600
+                font-medium
+                w-full
+                lg:w-4/12
+                md:w-5/12
+                sm:w-6/12
+              "
+            >
+              Address
+            </div>
+            <div class="text-gray-600 text-left md:w-7/12 sm:w-6/12">
+              {{ itemDetails.address }}
+            </div>
+          </div>
+          <div class="flex items-center mt-3 flex-wrap">
+            <div
+              class="
+                text-left text-gray-600
+                font-medium
+                w-full
+                lg:w-4/12
+                md:w-5/12
+                sm:w-6/12
+              "
+            >
+              City
+            </div>
+            <div class="text-gray-600 text-left md:w-7/12 sm:w-6/12">
+              {{ itemDetails.city }}
+            </div>
+          </div>
+          <div class="flex items-center mt-3 flex-wrap">
+            <div
+              class="
+                text-left text-gray-600
+                font-medium
+                w-full
+                lg:w-4/12
+                md:w-5/12
+                sm:w-6/12
+              "
+            >
+              State
+            </div>
+            <div class="text-gray-600 text-left md:w-7/12 sm:w-6/12">
+              {{ itemDetails.states }}
+            </div>
+          </div>
+          <div class="flex items-center mt-3 flex-wrap">
+            <div
+              class="
+                text-left text-gray-600
+                font-medium
+                w-full
+                lg:w-4/12
+                md:w-5/12
+                sm:w-6/12
+              "
+            >
+              Country
+            </div>
+            <div class="text-gray-600 text-left md:w-7/12 sm:w-6/12">
+              {{ itemDetails.country }}
+            </div>
+          </div>
+          <div class="flex items-center mt-3 flex-wrap">
+            <div
+              class="
+                text-left text-gray-600
+                font-medium
+                w-full
+                lg:w-4/12
+                md:w-5/12
+                sm:w-6/12
+              "
+            >
+              Zipcode
+            </div>
+            <div class="text-gray-600 text-left md:w-7/12 sm:w-6/12">
+              {{ itemDetails.zipcode }}
+            </div>
+          </div>
+        </div>
+
+        <div class="flex flex-wrap gap-2 m-5">
+          <BaseButton
+            class="flex-auto"
+            :is-loading="isLoading['Approve']"
+            @click="action('Approve')"
+          >
+            Approve
+          </BaseButton>
+          <BaseButton
+            class="flex-auto"
+            :is-loading="isLoading['Reject']"
+            @click="action('Reject')"
+          >
+            Reject
+          </BaseButton>
+        </div>
+      </section>
     </div>
     <BaseDialog
       :showDialog="showDialog"
@@ -660,11 +579,14 @@
       @close="closeDialog"
     />
   </div>
+  <div v-else>
+    <BaseLoader />
+  </div>
 </template>
 
 <script>
 export default {
-  middleware: ['auth-admin'],
+  middleware: ["auth-admin"],
   data() {
     return {
       showDialog: false,
@@ -701,12 +623,6 @@ export default {
     }
   },
   methods: {
-    closeDialog() {
-      this.showDialog = false;
-      this.$nextTick(() => {
-        this.$router.push({ path: "/found-items" });
-      });
-    },
     action(type) {
       this.isLoading[type] = true;
       let params = {
@@ -737,6 +653,12 @@ export default {
           this.isLoading[type] = false;
         });
     },
+    closeDialog() {
+      this.showDialog = false;
+      this.$nextTick(() => {
+        this.$router.push({ path: "/found-items" });
+      });
+    },
   },
 };
 </script>
@@ -744,61 +666,6 @@ export default {
 <style lang="scss" scoped>
 .wrapper {
   @apply min-h-screen flex justify-center py-10 mx-auto;
-}
-
-.card {
-  @apply rounded-lg text-indigo-500;
-
-  .title {
-    @apply text-6xl font-bold;
-  }
-}
-
-// .text-gray-600 {
-//   @apply sm: px-3;
-// }
-
-.button {
-  position: relative;
-  border: none;
-  outline: none;
-  cursor: pointer;
-}
-
-.button__text {
-  color: #ffffff;
-  transition: all 0.2s;
-}
-
-.button--loading .button__text {
-  visibility: hidden;
-  opacity: 0;
-}
-
-.button--loading::after {
-  content: "";
-  position: absolute;
-  width: 16px;
-  height: 16px;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  margin: auto;
-  border: 4px solid transparent;
-  border-top-color: #ffffff;
-  border-radius: 50%;
-  animation: button-loading-spinner 1s ease infinite;
-}
-
-@keyframes button-loading-spinner {
-  from {
-    transform: rotate(0turn);
-  }
-
-  to {
-    transform: rotate(1turn);
-  }
 }
 
 @media only screen and (max-width: 650px) {

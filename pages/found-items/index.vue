@@ -23,37 +23,12 @@
         >
           Found Items ({{ lostItems.length }})
         </h2>
-        <button
-          v-if="!isAdminLogin"
-          class="
-            !py-3
-            font-medium
-            text-md
-            uppercase
-            py-2
-            px-6
-            sm:ml-2
-            grow
-            mt-3
-            sm:mt-0 sm:grow-0
-            rounded-md
-            button
-            focus:outline-none
-            focus:ring-2
-            focus:ring-offset-2
-            focus:ring-offset-primary-60
-            transition-all
-            font-display
-            bg-accent-100
-            text-white
-            focus:ring-accent-100
-            shadow-accent
-            hover:bg-accent-200
-          "
+        <BaseButton
+          class="sm:ml-2 grow mt-3 sm:mt-0 sm:grow-0"
           @click="addNewItem"
         >
           + Add New Item
-        </button>
+        </BaseButton>
       </div>
       <div class="align-middle inline-block w-full">
         <div class="flex justify-between flex-col gap-4 sm:flex-row items-center">
@@ -305,26 +280,6 @@
             >
               Claim Item
             </button>
-            <button
-              v-if="isAdminLogin"
-              class="
-                whitespace-nowrap
-                font-medium
-                text-sm
-                px-5
-                py-2
-                rounded-md
-                border-red-600 border
-                text-red-600
-                transition
-                duration-300
-                hover:bg-red-600 hover:text-white
-                focus:outline-none
-              "
-              @click.stop="claimItem(item)"
-            >
-              Delete Item
-            </button>
           </div>
         </div>
       </div>
@@ -350,14 +305,6 @@ export default {
       inputDate: [],
       itemDescriptionOptions: itemDescriptionOptions,
     };
-  },
-  computed: {
-    isAdminLogin(){
-      if (this.$auth.loggedIn) {
-        return true;
-      }
-      return false;
-    }
   },
   methods: {
     changeItemDescription(event){
@@ -401,7 +348,7 @@ export default {
         if (response.status === 200) {
           this.isLoading = false;
           this.lostItems = response?.data?.data;
-          if(!this.lostItems){
+          if (!this.lostItems) {
             this.lostItems = [];
           }
         }

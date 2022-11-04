@@ -266,49 +266,16 @@
               </div>
               <div
                 v-show="showValidateAlert"
-                class="
-                  p-4
-                  mb-4
-                  top-margin-alert
-                  text-sm text-red-700
-                  bg-red-100
-                  rounded-lg
-                "
+                class="p-4 mb-4 text-sm text-red-700 bg-red-100 rounded-lg"
                 role="alert"
               >
                 <span class="font-medium">Oops!</span> Please fill all required
                 fields and try submitting again.
               </div>
               <div class="flex justify-end">
-                <button
-                  :class="{ 'button--loading': isLoading }"
-                  type="submit"
-                  class="
-                    !py-3
-                    font-medium
-                    text-md
-                    leading-5
-                    uppercase
-                    py-2
-                    px-12
-                    rounded-md
-                    button
-                    focus:outline-none
-                    focus:ring-2
-                    focus:ring-offset-2
-                    focus:ring-offset-primary-60
-                    transition-all
-                    font-display
-                    disabled:cursor-not-allowed
-                    bg-accent-100
-                    text-white
-                    focus:ring-accent-100
-                    shadow-accent
-                    hover:bg-accent-200
-                  "
-                >
-                  <span class="button__text"> Submit </span>
-                </button>
+                <BaseButton :is-loading="isLoading" button-type="submit">
+                  Submit
+                </BaseButton>
               </div>
             </div>
           </form>
@@ -328,11 +295,10 @@
 </template>
 
 <script>
-import "vue-select/dist/vue-select.css";
 import { ValidationObserver, ValidationProvider } from "vee-validate";
 
 export default {
-  middleware: ['auth-admin'],
+  middleware: ["auth-admin"],
   components: {
     ValidationObserver,
     ValidationProvider,
@@ -376,6 +342,19 @@ export default {
       secondaryEmail: "",
     };
   },
+  mounted() {
+    window.addEventListener("keydown", () => {
+      this.showValidateAlert = false;
+    });
+    window.addEventListener("click", () => {
+      this.showValidateAlert = false;
+    });
+    if (this.$route.params.item) {
+      this.itemId = this.$route.params.item.id;
+      this.venueEmail = this.$route.params.item.venue_email;
+      this.secondaryEmail = this.$route.params.item?.secondaryEmail;
+    }
+  },
   computed: {
     dialogMessage() {
       return "We have sent the notification to the person who has uploaded the item with the entered Claim details. Please wait for the person to perform the necessary action on your claim request. We will notify you once they have taken appropriate actions for your claim request.";
@@ -417,12 +396,6 @@ export default {
         });
       });
     },
-    closeDialog() {
-      this.showDialog = false;
-      this.$nextTick(() => {
-        this.$router.push({ path: "/found-items" });
-      });
-    },
     validateUserPhone() {
       if (!this.claimPersonPhoneNo) {
         this.isPhoneNoValid = false;
@@ -442,7 +415,6 @@ export default {
       const isValid = await this.$refs.observer.validate();
       if (!isValid || !this.isPhoneNoValid) {
         this.showValidateAlert = true;
-        // console.log("in valid");
         this.isLoading = false;
       } else {
         this.showValidateAlert = false;
@@ -475,82 +447,33 @@ export default {
           });
       }
     },
-  },
-  mounted() {
-    window.addEventListener('keydown', () => {
-      this.showValidateAlert = false;
-    });
-    window.addEventListener('click', () => {
-      this.showValidateAlert = false;
-    });
-    if (this.$route.params.item) {
-      this.itemId = this.$route.params.item.id;
-      this.venueEmail = this.$route.params.item.venue_email;
-      this.secondaryEmail = this.$route.params.item?.secondaryEmail;
-    }
+    closeDialog() {
+      this.showDialog = false;
+      this.$nextTick(() => {
+        this.$router.push({ path: "/found-items" });
+      });
+    },
   },
   beforeDestroy() {
-    window.removeEventListener('click', () => {});
-    window.removeEventListener('keydown', () => {});
+    window.removeEventListener("click", () => {});
+    window.removeEventListener("keydown", () => {});
   },
 };
 </script>
 
-<style lang="scss" scoped>
+<style lang="scss">
 .wrapper-form {
   @apply min-h-screen flex justify-center py-10 mx-auto;
 }
 .vue-tel-input {
   border-radius: 0.5rem;
+  border: 1px solid #cccccc;
 }
 .vti__dropdown-list {
   z-index: 100;
 }
-.button {
-  position: relative;
-  border: none;
-  outline: none;
-  cursor: pointer;
-}
-
-.button__text {
-  color: #ffffff;
-  transition: all 0.2s;
-}
-
-.button--loading .button__text {
-  visibility: hidden;
-  opacity: 0;
-}
-
-.button--loading::after {
-  content: "";
-  position: absolute;
-  width: 16px;
-  height: 16px;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  margin: auto;
-  border: 4px solid transparent;
-  border-top-color: #ffffff;
-  border-radius: 50%;
-  animation: button-loading-spinner 1s ease infinite;
-}
-
-.top-margin-alert {
-  margin-top: 2.5rem !important;
-}
-
-@keyframes button-loading-spinner {
-  from {
-    transform: rotate(0turn);
-  }
-
-  to {
-    transform: rotate(1turn);
-  }
+.vti__input {
+  border-radius: 50px;
 }
 
 .pac-item {

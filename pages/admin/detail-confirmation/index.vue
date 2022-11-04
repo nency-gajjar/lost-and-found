@@ -36,7 +36,7 @@
         >
           <div class="relative">
             <div class="title bg-accent-100 pl-6 py-4 mb-4">
-              <h3 class="text-white">Crop Image</h3>
+              <h3 class="text-white">Upload Image</h3>
             </div>
             <span
               @click="closeEditor"
@@ -76,29 +76,6 @@
               editor-container
             "
           >
-            <!-- <div
-              class="top-margin-3 flex justify-center"
-              v-show="loadingSpinner"
-              role="status"
-            >
-              <svg
-                aria-hidden="true"
-                class="mr-2 w-16 h-16 text-gray-200 animate-spin fill-blue-600"
-                viewBox="0 0 100 101"
-                fill="none"
-                xmlns="http://www.w3.org/2000/svg"
-              >
-                <path
-                  d="M100 50.5908C100 78.2051 77.6142 100.591 50 100.591C22.3858 100.591 0 78.2051 0 50.5908C0 22.9766 22.3858 0.59082 50 0.59082C77.6142 0.59082 100 22.9766 100 50.5908ZM9.08144 50.5908C9.08144 73.1895 27.4013 91.5094 50 91.5094C72.5987 91.5094 90.9186 73.1895 90.9186 50.5908C90.9186 27.9921 72.5987 9.67226 50 9.67226C27.4013 9.67226 9.08144 27.9921 9.08144 50.5908Z"
-                  fill="currentColor"
-                />
-                <path
-                  d="M93.9676 39.0409C96.393 38.4038 97.8624 35.9116 97.0079 33.5539C95.2932 28.8227 92.871 24.3692 89.8167 20.348C85.8452 15.1192 80.8826 10.7238 75.2124 7.41289C69.5422 4.10194 63.2754 1.94025 56.7698 1.05124C51.7666 0.367541 46.6976 0.446843 41.7345 1.27873C39.2613 1.69328 37.813 4.19778 38.4501 6.62326C39.0873 9.04874 41.5694 10.4717 44.0505 10.1071C47.8511 9.54855 51.7191 9.52689 55.5402 10.0491C60.8642 10.7766 65.9928 12.5457 70.6331 15.2552C75.2735 17.9648 79.3347 21.5619 82.5849 25.841C84.9175 28.9121 86.7997 32.2913 88.1811 35.8758C89.083 38.2158 91.5421 39.6781 93.9676 39.0409Z"
-                  fill="currentFill"
-                />
-              </svg>
-              <span class="sr-only">Loading...</span>
-            </div> -->
             <div class="w-full">
               <div class="px-6 flex justify-center">
                 <img
@@ -195,38 +172,10 @@
                     <p v-else>Done</p>
                   </div>
                 </div>
-                <div class="save-upload">
-                  <button
-                    type="button"
-                    :class="{ 'button--loading': isSavingImage }"
-                    @click="saveImg"
-                    class="
-                      font-medium
-                      text-md
-                      leading-5
-                      py-2
-                      px-6
-                      rounded-md
-                      button
-                      focus:outline-none
-                      focus:ring-2
-                      focus:ring-offset-2
-                      focus:ring-offset-primary-60
-                      transition-all
-                      font-display
-                      disabled:cursor-not-allowed
-                      bg-accent-100
-                      text-white
-                      focus:ring-accent-100
-                      shadow-accent
-                      hover:bg-accent-200
-                    "
-                  >
-                    <span class="button__text">
-                      <BaseIcon icon="floppy-disk" type="far" size="2x" />
-                      Save
-                    </span>
-                  </button>
+                <div class="save-upload flex items-center">
+                  <BaseButton :is-loading="isSavingImage" @click="saveImg">
+                    Save
+                  </BaseButton>
                 </div>
               </div>
             </div>
@@ -748,100 +697,28 @@
           </div>
         </div>
 
-        <div class="flex flex-wrap gap-2 mx-4">
-          <button
-            :class="{ 'button--loading': isLoading['Approve'] }"
-            type="submit"
-            class="
-              !py-3
-              flex-auto
-              font-medium
-              text-md
-              leading-5
-              uppercase
-              py-2
-              px-8
-              rounded-md
-              button
-              focus:outline-none
-              focus:ring-2
-              focus:ring-offset-2
-              focus:ring-offset-primary-60
-              transition-all
-              font-display
-              disabled:cursor-not-allowed
-              bg-accent-100
-              text-white
-              focus:ring-accent-100
-              shadow-accent
-              hover:bg-accent-200
-            "
+        <div class="flex flex-wrap gap-2 m-5">
+          <BaseButton
+            :is-loading="isLoading['Approve']"
+            class="flex-1"
             @click="action('Approve')"
           >
-            <span class="button__text"> Approve </span>
-          </button>
-          <button
-            :class="{ 'button--loading': isLoading['Deny'] }"
-            type="submit"
-            class="
-              !py-3
-              flex-auto
-              font-medium
-              text-md
-              leading-5
-              uppercase
-              py-2
-              px-8
-              rounded-md
-              button
-              focus:outline-none
-              focus:ring-2
-              focus:ring-offset-2
-              focus:ring-offset-primary-60
-              transition-all
-              font-display
-              disabled:cursor-not-allowed
-              bg-accent-100
-              text-white
-              focus:ring-accent-100
-              shadow-accent
-              hover:bg-accent-200
-            "
+            Approve
+          </BaseButton>
+          <BaseButton
+            :is-loading="isLoading['Deny']"
+            class="flex-1"
             @click="action('Deny')"
           >
-            <span class="button__text"> Deny </span>
-          </button>
-          <button
-            :class="{ 'button--loading': isLoading['Approve without Image'] }"
-            type="submit"
-            class="
-              !py-3
-              flex-auto
-              font-medium
-              text-md
-              leading-5
-              uppercase
-              py-2
-              px-8
-              rounded-md
-              button
-              focus:outline-none
-              focus:ring-2
-              focus:ring-offset-2
-              focus:ring-offset-primary-60
-              transition-all
-              font-display
-              disabled:cursor-not-allowed
-              bg-accent-100
-              text-white
-              focus:ring-accent-100
-              shadow-accent
-              hover:bg-accent-200
-            "
+            Reject
+          </BaseButton>
+          <BaseButton
+            :is-loading="isLoading['Approve without Image']"
+            class="flex-auto"
             @click="action('Approve without Image')"
           >
-            <span class="button__text"> Approve without Image </span>
-          </button>
+            Approve without Image
+          </BaseButton>
         </div>
         <div v-if="image" class="text-left sm:w-12/12 px-6 pb-6 pt-4">
           <div
@@ -879,175 +756,6 @@
             Edit Image
           </button>
         </div>
-
-        <!-- <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3">
-          <div
-            class="
-              cursor-pointer
-              mt-8
-              py-4
-              px-5
-              flex flex-col
-              bg-white
-              rounded-lg
-              relative
-            "
-          >
-            <button
-              :class="{ 'button--loading': isLoading['approve'] }"
-              type="submit"
-              class="
-                !py-3
-                font-medium
-                text-md
-                leading-5
-                uppercase
-                py-2
-                px-12
-                rounded-md
-                button
-                focus:outline-none
-                focus:ring-2
-                focus:ring-offset-2
-                focus:ring-offset-primary-60
-                transition-all
-                font-display
-                disabled:cursor-not-allowed
-                bg-accent-100
-                text-white
-                focus:ring-accent-100
-                shadow-accent
-                hover:bg-accent-200
-              "
-              @click="action('Approve')"
-            >
-              <span class="button__text"> Approve </span>
-            </button>
-          </div>
-          <div
-            class="
-              cursor-pointer
-              mt-8
-              py-4
-              px-5
-              flex flex-col
-              bg-white
-              rounded-lg
-              relative
-            "
-          >
-            <button
-              :class="{ 'button--loading': isLoading['deny'] }"
-              type="submit"
-              class="
-                !py-3
-                font-medium
-                text-md
-                leading-5
-                uppercase
-                py-2
-                px-12
-                rounded-md
-                button
-                focus:outline-none
-                focus:ring-2
-                focus:ring-offset-2
-                focus:ring-offset-primary-60
-                transition-all
-                font-display
-                disabled:cursor-not-allowed
-                bg-accent-100
-                text-white
-                focus:ring-accent-100
-                shadow-accent
-                hover:bg-accent-200
-              "
-              @click="action('Deny')"
-            >
-              <span class="button__text"> Deny </span>
-            </button>
-          </div>
-          <div
-            class="
-              cursor-pointer
-              mt-8
-              py-4
-              px-5
-              flex flex-col
-              bg-white
-              rounded-lg
-              relative
-            "
-          >
-            <button
-              :class="{ 'button--loading': isLoading['approve-without-image'] }"
-              type="submit"
-              class="
-                !py-3
-                font-medium
-                text-md
-                leading-5
-                uppercase
-                py-2
-                px-12
-                rounded-md
-                button
-                focus:outline-none
-                focus:ring-2
-                focus:ring-offset-2
-                focus:ring-offset-primary-60
-                transition-all
-                font-display
-                disabled:cursor-not-allowed
-                bg-accent-100
-                text-white
-                focus:ring-accent-100
-                shadow-accent
-                hover:bg-accent-200
-              "
-              @click="action('Approve without Image')"
-            >
-              <span class="button__text"> Approve without Image </span>
-            </button>
-          </div>
-        </div>
-
-        <div class="text-left sm:w-12/12 px-6 pb-6 pt-4">
-          <div
-            class="
-              flex
-              items-center
-              my-4
-              before:flex-1 before:border-t before:border-gray-300 before:mt-0.5
-              after:flex-1 after:border-t after:border-gray-300 after:mt-0.5
-            "
-          >
-            <p class="text-center text-gray-400 font-medium mx-4 mb-0">OR</p>
-          </div>
-          <button
-            type="submit"
-            class="
-              inline-block
-              px-7
-              py-3
-              bg-gray
-              hover:shadow-lg hover:bg-gray-100
-              text-gray-600 text-sm
-              leading-snug
-              uppercase
-              rounded-md
-              font-medium
-              transition
-              duration-150
-              ease-in-out
-              w-full
-              border border-gray-300
-            "
-            @click="editImage()"
-          >
-            Edit Image
-          </button>
-        </div> -->
       </section>
     </div>
   </div>
@@ -1059,6 +767,7 @@ import VueCropper from "vue-cropperjs";
 import "cropperjs/dist/cropper.css";
 
 export default {
+  middleware: ["auth-admin"],
   components: {
     RedactImage,
     VueCropper,
@@ -1070,10 +779,6 @@ export default {
       showDraw: false,
       imgPreview: false,
       showUndo: false,
-      // enableEdit: false,
-
-      // canvasWidth: "600",
-      // canvasHeight: "400",
       size_icon: "2x",
       isLoading: {
         Approve: false,
@@ -1088,7 +793,6 @@ export default {
       isSavingImage: false,
       isImageEdited: false,
       showEditor: false,
-      // stateCrop: true,
       loadingSpinner: false,
       imageRecognitionData: [],
       imageKey: "",
@@ -1116,10 +820,6 @@ export default {
     }
   },
   methods: {
-    // editMode(){
-    //   this.enableEdit = true;
-    //   this.imgForEditor = this.imgSrc;
-    // },
     undo() {
       this.$refs.redacter.revert();
     },
@@ -1153,15 +853,8 @@ export default {
     editImage() {
       this.showEditor = false;
       if (this.image) {
-        // const response = await fetch(this.image);
-        // const blob = await response.blob();
-        // const file = new File([blob], "image.jpg", { type: blob.type });
         this.imgSrc = this.image;
         this.showEditor = true;
-        // this.loadingSpinner = true;
-        // setTimeout(() => {
-        //   this.loadingSpinner = false;
-        // }, 2000);
       } else {
         this.showEditor = false;
       }
@@ -1172,7 +865,6 @@ export default {
       this.showCrop = false;
       this.showDraw = false;
       this.imgPreview = false;
-      // this.enableEdit = false;
     },
     saveImg() {
       this.isSavingImage = true;
@@ -1206,7 +898,6 @@ export default {
           this.showCrop = false;
           this.showDraw = false;
           this.imgPreview = false;
-          // this.enableEdit = false;
           this.isImageEdited = true;
         })
         .catch((error) => {
@@ -1317,39 +1008,6 @@ canvas {
   @apply sm:px-3;
 }
 
-.button {
-  position: relative;
-  border: none;
-  outline: none;
-  cursor: pointer;
-}
-
-.button__text {
-  color: #ffffff;
-  transition: all 0.2s;
-}
-
-.button--loading .button__text {
-  visibility: hidden;
-  opacity: 0;
-}
-
-.button--loading::after {
-  content: "";
-  position: absolute;
-  width: 16px;
-  height: 16px;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  margin: auto;
-  border: 4px solid transparent;
-  border-top-color: #ffffff;
-  border-radius: 50%;
-  animation: button-loading-spinner 1s ease infinite;
-}
-
 .vue-cropper-container {
   min-width: 40vw;
 }
@@ -1361,16 +1019,6 @@ canvas {
 .vue-cropper-container {
   img {
     max-height: 300px !important;
-  }
-}
-
-@keyframes button-loading-spinner {
-  from {
-    transform: rotate(0turn);
-  }
-
-  to {
-    transform: rotate(1turn);
   }
 }
 

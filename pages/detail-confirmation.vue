@@ -2,7 +2,6 @@
   <div class="wrapper" v-if="Object.keys(itemDetails).length > 0">
     <div
       class="
-        card
         w-full
         mx-6
         lg:mx-0
@@ -518,38 +517,13 @@
           v-show="!itemDetails.onlyDisplay"
           class="text-left sm:w-12/12 px-6 pb-6 pt-4"
         >
-          <button
-            type="submit"
-            :class="{ 'button--loading': isLoading }"
-            class="
-              !py-3
-              font-medium
-              text-md
-              leading-5
-              uppercase
-              py-2
-              px-12
-              rounded-md
-              button
-              w-full
-              focus:outline-none
-              focus:ring-2
-              focus:ring-offset-2
-              focus:ring-offset-primary-60
-              transition-all
-              font-display
-              disabled:cursor-not-allowed
-              bg-accent-100
-              text-white
-              focus:ring-accent-100
-              shadow-accent
-              hover:bg-accent-200
-            "
+          <BaseButton
+            class="w-full"
+            :is-loading="isLoading"
             @click="submitDetails"
           >
-            <span class="button__text"> {{ btnName }} </span>
-          </button>
-
+            {{ btnName }}
+          </BaseButton>
           <div
             class="
               flex
@@ -728,61 +702,6 @@ export default {
 <style lang="scss" scoped>
 .wrapper {
   @apply min-h-screen flex justify-center py-10 mx-auto;
-}
-
-.card {
-  @apply rounded-lg text-indigo-500;
-
-  .title {
-    @apply text-6xl font-bold;
-  }
-}
-
-// .text-gray-600 {
-//   @apply sm: px-3;
-// }
-
-.button {
-  position: relative;
-  border: none;
-  outline: none;
-  cursor: pointer;
-}
-
-.button__text {
-  color: #ffffff;
-  transition: all 0.2s;
-}
-
-.button--loading .button__text {
-  visibility: hidden;
-  opacity: 0;
-}
-
-.button--loading::after {
-  content: "";
-  position: absolute;
-  width: 16px;
-  height: 16px;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  margin: auto;
-  border: 4px solid transparent;
-  border-top-color: #ffffff;
-  border-radius: 50%;
-  animation: button-loading-spinner 1s ease infinite;
-}
-
-@keyframes button-loading-spinner {
-  from {
-    transform: rotate(0turn);
-  }
-
-  to {
-    transform: rotate(1turn);
-  }
 }
 
 @media only screen and (max-width: 650px) {

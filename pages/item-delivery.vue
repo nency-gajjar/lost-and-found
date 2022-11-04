@@ -2,7 +2,6 @@
   <div class="wrapper">
     <div
       class="
-        card
         w-full
         mx-6
         lg:mx-0
@@ -17,7 +16,7 @@
     >
       <ValidationObserver v-slot="{ validate }" ref="observer">
         <form @submit.prevent="validate().then(onSubmit)">
-          <div class="card p-6 space-y-4">
+          <div class="p-6 space-y-4">
             <div class="form-title">
               <h1
                 class="
@@ -122,7 +121,10 @@
                 class="block mb-4"
               >
                 <div :class="errors.length && 'error'">
-                  <date-picker v-model="expectedPickupDate" formate="YYYY-MM-DD"></date-picker>
+                  <date-picker
+                    v-model="expectedPickupDate"
+                    formate="YYYY-MM-DD"
+                  ></date-picker>
                 </div>
                 <p
                   v-if="errors.length"
@@ -131,37 +133,17 @@
                   {{ errors[0] }}
                 </p>
               </ValidationProvider>
+              <div
+                v-show="showValidateAlert"
+                class="p-4 mb-4 text-sm text-red-700 bg-red-100 rounded-lg"
+                role="alert"
+              >
+                <span class="font-medium">Oops!</span> Please fill all required
+                fields and try submitting again.
+              </div>
             </div>
             <div class="flex justify-end">
-              <button
-                :class="{ 'button--loading': isLoading }"
-                type="submit"
-                class="
-                  !py-3
-                  font-medium
-                  text-md
-                  leading-5
-                  uppercase
-                  py-2
-                  px-12
-                  rounded-md
-                  button
-                  focus:outline-none
-                  focus:ring-2
-                  focus:ring-offset-2
-                  focus:ring-offset-primary-60
-                  transition-all
-                  font-display
-                  disabled:cursor-not-allowed
-                  bg-accent-100
-                  text-white
-                  focus:ring-accent-100
-                  shadow-accent
-                  hover:bg-accent-200
-                "
-              >
-                <span class="button__text"> Submit </span>
-              </button>
+              <BaseButton :is-loading="isLoading"> Submit </BaseButton>
             </div>
           </div>
         </form>
@@ -179,11 +161,11 @@
 </template>
   
 <script>
-import DatePicker from 'vue2-datepicker';
-import 'vue2-datepicker/index.css';
+import DatePicker from "vue2-datepicker";
+import "vue2-datepicker/index.css";
 
 export default {
-  middleware: ['auth-admin'],
+  middleware: ["auth-admin"],
   data: () => ({
     showDialog: false,
     deliveryType: "0",
@@ -192,12 +174,19 @@ export default {
     expectedPickupDate: new Date(),
     isLoading: false,
     itemId: "",
+    showValidateAlert: false,
   }),
   components: { DatePicker },
   mounted() {
     if (this.$route.query.id) {
       this.itemId = this.$route.query.id;
     }
+    window.addEventListener("keydown", () => {
+      this.showValidateAlert = false;
+    });
+    window.addEventListener("click", () => {
+      this.showValidateAlert = false;
+    });
   },
   computed: {
     dialogMessage() {
@@ -209,20 +198,18 @@ export default {
     },
   },
   methods: {
-    toggleTabs: function (tabNumber) {
+    toggleTabs(tabNumber) {
       this.openTab = tabNumber;
-    },
-    closeDialog() {
-      this.showDialog = false;
-      this.$nextTick(() => {
-        this.$router.push({ path: "/found-items" });
-      });
     },
     async onSubmit() {
       if (this.deliveryType === "1") {
         const isValid = await this.$refs.observer.validate();
-        if (!isValid) return;
+        if (!isValid) {
+          this.showValidateAlert = true;
+          return;
+        }
       }
+      this.showValidateAlert = false;
       this.isLoading = true;
       let params = {
         delivery_type: this.deliveryType,
@@ -255,272 +242,33 @@ export default {
           this.isLoading = false;
         });
     },
+    closeDialog() {
+      this.showDialog = false;
+      this.$nextTick(() => {
+        this.$router.push({ path: "/found-items" });
+      });
+    },
+  },
+  beforeDestroy() {
+    window.removeEventListener("click", () => {});
+    window.removeEventListener("keydown", () => {});
   },
 };
 </script>
   
-<style lang="scss">
-.mx-datepicker{
-  width: 100% !important;
-}
-.mx-datepicker input{
-  height: 3rem;
-}
+<style lang="scss" scoped>
 .wrapper {
   @apply min-h-screen flex justify-center py-10 mx-auto;
 }
-
-.editor-container {
-  min-width: 200px;
-  min-height: 200px;
-}
-
-.editor-tools {
-  @apply flex flex-wrap w-full justify-between;
-  margin-bottom: 20px;
-}
-
-.editor-tools .icons {
-  @apply flex items-center;
-}
-
-.editor-tools .save-upload .button__text {
-  @apply flex items-center;
-}
-
-.editor-tools .save-upload .button__text svg {
-  margin-right: 10px;
-  width: 18px;
-}
-
-.custom-editor {
-  @apply flex justify-center;
-  border: 1px solid #808080;
-  background-color: #ffffff;
-}
-
-.editor-tools .icons {
-  div {
-    cursor: pointer;
-    border: 1px solid #808080;
-    border-radius: 14px;
-    margin-right: 7px;
-
-    &:hover {
-      background: #dfdfdf;
-    }
-
-    padding: 2px 10px;
-    background-color: #f3f3f3;
-    margin-bottom: 5px;
-    color: #ff9800;
-
-    svg {
-      width: 18px;
-    }
-  }
-}
-
-.top-margin-05 {
-  margin-top: 0.5rem !important;
-}
-
-.top-margin-alert {
-  margin-top: 2.5rem !important;
-}
-
-.previewCard h1,
-h2,
-h3,
-h4,
-h5,
-h6 {
-  font-size: revert;
-  font-weight: revert;
-}
-
-canvas {
-  width: 0 !important;
-  object-fit: contain;
-}
-
-.canvas-container {
+.mx-datepicker {
   width: 100% !important;
 }
-
-.canvas-container {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  min-width: 500px !important;
-  min-height: 384px;
+.mx-datepicker input {
+  height: 3rem;
 }
-
-.upper-canvas {
-  margin: 0px 0px;
-  min-width: 500px !important;
-  min-height: 384px;
-}
-
-.lower-canvas {
-  min-width: 500px !important;
-  min-height: 384px;
-  position: static !important;
-}
-
-.vs__dropdown-toggle {
-  @apply h-12 rounded-lg;
-}
-
 .error {
   & > .mx-datepicker {
     @apply border-red-500 border-2 ring-4 ring-red-500 ring-opacity-10 transition-none;
-  }
-}
-
-.error {
-  & > div {
-    @apply text-red-500;
-  }
-
-  .vs__dropdown-toggle {
-    @apply border-red-500 border-2 ring-4 ring-red-500 ring-opacity-10 transition-none;
-  }
-}
-
-.top-margin-3 {
-  margin-top: 3px !important;
-}
-
-@media only screen and (max-width: 650px) {
-  .canvas-container,
-  .upper-canvas,
-  .lower-canvas {
-    min-width: 0 !important;
-    min-height: 0 !important;
-    width: 500px !important;
-    height: 384px !important;
-  }
-}
-
-@media only screen and (max-width: 510px) {
-  .canvas-container,
-  .upper-canvas,
-  .lower-canvas {
-    min-width: 0 !important;
-    min-height: 0 !important;
-    width: 350px !important;
-    height: 350px !important;
-  }
-}
-
-@media only screen and (max-width: 410px) {
-  .canvas-container,
-  .upper-canvas,
-  .lower-canvas {
-    min-width: 0 !important;
-    min-height: 0 !important;
-    width: 300px !important;
-    height: 300px !important;
-  }
-}
-
-.fade-enter {
-  opacity: 0;
-}
-
-.fade-enter-active,
-.fade-leave-active {
-  transition: opacity 500ms ease-out;
-}
-
-.fade-leave-to {
-  opacity: 0;
-}
-
-.vue-tel-input {
-  border-radius: 0.5rem;
-  overflow: hidden;
-}
-
-.vs__actions svg {
-  display: none;
-}
-
-.vs__actions {
-  background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 20 20'%3e%3cpath stroke='%23737373' stroke-linecap='round' stroke-linejoin='round' stroke-width='1.5' d='M6 8l4 4 4-4'/%3e%3c/svg%3e");
-  background-position: right 0.5rem center;
-  background-repeat: no-repeat;
-  background-size: 1.5em 1.5em;
-  width: 26px;
-}
-
-.button {
-  position: relative;
-  border: none;
-  outline: none;
-  cursor: pointer;
-}
-
-.button__text {
-  color: #ffffff;
-  transition: all 0.2s;
-}
-
-.button--loading .button__text {
-  visibility: hidden;
-  opacity: 0;
-}
-
-.button--loading::after {
-  content: "";
-  position: absolute;
-  width: 16px;
-  height: 16px;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  margin: auto;
-  border: 4px solid transparent;
-  border-top-color: #ffffff;
-  border-radius: 50%;
-  animation: button-loading-spinner 1s ease infinite;
-}
-
-@keyframes button-loading-spinner {
-  from {
-    transform: rotate(0turn);
-  }
-
-  to {
-    transform: rotate(1turn);
-  }
-}
-
-.loader {
-  border-top-color: orange;
-  -webkit-animation: spinner 1.5s linear infinite;
-  animation: spinner 1.5s linear infinite;
-}
-
-@-webkit-keyframes spinner {
-  0% {
-    -webkit-transform: rotate(0deg);
-  }
-
-  100% {
-    -webkit-transform: rotate(360deg);
-  }
-}
-
-@keyframes spinner {
-  0% {
-    transform: rotate(0deg);
-  }
-
-  100% {
-    transform: rotate(360deg);
   }
 }
 </style>

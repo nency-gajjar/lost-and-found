@@ -11,15 +11,7 @@
     "
   >
     <div
-      class="
-        loader
-        ease-linear
-        rounded-full
-        border-4 border-t-4 border-gray-200
-        h-12
-        w-12
-        mb-4
-      "
+      class="loader ease-linear rounded-full border-gray-200 h-14 w-14 mb-4"
     ></div>
   </div>
 </template>
@@ -28,5 +20,29 @@
 export default {};
 </script>
 
-<style>
+<style scoped>
+.loader {
+  border-top-color: orange;
+  -webkit-animation: spinner 1.5s linear infinite;
+  animation: spinner 1.5s linear infinite;
+  border-width: 6px;
+}
+
+@-webkit-keyframes spinner {
+  0% {
+    -webkit-transform: rotate(0deg);
+  }
+  100% {
+    -webkit-transform: rotate(360deg);
+  }
+}
+
+@keyframes spinner {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}
 </style>

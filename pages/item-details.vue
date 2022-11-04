@@ -2,7 +2,6 @@
   <div class="wrapper-form">
     <div
       class="
-        card
         w-full
         mx-4
         lg:mx-0
@@ -18,7 +17,7 @@
       <div v-if="!isLoadingItemDetails || Object.keys(itemDetails).length > 0">
         <ValidationObserver v-slot="{ validate }" ref="observer">
           <form @submit.prevent="validate().then(onSubmit)">
-            <div class="card sm:p-6 p-4 space-y-4">
+            <div class="sm:p-6 p-4 space-y-4">
               <div class="form-title">
                 <h1
                   class="
@@ -186,7 +185,10 @@
                   {{ errors[0] }}
                 </p>
               </ValidationProvider>
-              <div class="block relative box-content h-12" :class="!isEmployeeMobileNoValid && 'error'">
+              <div
+                class="block relative box-content h-12"
+                :class="!isEmployeeMobileNoValid && 'error'"
+              >
                 <vue-tel-input
                   :inputOptions="{ placeholder: 'Employee Mobile No.' }"
                   class="
@@ -384,7 +386,10 @@
                     {{ errors[0] }}
                   </p>
                 </ValidationProvider>
-                <div class="block relative box-content h-12" :class="!isVenuePhoneValid && 'error'">
+                <div
+                  class="block relative box-content h-12"
+                  :class="!isVenuePhoneValid && 'error'"
+                >
                   <vue-tel-input
                     :inputOptions="{ placeholder: 'Phone Number' }"
                     class="
@@ -487,37 +492,6 @@
                       <span class="flex flex-col items-center sm:flex-row">
                         <input
                           type="file"
-                          id="choose-file"
-                          name="files"
-                          class="hidden"
-                          @change="uploadImg($event)"
-                        />
-                        <label
-                          for="choose-file"
-                          id="chooseFile"
-                          class="
-                            cursor-pointer
-                            bg-accent-100
-                            text-white
-                            font-bold
-                            text-xs
-                            px-4
-                            py-2
-                            rounded-full
-                            border-accent-100 border
-                            hover:bg-accent-200 hover:text-white
-                          "
-                        >
-                          <BaseIcon
-                            icon="arrow-up-from-bracket"
-                            color="white"
-                            class="mr-1"
-                          />
-                          Choose a file
-                        </label>
-                        <span class="m-2 text-md text-gray-500">or</span>
-                        <input
-                          type="file"
                           id="take-picture"
                           name="files"
                           class="hidden"
@@ -533,7 +507,7 @@
                             bg-indigo-600
                             text-white
                             font-bold
-                            text-xs
+                            text-sm
                             px-4
                             py-2
                             rounded-full
@@ -543,6 +517,38 @@
                         >
                           <BaseIcon icon="camera" color="white" class="mr-1" />
                           Take a Picture
+                        </label>
+
+                        <span class="m-2 text-md text-gray-500">or</span>
+                        <input
+                          type="file"
+                          id="choose-file"
+                          name="files"
+                          class="hidden"
+                          @change="uploadImg($event)"
+                        />
+                        <label
+                          for="choose-file"
+                          id="chooseFile"
+                          class="
+                            cursor-pointer
+                            bg-accent-100
+                            text-white
+                            font-bold
+                            text-sm
+                            px-4
+                            py-2
+                            rounded-full
+                            border-accent-100 border
+                            hover:bg-accent-200 hover:text-white
+                          "
+                        >
+                          <BaseIcon
+                            icon="arrow-up-from-bracket"
+                            color="white"
+                            class="mr-1"
+                          />
+                          Choose a file
                         </label>
                       </span>
                       <p class="mt-3 text-xs text-gray-500">PNG, JPEG, JPG.</p>
@@ -720,7 +726,7 @@
                   >
                     <div class="relative">
                       <div class="title bg-accent-100 pl-6 py-4 mb-4">
-                        <h3 class="text-white">Crop Image</h3>
+                        <h3 class="text-white">Upload Image</h3>
                       </div>
                       <span
                         @click="closeEditor"
@@ -766,21 +772,21 @@
                             v-if="showCrop && !imgPreview"
                             class="vue-cropper-container"
                           > -->
-                            <VueCropper
-                              v-if="showCrop && !imgPreview"
-                              ref="cropper"
-                              :src="imgSrc"
-                              :responsive="true"
-                              :min-container-width="250"
-                              :min-container-height="300"
-                              :scalable="true"
-                              drag-mode="none"
-                              :movable="false"
-                              :zoomable="false"
-                              :zoomOnTouch="false"
-                              :zoomOnWheel="false"
-                              alt="Source Image"
-                            ></VueCropper>
+                          <VueCropper
+                            v-if="showCrop && !imgPreview"
+                            ref="cropper"
+                            :src="imgSrc"
+                            :responsive="true"
+                            :min-container-width="250"
+                            :min-container-height="300"
+                            :scalable="true"
+                            drag-mode="none"
+                            :movable="false"
+                            :zoomable="false"
+                            :zoomOnTouch="false"
+                            :zoomOnWheel="false"
+                            alt="Source Image"
+                          ></VueCropper>
                           <!-- </div> -->
                           <RedactImage
                             v-if="showDraw && !imgPreview"
@@ -856,42 +862,13 @@
                               <p v-else>Done</p>
                             </div>
                           </div>
-                          <div class="save-upload">
-                            <button
-                              type="button"
-                              :class="{ 'button--loading': isSavingImage }"
+                          <div class="save-upload flex items-center">
+                            <BaseButton
+                              :is-loading="isSavingImage"
                               @click="saveImg"
-                              class="
-                                font-medium
-                                text-md
-                                leading-5
-                                py-2
-                                px-6
-                                rounded-md
-                                button
-                                focus:outline-none
-                                focus:ring-2
-                                focus:ring-offset-2
-                                focus:ring-offset-primary-60
-                                transition-all
-                                font-display
-                                disabled:cursor-not-allowed
-                                bg-accent-100
-                                text-white
-                                focus:ring-accent-100
-                                shadow-accent
-                                hover:bg-accent-200
-                              "
                             >
-                              <span class="button__text">
-                                <BaseIcon
-                                  icon="floppy-disk"
-                                  type="far"
-                                  size="2x"
-                                />
-                                Save
-                              </span>
-                            </button>
+                              Save
+                            </BaseButton>
                           </div>
                         </div>
                       </div>
@@ -1059,6 +1036,9 @@
               </div>
 
               <!-- Item Status -->
+              <label class="block text-md font-medium text-gray-800"
+                >Item Status</label
+              >
               <ValidationProvider
                 v-slot="{ errors }"
                 rules="required"
@@ -1120,7 +1100,10 @@
                     {{ errors[0] }}
                   </p>
                 </ValidationProvider>
-                <div class="block relative box-content h-12" :class="!isReceiverMobileNoValid && 'error'">
+                <div
+                  class="block relative box-content h-12"
+                  :class="!isReceiverMobileNoValid && 'error'"
+                >
                   <vue-tel-input
                     :inputOptions="{ placeholder: 'Receiver Mobile No.' }"
                     class="
@@ -1147,14 +1130,7 @@
 
               <div
                 v-show="showValidateAlert"
-                class="
-                  p-4
-                  mb-4
-                  top-margin-alert
-                  text-sm text-red-700
-                  bg-red-100
-                  rounded-lg
-                "
+                class="p-4 mb-4 text-sm text-red-700 bg-red-100 rounded-lg"
                 role="alert"
               >
                 <span class="font-medium">Oops!</span> Please fill all required
@@ -1162,35 +1138,9 @@
               </div>
 
               <div class="flex justify-end">
-                <button
-                  :class="{ 'button--loading': isLoading }"
-                  type="submit"
-                  class="
-                    !py-3
-                    font-medium
-                    text-md
-                    leading-5
-                    uppercase
-                    py-2
-                    px-12
-                    rounded-md
-                    button
-                    focus:outline-none
-                    focus:ring-2
-                    focus:ring-offset-2
-                    focus:ring-offset-primary-60
-                    transition-all
-                    font-display
-                    disabled:cursor-not-allowed
-                    bg-accent-100
-                    text-white
-                    focus:ring-accent-100
-                    shadow-accent
-                    hover:bg-accent-200
-                  "
-                >
-                  <span class="button__text"> Preview </span>
-                </button>
+                <BaseButton :is-loading="isLoading" button-type="submit">
+                  Preview
+                </BaseButton>
               </div>
             </div>
           </form>
@@ -1218,7 +1168,7 @@ import DatePicker from 'vue2-datepicker';
 import 'vue2-datepicker/index.css';
 
 export default {
-  middleware: ['auth-admin'],
+  middleware: ["auth-admin"],
   data: () => ({
     imgSrc: "",
     showCrop: false,
@@ -1789,7 +1739,7 @@ export default {
           this.itemWidth = "";
           this.itemHeight = "";
           this.weight = "";
-          this.weightOunces = "0";
+          this.weightOunces = "";
           break;
       }
     },
@@ -2406,16 +2356,16 @@ export default {
           this.itemWidth = "";
           this.itemHeight = "";
           this.weight = "";
-          this.weightOunces = "0";
+          this.weightOunces = "";
           break;
       }
     },
   },
   mounted() {
-    window.addEventListener('keydown', () => {
+    window.addEventListener("keydown", () => {
       this.showValidateAlert = false;
     });
-    window.addEventListener('click', () => {
+    window.addEventListener("click", () => {
       this.showValidateAlert = false;
     });
     if (this.$route.query.id) {
@@ -2516,8 +2466,8 @@ export default {
     }
   },
   beforeDestroy() {
-    window.removeEventListener('click', () => {});
-    window.removeEventListener('keydown', () => {});
+    window.removeEventListener("click", () => {});
+    window.removeEventListener("keydown", () => {});
   },
 };
 </script>
@@ -2586,10 +2536,6 @@ export default {
   margin-top: 0.5rem !important;
 }
 
-.top-margin-alert {
-  margin-top: 2.5rem !important;
-}
-
 .previewCard h1,
 h2,
 h3,
@@ -2602,10 +2548,6 @@ h6 {
 
 canvas {
   object-fit: contain;
-}
-
-.vs__dropdown-toggle {
-  @apply h-12 rounded-lg;
 }
 
 .error {
@@ -2671,75 +2613,15 @@ canvas {
   }
 }
 
-.fade-enter {
-  opacity: 0;
-}
-
-.fade-enter-active,
-.fade-leave-active {
-  transition: opacity 500ms ease-out;
-}
-
-.fade-leave-to {
-  opacity: 0;
-}
 .vue-tel-input {
   border-radius: 0.5rem;
+  border: 1px solid #cccccc;
 }
 .vti__dropdown-list {
   z-index: 100;
 }
-.vs__actions svg {
-  display: none;
-}
-.vs__actions {
-  background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 20 20'%3e%3cpath stroke='%23737373' stroke-linecap='round' stroke-linejoin='round' stroke-width='1.5' d='M6 8l4 4 4-4'/%3e%3c/svg%3e");
-  background-position: right 0.5rem center;
-  background-repeat: no-repeat;
-  background-size: 1.5em 1.5em;
-  width: 26px;
-}
-.button {
-  position: relative;
-  border: none;
-  outline: none;
-  cursor: pointer;
-}
-
-.button__text {
-  color: #ffffff;
-  transition: all 0.2s;
-}
-
-.button--loading .button__text {
-  visibility: hidden;
-  opacity: 0;
-}
-
-.button--loading::after {
-  content: "";
-  position: absolute;
-  width: 16px;
-  height: 16px;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  margin: auto;
-  border: 4px solid transparent;
-  border-top-color: #ffffff;
-  border-radius: 50%;
-  animation: button-loading-spinner 1s ease infinite;
-}
-
-@keyframes button-loading-spinner {
-  from {
-    transform: rotate(0turn);
-  }
-
-  to {
-    transform: rotate(1turn);
-  }
+.vti__input {
+  border-radius: 50px;
 }
 
 .loader {
