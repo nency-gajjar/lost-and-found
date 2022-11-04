@@ -767,7 +767,11 @@ import VueCropper from "vue-cropperjs";
 import "cropperjs/dist/cropper.css";
 
 export default {
-  middleware: ["auth-admin"],
+  middleware({ $auth, redirect }) {
+    if (!$auth.loggedIn) {
+      return redirect("/login");
+    }
+  },
   components: {
     RedactImage,
     VueCropper,
@@ -816,7 +820,14 @@ export default {
             this.image = this.responseData.image;
           }
         })
-        .catch((error) => console.log(error));
+        .catch((error) => {
+          console.log(error);
+          this.$nextTick(() => {
+            this.$router.push({
+              name: "found-items",
+            });
+          });
+        });
     }
   },
   methods: {

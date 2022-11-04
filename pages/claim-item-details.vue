@@ -619,6 +619,11 @@ export default {
         .catch((error) => {
           this.isLoadingItemDetails = false;
           console.log(error);
+          this.$nextTick(() => {
+            this.$router.push({
+              name: "found-items",
+            });
+          });
         });
     }
   },

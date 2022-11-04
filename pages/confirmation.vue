@@ -396,7 +396,14 @@ export default {
             this.itemDetails = response.data.data.Item;
           }
         })
-        .catch((error) => console.log(error));
+        .catch((error) => {
+          console.log(error);
+          this.$nextTick(() => {
+            this.$router.push({
+              name: "found-items",
+            });
+          });
+        });
     }
   },
   mounted() {

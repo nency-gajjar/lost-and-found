@@ -1344,7 +1344,14 @@ export default {
     },
     clearAddress() {
       this.address = "";
-      this.resetAddressFields();
+      this.autoCompleteAddress = {
+        address: "",
+        city: "",
+        state: "",
+        country: "",
+        zipcode: "",
+        phoneNo: "",
+      };
     },
     resetAddressFields() {
       this.autoCompleteAddress = {
@@ -2398,7 +2405,14 @@ export default {
             }
           }
         })
-        .catch((error) => console.log(error));
+        .catch((error) => {
+          console.log(error);
+          this.$nextTick(() => {
+            this.$router.push({
+              name: "found-items",
+            });
+          });
+        });
     } else if (this.$route.params?.itemDetails) {
       this.senderFormTitle = "EDIT SENDER'S DETAILS";
       this.foundItemFormTitle = "EDIT FOUND ITEM'S DETAILS";
