@@ -13,10 +13,10 @@
         <div v-else class="link-container">
           <NuxtLink to="/found-items" class="btn">Found Items</NuxtLink>
         </div>
-        <div v-show="isAdminLogin" class="link-container">
+        <div class="link-container">
           <NuxtLink to="/register" class="btn">Register</NuxtLink>
         </div>
-        <div v-if="isAdminLogin" class="link-container">
+        <div class="link-container">
           <div class="btn" @click="logoutAdmin('desktop')">Logout</div>
         </div>
         <div class="drawer-container">

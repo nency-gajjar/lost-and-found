@@ -31,7 +31,9 @@
         </BaseButton>
       </div>
       <div class="align-middle inline-block w-full">
-        <div class="flex justify-between flex-col gap-4 sm:flex-row items-center">
+        <div
+          class="flex justify-between flex-col gap-4 sm:flex-row items-center"
+        >
           <div
             class="
               inline-flex
@@ -112,7 +114,13 @@
             </div>
           </div>
           <div class="w-full mt-3 sm:mt-0 sm:w-3/12">
-            <date-picker :confirm="true" range v-model="inputDate" @pick="changeDate($event)" formate="YYYY-MM-DD"></date-picker>
+            <date-picker
+              :confirm="true"
+              range
+              v-model="inputDate"
+              @pick="changeDate($event)"
+              formate="YYYY-MM-DD"
+            ></date-picker>
           </div>
           <div class="h-full w-full mt-3 sm:mt-0 sm:w-3/12">
             <select
@@ -130,40 +138,21 @@
               "
             >
               <option disabled selected>Select category</option>
-              <option v-for="item in itemDescriptionOptions" :key="item" :value="item">{{ item }}</option>
+              <option
+                v-for="item in itemDescriptionOptions"
+                :key="item"
+                :value="item"
+              >
+                {{ item }}
+              </option>
             </select>
           </div>
-          <div>
-            <button
-              class="
-                !py-3
-                font-medium
-                text-md
-                uppercase
-                py-2
-                px-6
-                sm:ml-2
-                grow
-                mt-3
-                sm:mt-0 sm:grow-0
-                rounded-md
-                button
-                focus:outline-none
-                focus:ring-2
-                focus:ring-offset-2
-                focus:ring-offset-primary-60
-                transition-all
-                font-display
-                bg-accent-100
-                text-white
-                focus:ring-accent-100
-                shadow-accent
-                hover:bg-accent-200
-              "
-            >
-              Apply filters
-            </button>
-          </div>
+          <BaseButton
+            class="sm:ml-2 grow mt-3 sm:mt-0 sm:grow-0"
+            @click="addNewItem"
+          >
+            Apply Filters
+          </BaseButton>
         </div>
       </div>
       <div v-if="!isLoading && lostItems.length > 0">
@@ -292,8 +281,8 @@
 </template>
 
 <script>
-import DatePicker from 'vue2-datepicker';
-import 'vue2-datepicker/index.css';
+import DatePicker from "vue2-datepicker";
+import "vue2-datepicker/index.css";
 import { itemDescriptionOptions } from "../../static/defaults.js";
 
 export default {
@@ -307,14 +296,14 @@ export default {
     };
   },
   methods: {
-    changeItemDescription(event){
+    changeItemDescription(event) {
       console.log(event.target.value);
     },
-    changeDate(event){
+    changeDate(event) {
       console.log(this.inputDate);
       console.log(event);
     },
-    updateValues(){
+    updateValues() {
       console.log(this.dateRange);
     },
     addNewItem() {
@@ -362,7 +351,7 @@ export default {
 </script>
 
 <style>
-.mx-input{
+.mx-input {
   height: 3rem !important;
 }
 </style>
@@ -382,7 +371,7 @@ export default {
   animation: spinner 1.5s linear infinite;
 }
 
-.mx-datepicker-range{
+.mx-datepicker-range {
   width: 100% !important;
 }
 
