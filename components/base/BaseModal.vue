@@ -23,18 +23,15 @@
             <button
               type="submit"
               class="
-                inline-block
-                px-7
-                py-3
+                py-2.5
+                px-12
+                text-md
+                font-medium
+                leading-5
                 bg-gray
                 hover:shadow-lg hover:bg-gray-100
                 text-gray-600 text-md
-                leading-snug
                 rounded-md
-                font-medium
-                transition
-                duration-150
-                ease-in-out
                 border border-gray-300
               "
               @click="$emit('close')"
@@ -151,9 +148,9 @@ export default {
 
     &.is-large {
       width: 90%;
-      max-width: 1200px;
+      max-width: 1250px;
       @media (max-width: 767px) {
-        width: 100%;
+        width: 94%;
       }
     }
 
@@ -188,6 +185,7 @@ export default {
     .base-modal-body {
       background: #f7f7f7;
       overflow: auto;
+      margin: 20px;
 
       &.white {
         background: white;
