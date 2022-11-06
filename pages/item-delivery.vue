@@ -114,11 +114,13 @@
                   label="Additional Person Name (optional)"
                 />
               </div>
-              <p>Expected Pickup Date:</p>
+              <label class="block text-md font-medium text-gray-800"
+                >Expected Pickup Date:</label
+              >
               <ValidationProvider
                 v-slot="{ errors }"
                 rules="required"
-                class="block mb-4"
+                class="block mb-4 mt-2"
               >
                 <div :class="errors.length && 'error'">
                   <date-picker
@@ -256,19 +258,28 @@ export default {
 };
 </script>
   
-<style lang="scss" scoped>
+<style lang="scss">
 .wrapper {
   @apply min-h-screen flex justify-center py-10 mx-auto;
+}
+.mx-input-wrapper i {
+  margin-right: 10px;
+}
+.mx-input:hover {
+  @apply border-gray-300;
 }
 .mx-datepicker {
   width: 100% !important;
 }
 .mx-datepicker input {
   height: 3rem;
+  border-radius: 0.5rem;
+  border-color: rgb(212 212 212);
+  cursor: pointer;
 }
 .error {
   & > .mx-datepicker {
-    @apply border-red-500 border-2 ring-4 ring-red-500 ring-opacity-10 transition-none;
+    @apply border-red-500 border-2 ring-4 ring-red-500 ring-opacity-10 rounded-lg transition-none;
   }
 }
 </style>

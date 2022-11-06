@@ -86,7 +86,9 @@
               </ValidationProvider>
 
               <!-- Found Item Date -->
-              <p>Found Item Date:</p>
+              <label class="block text-md font-medium text-gray-800"
+                >Found Item Date:</label
+              >
               <ValidationProvider
                 v-slot="{ errors }"
                 rules="required"
@@ -706,7 +708,6 @@
                     px-4
                     pb-20
                     text-center
-                    sm:p-0
                   "
                 >
                   <div class="fixed inset-0 transition-opacity">
@@ -714,6 +715,7 @@
                   </div>
                   <div
                     class="
+                      w-full
                       inline-block
                       align-middle
                       bg-white
@@ -2478,11 +2480,20 @@ export default {
 </script>
 
 <style lang="scss">
+.mx-input-wrapper i {
+  margin-right: 10px;
+}
+.mx-input:hover {
+  @apply border-gray-300;
+}
 .mx-datepicker {
   width: 100% !important;
 }
 .mx-datepicker input {
   height: 3rem;
+  border-radius: 0.5rem;
+  border-color: rgb(212 212 212);
+  cursor: pointer;
 }
 .wrapper-form {
   @apply min-h-screen flex justify-center py-10 mx-auto;
@@ -2557,13 +2568,13 @@ canvas {
 
 .error {
   & > .mx-datepicker {
-    @apply border-red-500 border-2 ring-4 ring-red-500 ring-opacity-10 transition-none;
+    @apply border-red-500 border-2 ring-4 ring-red-500 ring-opacity-10 rounded-lg transition-none;
   }
 }
 
 .error {
   & > .vue-tel-input {
-    @apply border-red-500 border-2 ring-4 ring-red-500 ring-opacity-10 transition-none;
+    @apply border-red-500 border-2 ring-4 ring-red-500 ring-opacity-10 rounded-lg  transition-none;
   }
 }
 

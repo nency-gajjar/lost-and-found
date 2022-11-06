@@ -32,7 +32,16 @@
       </div>
       <div class="align-middle inline-block w-full">
         <div
-          class="flex justify-between flex-col gap-4 sm:flex-row items-center"
+          class="
+            flex
+            justify-between
+            flex-col
+            gap-4
+            flex-wrap
+            md:flex-nowrap
+            sm:flex-row
+            items-center
+          "
         >
           <div
             class="
@@ -43,6 +52,7 @@
               rounded
               px-3
               h-12
+              flex-auto
               bg-white
             "
           >
@@ -113,7 +123,7 @@
               />
             </div>
           </div>
-          <div class="w-full mt-3 sm:mt-0 sm:w-3/12">
+          <div class="w-full flex-auto mt-3 sm:mt-0 sm:w-3/12">
             <date-picker
               :confirm="true"
               range
@@ -122,7 +132,7 @@
               formate="YYYY-MM-DD"
             ></date-picker>
           </div>
-          <div class="h-full w-full mt-3 sm:mt-0 sm:w-3/12">
+          <div class="h-full flex-auto w-full mt-3 sm:mt-0 sm:w-3/12">
             <select
               id="countries"
               @change="changeItemDescription"
@@ -148,10 +158,10 @@
             </select>
           </div>
           <BaseButton
-            class="sm:ml-2 grow mt-3 sm:mt-0 sm:grow-0"
+            class="sm:ml-2 grow mt-3 sm:mt-0 sm:grow-0 whitespace-nowrap"
             @click="addNewItem"
           >
-            Apply Filters
+            Apply
           </BaseButton>
         </div>
       </div>
@@ -351,6 +361,24 @@ export default {
 </script>
 
 <style>
+.mx-input {
+  height: 3rem !important;
+}
+@media (max-width: 750px) {
+  .mx-datepicker-main {
+    max-width: 92%;
+  }
+  .mx-range-wrapper {
+    flex-wrap: wrap;
+    flex-direction: row;
+  }
+  .mx-range-wrapper .mx-calendar-panel-date {
+    flex: auto;
+  }
+}
+</style>
+
+<style scoped>
 .wrapper {
   @apply flex flex-col justify-start pt-0 items-center text-center mx-auto;
 }
@@ -367,9 +395,6 @@ export default {
 
 .mx-datepicker-range {
   width: 100% !important;
-}
-.mx-input {
-  height: 3rem !important;
 }
 @-webkit-keyframes spinner {
   0% {
