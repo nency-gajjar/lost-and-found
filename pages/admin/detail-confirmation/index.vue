@@ -931,16 +931,14 @@ export default {
     async editImage() {
       this.showEditor = false;
       if (this.image) {
-        // const data = await fetch(this.image);
-        // const blob = await data.blob();
-        // let reader = new FileReader();
-        // reader.onloadend = () => {
-        //   this.imgSrc = reader.result;
-        //   this.showEditor = true;
-        // };
-        // reader.readAsDataURL(blob);
-        this.imgSrc = this.image;
-        this.showEditor = true;
+        const data = await fetch(this.image, {cache: "no-cache"});
+        const blob = await data.blob();
+        let reader = new FileReader();
+        reader.onloadend = () => {
+          this.imgSrc = reader.result;
+          this.showEditor = true;
+        };
+        reader.readAsDataURL(blob);
       } else {
         this.showEditor = false;
       }

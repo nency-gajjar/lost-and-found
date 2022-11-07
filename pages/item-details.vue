@@ -1899,18 +1899,17 @@ export default {
       this.showDraw = false;
       this.imgPreview = true;
     },
-    editImage() {
+    async editImage() {
       this.showEditor = false;
       if (this.image) {
-        // const response = await fetch(this.image);
-        // const blob = await response.blob();
-        // const file = new File([blob], "image.jpg", { type: blob.type });
-        this.imgSrc = this.image;
-        this.showEditor = true;
-        // this.loadingSpinner = true;
-        // setTimeout(() => {
-        //   this.loadingSpinner = false;
-        // }, 2000);
+        const data = await fetch(this.image, {cache: "no-cache"});
+        const blob = await data.blob();
+        let reader = new FileReader();
+        reader.onloadend = () => {
+          this.imgSrc = reader.result;
+          this.showEditor = true;
+        };
+        reader.readAsDataURL(blob);
       } else {
         this.showEditor = false;
       }
