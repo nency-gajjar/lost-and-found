@@ -1173,6 +1173,7 @@ import {
 } from "static/defaults.js";
 import DatePicker from "vue2-datepicker";
 import "vue2-datepicker/index.css";
+import moment from "moment";
 
 export default {
   data: () => ({
@@ -1389,7 +1390,6 @@ export default {
     },
     formatMobileNumber(phoneNumber) {
       let arr = phoneNumber.split(" ");
-      console.log(arr);
       let countryCode = arr.shift();
       return countryCode + " " + arr.join("");
     },
@@ -1773,7 +1773,7 @@ export default {
         const params = {
           venu_type:
             this.venueType === "Other" ? this.manualVenue : this.venueType,
-          datse: this.foundDate,
+          datse: moment(this.foundDate).format("YYYY-MM-DD"),
           venue_email: this.venueEmail,
           secondary_email: this.venueSecondaryEmail,
           venue_phone_no: venuePhoneNo,
@@ -2391,7 +2391,7 @@ export default {
               this.venueType = "Other";
               this.manualVenue = data.venu_type;
             }
-            this.foundDate = new Date().toISOString().slice(0, 10);
+            this.foundDate = new Date(data.datse);
             this.venueEmail = data.venue_email;
             this.venueSecondaryEmail = data.secondary_email;
             this.employeeMobileNo = data.employee_mobile_no;
@@ -2437,7 +2437,7 @@ export default {
       } else {
         this.foundItemId = data.id;
       }
-      this.foundDate = data.datse;
+      this.foundDate = new Date(data.datse);
       this.venueEmail = data.venue_email;
       this.venueSecondaryEmail = data.secondary_email;
       this.employeeMobileNo = data.employee_mobile_no;

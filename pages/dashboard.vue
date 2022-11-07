@@ -415,14 +415,19 @@ export default {
   },
   computed: {
     lostItems() {
-      if (this.tabSelected === 1) {
-        return this.dashboardDetails[0].totallostitemslisted;
-      } else if (this.tabSelected === 2) {
-        return this.dashboardDetails[1].totalclaimitems;
-      } else if (this.tabSelected === 3) {
-        return this.dashboardDetails[2].totalitemslistedtoday;
-      } else if (this.tabSelected === 4) {
-        return this.dashboardDetails[3].totalclaimitemstoday;
+      if(this.dashboardDetails){
+        if (this.tabSelected === 1) {
+          return this.dashboardDetails[0].totallostitemslisted;
+        } else if (this.tabSelected === 2) {
+          return this.dashboardDetails[1].totalclaimitems;
+        } else if (this.tabSelected === 3) {
+          return this.dashboardDetails[2].totalitemslistedtoday;
+        } else if (this.tabSelected === 4) {
+          return this.dashboardDetails[3].totalclaimitemstoday;
+        }
+      }
+      else{
+        return [];
       }
     },
   },
@@ -439,7 +444,7 @@ export default {
         .then((response) => {
           if (response.status === 200) {
             this.isLoading = false;
-            this.dashboardDetails = response?.data.data;
+            this.dashboardDetails = response?.data?.data;
           }
         })
         .catch((err) => {

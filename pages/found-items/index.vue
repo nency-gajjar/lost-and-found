@@ -97,6 +97,7 @@
                 </span>
               </div>
               <input
+                v-model="searchQuery"
                 type="text"
                 class="
                   border-transparent
@@ -123,12 +124,15 @@
               />
             </div>
           </div>
-          <div class="w-full flex-auto mt-3 sm:mt-0 sm:w-3/12">
+          <div class="w-full flex gap-2 flex-auto mt-3 sm:mt-0 sm:w-3/12">
             <date-picker
-              :confirm="true"
-              range
-              v-model="inputDate"
-              @pick="changeDate($event)"
+              placeholder="Start date"
+              v-model="startDate"
+              formate="YYYY-MM-DD"
+            ></date-picker>
+            <date-picker
+              placeholder="End date"
+              v-model="endDate"
               formate="YYYY-MM-DD"
             ></date-picker>
           </div>
@@ -159,7 +163,7 @@
           </div>
           <BaseButton
             class="sm:ml-2 grow mt-3 sm:mt-0 sm:grow-0 whitespace-nowrap"
-            @click="addNewItem"
+            @click="applyFilters"
           >
             Apply
           </BaseButton>
@@ -293,6 +297,7 @@
 <script>
 import DatePicker from "vue2-datepicker";
 import "vue2-datepicker/index.css";
+import moment from "moment";
 import { itemDescriptionOptions } from "../../static/defaults.js";
 
 export default {
@@ -301,23 +306,25 @@ export default {
     return {
       lostItems: [],
       isLoading: false,
-      inputDate: [],
+      searchQuery: "",
+      startDate: null,
+      endDate: null,
+      itemDescription: "",
       itemDescriptionOptions: itemDescriptionOptions,
     };
   },
   methods: {
     changeItemDescription(event) {
-      console.log(event.target.value);
-    },
-    changeDate(event) {
-      console.log(this.inputDate);
-      console.log(event);
-    },
-    updateValues() {
-      console.log(this.dateRange);
+      this.itemDescription = event.target.value;
     },
     addNewItem() {
       this.$router.push({ name: "item-details" });
+    },
+    applyFilters(){
+      console.log(this.searchQuery);
+      console.log(moment(this.startDate).format("YYYY-MM-DD"));
+      console.log(moment(this.endDate).format("YYYY-MM-DD"));
+      console.log(this.itemDescription);
     },
     viewItem(item) {
       this.$store.commit("item/SET_ITEM_DETAILS", {
@@ -393,7 +400,7 @@ export default {
   animation: spinner 1.5s linear infinite;
 }
 
-.mx-datepicker-range {
+.mx-datepicker {
   width: 100% !important;
 }
 @-webkit-keyframes spinner {
