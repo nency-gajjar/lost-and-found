@@ -34,8 +34,9 @@
           <div class="inline-flex flex-auto w-full bg-white">
             <BaseInput
               v-model="address"
-              id="autocomplete"
+              id="autocomplete-found-items"
               type="text"
+              placeholder=""
               label="Location"
               class="w-full"
               @input="getAddress"
@@ -45,11 +46,7 @@
                   v-if="address"
                   class="absolute inset-y-0 right-0 flex items-center p-5"
                 >
-                  <BaseIcon
-                    @click="clearAddress"
-                    icon="circle-xmark"
-                    color="gray"
-                  />
+                  <BaseIcon @click="clearAddress" icon="xmark" color="gray" />
                 </div>
                 <div
                   v-else
@@ -106,39 +103,15 @@
                 gap-2
               "
             >
-              <!-- <button
-                class="
-                  bg-blue-500
-                  text-white
-                  hover:bg-blue-600
-                  font-bold
-                  text-sm
-                  px-4
-                  py-2
-                  rounded
-                  shadow
-                  hover:shadow-md
-                  outline-none
-                  focus:outline-none
-                  mr-1
-                  mb-1
-                "
-                type="button"
-              >
-                <BaseIcon
-                  icon="filter"
-                  color="white"
-                  style="max-width: 15px"
-                  class="mr-1"
-                />
-                Apply Filter
-              </button> -->
               <button
                 @click="applyFilters"
+                :class="
+                  isFilterApplied
+                    ? 'bg-green-600 hover:bg-green-700'
+                    : 'bg-blue-500 hover:bg-blue-600'
+                "
                 class="
-                  bg-green-600
                   text-white
-                  hover:bg-green-700
                   font-bold
                   text-sm
                   px-4
@@ -159,7 +132,7 @@
                   style="max-width: 15px"
                   class="mr-1"
                 />
-                Filters Applied
+                {{ isFilterApplied ? "Filters Applied" : "Apply Filters" }}
               </button>
               <button
                 @click="clearFilters"
@@ -223,9 +196,12 @@
             "
           >
             <div class="w-full flex gap-3 flex-auto mt-3 sm:mt-0 sm:w-5/12">
-              <ul class="list-none flex items-center mt-4">
+              <ul
+                v-show="isFilterApplied"
+                class="list-none flex items-center mt-4"
+              >
                 <li
-                  v-if="addressForApi"
+                  v-if="isFilterApplied && lostItemAddress"
                   class="
                     flex
                     items-center
@@ -238,7 +214,7 @@
                     cursor-pointer
                   "
                 >
-                  <p>Location</p>
+                  <p>{{ lostItemAddress }}</p>
                   <span class="ml-2">
                     <BaseIcon
                       @click="resetAddress"
@@ -249,7 +225,7 @@
                   </span>
                 </li>
                 <li
-                  v-if="startDate"
+                  v-if="isFilterApplied && startDate"
                   class="
                     flex
                     items-center
@@ -273,7 +249,7 @@
                   </span>
                 </li>
                 <li
-                  v-if="endDate"
+                  v-if="isFilterApplied && endDate"
                   class="
                     flex
                     items-center
@@ -343,19 +319,22 @@
                   placeholder="Search"
                 />
                 <BaseIcon
+                  v-if="!searchQuery"
                   icon="magnifying-glass"
                   color="gray"
                   size="1x"
                   class="absolute right-3 z-10 cursor-pointer"
                   style="max-width: 15px"
                 />
-                <!-- <BaseIcon
+                <BaseIcon
+                  v-else
                   icon="xmark"
                   color="gray"
                   size="1x"
                   class="absolute right-3 z-10 cursor-pointer"
                   style="max-width: 15px"
-                /> -->
+                  @click="(searchQuery = ''), (lostItems = cloneLostItems)"
+                />
               </div>
             </div>
           </div>
@@ -465,11 +444,11 @@
                 px-5
                 py-2
                 rounded-md
-                border-indigo-600 border
-                text-indigo-600
+                text-white
                 transition
                 duration-300
-                hover:bg-indigo-600 hover:text-white
+                bg-red-500
+                hover:bg-red-600
                 focus:outline-none
               "
               @click.stop="claimItem(item)"
@@ -479,7 +458,9 @@
           </div>
         </div>
       </div>
-      <div v-else-if="!isLoading && lostItems.length === 0">No Data</div>
+      <div v-else-if="!isLoading && lostItems.length === 0">
+        No Result Found
+      </div>
       <div v-else>
         <BaseLoader />
       </div>
@@ -492,13 +473,13 @@ import DatePicker from "vue2-datepicker";
 import "vue2-datepicker/index.css";
 import moment from "moment";
 import { itemDescriptionOptions } from "../../static/defaults.js";
-
+import { cloneDeep } from "lodash";
 export default {
   components: { DatePicker },
   data() {
     return {
       lostItems: [],
-      backupLostItems: [],
+      cloneLostItems: [],
       isLoading: false,
       searchQuery: "",
       startDate: null,
@@ -506,75 +487,92 @@ export default {
       itemDescription: "",
       itemDescriptionOptions: itemDescriptionOptions,
       address: "",
-      addressForApi: "",
+      lostItemAddress: "",
       lat: "",
       long: "",
       isFilterApplied: false,
     };
   },
-  computed: {
-    formatedStartDate(){
-      return moment(this.startDate).format("YYYY-MM-DD");
-    },
-    formatedEndDate(){
-      return moment(this.endDate).format("YYYY-MM-DD")
+  mounted() {
+    if (this.$route.params?.filteredItems) {
+      this.lostItems = this.$route.params?.filteredItems;
+      this.cloneLostItems = this.lostItems;
+    } else {
+      this.getAllLostItems();
     }
+  },
+  computed: {
+    formatedStartDate() {
+      if (this.startDate) {
+        return moment(this.startDate).format("YYYY-MM-DD");
+      }
+      return moment(new Date()).format("YYYY-MM-DD");
+    },
+    formatedEndDate() {
+      if (this.endDate) {
+        return moment(this.endDate).format("YYYY-MM-DD");
+      }
+      return moment(new Date()).format("YYYY-MM-DD");
+    },
   },
   methods: {
     addNewItem() {
       this.$router.push({ name: "item-details" });
     },
-    resetAddress(){
-      this.address = "";
-      this.addressForApi = "";
+    resetAddress() {
+      this.clearAddress();
+      this.lostItemAddress = "";
       this.lat = "";
       this.long = "";
-      if(this.isFilterApplied){
+      if (this.isFilterApplied) {
         this.applyFilters();
       }
     },
-    resetStartDate(){
+    resetStartDate() {
       this.startDate = null;
-      if(this.isFilterApplied){
+      if (this.isFilterApplied) {
         this.applyFilters();
       }
     },
-    resetEndDate(){
+    resetEndDate() {
       this.endDate = null;
-      if(this.isFilterApplied){
+      if (this.isFilterApplied) {
         this.applyFilters();
       }
     },
-    resetItemDescription(){
+    resetItemDescription() {
       this.itemDescription = "";
-      if(this.isFilterApplied){
+      if (this.isFilterApplied) {
         this.applyFilters();
       }
     },
     applyFilters() {
-      if(
-        this.itemDescription || 
-        this.startDate || 
-        this.endDate || 
-        this.addressForApi || 
-        this.lat || 
-        this.long 
-      ){
+      if (
+        this.itemDescription ||
+        this.startDate ||
+        this.endDate ||
+        this.lostItemAddress ||
+        this.lat ||
+        this.long
+      ) {
         this.isLoading = true;
         let params = {
           abc: "123",
-          item_description: this.itemDescription,
-          datse: this.formatedStartDate,
-          datse1: this.formatedEndDate,
-          address: this.addressForApi,
-          lat: this.lat,
-          long: this.long,
         };
+        if (this.itemDescription)
+          params.item_description = this.itemDescription;
+        if (this.startDate || this.endDate) {
+          params.datse = this.formatedStartDate;
+          params.datse1 = this.formatedEndDate;
+        }
+        if (this.lostItemAddress) params.address = this.lostItemAddress;
+        if (this.lat) params.lat = this.lat;
+        if (this.long) params.long = this.long;
         this.$axios
           .post("getallfilteritemdetails", {}, { params: params })
           .then((res) => {
             this.lostItems = res?.data?.data[0]?.ITEMS;
-            this.backupLostItems = this.lostItems;
+            this.cloneLostItems = this.lostItems;
             this.filterItems();
             this.isLoading = false;
             this.isFilterApplied = true;
@@ -582,9 +580,8 @@ export default {
           .catch((err) => {
             console.log(err);
           });
-      }
-      else{
-        console.log("no filter")
+      } else {
+        console.log("no filter");
         this.getAllLostItems();
       }
     },
@@ -609,24 +606,25 @@ export default {
     },
     getAddress() {
       const autocomplete = new google.maps.places.Autocomplete(
-        document.getElementById("autocomplete")
+        document.getElementById("autocomplete-found-items")
       );
       autocomplete.addListener("place_changed", () => {
         let address = autocomplete.getPlace();
         this.lat = address.geometry.location.lat();
         this.long = address.geometry.location.lng();
-        this.addressForApi = address.formatted_address;
+        this.lostItemAddress = address.formatted_address;
       });
     },
     clearAddress() {
       this.address = "";
+      document.getElementById("autocomplete-found-items").placeholder = "";
     },
     filterItems() {
       let filterArray = [];
       if (this.searchQuery === "") {
-        this.lostItems = this.backupLostItems;
+        this.lostItems = this.cloneLostItems;
       }
-      this.backupLostItems.forEach((item) => {
+      this.cloneLostItems.forEach((item) => {
         let itemArr = Object.values(item);
         let filteredItems = itemArr.filter((itemElement) => {
           if (typeof itemElement === "number") {
@@ -642,18 +640,18 @@ export default {
       });
       this.lostItems = filterArray;
     },
-    clearFilters(){
+    clearFilters() {
       this.searchQuery = "";
       this.startDate = null;
       this.endDate = null;
       this.itemDescription = "";
-      this.address = "";
-      this.addressForApi = "";
+      this.clearAddress();
+      this.lostItemAddress = "";
       this.lat = "";
       this.long = "";
       this.getAllLostItems();
     },
-    getAllLostItems(){
+    getAllLostItems() {
       this.isFilterApplied = false;
       this.isLoading = true;
       this.$axios
@@ -662,7 +660,7 @@ export default {
           if (response.status === 200) {
             this.isLoading = false;
             this.lostItems = response?.data?.data;
-            this.backupLostItems = this.lostItems;
+            this.cloneLostItems = cloneDeep(this.lostItems);
             if (!this.lostItems) {
               this.lostItems = [];
             }
@@ -672,15 +670,7 @@ export default {
           this.isLoading = false;
           console.log(err);
         });
-    }
-  },
-  mounted() {
-    if (this.$route.params?.filteredItems) {
-      this.lostItems = this.$route.params?.filteredItems;
-      this.backupLostItems = this.lostItems;
-    } else {
-      this.getAllLostItems();
-    }
+    },
   },
 };
 </script>

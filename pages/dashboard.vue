@@ -383,7 +383,9 @@
           </div>
         </div>
       </div>
-      <div v-else-if="!isLoading && lostItems.length === 0">No Data</div>
+      <div v-else-if="!isLoading && lostItems.length === 0">
+        No Result Found
+      </div>
       <div v-else>
         <BaseLoader />
       </div>
@@ -415,7 +417,7 @@ export default {
   },
   computed: {
     lostItems() {
-      if(this.dashboardDetails){
+      if (this.dashboardDetails) {
         if (this.tabSelected === 1) {
           return this.dashboardDetails[0].totallostitemslisted;
         } else if (this.tabSelected === 2) {
@@ -425,8 +427,7 @@ export default {
         } else if (this.tabSelected === 4) {
           return this.dashboardDetails[3].totalclaimitemstoday;
         }
-      }
-      else{
+      } else {
         return [];
       }
     },

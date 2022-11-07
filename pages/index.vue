@@ -141,8 +141,9 @@
             <div class="inline-flex flex-auto w-full sm:w-6/12 bg-white">
               <BaseInput
                 v-model="address"
-                id="autocomplete"
+                id="autocomplete-main"
                 type="text"
+                placeholder=""
                 label="Location"
                 class="w-full"
                 @input="getAddress"
@@ -152,7 +153,7 @@
                     v-if="address"
                     class="absolute inset-y-0 right-0 flex items-center p-5"
                   >
-                    <BaseIcon @click="clearAddress" icon="circle-xmark" color="gray" />
+                    <BaseIcon @click="clearAddress" icon="xmark" color="gray" />
                   </div>
                   <div
                     v-else
@@ -163,17 +164,6 @@
                 </template>
               </BaseInput>
             </div>
-
-            <!-- Date -->
-            <!-- <div class="w-full flex-auto mt-3 sm:mt-0 sm:w-4/12">
-              <date-picker
-                :confirm="true"
-                range
-                v-model="inputDate"
-                @pick="changeDate($event)"
-                formate="YYYY-MM-DD"
-              ></date-picker>
-            </div> -->
 
             <div class="w-full flex gap-2 flex-auto mt-3 sm:mt-0 sm:w-4/12">
               <date-picker
@@ -362,43 +352,57 @@ export default {
       address: "",
       startDate: null,
       endDate: null,
-      addressForApi: "",
+      lostItemAddress: "",
       lat: "",
       long: "",
     };
   },
+  computed: {
+    formatedStartDate() {
+      if (this.startDate) {
+        return moment(this.startDate).format("YYYY-MM-DD");
+      }
+      return moment(new Date()).format("YYYY-MM-DD");
+    },
+    formatedEndDate() {
+      if (this.endDate) {
+        return moment(this.endDate).format("YYYY-MM-DD");
+      }
+      return moment(new Date()).format("YYYY-MM-DD");
+    },
+  },
   methods: {
-    // changeDate(event) {
-    //   console.log(this.inputDate);
-    //   console.log(event);
-    // },
     getAddress() {
       const autocomplete = new google.maps.places.Autocomplete(
-        document.getElementById("autocomplete")
+        document.getElementById("autocomplete-main")
       );
       autocomplete.addListener("place_changed", () => {
         let address = autocomplete.getPlace();
         this.lat = address.geometry.location.lat();
         this.long = address.geometry.location.lng();
-        this.addressForApi = address.formatted_address;
+        this.lostItemAddress = address.formatted_address;
       });
     },
-    clearAddress(){
+    clearAddress() {
       this.address = "";
+      document.getElementById("autocomplete-main").placeholder = "";
     },
-    applyFilters(){
+    applyFilters() {
       let params = {
         abc: "123",
-        item_description: this.itemDescription,
-        datse: moment(this.startDate).format("YYYY-MM-DD"),
-        datse1: moment(this.endDate).format("YYYY-MM-DD"),
-        address: this.addressForApi,
-        lat: this.lat,
-        long: this.long,
+      };
+      if (this.itemDescription) params.item_description = this.itemDescription;
+      if (this.startDate || this.endDate) {
+        params.datse = this.formatedStartDate;
+        params.datse1 = this.formatedEndDate;
       }
+      if (this.lostItemAddress) params.address = this.lostItemAddress;
+      if (this.lat) params.lat = this.lat;
+      if (this.long) params.long = this.long;
+
       this.$axios
-        .post("getallfilteritemdetails", {}, {params : params})
-        .then(res => {
+        .post("getallfilteritemdetails", {}, { params: params })
+        .then((res) => {
           this.$nextTick(() => {
             this.$router.push({
               name: "found-items",
@@ -406,9 +410,9 @@ export default {
             });
           });
         })
-        .catch(err => {
+        .catch((err) => {
           console.log(err);
-        })
+        });
     },
   },
 };
