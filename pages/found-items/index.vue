@@ -2,12 +2,193 @@
   <div class="wrapper">
     <div class="container max-w-7xl mx-auto px-4">
       <div
-        :class="
-          !isLoading && lostItems.length > 0
-            ? ' justify-between'
-            : 'justify-end'
-        "
         class="
+          justify-end
+          w-full
+          flex flex-col
+          sm:flex-row
+          flex-wrap
+          sm:flex-nowrap
+          mt-8
+          mb-5
+        "
+      >
+        <!-- <h2
+          v-if="!isLoading && lostItems.length > 0"
+          class="text-2xl font-semibold leading-tight"
+        >
+          Found Items ({{ lostItems.length }})
+        </h2> -->
+        <BaseButton
+          class="sm:ml-2 grow mt-3 sm:mt-0 sm:grow-0"
+          @click="addNewItem"
+        >
+          + Add New Item
+        </BaseButton>
+      </div>
+
+      <!-- Filter Panel -->
+      <div class="flex flex-col gap-3">
+        <div class="align-middle inline-block w-full">
+          <!-- Location -->
+          <div class="inline-flex flex-auto w-full bg-white">
+            <BaseInput
+              v-model="address"
+              id="autocomplete"
+              type="text"
+              label="Location"
+              class="w-full"
+              @input="getAddress"
+            >
+              <template v-slot:icon>
+                <div
+                  v-if="address"
+                  class="absolute inset-y-0 right-0 flex items-center p-5"
+                >
+                  <BaseIcon
+                    @click="clearAddress"
+                    icon="circle-xmark"
+                    color="gray"
+                  />
+                </div>
+                <div
+                  v-else
+                  class="absolute inset-y-0 right-0 flex items-center p-5"
+                >
+                  <BaseIcon icon="location-arrow" color="lightgray" />
+                </div>
+              </template>
+            </BaseInput>
+          </div>
+        </div>
+        <div class="align-middle inline-block w-full">
+          <div
+            class="
+              flex
+              justify-between
+              flex-col
+              gap-3
+              flex-wrap
+              md:flex-nowrap
+              sm:flex-row
+              items-center
+            "
+          >
+            <div class="w-full flex gap-3 flex-auto mt-3 sm:mt-0 sm:w-6/12">
+              <date-picker
+                placeholder="Start date"
+                v-model="startDate"
+                formate="YYYY-MM-DD"
+              ></date-picker>
+              <date-picker
+                placeholder="End date"
+                v-model="endDate"
+                formate="YYYY-MM-DD"
+              ></date-picker>
+            </div>
+
+            <!-- Item Description -->
+            <div class="h-full flex-auto w-full mt-3 sm:mt-0 sm:w-2/12">
+              <BaseSelect
+                v-model="itemDescription"
+                :options="itemDescriptionOptions"
+                label="Item Description"
+              />
+            </div>
+            <div
+              class="
+                w-full
+                flex
+                item-center
+                justify-end
+                sm:mt-0 sm:w-2/12
+                flex-auto
+                gap-2
+              "
+            >
+              <!-- <button
+                class="
+                  bg-blue-500
+                  text-white
+                  hover:bg-blue-600
+                  font-bold
+                  text-sm
+                  px-4
+                  py-2
+                  rounded
+                  shadow
+                  hover:shadow-md
+                  outline-none
+                  focus:outline-none
+                  mr-1
+                  mb-1
+                "
+                type="button"
+              >
+                <BaseIcon
+                  icon="filter"
+                  color="white"
+                  style="max-width: 15px"
+                  class="mr-1"
+                />
+                Apply Filter
+              </button> -->
+              <button
+                class="
+                  bg-green-600
+                  text-white
+                  hover:bg-green-700
+                  font-bold
+                  text-sm
+                  px-4
+                  py-2
+                  rounded
+                  shadow
+                  hover:shadow-md
+                  outline-none
+                  focus:outline-none
+                  mr-1
+                  mb-1
+                "
+                type="button"
+              >
+                <BaseIcon
+                  icon="filter"
+                  color="white"
+                  style="max-width: 15px"
+                  class="mr-1"
+                />
+                Filters Applied
+              </button>
+              <button
+                class="
+                  bg-gray bg-white
+                  hover:shadow-lg hover:bg-gray-100
+                  text-gray-600 text-sm
+                  font-bold
+                  px-4
+                  py-2
+                  rounded
+                  shadow
+                  hover:shadow-md
+                  outline-none
+                  border border-gray-300
+                  focus:outline-none
+                  mr-1
+                  mb-1
+                "
+                type="button"
+              >
+                Clear
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div
+        class="
+          justify-start
           w-full
           flex flex-col
           sm:flex-row
@@ -23,187 +204,126 @@
         >
           Found Items ({{ lostItems.length }})
         </h2>
-        <BaseButton
-          class="sm:ml-2 grow mt-3 sm:mt-0 sm:grow-0"
-          @click="addNewItem"
-        >
-          + Add New Item
-        </BaseButton>
       </div>
-      <div class="flex justify-end w-full">
-        <div
-          class="
-            border
-            w-full
-            sm:w-3/12
-            rounded
-            px-3
-            h-12
-            bg-white 
-            mb-6
-          "
-        >
-          <div
-            class="flex flex-wrap items-stretch w-full h-full relative"
-          >
-            <div class="flex">
-              <span
-                class="
-                  flex
-                  items-center
-                  leading-normal
-                  bg-transparent
-                  rounded rounded-r-none
-                  border border-r-0 border-none
-                  py-2
-                  whitespace-no-wrap
-                  text-grey-dark text-sm
-                "
-              >
-                <svg
-                  width="18"
-                  height="18"
-                  class="w-4 lg:w-auto"
-                  viewBox="0 0 18 18"
-                  fill="none"
-                  xmlns="http://www.w3.org/2000/svg"
-                >
-                  <path
-                    d="M8.11086 15.2217C12.0381 15.2217 15.2217 12.0381 15.2217 8.11086C15.2217 4.18364 12.0381 1 8.11086 1C4.18364 1 1 4.18364 1 8.11086C1 12.0381 4.18364 15.2217 8.11086 15.2217Z"
-                    stroke="#455A64"
-                    stroke-linecap="round"
-                    stroke-linejoin="round"
-                  />
-                  <path
-                    d="M16.9993 16.9993L13.1328 13.1328"
-                    stroke="#455A64"
-                    stroke-linecap="round"
-                    stroke-linejoin="round"
-                  />
-                </svg>
-              </span>
-            </div>
-            <input
-              v-model="searchQuery"
-              @input="filterItems"
-              type="text"
-              class="
-                border-transparent
-                focus:border-transparent focus:ring-0
-                flex-shrink
-                w-full
-                flex-grow flex-auto
-                leading-normal
-                tracking-wide
-                w-px
-                flex-1
-                border-0
-                shadow-none
-                rounded rounded-l-none
-                px-3
-                relative
-                focus:outline-none
-                text-xxs
-                lg:text-xs lg:text-base
-                text-gray-500
-                font-thin
-              "
-              placeholder="Search"
-            />
-          </div>
-        </div>
-      </div>
-      <div class="align-middle inline-block w-full">
-        <div
-          class="
-            flex
-            justify-between
-            flex-col
-            gap-4
-            flex-wrap
-            md:flex-nowrap
-            sm:flex-row
-            items-center
-          "
-        >
+
+      <div class="flex flex-col gap-3">
+        <div class="align-middle inline-block w-full">
           <div
             class="
-              inline-flex
-              w-full
-              sm:w-3/12
-              h-12
-              flex-auto
+              flex
+              justify-between
+              flex-col
+              gap-3
+              flex-wrap
+              md:flex-nowrap
+              sm:flex-row
+              items-center
             "
           >
-              <BaseInput
-                v-model="address"
-                id="autocomplete"
-                type="text"
-                label="Location"
-                class="w-full"
-                @input="getAddress"
-              >
-                <template v-slot:icon>
-                  <div
-                    v-if="address"
-                    class="absolute inset-y-0 right-0 flex items-center p-5"
-                  >
-                    <BaseIcon @click="clearAddress" icon="circle-xmark" color="gray" />
-                  </div>
-                  <div
-                    v-else
-                    class="absolute inset-y-0 right-0 flex items-center p-5"
-                  >
-                    <BaseIcon icon="location-arrow" color="lightgray" />
-                  </div>
-                </template>
-              </BaseInput>
+            <div class="w-full flex gap-3 flex-auto mt-3 sm:mt-0 sm:w-5/12">
+              <ul class="list-none flex items-center mt-4">
+                <li
+                  class="
+                    p-2
+                    mr-4
+                    text-xs text-gray-600
+                    bg-white
+                    rounded-full
+                    border border-gray-300
+                    cursor-pointer
+                  "
+                >
+                  12-01-2022
+                  <span class="ml-2">
+                    <BaseIcon
+                      icon="xmark"
+                      color="gray"
+                      style="max-width: 12px"
+                    />
+                  </span>
+                </li>
+                <li
+                  class="
+                    p-2
+                    mr-4
+                    text-xs text-gray-600
+                    bg-white
+                    rounded-full
+                    border border-gray-300
+                    cursor-pointer
+                  "
+                >
+                  12-01-2022
+                  <span class="ml-2">
+                    <BaseIcon
+                      icon="xmark"
+                      color="gray"
+                      style="max-width: 12px"
+                    />
+                  </span>
+                </li>
+                <li
+                  class="
+                    p-2
+                    mr-4
+                    text-xs text-gray-600
+                    bg-white
+                    rounded-full
+                    border border-gray-300
+                    cursor-pointer
+                  "
+                >
+                  12-01-2022
+                  <span class="ml-2">
+                    <BaseIcon
+                      icon="xmark"
+                      color="gray"
+                      style="max-width: 12px"
+                    />
+                  </span>
+                </li>
+              </ul>
+            </div>
+            <div class="w-full flex gap-3 flex-auto mt-3 sm:mt-0 sm:w-7/12">
+              <div class="w-full flex justify-end items-center pt-5 relative">
+                <input
+                  v-model="searchQuery"
+                  @input="filterItems"
+                  class="
+                    text-sm
+                    leading-none
+                    text-left text-gray-600
+                    px-4
+                    py-3
+                    w-full
+                    border
+                    rounded-full
+                    border-gray-300
+                    outline-none
+                  "
+                  type="text"
+                  placeholder="Search"
+                />
+                <BaseIcon
+                  icon="magnifying-glass"
+                  color="gray"
+                  size="1x"
+                  class="absolute right-3 z-10 cursor-pointer"
+                  style="max-width: 15px"
+                />
+                <!-- <BaseIcon
+                  icon="xmark"
+                  color="gray"
+                  size="1x"
+                  class="absolute right-3 z-10 cursor-pointer"
+                  style="max-width: 15px"
+                /> -->
+              </div>
+            </div>
           </div>
-          <div class="w-full flex gap-2 flex-auto mt-3 sm:mt-0 sm:w-3/12">
-            <date-picker
-              placeholder="Start date"
-              v-model="startDate"
-              formate="YYYY-MM-DD"
-            ></date-picker>
-            <date-picker
-              placeholder="End date"
-              v-model="endDate"
-              formate="YYYY-MM-DD"
-            ></date-picker>
-          </div>
-          <div class="h-full flex-auto w-full mt-3 sm:mt-0 sm:w-3/12">
-            <select
-              id="countries"
-              @change="changeItemDescription"
-              class="
-                h-12
-                border border-gray-300
-                text-gray-900 text-sm
-                rounded-lg
-                focus:ring-blue-500 focus:border-blue-500
-                block
-                w-full
-                p-2.5
-              "
-            >
-              <option disabled selected>Select category</option>
-              <option
-                v-for="item in itemDescriptionOptions"
-                :key="item"
-                :value="item"
-              >
-                {{ item }}
-              </option>
-            </select>
-          </div>
-          <BaseButton
-            class="sm:ml-2 grow mt-3 sm:mt-0 sm:grow-0 whitespace-nowrap"
-            @click="applyFilters"
-          >
-            Apply
-          </BaseButton>
         </div>
       </div>
+
       <div v-if="!isLoading && lostItems.length > 0">
         <div
           v-for="item in lostItems"
@@ -360,7 +480,7 @@ export default {
     addNewItem() {
       this.$router.push({ name: "item-details" });
     },
-    applyFilters(){
+    applyFilters() {
       let params = {
         abc: "123",
         item_description: this.itemDescription,
@@ -369,15 +489,15 @@ export default {
         address: this.addressForApi,
         lat: this.lat,
         long: this.long,
-      }
+      };
       this.$axios
-        .post("getallfilteritemdetails", {}, {params : params})
-        .then(res => {
+        .post("getallfilteritemdetails", {}, { params: params })
+        .then((res) => {
           this.lostItems = res?.data?.data[0]?.ITEMS;
         })
-        .catch(err => {
+        .catch((err) => {
           console.log(err);
-        })
+        });
     },
     viewItem(item) {
       this.$store.commit("item/SET_ITEM_DETAILS", {
@@ -409,10 +529,10 @@ export default {
         this.addressForApi = address.formatted_address;
       });
     },
-    clearAddress(){
+    clearAddress() {
       this.address = "";
     },
-    filterItems(){
+    filterItems() {
       let filterArray = [];
       if (this.searchQuery === "") {
         this.lostItems = this.backupLostItems;
@@ -434,12 +554,11 @@ export default {
       this.lostItems = filterArray;
     },
   },
-  mounted(){
-    if(this.$route.params?.filteredItems){
+  mounted() {
+    if (this.$route.params?.filteredItems) {
       this.lostItems = this.$route.params?.filteredItems;
       this.backupLostItems = this.lostItems;
-    }
-    else{
+    } else {
       this.isLoading = true;
       this.$axios
         .get("/getalllostitem")
@@ -458,7 +577,7 @@ export default {
           console.log(err);
         });
     }
-  }
+  },
 };
 </script>
 
