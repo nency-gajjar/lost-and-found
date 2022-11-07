@@ -225,7 +225,10 @@
             <div class="w-full flex gap-3 flex-auto mt-3 sm:mt-0 sm:w-5/12">
               <ul class="list-none flex items-center mt-4">
                 <li
+                  v-if="addressForApi"
                   class="
+                    flex
+                    items-center
                     p-2
                     mr-4
                     text-xs text-gray-600
@@ -235,9 +238,10 @@
                     cursor-pointer
                   "
                 >
-                  12-01-2022
+                  <p>Location</p>
                   <span class="ml-2">
                     <BaseIcon
+                      @click="resetAddress"
                       icon="xmark"
                       color="gray"
                       style="max-width: 12px"
@@ -245,7 +249,10 @@
                   </span>
                 </li>
                 <li
+                  v-if="startDate"
                   class="
+                    flex
+                    items-center
                     p-2
                     mr-4
                     text-xs text-gray-600
@@ -255,9 +262,10 @@
                     cursor-pointer
                   "
                 >
-                  12-01-2022
+                  <p>{{ formatedStartDate }}</p>
                   <span class="ml-2">
                     <BaseIcon
+                      @click="resetStartDate"
                       icon="xmark"
                       color="gray"
                       style="max-width: 12px"
@@ -265,7 +273,10 @@
                   </span>
                 </li>
                 <li
+                  v-if="endDate"
                   class="
+                    flex
+                    items-center
                     p-2
                     mr-4
                     text-xs text-gray-600
@@ -275,9 +286,34 @@
                     cursor-pointer
                   "
                 >
-                  12-01-2022
+                  <p>{{ formatedEndDate }}</p>
                   <span class="ml-2">
                     <BaseIcon
+                      @click="resetEndDate"
+                      icon="xmark"
+                      color="gray"
+                      style="max-width: 12px"
+                    />
+                  </span>
+                </li>
+                <li
+                  v-if="itemDescription"
+                  class="
+                    flex
+                    items-center
+                    p-2
+                    mr-4
+                    text-xs text-gray-600
+                    bg-white
+                    rounded-full
+                    border border-gray-300
+                    cursor-pointer
+                  "
+                >
+                  <p>{{ itemDescription }}</p>
+                  <span class="ml-2">
+                    <BaseIcon
+                      @click="resetItemDescription"
                       icon="xmark"
                       color="gray"
                       style="max-width: 12px"
@@ -473,34 +509,84 @@ export default {
       addressForApi: "",
       lat: "",
       long: "",
+      isFilterApplied: false,
     };
+  },
+  computed: {
+    formatedStartDate(){
+      return moment(this.startDate).format("YYYY-MM-DD");
+    },
+    formatedEndDate(){
+      return moment(this.endDate).format("YYYY-MM-DD")
+    }
   },
   methods: {
     addNewItem() {
       this.$router.push({ name: "item-details" });
     },
+    resetAddress(){
+      this.address = "";
+      this.addressForApi = "";
+      this.lat = "";
+      this.long = "";
+      if(this.isFilterApplied){
+        this.applyFilters();
+      }
+    },
+    resetStartDate(){
+      this.startDate = null;
+      if(this.isFilterApplied){
+        this.applyFilters();
+      }
+    },
+    resetEndDate(){
+      this.endDate = null;
+      if(this.isFilterApplied){
+        this.applyFilters();
+      }
+    },
+    resetItemDescription(){
+      this.itemDescription = "";
+      if(this.isFilterApplied){
+        this.applyFilters();
+      }
+    },
     applyFilters() {
-      this.isLoading = true;
-      let params = {
-        abc: "123",
-        item_description: this.itemDescription,
-        datse: moment(this.startDate).format("YYYY-MM-DD"),
-        datse1: moment(this.endDate).format("YYYY-MM-DD"),
-        address: this.addressForApi,
-        lat: this.lat,
-        long: this.long,
-      };
-      this.$axios
-        .post("getallfilteritemdetails", {}, { params: params })
-        .then((res) => {
-          this.lostItems = res?.data?.data[0]?.ITEMS;
-          this.backupLostItems = this.lostItems;
-          this.filterItems();
-          this.isLoading = false;
-        })
-        .catch((err) => {
-          console.log(err);
-        });
+      if(
+        this.itemDescription || 
+        this.startDate || 
+        this.endDate || 
+        this.addressForApi || 
+        this.lat || 
+        this.long 
+      ){
+        this.isLoading = true;
+        let params = {
+          abc: "123",
+          item_description: this.itemDescription,
+          datse: this.formatedStartDate,
+          datse1: this.formatedEndDate,
+          address: this.addressForApi,
+          lat: this.lat,
+          long: this.long,
+        };
+        this.$axios
+          .post("getallfilteritemdetails", {}, { params: params })
+          .then((res) => {
+            this.lostItems = res?.data?.data[0]?.ITEMS;
+            this.backupLostItems = this.lostItems;
+            this.filterItems();
+            this.isLoading = false;
+            this.isFilterApplied = true;
+          })
+          .catch((err) => {
+            console.log(err);
+          });
+      }
+      else{
+        console.log("no filter")
+        this.getAllLostItems();
+      }
     },
     viewItem(item) {
       this.$store.commit("item/SET_ITEM_DETAILS", {
@@ -568,6 +654,7 @@ export default {
       this.getAllLostItems();
     },
     getAllLostItems(){
+      this.isFilterApplied = false;
       this.isLoading = true;
       this.$axios
         .get("/getalllostitem")
