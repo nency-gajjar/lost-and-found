@@ -887,11 +887,6 @@ export default {
         })
         .catch((error) => {
           console.log(error);
-          this.$nextTick(() => {
-            this.$router.push({
-              name: "found-items",
-            });
-          });
         });
     }
     else{

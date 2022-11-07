@@ -2414,11 +2414,6 @@ export default {
         })
         .catch((error) => {
           console.log(error);
-          this.$nextTick(() => {
-            this.$router.push({
-              name: "found-items",
-            });
-          });
         });
     } else if (this.$route.params?.itemDetails) {
       this.senderFormTitle = "EDIT SENDER'S DETAILS";
