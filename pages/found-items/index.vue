@@ -134,6 +134,7 @@
                 Apply Filter
               </button> -->
               <button
+                @click="applyFilters"
                 class="
                   bg-green-600
                   text-white
@@ -161,6 +162,7 @@
                 Filters Applied
               </button>
               <button
+                @click="clearFilters"
                 class="
                   bg-gray bg-white
                   hover:shadow-lg hover:bg-gray-100
@@ -474,13 +476,11 @@ export default {
     };
   },
   methods: {
-    changeItemDescription(event) {
-      this.itemDescription = event.target.value;
-    },
     addNewItem() {
       this.$router.push({ name: "item-details" });
     },
     applyFilters() {
+      this.isLoading = true;
       let params = {
         abc: "123",
         item_description: this.itemDescription,
@@ -494,6 +494,9 @@ export default {
         .post("getallfilteritemdetails", {}, { params: params })
         .then((res) => {
           this.lostItems = res?.data?.data[0]?.ITEMS;
+          this.backupLostItems = this.lostItems;
+          this.filterItems();
+          this.isLoading = false;
         })
         .catch((err) => {
           console.log(err);
@@ -553,12 +556,18 @@ export default {
       });
       this.lostItems = filterArray;
     },
-  },
-  mounted() {
-    if (this.$route.params?.filteredItems) {
-      this.lostItems = this.$route.params?.filteredItems;
-      this.backupLostItems = this.lostItems;
-    } else {
+    clearFilters(){
+      this.searchQuery = "";
+      this.startDate = null;
+      this.endDate = null;
+      this.itemDescription = "";
+      this.address = "";
+      this.addressForApi = "";
+      this.lat = "";
+      this.long = "";
+      this.getAllLostItems();
+    },
+    getAllLostItems(){
       this.isLoading = true;
       this.$axios
         .get("/getalllostitem")
@@ -576,6 +585,14 @@ export default {
           this.isLoading = false;
           console.log(err);
         });
+    }
+  },
+  mounted() {
+    if (this.$route.params?.filteredItems) {
+      this.lostItems = this.$route.params?.filteredItems;
+      this.backupLostItems = this.lostItems;
+    } else {
+      this.getAllLostItems();
     }
   },
 };
