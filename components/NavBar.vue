@@ -2,28 +2,32 @@
   <div>
     <nav>
       <div class="appbar-container justify-between md:justify-start">
-        <div class="logo-main-container">
-          <div class="logo-container">
-            <NuxtLink to="/" class="logo">Lost & Found</NuxtLink>
+        <div class="menu flex justify-between w-full">
+          <div class="menu-left flex items-center">
+            <div class="logo-container">
+              <NuxtLink to="/" class="logo">Lost & Found</NuxtLink>
+            </div>
+            <div v-if="isAdminLogin" class="link-container">
+              <NuxtLink to="/dashboard" class="menu">Dashboard</NuxtLink>
+            </div>
+            <div v-else class="link-container">
+              <NuxtLink to="/found-items" class="menu">Found Items</NuxtLink>
+            </div>
           </div>
-        </div>
-        <div v-if="isAdminLogin" class="link-container">
-          <NuxtLink to="/dashboard" class="btn">Dashboard</NuxtLink>
-        </div>
-        <div v-else class="link-container">
-          <NuxtLink to="/found-items" class="btn">Found Items</NuxtLink>
-        </div>
-        <div v-show="isAdminLogin" class="link-container">
-          <NuxtLink to="/register" class="btn">Register</NuxtLink>
-        </div>
-        <div v-if="isAdminLogin" class="link-container">
-          <div class="btn" @click="logoutAdmin('desktop')">Logout</div>
-        </div>
-        <div class="drawer-container">
-          <div class="icon-container" @click="toggleMenu">
-            <div class="bar1"></div>
-            <div class="bar2"></div>
-            <div class="bar3"></div>
+          <div class="menu-right flex items-center">
+            <div v-show="isAdminLogin" class="link-container">
+              <NuxtLink to="/register" class="menu">Register</NuxtLink>
+            </div>
+            <div v-show="isAdminLogin" class="link-container cursor-pointer">
+              <div class="menu" @click="logoutAdmin('desktop')">Logout</div>
+            </div>
+            <div class="drawer-container">
+              <div class="icon-container" @click="toggleMenu">
+                <div class="bar1"></div>
+                <div class="bar2"></div>
+                <div class="bar3"></div>
+              </div>
+            </div>
           </div>
         </div>
       </div>
@@ -107,12 +111,15 @@ export default {
     }
   }
 
-  .btn {
+  .menu {
     @apply px-4 py-2 text-gray-500 rounded-lg font-medium;
 
     &.nuxt-link-exact-active {
       @apply bg-orange-100 text-orange-700;
     }
+  }
+  .menu:hover {
+    @apply text-orange-700;
   }
 }
 

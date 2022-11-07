@@ -86,17 +86,20 @@
               </ValidationProvider>
 
               <!-- Found Item Date -->
+              <label class="block text-md font-medium text-gray-800"
+                >Found Item Date:</label
+              >
               <ValidationProvider
                 v-slot="{ errors }"
                 rules="required"
                 class="block"
               >
-                <BaseInput
-                  v-model="foundDate"
-                  type="date"
-                  label="Found Item Date"
-                  :class="errors.length > 0 && 'error'"
-                />
+                <div :class="errors.length && 'error'">
+                  <date-picker
+                    v-model="foundDate"
+                    formate="YYYY-MM-DD"
+                  ></date-picker>
+                </div>
                 <p
                   v-if="errors.length"
                   class="vee-validation-error mt-2 text-sm text-red-600"
@@ -686,6 +689,9 @@
                   </div>
                 </div>
               </div>
+              <p v-show="!isImageValid" class="text-red-600">
+                {{ imageValidationMessage }}
+              </p>
 
               <div
                 v-show="showEditor"
@@ -702,7 +708,6 @@
                     px-4
                     pb-20
                     text-center
-                    sm:p-0
                   "
                 >
                   <div class="fixed inset-0 transition-opacity">
@@ -710,6 +715,7 @@
                   </div>
                   <div
                     class="
+                      w-full
                       inline-block
                       align-middle
                       bg-white
@@ -1165,9 +1171,10 @@ import {
   weightOuncesOptions,
   venueOptions,
 } from "static/defaults.js";
+import DatePicker from "vue2-datepicker";
+import "vue2-datepicker/index.css";
 
 export default {
-  middleware: ["auth-admin"],
   data: () => ({
     imgSrc: "",
     showCrop: false,
@@ -1189,7 +1196,7 @@ export default {
     venueType: "",
     venueOptions: venueOptions,
     employeeMobileNo: "",
-    foundDate: new Date().toISOString().slice(0, 10),
+    foundDate: new Date(),
     venueManually: false,
     itemDescription: "",
     itemDescriptionOptions: itemDescriptionOptions,
@@ -1218,6 +1225,8 @@ export default {
     imageRecognitionData: [],
     image: "",
     imageKey: "",
+    isImageValid: true,
+    imageValidationMessage: "",
     isLoadingRemoveImage: false,
     bindPhoneInputProps: {
       mode: "international",
@@ -1249,6 +1258,7 @@ export default {
     autoCompleteAddressArr: [],
   }),
   components: {
+    DatePicker,
     RedactImage,
     VueCropper,
     ValidationObserver,
@@ -1892,19 +1902,32 @@ export default {
       }
     },
     uploadImg(event) {
-      this.showEditor = false;
-      if (event.target.files[0]) {
-        let file = event.target.files[0];
-        let reader = new FileReader();
-        reader.onloadend = () => {
-          this.imgSrc = reader.result;
-          this.showEditor = true;
-        };
-        reader.readAsDataURL(file);
-        // this.loadingSpinner = true;
-        // setTimeout(() => {
-        //   this.loadingSpinner = false;
-        // }, 2000);
+      const allowedExtensions = /(\.jpg|\.jpeg|\.png)$/i;
+      const filePath = event.target?.files[0];
+      if (filePath) {
+        const fileSize = event.target?.files[0]?.size / 1024 / 1024;
+        if (allowedExtensions.exec(filePath.name)) {
+          if (fileSize < 2) {
+            this.isImageValid = true;
+            this.imageValidationMessage = "";
+            let file = filePath;
+            let reader = new FileReader();
+            reader.onloadend = () => {
+              this.imgSrc = reader.result;
+              this.showEditor = true;
+            };
+            reader.readAsDataURL(file);
+          } else {
+            this.imageValidationMessage = "File size must under 2MB";
+            this.isImageValid = false;
+            return;
+          }
+        } else {
+          this.imageValidationMessage =
+            "Uploaded file is not supported. Allowed file types: .png, .jpeg, .jpg";
+          this.isImageValid = false;
+          return;
+        }
       } else {
         this.showEditor = false;
       }
@@ -2456,6 +2479,21 @@ export default {
 </script>
 
 <style lang="scss">
+.mx-input-wrapper i {
+  margin-right: 10px;
+}
+.mx-input:hover {
+  @apply border-gray-300;
+}
+.mx-datepicker {
+  width: 100% !important;
+}
+.mx-datepicker input {
+  height: 3rem;
+  border-radius: 0.5rem;
+  border-color: rgb(212 212 212);
+  cursor: pointer;
+}
 .wrapper-form {
   @apply min-h-screen flex justify-center py-10 mx-auto;
 }
@@ -2528,8 +2566,14 @@ canvas {
 }
 
 .error {
+  & > .mx-datepicker {
+    @apply border-red-500 border-2 ring-4 ring-red-500 ring-opacity-10 rounded-lg transition-none;
+  }
+}
+
+.error {
   & > .vue-tel-input {
-    @apply border-red-500 border-2 ring-4 ring-red-500 ring-opacity-10 transition-none;
+    @apply border-red-500 border-2 ring-4 ring-red-500 ring-opacity-10 rounded-lg  transition-none;
   }
 }
 

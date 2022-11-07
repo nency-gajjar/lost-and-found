@@ -2,33 +2,37 @@
   <div class="wrapper">
     <div class="container max-w-7xl mx-auto px-4">
       <main class="my-10 space-y-6">
-        <div
-          class="
-            flex flex-col
-            space-y-6
-            md:space-y-0 md:flex-row
-            justify-between
-          "
-        >
-          <div class="mr-6">
-            <h1 class="text-3xl font-semibold mb-2">Admin Dashboard</h1>
+        <div class="flex flex-col md:space-y-0 md:flex-row justify-between">
+          <div class="mr-6 order-2 md:order-1 mt-3 md:mt-0">
+            <h1 class="text-2xl text-gray-600 font-semibold">
+              Admin Dashboard
+            </h1>
             <!-- <h2 class="text-gray-600 ml-0.5">Content here</h2> -->
           </div>
+          <BaseButton
+            class="order-1 md:order-2 sm:ml-2 grow sm:grow-0 mt-0"
+            @click="showAddNewItemDescription = true"
+          >
+            + Add New Item Description
+          </BaseButton>
         </div>
-        <section class="grid md:grid-cols-2 xl:grid-cols-4 gap-6">
+        <section class="grid md:grid-cols-2 xl:grid-cols-5 gap-6">
           <div
             class="
-              p-4
-              bg-white
-              shadow
+              p-3
+              bg-blue-600
+              transition-shadow
+              border
               rounded-lg
+              shadow-sm
+              hover:shadow-lg
               flex
               justify-center
               cursor-pointer
             "
             @click="getData(1)"
           >
-            <div class="flex items-center justify-center">
+            <div class="flex flex-col items-center justify-center">
               <span
                 v-if="
                   dashboardDetails &&
@@ -36,38 +40,85 @@
                   dashboardDetails[0].totallostitemslisted
                 "
                 class="
-                  block
+                  mb-2
                   text-2xl
                   font-bold
                   inline-flex
                   flex-shrink-0
                   items-center
                   justify-center
-                  h-16
-                  w-16
-                  text-blue-600
-                  bg-blue-100
+                  h-14
+                  w-14
+                  text-white
+                  bg-blue-500
                   rounded-full
-                  mr-6
                 "
                 >{{ dashboardDetails[0].totallostitemslisted.length }}</span
               >
-              <span class="block text-gray-500">Total Lost Items</span>
+              <span class="block font-semibold text-white"
+                >Waiting For Approval</span
+              >
             </div>
           </div>
           <div
             class="
-              p-4
-              bg-white
-              shadow
+              p-3
+              bg-pink-600
+              transition-shadow
+              border
               rounded-lg
+              shadow-sm
+              hover:shadow-lg
+              flex
+              justify-center
+              cursor-pointer
+            "
+            @click="getData(1)"
+          >
+            <div class="flex flex-col items-center justify-center">
+              <span
+                v-if="
+                  dashboardDetails &&
+                  dashboardDetails[0] &&
+                  dashboardDetails[0].totallostitemslisted
+                "
+                class="
+                  mb-2
+                  text-2xl
+                  font-bold
+                  inline-flex
+                  flex-shrink-0
+                  items-center
+                  justify-center
+                  h-14
+                  w-14
+                  text-white
+                  bg-pink-400
+                  rounded-full
+                "
+                >{{ dashboardDetails[0].totallostitemslisted.length }}</span
+              >
+              <span class="block font-semibold text-white"
+                >Total Lost Items</span
+              >
+            </div>
+          </div>
+          <div
+            class="
+              p-3
+              bg-yellow-600
+              transition-shadow
+              border
+              rounded-lg
+              shadow-sm
+              hover:shadow-lg
               flex
               justify-center
               cursor-pointer
             "
             @click="getData(2)"
           >
-            <div class="flex items-center justify-center">
+            <div class="flex flex-col items-center justify-center">
               <span
                 v-if="
                   dashboardDetails &&
@@ -75,38 +126,42 @@
                   dashboardDetails[1].totalclaimitems
                 "
                 class="
-                  block
+                  mb-2
                   text-2xl
                   font-bold
                   inline-flex
                   flex-shrink-0
                   items-center
                   justify-center
-                  h-16
-                  w-16
-                  text-green-600
-                  bg-green-100
+                  h-14
+                  w-14
+                  text-white
+                  bg-yellow-500
                   rounded-full
-                  mr-6
                 "
                 >{{ dashboardDetails[1].totalclaimitems.length }}</span
               >
-              <span class="block text-gray-500">Total Claim Items</span>
+              <span class="block font-semibold text-white"
+                >Total Claim Items</span
+              >
             </div>
           </div>
           <div
             class="
-              p-4
-              bg-white
-              shadow
+              p-3
+              bg-cyan-600
+              transition-shadow
+              border
               rounded-lg
+              shadow-sm
+              hover:shadow-lg
               flex
               justify-center
               cursor-pointer
             "
             @click="getData(3)"
           >
-            <div class="flex items-center justify-center">
+            <div class="flex flex-col items-center justify-center">
               <span
                 v-if="
                   dashboardDetails &&
@@ -114,38 +169,42 @@
                   dashboardDetails[2].totalitemslistedtoday
                 "
                 class="
-                  block
+                  mb-2
                   text-2xl
                   font-bold
                   inline-flex
                   flex-shrink-0
                   items-center
                   justify-center
-                  h-16
-                  w-16
-                  text-red-600
-                  bg-red-100
+                  h-14
+                  w-14
+                  text-white
+                  bg-cyan-500
                   rounded-full
-                  mr-6
                 "
                 >{{ dashboardDetails[2].totalitemslistedtoday.length }}</span
               >
-              <span class="block text-gray-500">Total Items Listed Today</span>
+              <span class="block font-semibold text-white"
+                >Total Items Listed Today</span
+              >
             </div>
           </div>
           <div
             class="
-              p-4
-              bg-white
-              shadow
+              p-3
+              bg-indigo-600
+              transition-shadow
+              border
               rounded-lg
+              shadow-sm
+              hover:shadow-lg
               flex
               justify-center
               cursor-pointer
             "
             @click="getData(4)"
           >
-            <div class="flex items-center justify-center">
+            <div class="flex flex-col items-center justify-center">
               <span
                 v-if="
                   dashboardDetails &&
@@ -153,26 +212,28 @@
                   dashboardDetails[3].totalclaimitemstoday
                 "
                 class="
-                  block
+                  mb-2
                   text-2xl
                   font-bold
                   inline-flex
                   flex-shrink-0
                   items-center
                   justify-center
-                  h-16
-                  w-16
-                  text-indigo-600
-                  bg-indigo-100
+                  h-14
+                  w-14
+                  text-white
+                  bg-indigo-400
                   rounded-full
-                  mr-6
                 "
                 >{{ dashboardDetails[3].totalclaimitemstoday.length }}</span
               >
-              <span class="block text-gray-500">Total Items Claimed Today</span>
+              <span class="block font-semibold text-white"
+                >Total Items Claimed Today</span
+              >
             </div>
           </div>
         </section>
+        <!-- </div> -->
       </main>
       <div v-if="!isLoading && lostItems.length > 0">
         <div
@@ -326,23 +387,27 @@
       <div v-else>
         <BaseLoader />
       </div>
+      <AddNewItemDescription
+        v-if="showAddNewItemDescription"
+        :show-modal="showAddNewItemDescription"
+        @close="showAddNewItemDescription = false"
+      />
     </div>
   </div>
 </template>
 
 <script>
+import AddNewItemDescription from "~/components/admin/AddNewItemDescription.vue";
 export default {
-  middleware({ $auth, redirect }) {
-    if (!$auth.loggedIn) {
-      return redirect("/found-items");
-    }
-  },
+  middleware: ["auth-admin"],
+  components: { AddNewItemDescription },
   data() {
     return {
       dashboardDetails: [],
       isLoadingRemoveImage: {},
       isLoading: false,
       tabSelected: 1,
+      showAddNewItemDescription: false,
     };
   },
   created() {

@@ -31,16 +31,28 @@
         </BaseButton>
       </div>
       <div class="align-middle inline-block w-full">
-        <div class="flex justify-between flex-col sm:flex-row items-center">
+        <div
+          class="
+            flex
+            justify-between
+            flex-col
+            gap-4
+            flex-wrap
+            md:flex-nowrap
+            sm:flex-row
+            items-center
+          "
+        >
           <div
             class="
               inline-flex
               border
               w-full
-              sm:w-3/5
+              sm:w-3/12
               rounded
               px-3
               h-12
+              flex-auto
               bg-white
             "
           >
@@ -111,9 +123,19 @@
               />
             </div>
           </div>
-          <div class="h-full w-full mt-3 sm:mt-0 sm:w-60">
+          <div class="w-full flex-auto mt-3 sm:mt-0 sm:w-3/12">
+            <date-picker
+              :confirm="true"
+              range
+              v-model="inputDate"
+              @pick="changeDate($event)"
+              formate="YYYY-MM-DD"
+            ></date-picker>
+          </div>
+          <div class="h-full flex-auto w-full mt-3 sm:mt-0 sm:w-3/12">
             <select
               id="countries"
+              @change="changeItemDescription"
               class="
                 h-12
                 border border-gray-300
@@ -125,11 +147,22 @@
                 p-2.5
               "
             >
-              <option selected>Sort By</option>
-              <option value="US">Claimed</option>
-              <option value="CA">Unclaimed</option>
+              <option disabled selected>Select category</option>
+              <option
+                v-for="item in itemDescriptionOptions"
+                :key="item"
+                :value="item"
+              >
+                {{ item }}
+              </option>
             </select>
           </div>
+          <BaseButton
+            class="sm:ml-2 grow mt-3 sm:mt-0 sm:grow-0 whitespace-nowrap"
+            @click="addNewItem"
+          >
+            Apply
+          </BaseButton>
         </div>
       </div>
       <div v-if="!isLoading && lostItems.length > 0">
@@ -258,14 +291,31 @@
 </template>
 
 <script>
+import DatePicker from "vue2-datepicker";
+import "vue2-datepicker/index.css";
+import { itemDescriptionOptions } from "../../static/defaults.js";
+
 export default {
+  components: { DatePicker },
   data() {
     return {
       lostItems: [],
       isLoading: false,
+      inputDate: [],
+      itemDescriptionOptions: itemDescriptionOptions,
     };
   },
   methods: {
+    changeItemDescription(event) {
+      console.log(event.target.value);
+    },
+    changeDate(event) {
+      console.log(this.inputDate);
+      console.log(event);
+    },
+    updateValues() {
+      console.log(this.dateRange);
+    },
     addNewItem() {
       this.$router.push({ name: "item-details" });
     },
@@ -310,6 +360,24 @@ export default {
 };
 </script>
 
+<style>
+.mx-input {
+  height: 3rem !important;
+}
+@media (max-width: 750px) {
+  .mx-datepicker-main {
+    max-width: 92%;
+  }
+  .mx-range-wrapper {
+    flex-wrap: wrap;
+    flex-direction: row;
+  }
+  .mx-range-wrapper .mx-calendar-panel-date {
+    flex: auto;
+  }
+}
+</style>
+
 <style scoped>
 .wrapper {
   @apply flex flex-col justify-start pt-0 items-center text-center mx-auto;
@@ -325,6 +393,9 @@ export default {
   animation: spinner 1.5s linear infinite;
 }
 
+.mx-datepicker-range {
+  width: 100% !important;
+}
 @-webkit-keyframes spinner {
   0% {
     -webkit-transform: rotate(0deg);

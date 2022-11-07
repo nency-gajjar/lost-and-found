@@ -133,11 +133,7 @@
 <script>
 import { ValidationObserver, ValidationProvider } from "vee-validate";
 export default {
-  middleware({ $auth, redirect }) {
-    if ($auth.loggedIn) {
-      return redirect("/found-items");
-    }
-  },
+  middleware: ["auth-admin"],
   components: {
     ValidationObserver,
     ValidationProvider,
