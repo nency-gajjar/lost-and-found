@@ -399,11 +399,7 @@
 <script>
 import AddNewItemDescription from "~/components/admin/AddNewItemDescription.vue";
 export default {
-  middleware({ $auth, redirect }) {
-    if (!$auth.loggedIn) {
-      return redirect("/found-items");
-    }
-  },
+  middleware: ["auth-admin"],
   components: { AddNewItemDescription },
   data() {
     return {
