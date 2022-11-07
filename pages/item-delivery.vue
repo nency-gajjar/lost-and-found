@@ -114,17 +114,20 @@
                   label="Additional Person Name (optional)"
                 />
               </div>
+              <label class="block text-md font-medium text-gray-800"
+                >Expected Pickup Date:</label
+              >
               <ValidationProvider
                 v-slot="{ errors }"
                 rules="required"
-                class="block mb-4"
+                class="block mb-4 mt-2"
               >
-                <BaseInput
-                  v-model="expectedPickupDate"
-                  type="date"
-                  label="Expected Pickup Date"
-                  :class="errors.length > 0 && 'error'"
-                />
+                <div :class="errors.length && 'error'">
+                  <date-picker
+                    v-model="expectedPickupDate"
+                    formate="YYYY-MM-DD"
+                  ></date-picker>
+                </div>
                 <p
                   v-if="errors.length"
                   class="vee-validation-error mt-2 text-sm text-red-600"
@@ -160,18 +163,21 @@
 </template>
   
 <script>
+import DatePicker from "vue2-datepicker";
+import "vue2-datepicker/index.css";
+
 export default {
-  middleware: ["auth-admin"],
   data: () => ({
     showDialog: false,
     deliveryType: "0",
     pickupPersonName: "",
     additionalPersonName: "",
-    expectedPickupDate: new Date().toISOString().slice(0, 10),
+    expectedPickupDate: new Date(),
     isLoading: false,
     itemId: "",
     showValidateAlert: false,
   }),
+  components: { DatePicker },
   mounted() {
     if (this.$route.query.id) {
       this.itemId = this.$route.query.id;
@@ -258,8 +264,28 @@ export default {
 };
 </script>
   
-<style lang="scss" scoped>
+<style lang="scss">
 .wrapper {
   @apply min-h-screen flex justify-center py-10 mx-auto;
+}
+.mx-input-wrapper i {
+  margin-right: 10px;
+}
+.mx-input:hover {
+  @apply border-gray-300;
+}
+.mx-datepicker {
+  width: 100% !important;
+}
+.mx-datepicker input {
+  height: 3rem;
+  border-radius: 0.5rem;
+  border-color: rgb(212 212 212);
+  cursor: pointer;
+}
+.error {
+  & > .mx-datepicker {
+    @apply border-red-500 border-2 ring-4 ring-red-500 ring-opacity-10 rounded-lg transition-none;
+  }
 }
 </style>

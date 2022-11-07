@@ -133,6 +133,8 @@
                     rounded-t-lg
                     md:h-32 md:w-32
                     sm:h-16 sm:w-16
+                    w-14
+                    h-14
                     md:rounded-none md:rounded-l-lg
                   "
                   src="@/assets/images/headphones.png"
@@ -143,12 +145,7 @@
                   <li class="flex items-center space-x-2">
                     <!-- Icon -->
                     <svg
-                      class="
-                        flex-shrink-0
-                        w-5
-                        h-5
-                        text-green-500
-                      "
+                      class="flex-shrink-0 w-5 h-5 text-green-500"
                       fill="currentColor"
                       viewBox="0 0 20 20"
                       xmlns="http://www.w3.org/2000/svg"
@@ -164,12 +161,7 @@
                   <li class="flex items-center space-x-2">
                     <!-- Icon -->
                     <svg
-                      class="
-                        flex-shrink-0
-                        w-5
-                        h-5
-                        text-green-500
-                      "
+                      class="flex-shrink-0 w-5 h-5 text-green-500"
                       fill="currentColor"
                       viewBox="0 0 20 20"
                       xmlns="http://www.w3.org/2000/svg"
@@ -299,7 +291,9 @@ export default {
 }
 .slick-prev:before,
 .slick-next:before {
+  /* font-size: 35px; */
   font-size: 34px;
   opacity: 1;
+  /* line-height: 41.5px; */
 }
 </style>

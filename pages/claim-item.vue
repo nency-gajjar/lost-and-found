@@ -298,7 +298,6 @@
 import { ValidationObserver, ValidationProvider } from "vee-validate";
 
 export default {
-  middleware: ["auth-admin"],
   components: {
     ValidationObserver,
     ValidationProvider,

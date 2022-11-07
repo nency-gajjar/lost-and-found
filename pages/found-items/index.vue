@@ -32,16 +32,28 @@
         </BaseButton>
       </div>
       <div class="align-middle inline-block w-full">
-        <div class="flex justify-between flex-col sm:flex-row items-center">
+        <div
+          class="
+            flex
+            justify-between
+            flex-col
+            gap-4
+            flex-wrap
+            md:flex-nowrap
+            sm:flex-row
+            items-center
+          "
+        >
           <div
             class="
               inline-flex
               border
               w-full
-              sm:w-3/5
+              sm:w-3/12
               rounded
               px-3
               h-12
+              flex-auto
               bg-white
             "
           >
@@ -86,6 +98,7 @@
                 </span>
               </div>
               <input
+                v-model="searchQuery"
                 type="text"
                 class="
                   border-transparent
@@ -112,9 +125,22 @@
               />
             </div>
           </div>
-          <div class="h-full w-full mt-3 sm:mt-0 sm:w-60">
+          <div class="w-full flex gap-2 flex-auto mt-3 sm:mt-0 sm:w-3/12">
+            <date-picker
+              placeholder="Start date"
+              v-model="startDate"
+              formate="YYYY-MM-DD"
+            ></date-picker>
+            <date-picker
+              placeholder="End date"
+              v-model="endDate"
+              formate="YYYY-MM-DD"
+            ></date-picker>
+          </div>
+          <div class="h-full flex-auto w-full mt-3 sm:mt-0 sm:w-3/12">
             <select
               id="countries"
+              @change="changeItemDescription"
               class="
                 h-12
                 border border-gray-300
@@ -126,11 +152,22 @@
                 p-2.5
               "
             >
-              <option selected>Sort By</option>
-              <option value="US">Claimed</option>
-              <option value="CA">Unclaimed</option>
+              <option disabled selected>Select category</option>
+              <option
+                v-for="item in itemDescriptionOptions"
+                :key="item"
+                :value="item"
+              >
+                {{ item }}
+              </option>
             </select>
           </div>
+          <BaseButton
+            class="sm:ml-2 grow mt-3 sm:mt-0 sm:grow-0 whitespace-nowrap"
+            @click="applyFilters"
+          >
+            Apply
+          </BaseButton>
         </div>
       </div>
       <div v-if="!isLoading && lostItems.length > 0">
@@ -259,11 +296,22 @@
 </template>
 
 <script>
+import DatePicker from "vue2-datepicker";
+import "vue2-datepicker/index.css";
+import moment from "moment";
+import { itemDescriptionOptions } from "../../static/defaults.js";
+
 export default {
+  components: { DatePicker },
   data() {
     return {
       lostItems: [],
       isLoading: false,
+      searchQuery: "",
+      startDate: null,
+      endDate: null,
+      itemDescription: "",
+      itemDescriptionOptions: itemDescriptionOptions,
     };
   },
   computed: {
@@ -275,8 +323,17 @@ export default {
     },
   },
   methods: {
+    changeItemDescription(event) {
+      this.itemDescription = event.target.value;
+    },
     addNewItem() {
       this.$router.push({ name: "item-details" });
+    },
+    applyFilters(){
+      console.log(this.searchQuery);
+      console.log(moment(this.startDate).format("YYYY-MM-DD"));
+      console.log(moment(this.endDate).format("YYYY-MM-DD"));
+      console.log(this.itemDescription);
     },
     viewItem(item) {
       this.$store.commit("item/SET_ITEM_DETAILS", {
@@ -319,6 +376,24 @@ export default {
 };
 </script>
 
+<style>
+.mx-input {
+  height: 3rem !important;
+}
+@media (max-width: 750px) {
+  .mx-datepicker-main {
+    max-width: 92%;
+  }
+  .mx-range-wrapper {
+    flex-wrap: wrap;
+    flex-direction: row;
+  }
+  .mx-range-wrapper .mx-calendar-panel-date {
+    flex: auto;
+  }
+}
+</style>
+
 <style scoped>
 .wrapper {
   @apply flex flex-col justify-start pt-0 items-center text-center mx-auto;
@@ -334,6 +409,9 @@ export default {
   animation: spinner 1.5s linear infinite;
 }
 
+.mx-datepicker {
+  width: 100% !important;
+}
 @-webkit-keyframes spinner {
   0% {
     -webkit-transform: rotate(0deg);
