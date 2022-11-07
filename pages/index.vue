@@ -152,7 +152,7 @@
                     v-if="address"
                     class="absolute inset-y-0 right-0 flex items-center p-5"
                   >
-                    <BaseIcon icon="circle-xmark" color="gray" />
+                    <BaseIcon @click="clearAddress" icon="circle-xmark" color="gray" />
                   </div>
                   <div
                     v-else
@@ -190,16 +190,34 @@
 
             <!-- Item Description -->
             <div class="h-full flex-auto w-full mt-3 sm:mt-0 sm:w-2/12">
-              <BaseSelect
-                v-model="itemDescription"
-                :options="itemDescriptionOptions"
-                label="Item Description"
-              />
+              <select
+                id="countries"
+                @change="changeItemDescription"
+                class="
+                  h-12
+                  border border-gray-300
+                  text-gray-900 text-sm
+                  rounded-lg
+                  focus:ring-blue-500 focus:border-blue-500
+                  block
+                  w-full
+                  p-2.5
+                "
+              >
+                <option disabled selected>Select category</option>
+                <option
+                  v-for="item in itemDescriptionOptions"
+                  :key="item"
+                  :value="item"
+                >
+                  {{ item }}
+                </option>
+              </select>
             </div>
           </div>
         </div>
         <div class="flex items-center justify-center m-6">
-          <BaseButton> Search </BaseButton>
+          <BaseButton @click="applyFilters"> Search </BaseButton>
         </div>
       </div>
     </section>
@@ -326,6 +344,7 @@ import "vue-slick-carousel/dist/vue-slick-carousel.css";
 import "vue-slick-carousel/dist/vue-slick-carousel-theme.css";
 import DatePicker from "vue2-datepicker";
 import "vue2-datepicker/index.css";
+import moment from "moment";
 export default {
   components: { VueSlickCarousel, DatePicker },
   data() {
@@ -361,23 +380,56 @@ export default {
       address: "",
       startDate: null,
       endDate: null,
+      addressForApi: "",
+      lat: "",
+      long: "",
     };
   },
   methods: {
-    changeDate(event) {
-      console.log(this.inputDate);
-      console.log(event);
-    },
+    // changeDate(event) {
+    //   console.log(this.inputDate);
+    //   console.log(event);
+    // },
     getAddress() {
       const autocomplete = new google.maps.places.Autocomplete(
         document.getElementById("autocomplete")
       );
       autocomplete.addListener("place_changed", () => {
         let address = autocomplete.getPlace();
-        let lat = address.geometry.location.lat();
-        let long = address.geometry.location.lng();
-        console.log("=====lat long", lat, long);
+        this.lat = address.geometry.location.lat();
+        this.long = address.geometry.location.lng();
+        this.addressForApi = address.formatted_address;
       });
+    },
+    clearAddress(){
+      this.address = "";
+    },
+    changeItemDescription(event) {
+      this.itemDescription = event.target.value;
+    },
+    applyFilters(){
+      let params = {
+        abc: "123",
+        item_description: this.itemDescription,
+        datse: moment(this.startDate).format("YYYY-MM-DD"),
+        datse1: moment(this.endDate).format("YYYY-MM-DD"),
+        address: this.addressForApi,
+        lat: this.lat,
+        long: this.long,
+      }
+      this.$axios
+        .post("getallfilteritemdetails", {}, {params : params})
+        .then(res => {
+          this.$nextTick(() => {
+            this.$router.push({
+              name: "found-items",
+              params: { filteredItems: res?.data?.data[0]?.ITEMS },
+            });
+          });
+        })
+        .catch(err => {
+          console.log(err);
+        })
     },
   },
 };

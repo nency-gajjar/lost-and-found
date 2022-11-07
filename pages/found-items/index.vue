@@ -30,6 +30,89 @@
           + Add New Item
         </BaseButton>
       </div>
+      <div class="flex justify-end w-full">
+        <div
+          class="
+            border
+            w-full
+            sm:w-3/12
+            rounded
+            px-3
+            h-12
+            bg-white 
+            mb-6
+          "
+        >
+          <div
+            class="flex flex-wrap items-stretch w-full h-full relative"
+          >
+            <div class="flex">
+              <span
+                class="
+                  flex
+                  items-center
+                  leading-normal
+                  bg-transparent
+                  rounded rounded-r-none
+                  border border-r-0 border-none
+                  py-2
+                  whitespace-no-wrap
+                  text-grey-dark text-sm
+                "
+              >
+                <svg
+                  width="18"
+                  height="18"
+                  class="w-4 lg:w-auto"
+                  viewBox="0 0 18 18"
+                  fill="none"
+                  xmlns="http://www.w3.org/2000/svg"
+                >
+                  <path
+                    d="M8.11086 15.2217C12.0381 15.2217 15.2217 12.0381 15.2217 8.11086C15.2217 4.18364 12.0381 1 8.11086 1C4.18364 1 1 4.18364 1 8.11086C1 12.0381 4.18364 15.2217 8.11086 15.2217Z"
+                    stroke="#455A64"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                  />
+                  <path
+                    d="M16.9993 16.9993L13.1328 13.1328"
+                    stroke="#455A64"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                  />
+                </svg>
+              </span>
+            </div>
+            <input
+              v-model="searchQuery"
+              @input="filterItems"
+              type="text"
+              class="
+                border-transparent
+                focus:border-transparent focus:ring-0
+                flex-shrink
+                w-full
+                flex-grow flex-auto
+                leading-normal
+                tracking-wide
+                w-px
+                flex-1
+                border-0
+                shadow-none
+                rounded rounded-l-none
+                px-3
+                relative
+                focus:outline-none
+                text-xxs
+                lg:text-xs lg:text-base
+                text-gray-500
+                font-thin
+              "
+              placeholder="Search"
+            />
+          </div>
+        </div>
+      </div>
       <div class="align-middle inline-block w-full">
         <div
           class="
@@ -46,83 +129,35 @@
           <div
             class="
               inline-flex
-              border
               w-full
               sm:w-3/12
-              rounded
-              px-3
               h-12
               flex-auto
-              bg-white
             "
           >
-            <div
-              class="flex flex-wrap items-stretch w-full h-full mb-6 relative"
-            >
-              <div class="flex">
-                <span
-                  class="
-                    flex
-                    items-center
-                    leading-normal
-                    bg-transparent
-                    rounded rounded-r-none
-                    border border-r-0 border-none
-                    py-2
-                    whitespace-no-wrap
-                    text-grey-dark text-sm
-                  "
-                >
-                  <svg
-                    width="18"
-                    height="18"
-                    class="w-4 lg:w-auto"
-                    viewBox="0 0 18 18"
-                    fill="none"
-                    xmlns="http://www.w3.org/2000/svg"
-                  >
-                    <path
-                      d="M8.11086 15.2217C12.0381 15.2217 15.2217 12.0381 15.2217 8.11086C15.2217 4.18364 12.0381 1 8.11086 1C4.18364 1 1 4.18364 1 8.11086C1 12.0381 4.18364 15.2217 8.11086 15.2217Z"
-                      stroke="#455A64"
-                      stroke-linecap="round"
-                      stroke-linejoin="round"
-                    />
-                    <path
-                      d="M16.9993 16.9993L13.1328 13.1328"
-                      stroke="#455A64"
-                      stroke-linecap="round"
-                      stroke-linejoin="round"
-                    />
-                  </svg>
-                </span>
-              </div>
-              <input
-                v-model="searchQuery"
+              <BaseInput
+                v-model="address"
+                id="autocomplete"
                 type="text"
-                class="
-                  border-transparent
-                  focus:border-transparent focus:ring-0
-                  flex-shrink
-                  w-full
-                  flex-grow flex-auto
-                  leading-normal
-                  tracking-wide
-                  w-px
-                  flex-1
-                  border-0
-                  shadow-none
-                  rounded rounded-l-none
-                  px-3
-                  relative
-                  focus:outline-none
-                  text-xxs
-                  lg:text-xs lg:text-base
-                  text-gray-500
-                  font-thin
-                "
-                placeholder="Search"
-              />
-            </div>
+                label="Location"
+                class="w-full"
+                @input="getAddress"
+              >
+                <template v-slot:icon>
+                  <div
+                    v-if="address"
+                    class="absolute inset-y-0 right-0 flex items-center p-5"
+                  >
+                    <BaseIcon @click="clearAddress" icon="circle-xmark" color="gray" />
+                  </div>
+                  <div
+                    v-else
+                    class="absolute inset-y-0 right-0 flex items-center p-5"
+                  >
+                    <BaseIcon icon="location-arrow" color="lightgray" />
+                  </div>
+                </template>
+              </BaseInput>
           </div>
           <div class="w-full flex gap-2 flex-auto mt-3 sm:mt-0 sm:w-3/12">
             <date-picker
@@ -305,12 +340,17 @@ export default {
   data() {
     return {
       lostItems: [],
+      backupLostItems: [],
       isLoading: false,
       searchQuery: "",
       startDate: null,
       endDate: null,
       itemDescription: "",
       itemDescriptionOptions: itemDescriptionOptions,
+      address: "",
+      addressForApi: "",
+      lat: "",
+      long: "",
     };
   },
   methods: {
@@ -321,10 +361,23 @@ export default {
       this.$router.push({ name: "item-details" });
     },
     applyFilters(){
-      console.log(this.searchQuery);
-      console.log(moment(this.startDate).format("YYYY-MM-DD"));
-      console.log(moment(this.endDate).format("YYYY-MM-DD"));
-      console.log(this.itemDescription);
+      let params = {
+        abc: "123",
+        item_description: this.itemDescription,
+        datse: moment(this.startDate).format("YYYY-MM-DD"),
+        datse1: moment(this.endDate).format("YYYY-MM-DD"),
+        address: this.addressForApi,
+        lat: this.lat,
+        long: this.long,
+      }
+      this.$axios
+        .post("getallfilteritemdetails", {}, {params : params})
+        .then(res => {
+          this.lostItems = res?.data?.data[0]?.ITEMS;
+        })
+        .catch(err => {
+          console.log(err);
+        })
     },
     viewItem(item) {
       this.$store.commit("item/SET_ITEM_DETAILS", {
@@ -345,25 +398,67 @@ export default {
         params: { item: item },
       });
     },
-  },
-  created() {
-    this.isLoading = true;
-    this.$axios
-      .get("/getalllostitem")
-      .then((response) => {
-        if (response.status === 200) {
-          this.isLoading = false;
-          this.lostItems = response?.data?.data;
-          if (!this.lostItems) {
-            this.lostItems = [];
-          }
-        }
-      })
-      .catch((err) => {
-        this.isLoading = false;
-        console.log(err);
+    getAddress() {
+      const autocomplete = new google.maps.places.Autocomplete(
+        document.getElementById("autocomplete")
+      );
+      autocomplete.addListener("place_changed", () => {
+        let address = autocomplete.getPlace();
+        this.lat = address.geometry.location.lat();
+        this.long = address.geometry.location.lng();
+        this.addressForApi = address.formatted_address;
       });
+    },
+    clearAddress(){
+      this.address = "";
+    },
+    filterItems(){
+      let filterArray = [];
+      if (this.searchQuery === "") {
+        this.lostItems = this.backupLostItems;
+      }
+      this.backupLostItems.forEach((item) => {
+        let itemArr = Object.values(item);
+        let filteredItems = itemArr.filter((itemElement) => {
+          if (typeof itemElement === "number") {
+            itemElement = itemElement.toString();
+          }
+          return itemElement
+            .toLowerCase()
+            .includes(this.searchQuery.toLowerCase());
+        });
+        if (filteredItems.length != 0) {
+          filterArray.push(item);
+        }
+      });
+      this.lostItems = filterArray;
+    },
   },
+  mounted(){
+    if(this.$route.params?.filteredItems){
+      this.lostItems = this.$route.params?.filteredItems;
+      this.backupLostItems = this.lostItems;
+    }
+    else{
+      this.isLoading = true;
+      this.$axios
+        .get("/getalllostitem")
+        .then((response) => {
+          if (response.status === 200) {
+            this.isLoading = false;
+            this.lostItems = response?.data?.data;
+            this.backupLostItems = this.lostItems;
+            if (!this.lostItems) {
+              this.lostItems = [];
+            }
+          }
+        })
+        .catch((err) => {
+          this.isLoading = false;
+          console.log(err);
+        });
+    }
+  }
 };
 </script>
 
