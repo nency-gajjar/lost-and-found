@@ -896,7 +896,11 @@
                   label="Item Description"
                   :class="errors.length > 0 && 'error'"
                   @input="setItemDetails"
-                />
+                >
+                  <template v-slot:displayoption="{ option }">
+                    {{ option.item_description }}
+                  </template>
+                </BaseSelect>
                 <p
                   v-if="errors.length"
                   class="vee-validation-error mt-2 text-sm text-red-600"
@@ -1200,7 +1204,7 @@ export default {
     foundDate: new Date(),
     venueManually: false,
     itemDescription: "",
-    itemDescriptionOptions: itemDescriptionOptions,
+    itemDescriptionOptions: [],
     packageType: "",
     packageTypeOptions: ["Box", "Envelope"],
     weight: "",
@@ -1286,6 +1290,18 @@ export default {
     },
   },
   methods: {
+    getItemDescriptionOptions() {
+      this.$axios
+        .get("/viewallItemdescriptionDetails")
+        .then((response) => {
+          if (response.status === 200) {
+            this.itemDescriptionOptions = response.data?.data?.Items || [];
+          }
+        })
+        .catch((error) => {
+          console.log(error);
+        });
+    },
     getAddress() {
       const autocomplete = new google.maps.places.Autocomplete(
         document.getElementById("autocomplete")
@@ -2388,6 +2404,7 @@ export default {
     },
   },
   mounted() {
+    this.getItemDescriptionOptions();
     window.addEventListener("keydown", () => {
       this.showValidateAlert = false;
     });

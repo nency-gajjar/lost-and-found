@@ -41,6 +41,7 @@
               :key="index"
               class="border-b border-gray-200 hover:bg-gray-100"
             >
+              <!-- Item Description -->
               <td class="py-3 px-2 text-left">
                 <ValidationProvider v-slot="{ errors }" rules="required">
                   <BaseInput
@@ -58,6 +59,8 @@
                   </p>
                 </ValidationProvider>
               </td>
+
+              <!-- Package Type -->
               <td class="py-3 px-2 text-left">
                 <ValidationProvider v-slot="{ errors }" rules="required">
                   <BaseSelect
@@ -75,12 +78,18 @@
                   </p>
                 </ValidationProvider>
               </td>
+
+              <!-- Weight -->
               <td class="py-3 px-2 text-left">
                 <div class="flex gap-3">
-                  <ValidationProvider v-slot="{ errors }" rules="required">
+                  <ValidationProvider
+                    v-slot="{ errors }"
+                    rules="int|weight:@ounces"
+                    name="Pounds"
+                  >
                     <BaseInput
-                      class="w-20"
                       v-model="item.weightPounds"
+                      class="w-20"
                       label="Pounds"
                       type="text"
                       :class="errors.length > 0 && 'error'"
@@ -92,7 +101,11 @@
                       {{ errors[0] }}
                     </p>
                   </ValidationProvider>
-                  <ValidationProvider v-slot="{ errors }" rules="required">
+                  <ValidationProvider
+                    v-slot="{ errors }"
+                    rules="int|weight:@pounds"
+                    name="Ounces"
+                  >
                     <BaseSelect
                       class="w-24"
                       v-model="item.weightOunces"
@@ -109,9 +122,15 @@
                   </ValidationProvider>
                 </div>
               </td>
+
+              <!-- Dimensions -->
               <td class="py-3 px-2 text-center">
                 <div class="flex gap-3">
-                  <ValidationProvider v-slot="{ errors }" rules="required">
+                  <ValidationProvider
+                    v-slot="{ errors }"
+                    rules="required|float|positiveNumber"
+                    name="Length"
+                  >
                     <BaseInput
                       class="w-20"
                       v-model="item.itemLength"
@@ -126,7 +145,11 @@
                       {{ errors[0] }}
                     </p>
                   </ValidationProvider>
-                  <ValidationProvider v-slot="{ errors }" rules="required">
+                  <ValidationProvider
+                    v-slot="{ errors }"
+                    rules="required|float|positiveNumber"
+                    name="Width"
+                  >
                     <BaseInput
                       class="w-20"
                       v-model="item.itemWidth"
@@ -141,7 +164,11 @@
                       {{ errors[0] }}
                     </p>
                   </ValidationProvider>
-                  <ValidationProvider v-slot="{ errors }" rules="required">
+                  <ValidationProvider
+                    v-slot="{ errors }"
+                    rules="required|float|positiveNumber"
+                    name="Height"
+                  >
                     <BaseInput
                       class="w-20"
                       v-model="item.itemHeight"
@@ -279,7 +306,7 @@ export default {
   methods: {
     async addNewItem() {
       const isValid = await this.$refs.observer.validate();
-      if(isValid){
+      if (isValid) {
         let itemObject = {
           itemDescription: this.itemDescription,
           packageType: this.packageType,
@@ -290,17 +317,15 @@ export default {
           itemHeight: this.itemHeight,
         };
         this.items.push(itemObject);
-      }
-      else{
+      } else {
         console.log("invalid");
       }
     },
     async onSave() {
       const isValid = await this.$refs.observer.validate();
-      if(isValid){
+      if (isValid) {
         console.log("valid");
-      }
-      else{
+      } else {
         console.log("invalid");
       }
     },
