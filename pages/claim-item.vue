@@ -176,12 +176,33 @@
               >
                 <BaseInput
                   v-model="autoCompleteAddress.address"
+                  id="autocomplete-claim-item"
                   type="text"
-                  id="autocomplete"
+                  placeholder=""
                   label="Lost Location"
                   @input="getAddress"
                   :class="errors.length > 0 && 'error'"
-                />
+                >
+                  <template v-slot:icon>
+                    <div
+                      v-if="autoCompleteAddress.address"
+                      class="absolute inset-y-0 right-0 flex items-center p-5"
+                    >
+                      <BaseIcon
+                        @click="clearAddress"
+                        icon="xmark"
+                        color="gray"
+                      />
+                    </div>
+                    <div
+                      v-else
+                      class="absolute inset-y-0 right-0 flex items-center p-5"
+                    >
+                      <BaseIcon icon="location-arrow" color="lightgray" />
+                    </div>
+                  </template>
+                </BaseInput>
+
                 <p
                   v-if="errors.length"
                   class="vee-validation-error mt-2 text-sm text-red-600"
@@ -299,12 +320,13 @@
 import { ValidationObserver, ValidationProvider } from "vee-validate";
 import DatePicker from "vue2-datepicker";
 import "vue2-datepicker/index.css";
+import moment from "moment";
 
 export default {
   components: {
     ValidationObserver,
     ValidationProvider,
-    DatePicker,
+    DatePicker
   },
   data() {
     return {
@@ -366,7 +388,7 @@ export default {
   methods: {
     getAddress() {
       const autocomplete = new google.maps.places.Autocomplete(
-        document.getElementById("autocomplete")
+        document.getElementById("autocomplete-claim-item")
       );
       autocomplete.addListener("place_changed", () => {
         let address = autocomplete.getPlace();
@@ -399,6 +421,10 @@ export default {
         });
       });
     },
+    clearAddress() {
+      this.autoCompleteAddress.address = "";
+      document.getElementById("autocomplete-claim-item").placeholder = "";
+    },
     validateUserPhone() {
       if (!this.claimPersonPhoneNo) {
         this.isPhoneNoValid = false;
@@ -428,8 +454,7 @@ export default {
           claimpersonmobileno: claimPersonPhoneNo,
           claimpersonitemname: this.itemName,
           claimpersondescription: this.itemDescription,
-          // TO DO: Format Date
-          claimpersondatelost: this.itemLostDate,
+          claimpersondatelost: moment(this.itemLostDate).format("YYYY-MM-DD"),
           claimpersonlocation: this.autoCompleteAddress.address,
           itemid: this.itemId,
           venue_email: this.venueEmail,
@@ -519,5 +544,22 @@ export default {
 
 textarea.error {
   @apply border-red-500 border-2 ring-4 ring-red-500 ring-opacity-10 transition-none;
+}
+
+.mx-datepicker {
+  width: 100% !important;
+}
+
+.mx-datepicker input {
+  height: 3rem;
+  border-radius: 0.5rem;
+  border-color: rgb(212 212 212);
+  cursor: pointer;
+}
+
+.error {
+  & > .mx-datepicker {
+    @apply border-red-500 border-2 ring-4 ring-red-500 ring-opacity-10 rounded-lg transition-none;
+  }
 }
 </style>

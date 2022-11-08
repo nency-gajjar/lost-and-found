@@ -98,6 +98,103 @@
         </div>
       </div>
     </div>
+
+    <!-- Lost Item Filter -->
+    <section class="bg-white border-b p-6">
+      <div class="container max-w-6xl mx-auto m-8">
+        <h3
+          class="
+            w-full
+            my-2
+            text-2xl
+            font-bold
+            leading-tight
+            text-center text-gray-700
+          "
+        >
+          What have you lost?
+        </h3>
+        <div class="flex justify-center">
+          <span
+            class="
+              w-20
+              border-t-4 border-solid border-orange-200
+              inline-block
+              mb-3
+            "
+          ></span>
+        </div>
+        <div class="align-middle inline-block w-full mt-5">
+          <div
+            class="
+              flex
+              justify-between
+              flex-col
+              gap-4
+              flex-wrap
+              md:flex-nowrap
+              sm:flex-row
+              items-center
+            "
+          >
+            <!-- Location -->
+            <div class="inline-flex flex-auto w-full sm:w-6/12 bg-white">
+              <BaseInput
+                v-model="address"
+                id="autocomplete-main"
+                type="text"
+                placeholder=""
+                label="Location"
+                class="w-full"
+                @input="getAddress"
+              >
+                <template v-slot:icon>
+                  <div
+                    v-if="address"
+                    class="absolute inset-y-0 right-0 flex items-center p-5"
+                  >
+                    <BaseIcon @click="clearAddress" icon="xmark" color="gray" />
+                  </div>
+                  <div
+                    v-else
+                    class="absolute inset-y-0 right-0 flex items-center p-5"
+                  >
+                    <BaseIcon icon="location-arrow" color="lightgray" />
+                  </div>
+                </template>
+              </BaseInput>
+            </div>
+
+            <div class="w-full flex gap-2 flex-auto mt-3 sm:mt-0 sm:w-4/12">
+              <date-picker
+                placeholder="Start date"
+                v-model="startDate"
+                formate="YYYY-MM-DD"
+              ></date-picker>
+              <date-picker
+                placeholder="End date"
+                v-model="endDate"
+                formate="YYYY-MM-DD"
+              ></date-picker>
+            </div>
+
+            <!-- Item Description -->
+            <div class="h-full flex-auto w-full mt-3 sm:mt-0 sm:w-2/12">
+              <BaseSelect
+                v-model="itemDescription"
+                :options="itemDescriptionOptions"
+                label="Item Description"
+              />
+            </div>
+          </div>
+        </div>
+        <div class="flex items-center justify-center m-6">
+          <BaseButton @click="applyFilters"> Search </BaseButton>
+        </div>
+      </div>
+    </section>
+
+    <!-- Recently Added Items -->
     <section class="bg-white border-b py-8">
       <div class="container max-w-6xl mx-auto m-8">
         <h3
@@ -212,12 +309,16 @@
 </template>
 
 <script>
+// import { itemDescriptionOptions } from "static/defaults.js";
 import VueSlickCarousel from "vue-slick-carousel";
 import "vue-slick-carousel/dist/vue-slick-carousel.css";
 // optional style for arrows & dots
 import "vue-slick-carousel/dist/vue-slick-carousel-theme.css";
+import DatePicker from "vue2-datepicker";
+import "vue2-datepicker/index.css";
+import moment from "moment";
 export default {
-  components: { VueSlickCarousel },
+  components: { VueSlickCarousel, DatePicker },
   data() {
     return {
       sliderSetting: {
@@ -246,7 +347,101 @@ export default {
           },
         ],
       },
+      itemDescriptionOptions: [],
+      itemDescription: "",
+      address: "",
+      startDate: null,
+      endDate: null,
+      lostItemAddress: "",
+      lat: "",
+      long: "",
     };
+  },
+  mounted(){
+    this.getItemDescriptionOptions();
+  },
+  computed: {
+    formatedStartDate() {
+      if (this.startDate) {
+        return moment(this.startDate).format("YYYY-MM-DD");
+      }
+      return moment(new Date()).format("YYYY-MM-DD");
+    },
+    formatedEndDate() {
+      if (this.endDate) {
+        return moment(this.endDate).format("YYYY-MM-DD");
+      }
+      return moment(new Date()).format("YYYY-MM-DD");
+    },
+  },
+  methods: {
+    getItemDescriptionOptions() {
+      this.$axios
+        .get("/viewallItemdescriptionDetails")
+        .then((response) => {
+          if (response.status === 200) {
+            let itemDescriptionResponse = response.data?.data?.Items || [];
+            this.itemDescriptionOptions = itemDescriptionResponse.map(item => {
+              return item.item_description;
+            });
+          }
+        })
+        .catch((error) => {
+          console.log(error);
+        });
+    },
+    getAddress() {
+      const autocomplete = new google.maps.places.Autocomplete(
+        document.getElementById("autocomplete-main")
+      );
+      autocomplete.addListener("place_changed", () => {
+        let address = autocomplete.getPlace();
+        this.lat = address.geometry.location.lat();
+        this.long = address.geometry.location.lng();
+        this.lostItemAddress = address.formatted_address;
+      });
+    },
+    clearAddress() {
+      this.address = "";
+      document.getElementById("autocomplete-main").placeholder = "";
+    },
+    applyFilters() {
+      let params = {
+        abc: "123",
+      };
+      if (this.itemDescription) params.item_description = this.itemDescription;
+      if (this.startDate || this.endDate) {
+        params.datse = this.formatedStartDate;
+        params.datse1 = this.formatedEndDate;
+      }
+      if (this.lostItemAddress) params.address = this.lostItemAddress;
+      if (this.lat) params.lat = this.lat;
+      if (this.long) params.long = this.long;
+
+      this.$axios
+        .post("getallfilteritemdetails", {}, { params: params })
+        .then((res) => {
+          this.$nextTick(() => {
+            this.$router.push({
+              name: "found-items",
+              params: { 
+                filteredItems: res?.data?.data[0]?.ITEMS, 
+                appliedFilters: {
+                  itemDescription: this.itemDescription,
+                  startDate: this.startDate,
+                  endDate: this.endDate,
+                  lostItemAddress: this.lostItemAddress,
+                  lat: this.lat,
+                  long: this.long
+                }
+              }
+            });
+          });
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+    },
   },
 };
 </script>
@@ -280,7 +475,7 @@ export default {
 }
 </style>
 
-<style>
+<style lang="scss">
 .slick-prev,
 .slick-next {
   height: 35px !important;
@@ -295,5 +490,56 @@ export default {
   font-size: 34px;
   opacity: 1;
   /* line-height: 41.5px; */
+}
+
+/* .mx-input {
+  height: 3rem !important;
+} */
+
+.mx-datepicker-range {
+  width: 100%;
+}
+
+.mx-input-wrapper i {
+  margin-right: 10px;
+}
+.mx-input:hover {
+  @apply border-gray-300;
+}
+.mx-datepicker {
+  width: 100% !important;
+}
+.mx-datepicker input {
+  height: 3rem;
+  border-radius: 0.5rem;
+  border-color: rgb(212 212 212);
+  cursor: pointer;
+}
+
+@media (max-width: 750px) {
+  .mx-datepicker-main {
+    max-width: 92%;
+  }
+  .mx-range-wrapper {
+    flex-wrap: wrap;
+    flex-direction: row;
+  }
+  .mx-range-wrapper .mx-calendar-panel-date {
+    flex: auto;
+  }
+}
+
+.pac-item {
+  padding: 6px;
+  font-size: 14px;
+  cursor: pointer;
+
+  &:hover {
+    background-color: #ececec;
+  }
+}
+
+.pac-item-query {
+  font-size: 14px;
 }
 </style>
