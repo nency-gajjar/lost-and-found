@@ -309,7 +309,7 @@
 </template>
 
 <script>
-import { itemDescriptionOptions } from "static/defaults.js";
+// import { itemDescriptionOptions } from "static/defaults.js";
 import VueSlickCarousel from "vue-slick-carousel";
 import "vue-slick-carousel/dist/vue-slick-carousel.css";
 // optional style for arrows & dots
@@ -347,7 +347,7 @@ export default {
           },
         ],
       },
-      itemDescriptionOptions: itemDescriptionOptions,
+      itemDescriptionOptions: [],
       itemDescription: "",
       address: "",
       startDate: null,
@@ -356,6 +356,9 @@ export default {
       lat: "",
       long: "",
     };
+  },
+  mounted(){
+    this.getItemDescriptionOptions();
   },
   computed: {
     formatedStartDate() {
@@ -372,6 +375,21 @@ export default {
     },
   },
   methods: {
+    getItemDescriptionOptions() {
+      this.$axios
+        .get("/viewallItemdescriptionDetails")
+        .then((response) => {
+          if (response.status === 200) {
+            let itemDescriptionResponse = response.data?.data?.Items || [];
+            this.itemDescriptionOptions = itemDescriptionResponse.map(item => {
+              return item.item_description;
+            });
+          }
+        })
+        .catch((error) => {
+          console.log(error);
+        });
+    },
     getAddress() {
       const autocomplete = new google.maps.places.Autocomplete(
         document.getElementById("autocomplete-main")

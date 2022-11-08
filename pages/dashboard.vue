@@ -450,6 +450,7 @@ export default {
         })
         .catch((err) => {
           this.isLoading = false;
+          this.$toast.error("Something went wrong! Please try again.");
           console.log(err);
         });
     },

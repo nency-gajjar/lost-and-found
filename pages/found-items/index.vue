@@ -472,7 +472,7 @@
 import DatePicker from "vue2-datepicker";
 import "vue2-datepicker/index.css";
 import moment from "moment";
-import { itemDescriptionOptions } from "../../static/defaults.js";
+// import { itemDescriptionOptions } from "../../static/defaults.js";
 import { cloneDeep } from "lodash";
 export default {
   components: { DatePicker },
@@ -485,7 +485,7 @@ export default {
       startDate: null,
       endDate: null,
       itemDescription: "",
-      itemDescriptionOptions: itemDescriptionOptions,
+      itemDescriptionOptions: [],
       address: "",
       lostItemAddress: "",
       lat: "",
@@ -636,6 +636,21 @@ export default {
       this.long = "";
       this.applyFilters();
     },
+    getItemDescriptionOptions() {
+      this.$axios
+        .get("/viewallItemdescriptionDetails")
+        .then((response) => {
+          if (response.status === 200) {
+            let itemDescriptionResponse = response.data?.data?.Items || [];
+            this.itemDescriptionOptions = itemDescriptionResponse.map(item => {
+              return item.item_description;
+            });
+          }
+        })
+        .catch((error) => {
+          console.log(error);
+        });
+    },
     // getAllLostItems() {
     //   this.isFilterApplied = false;
     //   this.isLoading = true;
@@ -658,7 +673,7 @@ export default {
     // }
   },
   mounted() {
-    console.log( this.$route.params.filteredItems);
+    this.getItemDescriptionOptions();
     if (this.$route.params?.filteredItems) {
       this.lostItems = this.$route.params?.filteredItems;
       this.cloneLostItems = this.lostItems;
@@ -672,7 +687,6 @@ export default {
         this.isFilterApplied = true;
       }
     } else {
-      console.log("no filter");
       this.applyFilters();
     }
   },

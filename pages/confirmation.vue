@@ -388,7 +388,7 @@ export default {
   created() {
     if (Object.keys(this.itemConfirmationDetails).length > 0) {
       this.itemDetails = this.itemConfirmationDetails;
-    } else {
+    } else if(this.$route.query.id){
       this.$axios
         .get("/getsinglelostitem?id=" + this.$route.query.id)
         .then((response) => {
@@ -396,7 +396,16 @@ export default {
             this.itemDetails = response.data.data.Item;
           }
         })
-        .catch((error) => console.log(error));
+        .catch((error) => {
+          console.log(error);
+        });
+    }
+    else{
+      this.$nextTick(() => {
+        this.$router.push({
+          name: "found-items",
+        });
+      });
     }
   },
   mounted() {

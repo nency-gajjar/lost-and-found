@@ -181,6 +181,12 @@ export default {
   mounted() {
     if (this.$route.query.id) {
       this.itemId = this.$route.query.id;
+    } else {
+      this.$nextTick(() => {
+        this.$router.push({
+          name: "found-items",
+        });
+      });
     }
     window.addEventListener("keydown", () => {
       this.showValidateAlert = false;
@@ -234,12 +240,14 @@ export default {
               })
               .catch((error) => {
                 console.log(error);
+                this.$toast.error("Something went wrong! Please try again.");
                 this.isLoading = false;
               });
           }
         })
         .catch((error) => {
           console.log(error);
+          this.$toast.error("Something went wrong! Please try again.");
           this.isLoading = false;
         });
     },

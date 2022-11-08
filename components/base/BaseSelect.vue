@@ -43,6 +43,9 @@
       @change="updateValue"
     >
       <option v-for="option in options" :key="option">
+        <!-- <slot name="displayoption" :option="option">
+          {{ option }}
+        </slot> -->
         {{ option }}
       </option>
     </select>

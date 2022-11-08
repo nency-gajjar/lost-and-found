@@ -152,12 +152,13 @@
                 rules="required"
                 class="block"
               >
-                  <div :class="errors.length && 'error'">
-                    <date-picker
-                      v-model="itemLostDate"
-                      formate="YYYY-MM-DD"
-                    ></date-picker>
-                  </div>
+                <div :class="errors.length && 'error'">
+                  <date-picker
+                    v-model="itemLostDate"
+                    formate="YYYY-MM-DD"
+                    placeholder="Date of Lost"
+                  ></date-picker>
+                </div>
                 <p
                   v-if="errors.length"
                   class="vee-validation-error mt-2 text-sm text-red-600"
@@ -471,6 +472,7 @@ export default {
           })
           .catch((error) => {
             this.isLoading = false;
+            this.$toast.error("Something went wrong! Please try again.");
             console.log(error);
           });
       }
@@ -502,6 +504,28 @@ export default {
 }
 .vti__input {
   border-radius: 50px;
+}
+
+.mx-input-wrapper i {
+  margin-right: 10px;
+}
+.mx-input:hover {
+  @apply border-gray-300;
+}
+.mx-datepicker {
+  width: 100% !important;
+}
+.mx-datepicker input {
+  height: 3rem;
+  border-radius: 0.5rem;
+  border-color: rgb(212 212 212);
+  cursor: pointer;
+}
+
+.error {
+  & > .mx-datepicker {
+    @apply border-red-500 border-2 ring-4 ring-red-500 ring-opacity-10 rounded-lg transition-none;
+  }
 }
 
 .pac-item {

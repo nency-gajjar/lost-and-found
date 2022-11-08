@@ -556,15 +556,11 @@
           <BaseButton
             class="flex-auto"
             :is-loading="isLoading['Approve']"
-            @click="action('Approve')"
+            @click="handleItemApprove('Approve')"
           >
             Approve
           </BaseButton>
-          <BaseButton
-            class="flex-auto"
-            :is-loading="isLoading['Reject']"
-            @click="action('Reject')"
-          >
+          <BaseButton class="flex-auto" @click="showItemRejectDialog = true">
             Reject
           </BaseButton>
         </div>
@@ -578,6 +574,62 @@
       buttonTitle="Okay"
       @close="closeDialog"
     />
+    <BaseDialog
+      :showDialog="showItemRejectDialog"
+      :icon="{ name: 'circle-info', color: 'blue', size: '3x' }"
+      :message="dialogMessage"
+      title="Please enter Rejection reason"
+      :showClose="false"
+    >
+      <template v-slot:input>
+        <ValidationObserver v-slot="{ validate }" ref="observer">
+          <form @submit.prevent="validate().then(onSubmit)">
+            <ValidationProvider
+              v-slot="{ errors }"
+              rules="required"
+              class="block"
+            >
+              <textarea
+                v-model="rejectReson"
+                placeholder="Reject Reason"
+                class="
+                  border
+                  inline-block
+                  border-gray-300
+                  w-full
+                  rounded-lg
+                  px-4
+                  h-full
+                  text-sm
+                  pt-4
+                  pb-2
+                  transition-shadow
+                  text-gray-800
+                "
+                :class="errors.length > 0 && 'error'"
+              ></textarea>
+
+              <p
+                v-if="errors.length"
+                class="vee-validation-error mt-2 text-sm text-left text-red-600"
+              >
+                {{ errors[0] }}
+              </p>
+            </ValidationProvider>
+          </form>
+        </ValidationObserver>
+      </template>
+      <template v-slot:action>
+        <BaseButton
+          @click="handleItemReject()"
+          :is-loading="isLoading['Reject']"
+          type="submit"
+          class="w-full"
+        >
+          Submit
+        </BaseButton>
+      </template>
+    </BaseDialog>
   </div>
   <div v-else>
     <BaseLoader />
@@ -589,8 +641,10 @@ export default {
   data() {
     return {
       showDialog: false,
+      showItemRejectDialog: false,
       dialogTitle: "",
       dialogMessage: "",
+      rejectReson: "",
       isLoading: {
         Approve: false,
         Reject: false,
@@ -619,41 +673,69 @@ export default {
           this.isLoadingItemDetails = false;
           console.log(error);
         });
+    } else {
+      this.$nextTick(() => {
+        this.$router.push({
+          name: "found-items",
+        });
+      });
     }
   },
   methods: {
-    action(type) {
-      this.isLoading[type] = true;
-      let params = {
+    async handleItemApprove(type) {
+      await this.handleUpdateLostItem("Approve");
+    },
+    async handleItemReject() {
+      const isValid = await this.$refs.observer.validate();
+      if (!isValid) {
+        this.isLoading["Reject"] = false;
+      } else {
+        await this.handleUpdateLostItem("Reject");
+      }
+    },
+    handleUpdateLostItem(type) {
+      const params = {
         sender_approval: type === "Approve" ? true : false,
         receiver_name: this.claimDetails.claimpersonitemname,
         receiver_email: this.claimDetails.claimpersonemail,
         receiver_mobile_no: this.claimDetails.claimpersonmobileno,
       };
+      this.isLoading[type] = true;
       this.$axios
         .post("/updatesinglelostitem?id=" + this.itemId, params)
         .then((response) => {
           if (response.status === 200) {
-            if (type === "Approve") {
-              this.dialogTitle = "Claim request approved successfully!";
-              this.dialogMessage =
-                "Claim request has been approved successfully. Item owner will be notified via email for their claim request approval. Post that, the owner will have to select the Item Delivery to proceed further.";
-            } else {
-              this.dialogTitle = "Claim request rejected successfully!";
-              this.dialogMessage =
-                "Claim request has been rejected successfully. Item owner will be notified via email for their claim request rejection along with the rejection reason.";
+            if (type === "Reject") {
+              this.showItemRejectDialog = false;
             }
+            this.setDialogBody(type);
             this.showDialog = true;
             this.isLoading[type] = false;
           }
         })
         .catch((error) => {
           console.log(error);
+          this.$toast.error("Something went wrong! Please try again.");
           this.isLoading[type] = false;
         });
     },
+
+    setDialogBody(type) {
+      if (type === "Approve") {
+        this.dialogTitle = "Claim request approved successfully!";
+        this.dialogMessage =
+          "Claim request has been approved successfully. Item owner will be notified via email for their claim request approval. Post that, the owner will have to select the Item Delivery to proceed further.";
+      } else if (type === "Reject") {
+        this.dialogTitle = "Claim request rejected successfully!";
+        this.dialogMessage =
+          "Claim request has been rejected successfully. Item owner will be notified via email for their claim request rejection along with the rejection reason.";
+      }
+    },
     closeDialog() {
       this.showDialog = false;
+      this.dialogTitle = "";
+      this.dialogMessage = "";
+      this.rejectReson = "";
       this.$nextTick(() => {
         this.$router.push({ path: "/found-items" });
       });
@@ -679,5 +761,8 @@ export default {
   .text-gray-600 {
     @apply pr-2;
   }
+}
+textarea.error {
+  @apply border-red-500 border-2 ring-4 ring-red-500 ring-opacity-10 transition-none;
 }
 </style>

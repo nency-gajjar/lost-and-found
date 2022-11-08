@@ -701,21 +701,17 @@
           <BaseButton
             :is-loading="isLoading['Approve']"
             class="flex-1"
-            @click="action('Approve')"
+            @click="handleItemApprove('Approve')"
           >
             Approve
           </BaseButton>
-          <BaseButton
-            :is-loading="isLoading['Deny']"
-            class="flex-1"
-            @click="action('Deny')"
-          >
+          <BaseButton class="flex-1" @click="showItemRejectDialog = true">
             Reject
           </BaseButton>
           <BaseButton
             :is-loading="isLoading['Approve without Image']"
             class="flex-auto"
-            @click="action('Approve without Image')"
+            @click="handleItemApprove('Approve without Image')"
           >
             Approve without Image
           </BaseButton>
@@ -758,6 +754,70 @@
         </div>
       </section>
     </div>
+    <BaseDialog
+      :showDialog="showDialog"
+      :icon="{ name: 'circle-check', color: 'green', size: '3x' }"
+      :message="dialogMessage"
+      :title="dialogTitle"
+      buttonTitle="Okay"
+      @close="closeDialog"
+    />
+    <BaseDialog
+      :showDialog="showItemRejectDialog"
+      :icon="{ name: 'circle-info', color: 'blue', size: '3x' }"
+      :message="dialogMessage"
+      title="Please enter Rejection reason"
+      :showClose="false"
+    >
+      <template v-slot:input>
+        <ValidationObserver v-slot="{ validate }" ref="observer">
+          <form @submit.prevent="validate().then(onSubmit)">
+            <ValidationProvider
+              v-slot="{ errors }"
+              rules="required"
+              class="block"
+            >
+              <textarea
+                v-model="rejectReson"
+                placeholder="Reject Reason"
+                class="
+                  border
+                  inline-block
+                  border-gray-300
+                  w-full
+                  rounded-lg
+                  px-4
+                  h-full
+                  text-sm
+                  pt-4
+                  pb-2
+                  transition-shadow
+                  text-gray-800
+                "
+                :class="errors.length > 0 && 'error'"
+              ></textarea>
+
+              <p
+                v-if="errors.length"
+                class="vee-validation-error mt-2 text-sm text-left text-red-600"
+              >
+                {{ errors[0] }}
+              </p>
+            </ValidationProvider>
+          </form>
+        </ValidationObserver>
+      </template>
+      <template v-slot:action>
+        <BaseButton
+          @click="handleItemReject()"
+          :is-loading="isLoading['Deny']"
+          type="submit"
+          class="w-full"
+        >
+          Submit
+        </BaseButton>
+      </template>
+    </BaseDialog>
   </div>
 </template>
   
@@ -767,7 +827,11 @@ import VueCropper from "vue-cropperjs";
 import "cropperjs/dist/cropper.css";
 
 export default {
-  middleware: ["auth-admin"],
+  middleware({ $auth, redirect }) {
+    if (!$auth.loggedIn) {
+      return redirect("/login");
+    }
+  },
   components: {
     RedactImage,
     VueCropper,
@@ -796,6 +860,11 @@ export default {
       loadingSpinner: false,
       imageRecognitionData: [],
       imageKey: "",
+      showDialog: false,
+      showItemRejectDialog: false,
+      dialogTitle: "",
+      dialogMessage: "",
+      rejectReson: "",
     };
   },
   computed: {
@@ -816,7 +885,16 @@ export default {
             this.image = this.responseData.image;
           }
         })
-        .catch((error) => console.log(error));
+        .catch((error) => {
+          this.$toast.error("Something went wrong! Please try again.");
+          console.log(error);
+        });
+    } else {
+      this.$nextTick(() => {
+        this.$router.push({
+          name: "found-items",
+        });
+      });
     }
   },
   methods: {
@@ -850,11 +928,17 @@ export default {
       this.showDraw = false;
       this.imgPreview = true;
     },
-    editImage() {
+    async editImage() {
       this.showEditor = false;
       if (this.image) {
-        this.imgSrc = this.image;
-        this.showEditor = true;
+        const data = await fetch(this.image, { cache: "no-cache" });
+        const blob = await data.blob();
+        let reader = new FileReader();
+        reader.onloadend = () => {
+          this.imgSrc = reader.result;
+          this.showEditor = true;
+        };
+        reader.readAsDataURL(blob);
       } else {
         this.showEditor = false;
       }
@@ -911,32 +995,74 @@ export default {
         ? itemDetails.manualAddress
         : itemDetails.address;
     },
-    action(type) {
+    async handleItemApprove(type) {
       this.isLoading[type] = true;
       let params = {};
       if (this.itemDetails.image && type === "Approve" && this.isImageEdited) {
         params.image = this.image;
       }
       params.is_default = type;
+      await this.handleUpdateLostItem(params, type);
+    },
+    async handleItemReject() {
+      const isValid = await this.$refs.observer.validate();
+      if (!isValid) {
+        this.isLoading["Deny"] = false;
+      } else {
+        const params = {
+          is_default: "Deny",
+        };
+        await this.handleUpdateLostItem(params, "Deny");
+      }
+    },
+    handleUpdateLostItem(params, type) {
       if (this.itemDetails.id) {
+        this.isLoading[type] = true;
         this.$axios
-          .post("/updatesinglelostitem?id=" + this.itemDetails.id, params, {
-            responseType: "arraybuffer",
-            headers: {
-              "Content-Type": "application/json",
-              Accept: "application/pdf",
-            },
-          })
+          .post("/updatesinglelostitem?id=" + this.itemDetails.id, params)
           .then((response) => {
             if (response.status === 200) {
+              if (type === "Deny") {
+                this.showItemRejectDialog = false;
+              }
+              this.setDialogBody(type);
+              this.showDialog = true;
               this.isLoading[type] = false;
+              this.$nextTick(() => {
+                this.$router.push({ path: "/dashboard" });
+              });
             }
           })
           .catch((error) => {
             console.log(error);
+            this.$toast.error("Something went wrong! Please try again.");
             this.isLoading[type] = false;
           });
       }
+    },
+    setDialogBody(type) {
+      if (type === "Approve") {
+        this.dialogTitle = "Item approved successfully!";
+        this.dialogMessage =
+          "Item is approved & listed successfully. User who uploaded this item will be notified with the status.";
+      } else if (type === "Deny") {
+        this.dialogTitle = "Item rejected successfully!";
+        this.dialogMessage =
+          "Item is rejected & will not be listed. User who uploaded this item will be notified with the rejection reason.";
+      } else if (type === "Approve without Image") {
+        this.dialogTitle = "Item approved without Image successfully!";
+        this.dialogMessage =
+          "Item is approved without Image & listed accordingly. User who uploaded this item will be notified with the status.";
+      }
+    },
+    closeDialog() {
+      this.showDialog = false;
+      this.dialogTitle = "";
+      this.dialogMessage = "";
+      this.rejectReson = "";
+      this.$nextTick(() => {
+        this.$router.push({ path: "/found-items" });
+      });
     },
   },
 };
@@ -1062,5 +1188,8 @@ canvas {
       height: 100% !important;
     }
   }
+}
+textarea.error {
+  @apply border-red-500 border-2 ring-4 ring-red-500 ring-opacity-10 transition-none;
 }
 </style>
