@@ -304,6 +304,7 @@ export default {
     },
     items: [],
     isLoading: false,
+    originalItemsLength: null,
   }),
   methods: {
     getItemDescriptionOptions() {
@@ -318,6 +319,7 @@ export default {
                 weight_ounces: String(item.weight_ounces)
               }
             })
+            this.originalItemsLength = this.items.length;
           }
         })
         .catch((error) => {
@@ -354,17 +356,16 @@ export default {
         })
     },
     async addNewItem() {
-      console.log(this.item);
       const isValid = await this.$refs.observer.validate();
       if (isValid) {
         let itemObject = {
-          itemDescription: this.itemDescription,
-          packageType: this.packageType,
-          weightPounds: this.weightPounds,
-          weightOunces: this.weightOunces,
-          itemLength: this.itemLength,
-          itemWidth: this.itemWidth,
-          itemHeight: this.itemHeight,
+          item_description: "",
+          package_type: "",
+          weight_pounds: "",
+          weight_ounces: "",
+          item_length: "",
+          item_width: "",
+          item_height: "",
         };
         this.items.push(itemObject);
       } else {
@@ -372,10 +373,23 @@ export default {
       }
     },
     async onSave() {
-      console.log(this.item);
+      let itemsToSave = [...this.items];
+      itemsToSave.splice(0, this.originalItemsLength);
       const isValid = await this.$refs.observer.validate();
       if (isValid) {
-        console.log("valid");
+        // console.log("valid");
+        this.$axios
+          .post("/storeItemdescriptionDetails", itemsToSave, { 
+            headers: {
+              Authorization: localStorage.getItem("auth._token.local")
+            }})
+          .then(res => {
+            console.log(res);
+            this.getItemDescriptionOptions();
+          })
+          .catch(err => {
+            console.log(err);
+          })
       } else {
         console.log("invalid");
       }
