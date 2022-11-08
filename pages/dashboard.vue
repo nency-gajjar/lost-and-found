@@ -378,7 +378,9 @@
           </div>
         </div>
       </div>
-      <div v-else-if="!isLoading && lostItems.length === 0">No Data</div>
+      <div v-else-if="!isLoading && lostItems.length === 0">
+        No Result Found
+      </div>
       <div v-else>
         <BaseLoader />
       </div>

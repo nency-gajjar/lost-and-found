@@ -42,10 +42,11 @@
       @input="$emit('input', $event.target.value)"
       @change="updateValue"
     >
-      <option v-for="option in options" :key="option.id">
-        <slot name="displayoption" :option="option">
+      <option v-for="option in options" :key="option">
+        <!-- <slot name="displayoption" :option="option">
           {{ option }}
-        </slot>
+        </slot> -->
+        {{ option }}
       </option>
     </select>
   </label>

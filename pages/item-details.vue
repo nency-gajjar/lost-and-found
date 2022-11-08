@@ -896,11 +896,10 @@
                   label="Item Description"
                   :class="errors.length > 0 && 'error'"
                   @input="setItemDetails"
-                >
-                  <template v-slot:displayoption="{ option }">
+                />
+                  <!-- <template v-slot:displayoption="{ option }">
                     {{ option.item_description }}
-                  </template>
-                </BaseSelect>
+                  </template> -->
                 <p
                   v-if="errors.length"
                   class="vee-validation-error mt-2 text-sm text-red-600"
@@ -1205,6 +1204,7 @@ export default {
     venueManually: false,
     itemDescription: "",
     itemDescriptionOptions: [],
+    itemDescriptionResponse: [],
     packageType: "",
     packageTypeOptions: ["Box", "Envelope"],
     weight: "",
@@ -1295,7 +1295,10 @@ export default {
         .get("/viewallItemdescriptionDetails")
         .then((response) => {
           if (response.status === 200) {
-            this.itemDescriptionOptions = response.data?.data?.Items || [];
+            this.itemDescriptionResponse = response.data?.data?.Items || [];
+            this.itemDescriptionOptions = this.itemDescriptionResponse.map(item => {
+              return item.item_description;
+            });
           }
         })
         .catch((error) => {
@@ -1324,6 +1327,7 @@ export default {
         }
         let obj = {};
         this.autoCompleteAddress.address = this.addressArr[0];
+        this.address = this.addressArr[0];
         obj.address = this.addressArr[0];
         this.autoCompleteAddress.phoneNo =
           address.international_phone_number || address.formatted_phone_number;
@@ -1420,360 +1424,371 @@ export default {
       return countryCode + " " + arr.join("");
     },
     setItemDetails(value) {
-      switch (value) {
-        case "Laptop":
-          this.packageType = "Box";
-          this.itemLength = "18";
-          this.itemWidth = "12";
-          this.itemHeight = "6";
-          this.weight = "6";
-          this.weightOunces = "0";
-          break;
-        case "Tablet":
-          this.packageType = "Box";
-          this.itemLength = "12";
-          this.itemWidth = "10";
-          this.itemHeight = "6";
-          this.weight = "2";
-          this.weightOunces = "0";
-          break;
-        case "Cell phone":
-          this.packageType = "Box";
-          this.itemLength = "9";
-          this.itemWidth = "6";
-          this.itemHeight = "2";
-          this.weight = "1";
-          this.weightOunces = "0";
-          break;
-        case "Mobile Phone":
-          this.packageType = "Box";
-          this.itemLength = "9";
-          this.itemWidth = "6";
-          this.itemHeight = "2";
-          this.weight = "1";
-          this.weightOunces = "0";
-          break;
-        case "Pillow":
-          this.packageType = "Box";
-          this.itemLength = "20";
-          this.itemWidth = "12";
-          this.itemHeight = "6";
-          this.weight = "3";
-          this.weightOunces = "0";
-          break;
-        case "Shoes":
-          this.packageType = "Box";
-          this.itemLength = "14";
-          this.itemWidth = "12";
-          this.itemHeight = "7";
-          this.weight = "3";
-          this.weightOunces = "0";
-          break;
-        case "Slipper":
-          this.packageType = "Box";
-          this.itemLength = "13";
-          this.itemWidth = "8";
-          this.itemHeight = "2";
-          this.weight = "1";
-          this.weightOunces = "0";
-          break;
-        case "Socks":
-          this.packageType = "Box";
-          this.itemLength = "8";
-          this.itemWidth = "6";
-          this.itemHeight = "4";
-          this.weight = "1";
-          this.weightOunces = "0";
-          break;
-        case "Headphone":
-          this.packageType = "Box";
-          this.itemLength = "12";
-          this.itemWidth = "12";
-          this.itemHeight = "4";
-          this.weight = "2";
-          this.weightOunces = "0";
-          break;
-        case "Earphone":
-          this.packageType = "Box";
-          this.itemLength = "6";
-          this.itemWidth = "6";
-          this.itemHeight = "2";
-          this.weight = "1";
-          this.weightOunces = "0";
-          break;
-        case "Wristwatch":
-          this.packageType = "Box";
-          this.itemLength = "6";
-          this.itemWidth = "6";
-          this.itemHeight = "2";
-          this.weight = "1";
-          this.weightOunces = "0";
-          break;
-        case "ID":
-          this.packageType = "Box";
-          this.itemLength = "6";
-          this.itemWidth = "6";
-          this.itemHeight = "2";
-          this.weight = "1";
-          this.weightOunces = "0";
-          break;
-        case "Credit Card":
-          this.packageType = "Box";
-          this.itemLength = "6";
-          this.itemWidth = "6";
-          this.itemHeight = "2";
-          this.weight = "1";
-          this.weightOunces = "0";
-          break;
-        case "Passport":
-          this.packageType = "Box";
-          this.itemLength = "6";
-          this.itemWidth = "6";
-          this.itemHeight = "2";
-          this.weight = "1";
-          this.weightOunces = "0";
-          break;
-        case "Phone charger":
-          this.packageType = "Box";
-          this.itemLength = "6";
-          this.itemWidth = "6";
-          this.itemHeight = "6";
-          this.weight = "1";
-          this.weightOunces = "0";
-          break;
-        case "Charger for Laptop":
-          this.packageType = "Box";
-          this.itemLength = "8";
-          this.itemWidth = "8";
-          this.itemHeight = "6";
-          this.weight = "2";
-          this.weightOunces = "0";
-          break;
-        case "Blanket":
-          this.packageType = "Box";
-          this.itemLength = "20";
-          this.itemWidth = "12";
-          this.itemHeight = "6";
-          this.weight = "3";
-          this.weightOunces = "0";
-          break;
-        case "Shirt":
-          this.packageType = "Box";
-          this.itemLength = "12";
-          this.itemWidth = "10";
-          this.itemHeight = "6";
-          this.weight = "2";
-          this.weightOunces = "0";
-          break;
-        case "Pant":
-          this.packageType = "Box";
-          this.itemLength = "12";
-          this.itemWidth = "10";
-          this.itemHeight = "6";
-          this.weight = "2";
-          this.weightOunces = "0";
-          break;
-        case "T-shirt":
-          this.packageType = "Box";
-          this.itemLength = "12";
-          this.itemWidth = "10";
-          this.itemHeight = "6";
-          this.weight = "2";
-          this.weightOunces = "0";
-          break;
-        case "Clothes":
-          this.packageType = "Box";
-          this.itemLength = "12";
-          this.itemWidth = "10";
-          this.itemHeight = "6";
-          this.weight = "2";
-          this.weightOunces = "0";
-          break;
-        case "Jacket":
-          this.packageType = "Box";
-          this.itemLength = "18";
-          this.itemWidth = "12";
-          this.itemHeight = "6";
-          this.weight = "3";
-          this.weightOunces = "0";
-          break;
-        case "Suit":
-          this.packageType = "Box";
-          this.itemLength = "15";
-          this.itemWidth = "12";
-          this.itemHeight = "7";
-          this.weight = "4";
-          this.weightOunces = "0";
-          break;
-        case "Water bottle":
-          this.packageType = "Box";
-          this.itemLength = "13";
-          this.itemWidth = "10";
-          this.itemHeight = "5";
-          this.weight = "2";
-          this.weightOunces = "0";
-          break;
-        case "Stuffed toy":
-          this.packageType = "Box";
-          this.itemLength = "12";
-          this.itemWidth = "10";
-          this.itemHeight = "6";
-          this.weight = "2";
-          this.weightOunces = "0";
-          break;
-        case "Bed sheet":
-          this.packageType = "Box";
-          this.itemLength = "12";
-          this.itemWidth = "12";
-          this.itemHeight = "4";
-          this.weight = "4";
-          this.weightOunces = "0";
-          break;
-        case "Towel":
-          this.packageType = "Box";
-          this.itemLength = "15";
-          this.itemWidth = "12";
-          this.itemHeight = "3";
-          this.weight = "2";
-          this.weightOunces = "0";
-          break;
-        case "Tool box":
-          this.packageType = "Box";
-          this.itemLength = "15";
-          this.itemWidth = "12";
-          this.itemHeight = "10";
-          this.weight = "10";
-          this.weightOunces = "0";
-          break;
-        case "Box - Shoe size":
-          this.packageType = "Box";
-          this.itemLength = "13";
-          this.itemWidth = "12";
-          this.itemHeight = "6";
-          this.weight = "5";
-          this.weightOunces = "0";
-          break;
-        case "Small Box":
-          this.packageType = "Box";
-          this.itemLength = "15";
-          this.itemWidth = "12";
-          this.itemHeight = "12";
-          this.weight = "10";
-          this.weightOunces = "0";
-          break;
-        case "Medium Box":
-          this.packageType = "Box";
-          this.itemLength = "18";
-          this.itemWidth = "18";
-          this.itemHeight = "16";
-          this.weight = "20";
-          this.weightOunces = "0";
-          break;
-        case "Large Box":
-          this.packageType = "Box";
-          this.itemLength = "18";
-          this.itemWidth = "18";
-          this.itemHeight = "24";
-          this.weight = "30";
-          this.weightOunces = "0";
-          break;
-        case "Bagpack - Carry on":
-          this.packageType = "Box";
-          this.itemLength = "17";
-          this.itemWidth = "10";
-          this.itemHeight = "9";
-          this.weight = "10";
-          this.weightOunces = "0";
-          break;
-        case "Luggage - Carry on":
-          this.packageType = "Box";
-          this.itemLength = "22";
-          this.itemWidth = "14";
-          this.itemHeight = "9";
-          this.weight = "17";
-          this.weightOunces = "0";
-          break;
-        case "Luggage - Check in size":
-          this.packageType = "Box";
-          this.itemLength = "30";
-          this.itemWidth = "18";
-          this.itemHeight = "14";
-          this.weight = "46";
-          this.weightOunces = "0";
-          break;
-        case "Documents":
-          this.packageType = "Box";
-          this.itemLength = "13";
-          this.itemWidth = "10";
-          this.itemHeight = "1";
-          this.weight = "1";
-          this.weightOunces = "0";
-          break;
-        case "Keys":
-          this.packageType = "Box";
-          this.itemLength = "6";
-          this.itemWidth = "6";
-          this.itemHeight = "2";
-          this.weight = "1";
-          this.weightOunces = "0";
-          break;
-        case "Purse":
-          this.packageType = "Box";
-          this.itemLength = "15";
-          this.itemWidth = "11";
-          this.itemHeight = "7";
-          this.weight = "7";
-          this.weightOunces = "0";
-          break;
-        case "Wallet":
-          this.packageType = "Box";
-          this.itemLength = "6";
-          this.itemWidth = "6";
-          this.itemHeight = "2";
-          this.weight = "1";
-          this.weightOunces = "0";
-          break;
-        case "Medication Pills":
-          this.packageType = "Box";
-          this.itemLength = "6";
-          this.itemWidth = "6";
-          this.itemHeight = "6";
-          this.weight = "1";
-          this.weightOunces = "0";
-          break;
-        case "Folder":
-          this.packageType = "Box";
-          this.itemLength = "13";
-          this.itemWidth = "10";
-          this.itemHeight = "1";
-          this.weight = "1";
-          this.weightOunces = "0";
-          break;
-        case "Jewelery":
-          this.packageType = "Box";
-          this.itemLength = "6";
-          this.itemWidth = "6";
-          this.itemHeight = "2";
-          this.weight = "1";
-          this.weightOunces = "0";
-          break;
-        case "Thermos":
-          this.packageType = "Box";
-          this.itemLength = "12";
-          this.itemWidth = "10";
-          this.itemHeight = "6";
-          this.weight = "5";
-          this.weightOunces = "0";
-          break;
-        case "Other":
-          this.packageType = "";
-          this.itemLength = "";
-          this.itemWidth = "";
-          this.itemHeight = "";
-          this.weight = "";
-          this.weightOunces = "";
-          break;
+      let index = this.itemDescriptionResponse.findIndex(item => {
+        return item.item_description === value;
+      });
+      if(index != -1){
+        this.packageType = this.itemDescriptionResponse[index].package_type;
+        this.itemLength = this.itemDescriptionResponse[index].item_length;
+        this.itemWidth = this.itemDescriptionResponse[index].item_width;
+        this.itemHeight = this.itemDescriptionResponse[index].item_height;
+        this.weight = this.itemDescriptionResponse[index].weight_pounds;
+        this.weightOunces = String(this.itemDescriptionResponse[index].weight_ounces);
       }
+      // switch (value) {
+      //   case "Laptop":
+      //     this.packageType = "Box";
+      //     this.itemLength = "18";
+      //     this.itemWidth = "12";
+      //     this.itemHeight = "6";
+      //     this.weight = "6";
+      //     this.weightOunces = "0";
+      //     break;
+      //   case "Tablet":
+      //     this.packageType = "Box";
+      //     this.itemLength = "12";
+      //     this.itemWidth = "10";
+      //     this.itemHeight = "6";
+      //     this.weight = "2";
+      //     this.weightOunces = "0";
+      //     break;
+      //   case "Cell phone":
+      //     this.packageType = "Box";
+      //     this.itemLength = "9";
+      //     this.itemWidth = "6";
+      //     this.itemHeight = "2";
+      //     this.weight = "1";
+      //     this.weightOunces = "0";
+      //     break;
+      //   case "Mobile Phone":
+      //     this.packageType = "Box";
+      //     this.itemLength = "9";
+      //     this.itemWidth = "6";
+      //     this.itemHeight = "2";
+      //     this.weight = "1";
+      //     this.weightOunces = "0";
+      //     break;
+      //   case "Pillow":
+      //     this.packageType = "Box";
+      //     this.itemLength = "20";
+      //     this.itemWidth = "12";
+      //     this.itemHeight = "6";
+      //     this.weight = "3";
+      //     this.weightOunces = "0";
+      //     break;
+      //   case "Shoes":
+      //     this.packageType = "Box";
+      //     this.itemLength = "14";
+      //     this.itemWidth = "12";
+      //     this.itemHeight = "7";
+      //     this.weight = "3";
+      //     this.weightOunces = "0";
+      //     break;
+      //   case "Slipper":
+      //     this.packageType = "Box";
+      //     this.itemLength = "13";
+      //     this.itemWidth = "8";
+      //     this.itemHeight = "2";
+      //     this.weight = "1";
+      //     this.weightOunces = "0";
+      //     break;
+      //   case "Socks":
+      //     this.packageType = "Box";
+      //     this.itemLength = "8";
+      //     this.itemWidth = "6";
+      //     this.itemHeight = "4";
+      //     this.weight = "1";
+      //     this.weightOunces = "0";
+      //     break;
+      //   case "Headphone":
+      //     this.packageType = "Box";
+      //     this.itemLength = "12";
+      //     this.itemWidth = "12";
+      //     this.itemHeight = "4";
+      //     this.weight = "2";
+      //     this.weightOunces = "0";
+      //     break;
+      //   case "Earphone":
+      //     this.packageType = "Box";
+      //     this.itemLength = "6";
+      //     this.itemWidth = "6";
+      //     this.itemHeight = "2";
+      //     this.weight = "1";
+      //     this.weightOunces = "0";
+      //     break;
+      //   case "Wristwatch":
+      //     this.packageType = "Box";
+      //     this.itemLength = "6";
+      //     this.itemWidth = "6";
+      //     this.itemHeight = "2";
+      //     this.weight = "1";
+      //     this.weightOunces = "0";
+      //     break;
+      //   case "ID":
+      //     this.packageType = "Box";
+      //     this.itemLength = "6";
+      //     this.itemWidth = "6";
+      //     this.itemHeight = "2";
+      //     this.weight = "1";
+      //     this.weightOunces = "0";
+      //     break;
+      //   case "Credit Card":
+      //     this.packageType = "Box";
+      //     this.itemLength = "6";
+      //     this.itemWidth = "6";
+      //     this.itemHeight = "2";
+      //     this.weight = "1";
+      //     this.weightOunces = "0";
+      //     break;
+      //   case "Passport":
+      //     this.packageType = "Box";
+      //     this.itemLength = "6";
+      //     this.itemWidth = "6";
+      //     this.itemHeight = "2";
+      //     this.weight = "1";
+      //     this.weightOunces = "0";
+      //     break;
+      //   case "Phone charger":
+      //     this.packageType = "Box";
+      //     this.itemLength = "6";
+      //     this.itemWidth = "6";
+      //     this.itemHeight = "6";
+      //     this.weight = "1";
+      //     this.weightOunces = "0";
+      //     break;
+      //   case "Charger for Laptop":
+      //     this.packageType = "Box";
+      //     this.itemLength = "8";
+      //     this.itemWidth = "8";
+      //     this.itemHeight = "6";
+      //     this.weight = "2";
+      //     this.weightOunces = "0";
+      //     break;
+      //   case "Blanket":
+      //     this.packageType = "Box";
+      //     this.itemLength = "20";
+      //     this.itemWidth = "12";
+      //     this.itemHeight = "6";
+      //     this.weight = "3";
+      //     this.weightOunces = "0";
+      //     break;
+      //   case "Shirt":
+      //     this.packageType = "Box";
+      //     this.itemLength = "12";
+      //     this.itemWidth = "10";
+      //     this.itemHeight = "6";
+      //     this.weight = "2";
+      //     this.weightOunces = "0";
+      //     break;
+      //   case "Pant":
+      //     this.packageType = "Box";
+      //     this.itemLength = "12";
+      //     this.itemWidth = "10";
+      //     this.itemHeight = "6";
+      //     this.weight = "2";
+      //     this.weightOunces = "0";
+      //     break;
+      //   case "T-shirt":
+      //     this.packageType = "Box";
+      //     this.itemLength = "12";
+      //     this.itemWidth = "10";
+      //     this.itemHeight = "6";
+      //     this.weight = "2";
+      //     this.weightOunces = "0";
+      //     break;
+      //   case "Clothes":
+      //     this.packageType = "Box";
+      //     this.itemLength = "12";
+      //     this.itemWidth = "10";
+      //     this.itemHeight = "6";
+      //     this.weight = "2";
+      //     this.weightOunces = "0";
+      //     break;
+      //   case "Jacket":
+      //     this.packageType = "Box";
+      //     this.itemLength = "18";
+      //     this.itemWidth = "12";
+      //     this.itemHeight = "6";
+      //     this.weight = "3";
+      //     this.weightOunces = "0";
+      //     break;
+      //   case "Suit":
+      //     this.packageType = "Box";
+      //     this.itemLength = "15";
+      //     this.itemWidth = "12";
+      //     this.itemHeight = "7";
+      //     this.weight = "4";
+      //     this.weightOunces = "0";
+      //     break;
+      //   case "Water bottle":
+      //     this.packageType = "Box";
+      //     this.itemLength = "13";
+      //     this.itemWidth = "10";
+      //     this.itemHeight = "5";
+      //     this.weight = "2";
+      //     this.weightOunces = "0";
+      //     break;
+      //   case "Stuffed toy":
+      //     this.packageType = "Box";
+      //     this.itemLength = "12";
+      //     this.itemWidth = "10";
+      //     this.itemHeight = "6";
+      //     this.weight = "2";
+      //     this.weightOunces = "0";
+      //     break;
+      //   case "Bed sheet":
+      //     this.packageType = "Box";
+      //     this.itemLength = "12";
+      //     this.itemWidth = "12";
+      //     this.itemHeight = "4";
+      //     this.weight = "4";
+      //     this.weightOunces = "0";
+      //     break;
+      //   case "Towel":
+      //     this.packageType = "Box";
+      //     this.itemLength = "15";
+      //     this.itemWidth = "12";
+      //     this.itemHeight = "3";
+      //     this.weight = "2";
+      //     this.weightOunces = "0";
+      //     break;
+      //   case "Tool box":
+      //     this.packageType = "Box";
+      //     this.itemLength = "15";
+      //     this.itemWidth = "12";
+      //     this.itemHeight = "10";
+      //     this.weight = "10";
+      //     this.weightOunces = "0";
+      //     break;
+      //   case "Box - Shoe size":
+      //     this.packageType = "Box";
+      //     this.itemLength = "13";
+      //     this.itemWidth = "12";
+      //     this.itemHeight = "6";
+      //     this.weight = "5";
+      //     this.weightOunces = "0";
+      //     break;
+      //   case "Small Box":
+      //     this.packageType = "Box";
+      //     this.itemLength = "15";
+      //     this.itemWidth = "12";
+      //     this.itemHeight = "12";
+      //     this.weight = "10";
+      //     this.weightOunces = "0";
+      //     break;
+      //   case "Medium Box":
+      //     this.packageType = "Box";
+      //     this.itemLength = "18";
+      //     this.itemWidth = "18";
+      //     this.itemHeight = "16";
+      //     this.weight = "20";
+      //     this.weightOunces = "0";
+      //     break;
+      //   case "Large Box":
+      //     this.packageType = "Box";
+      //     this.itemLength = "18";
+      //     this.itemWidth = "18";
+      //     this.itemHeight = "24";
+      //     this.weight = "30";
+      //     this.weightOunces = "0";
+      //     break;
+      //   case "Bagpack - Carry on":
+      //     this.packageType = "Box";
+      //     this.itemLength = "17";
+      //     this.itemWidth = "10";
+      //     this.itemHeight = "9";
+      //     this.weight = "10";
+      //     this.weightOunces = "0";
+      //     break;
+      //   case "Luggage - Carry on":
+      //     this.packageType = "Box";
+      //     this.itemLength = "22";
+      //     this.itemWidth = "14";
+      //     this.itemHeight = "9";
+      //     this.weight = "17";
+      //     this.weightOunces = "0";
+      //     break;
+      //   case "Luggage - Check in size":
+      //     this.packageType = "Box";
+      //     this.itemLength = "30";
+      //     this.itemWidth = "18";
+      //     this.itemHeight = "14";
+      //     this.weight = "46";
+      //     this.weightOunces = "0";
+      //     break;
+      //   case "Documents":
+      //     this.packageType = "Box";
+      //     this.itemLength = "13";
+      //     this.itemWidth = "10";
+      //     this.itemHeight = "1";
+      //     this.weight = "1";
+      //     this.weightOunces = "0";
+      //     break;
+      //   case "Keys":
+      //     this.packageType = "Box";
+      //     this.itemLength = "6";
+      //     this.itemWidth = "6";
+      //     this.itemHeight = "2";
+      //     this.weight = "1";
+      //     this.weightOunces = "0";
+      //     break;
+      //   case "Purse":
+      //     this.packageType = "Box";
+      //     this.itemLength = "15";
+      //     this.itemWidth = "11";
+      //     this.itemHeight = "7";
+      //     this.weight = "7";
+      //     this.weightOunces = "0";
+      //     break;
+      //   case "Wallet":
+      //     this.packageType = "Box";
+      //     this.itemLength = "6";
+      //     this.itemWidth = "6";
+      //     this.itemHeight = "2";
+      //     this.weight = "1";
+      //     this.weightOunces = "0";
+      //     break;
+      //   case "Medication Pills":
+      //     this.packageType = "Box";
+      //     this.itemLength = "6";
+      //     this.itemWidth = "6";
+      //     this.itemHeight = "6";
+      //     this.weight = "1";
+      //     this.weightOunces = "0";
+      //     break;
+      //   case "Folder":
+      //     this.packageType = "Box";
+      //     this.itemLength = "13";
+      //     this.itemWidth = "10";
+      //     this.itemHeight = "1";
+      //     this.weight = "1";
+      //     this.weightOunces = "0";
+      //     break;
+      //   case "Jewelery":
+      //     this.packageType = "Box";
+      //     this.itemLength = "6";
+      //     this.itemWidth = "6";
+      //     this.itemHeight = "2";
+      //     this.weight = "1";
+      //     this.weightOunces = "0";
+      //     break;
+      //   case "Thermos":
+      //     this.packageType = "Box";
+      //     this.itemLength = "12";
+      //     this.itemWidth = "10";
+      //     this.itemHeight = "6";
+      //     this.weight = "5";
+      //     this.weightOunces = "0";
+      //     break;
+      //   case "Other":
+      //     this.packageType = "";
+      //     this.itemLength = "";
+      //     this.itemWidth = "";
+      //     this.itemHeight = "";
+      //     this.weight = "";
+      //     this.weightOunces = "";
+      //     break;
+      // }
     },
     async onSubmit() {
       let itemStatus = "";
@@ -2046,362 +2061,362 @@ export default {
         }
       }
     },
-    itemDescription(value) {
-      switch (value) {
-        case "Laptop":
-          this.packageType = this.packageType ? this.packageType : "Box";
-          this.itemLength = this.itemLength ? this.itemLength : "18";
-          this.itemWidth = this.itemWidth ? this.itemWidth : "12";
-          this.itemHeight = this.itemHeight ? this.itemHeight : "6";
-          this.weight = this.weight ? this.weight : "6";
-          this.weightOunces = this.weightOunces ? this.weightOunces : "0";
-          break;
-        case "Tablet":
-          this.packageType = this.packageType ? this.packageType : "Box";
-          this.itemLength = this.itemLength ? this.itemLength : "12";
-          this.itemWidth = this.itemWidth ? this.itemWidth : "10";
-          this.itemHeight = this.itemHeight ? this.itemHeight : "6";
-          this.weight = this.weight ? this.weight : "2";
-          this.weightOunces = this.weightOunces ? this.weightOunces : "0";
-          break;
-        case "Cell phone":
-          this.packageType = this.packageType ? this.packageType : "Box";
-          this.itemLength = this.itemLength ? this.itemLength : "9";
-          this.itemWidth = this.itemWidth ? this.itemWidth : "6";
-          this.itemHeight = this.itemHeight ? this.itemHeight : "2";
-          this.weight = this.weight ? this.weight : "1";
-          this.weightOunces = this.weightOunces ? this.weightOunces : "0";
-          break;
-        case "Mobile Phone":
-          this.packageType = this.packageType ? this.packageType : "Box";
-          this.itemLength = this.itemLength ? this.itemLength : "9";
-          this.itemWidth = this.itemWidth ? this.itemWidth : "6";
-          this.itemHeight = this.itemHeight ? this.itemHeight : "2";
-          this.weight = this.weight ? this.weight : "1";
-          this.weightOunces = this.weightOunces ? this.weightOunces : "0";
-          break;
-        case "Pillow":
-          this.packageType = this.packageType ? this.packageType : "Box";
-          this.itemLength = this.itemLength ? this.itemLength : "20";
-          this.itemWidth = this.itemWidth ? this.itemWidth : "12";
-          this.itemHeight = this.itemHeight ? this.itemHeight : "6";
-          this.weight = this.weight ? this.weight : "3";
-          this.weightOunces = this.weightOunces ? this.weightOunces : "0";
-          break;
-        case "Shoes":
-          this.packageType = this.packageType ? this.packageType : "Box";
-          this.itemLength = this.itemLength ? this.itemLength : "14";
-          this.itemWidth = this.itemWidth ? this.itemWidth : "12";
-          this.itemHeight = this.itemHeight ? this.itemHeight : "7";
-          this.weight = this.weight ? this.weight : "3";
-          this.weightOunces = this.weightOunces ? this.weightOunces : "0";
-          break;
-        case "Slipper":
-          this.packageType = this.packageType ? this.packageType : "Box";
-          this.itemLength = this.itemLength ? this.itemLength : "13";
-          this.itemWidth = this.itemWidth ? this.itemWidth : "8";
-          this.itemHeight = this.itemHeight ? this.itemHeight : "2";
-          this.weight = this.weight ? this.weight : "1";
-          this.weightOunces = this.weightOunces ? this.weightOunces : "0";
-          break;
-        case "Socks":
-          this.packageType = this.packageType ? this.packageType : "Box";
-          this.itemLength = this.itemLength ? this.itemLength : "8";
-          this.itemWidth = this.itemWidth ? this.itemWidth : "6";
-          this.itemHeight = this.itemHeight ? this.itemHeight : "4";
-          this.weight = this.weight ? this.weight : "1";
-          this.weightOunces = this.weightOunces ? this.weightOunces : "0";
-          break;
-        case "Headphone":
-          this.packageType = this.packageType ? this.packageType : "Box";
-          this.itemLength = this.itemLength ? this.itemLength : "12";
-          this.itemWidth = this.itemWidth ? this.itemWidth : "12";
-          this.itemHeight = this.itemHeight ? this.itemHeight : "4";
-          this.weight = this.weight ? this.weight : "2";
-          this.weightOunces = this.weightOunces ? this.weightOunces : "0";
-          break;
-        case "Earphone":
-          this.packageType = this.packageType ? this.packageType : "Box";
-          this.itemLength = this.itemLength ? this.itemLength : "6";
-          this.itemWidth = this.itemWidth ? this.itemWidth : "6";
-          this.itemHeight = this.itemHeight ? this.itemHeight : "2";
-          this.weight = this.weight ? this.weight : "1";
-          this.weightOunces = this.weightOunces ? this.weightOunces : "0";
-          break;
-        case "Wristwatch":
-          this.packageType = this.packageType ? this.packageType : "Box";
-          this.itemLength = this.itemLength ? this.itemLength : "6";
-          this.itemWidth = this.itemWidth ? this.itemWidth : "6";
-          this.itemHeight = this.itemHeight ? this.itemHeight : "2";
-          this.weight = this.weight ? this.weight : "1";
-          this.weightOunces = this.weightOunces ? this.weightOunces : "0";
-          break;
-        case "ID":
-          this.packageType = this.packageType ? this.packageType : "Box";
-          this.itemLength = this.itemLength ? this.itemLength : "6";
-          this.itemWidth = this.itemWidth ? this.itemWidth : "6";
-          this.itemHeight = this.itemHeight ? this.itemHeight : "2";
-          this.weight = this.weight ? this.weight : "1";
-          this.weightOunces = this.weightOunces ? this.weightOunces : "0";
-          break;
-        case "Credit Card":
-          this.packageType = this.packageType ? this.packageType : "Box";
-          this.itemLength = this.itemLength ? this.itemLength : "6";
-          this.itemWidth = this.itemWidth ? this.itemWidth : "6";
-          this.itemHeight = this.itemHeight ? this.itemHeight : "2";
-          this.weight = this.weight ? this.weight : "1";
-          this.weightOunces = this.weightOunces ? this.weightOunces : "0";
-          break;
-        case "Passport":
-          this.packageType = this.packageType ? this.packageType : "Box";
-          this.itemLength = this.itemLength ? this.itemLength : "6";
-          this.itemWidth = this.itemWidth ? this.itemWidth : "6";
-          this.itemHeight = this.itemHeight ? this.itemHeight : "2";
-          this.weight = this.weight ? this.weight : "1";
-          this.weightOunces = this.weightOunces ? this.weightOunces : "0";
-          break;
-        case "Phone charger":
-          this.packageType = this.packageType ? this.packageType : "Box";
-          this.itemLength = this.itemLength ? this.itemLength : "6";
-          this.itemWidth = this.itemWidth ? this.itemWidth : "6";
-          this.itemHeight = this.itemHeight ? this.itemHeight : "6";
-          this.weight = this.weight ? this.weight : "1";
-          this.weightOunces = this.weightOunces ? this.weightOunces : "0";
-          break;
-        case "Charger for Laptop":
-          this.packageType = this.packageType ? this.packageType : "Box";
-          this.itemLength = this.itemLength ? this.itemLength : "8";
-          this.itemWidth = this.itemWidth ? this.itemWidth : "8";
-          this.itemHeight = this.itemHeight ? this.itemHeight : "6";
-          this.weight = this.weight ? this.weight : "2";
-          this.weightOunces = this.weightOunces ? this.weightOunces : "0";
-          break;
-        case "Blanket":
-          this.packageType = this.packageType ? this.packageType : "Box";
-          this.itemLength = this.itemLength ? this.itemLength : "20";
-          this.itemWidth = this.itemWidth ? this.itemWidth : "12";
-          this.itemHeight = this.itemHeight ? this.itemHeight : "6";
-          this.weight = this.weight ? this.weight : "3";
-          this.weightOunces = this.weightOunces ? this.weightOunces : "0";
-          break;
-        case "Shirt":
-          this.packageType = this.packageType ? this.packageType : "Box";
-          this.itemLength = this.itemLength ? this.itemLength : "12";
-          this.itemWidth = this.itemWidth ? this.itemWidth : "10";
-          this.itemHeight = this.itemHeight ? this.itemHeight : "6";
-          this.weight = this.weight ? this.weight : "2";
-          this.weightOunces = this.weightOunces ? this.weightOunces : "0";
-          break;
-        case "Pant":
-          this.packageType = this.packageType ? this.packageType : "Box";
-          this.itemLength = this.itemLength ? this.itemLength : "12";
-          this.itemWidth = this.itemWidth ? this.itemWidth : "10";
-          this.itemHeight = this.itemHeight ? this.itemHeight : "6";
-          this.weight = this.weight ? this.weight : "2";
-          this.weightOunces = this.weightOunces ? this.weightOunces : "0";
-          break;
-        case "T-shirt":
-          this.packageType = this.packageType ? this.packageType : "Box";
-          this.itemLength = this.itemLength ? this.itemLength : "12";
-          this.itemWidth = this.itemWidth ? this.itemWidth : "10";
-          this.itemHeight = this.itemHeight ? this.itemHeight : "6";
-          this.weight = this.weight ? this.weight : "2";
-          this.weightOunces = this.weightOunces ? this.weightOunces : "0";
-          break;
-        case "Clothes":
-          this.packageType = this.packageType ? this.packageType : "Box";
-          this.itemLength = this.itemLength ? this.itemLength : "12";
-          this.itemWidth = this.itemWidth ? this.itemWidth : "10";
-          this.itemHeight = this.itemHeight ? this.itemHeight : "6";
-          this.weight = this.weight ? this.weight : "2";
-          this.weightOunces = this.weightOunces ? this.weightOunces : "0";
-          break;
-        case "Jacket":
-          this.packageType = this.packageType ? this.packageType : "Box";
-          this.itemLength = this.itemLength ? this.itemLength : "18";
-          this.itemWidth = this.itemWidth ? this.itemWidth : "12";
-          this.itemHeight = this.itemHeight ? this.itemHeight : "6";
-          this.weight = this.weight ? this.weight : "3";
-          this.weightOunces = this.weightOunces ? this.weightOunces : "0";
-          break;
-        case "Suit":
-          this.packageType = this.packageType ? this.packageType : "Box";
-          this.itemLength = this.itemLength ? this.itemLength : "15";
-          this.itemWidth = this.itemWidth ? this.itemWidth : "12";
-          this.itemHeight = this.itemHeight ? this.itemHeight : "7";
-          this.weight = this.weight ? this.weight : "4";
-          this.weightOunces = this.weightOunces ? this.weightOunces : "0";
-          break;
-        case "Water bottle":
-          this.packageType = this.packageType ? this.packageType : "Box";
-          this.itemLength = this.itemLength ? this.itemLength : "13";
-          this.itemWidth = this.itemWidth ? this.itemWidth : "10";
-          this.itemHeight = this.itemHeight ? this.itemHeight : "5";
-          this.weight = this.weight ? this.weight : "2";
-          this.weightOunces = this.weightOunces ? this.weightOunces : "0";
-          break;
-        case "Stuffed toy":
-          this.packageType = this.packageType ? this.packageType : "Box";
-          this.itemLength = this.itemLength ? this.itemLength : "12";
-          this.itemWidth = this.itemWidth ? this.itemWidth : "10";
-          this.itemHeight = this.itemHeight ? this.itemHeight : "6";
-          this.weight = this.weight ? this.weight : "2";
-          this.weightOunces = this.weightOunces ? this.weightOunces : "0";
-          break;
-        case "Bed sheet":
-          this.packageType = this.packageType ? this.packageType : "Box";
-          this.itemLength = this.itemLength ? this.itemLength : "12";
-          this.itemWidth = this.itemWidth ? this.itemWidth : "12";
-          this.itemHeight = this.itemHeight ? this.itemHeight : "4";
-          this.weight = this.weight ? this.weight : "4";
-          this.weightOunces = this.weightOunces ? this.weightOunces : "0";
-          break;
-        case "Towel":
-          this.packageType = this.packageType ? this.packageType : "Box";
-          this.itemLength = this.itemLength ? this.itemLength : "15";
-          this.itemWidth = this.itemWidth ? this.itemWidth : "12";
-          this.itemHeight = this.itemHeight ? this.itemHeight : "3";
-          this.weight = this.weight ? this.weight : "2";
-          this.weightOunces = this.weightOunces ? this.weightOunces : "0";
-          break;
-        case "Tool box":
-          this.packageType = this.packageType ? this.packageType : "Box";
-          this.itemLength = this.itemLength ? this.itemLength : "15";
-          this.itemWidth = this.itemWidth ? this.itemWidth : "12";
-          this.itemHeight = this.itemHeight ? this.itemHeight : "10";
-          this.weight = this.weight ? this.weight : "10";
-          this.weightOunces = this.weightOunces ? this.weightOunces : "0";
-          break;
-        case "Box - Shoe size":
-          this.packageType = this.packageType ? this.packageType : "Box";
-          this.itemLength = this.itemLength ? this.itemLength : "13";
-          this.itemWidth = this.itemWidth ? this.itemWidth : "12";
-          this.itemHeight = this.itemHeight ? this.itemHeight : "6";
-          this.weight = this.weight ? this.weight : "5";
-          this.weightOunces = this.weightOunces ? this.weightOunces : "0";
-          break;
-        case "Small Box":
-          this.packageType = this.packageType ? this.packageType : "Box";
-          this.itemLength = this.itemLength ? this.itemLength : "15";
-          this.itemWidth = this.itemWidth ? this.itemWidth : "12";
-          this.itemHeight = this.itemHeight ? this.itemHeight : "12";
-          this.weight = this.weight ? this.weight : "10";
-          this.weightOunces = this.weightOunces ? this.weightOunces : "0";
-          break;
-        case "Medium Box":
-          this.packageType = this.packageType ? this.packageType : "Box";
-          this.itemLength = this.itemLength ? this.itemLength : "18";
-          this.itemWidth = this.itemWidth ? this.itemWidth : "18";
-          this.itemHeight = this.itemHeight ? this.itemHeight : "16";
-          this.weight = this.weight ? this.weight : "20";
-          this.weightOunces = this.weightOunces ? this.weightOunces : "0";
-          break;
-        case "Large Box":
-          this.packageType = this.packageType ? this.packageType : "Box";
-          this.itemLength = this.itemLength ? this.itemLength : "18";
-          this.itemWidth = this.itemWidth ? this.itemWidth : "18";
-          this.itemHeight = this.itemHeight ? this.itemHeight : "24";
-          this.weight = this.weight ? this.weight : "30";
-          this.weightOunces = this.weightOunces ? this.weightOunces : "0";
-          break;
-        case "Bagpack - Carry on":
-          this.packageType = this.packageType ? this.packageType : "Box";
-          this.itemLength = this.itemLength ? this.itemLength : "17";
-          this.itemWidth = this.itemWidth ? this.itemWidth : "10";
-          this.itemHeight = this.itemHeight ? this.itemHeight : "9";
-          this.weight = this.weight ? this.weight : "10";
-          this.weightOunces = this.weightOunces ? this.weightOunces : "0";
-          break;
-        case "Luggage - Carry on":
-          this.packageType = this.packageType ? this.packageType : "Box";
-          this.itemLength = this.itemLength ? this.itemLength : "22";
-          this.itemWidth = this.itemWidth ? this.itemWidth : "14";
-          this.itemHeight = this.itemHeight ? this.itemHeight : "9";
-          this.weight = this.weight ? this.weight : "17";
-          this.weightOunces = this.weightOunces ? this.weightOunces : "0";
-          break;
-        case "Luggage - Check in size":
-          this.packageType = this.packageType ? this.packageType : "Box";
-          this.itemLength = this.itemLength ? this.itemLength : "30";
-          this.itemWidth = this.itemWidth ? this.itemWidth : "18";
-          this.itemHeight = this.itemHeight ? this.itemHeight : "14";
-          this.weight = this.weight ? this.weight : "46";
-          this.weightOunces = this.weightOunces ? this.weightOunces : "0";
-          break;
-        case "Documents":
-          this.packageType = this.packageType ? this.packageType : "Box";
-          this.itemLength = this.itemLength ? this.itemLength : "13";
-          this.itemWidth = this.itemWidth ? this.itemWidth : "10";
-          this.itemHeight = this.itemHeight ? this.itemHeight : "1";
-          this.weight = this.weight ? this.weight : "1";
-          this.weightOunces = this.weightOunces ? this.weightOunces : "0";
-          break;
-        case "Keys":
-          this.packageType = this.packageType ? this.packageType : "Box";
-          this.itemLength = this.itemLength ? this.itemLength : "6";
-          this.itemWidth = this.itemWidth ? this.itemWidth : "6";
-          this.itemHeight = this.itemHeight ? this.itemHeight : "2";
-          this.weight = this.weight ? this.weight : "1";
-          this.weightOunces = this.weightOunces ? this.weightOunces : "0";
-          break;
-        case "Purse":
-          this.packageType = this.packageType ? this.packageType : "Box";
-          this.itemLength = this.itemLength ? this.itemLength : "15";
-          this.itemWidth = this.itemWidth ? this.itemWidth : "11";
-          this.itemHeight = this.itemHeight ? this.itemHeight : "7";
-          this.weight = this.weight ? this.weight : "7";
-          this.weightOunces = this.weightOunces ? this.weightOunces : "0";
-          break;
-        case "Wallet":
-          this.packageType = this.packageType ? this.packageType : "Box";
-          this.itemLength = this.itemLength ? this.itemLength : "6";
-          this.itemWidth = this.itemWidth ? this.itemWidth : "6";
-          this.itemHeight = this.itemHeight ? this.itemHeight : "2";
-          this.weight = this.weight ? this.weight : "1";
-          this.weightOunces = this.weightOunces ? this.weightOunces : "0";
-          break;
-        case "Medication Pills":
-          this.packageType = this.packageType ? this.packageType : "Box";
-          this.itemLength = this.itemLength ? this.itemLength : "6";
-          this.itemWidth = this.itemWidth ? this.itemWidth : "6";
-          this.itemHeight = this.itemHeight ? this.itemHeight : "6";
-          this.weight = this.weight ? this.weight : "1";
-          this.weightOunces = this.weightOunces ? this.weightOunces : "0";
-          break;
-        case "Folder":
-          this.packageType = this.packageType ? this.packageType : "Box";
-          this.itemLength = this.itemLength ? this.itemLength : "13";
-          this.itemWidth = this.itemWidth ? this.itemWidth : "10";
-          this.itemHeight = this.itemHeight ? this.itemHeight : "1";
-          this.weight = this.weight ? this.weight : "1";
-          this.weightOunces = this.weightOunces ? this.weightOunces : "0";
-          break;
-        case "Jewelery":
-          this.packageType = this.packageType ? this.packageType : "Box";
-          this.itemLength = this.itemLength ? this.itemLength : "6";
-          this.itemWidth = this.itemWidth ? this.itemWidth : "6";
-          this.itemHeight = this.itemHeight ? this.itemHeight : "2";
-          this.weight = this.weight ? this.weight : "1";
-          this.weightOunces = this.weightOunces ? this.weightOunces : "0";
-          break;
-        case "Thermos":
-          this.packageType = this.packageType ? this.packageType : "Box";
-          this.itemLength = this.itemLength ? this.itemLength : "12";
-          this.itemWidth = this.itemWidth ? this.itemWidth : "10";
-          this.itemHeight = this.itemHeight ? this.itemHeight : "6";
-          this.weight = this.weight ? this.weight : "5";
-          this.weightOunces = this.weightOunces ? this.weightOunces : "0";
-          break;
-        case "Other":
-          this.packageType = "";
-          this.itemLength = "";
-          this.itemWidth = "";
-          this.itemHeight = "";
-          this.weight = "";
-          this.weightOunces = "";
-          break;
-      }
-    },
+    // itemDescription(value) {
+    //   switch (value) {
+    //     case "Laptop":
+    //       this.packageType = this.packageType ? this.packageType : "Box";
+    //       this.itemLength = this.itemLength ? this.itemLength : "18";
+    //       this.itemWidth = this.itemWidth ? this.itemWidth : "12";
+    //       this.itemHeight = this.itemHeight ? this.itemHeight : "6";
+    //       this.weight = this.weight ? this.weight : "6";
+    //       this.weightOunces = this.weightOunces ? this.weightOunces : "0";
+    //       break;
+    //     case "Tablet":
+    //       this.packageType = this.packageType ? this.packageType : "Box";
+    //       this.itemLength = this.itemLength ? this.itemLength : "12";
+    //       this.itemWidth = this.itemWidth ? this.itemWidth : "10";
+    //       this.itemHeight = this.itemHeight ? this.itemHeight : "6";
+    //       this.weight = this.weight ? this.weight : "2";
+    //       this.weightOunces = this.weightOunces ? this.weightOunces : "0";
+    //       break;
+    //     case "Cell phone":
+    //       this.packageType = this.packageType ? this.packageType : "Box";
+    //       this.itemLength = this.itemLength ? this.itemLength : "9";
+    //       this.itemWidth = this.itemWidth ? this.itemWidth : "6";
+    //       this.itemHeight = this.itemHeight ? this.itemHeight : "2";
+    //       this.weight = this.weight ? this.weight : "1";
+    //       this.weightOunces = this.weightOunces ? this.weightOunces : "0";
+    //       break;
+    //     case "Mobile Phone":
+    //       this.packageType = this.packageType ? this.packageType : "Box";
+    //       this.itemLength = this.itemLength ? this.itemLength : "9";
+    //       this.itemWidth = this.itemWidth ? this.itemWidth : "6";
+    //       this.itemHeight = this.itemHeight ? this.itemHeight : "2";
+    //       this.weight = this.weight ? this.weight : "1";
+    //       this.weightOunces = this.weightOunces ? this.weightOunces : "0";
+    //       break;
+    //     case "Pillow":
+    //       this.packageType = this.packageType ? this.packageType : "Box";
+    //       this.itemLength = this.itemLength ? this.itemLength : "20";
+    //       this.itemWidth = this.itemWidth ? this.itemWidth : "12";
+    //       this.itemHeight = this.itemHeight ? this.itemHeight : "6";
+    //       this.weight = this.weight ? this.weight : "3";
+    //       this.weightOunces = this.weightOunces ? this.weightOunces : "0";
+    //       break;
+    //     case "Shoes":
+    //       this.packageType = this.packageType ? this.packageType : "Box";
+    //       this.itemLength = this.itemLength ? this.itemLength : "14";
+    //       this.itemWidth = this.itemWidth ? this.itemWidth : "12";
+    //       this.itemHeight = this.itemHeight ? this.itemHeight : "7";
+    //       this.weight = this.weight ? this.weight : "3";
+    //       this.weightOunces = this.weightOunces ? this.weightOunces : "0";
+    //       break;
+    //     case "Slipper":
+    //       this.packageType = this.packageType ? this.packageType : "Box";
+    //       this.itemLength = this.itemLength ? this.itemLength : "13";
+    //       this.itemWidth = this.itemWidth ? this.itemWidth : "8";
+    //       this.itemHeight = this.itemHeight ? this.itemHeight : "2";
+    //       this.weight = this.weight ? this.weight : "1";
+    //       this.weightOunces = this.weightOunces ? this.weightOunces : "0";
+    //       break;
+    //     case "Socks":
+    //       this.packageType = this.packageType ? this.packageType : "Box";
+    //       this.itemLength = this.itemLength ? this.itemLength : "8";
+    //       this.itemWidth = this.itemWidth ? this.itemWidth : "6";
+    //       this.itemHeight = this.itemHeight ? this.itemHeight : "4";
+    //       this.weight = this.weight ? this.weight : "1";
+    //       this.weightOunces = this.weightOunces ? this.weightOunces : "0";
+    //       break;
+    //     case "Headphone":
+    //       this.packageType = this.packageType ? this.packageType : "Box";
+    //       this.itemLength = this.itemLength ? this.itemLength : "12";
+    //       this.itemWidth = this.itemWidth ? this.itemWidth : "12";
+    //       this.itemHeight = this.itemHeight ? this.itemHeight : "4";
+    //       this.weight = this.weight ? this.weight : "2";
+    //       this.weightOunces = this.weightOunces ? this.weightOunces : "0";
+    //       break;
+    //     case "Earphone":
+    //       this.packageType = this.packageType ? this.packageType : "Box";
+    //       this.itemLength = this.itemLength ? this.itemLength : "6";
+    //       this.itemWidth = this.itemWidth ? this.itemWidth : "6";
+    //       this.itemHeight = this.itemHeight ? this.itemHeight : "2";
+    //       this.weight = this.weight ? this.weight : "1";
+    //       this.weightOunces = this.weightOunces ? this.weightOunces : "0";
+    //       break;
+    //     case "Wristwatch":
+    //       this.packageType = this.packageType ? this.packageType : "Box";
+    //       this.itemLength = this.itemLength ? this.itemLength : "6";
+    //       this.itemWidth = this.itemWidth ? this.itemWidth : "6";
+    //       this.itemHeight = this.itemHeight ? this.itemHeight : "2";
+    //       this.weight = this.weight ? this.weight : "1";
+    //       this.weightOunces = this.weightOunces ? this.weightOunces : "0";
+    //       break;
+    //     case "ID":
+    //       this.packageType = this.packageType ? this.packageType : "Box";
+    //       this.itemLength = this.itemLength ? this.itemLength : "6";
+    //       this.itemWidth = this.itemWidth ? this.itemWidth : "6";
+    //       this.itemHeight = this.itemHeight ? this.itemHeight : "2";
+    //       this.weight = this.weight ? this.weight : "1";
+    //       this.weightOunces = this.weightOunces ? this.weightOunces : "0";
+    //       break;
+    //     case "Credit Card":
+    //       this.packageType = this.packageType ? this.packageType : "Box";
+    //       this.itemLength = this.itemLength ? this.itemLength : "6";
+    //       this.itemWidth = this.itemWidth ? this.itemWidth : "6";
+    //       this.itemHeight = this.itemHeight ? this.itemHeight : "2";
+    //       this.weight = this.weight ? this.weight : "1";
+    //       this.weightOunces = this.weightOunces ? this.weightOunces : "0";
+    //       break;
+    //     case "Passport":
+    //       this.packageType = this.packageType ? this.packageType : "Box";
+    //       this.itemLength = this.itemLength ? this.itemLength : "6";
+    //       this.itemWidth = this.itemWidth ? this.itemWidth : "6";
+    //       this.itemHeight = this.itemHeight ? this.itemHeight : "2";
+    //       this.weight = this.weight ? this.weight : "1";
+    //       this.weightOunces = this.weightOunces ? this.weightOunces : "0";
+    //       break;
+    //     case "Phone charger":
+    //       this.packageType = this.packageType ? this.packageType : "Box";
+    //       this.itemLength = this.itemLength ? this.itemLength : "6";
+    //       this.itemWidth = this.itemWidth ? this.itemWidth : "6";
+    //       this.itemHeight = this.itemHeight ? this.itemHeight : "6";
+    //       this.weight = this.weight ? this.weight : "1";
+    //       this.weightOunces = this.weightOunces ? this.weightOunces : "0";
+    //       break;
+    //     case "Charger for Laptop":
+    //       this.packageType = this.packageType ? this.packageType : "Box";
+    //       this.itemLength = this.itemLength ? this.itemLength : "8";
+    //       this.itemWidth = this.itemWidth ? this.itemWidth : "8";
+    //       this.itemHeight = this.itemHeight ? this.itemHeight : "6";
+    //       this.weight = this.weight ? this.weight : "2";
+    //       this.weightOunces = this.weightOunces ? this.weightOunces : "0";
+    //       break;
+    //     case "Blanket":
+    //       this.packageType = this.packageType ? this.packageType : "Box";
+    //       this.itemLength = this.itemLength ? this.itemLength : "20";
+    //       this.itemWidth = this.itemWidth ? this.itemWidth : "12";
+    //       this.itemHeight = this.itemHeight ? this.itemHeight : "6";
+    //       this.weight = this.weight ? this.weight : "3";
+    //       this.weightOunces = this.weightOunces ? this.weightOunces : "0";
+    //       break;
+    //     case "Shirt":
+    //       this.packageType = this.packageType ? this.packageType : "Box";
+    //       this.itemLength = this.itemLength ? this.itemLength : "12";
+    //       this.itemWidth = this.itemWidth ? this.itemWidth : "10";
+    //       this.itemHeight = this.itemHeight ? this.itemHeight : "6";
+    //       this.weight = this.weight ? this.weight : "2";
+    //       this.weightOunces = this.weightOunces ? this.weightOunces : "0";
+    //       break;
+    //     case "Pant":
+    //       this.packageType = this.packageType ? this.packageType : "Box";
+    //       this.itemLength = this.itemLength ? this.itemLength : "12";
+    //       this.itemWidth = this.itemWidth ? this.itemWidth : "10";
+    //       this.itemHeight = this.itemHeight ? this.itemHeight : "6";
+    //       this.weight = this.weight ? this.weight : "2";
+    //       this.weightOunces = this.weightOunces ? this.weightOunces : "0";
+    //       break;
+    //     case "T-shirt":
+    //       this.packageType = this.packageType ? this.packageType : "Box";
+    //       this.itemLength = this.itemLength ? this.itemLength : "12";
+    //       this.itemWidth = this.itemWidth ? this.itemWidth : "10";
+    //       this.itemHeight = this.itemHeight ? this.itemHeight : "6";
+    //       this.weight = this.weight ? this.weight : "2";
+    //       this.weightOunces = this.weightOunces ? this.weightOunces : "0";
+    //       break;
+    //     case "Clothes":
+    //       this.packageType = this.packageType ? this.packageType : "Box";
+    //       this.itemLength = this.itemLength ? this.itemLength : "12";
+    //       this.itemWidth = this.itemWidth ? this.itemWidth : "10";
+    //       this.itemHeight = this.itemHeight ? this.itemHeight : "6";
+    //       this.weight = this.weight ? this.weight : "2";
+    //       this.weightOunces = this.weightOunces ? this.weightOunces : "0";
+    //       break;
+    //     case "Jacket":
+    //       this.packageType = this.packageType ? this.packageType : "Box";
+    //       this.itemLength = this.itemLength ? this.itemLength : "18";
+    //       this.itemWidth = this.itemWidth ? this.itemWidth : "12";
+    //       this.itemHeight = this.itemHeight ? this.itemHeight : "6";
+    //       this.weight = this.weight ? this.weight : "3";
+    //       this.weightOunces = this.weightOunces ? this.weightOunces : "0";
+    //       break;
+    //     case "Suit":
+    //       this.packageType = this.packageType ? this.packageType : "Box";
+    //       this.itemLength = this.itemLength ? this.itemLength : "15";
+    //       this.itemWidth = this.itemWidth ? this.itemWidth : "12";
+    //       this.itemHeight = this.itemHeight ? this.itemHeight : "7";
+    //       this.weight = this.weight ? this.weight : "4";
+    //       this.weightOunces = this.weightOunces ? this.weightOunces : "0";
+    //       break;
+    //     case "Water bottle":
+    //       this.packageType = this.packageType ? this.packageType : "Box";
+    //       this.itemLength = this.itemLength ? this.itemLength : "13";
+    //       this.itemWidth = this.itemWidth ? this.itemWidth : "10";
+    //       this.itemHeight = this.itemHeight ? this.itemHeight : "5";
+    //       this.weight = this.weight ? this.weight : "2";
+    //       this.weightOunces = this.weightOunces ? this.weightOunces : "0";
+    //       break;
+    //     case "Stuffed toy":
+    //       this.packageType = this.packageType ? this.packageType : "Box";
+    //       this.itemLength = this.itemLength ? this.itemLength : "12";
+    //       this.itemWidth = this.itemWidth ? this.itemWidth : "10";
+    //       this.itemHeight = this.itemHeight ? this.itemHeight : "6";
+    //       this.weight = this.weight ? this.weight : "2";
+    //       this.weightOunces = this.weightOunces ? this.weightOunces : "0";
+    //       break;
+    //     case "Bed sheet":
+    //       this.packageType = this.packageType ? this.packageType : "Box";
+    //       this.itemLength = this.itemLength ? this.itemLength : "12";
+    //       this.itemWidth = this.itemWidth ? this.itemWidth : "12";
+    //       this.itemHeight = this.itemHeight ? this.itemHeight : "4";
+    //       this.weight = this.weight ? this.weight : "4";
+    //       this.weightOunces = this.weightOunces ? this.weightOunces : "0";
+    //       break;
+    //     case "Towel":
+    //       this.packageType = this.packageType ? this.packageType : "Box";
+    //       this.itemLength = this.itemLength ? this.itemLength : "15";
+    //       this.itemWidth = this.itemWidth ? this.itemWidth : "12";
+    //       this.itemHeight = this.itemHeight ? this.itemHeight : "3";
+    //       this.weight = this.weight ? this.weight : "2";
+    //       this.weightOunces = this.weightOunces ? this.weightOunces : "0";
+    //       break;
+    //     case "Tool box":
+    //       this.packageType = this.packageType ? this.packageType : "Box";
+    //       this.itemLength = this.itemLength ? this.itemLength : "15";
+    //       this.itemWidth = this.itemWidth ? this.itemWidth : "12";
+    //       this.itemHeight = this.itemHeight ? this.itemHeight : "10";
+    //       this.weight = this.weight ? this.weight : "10";
+    //       this.weightOunces = this.weightOunces ? this.weightOunces : "0";
+    //       break;
+    //     case "Box - Shoe size":
+    //       this.packageType = this.packageType ? this.packageType : "Box";
+    //       this.itemLength = this.itemLength ? this.itemLength : "13";
+    //       this.itemWidth = this.itemWidth ? this.itemWidth : "12";
+    //       this.itemHeight = this.itemHeight ? this.itemHeight : "6";
+    //       this.weight = this.weight ? this.weight : "5";
+    //       this.weightOunces = this.weightOunces ? this.weightOunces : "0";
+    //       break;
+    //     case "Small Box":
+    //       this.packageType = this.packageType ? this.packageType : "Box";
+    //       this.itemLength = this.itemLength ? this.itemLength : "15";
+    //       this.itemWidth = this.itemWidth ? this.itemWidth : "12";
+    //       this.itemHeight = this.itemHeight ? this.itemHeight : "12";
+    //       this.weight = this.weight ? this.weight : "10";
+    //       this.weightOunces = this.weightOunces ? this.weightOunces : "0";
+    //       break;
+    //     case "Medium Box":
+    //       this.packageType = this.packageType ? this.packageType : "Box";
+    //       this.itemLength = this.itemLength ? this.itemLength : "18";
+    //       this.itemWidth = this.itemWidth ? this.itemWidth : "18";
+    //       this.itemHeight = this.itemHeight ? this.itemHeight : "16";
+    //       this.weight = this.weight ? this.weight : "20";
+    //       this.weightOunces = this.weightOunces ? this.weightOunces : "0";
+    //       break;
+    //     case "Large Box":
+    //       this.packageType = this.packageType ? this.packageType : "Box";
+    //       this.itemLength = this.itemLength ? this.itemLength : "18";
+    //       this.itemWidth = this.itemWidth ? this.itemWidth : "18";
+    //       this.itemHeight = this.itemHeight ? this.itemHeight : "24";
+    //       this.weight = this.weight ? this.weight : "30";
+    //       this.weightOunces = this.weightOunces ? this.weightOunces : "0";
+    //       break;
+    //     case "Bagpack - Carry on":
+    //       this.packageType = this.packageType ? this.packageType : "Box";
+    //       this.itemLength = this.itemLength ? this.itemLength : "17";
+    //       this.itemWidth = this.itemWidth ? this.itemWidth : "10";
+    //       this.itemHeight = this.itemHeight ? this.itemHeight : "9";
+    //       this.weight = this.weight ? this.weight : "10";
+    //       this.weightOunces = this.weightOunces ? this.weightOunces : "0";
+    //       break;
+    //     case "Luggage - Carry on":
+    //       this.packageType = this.packageType ? this.packageType : "Box";
+    //       this.itemLength = this.itemLength ? this.itemLength : "22";
+    //       this.itemWidth = this.itemWidth ? this.itemWidth : "14";
+    //       this.itemHeight = this.itemHeight ? this.itemHeight : "9";
+    //       this.weight = this.weight ? this.weight : "17";
+    //       this.weightOunces = this.weightOunces ? this.weightOunces : "0";
+    //       break;
+    //     case "Luggage - Check in size":
+    //       this.packageType = this.packageType ? this.packageType : "Box";
+    //       this.itemLength = this.itemLength ? this.itemLength : "30";
+    //       this.itemWidth = this.itemWidth ? this.itemWidth : "18";
+    //       this.itemHeight = this.itemHeight ? this.itemHeight : "14";
+    //       this.weight = this.weight ? this.weight : "46";
+    //       this.weightOunces = this.weightOunces ? this.weightOunces : "0";
+    //       break;
+    //     case "Documents":
+    //       this.packageType = this.packageType ? this.packageType : "Box";
+    //       this.itemLength = this.itemLength ? this.itemLength : "13";
+    //       this.itemWidth = this.itemWidth ? this.itemWidth : "10";
+    //       this.itemHeight = this.itemHeight ? this.itemHeight : "1";
+    //       this.weight = this.weight ? this.weight : "1";
+    //       this.weightOunces = this.weightOunces ? this.weightOunces : "0";
+    //       break;
+    //     case "Keys":
+    //       this.packageType = this.packageType ? this.packageType : "Box";
+    //       this.itemLength = this.itemLength ? this.itemLength : "6";
+    //       this.itemWidth = this.itemWidth ? this.itemWidth : "6";
+    //       this.itemHeight = this.itemHeight ? this.itemHeight : "2";
+    //       this.weight = this.weight ? this.weight : "1";
+    //       this.weightOunces = this.weightOunces ? this.weightOunces : "0";
+    //       break;
+    //     case "Purse":
+    //       this.packageType = this.packageType ? this.packageType : "Box";
+    //       this.itemLength = this.itemLength ? this.itemLength : "15";
+    //       this.itemWidth = this.itemWidth ? this.itemWidth : "11";
+    //       this.itemHeight = this.itemHeight ? this.itemHeight : "7";
+    //       this.weight = this.weight ? this.weight : "7";
+    //       this.weightOunces = this.weightOunces ? this.weightOunces : "0";
+    //       break;
+    //     case "Wallet":
+    //       this.packageType = this.packageType ? this.packageType : "Box";
+    //       this.itemLength = this.itemLength ? this.itemLength : "6";
+    //       this.itemWidth = this.itemWidth ? this.itemWidth : "6";
+    //       this.itemHeight = this.itemHeight ? this.itemHeight : "2";
+    //       this.weight = this.weight ? this.weight : "1";
+    //       this.weightOunces = this.weightOunces ? this.weightOunces : "0";
+    //       break;
+    //     case "Medication Pills":
+    //       this.packageType = this.packageType ? this.packageType : "Box";
+    //       this.itemLength = this.itemLength ? this.itemLength : "6";
+    //       this.itemWidth = this.itemWidth ? this.itemWidth : "6";
+    //       this.itemHeight = this.itemHeight ? this.itemHeight : "6";
+    //       this.weight = this.weight ? this.weight : "1";
+    //       this.weightOunces = this.weightOunces ? this.weightOunces : "0";
+    //       break;
+    //     case "Folder":
+    //       this.packageType = this.packageType ? this.packageType : "Box";
+    //       this.itemLength = this.itemLength ? this.itemLength : "13";
+    //       this.itemWidth = this.itemWidth ? this.itemWidth : "10";
+    //       this.itemHeight = this.itemHeight ? this.itemHeight : "1";
+    //       this.weight = this.weight ? this.weight : "1";
+    //       this.weightOunces = this.weightOunces ? this.weightOunces : "0";
+    //       break;
+    //     case "Jewelery":
+    //       this.packageType = this.packageType ? this.packageType : "Box";
+    //       this.itemLength = this.itemLength ? this.itemLength : "6";
+    //       this.itemWidth = this.itemWidth ? this.itemWidth : "6";
+    //       this.itemHeight = this.itemHeight ? this.itemHeight : "2";
+    //       this.weight = this.weight ? this.weight : "1";
+    //       this.weightOunces = this.weightOunces ? this.weightOunces : "0";
+    //       break;
+    //     case "Thermos":
+    //       this.packageType = this.packageType ? this.packageType : "Box";
+    //       this.itemLength = this.itemLength ? this.itemLength : "12";
+    //       this.itemWidth = this.itemWidth ? this.itemWidth : "10";
+    //       this.itemHeight = this.itemHeight ? this.itemHeight : "6";
+    //       this.weight = this.weight ? this.weight : "5";
+    //       this.weightOunces = this.weightOunces ? this.weightOunces : "0";
+    //       break;
+    //     case "Other":
+    //       this.packageType = "";
+    //       this.itemLength = "";
+    //       this.itemWidth = "";
+    //       this.itemHeight = "";
+    //       this.weight = "";
+    //       this.weightOunces = "";
+    //       break;
+    //   }
+    // },
   },
   mounted() {
     this.getItemDescriptionOptions();
