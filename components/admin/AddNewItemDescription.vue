@@ -326,20 +326,26 @@ export default {
           console.log(error);
         });
     },
-    editItemDesc(item){
-      let id = item.id;
-      delete item.id;
-      this.$axios
-        .post("/updateItemdescriptionDetails", item, { 
-          headers: {
-            Authorization: localStorage.getItem("auth._token.local")
-          }, params: {id: id} })
-        .then(res => {
-          console.log(res);
-        })
-        .catch(err => {
-          console.log(err);
-        })
+    async editItemDesc(item){
+      const isValid = await this.$refs.observer.validate();
+      if(isValid){
+        let id = item.id;
+        delete item.id;
+        this.$axios
+          .post("/updateItemdescriptionDetails", item, { 
+            headers: {
+              Authorization: localStorage.getItem("auth._token.local")
+            }, params: {id: id} })
+          .then(res => {
+            console.log(res);
+          })
+          .catch(err => {
+            console.log(err);
+          })
+      }
+      else{
+        console.log("invalid");
+      }
     },
     deleteItemDesc(item){
       this.$axios
