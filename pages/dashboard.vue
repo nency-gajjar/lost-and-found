@@ -30,15 +30,10 @@
               justify-center
               cursor-pointer
             "
-            @click="getData(1)"
+            @click="getData(5)"
           >
             <div class="flex flex-col items-center justify-center">
               <span
-                v-if="
-                  dashboardDetails &&
-                  dashboardDetails[0] &&
-                  dashboardDetails[0].totallostitemslisted
-                "
                 class="
                   mb-2
                   text-2xl
@@ -53,7 +48,7 @@
                   bg-blue-500
                   rounded-full
                 "
-                >{{ dashboardDetails[0].totallostitemslisted.length }}</span
+                >{{ pendingListDetails.length || "0" }}</span
               >
               <span class="block font-semibold text-white"
                 >Waiting For Approval</span
@@ -409,26 +404,26 @@ export default {
       isLoadingRemoveImage: {},
       isLoading: false,
       tabSelected: 1,
+      pendingListDetails: [],
       showAddNewItemDescription: false,
     };
   },
   created() {
     this.getAdminDashboardDetails();
+    this.getPendingListDetails();
   },
   computed: {
     lostItems() {
-      if (this.dashboardDetails) {
-        if (this.tabSelected === 1) {
-          return this.dashboardDetails[0].totallostitemslisted;
-        } else if (this.tabSelected === 2) {
-          return this.dashboardDetails[1].totalclaimitems;
-        } else if (this.tabSelected === 3) {
-          return this.dashboardDetails[2].totalitemslistedtoday;
-        } else if (this.tabSelected === 4) {
-          return this.dashboardDetails[3].totalclaimitemstoday;
-        }
-      } else {
-        return [];
+      if (this.tabSelected === 1) {
+        return this.dashboardDetails[0].totallostitemslisted || [];
+      } else if (this.tabSelected === 2) {
+        return this.dashboardDetails[1].totalclaimitems || [];
+      } else if (this.tabSelected === 3) {
+        return this.dashboardDetails[2].totalitemslistedtoday || [];
+      } else if (this.tabSelected === 4) {
+        return this.dashboardDetails[3].totalclaimitemstoday || [];
+      } else if (this.tabSelected === 5) {
+        return this.pendingListDetails;
       }
     },
   },
@@ -454,20 +449,47 @@ export default {
           console.log(err);
         });
     },
+    getPendingListDetails() {
+      const access_token = this.$auth.getToken("local");
+      this.$axios
+        .get("/getPendinglistItemDetails", {
+          headers: {
+            Authorization: `${access_token}`,
+          },
+        })
+        .then((response) => {
+          if (response.status === 200) {
+            this.pendingListDetails = response?.data?.data?.Items;
+          }
+        })
+        .catch((err) => {
+          this.$toast.error("Something went wrong! Please try again.");
+          console.log(err);
+        });
+    },
     getData(tabNumber) {
       this.tabSelected = tabNumber;
     },
     viewItem(item) {
-      this.$store.commit("item/SET_ITEM_DETAILS", {
-        ...item,
-        onlyDisplay: true,
-      });
-      this.$nextTick(() => {
-        this.$router.push({
-          path: "/detail-confirmation",
-          query: { id: item.id },
+      if (this.tabSelected === 5) {
+        this.$nextTick(() => {
+          this.$router.push({
+            path: "/admin/detail-confirmation",
+            query: { id: item.id },
+          });
         });
-      });
+      } else {
+        this.$store.commit("item/SET_ITEM_DETAILS", {
+          ...item,
+          onlyDisplay: true,
+        });
+        this.$nextTick(() => {
+          this.$router.push({
+            path: "/detail-confirmation",
+            query: { id: item.id },
+          });
+        });
+      }
     },
     deleteItem(item) {
       const access_token = this.$auth.getToken("local");
