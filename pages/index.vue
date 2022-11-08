@@ -412,7 +412,7 @@ export default {
                   itemDescription: this.itemDescription,
                   startDate: this.startDate,
                   endDate: this.endDate,
-                  addressForApi: this.addressForApi,
+                  lostItemAddress: this.lostItemAddress,
                   lat: this.lat,
                   long: this.long
                 }

@@ -493,14 +493,6 @@ export default {
       isFilterApplied: false,
     };
   },
-  mounted() {
-    if (this.$route.params?.filteredItems) {
-      this.lostItems = this.$route.params?.filteredItems;
-      this.cloneLostItems = this.lostItems;
-    } else {
-      this.getAllLostItems();
-    }
-  },
   computed: {
     formatedStartDate() {
       if (this.startDate) {
@@ -547,42 +539,36 @@ export default {
       }
     },
     applyFilters() {
-      if (
-        this.itemDescription ||
-        this.startDate ||
-        this.endDate ||
-        this.lostItemAddress ||
-        this.lat ||
-        this.long
-      ) {
-        this.isLoading = true;
-        let params = {
-          abc: "123",
-        };
-        if (this.itemDescription)
-          params.item_description = this.itemDescription;
-        if (this.startDate || this.endDate) {
-          params.datse = this.formatedStartDate;
-          params.datse1 = this.formatedEndDate;
-        }
-        if (this.lostItemAddress) params.address = this.lostItemAddress;
-        if (this.lat) params.lat = this.lat;
-        if (this.long) params.long = this.long;
-        this.$axios
-          .post("getallfilteritemdetails", {}, { params: params })
-          .then((res) => {
-            this.lostItems = res?.data?.data[0]?.ITEMS;
-            this.cloneLostItems = this.lostItems;
-            this.filterItems();
-            this.isLoading = false;
-            this.isFilterApplied = true;
-          })
-          .catch((err) => {
-            console.log(err);
-          });
-      } else {
-        this.getAllLostItems();
+      this.isLoading = true;
+      let params = {
+        abc: "123",
+      };
+      if (this.itemDescription)
+        params.item_description = this.itemDescription;
+      if (this.startDate || this.endDate) {
+        params.datse = this.formatedStartDate;
+        params.datse1 = this.formatedEndDate;
       }
+      if (this.lostItemAddress) params.address = this.lostItemAddress;
+      if (this.lat) params.lat = this.lat;
+      if (this.long) params.long = this.long;
+      this.$axios
+        .post("getallfilteritemdetails", {}, { params: params })
+        .then((res) => {
+          this.lostItems = res?.data?.data[0]?.ITEMS;
+          if(!this.lostItems){
+            this.lostItems = [];
+          }
+          this.cloneLostItems = this.lostItems;
+          if(this.searchQuery){
+            this.filterItems();
+          }
+          this.isLoading = false;
+          this.isFilterApplied = true;
+        })
+        .catch((err) => {
+          console.log(err);
+        });
     },
     viewItem(item) {
       this.$store.commit("item/SET_ITEM_DETAILS", {
@@ -626,7 +612,7 @@ export default {
       this.cloneLostItems.forEach((item) => {
         let itemArr = Object.values(item);
         let filteredItems = itemArr.filter((itemElement) => {
-          if (typeof itemElement === "number") {
+          if (typeof itemElement !== "string") {
             itemElement = itemElement.toString();
           }
           return itemElement
@@ -648,44 +634,46 @@ export default {
       this.lostItemAddress = "";
       this.lat = "";
       this.long = "";
-      this.getAllLostItems();
+      this.applyFilters();
     },
-    getAllLostItems() {
-      this.isFilterApplied = false;
-      this.isLoading = true;
-      this.$axios
-        .get("/getalllostitem")
-        .then((response) => {
-          if (response.status === 200) {
-            this.isLoading = false;
-            this.lostItems = response?.data?.data;
-            this.cloneLostItems = cloneDeep(this.lostItems);
-            if (!this.lostItems) {
-              this.lostItems = [];
-            }
-          }
-        })
-        .catch((err) => {
-          this.isLoading = false;
-          console.log(err);
-        });
-    }
+    // getAllLostItems() {
+    //   this.isFilterApplied = false;
+    //   this.isLoading = true;
+    //   this.$axios
+    //     .get("/getalllostitem")
+    //     .then((response) => {
+    //       if (response.status === 200) {
+    //         this.isLoading = false;
+    //         this.lostItems = response?.data?.data;
+    //         this.cloneLostItems = cloneDeep(this.lostItems);
+    //         if (!this.lostItems) {
+    //           this.lostItems = [];
+    //         }
+    //       }
+    //     })
+    //     .catch((err) => {
+    //       this.isLoading = false;
+    //       console.log(err);
+    //     });
+    // }
   },
   mounted() {
+    console.log( this.$route.params.filteredItems);
     if (this.$route.params?.filteredItems) {
       this.lostItems = this.$route.params?.filteredItems;
-      this.backupLostItems = this.lostItems;
+      this.cloneLostItems = this.lostItems;
       if(this.$route.params?.appliedFilters){
         this.itemDescription = this.$route.params.appliedFilters.itemDescription;
         this.startDate = this.$route.params.appliedFilters.startDate;
         this.endDate = this.$route.params.appliedFilters.endDate;
-        this.addressForApi = this.$route.params.appliedFilters.addressForApi;
+        this.lostItemAddress = this.$route.params.appliedFilters.addressForApi;
         this.lat = this.$route.params.appliedFilters.lat;
         this.long = this.$route.params.appliedFilters.long;
         this.isFilterApplied = true;
       }
     } else {
-      this.getAllLostItems();
+      console.log("no filter");
+      this.applyFilters();
     }
   },
 };
