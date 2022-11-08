@@ -181,8 +181,7 @@ export default {
   mounted() {
     if (this.$route.query.id) {
       this.itemId = this.$route.query.id;
-    }
-    else{
+    } else {
       this.$nextTick(() => {
         this.$router.push({
           name: "found-items",
@@ -241,12 +240,14 @@ export default {
               })
               .catch((error) => {
                 console.log(error);
+                this.$toast.error("Something went wrong! Please try again.");
                 this.isLoading = false;
               });
           }
         })
         .catch((error) => {
           console.log(error);
+          this.$toast.error("Something went wrong! Please try again.");
           this.isLoading = false;
         });
     },

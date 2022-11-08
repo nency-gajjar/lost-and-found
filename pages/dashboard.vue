@@ -415,7 +415,7 @@ export default {
   },
   computed: {
     lostItems() {
-      if(this.dashboardDetails){
+      if (this.dashboardDetails) {
         if (this.tabSelected === 1) {
           return this.dashboardDetails[0].totallostitemslisted;
         } else if (this.tabSelected === 2) {
@@ -425,8 +425,7 @@ export default {
         } else if (this.tabSelected === 4) {
           return this.dashboardDetails[3].totalclaimitemstoday;
         }
-      }
-      else{
+      } else {
         return [];
       }
     },
@@ -449,6 +448,7 @@ export default {
         })
         .catch((err) => {
           this.isLoading = false;
+          this.$toast.error("Something went wrong! Please try again.");
           console.log(err);
         });
     },

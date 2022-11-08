@@ -1210,7 +1210,10 @@ export default {
     itemWidth: "",
     itemHeight: "",
     itemStatus: "",
-    itemStatusOptions: ["Claimed (You know the actual owner of this item)", "Unclaimed (You do not know the actual owner of this item)"],
+    itemStatusOptions: [
+      "Claimed (You know the actual owner of this item)",
+      "Unclaimed (You do not know the actual owner of this item)",
+    ],
     showReceiverInputs: false,
     receiverName: "",
     receiverEmail: "",
@@ -1758,10 +1761,14 @@ export default {
     },
     async onSubmit() {
       let itemStatus = "";
-      if(this.itemStatus === "Claimed (You know the actual owner of this item)"){
+      if (
+        this.itemStatus === "Claimed (You know the actual owner of this item)"
+      ) {
         itemStatus = "Claimed";
-      }
-      else if(this.itemStatus === "Unclaimed (You do not know the actual owner of this item)"){
+      } else if (
+        this.itemStatus ===
+        "Unclaimed (You do not know the actual owner of this item)"
+      ) {
         itemStatus = "Unclaimed";
       }
       this.validateVenuePhoneNo();
@@ -1902,7 +1909,7 @@ export default {
     async editImage() {
       this.showEditor = false;
       if (this.image) {
-        const data = await fetch(this.image, {cache: "no-cache"});
+        const data = await fetch(this.image, { cache: "no-cache" });
         const blob = await data.blob();
         let reader = new FileReader();
         reader.onloadend = () => {
@@ -2435,6 +2442,7 @@ export default {
           }
         })
         .catch((error) => {
+          this.$toast.error("Something went wrong! Please try again.");
           console.log(error);
         });
     } else if (this.$route.params?.itemDetails) {

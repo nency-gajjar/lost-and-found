@@ -24,7 +24,7 @@
           Found Items ({{ lostItems.length }})
         </h2>
         <BaseButton
-        v-show="isAdminLogin"
+          v-show="isAdminLogin"
           class="sm:ml-2 grow mt-3 sm:mt-0 sm:grow-0"
           @click="addNewItem"
         >
@@ -329,7 +329,7 @@ export default {
     addNewItem() {
       this.$router.push({ name: "item-details" });
     },
-    applyFilters(){
+    applyFilters() {
       console.log(this.searchQuery);
       console.log(moment(this.startDate).format("YYYY-MM-DD"));
       console.log(moment(this.endDate).format("YYYY-MM-DD"));
@@ -370,6 +370,7 @@ export default {
       })
       .catch((err) => {
         this.isLoading = false;
+        this.$toast.error("Something went wrong! Please try again.");
         console.log(err);
       });
   },

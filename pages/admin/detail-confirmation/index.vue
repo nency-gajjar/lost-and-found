@@ -886,10 +886,10 @@ export default {
           }
         })
         .catch((error) => {
+          this.$toast.error("Something went wrong! Please try again.");
           console.log(error);
         });
-    }
-    else{
+    } else {
       this.$nextTick(() => {
         this.$router.push({
           name: "found-items",
@@ -931,7 +931,7 @@ export default {
     async editImage() {
       this.showEditor = false;
       if (this.image) {
-        const data = await fetch(this.image, {cache: "no-cache"});
+        const data = await fetch(this.image, { cache: "no-cache" });
         const blob = await data.blob();
         let reader = new FileReader();
         reader.onloadend = () => {
@@ -1035,6 +1035,7 @@ export default {
           })
           .catch((error) => {
             console.log(error);
+            this.$toast.error("Something went wrong! Please try again.");
             this.isLoading[type] = false;
           });
       }
