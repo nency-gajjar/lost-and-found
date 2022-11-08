@@ -46,7 +46,7 @@
                 <ValidationProvider v-slot="{ errors }" rules="required">
                   <BaseInput
                     class="w-80"
-                    v-model="item.itemDescription"
+                    v-model="item.item_description"
                     label="Item Description"
                     type="text"
                     :class="errors.length > 0 && 'error'"
@@ -64,7 +64,7 @@
               <td class="py-3 px-2 text-left">
                 <ValidationProvider v-slot="{ errors }" rules="required">
                   <BaseSelect
-                    v-model="item.packageType"
+                    v-model="item.package_type"
                     :options="packageTypeOptions"
                     label="Package Type"
                     class="w-40"
@@ -88,7 +88,7 @@
                     name="Pounds"
                   >
                     <BaseInput
-                      v-model="item.weightPounds"
+                      v-model="item.weight_pounds"
                       class="w-20"
                       label="Pounds"
                       type="text"
@@ -108,7 +108,7 @@
                   >
                     <BaseSelect
                       class="w-24"
-                      v-model="item.weightOunces"
+                      v-model="item.weight_ounces"
                       :options="weightOuncesOptions"
                       label="Ounces"
                       :class="errors.length > 0 && 'error'"
@@ -133,7 +133,7 @@
                   >
                     <BaseInput
                       class="w-20"
-                      v-model="item.itemLength"
+                      v-model="item.item_length"
                       label="Length"
                       type="text"
                       :class="errors.length > 0 && 'error'"
@@ -152,7 +152,7 @@
                   >
                     <BaseInput
                       class="w-20"
-                      v-model="item.itemWidth"
+                      v-model="item.item_width"
                       label="Width"
                       type="text"
                       :class="errors.length > 0 && 'error'"
@@ -171,7 +171,7 @@
                   >
                     <BaseInput
                       class="w-20"
-                      v-model="item.itemHeight"
+                      v-model="item.item_height"
                       label="Height"
                       type="text"
                       :class="errors.length > 0 && 'error'"
@@ -188,6 +188,7 @@
               <td class="py-3 px-2 text-center">
                 <div class="flex item-center justify-center gap-3">
                   <button
+                    @click="editItemDesc(item)"
                     class="
                       bg-blue-500
                       text-white
@@ -209,6 +210,7 @@
                     Edit
                   </button>
                   <button
+                    @click="deleteItemDesc(item)"
                     class="
                       bg-red-500
                       text-white
@@ -304,7 +306,55 @@ export default {
     isLoading: false,
   }),
   methods: {
+    getItemDescriptionOptions() {
+      this.$axios
+        .get("/viewallItemdescriptionDetails")
+        .then((response) => {
+          if (response.status === 200) {
+            this.items = response.data?.data?.Items || [];
+            this.items = this.items.map(item => {
+              return{
+                ...item,
+                weight_ounces: String(item.weight_ounces)
+              }
+            })
+          }
+        })
+        .catch((error) => {
+          console.log(error);
+        });
+    },
+    editItemDesc(item){
+      let id = item.id;
+      delete item.id;
+      this.$axios
+        .post("/updateItemdescriptionDetails", item, { 
+          headers: {
+            Authorization: localStorage.getItem("auth._token.local")
+          }, params: {id: id} })
+        .then(res => {
+          console.log(res);
+        })
+        .catch(err => {
+          console.log(err);
+        })
+    },
+    deleteItemDesc(item){
+      this.$axios
+        .post("/deleteItemdescriptionDetails", item, { 
+          headers: {
+            Authorization: localStorage.getItem("auth._token.local")
+          }, params: {id: item.id} })
+        .then(res => {
+          console.log(res);
+          this.getItemDescriptionOptions();
+        })
+        .catch(err => {
+          console.log(err);
+        })
+    },
     async addNewItem() {
+      console.log(this.item);
       const isValid = await this.$refs.observer.validate();
       if (isValid) {
         let itemObject = {
@@ -322,6 +372,7 @@ export default {
       }
     },
     async onSave() {
+      console.log(this.item);
       const isValid = await this.$refs.observer.validate();
       if (isValid) {
         console.log("valid");
@@ -329,6 +380,9 @@ export default {
         console.log("invalid");
       }
     },
+  },
+  mounted(){
+    this.getItemDescriptionOptions();
   },
 };
 </script>
