@@ -581,7 +581,6 @@ export default {
             console.log(err);
           });
       } else {
-        console.log("no filter");
         this.getAllLostItems();
       }
     },
@@ -670,7 +669,24 @@ export default {
           this.isLoading = false;
           console.log(err);
         });
-    },
+    }
+  },
+  mounted() {
+    if (this.$route.params?.filteredItems) {
+      this.lostItems = this.$route.params?.filteredItems;
+      this.backupLostItems = this.lostItems;
+      if(this.$route.params?.appliedFilters){
+        this.itemDescription = this.$route.params.appliedFilters.itemDescription;
+        this.startDate = this.$route.params.appliedFilters.startDate;
+        this.endDate = this.$route.params.appliedFilters.endDate;
+        this.addressForApi = this.$route.params.appliedFilters.addressForApi;
+        this.lat = this.$route.params.appliedFilters.lat;
+        this.long = this.$route.params.appliedFilters.long;
+        this.isFilterApplied = true;
+      }
+    } else {
+      this.getAllLostItems();
+    }
   },
 };
 </script>

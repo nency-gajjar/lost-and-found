@@ -1305,6 +1305,7 @@ export default {
         }
         let obj = {};
         this.autoCompleteAddress.address = this.addressArr[0];
+        this.address = this.addressArr[0];
         obj.address = this.addressArr[0];
         this.autoCompleteAddress.phoneNo =
           address.international_phone_number || address.formatted_phone_number;
@@ -1355,7 +1356,14 @@ export default {
     },
     clearAddress() {
       this.address = "";
-      this.resetAddressFields();
+      this.autoCompleteAddress = {
+        address: "",
+        city: "",
+        state: "",
+        country: "",
+        zipcode: "",
+        phoneNo: "",
+      };
     },
     resetAddressFields() {
       this.autoCompleteAddress = {

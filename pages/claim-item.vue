@@ -152,12 +152,12 @@
                 rules="required"
                 class="block"
               >
-                <BaseInput
-                  v-model="itemLostDate"
-                  type="date"
-                  label="Date of Lost"
-                  :class="errors.length > 0 && 'error'"
-                />
+                  <div :class="errors.length && 'error'">
+                    <date-picker
+                      v-model="itemLostDate"
+                      formate="YYYY-MM-DD"
+                    ></date-picker>
+                  </div>
                 <p
                   v-if="errors.length"
                   class="vee-validation-error mt-2 text-sm text-red-600"
@@ -317,11 +317,15 @@
 
 <script>
 import { ValidationObserver, ValidationProvider } from "vee-validate";
+import DatePicker from "vue2-datepicker";
+import "vue2-datepicker/index.css";
+import moment from "moment";
 
 export default {
   components: {
     ValidationObserver,
     ValidationProvider,
+    DatePicker
   },
   data() {
     return {
@@ -449,7 +453,7 @@ export default {
           claimpersonmobileno: claimPersonPhoneNo,
           claimpersonitemname: this.itemName,
           claimpersondescription: this.itemDescription,
-          claimpersondatelost: this.itemLostDate,
+          claimpersondatelost: moment(this.itemLostDate).format("YYYY-MM-DD"),
           claimpersonlocation: this.autoCompleteAddress.address,
           itemid: this.itemId,
           venue_email: this.venueEmail,
@@ -516,5 +520,22 @@ export default {
 
 textarea.error {
   @apply border-red-500 border-2 ring-4 ring-red-500 ring-opacity-10 transition-none;
+}
+
+.mx-datepicker {
+  width: 100% !important;
+}
+
+.mx-datepicker input {
+  height: 3rem;
+  border-radius: 0.5rem;
+  border-color: rgb(212 212 212);
+  cursor: pointer;
+}
+
+.error {
+  & > .mx-datepicker {
+    @apply border-red-500 border-2 ring-4 ring-red-500 ring-opacity-10 rounded-lg transition-none;
+  }
 }
 </style>

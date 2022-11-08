@@ -406,7 +406,17 @@ export default {
           this.$nextTick(() => {
             this.$router.push({
               name: "found-items",
-              params: { filteredItems: res?.data?.data[0]?.ITEMS },
+              params: { 
+                filteredItems: res?.data?.data[0]?.ITEMS, 
+                appliedFilters: {
+                  itemDescription: this.itemDescription,
+                  startDate: this.startDate,
+                  endDate: this.endDate,
+                  addressForApi: this.addressForApi,
+                  lat: this.lat,
+                  long: this.long
+                }
+              }
             });
           });
         })
