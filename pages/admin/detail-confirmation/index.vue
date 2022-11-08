@@ -930,6 +930,9 @@ export default {
           .then((response) => {
             if (response.status === 200) {
               this.isLoading[type] = false;
+              this.$nextTick(() => {
+                this.$router.push({ path: "/dashboard" });
+              });
             }
           })
           .catch((error) => {
