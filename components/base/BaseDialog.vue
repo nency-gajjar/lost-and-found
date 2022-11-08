@@ -65,6 +65,7 @@
               <h2 v-if="title" class="text-xl font-semibold py-4 text-gray-800">
                 {{ title }}
               </h2>
+              <slot name="input" />
               <p v-if="message" class="text-md text-gray-600 px-8">
                 {{ message }}
               </p>

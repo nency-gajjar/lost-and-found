@@ -1210,7 +1210,7 @@ export default {
     itemWidth: "",
     itemHeight: "",
     itemStatus: "",
-    itemStatusOptions: ["Claimed", "Unclaimed"],
+    itemStatusOptions: ["Claimed (You know the actual owner of this item)", "Unclaimed (You do not know the actual owner of this item)"],
     showReceiverInputs: false,
     receiverName: "",
     receiverEmail: "",
@@ -1355,7 +1355,14 @@ export default {
     },
     clearAddress() {
       this.address = "";
-      this.resetAddressFields();
+      this.autoCompleteAddress = {
+        address: "",
+        city: "",
+        state: "",
+        country: "",
+        zipcode: "",
+        phoneNo: "",
+      };
     },
     resetAddressFields() {
       this.autoCompleteAddress = {
@@ -1750,9 +1757,16 @@ export default {
       }
     },
     async onSubmit() {
+      let itemStatus = "";
+      if(this.itemStatus === "Claimed (You know the actual owner of this item)"){
+        itemStatus = "Claimed";
+      }
+      else if(this.itemStatus === "Unclaimed (You do not know the actual owner of this item)"){
+        itemStatus = "Unclaimed";
+      }
       this.validateVenuePhoneNo();
       this.validateEmployeeMobileNo();
-      if (this.itemStatus == "Claimed") this.validateReceiverMobileNo();
+      if (itemStatus == "Claimed") this.validateReceiverMobileNo();
 
       this.isLoading = true;
       const isValid = await this.$refs.observer.validate();
@@ -1795,10 +1809,10 @@ export default {
           item_length: this.itemLength,
           item_width: this.itemWidth,
           item_height: this.itemHeight,
-          item_status: this.itemStatus === "Claimed" ? 0 : 1,
+          item_status: itemStatus === "Claimed" ? 0 : 1,
         };
         params.foundItemId = this.foundItemId;
-        if (this.itemStatus === "Claimed") {
+        if (itemStatus === "Claimed") {
           let receiverMobileNo = this.formatMobileNumber(this.receiverMobileNo);
           params.receiver_name = this.receiverName;
           params.receiver_email = this.receiverEmail;
@@ -1885,18 +1899,17 @@ export default {
       this.showDraw = false;
       this.imgPreview = true;
     },
-    editImage() {
+    async editImage() {
       this.showEditor = false;
       if (this.image) {
-        // const response = await fetch(this.image);
-        // const blob = await response.blob();
-        // const file = new File([blob], "image.jpg", { type: blob.type });
-        this.imgSrc = this.image;
-        this.showEditor = true;
-        // this.loadingSpinner = true;
-        // setTimeout(() => {
-        //   this.loadingSpinner = false;
-        // }, 2000);
+        const data = await fetch(this.image, {cache: "no-cache"});
+        const blob = await data.blob();
+        let reader = new FileReader();
+        reader.onloadend = () => {
+          this.imgSrc = reader.result;
+          this.showEditor = true;
+        };
+        reader.readAsDataURL(blob);
       } else {
         this.showEditor = false;
       }
@@ -2003,7 +2016,7 @@ export default {
     },
     itemStatus(newValue, oldValue) {
       if (newValue != oldValue) {
-        if (newValue == "Claimed") {
+        if (newValue == "Claimed (You know the actual owner of this item)") {
           this.showReceiverInputs = true;
         } else {
           this.showReceiverInputs = false;
@@ -2421,7 +2434,9 @@ export default {
             }
           }
         })
-        .catch((error) => console.log(error));
+        .catch((error) => {
+          console.log(error);
+        });
     } else if (this.$route.params?.itemDetails) {
       this.senderFormTitle = "EDIT SENDER'S DETAILS";
       this.foundItemFormTitle = "EDIT FOUND ITEM'S DETAILS";

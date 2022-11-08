@@ -182,6 +182,13 @@ export default {
     if (this.$route.query.id) {
       this.itemId = this.$route.query.id;
     }
+    else{
+      this.$nextTick(() => {
+        this.$router.push({
+          name: "found-items",
+        });
+      });
+    }
     window.addEventListener("keydown", () => {
       this.showValidateAlert = false;
     });
