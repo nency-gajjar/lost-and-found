@@ -45,6 +45,7 @@
               <td class="py-3 px-2 text-left">
                 <ValidationProvider v-slot="{ errors }" rules="required">
                   <BaseInput
+                    :readonly="isFieldsEnable(index, item)"
                     class="w-80"
                     v-model="item.item_description"
                     label="Item Description"
@@ -64,6 +65,7 @@
               <td class="py-3 px-2 text-left">
                 <ValidationProvider v-slot="{ errors }" rules="required">
                   <BaseSelect
+                    :disabled="isFieldsEnable(index, item)"
                     v-model="item.package_type"
                     :options="packageTypeOptions"
                     label="Package Type"
@@ -84,10 +86,11 @@
                 <div class="flex gap-3">
                   <ValidationProvider
                     v-slot="{ errors }"
-                    rules="int|weight:@ounces"
+                    rules="int|weight"
                     name="Pounds"
                   >
                     <BaseInput
+                      :readonly="isFieldsEnable(index, item)"
                       v-model="item.weight_pounds"
                       class="w-20"
                       label="Pounds"
@@ -101,25 +104,13 @@
                       {{ errors[0] }}
                     </p>
                   </ValidationProvider>
-                  <ValidationProvider
-                    v-slot="{ errors }"
-                    rules="int|weight:@pounds"
-                    name="Ounces"
-                  >
-                    <BaseSelect
-                      class="w-24"
-                      v-model="item.weight_ounces"
-                      :options="weightOuncesOptions"
-                      label="Ounces"
-                      :class="errors.length > 0 && 'error'"
-                    />
-                    <p
-                      v-if="errors.length"
-                      class="vee-validation-error mt-2 text-sm text-red-600"
-                    >
-                      {{ errors[0] }}
-                    </p>
-                  </ValidationProvider>
+                  <BaseSelect
+                    :disabled="isFieldsEnable(index, item)"
+                    class="w-24"
+                    v-model="item.weight_ounces"
+                    :options="weightOuncesOptions"
+                    label="Ounces"
+                  />
                 </div>
               </td>
 
@@ -132,6 +123,7 @@
                     name="Length"
                   >
                     <BaseInput
+                      :readonly="isFieldsEnable(index, item)"
                       class="w-20"
                       v-model="item.item_length"
                       label="Length"
@@ -151,6 +143,7 @@
                     name="Width"
                   >
                     <BaseInput
+                      :readonly="isFieldsEnable(index, item)"
                       class="w-20"
                       v-model="item.item_width"
                       label="Width"
@@ -170,6 +163,7 @@
                     name="Height"
                   >
                     <BaseInput
+                      :readonly="isFieldsEnable(index, item)"
                       class="w-20"
                       v-model="item.item_height"
                       label="Height"
@@ -187,29 +181,56 @@
               </td>
               <td class="py-3 px-2 text-center">
                 <div class="flex item-center justify-center gap-3">
+                  <template v-if="index < originalItemsLength">
+                    <button
+                      v-show="item.isEdit"
+                      @click="editItemDesc(item)"
+                      class="
+                        bg-blue-500
+                        text-white
+                        active:bg-blue-600
+                        font-bold
+                        text-sm
+                        px-4
+                        py-2
+                        rounded
+                        shadow
+                        hover:shadow-md
+                        outline-none
+                        focus:outline-none
+                        mr-1
+                        mb-1
+                      "
+                      type="button"
+                    >
+                      Edit
+                    </button>
+                    <button
+                      @click="enableFields(item.id)"
+                      v-show="!item.isEdit"
+                      class="
+                        bg-blue-500
+                        text-white
+                        active:bg-blue-600
+                        font-bold
+                        text-sm
+                        px-4
+                        py-2
+                        rounded
+                        shadow
+                        hover:shadow-md
+                        outline-none
+                        focus:outline-none
+                        mr-1
+                        mb-1
+                      "
+                      type="button"
+                    >
+                      Enable
+                    </button>
+                  </template>
                   <button
-                    @click="editItemDesc(item)"
-                    class="
-                      bg-blue-500
-                      text-white
-                      active:bg-blue-600
-                      font-bold
-                      text-sm
-                      px-4
-                      py-2
-                      rounded
-                      shadow
-                      hover:shadow-md
-                      outline-none
-                      focus:outline-none
-                      mr-1
-                      mb-1
-                    "
-                    type="button"
-                  >
-                    Edit
-                  </button>
-                  <button
+                    v-show="index < originalItemsLength"
                     @click="deleteItemDesc(item)"
                     class="
                       bg-red-500
@@ -266,6 +287,7 @@
           :is-loading="isLoading"
           @click="validate().then(onSave)"
           button-type="submit"
+          v-show="enableSaveButton"
         >
           Save
         </BaseButton>
@@ -306,7 +328,32 @@ export default {
     isLoading: false,
     originalItemsLength: null,
   }),
+  computed: {
+    enableSaveButton(){
+      if(this.items.length > this.originalItemsLength){
+        return true;
+      }
+      return false;
+    },
+  },
   methods: {
+    isFieldsEnable(index, item){
+      if(index < this.originalItemsLength){
+        if(!item.isEdit){
+          return true;
+        }
+      }
+      return false;
+    },
+    enableFields(id){
+      let index = this.items.findIndex(item => {
+        return id === item.id;
+      });
+
+      if(index !== -1){
+        this.items[index].isEdit = true;
+      }
+    },
     getItemDescriptionOptions() {
       this.$axios
         .get("/viewallItemdescriptionDetails")
@@ -316,7 +363,8 @@ export default {
             this.items = this.items.map(item => {
               return{
                 ...item,
-                weight_ounces: String(item.weight_ounces)
+                weight_ounces: String(item.weight_ounces),
+                isEdit: false,
               }
             })
             this.originalItemsLength = this.items.length;
@@ -368,7 +416,7 @@ export default {
           item_description: "",
           package_type: "",
           weight_pounds: "",
-          weight_ounces: "",
+          weight_ounces: "0",
           item_length: "",
           item_width: "",
           item_height: "",

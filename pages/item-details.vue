@@ -1291,19 +1291,22 @@ export default {
   },
   methods: {
     getItemDescriptionOptions() {
-      this.$axios
-        .get("/viewallItemdescriptionDetails")
-        .then((response) => {
-          if (response.status === 200) {
-            this.itemDescriptionResponse = response.data?.data?.Items || [];
-            this.itemDescriptionOptions = this.itemDescriptionResponse.map(item => {
-              return item.item_description;
-            });
-          }
-        })
-        .catch((error) => {
-          console.log(error);
-        });
+      return new Promise((resolve) => {
+        this.$axios
+          .get("/viewallItemdescriptionDetails")
+          .then((response) => {
+            if (response.status === 200) {
+              this.itemDescriptionResponse = response.data?.data?.Items || [];
+              this.itemDescriptionOptions = this.itemDescriptionResponse.map(item => {
+                return item.item_description;
+              });
+              resolve();
+            }
+          })
+          .catch((error) => {
+            console.log(error);
+          });
+      })
     },
     getAddress() {
       const autocomplete = new google.maps.places.Autocomplete(
@@ -2418,8 +2421,8 @@ export default {
     //   }
     // },
   },
-  mounted() {
-    this.getItemDescriptionOptions();
+  async mounted() {
+    await this.getItemDescriptionOptions();
     window.addEventListener("keydown", () => {
       this.showValidateAlert = false;
     });
@@ -2464,8 +2467,8 @@ export default {
             this.itemLength = data.item_length;
             this.itemWidth = data.item_width;
             this.itemHeight = data.item_height;
-            this.itemStatus = data.item_status === 0 ? "Claimed" : "Unclaimed";
-
+            this.itemStatus = data.item_status === 0 ? "Claimed (You know the actual owner of this item)" : "Unclaimed (You do not know the actual owner of this item)";
+            
             if (data.item_status === 0) {
               this.receiverName = data.receiver_name;
               this.receiverEmail = data.receiver_email;
@@ -2514,7 +2517,7 @@ export default {
       this.itemLength = data.item_length;
       this.itemWidth = data.item_width;
       this.itemHeight = data.item_height;
-      this.itemStatus = data.item_status === 0 ? "Claimed" : "Unclaimed";
+      this.itemStatus = data.item_status === 0 ? "Claimed (You know the actual owner of this item)" : "Unclaimed (You do not know the actual owner of this item)";
 
       if (data.item_status === 0) {
         this.receiverName = data.receiver_name;
