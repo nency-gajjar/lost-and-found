@@ -459,7 +459,7 @@
         </div>
       </div>
       <div v-else-if="!isLoading && lostItems.length === 0">
-        No Result Found
+        <p class="text-gray-600 font-medium m-14">No Result Found</p>
       </div>
       <div v-else>
         <BaseLoader />
@@ -543,8 +543,7 @@ export default {
       let params = {
         abc: "123",
       };
-      if (this.itemDescription)
-        params.item_description = this.itemDescription;
+      if (this.itemDescription) params.item_description = this.itemDescription;
       if (this.startDate || this.endDate) {
         params.datse = this.formatedStartDate;
         params.datse1 = this.formatedEndDate;
@@ -556,11 +555,11 @@ export default {
         .post("getallfilteritemdetails", {}, { params: params })
         .then((res) => {
           this.lostItems = res?.data?.data[0]?.ITEMS;
-          if(!this.lostItems){
+          if (!this.lostItems) {
             this.lostItems = [];
           }
           this.cloneLostItems = this.lostItems;
-          if(this.searchQuery){
+          if (this.searchQuery) {
             this.filterItems();
           }
           this.isLoading = false;
@@ -590,6 +589,9 @@ export default {
       });
     },
     getAddress() {
+      if (this.address == "") {
+        document.getElementById("autocomplete-found-items").placeholder = "";
+      }
       const autocomplete = new google.maps.places.Autocomplete(
         document.getElementById("autocomplete-found-items")
       );
@@ -642,9 +644,11 @@ export default {
         .then((response) => {
           if (response.status === 200) {
             let itemDescriptionResponse = response.data?.data?.Items || [];
-            this.itemDescriptionOptions = itemDescriptionResponse.map(item => {
-              return item.item_description;
-            });
+            this.itemDescriptionOptions = itemDescriptionResponse.map(
+              (item) => {
+                return item.item_description;
+              }
+            );
           }
         })
         .catch((error) => {
@@ -677,8 +681,9 @@ export default {
     if (this.$route.params?.filteredItems) {
       this.lostItems = this.$route.params?.filteredItems;
       this.cloneLostItems = this.lostItems;
-      if(this.$route.params?.appliedFilters){
-        this.itemDescription = this.$route.params.appliedFilters.itemDescription;
+      if (this.$route.params?.appliedFilters) {
+        this.itemDescription =
+          this.$route.params.appliedFilters.itemDescription;
         this.startDate = this.$route.params.appliedFilters.startDate;
         this.endDate = this.$route.params.appliedFilters.endDate;
         this.lostItemAddress = this.$route.params.appliedFilters.addressForApi;

@@ -18,6 +18,7 @@
         </div>
         <section class="grid md:grid-cols-2 xl:grid-cols-5 gap-6">
           <div
+            :class="{ 'border-b-8 border-gray-500': tabSelected === 5 }"
             class="
               p-3
               bg-blue-600
@@ -56,6 +57,7 @@
             </div>
           </div>
           <div
+            :class="{ 'border-b-8 border-gray-500': tabSelected === 1 }"
             class="
               p-3
               bg-pink-600
@@ -99,6 +101,7 @@
             </div>
           </div>
           <div
+            :class="{ 'border-b-8 border-gray-500': tabSelected === 2 }"
             class="
               p-3
               bg-yellow-600
@@ -142,6 +145,7 @@
             </div>
           </div>
           <div
+            :class="{ 'border-b-8 border-gray-500': tabSelected === 3 }"
             class="
               p-3
               bg-cyan-600
@@ -185,6 +189,7 @@
             </div>
           </div>
           <div
+            :class="{ 'border-b-8 border-gray-500': tabSelected === 4 }"
             class="
               p-3
               bg-indigo-600
@@ -379,7 +384,7 @@
         </div>
       </div>
       <div v-else-if="!isLoading && lostItems.length === 0">
-        No Result Found
+        <p class="text-gray-600 font-medium m-14">No Result Found</p>
       </div>
       <div v-else>
         <BaseLoader />

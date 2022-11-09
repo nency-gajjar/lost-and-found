@@ -1313,6 +1313,9 @@ export default {
         });
     },
     getAddress() {
+      if (this.address == "") {
+        document.getElementById("autocomplete").placeholder = "";
+      }
       const autocomplete = new google.maps.places.Autocomplete(
         document.getElementById("autocomplete")
       );
