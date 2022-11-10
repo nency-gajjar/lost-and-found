@@ -526,7 +526,11 @@
                           Take a Picture
                         </label>
 
-                        <span v-show="mobileDevice" class="m-2 text-md text-gray-500">or</span>
+                        <span
+                          v-show="mobileDevice"
+                          class="m-2 text-md text-gray-500"
+                          >or</span
+                        >
                         <input
                           type="file"
                           id="choose-file"
@@ -1212,7 +1216,10 @@ export default {
     itemWidth: "",
     itemHeight: "",
     itemStatus: "",
-    itemStatusOptions: ["Claimed (You know the actual owner of this item)", "Unclaimed (You do not know the actual owner of this item)"],
+    itemStatusOptions: [
+      "Claimed (You know the actual owner of this item)",
+      "Unclaimed (You do not know the actual owner of this item)",
+    ],
     showReceiverInputs: false,
     receiverName: "",
     receiverEmail: "",
@@ -1287,7 +1294,11 @@ export default {
   },
   methods: {
     isMobile() {
-      if(/Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent)) {
+      if (
+        /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(
+          navigator.userAgent
+        )
+      ) {
         return true;
       } else {
         return false;
@@ -1768,10 +1779,14 @@ export default {
     },
     async onSubmit() {
       let itemStatus = "";
-      if(this.itemStatus === "Claimed (You know the actual owner of this item)"){
+      if (
+        this.itemStatus === "Claimed (You know the actual owner of this item)"
+      ) {
         itemStatus = "Claimed";
-      }
-      else if(this.itemStatus === "Unclaimed (You do not know the actual owner of this item)"){
+      } else if (
+        this.itemStatus ===
+        "Unclaimed (You do not know the actual owner of this item)"
+      ) {
         itemStatus = "Unclaimed";
       }
       this.validateVenuePhoneNo();
@@ -1912,7 +1927,7 @@ export default {
     async editImage() {
       this.showEditor = false;
       if (this.image) {
-        const data = await fetch(this.image, {cache: "no-cache"});
+        const data = await fetch(this.image, { cache: "no-cache" });
         const blob = await data.blob();
         let reader = new FileReader();
         reader.onloadend = () => {
@@ -1928,23 +1943,16 @@ export default {
       const allowedExtensions = /(\.jpg|\.jpeg|\.png)$/i;
       const filePath = event.target?.files[0];
       if (filePath) {
-        // const fileSize = event.target?.files[0]?.size / 1024 / 1024;
         if (allowedExtensions.exec(filePath.name)) {
-          // if (fileSize < 2) {
-            this.isImageValid = true;
-            this.imageValidationMessage = "";
-            let file = filePath;
-            let reader = new FileReader();
-            reader.onloadend = () => {
-              this.imgSrc = reader.result;
-              this.showEditor = true;
-            };
-            reader.readAsDataURL(file);
-          // } else {
-          //   this.imageValidationMessage = "File size must under 2MB";
-          //   this.isImageValid = false;
-          //   return;
-          // }
+          this.isImageValid = true;
+          this.imageValidationMessage = "";
+          let file = filePath;
+          let reader = new FileReader();
+          reader.onloadend = () => {
+            this.imgSrc = reader.result;
+            this.showEditor = true;
+          };
+          reader.readAsDataURL(file);
         } else {
           this.imageValidationMessage =
             "Uploaded file is not supported. Allowed file types: .png, .jpeg, .jpg";
