@@ -235,6 +235,45 @@
         </section>
         <!-- </div> -->
       </main>
+      <div class="w-full flex gap-3 flex-auto mt-3 justify-end">
+        <div class="w-full sm:w-7/12 flex justify-end items-center pt-5 relative">
+          <input
+            v-model="searchQuery"
+            @input="filterItems"
+            class="
+              text-sm
+              leading-none
+              text-left text-gray-600
+              px-4
+              py-3
+              w-full
+              border
+              rounded-full
+              border-gray-300
+              outline-none
+            "
+            type="text"
+            placeholder="Search"
+          />
+          <BaseIcon
+            v-if="!searchQuery"
+            icon="magnifying-glass"
+            color="gray"
+            size="1x"
+            class="absolute right-3 z-10 cursor-pointer"
+            style="max-width: 15px"
+          />
+          <BaseIcon
+            v-else
+            icon="xmark"
+            color="gray"
+            size="1x"
+            class="absolute right-3 z-10 cursor-pointer"
+            style="max-width: 15px"
+            @click="(searchQuery = ''), (lostItems = cloneLostItems)"
+          />
+        </div>
+      </div>
       <div v-if="!isLoading && lostItems.length > 0">
         <div
           v-for="item in lostItems"
@@ -411,28 +450,57 @@ export default {
       tabSelected: 1,
       pendingListDetails: [],
       showAddNewItemDescription: false,
+      searchQuery: "",
+      lostItems: [],
+      cloneLostItems: []
     };
   },
   created() {
     this.getAdminDashboardDetails();
     this.getPendingListDetails();
   },
-  computed: {
-    lostItems() {
-      if (this.tabSelected === 1) {
-        return this.dashboardDetails[0].totallostitemslisted || [];
-      } else if (this.tabSelected === 2) {
-        return this.dashboardDetails[1].totalclaimitems || [];
-      } else if (this.tabSelected === 3) {
-        return this.dashboardDetails[2].totalitemslistedtoday || [];
-      } else if (this.tabSelected === 4) {
-        return this.dashboardDetails[3].totalclaimitemstoday || [];
-      } else if (this.tabSelected === 5) {
-        return this.pendingListDetails;
-      }
+  watch:{
+    tabSelected(value){
+      this.tabSelectedChanged(value);
     },
   },
   methods: {
+    tabSelectedChanged(value){
+      this.searchQuery = "";
+      if (value === 1) {
+        this.lostItems = this.dashboardDetails[0].totallostitemslisted || [];
+      } else if (value === 2) {
+        this.lostItems = this.dashboardDetails[1].totalclaimitems || [];
+      } else if (value === 3) {
+        this.lostItems = this.dashboardDetails[2].totalitemslistedtoday || [];
+      } else if (value === 4) {
+        this.lostItems = this.dashboardDetails[3].totalclaimitemstoday || [];
+      } else if (value === 5) {
+        this.lostItems = this.pendingListDetails;
+      }
+      this.cloneLostItems = this.lostItems;
+    },
+    filterItems(){
+      let filterArray = [];
+      if (this.searchQuery === "") {
+        this.lostItems = this.cloneLostItems;
+      }
+      this.cloneLostItems.forEach((item) => {
+        let itemArr = Object.values(item);
+        let filteredItems = itemArr.filter((itemElement) => {
+          if (typeof itemElement !== "string") {
+            itemElement = itemElement.toString();
+          }
+          return itemElement
+            .toLowerCase()
+            .includes(this.searchQuery.toLowerCase());
+        });
+        if (filteredItems.length != 0) {
+          filterArray.push(item);
+        }
+      });
+      this.lostItems = filterArray;
+    },
     getAdminDashboardDetails() {
       const access_token = this.$auth.getToken("local");
       this.isLoading = true;
@@ -446,6 +514,7 @@ export default {
           if (response.status === 200) {
             this.isLoading = false;
             this.dashboardDetails = response?.data?.data;
+            this.tabSelectedChanged(this.tabSelected);
           }
         })
         .catch((err) => {

@@ -294,6 +294,8 @@ export default {
                 return item.item_description;
               }
             );
+            this.itemDescriptionOptions.unshift("All");
+            this.itemDescription = "All";
           }
         })
         .catch((error) => {
@@ -319,41 +321,21 @@ export default {
       document.getElementById("autocomplete-main").placeholder = "";
     },
     applyFilters() {
-      let params = {
-        abc: "123",
-      };
-      if (this.itemDescription) params.item_description = this.itemDescription;
-      if (this.startDate || this.endDate) {
-        params.datse = this.formatedStartDate;
-        params.datse1 = this.formatedEndDate;
-      }
-      if (this.lostItemAddress) params.address = this.lostItemAddress;
-      if (this.lat) params.lat = this.lat;
-      if (this.long) params.long = this.long;
-
-      this.$axios
-        .post("getallfilteritemdetails", {}, { params: params })
-        .then((res) => {
-          this.$nextTick(() => {
-            this.$router.push({
-              name: "found-items",
-              params: {
-                filteredItems: res?.data?.data[0]?.ITEMS,
-                appliedFilters: {
-                  itemDescription: this.itemDescription,
-                  startDate: this.startDate,
-                  endDate: this.endDate,
-                  lostItemAddress: this.lostItemAddress,
-                  lat: this.lat,
-                  long: this.long,
-                },
-              },
-            });
-          });
-        })
-        .catch((err) => {
-          console.log(err);
+      this.$nextTick(() => {
+        this.$router.push({
+          name: "found-items",
+          params: {
+            appliedFilters: {
+              itemDescription: this.itemDescription,
+              startDate: this.startDate,
+              endDate: this.endDate,
+              lostItemAddress: this.lostItemAddress,
+              lat: this.lat,
+              long: this.long,
+            },
+          },
         });
+      });
     },
   },
 };

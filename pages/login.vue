@@ -176,7 +176,6 @@ export default {
             data: params,
           })
           .then(async (response) => {
-            console.log(response);
             if (response.status === 200) {
               await this.$auth.setUser({
                 email: params.email,

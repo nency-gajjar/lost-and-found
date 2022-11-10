@@ -543,7 +543,11 @@ export default {
       let params = {
         abc: "123",
       };
-      if (this.itemDescription) params.item_description = this.itemDescription;
+      let itemDescription = this.itemDescription;
+      if (this.itemDescription === "All") {
+        itemDescription = "";
+      }
+      if (itemDescription) params.item_description = itemDescription;
       if (this.startDate || this.endDate) {
         params.datse = this.formatedStartDate;
         params.datse1 = this.formatedEndDate;
@@ -563,7 +567,16 @@ export default {
             this.filterItems();
           }
           this.isLoading = false;
-          this.isFilterApplied = true;
+          if (
+            itemDescription ||
+            this.startDate ||
+            this.endDate ||
+            this.lostItemAddress
+          ) {
+            this.isFilterApplied = true;
+          } else {
+            this.isFilterApplied = false;
+          }
         })
         .catch((err) => {
           console.log(err);
@@ -639,21 +652,26 @@ export default {
       this.applyFilters();
     },
     getItemDescriptionOptions() {
-      this.$axios
-        .get("/viewallItemdescriptionDetails")
-        .then((response) => {
-          if (response.status === 200) {
-            let itemDescriptionResponse = response.data?.data?.Items || [];
-            this.itemDescriptionOptions = itemDescriptionResponse.map(
-              (item) => {
-                return item.item_description;
-              }
-            );
-          }
-        })
-        .catch((error) => {
-          console.log(error);
-        });
+      return new Promise((resolve) => {
+        this.$axios
+          .get("/viewallItemdescriptionDetails")
+          .then((response) => {
+            if (response.status === 200) {
+              let itemDescriptionResponse = response.data?.data?.Items || [];
+              this.itemDescriptionOptions = itemDescriptionResponse.map(
+                (item) => {
+                  return item.item_description;
+                }
+              );
+              this.itemDescriptionOptions.unshift("All");
+              this.itemDescription = "All";
+              resolve();
+            }
+          })
+          .catch((error) => {
+            console.log(error);
+          });
+      });
     },
     // getAllLostItems() {
     //   this.isFilterApplied = false;
@@ -676,21 +694,17 @@ export default {
     //     });
     // }
   },
-  mounted() {
-    this.getItemDescriptionOptions();
-    if (this.$route.params?.filteredItems) {
-      this.lostItems = this.$route.params?.filteredItems;
-      this.cloneLostItems = this.lostItems;
-      if (this.$route.params?.appliedFilters) {
-        this.itemDescription =
-          this.$route.params.appliedFilters.itemDescription;
-        this.startDate = this.$route.params.appliedFilters.startDate;
-        this.endDate = this.$route.params.appliedFilters.endDate;
-        this.lostItemAddress = this.$route.params.appliedFilters.addressForApi;
-        this.lat = this.$route.params.appliedFilters.lat;
-        this.long = this.$route.params.appliedFilters.long;
-        this.isFilterApplied = true;
-      }
+  async mounted() {
+    await this.getItemDescriptionOptions();
+    if (this.$route.params?.appliedFilters) {
+      this.itemDescription = this.$route.params.appliedFilters.itemDescription;
+      this.startDate = this.$route.params.appliedFilters.startDate;
+      this.endDate = this.$route.params.appliedFilters.endDate;
+      this.address = this.$route.params.appliedFilters.lostItemAddress;
+      this.lostItemAddress = this.$route.params.appliedFilters.lostItemAddress;
+      this.lat = this.$route.params.appliedFilters.lat;
+      this.long = this.$route.params.appliedFilters.long;
+      this.applyFilters();
     } else {
       this.applyFilters();
     }
