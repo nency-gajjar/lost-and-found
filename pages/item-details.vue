@@ -523,7 +523,12 @@
                             hover:bg-indigo-500 hover:text-white
                           "
                         >
-                          <BaseIcon icon="camera" color="white" class="mr-1" />
+                          <BaseIcon
+                            icon="camera"
+                            color="white"
+                            class="mr-1"
+                            style="max-width: 15px"
+                          />
                           Take a Picture
                         </label>
 
@@ -555,6 +560,7 @@
                             icon="arrow-up-from-bracket"
                             color="white"
                             class="mr-1"
+                            style="max-width: 15px"
                           />
                           Choose a file
                         </label>
