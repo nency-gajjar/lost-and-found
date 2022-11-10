@@ -673,8 +673,7 @@ export default {
           this.isLoadingItemDetails = false;
           console.log(error);
         });
-    }
-    else{
+    } else {
       this.$nextTick(() => {
         this.$router.push({
           name: "found-items",
@@ -716,6 +715,7 @@ export default {
         })
         .catch((error) => {
           console.log(error);
+          this.$toast.error("Something went wrong! Please try again.");
           this.isLoading[type] = false;
         });
     },

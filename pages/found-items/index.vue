@@ -2,12 +2,168 @@
   <div class="wrapper">
     <div class="container max-w-7xl mx-auto px-4">
       <div
-        :class="
-          !isLoading && lostItems.length > 0
-            ? ' justify-between'
-            : 'justify-end'
-        "
         class="
+          justify-end
+          w-full
+          flex flex-col
+          sm:flex-row
+          flex-wrap
+          sm:flex-nowrap
+          mt-8
+          mb-5
+        "
+      >
+        <!-- <h2
+          v-if="!isLoading && lostItems.length > 0"
+          class="text-2xl font-semibold leading-tight"
+        >
+          Found Items ({{ lostItems.length }})
+        </h2> -->
+        <BaseButton
+          class="sm:ml-2 grow mt-3 sm:mt-0 sm:grow-0"
+          @click="addNewItem"
+        >
+          + Add New Item
+        </BaseButton>
+      </div>
+
+      <!-- Filter Panel -->
+      <div class="flex flex-col gap-3">
+        <div class="align-middle inline-block w-full">
+          <!-- Location -->
+          <div class="inline-flex flex-auto w-full bg-white">
+            <BaseInput
+              v-model="address"
+              id="autocomplete-found-items"
+              type="text"
+              placeholder=""
+              label="Location"
+              class="w-full"
+              @input="getAddress"
+            >
+              <template v-slot:icon>
+                <div
+                  v-if="address"
+                  class="absolute inset-y-0 right-0 flex items-center p-5"
+                >
+                  <BaseIcon @click="clearAddress" icon="xmark" color="gray" />
+                </div>
+                <div
+                  v-else
+                  class="absolute inset-y-0 right-0 flex items-center p-5"
+                >
+                  <BaseIcon icon="location-arrow" color="lightgray" />
+                </div>
+              </template>
+            </BaseInput>
+          </div>
+        </div>
+        <div class="align-middle inline-block w-full">
+          <div
+            class="
+              flex
+              justify-between
+              flex-col
+              gap-3
+              flex-wrap
+              md:flex-nowrap
+              sm:flex-row
+              items-center
+            "
+          >
+            <div class="w-full flex gap-3 flex-auto mt-3 sm:mt-0 sm:w-6/12">
+              <date-picker
+                placeholder="Start date"
+                v-model="startDate"
+                formate="YYYY-MM-DD"
+              ></date-picker>
+              <date-picker
+                placeholder="End date"
+                v-model="endDate"
+                formate="YYYY-MM-DD"
+              ></date-picker>
+            </div>
+
+            <!-- Item Description -->
+            <div class="h-full flex-auto w-full mt-3 sm:mt-0 sm:w-2/12">
+              <BaseSelect
+                v-model="itemDescription"
+                :options="itemDescriptionOptions"
+                label="Item Description"
+              />
+            </div>
+            <div
+              class="
+                w-full
+                flex
+                item-center
+                justify-end
+                sm:mt-0 sm:w-2/12
+                flex-auto
+                gap-2
+              "
+            >
+              <button
+                @click="applyFilters"
+                :class="
+                  isFilterApplied
+                    ? 'bg-green-600 hover:bg-green-700'
+                    : 'bg-blue-500 hover:bg-blue-600'
+                "
+                class="
+                  text-white
+                  font-bold
+                  text-sm
+                  px-4
+                  py-2
+                  rounded
+                  shadow
+                  hover:shadow-md
+                  outline-none
+                  focus:outline-none
+                  mr-1
+                  mb-1
+                "
+                type="button"
+              >
+                <BaseIcon
+                  icon="filter"
+                  color="white"
+                  style="max-width: 15px"
+                  class="mr-1"
+                />
+                {{ isFilterApplied ? "Filters Applied" : "Apply Filters" }}
+              </button>
+              <button
+                @click="clearFilters"
+                class="
+                  bg-gray bg-white
+                  hover:shadow-lg hover:bg-gray-100
+                  text-gray-600 text-sm
+                  font-bold
+                  px-4
+                  py-2
+                  rounded
+                  shadow
+                  hover:shadow-md
+                  outline-none
+                  border border-gray-300
+                  focus:outline-none
+                  mr-1
+                  mb-1
+                "
+                type="button"
+              >
+                Clear
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div
+        class="
+          justify-start
           w-full
           flex flex-col
           sm:flex-row
@@ -23,153 +179,168 @@
         >
           Found Items ({{ lostItems.length }})
         </h2>
-        <BaseButton
-        v-show="isAdminLogin"
-          class="sm:ml-2 grow mt-3 sm:mt-0 sm:grow-0"
-          @click="addNewItem"
-        >
-          + Add New Item
-        </BaseButton>
       </div>
-      <div class="align-middle inline-block w-full">
-        <div
-          class="
-            flex
-            justify-between
-            flex-col
-            gap-4
-            flex-wrap
-            md:flex-nowrap
-            sm:flex-row
-            items-center
-          "
-        >
+
+      <div class="flex flex-col gap-3">
+        <div class="align-middle inline-block w-full">
           <div
             class="
-              inline-flex
-              border
-              w-full
-              sm:w-3/12
-              rounded
-              px-3
-              h-12
-              flex-auto
-              bg-white
+              flex
+              justify-between
+              flex-col
+              gap-3
+              flex-wrap
+              md:flex-nowrap
+              sm:flex-row
+              items-center
             "
           >
-            <div
-              class="flex flex-wrap items-stretch w-full h-full mb-6 relative"
-            >
-              <div class="flex">
-                <span
+            <div class="w-full flex gap-3 flex-auto mt-3 sm:mt-0 sm:w-5/12">
+              <ul
+                v-show="isFilterApplied"
+                class="list-none flex items-center mt-4"
+              >
+                <li
+                  v-if="isFilterApplied && lostItemAddress"
                   class="
                     flex
                     items-center
-                    leading-normal
-                    bg-transparent
-                    rounded rounded-r-none
-                    border border-r-0 border-none
-                    py-2
-                    whitespace-no-wrap
-                    text-grey-dark text-sm
+                    p-2
+                    mr-4
+                    text-xs text-gray-600
+                    bg-white
+                    rounded-full
+                    border border-gray-300
+                    cursor-pointer
                   "
                 >
-                  <svg
-                    width="18"
-                    height="18"
-                    class="w-4 lg:w-auto"
-                    viewBox="0 0 18 18"
-                    fill="none"
-                    xmlns="http://www.w3.org/2000/svg"
-                  >
-                    <path
-                      d="M8.11086 15.2217C12.0381 15.2217 15.2217 12.0381 15.2217 8.11086C15.2217 4.18364 12.0381 1 8.11086 1C4.18364 1 1 4.18364 1 8.11086C1 12.0381 4.18364 15.2217 8.11086 15.2217Z"
-                      stroke="#455A64"
-                      stroke-linecap="round"
-                      stroke-linejoin="round"
+                  <p>{{ lostItemAddress }}</p>
+                  <span class="ml-2">
+                    <BaseIcon
+                      @click="resetAddress"
+                      icon="xmark"
+                      color="gray"
+                      style="max-width: 12px"
                     />
-                    <path
-                      d="M16.9993 16.9993L13.1328 13.1328"
-                      stroke="#455A64"
-                      stroke-linecap="round"
-                      stroke-linejoin="round"
+                  </span>
+                </li>
+                <li
+                  v-if="isFilterApplied && startDate"
+                  class="
+                    flex
+                    items-center
+                    p-2
+                    mr-4
+                    text-xs text-gray-600
+                    bg-white
+                    rounded-full
+                    border border-gray-300
+                    cursor-pointer
+                  "
+                >
+                  <p>{{ formatedStartDate }}</p>
+                  <span class="ml-2">
+                    <BaseIcon
+                      @click="resetStartDate"
+                      icon="xmark"
+                      color="gray"
+                      style="max-width: 12px"
                     />
-                  </svg>
-                </span>
+                  </span>
+                </li>
+                <li
+                  v-if="isFilterApplied && endDate"
+                  class="
+                    flex
+                    items-center
+                    p-2
+                    mr-4
+                    text-xs text-gray-600
+                    bg-white
+                    rounded-full
+                    border border-gray-300
+                    cursor-pointer
+                  "
+                >
+                  <p>{{ formatedEndDate }}</p>
+                  <span class="ml-2">
+                    <BaseIcon
+                      @click="resetEndDate"
+                      icon="xmark"
+                      color="gray"
+                      style="max-width: 12px"
+                    />
+                  </span>
+                </li>
+                <li
+                  v-if="itemDescription"
+                  class="
+                    flex
+                    items-center
+                    p-2
+                    mr-4
+                    text-xs text-gray-600
+                    bg-white
+                    rounded-full
+                    border border-gray-300
+                    cursor-pointer
+                  "
+                >
+                  <p>{{ itemDescription }}</p>
+                  <span class="ml-2">
+                    <BaseIcon
+                      @click="resetItemDescription"
+                      icon="xmark"
+                      color="gray"
+                      style="max-width: 12px"
+                    />
+                  </span>
+                </li>
+              </ul>
+            </div>
+            <div class="w-full flex gap-3 flex-auto mt-3 sm:mt-0 sm:w-7/12">
+              <div class="w-full flex justify-end items-center pt-5 relative">
+                <input
+                  v-model="searchQuery"
+                  @input="filterItems"
+                  class="
+                    text-sm
+                    leading-none
+                    text-left text-gray-600
+                    px-4
+                    py-3
+                    w-full
+                    border
+                    rounded-full
+                    border-gray-300
+                    outline-none
+                  "
+                  type="text"
+                  placeholder="Search"
+                />
+                <BaseIcon
+                  v-if="!searchQuery"
+                  icon="magnifying-glass"
+                  color="gray"
+                  size="1x"
+                  class="absolute right-3 z-10 cursor-pointer"
+                  style="max-width: 15px"
+                />
+                <BaseIcon
+                  v-else
+                  icon="xmark"
+                  color="gray"
+                  size="1x"
+                  class="absolute right-3 z-10 cursor-pointer"
+                  style="max-width: 15px"
+                  @click="(searchQuery = ''), (lostItems = cloneLostItems)"
+                />
               </div>
-              <input
-                v-model="searchQuery"
-                type="text"
-                class="
-                  border-transparent
-                  focus:border-transparent focus:ring-0
-                  flex-shrink
-                  w-full
-                  flex-grow flex-auto
-                  leading-normal
-                  tracking-wide
-                  w-px
-                  flex-1
-                  border-0
-                  shadow-none
-                  rounded rounded-l-none
-                  px-3
-                  relative
-                  focus:outline-none
-                  text-xxs
-                  lg:text-xs lg:text-base
-                  text-gray-500
-                  font-thin
-                "
-                placeholder="Search"
-              />
             </div>
           </div>
-          <div class="w-full flex gap-2 flex-auto mt-3 sm:mt-0 sm:w-3/12">
-            <date-picker
-              placeholder="Start date"
-              v-model="startDate"
-              formate="YYYY-MM-DD"
-            ></date-picker>
-            <date-picker
-              placeholder="End date"
-              v-model="endDate"
-              formate="YYYY-MM-DD"
-            ></date-picker>
-          </div>
-          <div class="h-full flex-auto w-full mt-3 sm:mt-0 sm:w-3/12">
-            <select
-              id="countries"
-              @change="changeItemDescription"
-              class="
-                h-12
-                border border-gray-300
-                text-gray-900 text-sm
-                rounded-lg
-                focus:ring-blue-500 focus:border-blue-500
-                block
-                w-full
-                p-2.5
-              "
-            >
-              <option disabled selected>Select category</option>
-              <option
-                v-for="item in itemDescriptionOptions"
-                :key="item"
-                :value="item"
-              >
-                {{ item }}
-              </option>
-            </select>
-          </div>
-          <BaseButton
-            class="sm:ml-2 grow mt-3 sm:mt-0 sm:grow-0 whitespace-nowrap"
-            @click="applyFilters"
-          >
-            Apply
-          </BaseButton>
         </div>
       </div>
+
       <div v-if="!isLoading && lostItems.length > 0">
         <div
           v-for="item in lostItems"
@@ -273,11 +444,11 @@
                 px-5
                 py-2
                 rounded-md
-                border-indigo-600 border
-                text-indigo-600
+                text-white
                 transition
                 duration-300
-                hover:bg-indigo-600 hover:text-white
+                bg-red-500
+                hover:bg-red-600
                 focus:outline-none
               "
               @click.stop="claimItem(item)"
@@ -287,7 +458,9 @@
           </div>
         </div>
       </div>
-      <div v-else-if="!isLoading && lostItems.length === 0">No Data</div>
+      <div v-else-if="!isLoading && lostItems.length === 0">
+        <p class="text-gray-600 font-medium m-14">No Result Found</p>
+      </div>
       <div v-else>
         <BaseLoader />
       </div>
@@ -299,41 +472,115 @@
 import DatePicker from "vue2-datepicker";
 import "vue2-datepicker/index.css";
 import moment from "moment";
-import { itemDescriptionOptions } from "../../static/defaults.js";
-
+// import { itemDescriptionOptions } from "../../static/defaults.js";
+import { cloneDeep } from "lodash";
 export default {
   components: { DatePicker },
   data() {
     return {
       lostItems: [],
+      cloneLostItems: [],
       isLoading: false,
       searchQuery: "",
       startDate: null,
       endDate: null,
       itemDescription: "",
-      itemDescriptionOptions: itemDescriptionOptions,
+      itemDescriptionOptions: [],
+      address: "",
+      lostItemAddress: "",
+      lat: "",
+      long: "",
+      isFilterApplied: false,
     };
   },
   computed: {
-    isAdminLogin() {
-      if (this.$auth.loggedIn) {
-        return false;
+    formatedStartDate() {
+      if (this.startDate) {
+        return moment(this.startDate).format("YYYY-MM-DD");
       }
-      return true;
+      return moment(new Date()).format("YYYY-MM-DD");
+    },
+    formatedEndDate() {
+      if (this.endDate) {
+        return moment(this.endDate).format("YYYY-MM-DD");
+      }
+      return moment(new Date()).format("YYYY-MM-DD");
     },
   },
   methods: {
-    changeItemDescription(event) {
-      this.itemDescription = event.target.value;
-    },
     addNewItem() {
       this.$router.push({ name: "item-details" });
     },
-    applyFilters(){
-      console.log(this.searchQuery);
-      console.log(moment(this.startDate).format("YYYY-MM-DD"));
-      console.log(moment(this.endDate).format("YYYY-MM-DD"));
-      console.log(this.itemDescription);
+    resetAddress() {
+      this.clearAddress();
+      this.lostItemAddress = "";
+      this.lat = "";
+      this.long = "";
+      if (this.isFilterApplied) {
+        this.applyFilters();
+      }
+    },
+    resetStartDate() {
+      this.startDate = null;
+      if (this.isFilterApplied) {
+        this.applyFilters();
+      }
+    },
+    resetEndDate() {
+      this.endDate = null;
+      if (this.isFilterApplied) {
+        this.applyFilters();
+      }
+    },
+    resetItemDescription() {
+      this.itemDescription = "";
+      if (this.isFilterApplied) {
+        this.applyFilters();
+      }
+    },
+    applyFilters() {
+      this.isLoading = true;
+      let params = {
+        abc: "123",
+      };
+      let itemDescription = this.itemDescription;
+      if (this.itemDescription === "All") {
+        itemDescription = "";
+      }
+      if (itemDescription) params.item_description = itemDescription;
+      if (this.startDate || this.endDate) {
+        params.datse = this.formatedStartDate;
+        params.datse1 = this.formatedEndDate;
+      }
+      if (this.lostItemAddress) params.address = this.lostItemAddress;
+      if (this.lat) params.lat = this.lat;
+      if (this.long) params.long = this.long;
+      this.$axios
+        .post("getallfilteritemdetails", {}, { params: params })
+        .then((res) => {
+          this.lostItems = res?.data?.data[0]?.ITEMS;
+          if (!this.lostItems) {
+            this.lostItems = [];
+          }
+          this.cloneLostItems = this.lostItems;
+          if (this.searchQuery) {
+            this.filterItems();
+          }
+          this.isLoading = false;
+          if (
+            itemDescription ||
+            this.startDate ||
+            this.endDate ||
+            this.lostItemAddress
+          ) {
+            this.isFilterApplied = true;
+          } else {
+            this.isFilterApplied = false;
+          }
+        })
+        .catch((err) => {
+          console.log(err);
+        });
     },
     viewItem(item) {
       this.$store.commit("item/SET_ITEM_DETAILS", {
@@ -354,24 +601,113 @@ export default {
         params: { item: item },
       });
     },
-  },
-  created() {
-    this.isLoading = true;
-    this.$axios
-      .get("/getalllostitem")
-      .then((response) => {
-        if (response.status === 200) {
-          this.isLoading = false;
-          this.lostItems = response?.data?.data;
-          if (!this.lostItems) {
-            this.lostItems = [];
-          }
-        }
-      })
-      .catch((err) => {
-        this.isLoading = false;
-        console.log(err);
+    getAddress() {
+      if (this.address == "") {
+        document.getElementById("autocomplete-found-items").placeholder = "";
+      }
+      const autocomplete = new google.maps.places.Autocomplete(
+        document.getElementById("autocomplete-found-items")
+      );
+      autocomplete.addListener("place_changed", () => {
+        let address = autocomplete.getPlace();
+        this.lat = address.geometry.location.lat();
+        this.long = address.geometry.location.lng();
+        this.lostItemAddress = address.formatted_address;
       });
+    },
+    clearAddress() {
+      this.address = "";
+      document.getElementById("autocomplete-found-items").placeholder = "";
+    },
+    filterItems() {
+      let filterArray = [];
+      if (this.searchQuery === "") {
+        this.lostItems = this.cloneLostItems;
+      }
+      this.cloneLostItems.forEach((item) => {
+        let itemArr = Object.values(item);
+        let filteredItems = itemArr.filter((itemElement) => {
+          if (typeof itemElement !== "string") {
+            itemElement = itemElement.toString();
+          }
+          return itemElement
+            .toLowerCase()
+            .includes(this.searchQuery.toLowerCase());
+        });
+        if (filteredItems.length != 0) {
+          filterArray.push(item);
+        }
+      });
+      this.lostItems = filterArray;
+    },
+    clearFilters() {
+      this.searchQuery = "";
+      this.startDate = null;
+      this.endDate = null;
+      this.itemDescription = "";
+      this.clearAddress();
+      this.lostItemAddress = "";
+      this.lat = "";
+      this.long = "";
+      this.applyFilters();
+    },
+    getItemDescriptionOptions() {
+      return new Promise((resolve) => {
+        this.$axios
+          .get("/viewallItemdescriptionDetails")
+          .then((response) => {
+            if (response.status === 200) {
+              let itemDescriptionResponse = response.data?.data?.Items || [];
+              this.itemDescriptionOptions = itemDescriptionResponse.map(
+                (item) => {
+                  return item.item_description;
+                }
+              );
+              this.itemDescriptionOptions.unshift("All");
+              this.itemDescription = "All";
+              resolve();
+            }
+          })
+          .catch((error) => {
+            console.log(error);
+          });
+      });
+    },
+    // getAllLostItems() {
+    //   this.isFilterApplied = false;
+    //   this.isLoading = true;
+    //   this.$axios
+    //     .get("/getalllostitem")
+    //     .then((response) => {
+    //       if (response.status === 200) {
+    //         this.isLoading = false;
+    //         this.lostItems = response?.data?.data;
+    //         this.cloneLostItems = cloneDeep(this.lostItems);
+    //         if (!this.lostItems) {
+    //           this.lostItems = [];
+    //         }
+    //       }
+    //     })
+    //     .catch((err) => {
+    //       this.isLoading = false;
+    //       console.log(err);
+    //     });
+    // }
+  },
+  async mounted() {
+    await this.getItemDescriptionOptions();
+    if (this.$route.params?.appliedFilters) {
+      this.itemDescription = this.$route.params.appliedFilters.itemDescription;
+      this.startDate = this.$route.params.appliedFilters.startDate;
+      this.endDate = this.$route.params.appliedFilters.endDate;
+      this.address = this.$route.params.appliedFilters.lostItemAddress;
+      this.lostItemAddress = this.$route.params.appliedFilters.lostItemAddress;
+      this.lat = this.$route.params.appliedFilters.lat;
+      this.long = this.$route.params.appliedFilters.long;
+      this.applyFilters();
+    } else {
+      this.applyFilters();
+    }
   },
 };
 </script>

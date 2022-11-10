@@ -43,6 +43,9 @@
       @change="updateValue"
     >
       <option v-for="option in options" :key="option">
+        <!-- <slot name="displayoption" :option="option">
+          {{ option }}
+        </slot> -->
         {{ option }}
       </option>
     </select>
@@ -93,6 +96,11 @@ export default {
     @apply border-red-500 border-2 ring-4 ring-red-500 ring-opacity-10 transition-none;
   }
 }
+
+.readonly select {
+  @apply bg-gray-100 cursor-pointer ring-offset-0 ring-0 cursor-not-allowed;
+}
+
 .errorWithoutRing {
   select {
     @apply border-red-500 transition-none;

@@ -97,7 +97,7 @@ export default {
 <style lang="scss" scoped>
 .appbar-container {
   z-index: 100;
-  @apply flex items-center py-2 px-6 md:px-10 w-full bg-white shadow-lg;
+  @apply flex items-center px-6 md:px-10 w-full bg-white shadow-lg;
 
   .logo-main-container {
     @apply flex items-center;

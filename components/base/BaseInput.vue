@@ -106,6 +106,6 @@ export default {
   @apply border-red-500 border-2 ring-4 ring-red-500 ring-opacity-10 transition-none;
 }
 .readonly input {
-  @apply bg-gray-100 cursor-pointer;
+  @apply bg-gray-100 cursor-pointer ring-offset-0 ring-0 cursor-not-allowed;
 }
 </style>

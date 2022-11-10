@@ -18,6 +18,7 @@
         </div>
         <section class="grid md:grid-cols-2 xl:grid-cols-5 gap-6">
           <div
+            :class="{ 'border-b-8 border-gray-500': tabSelected === 5 }"
             class="
               p-3
               bg-blue-600
@@ -30,15 +31,10 @@
               justify-center
               cursor-pointer
             "
-            @click="getData(1)"
+            @click="getData(5)"
           >
             <div class="flex flex-col items-center justify-center">
               <span
-                v-if="
-                  dashboardDetails &&
-                  dashboardDetails[0] &&
-                  dashboardDetails[0].totallostitemslisted
-                "
                 class="
                   mb-2
                   text-2xl
@@ -53,7 +49,7 @@
                   bg-blue-500
                   rounded-full
                 "
-                >{{ dashboardDetails[0].totallostitemslisted.length }}</span
+                >{{ pendingListDetails.length || "0" }}</span
               >
               <span class="block font-semibold text-white"
                 >Waiting For Approval</span
@@ -61,6 +57,7 @@
             </div>
           </div>
           <div
+            :class="{ 'border-b-8 border-gray-500': tabSelected === 1 }"
             class="
               p-3
               bg-pink-600
@@ -104,6 +101,7 @@
             </div>
           </div>
           <div
+            :class="{ 'border-b-8 border-gray-500': tabSelected === 2 }"
             class="
               p-3
               bg-yellow-600
@@ -147,6 +145,7 @@
             </div>
           </div>
           <div
+            :class="{ 'border-b-8 border-gray-500': tabSelected === 3 }"
             class="
               p-3
               bg-cyan-600
@@ -190,6 +189,7 @@
             </div>
           </div>
           <div
+            :class="{ 'border-b-8 border-gray-500': tabSelected === 4 }"
             class="
               p-3
               bg-indigo-600
@@ -235,6 +235,45 @@
         </section>
         <!-- </div> -->
       </main>
+      <div class="w-full flex gap-3 flex-auto mt-3 justify-end">
+        <div class="w-full sm:w-7/12 flex justify-end items-center pt-5 relative">
+          <input
+            v-model="searchQuery"
+            @input="filterItems"
+            class="
+              text-sm
+              leading-none
+              text-left text-gray-600
+              px-4
+              py-3
+              w-full
+              border
+              rounded-full
+              border-gray-300
+              outline-none
+            "
+            type="text"
+            placeholder="Search"
+          />
+          <BaseIcon
+            v-if="!searchQuery"
+            icon="magnifying-glass"
+            color="gray"
+            size="1x"
+            class="absolute right-3 z-10 cursor-pointer"
+            style="max-width: 15px"
+          />
+          <BaseIcon
+            v-else
+            icon="xmark"
+            color="gray"
+            size="1x"
+            class="absolute right-3 z-10 cursor-pointer"
+            style="max-width: 15px"
+            @click="(searchQuery = ''), (lostItems = cloneLostItems)"
+          />
+        </div>
+      </div>
       <div v-if="!isLoading && lostItems.length > 0">
         <div
           v-for="item in lostItems"
@@ -383,7 +422,9 @@
           </div>
         </div>
       </div>
-      <div v-else-if="!isLoading && lostItems.length === 0">No Data</div>
+      <div v-else-if="!isLoading && lostItems.length === 0">
+        <p class="text-gray-600 font-medium m-14">No Result Found</p>
+      </div>
       <div v-else>
         <BaseLoader />
       </div>
@@ -407,31 +448,59 @@ export default {
       isLoadingRemoveImage: {},
       isLoading: false,
       tabSelected: 1,
+      pendingListDetails: [],
       showAddNewItemDescription: false,
+      searchQuery: "",
+      lostItems: [],
+      cloneLostItems: []
     };
   },
   created() {
     this.getAdminDashboardDetails();
+    this.getPendingListDetails();
   },
-  computed: {
-    lostItems() {
-      if(this.dashboardDetails){
-        if (this.tabSelected === 1) {
-          return this.dashboardDetails[0].totallostitemslisted;
-        } else if (this.tabSelected === 2) {
-          return this.dashboardDetails[1].totalclaimitems;
-        } else if (this.tabSelected === 3) {
-          return this.dashboardDetails[2].totalitemslistedtoday;
-        } else if (this.tabSelected === 4) {
-          return this.dashboardDetails[3].totalclaimitemstoday;
-        }
-      }
-      else{
-        return [];
-      }
+  watch:{
+    tabSelected(value){
+      this.tabSelectedChanged(value);
     },
   },
   methods: {
+    tabSelectedChanged(value){
+      this.searchQuery = "";
+      if (value === 1) {
+        this.lostItems = this.dashboardDetails[0].totallostitemslisted || [];
+      } else if (value === 2) {
+        this.lostItems = this.dashboardDetails[1].totalclaimitems || [];
+      } else if (value === 3) {
+        this.lostItems = this.dashboardDetails[2].totalitemslistedtoday || [];
+      } else if (value === 4) {
+        this.lostItems = this.dashboardDetails[3].totalclaimitemstoday || [];
+      } else if (value === 5) {
+        this.lostItems = this.pendingListDetails;
+      }
+      this.cloneLostItems = this.lostItems;
+    },
+    filterItems(){
+      let filterArray = [];
+      if (this.searchQuery === "") {
+        this.lostItems = this.cloneLostItems;
+      }
+      this.cloneLostItems.forEach((item) => {
+        let itemArr = Object.values(item);
+        let filteredItems = itemArr.filter((itemElement) => {
+          if (typeof itemElement !== "string") {
+            itemElement = itemElement.toString();
+          }
+          return itemElement
+            .toLowerCase()
+            .includes(this.searchQuery.toLowerCase());
+        });
+        if (filteredItems.length != 0) {
+          filterArray.push(item);
+        }
+      });
+      this.lostItems = filterArray;
+    },
     getAdminDashboardDetails() {
       const access_token = this.$auth.getToken("local");
       this.isLoading = true;
@@ -445,10 +514,30 @@ export default {
           if (response.status === 200) {
             this.isLoading = false;
             this.dashboardDetails = response?.data?.data;
+            this.tabSelectedChanged(this.tabSelected);
           }
         })
         .catch((err) => {
           this.isLoading = false;
+          this.$toast.error("Something went wrong! Please try again.");
+          console.log(err);
+        });
+    },
+    getPendingListDetails() {
+      const access_token = this.$auth.getToken("local");
+      this.$axios
+        .get("/getPendinglistItemDetails", {
+          headers: {
+            Authorization: `${access_token}`,
+          },
+        })
+        .then((response) => {
+          if (response.status === 200) {
+            this.pendingListDetails = response?.data?.data?.Items;
+          }
+        })
+        .catch((err) => {
+          this.$toast.error("Something went wrong! Please try again.");
           console.log(err);
         });
     },
@@ -456,16 +545,25 @@ export default {
       this.tabSelected = tabNumber;
     },
     viewItem(item) {
-      this.$store.commit("item/SET_ITEM_DETAILS", {
-        ...item,
-        onlyDisplay: true,
-      });
-      this.$nextTick(() => {
-        this.$router.push({
-          path: "/detail-confirmation",
-          query: { id: item.id },
+      if (this.tabSelected === 5) {
+        this.$nextTick(() => {
+          this.$router.push({
+            path: "/admin/detail-confirmation",
+            query: { id: item.id },
+          });
         });
-      });
+      } else {
+        this.$store.commit("item/SET_ITEM_DETAILS", {
+          ...item,
+          onlyDisplay: true,
+        });
+        this.$nextTick(() => {
+          this.$router.push({
+            path: "/detail-confirmation",
+            query: { id: item.id },
+          });
+        });
+      }
     },
     deleteItem(item) {
       const access_token = this.$auth.getToken("local");
