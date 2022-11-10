@@ -1303,11 +1303,10 @@ export default {
           .then((response) => {
             if (response.status === 200) {
               this.itemDescriptionResponse = response.data?.data?.Items || [];
-              this.itemDescriptionOptions = this.itemDescriptionResponse.map(
-                (item) => {
-                  return item.item_description;
-                }
-              );
+              this.itemDescriptionResponse.map((item) => {
+                this.itemDescriptionOptions.unshift(item.item_description);
+                return item.item_description;
+              });
               resolve();
             }
           })
