@@ -496,6 +496,7 @@
                     >
                       <span class="flex flex-col items-center sm:flex-row">
                         <input
+                          v-show="mobileDevice"
                           type="file"
                           id="take-picture"
                           name="files"
@@ -505,6 +506,7 @@
                           @change="uploadImg($event)"
                         />
                         <label
+                          v-show="mobileDevice"
                           for="take-picture"
                           id="takePicture"
                           class="
@@ -524,7 +526,7 @@
                           Take a Picture
                         </label>
 
-                        <span class="m-2 text-md text-gray-500">or</span>
+                        <span v-show="mobileDevice" class="m-2 text-md text-gray-500">or</span>
                         <input
                           type="file"
                           id="choose-file"
@@ -1257,6 +1259,7 @@ export default {
       phoneNo: "",
     },
     autoCompleteAddressArr: [],
+    mobileDevice: false,
   }),
   components: {
     DatePicker,
@@ -1283,6 +1286,13 @@ export default {
     },
   },
   methods: {
+    isMobile() {
+      if(/Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent)) {
+        return true;
+      } else {
+        return false;
+      }
+    },
     getAddress() {
       const autocomplete = new google.maps.places.Autocomplete(
         document.getElementById("autocomplete")
@@ -1918,9 +1928,9 @@ export default {
       const allowedExtensions = /(\.jpg|\.jpeg|\.png)$/i;
       const filePath = event.target?.files[0];
       if (filePath) {
-        const fileSize = event.target?.files[0]?.size / 1024 / 1024;
+        // const fileSize = event.target?.files[0]?.size / 1024 / 1024;
         if (allowedExtensions.exec(filePath.name)) {
-          if (fileSize < 2) {
+          // if (fileSize < 2) {
             this.isImageValid = true;
             this.imageValidationMessage = "";
             let file = filePath;
@@ -1930,11 +1940,11 @@ export default {
               this.showEditor = true;
             };
             reader.readAsDataURL(file);
-          } else {
-            this.imageValidationMessage = "File size must under 2MB";
-            this.isImageValid = false;
-            return;
-          }
+          // } else {
+          //   this.imageValidationMessage = "File size must under 2MB";
+          //   this.isImageValid = false;
+          //   return;
+          // }
         } else {
           this.imageValidationMessage =
             "Uploaded file is not supported. Allowed file types: .png, .jpeg, .jpg";
@@ -2380,7 +2390,8 @@ export default {
       }
     },
   },
-  mounted() {
+  async mounted() {
+    this.mobileDevice = this.isMobile();
     window.addEventListener("keydown", () => {
       this.showValidateAlert = false;
     });
