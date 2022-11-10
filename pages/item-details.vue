@@ -1603,7 +1603,7 @@ export default {
       this.imgPreview = false;
       // this.enableEdit = false;
     },
-    deleteEditable() {
+    deleteEditable(showToastr = true) {
       if (this.imageKey) {
         this.isLoadingRemoveImage = true;
         this.$axios
@@ -1619,7 +1619,7 @@ export default {
               this.imageKey = "";
               this.image = "";
               this.resetItemDescriptionFields();
-              this.$toast.info("Image Removed Successfully!");
+              if (showToastr) this.$toast.info("Image Removed Successfully!");
             }
           })
           .catch((error) => {
@@ -1692,7 +1692,7 @@ export default {
       }
     },
     saveImg() {
-      this.deleteEditable();
+      this.deleteEditable(false);
       this.isSavingImage = true;
       let file = null;
       if (this.showDraw) {
