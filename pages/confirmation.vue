@@ -17,11 +17,11 @@
       <table id="printMe" width="100%" class="table-style">
         <tbody>
           <tr>
-            <td class="padding-1rem">
+            <td class="padding-1rem w-full">
               <table width="100%" cellspacing="0" cellpadding="0">
                 <tr>
-                  <td align="center">
-                    <h2 class="text-2xl font-bold text-accent-100">
+                  <td align="center" class="w-full">
+                    <h2 class="text-2xl font-bold text-accent-100 text-center w-full">
                       Preview Details
                     </h2>
                   </td>
@@ -61,7 +61,7 @@
                     ></span>
                   </td>
                 </tr>
-                <tr class="h-9">
+                <tr class="l-2">
                   <td>
                     <div class="text-left text-gray-600 font-medium">
                       Sender Affiliation
@@ -73,7 +73,7 @@
                     </div>
                   </td>
                 </tr>
-                <tr class="h-9">
+                <tr class="l-2">
                   <td>
                     <div class="text-left text-gray-600 font-medium">
                       Found Item Date
@@ -85,7 +85,7 @@
                     </div>
                   </td>
                 </tr>
-                <tr class="h-9">
+                <tr class="l-2">
                   <td>
                     <div class="text-left text-gray-600 font-medium">
                       Venue Email
@@ -97,7 +97,7 @@
                     </div>
                   </td>
                 </tr>
-                <tr v-if="itemDetails.secondary_email" class="h-9">
+                <tr v-if="itemDetails.secondary_email" class="l-2">
                   <td>
                     <div class="text-left text-gray-600 font-medium">
                       Venue Secondary Email
@@ -109,7 +109,7 @@
                     </div>
                   </td>
                 </tr>
-                <tr class="h-9">
+                <tr class="l-2">
                   <td>
                     <div class="text-left text-gray-600 font-medium">
                       Venue Phone No.
@@ -121,7 +121,7 @@
                     </div>
                   </td>
                 </tr>
-                <tr class="h-9">
+                <tr class="l-2">
                   <td>
                     <div class="text-left text-gray-600 font-medium">
                       Employee Mobile No.
@@ -161,7 +161,7 @@
                     ></span>
                   </td>
                 </tr>
-                <tr class="h-9">
+                <tr class="l-2">
                   <td>
                     <div class="text-left text-gray-600 font-medium">
                       Address
@@ -173,7 +173,7 @@
                     </div>
                   </td>
                 </tr>
-                <tr class="h-9">
+                <tr class="l-2">
                   <td>
                     <div class="text-left text-gray-600 font-medium">City</div>
                   </td>
@@ -183,7 +183,7 @@
                     </div>
                   </td>
                 </tr>
-                <tr class="h-9">
+                <tr class="l-2">
                   <td>
                     <div class="text-left text-gray-600 font-medium">State</div>
                   </td>
@@ -193,7 +193,7 @@
                     </div>
                   </td>
                 </tr>
-                <tr class="h-9">
+                <tr class="l-2">
                   <td>
                     <div class="text-left text-gray-600 font-medium">
                       Country
@@ -205,7 +205,7 @@
                     </div>
                   </td>
                 </tr>
-                <tr class="h-9">
+                <tr class="l-2">
                   <td>
                     <div class="text-left text-gray-600 font-medium">
                       Zipcode
@@ -245,7 +245,7 @@
                     ></span>
                   </td>
                 </tr>
-                <tr class="h-9">
+                <tr class="l-2">
                   <td>
                     <div class="text-left text-gray-600 font-medium">
                       Item Description
@@ -257,7 +257,7 @@
                     </div>
                   </td>
                 </tr>
-                <tr class="h-9">
+                <tr class="l-2">
                   <td>
                     <div class="text-left text-gray-600 font-medium">
                       Package Type
@@ -269,7 +269,7 @@
                     </div>
                   </td>
                 </tr>
-                <tr class="h-9">
+                <tr class="l-2">
                   <td>
                     <div class="text-left text-gray-600 font-medium">
                       Weight
@@ -281,7 +281,7 @@
                     </div>
                   </td>
                 </tr>
-                <tr class="h-9">
+                <tr class="l-2">
                   <td>
                     <div class="text-left text-gray-600 font-medium">
                       Dimension
@@ -295,7 +295,7 @@
                     </div>
                   </td>
                 </tr>
-                <tr class="h-9">
+                <tr class="l-2">
                   <td>
                     <div class="text-left text-gray-600 font-medium">
                       Item Status
@@ -310,7 +310,7 @@
                   </td>
                 </tr>
                 <template v-if="itemDetails.item_status === 'claimed'">
-                  <tr class="h-9">
+                  <tr class="l-2">
                     <td>
                       <div class="text-left text-gray-600 font-medium">
                         Receiver's Name
@@ -322,7 +322,7 @@
                       </div>
                     </td>
                   </tr>
-                  <tr class="h-9">
+                  <tr class="l-2">
                     <td>
                       <div class="text-left text-gray-600 font-medium">
                         Receiver's Email
@@ -334,7 +334,7 @@
                       </div>
                     </td>
                   </tr>
-                  <tr class="h-9">
+                  <tr class="l-2">
                     <td>
                       <div class="text-left text-gray-600 font-medium">
                         Receiver's Mobile No.
@@ -377,7 +377,6 @@
 
 <script>
 import { mapGetters } from "vuex";
-import jsPDF from "jspdf";
 export default {
   data() {
     return {
@@ -444,12 +443,13 @@ export default {
       let android = userAgent.indexOf("android") > -1;
 
       if (mobile || android) {
-        var doc = new jsPDF("p", "pt", "a4");
-        doc.html(document.getElementById("printMe"), {
-          callback: function () {
-            doc.save("item-detprintMeails.pdf");
-          },
-        });
+        this.$html2pdf(document.getElementById("printMe"), {
+					margin: 1,
+					filename: 'item-detprintMeails.pdf',
+					image: { type: 'jpeg', quality: 0.98 },
+					html2canvas: { dpi: 192, letterRendering: true },
+					jsPDF: { unit: 'in', format: 'letter', orientation: 'portrait' }
+				})
       } else {
         const mywindow = window.open("", "PRINT", "height=1200,width=600");
         mywindow.document.write("<html><head>");
@@ -457,8 +457,11 @@ export default {
                     tr td:first-child {
                       width: 250px;
                     }
-                    .qr-code-container td {
+                    .qr-code-container td, .w-full {
                       width: 100% !important;
+                    }
+                    .text-center {
+                      text-align: center;
                     }
                     th,
                     td {
@@ -495,7 +498,7 @@ export default {
                     }
                     .text-2xl {
                       font-size: 1.5rem;
-                      line-height: 2rem;
+                      line-height: 2;
                     }
                     .text-lg {
                       font-size: 1.125rem;
@@ -538,7 +541,7 @@ export default {
                     .h-40 {
                       height: 10rem;
                     }
-                    .h-9 {
+                    .l-2 {
                       height: 2.25rem;
                     }
                     .text-gray-600 {
@@ -592,12 +595,15 @@ export default {
   },
 };
 </script>
-<style lang="scss" scoped>
+<style scoped>
 tr td:first-child {
   width: 250px;
 }
-.qr-code-container td {
+.qr-code-container td, .w-full {
   width: 100% !important;
+}
+.text-center {
+  text-align: center;
 }
 th,
 td {
@@ -634,7 +640,7 @@ td {
 }
 .text-2xl {
   font-size: 1.5rem;
-  line-height: 2rem;
+  line-height: 2;
 }
 .text-lg {
   font-size: 1.125rem;
@@ -677,8 +683,8 @@ td {
 .h-40 {
   height: 10rem;
 }
-.h-9 {
-  height: 2.25rem;
+.l-2 {
+  line-height: 2;
 }
 .text-gray-600 {
   color: rgb(82 82 82);
