@@ -544,6 +544,7 @@
                           id="choose-file"
                           name="files"
                           class="hidden"
+                          accept="image/*"
                           @change="uploadImg($event)"
                         />
                         <label
