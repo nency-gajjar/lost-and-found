@@ -676,6 +676,7 @@
                         id="choose-another-file"
                         name="files"
                         class="hidden"
+                        accept="image/*"
                         @change="uploadImg($event)"
                       />
 
