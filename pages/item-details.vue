@@ -910,48 +910,34 @@
                 rules="required"
                 class="block"
               >
-                <label
-                  class="block relative box-content h-12 bg-white"
-                  :class="errors.length > 0 && 'error'"
-                >
-                  <div
-                    class="absolute px-4 transition-all text-gray-500"
-                    :class="
-                      checkEmptySelect(itemDescription)
-                        ? 'my-3.5 text-sm'
-                        : 'my-2 text-[0.625rem] leading-3'
-                    "
-                  >
-                    Item Description
-                  </div>
+                <div :class="errors.length > 0 && 'error'">
                   <select
-                    v-model="itemDescription"
                     class="
+                      h-12
                       relative
                       border
                       inline-block
                       border-gray-300
                       w-full
                       rounded-lg
-                      h-full
                       text-sm
                       transition-shadow
                       text-gray-800
                       bg-transparent
                     "
-                    :class="
-                      checkEmptySelect(itemDescription)
-                        ? 'p-0'
-                        : 'pl-3 pr-4 pt-4 pb-2'
-                    "
-                    @input="setItemDetails($event.target.value)"
-                    @blur="checkEmptySelect(itemDescription) !== ''"
+                    v-model="itemDescription"
+                    @change="setItemDetails"
                   >
-                    <option v-for="item in itemDescriptionOptions" :key="item">
-                      {{ item }}
+                    <option disabled value="">Item Description</option>
+                    <option
+                      :value="descriptionOption"
+                      v-for="descriptionOption in itemDescriptionOptions"
+                      :key="descriptionOption"
+                    >
+                      {{ descriptionOption }}
                     </option>
                   </select>
-                </label>
+                </div>
                 <p
                   v-if="errors.length"
                   class="vee-validation-error mt-2 text-sm text-red-600"
@@ -1235,8 +1221,6 @@ import { weightOuncesOptions, venueOptions } from "static/defaults.js";
 import DatePicker from "vue2-datepicker";
 import "vue2-datepicker/index.css";
 import moment from "moment";
-import { isEmpty } from "lodash";
-import Vue from "vue";
 
 export default {
   data: () => ({
@@ -1255,7 +1239,7 @@ export default {
     address: "",
     manualVenue: "",
     venueType: "",
-    venueOptions: Vue.nextTick(() => venueOptions),
+    venueOptions: venueOptions,
     employeeMobileNo: "",
     foundDate: new Date(),
     venueManually: false,
@@ -1268,7 +1252,7 @@ export default {
     packageTypeOptions: ["Box", "Envelope"],
     weight: "",
     weightOunces: "",
-    weightOuncesOptions: Vue.nextTick(() => weightOuncesOptions),
+    weightOuncesOptions: weightOuncesOptions,
     itemLength: "",
     itemWidth: "",
     itemHeight: "",
@@ -1361,9 +1345,6 @@ export default {
     },
   },
   methods: {
-    checkEmptySelect(option) {
-      return isEmpty(option);
-    },
     isMobile() {
       if (
         /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(
@@ -1909,7 +1890,7 @@ export default {
                 this.itemDescriptionOptions.unshift(item);
               }
             });
-            this.setItemDetails(responseItemData[0]);
+            this.itemDescription = this.itemDescriptionOptions[0];
             this.image =
               this.imageRecognitionData[
                 this.imageRecognitionData.length - 1
