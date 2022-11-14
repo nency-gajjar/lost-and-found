@@ -166,7 +166,6 @@ export default {
         this.isLoading = false;
       } else {
         this.showValidateAlert = false;
-        return;
         const params = {
           email: this.email,
           password: this.password,
