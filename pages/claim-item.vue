@@ -83,7 +83,7 @@
                   {{ errors[0] }}
                 </p>
               </ValidationProvider>
-              <div class="block relative box-content h-12">
+              <div class="block relative box-content h-12" :class="!isPhoneNoValid && 'error'">
                 <vue-tel-input
                   :inputOptions="{ placeholder: 'Mobile Number' }"
                   class="
@@ -98,12 +98,13 @@
                   v-model="claimPersonPhoneNo"
                   v-bind="bindPhoneInputProps"
                   @blur="validateUserPhone"
+                  @validate="validateUserPhoneFormat"
                 ></vue-tel-input>
                 <div
                   v-if="!isPhoneNoValid"
                   class="vee-validation-error mt-2 text-sm text-red-600"
                 >
-                  *Required
+                  {{ phoneNoValidateMessage }}
                 </div>
               </div>
               <label class="block mb-1 !mt-10 text-sm font-medium text-gray-800"
@@ -268,9 +269,10 @@
                   </p>
                 </ValidationProvider>
                 <ValidationProvider
-                  rules="required"
+                  rules="required|max:10"
                   v-slot="{ errors }"
                   class="block col-span-1"
+                  name="Zipcode"
                 >
                   <BaseInput
                     v-model="autoCompleteAddress.zipcode"
@@ -348,6 +350,8 @@ export default {
         },
       },
       isPhoneNoValid: true,
+      isPhoneNoFormateValid: true,
+      phoneNoValidateMessage: "",
       isLoading: false,
       itemName: "",
       itemDescription: "",
@@ -428,11 +432,32 @@ export default {
       this.autoCompleteAddress.address = "";
       document.getElementById("autocomplete-claim-item").placeholder = "";
     },
+    validateUserPhoneFormat(vueTelObj){
+      if(vueTelObj.valid !== undefined){
+        if(vueTelObj.valid){
+          this.isPhoneNoFormateValid = true;
+          this.isPhoneNoValid = true;
+          this.phoneNoValidateMessage = "";
+        }
+        else{
+          this.isPhoneNoFormateValid = false;
+          this.isPhoneNoValid = false;
+          this.phoneNoValidateMessage = "Please enter valid Phone number";
+        }
+      }
+    },
     validateUserPhone() {
       if (!this.claimPersonPhoneNo) {
         this.isPhoneNoValid = false;
+        this.phoneNoValidateMessage = "*Required";
       } else {
-        this.isPhoneNoValid = true;
+        if(this.isPhoneNoFormateValid){
+          this.isPhoneNoValid = true;
+          this.phoneNoValidateMessage = "";
+        }
+        else{
+          this.isPhoneNoValid = false;
+        }
       }
     },
     formatMobileNumber(phoneNumber) {
@@ -563,6 +588,12 @@ textarea.error {
 .error {
   & > .mx-datepicker {
     @apply border-red-500 border-2 ring-4 ring-red-500 ring-opacity-10 rounded-lg transition-none;
+  }
+}
+
+.error {
+  & > .vue-tel-input {
+    @apply border-red-500 border-2 ring-4 ring-red-500 ring-opacity-10 rounded-lg  transition-none;
   }
 }
 </style>

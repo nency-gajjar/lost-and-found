@@ -211,6 +211,7 @@
                   v-model="employeeMobileNo"
                   v-bind="bindPhoneInputProps"
                   @blur="validateEmployeeMobileNo"
+                  @validate="validateEmployeePhoneFormat"
                 ></vue-tel-input>
               </div>
               <div class="flex items-center" style="margin: 2px 5px !important">
@@ -228,7 +229,7 @@
                 v-if="!isEmployeeMobileNoValid"
                 class="vee-validation-error top-margin-05 text-sm text-red-600"
               >
-                *Required
+                {{ employeePhoneValidationMessage }}
               </div>
 
               <!-- AUTOCOMPLETE ADDRESS DETAILS -->
@@ -342,8 +343,9 @@
                 <!-- Zip -->
                 <ValidationProvider
                   v-slot="{ errors }"
-                  rules="required"
+                  rules="required|max:10"
                   class="block col-span-1"
+                  name="Zipcode"
                 >
                   <BaseInput
                     v-model="autoCompleteAddress.zipcode"
@@ -415,6 +417,7 @@
                     }"
                     v-model="autoCompleteAddress.phoneNo"
                     @blur="validateVenuePhoneNo"
+                    @validate="validateVenuePhoneFormat"
                     v-bind="bindPhoneInputProps"
                   ></vue-tel-input>
                   <div
@@ -425,7 +428,7 @@
                       text-sm text-red-600
                     "
                   >
-                    *Required
+                    {{ venuePhoneValidationMessage }}
                   </div>
                 </div>
               </div>
@@ -907,13 +910,34 @@
                 rules="required"
                 class="block"
               >
-                <BaseSelect
-                  v-model="itemDescription"
-                  :options="itemDescriptionOptions"
-                  label="Item Description"
-                  :class="errors.length > 0 && 'error'"
-                  @input="setItemDetails"
-                />
+                <div :class="errors.length > 0 && 'error'">
+                  <select
+                    class="
+                      h-12
+                      relative
+                      border
+                      inline-block
+                      border-gray-300
+                      w-full
+                      rounded-lg
+                      text-sm
+                      transition-shadow
+                      text-gray-800
+                      bg-transparent
+                    "
+                    v-model="itemDescription"
+                    @change="setItemDetails"
+                  >
+                    <option disabled value="">Item Description</option>
+                    <option
+                      :value="descriptionOption"
+                      v-for="descriptionOption in itemDescriptionOptions"
+                      :key="descriptionOption"
+                    >
+                      {{ descriptionOption }}
+                    </option>
+                  </select>
+                </div>
                 <p
                   v-if="errors.length"
                   class="vee-validation-error mt-2 text-sm text-red-600"
@@ -1151,12 +1175,13 @@
                     v-model="receiverMobileNo"
                     v-bind="bindPhoneInputProps"
                     @blur="validateReceiverMobileNo"
+                    @validate="validateReceiverPhoneFormat"
                   ></vue-tel-input>
                   <div
                     v-if="!isReceiverMobileNoValid"
                     class="vee-validation-error mt-2 text-sm text-red-600"
                   >
-                    *Required
+                    {{ receiverPhoneValidationMessage }}
                   </div>
                 </div>
               </template>
@@ -1204,11 +1229,9 @@ export default {
     showDraw: false,
     imgPreview: false,
     showUndo: false,
-    // enableEdit: false,
-
     showValidateAlert: false,
-    senderFormTitle: "",
-    foundItemFormTitle: "",
+    senderFormTitle: "SENDER'S DETAILS",
+    foundItemFormTitle: "FOUND ITEM'S DETAILS",
     venueEmail: "",
     venueSecondaryEmail: "",
     manualAddressSelected: false,
@@ -1244,10 +1267,7 @@ export default {
     receiverMobileNo: "",
     addressArr: ["Other"],
     itemImage: "",
-    // canvasWidth: "600",
-    // canvasHeight: "400",
     showEditor: false,
-    // stateCrop: true,
     size_icon: "2x",
     isSavingImage: false,
     imageRecognitionData: [],
@@ -1275,6 +1295,9 @@ export default {
     isVenuePhoneValid: true,
     isEmployeeMobileNoValid: true,
     isReceiverMobileNoValid: true,
+    isVenuePhoneFormatValid: true,
+    isEmployeeMobileNoFormatValid: true,
+    isReceiverMobileNoFormatValid: true,
     autoCompleteAddress: {
       address: "",
       city: "",
@@ -1285,6 +1308,9 @@ export default {
     },
     autoCompleteAddressArr: [],
     mobileDevice: false,
+    venuePhoneValidationMessage: "",
+    employeePhoneValidationMessage: "",
+    receiverPhoneValidationMessage: "",
   }),
   components: {
     DatePicker,
@@ -1307,7 +1333,15 @@ export default {
       }
     },
     autoAddressSelected() {
-      return this.autoCompleteAddress.address !== "Other";
+      if (this.autoCompleteAddress.address === "") {
+        return false;
+      } else {
+        if (this.autoCompleteAddress.address !== "Other") {
+          return true;
+        } else {
+          return false;
+        }
+      }
     },
   },
   methods: {
@@ -1450,25 +1484,85 @@ export default {
       this.weight = "";
       this.weightOunces = "0";
     },
+    validateVenuePhoneFormat(vueTelObj) {
+      if (vueTelObj.valid !== undefined) {
+        if (vueTelObj.valid) {
+          this.isVenuePhoneFormatValid = true;
+          this.isVenuePhoneValid = true;
+          this.venuePhoneValidationMessage = "";
+        } else {
+          this.isVenuePhoneFormatValid = false;
+          this.isVenuePhoneValid = false;
+          this.venuePhoneValidationMessage = "Please enter valid Phone number";
+        }
+      }
+    },
     validateVenuePhoneNo() {
       if (!this.autoCompleteAddress.phoneNo) {
         this.isVenuePhoneValid = false;
+        this.venuePhoneValidationMessage = "*Required";
       } else {
-        this.isVenuePhoneValid = true;
+        if (this.isVenuePhoneFormatValid) {
+          this.isVenuePhoneValid = true;
+          this.venuePhoneValidationMessage = "";
+        } else {
+          this.isVenuePhoneValid = false;
+        }
+      }
+    },
+    validateEmployeePhoneFormat(vueTelObj) {
+      if (vueTelObj.valid !== undefined) {
+        if (vueTelObj.valid) {
+          this.isEmployeeMobileNoFormatValid = true;
+          this.isEmployeeMobileNoValid = true;
+          this.employeePhoneValidationMessage = "";
+        } else {
+          this.isEmployeeMobileNoFormatValid = false;
+          this.isEmployeeMobileNoValid = false;
+          this.employeePhoneValidationMessage =
+            "Please enter valid Phone number";
+        }
       }
     },
     validateEmployeeMobileNo() {
       if (!this.employeeMobileNo) {
         this.isEmployeeMobileNoValid = false;
+        this.employeePhoneValidationMessage = "*Required";
       } else {
-        this.isEmployeeMobileNoValid = true;
+        if (this.isEmployeeMobileNoFormatValid) {
+          this.isEmployeeMobileNoValid = true;
+          this.employeePhoneValidationMessage = "";
+        } else {
+          this.isEmployeeMobileNoValid = false;
+        }
+      }
+    },
+    validateReceiverPhoneFormat(vueTelObj) {
+      if (vueTelObj.valid !== undefined) {
+        if (vueTelObj.valid) {
+          this.isReceiverMobileNoFormatValid = true;
+          this.isReceiverMobileNoValid = true;
+          this.receiverPhoneValidationMessage = "";
+        } else {
+          this.isReceiverMobileNoFormatValid = false;
+          this.isReceiverMobileNoValid = false;
+          this.receiverPhoneValidationMessage =
+            "Please enter valid Phone number";
+        }
       }
     },
     validateReceiverMobileNo() {
       if (!this.receiverMobileNo) {
         this.isReceiverMobileNoValid = false;
+        this.receiverPhoneValidationMessage = "*Required";
       } else {
         this.isReceiverMobileNoValid = true;
+        if (this.isReceiverMobileNoFormatValid) {
+          this.isReceiverMobileNoValid = true;
+          this.receiverPhoneValidationMessage = "";
+        } else {
+          this.isReceiverMobileNoValid = false;
+        }
       }
     },
     formatMobileNumber(phoneNumber) {
@@ -1476,7 +1570,8 @@ export default {
       let countryCode = arr.shift();
       return countryCode + " " + arr.join("");
     },
-    setItemDetails(value) {
+    setItemDetails() {
+      let value = this.itemDescription;
       let index = this.itemDescriptionResponse.findIndex((item) => {
         return item.item_description === value;
       });
@@ -1606,33 +1701,36 @@ export default {
       // this.enableEdit = false;
     },
     deleteEditable(showToastr = true) {
-      if (this.imageKey) {
-        this.isLoadingRemoveImage = true;
-        this.$axios
-          .post("/removes3files", { key: this.imageKey })
-          .then((response) => {
-            if (response.status === 200) {
+      return new Promise((resolve) => {
+        if (this.imageKey) {
+          this.isLoadingRemoveImage = true;
+          this.$axios
+            .post("/removes3files", { key: this.imageKey })
+            .then((response) => {
+              if (response.status === 200) {
+                this.isLoadingRemoveImage = false;
+                this.showEditor = false;
+                this.imgSrc = "";
+                this.showCrop = false;
+                this.showDraw = false;
+                this.imgPreview = false;
+                this.imageKey = "";
+                this.image = "";
+                this.resetItemDescriptionFields();
+                resolve();
+                if (showToastr) this.$toast.info("Image Removed Successfully!");
+              }
+            })
+            .catch((error) => {
+              this.$toast.error("Something went wrong! Please try again.");
               this.isLoadingRemoveImage = false;
-              this.showEditor = false;
-              this.imgSrc = "";
-              this.showCrop = false;
-              this.showDraw = false;
-              this.imgPreview = false;
-              this.imageKey = "";
-              this.image = "";
-              this.resetItemDescriptionFields();
-              if (showToastr) this.$toast.info("Image Removed Successfully!");
-            }
-          })
-          .catch((error) => {
-            this.$toast.error("Something went wrong! Please try again.");
-            this.isLoadingRemoveImage = false;
-            console.log(error);
-          });
-      } else {
-        // this.imgSrc = "";
-        // this.image = "";
-      }
+              console.log(error);
+              resolve();
+            });
+        } else {
+          resolve();
+        }
+      });
     },
     addSquare() {
       this.imgPreview = false;
@@ -1723,8 +1821,6 @@ export default {
         if (old_size > min_image_size) {
           const resized = await this.reduce_image_file_size(res);
           const new_size = this.calc_image_size(resized);
-          console.log("new_size=> ", new_size, "KB");
-          console.log("old_size=> ", old_size, "KB");
           return resized;
         } else {
           console.log("image already small enough");
@@ -1768,10 +1864,15 @@ export default {
       }
       this.$axios
         .post("/demo", { file })
-        .then((response) => {
+        .then(async (response) => {
           if (response.status === 200) {
             this.isSavingImage = false;
-            this.$toast.info("Image Saved Successfully!");
+            if (this.image) {
+              this.$toast.info("Image Updated Successfully!");
+              await this.deleteEditable(false);
+            } else {
+              this.$toast.info("Image Saved Successfully!");
+            }
             this.imageRecognitionData = response.data.data;
             let responseItemData = response.data.data
               .filter((obj) => {
@@ -1789,7 +1890,7 @@ export default {
                 this.itemDescriptionOptions.unshift(item);
               }
             });
-            this.setItemDetails(responseItemData[0]);
+            this.itemDescription = this.itemDescriptionOptions[0];
             this.image =
               this.imageRecognitionData[
                 this.imageRecognitionData.length - 1
@@ -2076,6 +2177,12 @@ canvas {
 .error {
   & > .vue-tel-input {
     @apply border-red-500 border-2 ring-4 ring-red-500 ring-opacity-10 rounded-lg  transition-none;
+  }
+}
+
+.error {
+  select {
+    @apply border-red-500 border-2 ring-4 ring-red-500 ring-opacity-10 transition-none;
   }
 }
 

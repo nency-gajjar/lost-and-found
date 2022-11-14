@@ -29,7 +29,8 @@ export default {
     '~/plugins/vee-validate',
     "~/plugins/vue-tel-input",
     "~/plugins/vue-cropper",
-    "~/plugins/font-awesome"
+    "~/plugins/font-awesome",
+    {src: "~/plugins/html2pdf", mode: 'client'},
   ],
 
   // Auto import components: https://go.nuxtjs.dev/config-components
