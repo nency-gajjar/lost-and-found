@@ -528,7 +528,12 @@
                             hover:bg-indigo-500 hover:text-white
                           "
                         >
-                          <BaseIcon icon="camera" color="white" class="mr-1" />
+                          <BaseIcon
+                            icon="camera"
+                            color="white"
+                            class="mr-1"
+                            style="max-width: 15px"
+                          />
                           Take a Picture
                         </label>
 
@@ -542,6 +547,7 @@
                           id="choose-file"
                           name="files"
                           class="hidden"
+                          accept="image/*"
                           @change="uploadImg($event)"
                         />
                         <label
@@ -564,6 +570,7 @@
                             icon="arrow-up-from-bracket"
                             color="white"
                             class="mr-1"
+                            style="max-width: 15px"
                           />
                           Choose a file
                         </label>
@@ -672,6 +679,7 @@
                         id="choose-another-file"
                         name="files"
                         class="hidden"
+                        accept="image/*"
                         @change="uploadImg($event)"
                       />
 
@@ -1688,7 +1696,7 @@ export default {
       this.imgPreview = false;
       // this.enableEdit = false;
     },
-    deleteEditable() {
+    deleteEditable(showToastr = true) {
       if (this.imageKey) {
         this.isLoadingRemoveImage = true;
         this.$axios
@@ -1704,7 +1712,7 @@ export default {
               this.imageKey = "";
               this.image = "";
               this.resetItemDescriptionFields();
-              this.$toast.info("Image Removed Successfully!");
+              if (showToastr) this.$toast.info("Image Removed Successfully!");
             }
           })
           .catch((error) => {
@@ -1742,17 +1750,83 @@ export default {
       if (this.image) {
         const data = await fetch(this.image, { cache: "no-cache" });
         const blob = await data.blob();
-        let reader = new FileReader();
-        reader.onloadend = () => {
-          this.imgSrc = reader.result;
-          this.showEditor = true;
-        };
-        reader.readAsDataURL(blob);
+        this.imgSrc = await this.process_image(blob);
+        this.showEditor = true;
       } else {
         this.showEditor = false;
       }
     },
-    uploadImg(event) {
+    async reduce_image_file_size(base64Str, MAX_WIDTH = 450, MAX_HEIGHT = 450) {
+      let resized_base64 = await new Promise((resolve) => {
+        let img = new Image();
+        img.src = base64Str;
+        img.onload = () => {
+          let canvas = document.createElement("canvas");
+          let width = img.width;
+          let height = img.height;
+
+          if (width > height) {
+            if (width > MAX_WIDTH) {
+              height *= MAX_WIDTH / width;
+              width = MAX_WIDTH;
+            }
+          } else {
+            if (height > MAX_HEIGHT) {
+              width *= MAX_HEIGHT / height;
+              height = MAX_HEIGHT;
+            }
+          }
+          canvas.width = width;
+          canvas.height = height;
+          let ctx = canvas.getContext("2d");
+          ctx.drawImage(img, 0, 0, width, height);
+          resolve(canvas.toDataURL()); // this will return base64 image results after resize
+        };
+      });
+      return resized_base64;
+    },
+    calc_image_size(image) {
+      let y = 1;
+      if (image.endsWith("==")) {
+        y = 2;
+      }
+      const x_size = image.length * (3 / 4) - y;
+      return Math.round(x_size / 1024);
+    },
+    async image_to_base64(file) {
+      let result_base64 = await new Promise((resolve) => {
+        let fileReader = new FileReader();
+        fileReader.onload = (e) => resolve(fileReader.result);
+        fileReader.onerror = (error) => {
+          console.log(error);
+          this.$toast.error(
+            "An Error occurred please try again, File might be corrupt"
+          );
+        };
+        fileReader.readAsDataURL(file);
+      });
+      return result_base64;
+    },
+    async process_image(file, min_image_size = 300) {
+      const res = await this.image_to_base64(file);
+      if (res) {
+        const old_size = this.calc_image_size(res);
+        if (old_size > min_image_size) {
+          const resized = await this.reduce_image_file_size(res);
+          const new_size = this.calc_image_size(resized);
+          console.log("new_size=> ", new_size, "KB");
+          console.log("old_size=> ", old_size, "KB");
+          return resized;
+        } else {
+          console.log("image already small enough");
+          return res;
+        }
+      } else {
+        console.log("return err");
+        return null;
+      }
+    },
+    async uploadImg(event) {
       const allowedExtensions = /(\.jpg|\.jpeg|\.png)$/i;
       const filePath = event.target?.files[0];
       if (filePath) {
@@ -1760,12 +1834,8 @@ export default {
           this.isImageValid = true;
           this.imageValidationMessage = "";
           let file = filePath;
-          let reader = new FileReader();
-          reader.onloadend = () => {
-            this.imgSrc = reader.result;
-            this.showEditor = true;
-          };
-          reader.readAsDataURL(file);
+          this.imgSrc = await this.process_image(file);
+          this.showEditor = true;
         } else {
           this.imageValidationMessage =
             "Uploaded file is not supported. Allowed file types: .png, .jpeg, .jpg";
@@ -1777,7 +1847,7 @@ export default {
       }
     },
     saveImg() {
-      this.deleteEditable();
+      // this.deleteEditable(false);
       this.isSavingImage = true;
       let file = null;
       if (this.showDraw) {
