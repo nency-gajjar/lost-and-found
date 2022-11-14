@@ -117,6 +117,7 @@
                 :is-loading="isLoading"
                 button-type="submit"
                 class="w-full"
+                :disabled="isLoading"
               >
                 Login
               </BaseButton>
@@ -165,7 +166,7 @@ export default {
         this.isLoading = false;
       } else {
         this.showValidateAlert = false;
-
+        return;
         const params = {
           email: this.email,
           password: this.password,

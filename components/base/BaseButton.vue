@@ -3,6 +3,8 @@
     v-bind="$attrs"
     v-on="$listeners"
     :type="buttonType"
+    :disabled="disabled || isLoading"
+    :class="{ 'cursor-not-allowed': disabled }"
     class="
       uppercase
       py-2.5
@@ -61,6 +63,11 @@ export default {
       type: String,
       required: false,
       default: "button",
+    },
+    disabled: {
+      required: false,
+      type: Boolean,
+      default: false,
     },
   },
 };

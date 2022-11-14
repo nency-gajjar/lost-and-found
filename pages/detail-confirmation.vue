@@ -521,6 +521,7 @@
             class="w-full"
             :is-loading="isLoading"
             @click="submitDetails"
+            :disabled="isLoading"
           >
             {{ btnName }}
           </BaseButton>

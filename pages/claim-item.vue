@@ -83,7 +83,10 @@
                   {{ errors[0] }}
                 </p>
               </ValidationProvider>
-              <div class="block relative box-content h-12" :class="!isPhoneNoValid && 'error'">
+              <div
+                class="block relative box-content h-12"
+                :class="!isPhoneNoValid && 'error'"
+              >
                 <vue-tel-input
                   :inputOptions="{ placeholder: 'Mobile Number' }"
                   class="
@@ -297,7 +300,11 @@
                 fields and try submitting again.
               </div>
               <div class="flex justify-end">
-                <BaseButton :is-loading="isLoading" button-type="submit">
+                <BaseButton
+                  :is-loading="isLoading"
+                  button-type="submit"
+                  :disabled="isLoading"
+                >
                   Submit
                 </BaseButton>
               </div>
@@ -432,14 +439,13 @@ export default {
       this.autoCompleteAddress.address = "";
       document.getElementById("autocomplete-claim-item").placeholder = "";
     },
-    validateUserPhoneFormat(vueTelObj){
-      if(vueTelObj.valid !== undefined){
-        if(vueTelObj.valid){
+    validateUserPhoneFormat(vueTelObj) {
+      if (vueTelObj.valid !== undefined) {
+        if (vueTelObj.valid) {
           this.isPhoneNoFormateValid = true;
           this.isPhoneNoValid = true;
           this.phoneNoValidateMessage = "";
-        }
-        else{
+        } else {
           this.isPhoneNoFormateValid = false;
           this.isPhoneNoValid = false;
           this.phoneNoValidateMessage = "Please enter valid Phone number";
@@ -451,11 +457,10 @@ export default {
         this.isPhoneNoValid = false;
         this.phoneNoValidateMessage = "*Required";
       } else {
-        if(this.isPhoneNoFormateValid){
+        if (this.isPhoneNoFormateValid) {
           this.isPhoneNoValid = true;
           this.phoneNoValidateMessage = "";
-        }
-        else{
+        } else {
           this.isPhoneNoValid = false;
         }
       }

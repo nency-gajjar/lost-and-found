@@ -82,6 +82,7 @@
                 :is-loading="isLoading"
                 button-type="submit"
                 class="w-full"
+                :disabled="isLoading"
               >
                 Register
               </BaseButton>
