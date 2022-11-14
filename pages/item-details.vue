@@ -910,19 +910,48 @@
                 rules="required"
                 class="block"
               >
-                <!-- <BaseSelect
-                  v-model="itemDescription"
-                  :options="itemDescriptionOptions"
-                  label="Item Description"
+                <label
+                  class="block relative box-content h-12 bg-white"
                   :class="errors.length > 0 && 'error'"
-                  @input="setItemDetails"
-                /> -->
-                <div :class="errors.length > 0 && 'error'">
-                  <select class="h-12 relative border inline-block border-gray-300 w-full rounded-lg text-sm transition-shadow text-gray-800 bg-transparent" v-model="itemDescription" @change="setItemDetails">
-                    <option disabled value="">Item Description</option>
-                    <option :value="descriptionOption" v-for="descriptionOption in itemDescriptionOptions" :key="descriptionOption">{{ descriptionOption }}</option>
+                >
+                  <div
+                    class="absolute px-4 transition-all text-gray-500"
+                    :class="
+                      checkEmptySelect(itemDescription)
+                        ? 'my-3.5 text-sm'
+                        : 'my-2 text-[0.625rem] leading-3'
+                    "
+                  >
+                    Item Description
+                  </div>
+                  <select
+                    v-model="itemDescription"
+                    class="
+                      relative
+                      border
+                      inline-block
+                      border-gray-300
+                      w-full
+                      rounded-lg
+                      h-full
+                      text-sm
+                      transition-shadow
+                      text-gray-800
+                      bg-transparent
+                    "
+                    :class="
+                      checkEmptySelect(itemDescription)
+                        ? 'p-0'
+                        : 'pl-3 pr-4 pt-4 pb-2'
+                    "
+                    @input="setItemDetails($event.target.value)"
+                    @blur="checkEmptySelect(itemDescription) !== ''"
+                  >
+                    <option v-for="item in itemDescriptionOptions" :key="item">
+                      {{ item }}
+                    </option>
                   </select>
-                </div>
+                </label>
                 <p
                   v-if="errors.length"
                   class="vee-validation-error mt-2 text-sm text-red-600"
@@ -1206,6 +1235,8 @@ import { weightOuncesOptions, venueOptions } from "static/defaults.js";
 import DatePicker from "vue2-datepicker";
 import "vue2-datepicker/index.css";
 import moment from "moment";
+import { isEmpty } from "lodash";
+import Vue from "vue";
 
 export default {
   data: () => ({
@@ -1214,11 +1245,9 @@ export default {
     showDraw: false,
     imgPreview: false,
     showUndo: false,
-    // enableEdit: false,
-
     showValidateAlert: false,
-    senderFormTitle: "",
-    foundItemFormTitle: "",
+    senderFormTitle: "SENDER'S DETAILS",
+    foundItemFormTitle: "FOUND ITEM'S DETAILS",
     venueEmail: "",
     venueSecondaryEmail: "",
     manualAddressSelected: false,
@@ -1226,7 +1255,7 @@ export default {
     address: "",
     manualVenue: "",
     venueType: "",
-    venueOptions: venueOptions,
+    venueOptions: Vue.nextTick(() => venueOptions),
     employeeMobileNo: "",
     foundDate: new Date(),
     venueManually: false,
@@ -1239,7 +1268,7 @@ export default {
     packageTypeOptions: ["Box", "Envelope"],
     weight: "",
     weightOunces: "",
-    weightOuncesOptions: weightOuncesOptions,
+    weightOuncesOptions: Vue.nextTick(() => weightOuncesOptions),
     itemLength: "",
     itemWidth: "",
     itemHeight: "",
@@ -1254,10 +1283,7 @@ export default {
     receiverMobileNo: "",
     addressArr: ["Other"],
     itemImage: "",
-    // canvasWidth: "600",
-    // canvasHeight: "400",
     showEditor: false,
-    // stateCrop: true,
     size_icon: "2x",
     isSavingImage: false,
     imageRecognitionData: [],
@@ -1300,7 +1326,7 @@ export default {
     mobileDevice: false,
     venuePhoneValidationMessage: "",
     employeePhoneValidationMessage: "",
-    receiverPhoneValidationMessage: ""
+    receiverPhoneValidationMessage: "",
   }),
   components: {
     DatePicker,
@@ -1323,20 +1349,21 @@ export default {
       }
     },
     autoAddressSelected() {
-      if(this.autoCompleteAddress.address === ""){
+      if (this.autoCompleteAddress.address === "") {
         return false;
-      }
-      else{
-        if(this.autoCompleteAddress.address !== "Other"){
+      } else {
+        if (this.autoCompleteAddress.address !== "Other") {
           return true;
-        }
-        else{
+        } else {
           return false;
         }
       }
     },
   },
   methods: {
+    checkEmptySelect(option) {
+      return isEmpty(option);
+    },
     isMobile() {
       if (
         /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(
@@ -1476,14 +1503,13 @@ export default {
       this.weight = "";
       this.weightOunces = "0";
     },
-    validateVenuePhoneFormat(vueTelObj){
-      if(vueTelObj.valid !== undefined){
-        if(vueTelObj.valid){
+    validateVenuePhoneFormat(vueTelObj) {
+      if (vueTelObj.valid !== undefined) {
+        if (vueTelObj.valid) {
           this.isVenuePhoneFormatValid = true;
           this.isVenuePhoneValid = true;
           this.venuePhoneValidationMessage = "";
-        }
-        else{
+        } else {
           this.isVenuePhoneFormatValid = false;
           this.isVenuePhoneValid = false;
           this.venuePhoneValidationMessage = "Please enter valid Phone number";
@@ -1495,26 +1521,25 @@ export default {
         this.isVenuePhoneValid = false;
         this.venuePhoneValidationMessage = "*Required";
       } else {
-        if(this.isVenuePhoneFormatValid){
+        if (this.isVenuePhoneFormatValid) {
           this.isVenuePhoneValid = true;
           this.venuePhoneValidationMessage = "";
-        }
-        else{
+        } else {
           this.isVenuePhoneValid = false;
         }
       }
     },
-    validateEmployeePhoneFormat(vueTelObj){
-      if(vueTelObj.valid !== undefined){
-        if(vueTelObj.valid){
+    validateEmployeePhoneFormat(vueTelObj) {
+      if (vueTelObj.valid !== undefined) {
+        if (vueTelObj.valid) {
           this.isEmployeeMobileNoFormatValid = true;
           this.isEmployeeMobileNoValid = true;
           this.employeePhoneValidationMessage = "";
-        }
-        else{
+        } else {
           this.isEmployeeMobileNoFormatValid = false;
           this.isEmployeeMobileNoValid = false;
-          this.employeePhoneValidationMessage = "Please enter valid Phone number";
+          this.employeePhoneValidationMessage =
+            "Please enter valid Phone number";
         }
       }
     },
@@ -1523,26 +1548,25 @@ export default {
         this.isEmployeeMobileNoValid = false;
         this.employeePhoneValidationMessage = "*Required";
       } else {
-        if(this.isEmployeeMobileNoFormatValid){
+        if (this.isEmployeeMobileNoFormatValid) {
           this.isEmployeeMobileNoValid = true;
           this.employeePhoneValidationMessage = "";
-        }
-        else{
+        } else {
           this.isEmployeeMobileNoValid = false;
         }
       }
     },
-    validateReceiverPhoneFormat(vueTelObj){
-      if(vueTelObj.valid !== undefined){
-        if(vueTelObj.valid){
+    validateReceiverPhoneFormat(vueTelObj) {
+      if (vueTelObj.valid !== undefined) {
+        if (vueTelObj.valid) {
           this.isReceiverMobileNoFormatValid = true;
           this.isReceiverMobileNoValid = true;
           this.receiverPhoneValidationMessage = "";
-        }
-        else{
+        } else {
           this.isReceiverMobileNoFormatValid = false;
           this.isReceiverMobileNoValid = false;
-          this.receiverPhoneValidationMessage = "Please enter valid Phone number";
+          this.receiverPhoneValidationMessage =
+            "Please enter valid Phone number";
         }
       }
     },
@@ -1552,11 +1576,10 @@ export default {
         this.receiverPhoneValidationMessage = "*Required";
       } else {
         this.isReceiverMobileNoValid = true;
-        if(this.isReceiverMobileNoFormatValid){
+        if (this.isReceiverMobileNoFormatValid) {
           this.isReceiverMobileNoValid = true;
           this.receiverPhoneValidationMessage = "";
-        }
-        else{
+        } else {
           this.isReceiverMobileNoValid = false;
         }
       }
@@ -1726,7 +1749,7 @@ export default {
         } else {
           resolve();
         }
-      })
+      });
     },
     addSquare() {
       this.imgPreview = false;
@@ -1817,8 +1840,6 @@ export default {
         if (old_size > min_image_size) {
           const resized = await this.reduce_image_file_size(res);
           const new_size = this.calc_image_size(resized);
-          console.log("new_size=> ", new_size, "KB");
-          console.log("old_size=> ", old_size, "KB");
           return resized;
         } else {
           console.log("image already small enough");
@@ -1865,11 +1886,10 @@ export default {
         .then(async (response) => {
           if (response.status === 200) {
             this.isSavingImage = false;
-            if(this.image){
+            if (this.image) {
               this.$toast.info("Image Updated Successfully!");
               await this.deleteEditable(false);
-            }
-            else{
+            } else {
               this.$toast.info("Image Saved Successfully!");
             }
             this.imageRecognitionData = response.data.data;
