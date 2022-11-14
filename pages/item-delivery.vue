@@ -145,7 +145,9 @@
               </div>
             </div>
             <div class="flex justify-end">
-              <BaseButton :is-loading="isLoading"> Submit </BaseButton>
+              <BaseButton :is-loading="isLoading" button-type="submit">
+                Submit
+              </BaseButton>
             </div>
           </div>
         </form>
