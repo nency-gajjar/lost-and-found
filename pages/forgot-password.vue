@@ -62,7 +62,6 @@
                 :is-loading="isLoading"
                 button-type="submit"
                 class="w-full"
-                :disabled="isLoading"
               >
                 Send Email
               </BaseButton>

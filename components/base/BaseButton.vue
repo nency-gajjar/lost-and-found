@@ -4,7 +4,7 @@
     v-on="$listeners"
     :type="buttonType"
     :disabled="disabled || isLoading"
-    :class="{ 'cursor-not-allowed': disabled }"
+    :class="{ 'cursor-wait': disabled || isLoading }"
     class="
       uppercase
       py-2.5

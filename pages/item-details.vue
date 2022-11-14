@@ -893,7 +893,6 @@
                             <BaseButton
                               :is-loading="isSavingImage"
                               @click="saveImg"
-                              :disabled="isSavingImage"
                             >
                               Save
                             </BaseButton>

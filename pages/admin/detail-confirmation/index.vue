@@ -173,11 +173,7 @@
                   </div>
                 </div>
                 <div class="save-upload flex items-center">
-                  <BaseButton
-                    :is-loading="isSavingImage"
-                    @click="saveImg"
-                    :disabled="isSavingImage"
-                  >
+                  <BaseButton :is-loading="isSavingImage" @click="saveImg">
                     Save
                   </BaseButton>
                 </div>
@@ -706,7 +702,6 @@
             :is-loading="isLoading['Approve']"
             class="flex-1"
             @click="handleItemApprove('Approve')"
-            :disabled="isLoading['Approve']"
           >
             Approve
           </BaseButton>
@@ -717,7 +712,6 @@
             :is-loading="isLoading['Approve without Image']"
             class="flex-auto"
             @click="handleItemApprove('Approve without Image')"
-            :disabled="isLoading['Approve without Image']"
           >
             Approve without Image
           </BaseButton>
@@ -819,7 +813,6 @@
           :is-loading="isLoading['Deny']"
           type="submit"
           class="w-full"
-          :disabled="isLoading['Deny']"
         >
           Submit
         </BaseButton>

@@ -557,7 +557,6 @@
             class="flex-auto"
             :is-loading="isLoading['Approve']"
             @click="handleItemApprove('Approve')"
-            :disabled="isLoading['Approve']"
           >
             Approve
           </BaseButton>
@@ -626,7 +625,6 @@
           :is-loading="isLoading['Reject']"
           type="submit"
           class="w-full"
-          :disabled="isLoading['Reject']"
         >
           Submit
         </BaseButton>
