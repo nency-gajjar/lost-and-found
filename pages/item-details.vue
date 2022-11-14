@@ -1697,33 +1697,36 @@ export default {
       // this.enableEdit = false;
     },
     deleteEditable(showToastr = true) {
-      if (this.imageKey) {
-        this.isLoadingRemoveImage = true;
-        this.$axios
-          .post("/removes3files", { key: this.imageKey })
-          .then((response) => {
-            if (response.status === 200) {
+      return new Promise((resolve) => {
+        if (this.imageKey) {
+          this.isLoadingRemoveImage = true;
+          this.$axios
+            .post("/removes3files", { key: this.imageKey })
+            .then((response) => {
+              if (response.status === 200) {
+                this.isLoadingRemoveImage = false;
+                this.showEditor = false;
+                this.imgSrc = "";
+                this.showCrop = false;
+                this.showDraw = false;
+                this.imgPreview = false;
+                this.imageKey = "";
+                this.image = "";
+                this.resetItemDescriptionFields();
+                resolve();
+                if (showToastr) this.$toast.info("Image Removed Successfully!");
+              }
+            })
+            .catch((error) => {
+              this.$toast.error("Something went wrong! Please try again.");
               this.isLoadingRemoveImage = false;
-              this.showEditor = false;
-              this.imgSrc = "";
-              this.showCrop = false;
-              this.showDraw = false;
-              this.imgPreview = false;
-              this.imageKey = "";
-              this.image = "";
-              this.resetItemDescriptionFields();
-              if (showToastr) this.$toast.info("Image Removed Successfully!");
-            }
-          })
-          .catch((error) => {
-            this.$toast.error("Something went wrong! Please try again.");
-            this.isLoadingRemoveImage = false;
-            console.log(error);
-          });
-      } else {
-        // this.imgSrc = "";
-        // this.image = "";
-      }
+              console.log(error);
+              resolve();
+            });
+        } else {
+          resolve();
+        }
+      })
     },
     addSquare() {
       this.imgPreview = false;
@@ -1859,10 +1862,16 @@ export default {
       }
       this.$axios
         .post("/demo", { file })
-        .then((response) => {
+        .then(async (response) => {
           if (response.status === 200) {
             this.isSavingImage = false;
-            this.$toast.info("Image Saved Successfully!");
+            if(this.image){
+              this.$toast.info("Image Updated Successfully!");
+              await this.deleteEditable(false);
+            }
+            else{
+              this.$toast.info("Image Saved Successfully!");
+            }
             this.imageRecognitionData = response.data.data;
             let responseItemData = response.data.data
               .filter((obj) => {
