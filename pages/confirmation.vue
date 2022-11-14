@@ -21,8 +21,15 @@
               <table width="100%" cellspacing="0" cellpadding="0">
                 <tr>
                   <td align="center" class="w-full">
-                    <h2 class="text-2xl font-bold text-accent-100 text-center w-full">
-                      Preview Details
+                    <h2
+                      class="
+                        text-2xl
+                        font-bold
+                        text-accent-100 text-center
+                        w-full
+                      "
+                    >
+                      Confirmation Details
                     </h2>
                   </td>
                 </tr>
@@ -387,7 +394,7 @@ export default {
   created() {
     if (Object.keys(this.itemConfirmationDetails).length > 0) {
       this.itemDetails = this.itemConfirmationDetails;
-    } else if(this.$route.query.id){
+    } else if (this.$route.query.id) {
       this.$axios
         .get("/getsinglelostitem?id=" + this.$route.query.id)
         .then((response) => {
@@ -398,8 +405,7 @@ export default {
         .catch((error) => {
           console.log(error);
         });
-    }
-    else{
+    } else {
       this.$nextTick(() => {
         this.$router.push({
           name: "found-items",
@@ -444,12 +450,12 @@ export default {
 
       if (mobile || android) {
         this.$html2pdf(document.getElementById("printMe"), {
-					margin: 1,
-					filename: 'item-detprintMeails.pdf',
-					image: { type: 'jpeg', quality: 0.98 },
-					html2canvas: { dpi: 192, letterRendering: true },
-					jsPDF: { unit: 'in', format: 'letter', orientation: 'portrait' }
-				})
+          margin: 1,
+          filename: "item-detprintMeails.pdf",
+          image: { type: "jpeg", quality: 0.98 },
+          html2canvas: { dpi: 192, letterRendering: true },
+          jsPDF: { unit: "in", format: "letter", orientation: "portrait" },
+        });
       } else {
         const mywindow = window.open("", "PRINT", "height=1200,width=600");
         mywindow.document.write("<html><head>");
@@ -599,7 +605,8 @@ export default {
 tr td:first-child {
   width: 250px;
 }
-.qr-code-container td, .w-full {
+.qr-code-container td,
+.w-full {
   width: 100% !important;
 }
 .text-center {

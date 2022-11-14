@@ -155,14 +155,15 @@
                 v-slot="{ errors }"
                 rules="required"
                 class="block"
-              >
-                <div :class="errors.length && 'error'">
-                  <date-picker
-                    v-model="itemLostDate"
-                    formate="YYYY-MM-DD"
-                    placeholder="Date of Lost"
-                  ></date-picker>
-                </div>
+                ><client-only>
+                  <div :class="errors.length && 'error'">
+                    <date-picker
+                      v-model="itemLostDate"
+                      formate="YYYY-MM-DD"
+                      placeholder="Date of Lost"
+                    ></date-picker>
+                  </div>
+                </client-only>
                 <p
                   v-if="errors.length"
                   class="vee-validation-error mt-2 text-sm text-red-600"

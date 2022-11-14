@@ -58,6 +58,9 @@
           </div>
 
           <div class="align-middle inline-block w-full mt-5">
+            <label class="block text-md font-medium text-gray-800 text-left m-2"
+              >Date when lost?</label
+            >
             <div
               class="
                 flex
@@ -71,16 +74,22 @@
               "
             >
               <div class="w-full flex gap-4 flex-auto mt-3 sm:mt-0 sm:w-9/12">
-                <date-picker
-                  placeholder="Start date"
-                  v-model="startDate"
-                  formate="YYYY-MM-DD"
-                ></date-picker>
-                <date-picker
-                  placeholder="End date"
-                  v-model="endDate"
-                  formate="YYYY-MM-DD"
-                ></date-picker>
+                <client-only>
+                  <date-picker
+                    placeholder="Approx. Start date"
+                    v-model="startDate"
+                    formate="YYYY-MM-DD"
+                  >
+                  </date-picker>
+                </client-only>
+                <client-only>
+                  <date-picker
+                    placeholder="Approx. End date"
+                    v-model="endDate"
+                    formate="YYYY-MM-DD"
+                  >
+                  </date-picker>
+                </client-only>
               </div>
 
               <!-- Item Description -->

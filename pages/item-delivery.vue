@@ -122,12 +122,14 @@
                 rules="required"
                 class="block mb-4 mt-2"
               >
-                <div :class="errors.length && 'error'">
-                  <date-picker
-                    v-model="expectedPickupDate"
-                    formate="YYYY-MM-DD"
-                  ></date-picker>
-                </div>
+                <client-only>
+                  <div :class="errors.length && 'error'">
+                    <date-picker
+                      v-model="expectedPickupDate"
+                      formate="YYYY-MM-DD"
+                    ></date-picker>
+                  </div>
+                </client-only>
                 <p
                   v-if="errors.length"
                   class="vee-validation-error mt-2 text-sm text-red-600"
