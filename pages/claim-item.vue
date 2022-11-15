@@ -83,7 +83,10 @@
                   {{ errors[0] }}
                 </p>
               </ValidationProvider>
-              <div class="block relative box-content h-12" :class="!isPhoneNoValid && 'error'">
+              <div
+                class="block relative box-content h-12"
+                :class="!isPhoneNoValid && 'error'"
+              >
                 <vue-tel-input
                   :inputOptions="{ placeholder: 'Mobile Number' }"
                   class="
@@ -152,14 +155,15 @@
                 v-slot="{ errors }"
                 rules="required"
                 class="block"
-              >
-                <div :class="errors.length && 'error'">
-                  <date-picker
-                    v-model="itemLostDate"
-                    formate="YYYY-MM-DD"
-                    placeholder="Date of Lost"
-                  ></date-picker>
-                </div>
+                ><client-only>
+                  <div :class="errors.length && 'error'">
+                    <date-picker
+                      v-model="itemLostDate"
+                      formate="YYYY-MM-DD"
+                      placeholder="Date of Lost"
+                    ></date-picker>
+                  </div>
+                </client-only>
                 <p
                   v-if="errors.length"
                   class="vee-validation-error mt-2 text-sm text-red-600"
@@ -432,14 +436,13 @@ export default {
       this.autoCompleteAddress.address = "";
       document.getElementById("autocomplete-claim-item").placeholder = "";
     },
-    validateUserPhoneFormat(vueTelObj){
-      if(vueTelObj.valid !== undefined){
-        if(vueTelObj.valid){
+    validateUserPhoneFormat(vueTelObj) {
+      if (vueTelObj.valid !== undefined) {
+        if (vueTelObj.valid) {
           this.isPhoneNoFormateValid = true;
           this.isPhoneNoValid = true;
           this.phoneNoValidateMessage = "";
-        }
-        else{
+        } else {
           this.isPhoneNoFormateValid = false;
           this.isPhoneNoValid = false;
           this.phoneNoValidateMessage = "Please enter valid Phone number";
@@ -451,11 +454,10 @@ export default {
         this.isPhoneNoValid = false;
         this.phoneNoValidateMessage = "*Required";
       } else {
-        if(this.isPhoneNoFormateValid){
+        if (this.isPhoneNoFormateValid) {
           this.isPhoneNoValid = true;
           this.phoneNoValidateMessage = "";
-        }
-        else{
+        } else {
           this.isPhoneNoValid = false;
         }
       }

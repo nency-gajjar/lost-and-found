@@ -122,12 +122,14 @@
                 rules="required"
                 class="block mb-4 mt-2"
               >
-                <div :class="errors.length && 'error'">
-                  <date-picker
-                    v-model="expectedPickupDate"
-                    formate="YYYY-MM-DD"
-                  ></date-picker>
-                </div>
+                <client-only>
+                  <div :class="errors.length && 'error'">
+                    <date-picker
+                      v-model="expectedPickupDate"
+                      formate="YYYY-MM-DD"
+                    ></date-picker>
+                  </div>
+                </client-only>
                 <p
                   v-if="errors.length"
                   class="vee-validation-error mt-2 text-sm text-red-600"
@@ -165,6 +167,7 @@
 </template>
   
 <script>
+import { faL } from "@fortawesome/free-solid-svg-icons";
 import DatePicker from "vue2-datepicker";
 import "vue2-datepicker/index.css";
 
@@ -211,15 +214,20 @@ export default {
       this.openTab = tabNumber;
     },
     async onSubmit() {
+      this.isLoading = true;
+      if (this.deliveryType === "0") {
+        window.location.href = `https://development.shipmoo.com/shipments/new/receiver-details/?id=${this.itemId}`;
+        return;
+      }
       if (this.deliveryType === "1") {
         const isValid = await this.$refs.observer.validate();
         if (!isValid) {
+          this.isLoading = false;
           this.showValidateAlert = true;
           return;
         }
       }
       this.showValidateAlert = false;
-      this.isLoading = true;
       let params = {
         delivery_type: this.deliveryType,
       };

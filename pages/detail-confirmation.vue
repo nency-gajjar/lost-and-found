@@ -27,7 +27,7 @@
               text-center text-white
             "
           >
-            PREVIEW DETAILS
+            ITEM DETAILS
           </h1>
         </div>
         <div class="sections py-4 px-6">

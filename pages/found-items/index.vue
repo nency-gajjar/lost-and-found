@@ -72,16 +72,20 @@
             "
           >
             <div class="w-full flex gap-3 flex-auto mt-3 sm:mt-0 sm:w-6/12">
-              <date-picker
-                placeholder="Start date"
-                v-model="startDate"
-                formate="YYYY-MM-DD"
-              ></date-picker>
-              <date-picker
-                placeholder="End date"
-                v-model="endDate"
-                formate="YYYY-MM-DD"
-              ></date-picker>
+              <client-only>
+                <date-picker
+                  placeholder="Start date"
+                  v-model="startDate"
+                  formate="YYYY-MM-DD"
+                ></date-picker>
+              </client-only>
+              <client-only>
+                <date-picker
+                  placeholder="End date"
+                  v-model="endDate"
+                  formate="YYYY-MM-DD"
+                ></date-picker>
+              </client-only>
             </div>
 
             <!-- Item Description -->
@@ -195,6 +199,45 @@
               items-center
             "
           >
+            <div class="w-full flex gap-3 flex-auto mt-3 sm:mt-0 sm:w-7/12">
+              <div class="w-full flex justify-end items-center pt-5 relative">
+                <input
+                  v-model="searchQuery"
+                  @input="filterItems"
+                  class="
+                    text-sm
+                    leading-none
+                    text-left text-gray-600
+                    px-4
+                    py-3
+                    w-full
+                    border
+                    rounded-full
+                    border-gray-300
+                    outline-none
+                  "
+                  type="text"
+                  placeholder="Search"
+                />
+                <BaseIcon
+                  v-if="!searchQuery"
+                  icon="magnifying-glass"
+                  color="gray"
+                  size="1x"
+                  class="absolute right-3 z-10 cursor-pointer"
+                  style="max-width: 15px"
+                />
+                <BaseIcon
+                  v-else
+                  icon="xmark"
+                  color="gray"
+                  size="1x"
+                  class="absolute right-3 z-10 cursor-pointer"
+                  style="max-width: 15px"
+                  @click="(searchQuery = ''), (lostItems = cloneLostItems)"
+                />
+              </div>
+            </div>
             <div class="w-full flex gap-3 flex-auto mt-3 sm:mt-0 sm:w-5/12">
               <ul
                 v-show="isFilterApplied"
@@ -297,45 +340,6 @@
                   </span>
                 </li>
               </ul>
-            </div>
-            <div class="w-full flex gap-3 flex-auto mt-3 sm:mt-0 sm:w-7/12">
-              <div class="w-full flex justify-end items-center pt-5 relative">
-                <input
-                  v-model="searchQuery"
-                  @input="filterItems"
-                  class="
-                    text-sm
-                    leading-none
-                    text-left text-gray-600
-                    px-4
-                    py-3
-                    w-full
-                    border
-                    rounded-full
-                    border-gray-300
-                    outline-none
-                  "
-                  type="text"
-                  placeholder="Search"
-                />
-                <BaseIcon
-                  v-if="!searchQuery"
-                  icon="magnifying-glass"
-                  color="gray"
-                  size="1x"
-                  class="absolute right-3 z-10 cursor-pointer"
-                  style="max-width: 15px"
-                />
-                <BaseIcon
-                  v-else
-                  icon="xmark"
-                  color="gray"
-                  size="1x"
-                  class="absolute right-3 z-10 cursor-pointer"
-                  style="max-width: 15px"
-                  @click="(searchQuery = ''), (lostItems = cloneLostItems)"
-                />
-              </div>
             </div>
           </div>
         </div>
