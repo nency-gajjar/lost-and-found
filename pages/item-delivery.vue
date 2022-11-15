@@ -167,6 +167,7 @@
 </template>
   
 <script>
+import { faL } from "@fortawesome/free-solid-svg-icons";
 import DatePicker from "vue2-datepicker";
 import "vue2-datepicker/index.css";
 
@@ -213,15 +214,20 @@ export default {
       this.openTab = tabNumber;
     },
     async onSubmit() {
+      this.isLoading = true;
+      if (this.deliveryType === "0") {
+        window.location.href = `https://development.shipmoo.com/shipments/new/receiver-details/?id=${this.itemId}`;
+        return;
+      }
       if (this.deliveryType === "1") {
         const isValid = await this.$refs.observer.validate();
         if (!isValid) {
+          this.isLoading = false;
           this.showValidateAlert = true;
           return;
         }
       }
       this.showValidateAlert = false;
-      this.isLoading = true;
       let params = {
         delivery_type: this.deliveryType,
       };
