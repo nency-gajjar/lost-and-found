@@ -299,10 +299,10 @@
                     type="text"
                     :class="{
                       error: errors.length > 0,
-                      readonly: autoCompleteAddress.city && autoAddressSelected,
+                      readonly: tempAutoCompleteAddress.city && autoAddressSelected,
                     }"
                     :readonly="
-                      autoCompleteAddress.city !== '' && autoAddressSelected
+                      tempAutoCompleteAddress.city !== '' && autoAddressSelected
                     "
                   />
                   <p
@@ -326,10 +326,10 @@
                     :class="{
                       error: errors.length > 0,
                       readonly:
-                        autoCompleteAddress.state && autoAddressSelected,
+                        tempAutoCompleteAddress.state && autoAddressSelected,
                     }"
                     :readonly="
-                      autoCompleteAddress.state !== '' && autoAddressSelected
+                      tempAutoCompleteAddress.state !== '' && autoAddressSelected
                     "
                   />
                   <p
@@ -354,10 +354,10 @@
                     :class="{
                       error: errors.length > 0,
                       readonly:
-                        autoCompleteAddress.zipcode && autoAddressSelected,
+                        tempAutoCompleteAddress.zipcode && autoAddressSelected,
                     }"
                     :readonly="
-                      autoCompleteAddress.zipcode !== '' && autoAddressSelected
+                      tempAutoCompleteAddress.zipcode !== '' && autoAddressSelected
                     "
                   />
                   <p
@@ -383,10 +383,10 @@
                     :class="{
                       error: errors.length > 0,
                       readonly:
-                        autoCompleteAddress.country && autoAddressSelected,
+                        tempAutoCompleteAddress.country && autoAddressSelected,
                     }"
                     :readonly="
-                      autoCompleteAddress.country !== '' && autoAddressSelected
+                      tempAutoCompleteAddress.country !== '' && autoAddressSelected
                     "
                   />
                   <p
@@ -413,7 +413,7 @@
                     "
                     :class="{
                       readonly:
-                        autoCompleteAddress.phoneNo && autoAddressSelected,
+                        tempAutoCompleteAddress.phoneNo && autoAddressSelected,
                     }"
                     v-model="autoCompleteAddress.phoneNo"
                     @blur="validateVenuePhoneNo"
@@ -1306,6 +1306,14 @@ export default {
       zipcode: "",
       phoneNo: "",
     },
+    tempAutoCompleteAddress: {
+      address: "",
+      city: "",
+      state: "",
+      country: "",
+      zipcode: "",
+      phoneNo: "",
+    },
     autoCompleteAddressArr: [],
     mobileDevice: false,
     venuePhoneValidationMessage: "",
@@ -1426,6 +1434,7 @@ export default {
             }
           });
         });
+        this.tempAutoCompleteAddress = {...this.autoCompleteAddress};
         this.autoCompleteAddressArr.push(obj);
       });
     },
