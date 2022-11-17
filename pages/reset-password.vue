@@ -133,7 +133,11 @@
 <script>
 import { ValidationObserver, ValidationProvider } from "vee-validate";
 export default {
-  middleware: ["auth-admin"],
+  middleware({ $auth, redirect }) {
+    if ($auth.loggedIn) {
+      return redirect("/dashboard");
+    }
+  },
   components: {
     ValidationObserver,
     ValidationProvider,

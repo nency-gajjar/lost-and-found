@@ -84,7 +84,11 @@
 <script>
 import { ValidationObserver, ValidationProvider } from "vee-validate";
 export default {
-  middleware: ["auth-admin"],
+  middleware({ $auth, redirect }) {
+    if ($auth.loggedIn) {
+      return redirect("/dashboard");
+    }
+  },
   components: {
     ValidationObserver,
     ValidationProvider,
@@ -128,8 +132,12 @@ export default {
           })
           .catch((error) => {
             this.isLoading = false;
-            this.$toast.error("Something went wrong! Please try again.");
-            console.log(error);
+            if(error.response.status === 400){
+              this.$toast.error(error.response.data.data);
+            }
+            else{
+              this.$toast.error("Something went wrong! Please try again.");
+            }
           });
       }
     },
