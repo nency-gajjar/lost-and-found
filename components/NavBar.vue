@@ -22,7 +22,7 @@
               <div class="menu" @click="logoutAdmin('desktop')">Logout</div>
             </div>
             <div v-if="!isAdminLogin" class="drawer-container">
-              <NuxtLink to="/found-items" class="opacity-100"
+              <NuxtLink to="/found-items" class="opacity-100 menu"
                 >Found Items</NuxtLink
               >
             </div>
