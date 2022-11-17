@@ -2,13 +2,13 @@
   <div
     wire:loading
     class="
-      h-screen
       z-50
       overflow-hidden
       flex flex-col
       items-center
       justify-center
     "
+    :class="{ 'h-screen': needFullScreen }"
   >
     <div
       class="loader ease-linear rounded-full border-gray-200 h-14 w-14 mb-4"
@@ -17,7 +17,11 @@
 </template>
 
 <script>
-export default {};
+export default {
+  props: {
+    needFullScreen: { type: Boolean, default: true },
+  },
+};
 </script>
 
 <style scoped>

@@ -16,7 +16,7 @@
           rounded-br-lg
         "
       >
-        <table class="min-w-full">
+        <table class="min-w-full" v-if="!isLoadingItemDesc && items.length > 0">
           <thead class="sticky top-0 z-20">
             <tr
               class="
@@ -35,7 +35,7 @@
               <th class="py-3 px-2 text-left">Actions</th>
             </tr>
           </thead>
-          <tbody class="bg-white" v-if="!isLoadingItemDesc && items.length > 0">
+          <tbody class="bg-white">
             <tr
               v-for="(item, index) in items"
               :key="index"
@@ -293,13 +293,13 @@
               </td>
             </tr>
           </tbody>
-          <div v-else-if="!isLoadingItemDesc && items.length === 0">
-            No Result Found
-          </div>
-          <div v-else>
-            <BaseLoader />
-          </div>
         </table>
+        <div class="pt-8" v-else-if="!isLoadingItemDesc && items.length === 0">
+          No Result Found
+        </div>
+        <div class="pt-8" v-else>
+          <BaseLoader :needFullScreen="false" />
+        </div>
         <div class="flex justify-start my-5 ml-2">
           <button
             class="
