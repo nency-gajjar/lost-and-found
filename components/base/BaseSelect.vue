@@ -10,6 +10,24 @@
       {{ label }}
     </div>
     <select
+      v-show="!isComponentLoaded"
+      class="
+        relative
+        border
+        inline-block
+        border-gray-300
+        w-full
+        rounded-lg
+        h-full
+        text-sm
+        transition-shadow
+        text-gray-800
+        bg-transparent
+      "
+    >
+    </select>
+    <select
+      v-show="isComponentLoaded"
       :value="value"
       class="
         relative
@@ -65,6 +83,7 @@ export default {
   data() {
     return {
       active: false,
+      isComponentLoaded: false
     };
   },
   methods: {
@@ -79,10 +98,11 @@ export default {
       }
     },
   },
-  created() {
+  mounted() {
     if (this.value) {
       this.active = true;
     }
+    this.isComponentLoaded = true
   },
 };
 </script>
