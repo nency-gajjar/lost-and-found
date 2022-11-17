@@ -15,13 +15,18 @@
             </div>
           </div>
           <div class="menu-right flex items-center">
-            <div v-show="isAdminLogin" class="link-container">
+            <div v-if="isAdminLogin" class="link-container">
               <NuxtLink to="/register" class="menu">Register</NuxtLink>
             </div>
-            <div v-show="isAdminLogin" class="link-container cursor-pointer">
+            <div v-if="isAdminLogin" class="link-container cursor-pointer">
               <div class="menu" @click="logoutAdmin('desktop')">Logout</div>
             </div>
-            <div class="drawer-container">
+            <div v-if="!isAdminLogin" class="drawer-container">
+              <NuxtLink to="/found-items" class="opacity-100"
+                >Found Items</NuxtLink
+              >
+            </div>
+            <div v-else class="drawer-container">
               <div class="icon-container" @click="toggleMenu">
                 <div class="bar1"></div>
                 <div class="bar2"></div>
@@ -31,7 +36,7 @@
           </div>
         </div>
       </div>
-      <div v-show="menuVisible" class="mobile-menu">
+      <div v-if="menuVisible" class="mobile-menu">
         <div v-if="isAdminLogin">
           <NuxtLink
             to="/dashboard"
@@ -48,17 +53,19 @@
             >Found Items</NuxtLink
           >
         </div>
-        <div v-show="isAdminLogin">
-          <NuxtLink
-            to="/register"
-            @click.native="toggleMenu"
-            class="opacity-100"
-            >Register</NuxtLink
-          >
-        </div>
-        <div v-show="isAdminLogin">
-          <div @click="logoutAdmin('mobile')" class="opacity-100">Logout</div>
-        </div>
+        <template v-if="isAdminLogin">
+          <div>
+            <NuxtLink
+              to="/register"
+              @click.native="toggleMenu"
+              class="opacity-100"
+              >Register</NuxtLink
+            >
+          </div>
+          <div>
+            <div @click="logoutAdmin('mobile')" class="opacity-100">Logout</div>
+          </div>
+        </template>
       </div>
     </nav>
   </div>
@@ -118,7 +125,7 @@ export default {
       @apply bg-orange-100 text-orange-700;
     }
   }
-  .menu:hover {
+  .menu .menu-left div a:hover {
     @apply text-orange-700;
   }
 }
