@@ -112,7 +112,7 @@
     </div>
 
     <!-- Recently Added Items -->
-    <section class="bg-white border-b py-8">
+    <section v-if="recentItemList.length > 0"  class="bg-white border-b py-8">
       <div class="container max-w-6xl mx-auto m-8">
         <h3
           class="
@@ -138,9 +138,10 @@
         </div>
         <div class="flex justify-center my-5">
           <VueSlickCarousel class="w-5/6" v-bind="sliderSetting">
-            <div v-for="item in 5" :key="item">
+            <div v-for="item in recentItemList" :key="item.id">
               <div class="sliderCard cursor-pointer shadow-md border">
                 <img
+                  v-if="item.image"
                   class="
                     object-cover
                     w-full
@@ -151,10 +152,25 @@
                     h-14
                     md:rounded-none md:rounded-l-lg
                   "
-                  src="@/assets/images/headphones.png"
+                  :src="item.image"
                   alt=""
                 />
-                <h5 class="m-4 text-lg font-semibold">Headphone</h5>
+                <img
+                  v-else
+                  class="
+                    object-cover
+                    w-full
+                    rounded-t-lg
+                    md:h-32 md:w-32
+                    sm:h-16 sm:w-16
+                    w-14
+                    h-14
+                    md:rounded-none md:rounded-l-lg
+                  "
+                  src="@/assets/images/no-image4.png"
+                  alt=""
+                />
+                <h5 class="m-4 text-lg font-semibold">{{ item.item_description }}</h5>
                 <ul role="list" class="mb-4 text-left text-gray-500">
                   <li class="flex items-center space-x-2">
                     <!-- Icon -->
@@ -170,7 +186,7 @@
                         clip-rule="evenodd"
                       ></path>
                     </svg>
-                    <span>Status: Unclaimed</span>
+                    <span>Status: {{ item.item_status == 0 ? "Claimed" : "Unclaimed" }}</span>
                   </li>
                   <li class="flex items-center space-x-2">
                     <!-- Icon -->
@@ -186,11 +202,12 @@
                         clip-rule="evenodd"
                       ></path>
                     </svg>
-                    <span>Found Date: 22-10-2022</span>
+                    <span>Found Date: {{ item.datse }}</span>
                   </li>
                 </ul>
                 <button
-                  type="submit"
+                  type="button"
+                  @click="viewItem(item)"
                   class="
                     w-full
                     font-medium
@@ -272,10 +289,12 @@ export default {
       lostItemAddress: "",
       lat: "",
       long: "",
+      recentItemList: [],
     };
   },
   mounted() {
     this.getItemDescriptionOptions();
+    this.getRecentItemList();
   },
   computed: {
     formatedStartDate() {
@@ -343,6 +362,30 @@ export default {
               long: this.long,
             },
           },
+        });
+      });
+    },
+    getRecentItemList(){
+      this.$axios
+        .get("/getRecentItemList")
+        .then((response) => {
+          if (response.status === 200) {
+            this.recentItemList = response?.data?.data?.Items.reverse();
+          }
+        })
+        .catch((error) => {
+          console.log(error);
+        });
+    },
+    viewItem(item) {
+      this.$store.commit("item/SET_ITEM_DETAILS", {
+        ...item,
+        onlyDisplay: true,
+      });
+      this.$nextTick(() => {
+        this.$router.push({
+          path: "/detail-confirmation",
+          query: { id: item.id },
         });
       });
     },
