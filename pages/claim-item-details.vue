@@ -649,7 +649,7 @@ export default {
         Approve: false,
         Reject: false,
       },
-      isLoadingItemDetails: false,
+      isLoadingItemDetails: true,
       claimDetails: {},
       itemDetails: {},
       itemId: "",

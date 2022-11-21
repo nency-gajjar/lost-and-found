@@ -299,7 +299,8 @@
                     type="text"
                     :class="{
                       error: errors.length > 0,
-                      readonly: tempAutoCompleteAddress.city && autoAddressSelected,
+                      readonly:
+                        tempAutoCompleteAddress.city && autoAddressSelected,
                     }"
                     :readonly="
                       tempAutoCompleteAddress.city !== '' && autoAddressSelected
@@ -329,7 +330,8 @@
                         tempAutoCompleteAddress.state && autoAddressSelected,
                     }"
                     :readonly="
-                      tempAutoCompleteAddress.state !== '' && autoAddressSelected
+                      tempAutoCompleteAddress.state !== '' &&
+                      autoAddressSelected
                     "
                   />
                   <p
@@ -357,7 +359,8 @@
                         tempAutoCompleteAddress.zipcode && autoAddressSelected,
                     }"
                     :readonly="
-                      tempAutoCompleteAddress.zipcode !== '' && autoAddressSelected
+                      tempAutoCompleteAddress.zipcode !== '' &&
+                      autoAddressSelected
                     "
                   />
                   <p
@@ -386,7 +389,8 @@
                         tempAutoCompleteAddress.country && autoAddressSelected,
                     }"
                     :readonly="
-                      tempAutoCompleteAddress.country !== '' && autoAddressSelected
+                      tempAutoCompleteAddress.country !== '' &&
+                      autoAddressSelected
                     "
                   />
                   <p
@@ -1291,7 +1295,7 @@ export default {
     },
     foundItemId: "",
     isLoading: false,
-    isLoadingItemDetails: false,
+    isLoadingItemDetails: true,
     isVenuePhoneValid: true,
     isEmployeeMobileNoValid: true,
     isReceiverMobileNoValid: true,
@@ -1434,7 +1438,7 @@ export default {
             }
           });
         });
-        this.tempAutoCompleteAddress = {...this.autoCompleteAddress};
+        this.tempAutoCompleteAddress = { ...this.autoCompleteAddress };
         this.autoCompleteAddressArr.push(obj);
       });
     },

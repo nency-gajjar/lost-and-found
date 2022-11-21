@@ -484,7 +484,7 @@ export default {
     return {
       lostItems: [],
       cloneLostItems: [],
-      isLoading: false,
+      isLoading: true,
       searchQuery: "",
       startDate: null,
       endDate: null,
