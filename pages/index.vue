@@ -112,7 +112,7 @@
     </div>
 
     <!-- Recently Added Items -->
-    <section v-if="recentItemList.length > 0"  class="bg-white border-b py-8">
+    <section v-if="recentItemList.length > 0" class="bg-white border-b py-8">
       <div class="container max-w-6xl mx-auto m-8">
         <h3
           class="
@@ -146,7 +146,7 @@
                     object-cover
                     w-full
                     rounded-t-lg
-                    md:h-32 md:w-32
+                    md:h-28 md:w-28
                     sm:h-16 sm:w-16
                     w-14
                     h-14
@@ -161,7 +161,7 @@
                     object-cover
                     w-full
                     rounded-t-lg
-                    md:h-32 md:w-32
+                    md:h-28 md:w-28
                     sm:h-16 sm:w-16
                     w-14
                     h-14
@@ -170,39 +170,25 @@
                   src="@/assets/images/no-image4.png"
                   alt=""
                 />
-                <h5 class="m-4 text-lg font-semibold">{{ item.item_description }}</h5>
+                <h5 class="m-4 text-lg font-semibold">
+                  {{ item.item_description }}
+                </h5>
                 <ul role="list" class="mb-4 text-left text-gray-500">
-                  <li class="flex items-center space-x-2">
-                    <!-- Icon -->
-                    <svg
-                      class="flex-shrink-0 w-5 h-5 text-green-500"
-                      fill="currentColor"
-                      viewBox="0 0 20 20"
-                      xmlns="http://www.w3.org/2000/svg"
-                    >
-                      <path
-                        fill-rule="evenodd"
-                        d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"
-                        clip-rule="evenodd"
-                      ></path>
-                    </svg>
-                    <span>Status: {{ item.item_status == 0 ? "Claimed" : "Unclaimed" }}</span>
+                  <li
+                    class="flex items-center space-x-2"
+                    data-toggle="tooltip"
+                    title="Found item date"
+                  >
+                    <BaseIcon icon="calendar-days" color="gray" />
+                    <span>{{ item.datse }}</span>
                   </li>
-                  <li class="flex items-center space-x-2">
-                    <!-- Icon -->
-                    <svg
-                      class="flex-shrink-0 w-5 h-5 text-green-500"
-                      fill="currentColor"
-                      viewBox="0 0 20 20"
-                      xmlns="http://www.w3.org/2000/svg"
-                    >
-                      <path
-                        fill-rule="evenodd"
-                        d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"
-                        clip-rule="evenodd"
-                      ></path>
-                    </svg>
-                    <span>Found Date: {{ item.datse }}</span>
+                  <li
+                    class="flex items-center space-x-2"
+                    data-toggle="tooltip"
+                    :title="item.address"
+                  >
+                    <BaseIcon icon="location-dot" color="red" />
+                    <span class="line-clamp-1"> {{ item.address }}</span>
                   </li>
                 </ul>
                 <button
@@ -213,7 +199,7 @@
                     font-medium
                     text-sm
                     px-5
-                    py-2.5
+                    py-2
                     rounded-lg
                     button
                     focus:outline-none
@@ -365,7 +351,7 @@ export default {
         });
       });
     },
-    getRecentItemList(){
+    getRecentItemList() {
       this.$axios
         .get("/getRecentItemList")
         .then((response) => {
@@ -417,7 +403,7 @@ export default {
 }
 
 .sliderCard {
-  @apply flex justify-center items-center flex-col bg-gray-100 mx-5 p-5 rounded-lg;
+  @apply flex justify-center items-center flex-col bg-gray-100 mx-5 p-4 rounded-lg;
   display: flex !important;
 }
 </style>
