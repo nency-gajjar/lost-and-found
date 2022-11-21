@@ -112,7 +112,10 @@
     </div>
 
     <!-- Recently Added Items -->
-    <section v-if="recentItemList.length > 0" class="bg-white border-b py-8">
+    <section
+      v-if="!isLoading && recentItemList.length > 0"
+      class="bg-white border-b py-8"
+    >
       <div class="container max-w-6xl mx-auto m-8">
         <h3
           class="
@@ -225,6 +228,12 @@
         </div>
       </div>
     </section>
+    <div v-else-if="!isLoading && recentItemList.length === 0">
+      <p class="text-gray-600 font-medium m-14">No Result Found</p>
+    </div>
+    <div v-else>
+      <BaseLoader />
+    </div>
   </div>
 </template>
 
@@ -275,6 +284,7 @@ export default {
       lostItemAddress: "",
       lat: "",
       long: "",
+      isLoading: false,
       recentItemList: [],
     };
   },
@@ -352,14 +362,17 @@ export default {
       });
     },
     getRecentItemList() {
+      this.isLoading = true;
       this.$axios
         .get("/getRecentItemList")
         .then((response) => {
           if (response.status === 200) {
+            this.isLoading = false;
             this.recentItemList = response?.data?.data?.Items.reverse();
           }
         })
         .catch((error) => {
+          this.isLoading = false;
           console.log(error);
         });
     },
