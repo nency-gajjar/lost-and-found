@@ -592,9 +592,12 @@ export default {
         mywindow.document.write("</head><body>");
         mywindow.document.write(document.getElementById("printMe").innerHTML);
         mywindow.document.write("</body></html>");
+        console.log("====After Document Write");
         setTimeout(() => {
           mywindow.print();
+          console.log("====After Print");
           mywindow.close();
+          console.log("====After Close");
         }, 250);
       }
     },
