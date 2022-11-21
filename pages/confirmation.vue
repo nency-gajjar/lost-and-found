@@ -596,7 +596,7 @@ export default {
         setTimeout(() => {
           mywindow.print();
           console.log("====After Print");
-          mywindow.close();
+          setTimeout(mywindow.close, 0);
           console.log("====After Close");
         }, 250);
       }
