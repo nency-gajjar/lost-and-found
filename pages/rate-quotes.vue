@@ -38,14 +38,14 @@
               relative
             "
             :class="{
-              'border-accent-100 ring-accent-60 ring-[6px] ring-offset-accent-100 ring-offset-1':
+              'border-primary-100 ring-primary-80 ring-[6px] ring-offset-primary-100 ring-offset-1':
                 selectedRate === item.id,
             }"
           >
             <div
               v-if="selectedRate === item.id"
               style="width: 25px; height: 25px"
-              class="rounded-50 absolute left-2 top-40 z-[40] bg-accent"
+              class="rounded-50 absolute left-2 top-40 z-[40] bg-primary-100"
             >
               <BaseIcon icon="check" color="white" size="1x" />
             </div>
@@ -69,27 +69,14 @@
                 "
               >
                 <div class="mb-1 flex-col items-start justify-center text-left">
-                  <div
-                    class="
-                      text-xl
-                      font-bold
-                      tracking-tight
-                      uppercase
-                      text-gray-900 text-accent-100
-                    "
+                  <h4
+                    class="font-semibold text-[#212B36] text-lg tracking-wide"
                   >
-                    {{ item.service }}
-                  </div>
-                  <div
-                    class="
-                      text-2xl
-                      font-bold
-                      tracking-tight
-                      text-gray-900 text-accent-100
-                    "
-                  >
-                    $ {{ item.rate }}
-                  </div>
+                    {{ displayItemService(item.service) }}
+                  </h4>
+                  <h4 class="text-green-500 font-display text-2xl">
+                    ${{ item.rate }}
+                  </h4>
                 </div>
                 <div class="text-left">
                   <div>
@@ -98,9 +85,15 @@
                     </h5>
                   </div>
                   <div>
-                    <span class="text-sm font-normal text-gray-700">
-                      {{ item.delivery_days ? item.delivery_days + ' Days' : 'Unknown' }}
+                    <span
+                      v-if="item && item.delivery_days"
+                      class="text-sm tracking-wider text-[#637381]"
+                    >
+                      {{ item.delivery_days }} Day{{
+                        item.delivery_days > 1 ? "s" : null
+                      }}
                     </span>
+                    <span v-else>Unknown</span>
                   </div>
                 </div>
               </div>
@@ -201,7 +194,10 @@
                 <p>{{ lableDetails.name }}</p>
                 <p>{{ lableDetails.company }}</p>
                 <p>{{ lableDetails.street1 }}</p>
-                <p>{{ lableDetails.city }}, {{ lableDetails.state }}, {{ lableDetails.zip }}</p>
+                <p>
+                  {{ lableDetails.city }}, {{ lableDetails.state }},
+                  {{ lableDetails.zip }}
+                </p>
               </div>
             </div>
             <hr class="my-5 flex-grow border-dashed border border-[#E1E3E6]" />
@@ -224,7 +220,10 @@
                 <p>{{ lableDetails.toname }}</p>
                 <p>{{ lableDetails.tocompany }}</p>
                 <p>{{ lableDetails.tostreet1 }}</p>
-                <p>{{ lableDetails.tocity }}, {{ lableDetails.tostate }}, {{ lableDetails.tozip }}</p>
+                <p>
+                  {{ lableDetails.tocity }}, {{ lableDetails.tostate }},
+                  {{ lableDetails.tozip }}
+                </p>
               </div>
             </div>
             <hr class="my-5 flex-grow border-dashed border border-[#E1E3E6]" />
@@ -268,7 +267,7 @@
               </div>
               <div class="flex justify-between text-sm leading-6">
                 <p>Insurance</p>
-                <p>$ {{ lableDetails.insuranceValue }}</p>
+                <p>$ {{ lableDetails.insuranceValue || "0" }}</p>
               </div>
             </div>
           </div>
@@ -348,6 +347,7 @@
 </template>
 
 <script>
+import { startCase, camelCase } from "lodash";
 export default {
   data() {
     return {
@@ -358,6 +358,9 @@ export default {
     };
   },
   methods: {
+    displayItemService(service) {
+      return startCase(camelCase(service));
+    },
     selecteRateQuote(id) {
       this.selectedRate = id;
     },
@@ -365,19 +368,19 @@ export default {
       this.$nextTick(() => {
         this.$router.go(-1);
       });
-    }
+    },
   },
-  mounted(){
-    let shippingRates = JSON.parse(localStorage.getItem('ShippingRates'));
+  mounted() {
+    let shippingRates = JSON.parse(localStorage.getItem("ShippingRates"));
     this.rateQuoteItems = shippingRates.rates;
-    let lableDetails = JSON.parse(localStorage.getItem('LableDetails'));
+    let lableDetails = JSON.parse(localStorage.getItem("LableDetails"));
     lableDetails.category = "My Own Packaging";
     lableDetails.type = "Box";
-    if(localStorage.getItem('InsuranceValue')){
-      lableDetails.insuranceValue = localStorage.getItem('InsuranceValue');
+    if (localStorage.getItem("InsuranceValue")) {
+      lableDetails.insuranceValue = localStorage.getItem("InsuranceValue");
     }
     this.lableDetails = lableDetails;
-  }
+  },
 };
 </script>
 
@@ -397,7 +400,7 @@ export default {
 .top-40 {
   top: 40%;
 }
-.rateLogoContainer img{
+.rateLogoContainer img {
   max-width: 179px;
   max-height: 120px;
 }

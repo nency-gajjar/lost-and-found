@@ -589,7 +589,7 @@
             <div class="!my-6 space-y-4" v-show="deliveryType === '0'">
               <ValidationProvider
                 v-slot="{ errors }"
-                :rules="deliveryType === '0'? 'required':''"
+                :rules="deliveryType === '0' ? 'required' : ''"
                 class="block"
               >
                 <BaseInput
@@ -631,7 +631,7 @@
               <div class="grid grid-cols-3 lg:grid-cols-3 gap-4">
                 <ValidationProvider
                   v-slot="{ errors }"
-                  :rules="deliveryType === '0'? 'max:28|required':''"
+                  :rules="deliveryType === '0' ? 'max:28|required' : ''"
                   class="block lg:col-span-1"
                 >
                   <BaseInput
@@ -649,7 +649,7 @@
                 </ValidationProvider>
                 <ValidationProvider
                   v-slot="{ errors }"
-                  :rules="deliveryType === '0'? 'required':''"
+                  :rules="deliveryType === '0' ? 'required' : ''"
                   class="block col-span-1"
                 >
                   <BaseInput
@@ -666,7 +666,7 @@
                   </p>
                 </ValidationProvider>
                 <ValidationProvider
-                  :rules="deliveryType === '0'? 'required|max:10' : ''"
+                  :rules="deliveryType === '0' ? 'required|max:10' : ''"
                   v-slot="{ errors }"
                   class="block col-span-1"
                   name="Zipcode"
@@ -688,7 +688,7 @@
               <div class="grid lg:grid-cols-2 gap-4">
                 <ValidationProvider
                   v-slot="{ errors }"
-                  :rules="deliveryType === '0'? 'max:28|required':''"
+                  :rules="deliveryType === '0' ? 'max:28|required' : ''"
                   class="block lg:col-span-1"
                 >
                   <BaseInput
@@ -805,7 +805,11 @@
             <div class="!my-6" v-show="deliveryType === '1'">
               <!-- TODO: -->
               <!-- rules="required" -->
-              <ValidationProvider v-slot="{ errors }" :rules="deliveryType === '1'? 'required':''" class="block mb-4">
+              <ValidationProvider
+                v-slot="{ errors }"
+                :rules="deliveryType === '1' ? 'required' : ''"
+                class="block mb-4"
+              >
                 <BaseInput
                   v-model="pickupPersonName"
                   type="text"
@@ -952,6 +956,7 @@ export default {
   },
   mounted() {
     if (this.$route.query.id) {
+      localStorage.removeItem("InsuranceValue");
       this.itemId = this.$route.query.id;
     } else {
       this.$nextTick(() => {
@@ -1075,7 +1080,9 @@ export default {
         params.receiver_state = this.autoCompleteAddress.state;
         params.receiver_country = this.autoCompleteAddress.country;
         params.receiver_zipcode = this.autoCompleteAddress.zipcode;
-        params.receiver_mobile_no = this.formatMobileNumber(this.autoCompleteAddress.phoneNo);
+        params.receiver_mobile_no = this.formatMobileNumber(
+          this.autoCompleteAddress.phoneNo
+        );
 
         params_rateQuotes.name = "Prem Panwala";
         params_rateQuotes.company = "Bacancy Company";
@@ -1083,14 +1090,18 @@ export default {
         params_rateQuotes.city = this.itemDetails.city;
         params_rateQuotes.state = this.itemDetails.states;
         params_rateQuotes.zip = this.itemDetails.zipcode;
-        params_rateQuotes.phone = this.formatMobileNumber(this.itemDetails.venue_phone_no);
+        params_rateQuotes.phone = this.formatMobileNumber(
+          this.itemDetails.venue_phone_no
+        );
         params_rateQuotes.toname = "Bhavya Makwana";
         params_rateQuotes.tocompany = "Bacancy Company";
         params_rateQuotes.tostreet1 = this.autoCompleteAddress.address;
         params_rateQuotes.tocity = this.autoCompleteAddress.city;
         params_rateQuotes.tostate = this.autoCompleteAddress.state;
         params_rateQuotes.tozip = this.autoCompleteAddress.zipcode;
-        params_rateQuotes.tophone = this.formatMobileNumber(this.autoCompleteAddress.phoneNo);
+        params_rateQuotes.tophone = this.formatMobileNumber(
+          this.autoCompleteAddress.phoneNo
+        );
         params_rateQuotes.length = Number(this.itemDetails.item_length);
         params_rateQuotes.width = Number(this.itemDetails.item_width);
         params_rateQuotes.height = Number(this.itemDetails.item_height);
@@ -1117,6 +1128,7 @@ export default {
                       .post("/getshippingrates", params_rateQuotes)
                       .then((response) => {
                         if (response.status === 200) {
+                          this.isLoading = false;
                           let shippingRates = {
                             buyer_address: response.data.buyer_address,
                             from_address: response.data.from_address,
@@ -1125,22 +1137,30 @@ export default {
                             rates: response.data.rates,
                             return_address: response.data.return_address,
                             to_address: response.data.to_address,
-                          }
-                          localStorage.setItem("ShippingRates", JSON.stringify(shippingRates));
-                          localStorage.setItem("LableDetails", JSON.stringify(params_rateQuotes));
-                          if(this.insuranceValue){
-                            localStorage.setItem("InsuranceValue", this.insuranceValue);
+                          };
+                          localStorage.setItem(
+                            "ShippingRates",
+                            JSON.stringify(shippingRates)
+                          );
+                          localStorage.setItem(
+                            "LableDetails",
+                            JSON.stringify(params_rateQuotes)
+                          );
+                          if (this.insuranceValue) {
+                            localStorage.setItem(
+                              "InsuranceValue",
+                              this.insuranceValue
+                            );
                           }
                           this.$nextTick(() => {
                             this.$router.push({ path: "/rate-quotes" });
                           });
                         }
                       })
-                      .catch(error => {
+                      .catch((error) => {
                         console.log(error);
-                      })
+                      });
                   }
-                  this.isLoading = false;
                 }
               })
               .catch((error) => {
