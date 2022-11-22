@@ -2029,6 +2029,7 @@ export default {
           console.log(error);
         });
     } else if (this.$route.params?.itemDetails) {
+      this.isLoadingItemDetails = false;
       this.senderFormTitle = "EDIT SENDER'S DETAILS";
       this.foundItemFormTitle = "EDIT FOUND ITEM'S DETAILS";
       let data = this.$route.params.itemDetails;
@@ -2084,6 +2085,7 @@ export default {
       }
       this.isLoadingItemDetails = false;
     } else {
+      this.isLoadingItemDetails = false;
       this.senderFormTitle = "SENDER'S DETAILS";
       this.foundItemFormTitle = "FOUND ITEM'S DETAILS";
       this.isLoadingItemDetails = false;
