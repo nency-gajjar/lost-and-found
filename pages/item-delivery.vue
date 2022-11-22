@@ -589,7 +589,7 @@
             <div class="!my-6 space-y-4" v-show="deliveryType === '0'">
               <ValidationProvider
                 v-slot="{ errors }"
-                rules="required"
+                :rules="deliveryType === '0'? 'required':''"
                 class="block"
               >
                 <BaseInput
@@ -628,11 +628,11 @@
                   {{ errors[0] }}
                 </p>
               </ValidationProvider>
-              <div class="grid grid-cols-2 lg:grid-cols-3 gap-4">
+              <div class="grid grid-cols-3 lg:grid-cols-3 gap-4">
                 <ValidationProvider
                   v-slot="{ errors }"
-                  rules="max:28|required"
-                  class="block lg:col-span-2"
+                  :rules="deliveryType === '0'? 'max:28|required':''"
+                  class="block lg:col-span-1"
                 >
                   <BaseInput
                     v-model="autoCompleteAddress.city"
@@ -649,7 +649,7 @@
                 </ValidationProvider>
                 <ValidationProvider
                   v-slot="{ errors }"
-                  rules="required"
+                  :rules="deliveryType === '0'? 'required':''"
                   class="block col-span-1"
                 >
                   <BaseInput
@@ -665,28 +665,8 @@
                     {{ errors[0] }}
                   </p>
                 </ValidationProvider>
-              </div>
-              <div class="grid grid-cols-2 lg:grid-cols-3 gap-4">
                 <ValidationProvider
-                  v-slot="{ errors }"
-                  rules="max:28|required"
-                  class="block lg:col-span-2"
-                >
-                  <BaseInput
-                    v-model="autoCompleteAddress.country"
-                    label="Country"
-                    type="text"
-                    :class="errors.length > 0 && 'error'"
-                  />
-                  <p
-                    v-if="errors.length"
-                    class="vee-validation-error mt-2 text-sm text-red-600"
-                  >
-                    {{ errors[0] }}
-                  </p>
-                </ValidationProvider>
-                <ValidationProvider
-                  rules="required|max:10"
+                  :rules="deliveryType === '0'? 'required|max:10' : ''"
                   v-slot="{ errors }"
                   class="block col-span-1"
                   name="Zipcode"
@@ -704,6 +684,57 @@
                     {{ errors[0] }}
                   </p>
                 </ValidationProvider>
+              </div>
+              <div class="grid lg:grid-cols-2 gap-4">
+                <ValidationProvider
+                  v-slot="{ errors }"
+                  :rules="deliveryType === '0'? 'max:28|required':''"
+                  class="block lg:col-span-1"
+                >
+                  <BaseInput
+                    v-model="autoCompleteAddress.country"
+                    label="Country"
+                    type="text"
+                    :class="errors.length > 0 && 'error'"
+                  />
+                  <p
+                    v-if="errors.length"
+                    class="vee-validation-error mt-2 text-sm text-red-600"
+                  >
+                    {{ errors[0] }}
+                  </p>
+                </ValidationProvider>
+                <div
+                  class="block relative box-content h-12"
+                  :class="!isUserPhoneValid && 'error'"
+                >
+                  <vue-tel-input
+                    :inputOptions="{ placeholder: 'Phone Number' }"
+                    class="
+                      relative
+                      border
+                      inline-block
+                      border-gray-300
+                      w-full
+                      rounded-lg
+                      h-full
+                    "
+                    v-model="autoCompleteAddress.phoneNo"
+                    @blur="validateUserPhone"
+                    @validate="validateUserPhoneFormat"
+                    v-bind="bindPhoneInputProps"
+                  ></vue-tel-input>
+                  <div
+                    v-if="!isUserPhoneValid"
+                    class="
+                      vee-validation-error
+                      top-margin-05
+                      text-sm text-red-600
+                    "
+                  >
+                    {{ userPhoneValidationMessage }}
+                  </div>
+                </div>
               </div>
               <div class="text-gray-500 flex flex-col space-y-4">
                 <div class="flex items-center space-x-3 ml-4">
@@ -774,7 +805,7 @@
             <div class="!my-6" v-show="deliveryType === '1'">
               <!-- TODO: -->
               <!-- rules="required" -->
-              <ValidationProvider v-slot="{ errors }" class="block mb-4">
+              <ValidationProvider v-slot="{ errors }" :rules="deliveryType === '1'? 'required':''" class="block mb-4">
                 <BaseInput
                   v-model="pickupPersonName"
                   type="text"
@@ -875,7 +906,24 @@ export default {
       state: "",
       country: "",
       zipcode: "",
+      phoneNo: "",
     },
+    bindPhoneInputProps: {
+      mode: "international",
+      autoDefaultCountry: true,
+      validCharactersOnly: true,
+      autoFormat: true,
+      preferredCountries: ["US", "CN"],
+      placeholder: "Enter a phone number",
+      name: "telephone",
+      maxLen: 15,
+      inputOptions: {
+        showDialCode: false,
+      },
+    },
+    isUserPhoneFormatValid: true,
+    isUserPhoneValid: true,
+    userPhoneValidationMessage: "",
     commercialAddress: "",
     insurance: "",
     insuranceValue: "",
@@ -891,7 +939,7 @@ export default {
         .then((response) => {
           if (response.status === 200) {
             this.isLoadingItemDetails = false;
-            console.log("====response", response.data.data.Item);
+            // console.log("====response", response.data.data.Item);
             this.itemDetails = response.data.data.Item;
           }
         })
@@ -929,6 +977,32 @@ export default {
     },
   },
   methods: {
+    validateUserPhoneFormat(vueTelObj) {
+      if (vueTelObj.valid !== undefined) {
+        if (vueTelObj.valid) {
+          this.isUserPhoneFormatValid = true;
+          this.isUserPhoneValid = true;
+          this.userPhoneValidationMessage = "";
+        } else {
+          this.isUserPhoneFormatValid = false;
+          this.isUserPhoneValid = false;
+          this.userPhoneValidationMessage = "Please enter valid Phone number";
+        }
+      }
+    },
+    validateUserPhone() {
+      if (!this.autoCompleteAddress.phoneNo) {
+        this.isUserPhoneValid = false;
+        this.userPhoneValidationMessage = "*Required";
+      } else {
+        if (this.isUserPhoneFormatValid) {
+          this.isUserPhoneValid = true;
+          this.userPhoneValidationMessage = "";
+        } else {
+          this.isUserPhoneValid = false;
+        }
+      }
+    },
     toggleTabs(tabNumber) {
       this.openTab = tabNumber;
     },
@@ -975,7 +1049,14 @@ export default {
         phoneNo: "",
       };
     },
+    formatMobileNumber(phoneNumber) {
+      let arr = phoneNumber.split(" ");
+      arr.shift();
+      let phone = arr.join("");
+      return phone.slice(0, 3) + "-" + phone.slice(3, 6) + "-" + phone.slice(6);
+    },
     async onSubmit() {
+      if (this.deliveryType === "0") this.validateUserPhone();
       this.isLoading = true;
       const isValid = await this.$refs.observer.validate();
       if (!isValid) {
@@ -987,12 +1068,34 @@ export default {
       let params = {
         delivery_type: this.deliveryType,
       };
+      let params_rateQuotes = {};
       if (this.deliveryType === "0") {
         params.receiver_address = this.autoCompleteAddress.address;
         params.receiver_city = this.autoCompleteAddress.city;
         params.receiver_state = this.autoCompleteAddress.state;
         params.receiver_country = this.autoCompleteAddress.country;
         params.receiver_zipcode = this.autoCompleteAddress.zipcode;
+        params.receiver_mobile_no = this.formatMobileNumber(this.autoCompleteAddress.phoneNo);
+
+        params_rateQuotes.name = "Prem Panwala";
+        params_rateQuotes.company = "Bacancy Company";
+        params_rateQuotes.street1 = this.itemDetails.address;
+        params_rateQuotes.city = this.itemDetails.city;
+        params_rateQuotes.state = this.itemDetails.states;
+        params_rateQuotes.zip = this.itemDetails.zipcode;
+        params_rateQuotes.phone = this.formatMobileNumber(this.itemDetails.venue_phone_no);
+        params_rateQuotes.toname = "Bhavya Makwana";
+        params_rateQuotes.tocompany = "Bacancy Company";
+        params_rateQuotes.tostreet1 = this.autoCompleteAddress.address;
+        params_rateQuotes.tocity = this.autoCompleteAddress.city;
+        params_rateQuotes.tostate = this.autoCompleteAddress.state;
+        params_rateQuotes.tozip = this.autoCompleteAddress.zipcode;
+        params_rateQuotes.tophone = this.formatMobileNumber(this.autoCompleteAddress.phoneNo);
+        params_rateQuotes.length = Number(this.itemDetails.item_length);
+        params_rateQuotes.width = Number(this.itemDetails.item_width);
+        params_rateQuotes.height = Number(this.itemDetails.item_height);
+        params_rateQuotes.weight = Number(this.itemDetails.weight_pounds);
+        params_rateQuotes.residential = !this.commercialAddress;
       }
       if (this.deliveryType === "1") {
         params.pickup_person_name = this.pickupPersonName;
@@ -1010,9 +1113,32 @@ export default {
                   if (this.deliveryType === "1") {
                     this.showDialog = true;
                   } else {
-                    this.$nextTick(() => {
-                      this.$router.push({ path: "/rate-quotes" });
-                    });
+                    this.$axios
+                      .post("/getshippingrates", params_rateQuotes)
+                      .then((response) => {
+                        if (response.status === 200) {
+                          let shippingRates = {
+                            buyer_address: response.data.buyer_address,
+                            from_address: response.data.from_address,
+                            id: response.data.id,
+                            parcel: response.data.parcel,
+                            rates: response.data.rates,
+                            return_address: response.data.return_address,
+                            to_address: response.data.to_address,
+                          }
+                          localStorage.setItem("ShippingRates", JSON.stringify(shippingRates));
+                          localStorage.setItem("LableDetails", JSON.stringify(params_rateQuotes));
+                          if(this.insuranceValue){
+                            localStorage.setItem("InsuranceValue", this.insuranceValue);
+                          }
+                          this.$nextTick(() => {
+                            this.$router.push({ path: "/rate-quotes" });
+                          });
+                        }
+                      })
+                      .catch(error => {
+                        console.log(error);
+                      })
                   }
                   this.isLoading = false;
                 }
@@ -1066,6 +1192,12 @@ export default {
 .error {
   & > .mx-datepicker {
     @apply border-red-500 border-2 ring-4 ring-red-500 ring-opacity-10 rounded-lg transition-none;
+  }
+}
+
+.error {
+  & > .vue-tel-input {
+    @apply border-red-500 border-2 ring-4 ring-red-500 ring-opacity-10 rounded-lg  transition-none;
   }
 }
 

@@ -68,21 +68,27 @@
                   gap-3
                 "
               >
-                <div class="mb-1 text-left">
-                  <!-- <div class="text-xl font-bold tracking-tight text-gray-800">
-                    {{ item.title }}
-                  </div> -->
-                  <div>
-                    <h4
-                      class="font-semibold text-[#212B36] text-lg tracking-wide"
-                    >
-                      {{ item.title }}
-                    </h4>
+                <div class="mb-1 flex-col items-start justify-center text-left">
+                  <div
+                    class="
+                      text-xl
+                      font-bold
+                      tracking-tight
+                      uppercase
+                      text-gray-900 text-accent-100
+                    "
+                  >
+                    {{ item.service }}
                   </div>
-                  <div>
-                    <h4 class="text-green-500 font-display text-2xl">
-                      ${{ item.price }}
-                    </h4>
+                  <div
+                    class="
+                      text-2xl
+                      font-bold
+                      tracking-tight
+                      text-gray-900 text-accent-100
+                    "
+                  >
+                    $ {{ item.rate }}
                   </div>
                 </div>
                 <div class="text-left">
@@ -92,15 +98,16 @@
                     </h5>
                   </div>
                   <div>
-                    <p class="text-xs tracking-wider text-[#637381]">
-                      {{ item.estimatedDelivery }}
-                    </p>
+                    <span class="text-sm font-normal text-gray-700">
+                      {{ item.delivery_days ? item.delivery_days + ' Days' : 'Unknown' }}
+                    </span>
                   </div>
                 </div>
               </div>
             </div>
-            <div class="flex items-center my-4 sm:my-0 gap-3">
+            <div class="flex items-center my-4 sm:my-0 gap-3 rateLogoContainer">
               <img
+                v-if="item.carrier === 'USPS'"
                 class="
                   w-full
                   h-auto
@@ -114,6 +121,38 @@
                 "
                 src="@/assets/images/usps-logo.svg"
                 alt="USPS"
+              />
+              <img
+                v-else-if="item.carrier === 'UPS'"
+                class="
+                  w-full
+                  h-auto
+                  mx-auto
+                  my-auto
+                  object-contain
+                  transition
+                  duration-500
+                  ease
+                  hover:transform hover:scale-[110%]
+                "
+                src="@/assets/images/ups-logo.svg"
+                alt="UPS"
+              />
+              <img
+                v-else
+                class="
+                  w-full
+                  h-auto
+                  mx-auto
+                  my-auto
+                  object-contain
+                  transition
+                  duration-500
+                  ease
+                  hover:transform hover:scale-[110%]
+                "
+                src="@/assets/images/fedex-logo.svg"
+                alt="FedEx"
               />
             </div>
           </div>
@@ -156,13 +195,13 @@
                 >
                   from
                 </h3>
-                <p class="text-sm leading-6">(123) 456-7890</p>
+                <p class="text-sm leading-6">{{ lableDetails.phone }}</p>
               </div>
               <div class="text-sm leading-6">
-                <p>Jemis Maru</p>
-                <p>Abc</p>
-                <p>Test Road</p>
-                <p>Orlando, FL, 32819</p>
+                <p>{{ lableDetails.name }}</p>
+                <p>{{ lableDetails.company }}</p>
+                <p>{{ lableDetails.street1 }}</p>
+                <p>{{ lableDetails.city }}, {{ lableDetails.state }}, {{ lableDetails.zip }}</p>
               </div>
             </div>
             <hr class="my-5 flex-grow border-dashed border border-[#E1E3E6]" />
@@ -179,12 +218,13 @@
                 >
                   To
                 </h3>
-                <p class="text-sm leading-6">(123) 456-7890</p>
+                <p class="text-sm leading-6">{{ lableDetails.tophone }}</p>
               </div>
               <div class="text-sm leading-6">
-                <p>Abc</p>
-                <p>Test Road</p>
-                <p>Orlando, FL, 32819</p>
+                <p>{{ lableDetails.toname }}</p>
+                <p>{{ lableDetails.tocompany }}</p>
+                <p>{{ lableDetails.tostreet1 }}</p>
+                <p>{{ lableDetails.tocity }}, {{ lableDetails.tostate }}, {{ lableDetails.tozip }}</p>
               </div>
             </div>
             <hr class="my-5 flex-grow border-dashed border border-[#E1E3E6]" />
@@ -204,31 +244,31 @@
               </div>
               <div class="flex justify-between text-sm leading-6">
                 <p>Category</p>
-                <p>My Own Packaging</p>
+                <p>{{ lableDetails.category }}</p>
               </div>
               <div class="flex justify-between text-sm leading-6">
                 <p>Type</p>
-                <p>Box</p>
+                <p>{{ lableDetails.type }}</p>
               </div>
               <div class="flex justify-between text-sm leading-6">
                 <p>Length</p>
-                <p>5 In</p>
+                <p>{{ lableDetails.length }} IN</p>
               </div>
               <div class="flex justify-between text-sm leading-6">
                 <p>Width</p>
-                <p>6 In</p>
+                <p>{{ lableDetails.width }} IN</p>
               </div>
               <div class="flex justify-between text-sm leading-6">
                 <p>Height</p>
-                <p>4 In</p>
+                <p>{{ lableDetails.height }} IN</p>
               </div>
               <div class="flex justify-between text-sm leading-6">
                 <p>Weight</p>
-                <p>6 LBS</p>
+                <p>{{ lableDetails.weight }} LBS</p>
               </div>
               <div class="flex justify-between text-sm leading-6">
                 <p>Insurance</p>
-                <p>$0</p>
+                <p>$ {{ lableDetails.insuranceValue }}</p>
               </div>
             </div>
           </div>
@@ -313,68 +353,8 @@ export default {
     return {
       selectedRate: null,
       signature: null,
-      rateQuoteItems: [
-        {
-          id: 1,
-          title: "priority mail",
-          price: "20.27",
-          estimatedDelivery: "1-3 Days",
-        },
-        {
-          id: 2,
-          title: "priority mail",
-          price: "20.27",
-          estimatedDelivery: "1-3 Days",
-        },
-        {
-          id: 3,
-          title: "priority mail",
-          price: "20.27",
-          estimatedDelivery: "1-3 Days",
-        },
-        {
-          id: 4,
-          title: "priority mail",
-          price: "20.27",
-          estimatedDelivery: "1-3 Days",
-        },
-        {
-          id: 5,
-          title: "priority mail",
-          price: "20.27",
-          estimatedDelivery: "1-3 Days",
-        },
-        {
-          id: 6,
-          title: "priority mail",
-          price: "20.27",
-          estimatedDelivery: "1-3 Days",
-        },
-        {
-          id: 7,
-          title: "priority mail",
-          price: "20.27",
-          estimatedDelivery: "1-3 Days",
-        },
-        {
-          id: 8,
-          title: "priority mail",
-          price: "20.27",
-          estimatedDelivery: "1-3 Days",
-        },
-        {
-          id: 9,
-          title: "priority mail",
-          price: "20.27",
-          estimatedDelivery: "1-3 Days",
-        },
-        {
-          id: 10,
-          title: "priority mail",
-          price: "20.27",
-          estimatedDelivery: "1-3 Days",
-        },
-      ],
+      rateQuoteItems: [],
+      lableDetails: {},
     };
   },
   methods: {
@@ -385,8 +365,19 @@ export default {
       this.$nextTick(() => {
         this.$router.go(-1);
       });
-    },
+    }
   },
+  mounted(){
+    let shippingRates = JSON.parse(localStorage.getItem('ShippingRates'));
+    this.rateQuoteItems = shippingRates.rates;
+    let lableDetails = JSON.parse(localStorage.getItem('LableDetails'));
+    lableDetails.category = "My Own Packaging";
+    lableDetails.type = "Box";
+    if(localStorage.getItem('InsuranceValue')){
+      lableDetails.insuranceValue = localStorage.getItem('InsuranceValue');
+    }
+    this.lableDetails = lableDetails;
+  }
 };
 </script>
 
@@ -405,5 +396,9 @@ export default {
 }
 .top-40 {
   top: 40%;
+}
+.rateLogoContainer img{
+  max-width: 179px;
+  max-height: 120px;
 }
 </style>
