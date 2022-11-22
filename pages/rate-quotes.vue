@@ -3,9 +3,8 @@
     <div class="container max-w-7xl mx-auto px-4">
       <div class="form-title my-5">
         <h1 class="w-full my-2 text-xl font-bold leading-tight text-gray-700">
-          PLEASE SELECT AN OPTION FROM
+          Rate Quote
         </h1>
-        <h3 class="w-full font-bold">YOUR RATE QUOTE</h3>
         <div class="flex justify-center my-2">
           <span
             class="
@@ -25,8 +24,8 @@
             @click="selecteRateQuote(item.id)"
             class="
               cursor-pointer
-              py-2
-              px-10
+              py-6
+              px-12
               mt-5
               flex
               sm:flex-row
@@ -38,14 +37,18 @@
               shadow-md
               relative
             "
-            :class="{'border-accent-100 ring-accent-80 ring-[6px] ring-offset-accent-100 ring-offset-1': selectedRate === item.id}"
+            :class="{
+              'border-accent-100 ring-accent-60 ring-[6px] ring-offset-accent-100 ring-offset-1':
+                selectedRate === item.id,
+            }"
           >
-          <div v-if="selectedRate === item.id" class="rounded-50 absolute left-1 top-40 w-32 z-[40] p-1 bg-accent">
-            <BaseIcon
-              icon="check"
-              color="white"
-            />
-          </div>
+            <div
+              v-if="selectedRate === item.id"
+              style="width: 25px; height: 25px"
+              class="rounded-50 absolute left-2 top-40 z-[40] bg-accent"
+            >
+              <BaseIcon icon="check" color="white" size="1x" />
+            </div>
             <div
               class="
                 flex
@@ -57,43 +60,41 @@
               "
             >
               <div
-                class="flex flex-col text-center justify-between leading-normal"
+                class="
+                  flex flex-col
+                  text-center
+                  justify-between
+                  leading-normal
+                  gap-3
+                "
               >
-                <div class="mb-1 flex-col items-start justify-center text-left">
-                  <div
-                    class="
-                      text-xl
-                      font-bold
-                      tracking-tight
-                      uppercase
-                      text-gray-900 text-accent-100
-                    "
-                  >
+                <div class="mb-1 text-left">
+                  <!-- <div class="text-xl font-bold tracking-tight text-gray-800">
                     {{ item.title }}
+                  </div> -->
+                  <div>
+                    <h4
+                      class="font-semibold text-[#212B36] text-lg tracking-wide"
+                    >
+                      {{ item.title }}
+                    </h4>
                   </div>
-                  <div
-                    class="
-                      text-2xl
-                      font-bold
-                      tracking-tight
-                      text-gray-900 text-accent-100
-                    "
-                  >
-                    $ {{ item.price }}
+                  <div>
+                    <h4 class="text-green-500 font-display text-2xl">
+                      ${{ item.price }}
+                    </h4>
                   </div>
                 </div>
                 <div class="text-left">
                   <div>
-                    <span class="text-sm font-normal text-gray-700">
+                    <h5 class="text-sm font-[#212B36] font-medium">
                       Estimated Delivery
-                    </span>
+                    </h5>
                   </div>
-                </div>
-                <div class="text-left">
                   <div>
-                    <span class="text-sm font-normal text-gray-700">
+                    <p class="text-xs tracking-wider text-[#637381]">
                       {{ item.estimatedDelivery }}
-                    </span>
+                    </p>
                   </div>
                 </div>
               </div>
@@ -101,13 +102,18 @@
             <div class="flex items-center my-4 sm:my-0 gap-3">
               <img
                 class="
-                  w-20
-                  contain
-                  rounded-t-lg
-                  md:rounded-none md:rounded-l-lg
+                  w-full
+                  h-auto
+                  mx-auto
+                  my-auto
+                  object-contain
+                  transition
+                  duration-500
+                  ease
+                  hover:transform hover:scale-[110%]
                 "
-                src="@/assets/images/no-image4.png"
-                alt=""
+                src="@/assets/images/usps-logo.svg"
+                alt="USPS"
               />
             </div>
           </div>
@@ -130,57 +136,97 @@
               mx-auto
             "
           >
-            <p class="uppercase font-bold">lable preview</p>
+            <h3
+              class="text-sm font-bold text-[#37322C] tracking-wider uppercase"
+            >
+              lable preview
+            </h3>
+
             <hr class="my-5 flex-grow border-dashed border border-[#E1E3E6]" />
             <div>
               <div class="flex justify-between">
-                <p class="uppercase font-bold">from</p>
-                <p>(123) 456-7890</p>
+                <h3
+                  class="
+                    text-sm
+                    font-bold
+                    text-[#37322C]
+                    tracking-wider
+                    uppercase
+                  "
+                >
+                  from
+                </h3>
+                <p class="text-sm leading-6">(123) 456-7890</p>
               </div>
-              <p>Jemis Maru</p>
-              <p>Abc</p>
-              <p>Test Road</p>
-              <p>Orlando, FL, 32819</p>
+              <div class="text-sm leading-6">
+                <p>Jemis Maru</p>
+                <p>Abc</p>
+                <p>Test Road</p>
+                <p>Orlando, FL, 32819</p>
+              </div>
+            </div>
+            <hr class="my-5 flex-grow border-dashed border border-[#E1E3E6]" />
+            <div>
+              <div class="flex justify-between">
+                <h3
+                  class="
+                    text-sm
+                    font-bold
+                    text-[#37322C]
+                    tracking-wider
+                    uppercase
+                  "
+                >
+                  To
+                </h3>
+                <p class="text-sm leading-6">(123) 456-7890</p>
+              </div>
+              <div class="text-sm leading-6">
+                <p>Abc</p>
+                <p>Test Road</p>
+                <p>Orlando, FL, 32819</p>
+              </div>
             </div>
             <hr class="my-5 flex-grow border-dashed border border-[#E1E3E6]" />
             <div>
               <div>
-                <p class="uppercase font-bold">to</p>
+                <h3
+                  class="
+                    text-sm
+                    font-bold
+                    text-[#37322C]
+                    tracking-wider
+                    uppercase
+                  "
+                >
+                  Package
+                </h3>
               </div>
-              <p>Abc</p>
-              <p>Test Road</p>
-              <p>Orlando, FL, 32819</p>
-            </div>
-            <hr class="my-5 flex-grow border-dashed border border-[#E1E3E6]" />
-            <div>
-              <div>
-                <p class="uppercase font-bold">package</p>
-              </div>
-              <div class="flex justify-between">
+              <div class="flex justify-between text-sm leading-6">
                 <p>Category</p>
                 <p>My Own Packaging</p>
               </div>
-              <div class="flex justify-between">
+              <div class="flex justify-between text-sm leading-6">
                 <p>Type</p>
                 <p>Box</p>
               </div>
-              <div class="flex justify-between">
+              <div class="flex justify-between text-sm leading-6">
                 <p>Length</p>
                 <p>5 In</p>
               </div>
-              <div class="flex justify-between">
+              <div class="flex justify-between text-sm leading-6">
                 <p>Width</p>
                 <p>6 In</p>
               </div>
-              <div class="flex justify-between">
+              <div class="flex justify-between text-sm leading-6">
                 <p>Height</p>
                 <p>4 In</p>
               </div>
-              <div class="flex justify-between">
+              <div class="flex justify-between text-sm leading-6">
                 <p>Weight</p>
                 <p>6 LBS</p>
               </div>
-              <div class="flex justify-between">
+              <div class="flex justify-between text-sm leading-6">
                 <p>Insurance</p>
                 <p>$0</p>
               </div>
@@ -202,7 +248,11 @@
               mx-auto
             "
           >
-            <p class="font-bold uppercase">Extra Services:</p>
+            <h3
+              class="text-sm font-bold text-[#37322C] tracking-wider uppercase"
+            >
+              Extra Services:
+            </h3>
             <div class="flex items-center text-gray-700 mt-[0.75rem]">
               <input
                 id="signature"
@@ -227,14 +277,28 @@
                   ml-[1.125rem]
                   font-normal
                 "
-                >Add Signature Confirmation (+$2.90)</label
+                >Add Signature Confirmation (+$5.00)</label
               >
             </div>
           </div>
-          <BaseButton class="grow w-full md:max-w-sm mt-5 mx-auto">
+          <BaseButton
+            class="grow font-semibold text-md w-full md:max-w-sm mt-5 mx-auto"
+          >
             PROCEED TO CHECKOUT
           </BaseButton>
-          <button class="font-bold grow w-full md:max-w-sm mt-5 mx-auto" @click="stepBack">
+          <button
+            class="
+              font-semibold
+              text-sm text-gray-600
+              grow
+              uppercase
+              w-full
+              md:max-w-sm
+              mt-5
+              mx-auto
+            "
+            @click="stepBack"
+          >
             STEP BACK
           </button>
         </div>
@@ -314,15 +378,15 @@ export default {
     };
   },
   methods: {
-    selecteRateQuote(id){
+    selecteRateQuote(id) {
       this.selectedRate = id;
     },
-    stepBack(){
+    stepBack() {
       this.$nextTick(() => {
         this.$router.go(-1);
       });
-    }
-  }
+    },
+  },
 };
 </script>
 
@@ -331,7 +395,7 @@ export default {
   @apply flex flex-col justify-start pt-0 items-center text-center mx-auto;
 }
 .bg-accent {
-  background-color: #F06B04;
+  background-color: #f06b04;
 }
 .w-32 {
   width: 32px;
