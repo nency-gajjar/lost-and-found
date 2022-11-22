@@ -216,7 +216,11 @@ export default {
     async onSubmit() {
       this.isLoading = true;
       if (this.deliveryType === "0") {
-        window.location.href = `https://development.shipmoo.com/shipments/new/receiver-details/?id=${this.itemId}`;
+        this.$nextTick(() => {
+          this.$router.push({
+            name: "rate-quotes",
+          });
+        });
         return;
       }
       if (this.deliveryType === "1") {

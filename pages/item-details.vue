@@ -2082,9 +2082,11 @@ export default {
         this.receiverEmail = data.receiver_email;
         this.receiverMobileNo = data.receiver_mobile_no;
       }
+      this.isLoadingItemDetails = false;
     } else {
       this.senderFormTitle = "SENDER'S DETAILS";
       this.foundItemFormTitle = "FOUND ITEM'S DETAILS";
+      this.isLoadingItemDetails = false;
     }
   },
   beforeDestroy() {
