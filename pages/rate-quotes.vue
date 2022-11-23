@@ -21,7 +21,7 @@
           <div
             v-for="item in rateQuoteItems"
             :key="item.id"
-            @click="selecteRateQuote(item.id)"
+            @click="selecteRateQuote(item)"
             class="
               cursor-pointer
               py-6
@@ -39,11 +39,11 @@
             "
             :class="{
               'border-primary-100 ring-primary-80 ring-[6px] ring-offset-primary-100 ring-offset-1':
-                selectedRate === item.id,
+                selectedRate.id === item.id,
             }"
           >
             <div
-              v-if="selectedRate === item.id"
+              v-if="selectedRate.id === item.id"
               style="width: 25px; height: 25px"
               class="rounded-50 absolute left-2 top-40 z-[40] bg-primary-100"
             >
@@ -322,6 +322,7 @@
           </div>
           <BaseButton
             class="grow font-semibold text-md w-full md:max-w-sm mt-5 mx-auto"
+            @click="proceedToCheckout"
           >
             PROCEED TO CHECKOUT
           </BaseButton>
@@ -351,7 +352,7 @@ import { startCase, camelCase } from "lodash";
 export default {
   data() {
     return {
-      selectedRate: null,
+      selectedRate: {},
       signature: null,
       rateQuoteItems: [],
       lableDetails: {},
@@ -361,8 +362,16 @@ export default {
     displayItemService(service) {
       return startCase(camelCase(service));
     },
-    selecteRateQuote(id) {
-      this.selectedRate = id;
+    selecteRateQuote(item) {
+      this.selectedRate = item;
+      localStorage.setItem("SelectedRate", JSON.stringify(item));
+    },
+    proceedToCheckout() {
+      localStorage.setItem("Signature", this.signature);
+      this.$router.push({
+        path: "/checkout",
+        query: { id: this.$route.query.id },
+      });
     },
     stepBack() {
       this.$nextTick(() => {
