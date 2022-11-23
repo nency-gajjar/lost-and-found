@@ -20,10 +20,19 @@
         <div class="w-full">
           <div class="w-full flex items-end relative">
             <div
-              class="flex ml-auto items-center space-x-2 mr-6 !px-2 !font-body cursor-pointer"
+              class="
+                flex
+                ml-auto
+                items-center
+                space-x-2
+                mr-6
+                !px-2
+                !font-body
+                cursor-pointer
+              "
               @click="menuOpened = !menuOpened"
             >
-              <span class="!font-medium">
+              <span class="!font-medium text-gray-700">
                 SORT BY:
                 <span v-if="sortBy === 0" class="!font-bold uppercase">
                   cheapest
@@ -36,6 +45,7 @@
                 icon="angle-down"
                 color="black"
                 size="1x"
+                style="max-width: 15px"
               />
             </div>
 
@@ -472,14 +482,13 @@ export default {
     };
   },
   methods: {
-    sortRateQuotes(sortBy){
+    sortRateQuotes(sortBy) {
       this.sortBy = sortBy;
-      if(sortBy === 0){
+      if (sortBy === 0) {
         this.rateQuoteItems.sort((a, b) => {
           return Number(a.rate) - Number(b.rate);
         });
-      }
-      else if(sortBy === 1){
+      } else if (sortBy === 1) {
         this.rateQuoteItems.sort((a, b) => {
           return a.delivery_days - b.delivery_days;
         });
