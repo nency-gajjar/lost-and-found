@@ -27,6 +27,18 @@
               "
             ></span>
           </div>
+          <p class="text-gray-600 text-md">
+            Describe the item lost in one word
+            <span>
+              <BaseIcon
+                icon="circle-info"
+                color="gray"
+                style="max-width: 15px"
+                data-toggle="tooltip"
+                title="Leave blank to show all items"
+              />
+            </span>
+          </p>
           <div class="align-middle inline-block w-full mt-5">
             <!-- Location -->
             <div class="inline-flex flex-auto w-full bg-white">

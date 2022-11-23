@@ -28,6 +28,7 @@
       </div>
 
       <!-- Filter Panel -->
+      <h3 class="text-lg text-left font-medium text-gray-800 my-2">Filters:</h3>
       <div class="flex flex-col gap-3">
         <div class="align-middle inline-block w-full">
           <!-- Location -->
@@ -164,7 +165,109 @@
           </div>
         </div>
       </div>
-
+      <div
+        v-if="isFilterApplied"
+        class="w-full flex gap-3 flex-auto mt-3 sm:mt-0 sm:w-5/12"
+      >
+        <ul v-show="isFilterApplied" class="list-none flex items-center mt-4">
+          <li
+            v-if="isFilterApplied && lostItemAddress"
+            class="
+              flex
+              items-center
+              p-2
+              mr-4
+              text-xs text-gray-600
+              bg-white
+              rounded-full
+              border border-gray-300
+              cursor-pointer
+            "
+          >
+            <p>{{ lostItemAddress }}</p>
+            <span class="ml-2">
+              <BaseIcon
+                @click="resetAddress"
+                icon="xmark"
+                color="gray"
+                style="max-width: 12px"
+              />
+            </span>
+          </li>
+          <li
+            v-if="isFilterApplied && startDate"
+            class="
+              flex
+              items-center
+              p-2
+              mr-4
+              text-xs text-gray-600
+              bg-white
+              rounded-full
+              border border-gray-300
+              cursor-pointer
+            "
+          >
+            <p>{{ formatedStartDate }}</p>
+            <span class="ml-2">
+              <BaseIcon
+                @click="resetStartDate"
+                icon="xmark"
+                color="gray"
+                style="max-width: 12px"
+              />
+            </span>
+          </li>
+          <li
+            v-if="isFilterApplied && endDate"
+            class="
+              flex
+              items-center
+              p-2
+              mr-4
+              text-xs text-gray-600
+              bg-white
+              rounded-full
+              border border-gray-300
+              cursor-pointer
+            "
+          >
+            <p>{{ formatedEndDate }}</p>
+            <span class="ml-2">
+              <BaseIcon
+                @click="resetEndDate"
+                icon="xmark"
+                color="gray"
+                style="max-width: 12px"
+              />
+            </span>
+          </li>
+          <li
+            v-if="itemDescription"
+            class="
+              flex
+              items-center
+              p-2
+              mr-4
+              text-xs text-gray-600
+              bg-white
+              rounded-full
+              border border-gray-300
+              cursor-pointer
+            "
+          >
+            <p>{{ itemDescription }}</p>
+            <span class="ml-2">
+              <BaseIcon
+                @click="resetItemDescription"
+                icon="xmark"
+                color="gray"
+                style="max-width: 12px"
+              />
+            </span>
+          </li>
+        </ul>
+      </div>
       <div
         class="
           justify-start
@@ -181,7 +284,7 @@
           v-if="!isLoading && lostItems.length > 0"
           class="text-2xl font-semibold leading-tight"
         >
-          Found Items ({{ lostItems.length }})
+          Search Results ({{ lostItems.length }})
         </h2>
       </div>
 
@@ -212,7 +315,7 @@
                     py-3
                     w-full
                     border
-                    rounded-full
+                    rounded-md
                     border-gray-300
                     outline-none
                   "
@@ -237,109 +340,6 @@
                   @click="(searchQuery = ''), (lostItems = cloneLostItems)"
                 />
               </div>
-            </div>
-            <div class="w-full flex gap-3 flex-auto mt-3 sm:mt-0 sm:w-5/12">
-              <ul
-                v-show="isFilterApplied"
-                class="list-none flex items-center mt-4"
-              >
-                <li
-                  v-if="isFilterApplied && lostItemAddress"
-                  class="
-                    flex
-                    items-center
-                    p-2
-                    mr-4
-                    text-xs text-gray-600
-                    bg-white
-                    rounded-full
-                    border border-gray-300
-                    cursor-pointer
-                  "
-                >
-                  <p>{{ lostItemAddress }}</p>
-                  <span class="ml-2">
-                    <BaseIcon
-                      @click="resetAddress"
-                      icon="xmark"
-                      color="gray"
-                      style="max-width: 12px"
-                    />
-                  </span>
-                </li>
-                <li
-                  v-if="isFilterApplied && startDate"
-                  class="
-                    flex
-                    items-center
-                    p-2
-                    mr-4
-                    text-xs text-gray-600
-                    bg-white
-                    rounded-full
-                    border border-gray-300
-                    cursor-pointer
-                  "
-                >
-                  <p>{{ formatedStartDate }}</p>
-                  <span class="ml-2">
-                    <BaseIcon
-                      @click="resetStartDate"
-                      icon="xmark"
-                      color="gray"
-                      style="max-width: 12px"
-                    />
-                  </span>
-                </li>
-                <li
-                  v-if="isFilterApplied && endDate"
-                  class="
-                    flex
-                    items-center
-                    p-2
-                    mr-4
-                    text-xs text-gray-600
-                    bg-white
-                    rounded-full
-                    border border-gray-300
-                    cursor-pointer
-                  "
-                >
-                  <p>{{ formatedEndDate }}</p>
-                  <span class="ml-2">
-                    <BaseIcon
-                      @click="resetEndDate"
-                      icon="xmark"
-                      color="gray"
-                      style="max-width: 12px"
-                    />
-                  </span>
-                </li>
-                <li
-                  v-if="itemDescription"
-                  class="
-                    flex
-                    items-center
-                    p-2
-                    mr-4
-                    text-xs text-gray-600
-                    bg-white
-                    rounded-full
-                    border border-gray-300
-                    cursor-pointer
-                  "
-                >
-                  <p>{{ itemDescription }}</p>
-                  <span class="ml-2">
-                    <BaseIcon
-                      @click="resetItemDescription"
-                      icon="xmark"
-                      color="gray"
-                      style="max-width: 12px"
-                    />
-                  </span>
-                </li>
-              </ul>
             </div>
           </div>
         </div>
