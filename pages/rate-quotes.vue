@@ -2,8 +2,8 @@
   <div class="wrapper pb-10">
     <div class="container max-w-7xl mx-auto px-4">
       <div class="form-title my-5">
-        <h1 class="w-full my-2 text-xl font-bold leading-tight text-gray-700">
-          Rate Quote
+        <h1 class="w-full mt-10 text-xl font-bold leading-tight text-gray-700">
+          Select Your Rate Quote
         </h1>
         <div class="flex justify-center my-2">
           <span

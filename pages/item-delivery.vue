@@ -1153,7 +1153,10 @@ export default {
                             );
                           }
                           this.$nextTick(() => {
-                            this.$router.push({ path: "/rate-quotes" });
+                            this.$router.push({
+                              name: "rate-quotes",
+                              query: { id: this.itemId },
+                            });
                           });
                         }
                       })
