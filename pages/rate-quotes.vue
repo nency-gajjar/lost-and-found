@@ -93,10 +93,7 @@
                         duration-150
                         text-left
                       "
-                      @click="
-                        sortBy = 0;
-                        menuOpened = false;
-                      "
+                      @click="sortRateQuotes(0)"
                     >
                       <p class="text-base font-medium text-primary-100">
                         Cheapest
@@ -118,10 +115,7 @@
                         duration-150
                         text-left
                       "
-                      @click="
-                        sortBy = 1;
-                        menuOpened = false;
-                      "
+                      @click="sortRateQuotes(1)"
                     >
                       <p class="text-base font-medium text-primary-100">
                         Fastest
@@ -477,6 +471,20 @@ export default {
     };
   },
   methods: {
+    sortRateQuotes(sortBy){
+      this.sortBy = sortBy;
+      if(sortBy === 0){
+        this.rateQuoteItems.sort((a, b) => {
+          return Number(a.rate) - Number(b.rate);
+        });
+      }
+      else if(sortBy === 1){
+        this.rateQuoteItems.sort((a, b) => {
+          return a.delivery_days - b.delivery_days;
+        });
+      }
+      this.menuOpened = false;
+    },
     displayItemService(service) {
       return startCase(camelCase(service));
     },
@@ -499,6 +507,7 @@ export default {
       lableDetails.insuranceValue = localStorage.getItem("InsuranceValue");
     }
     this.lableDetails = lableDetails;
+    this.sortRateQuotes(0);
   },
 };
 </script>
