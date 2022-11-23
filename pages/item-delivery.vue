@@ -114,152 +114,6 @@
                       {{ itemDetails.package_type }}
                     </div>
                   </div>
-                  <div class="flex items-center mt-3 flex-wrap">
-                    <div
-                      class="
-                        text-left text-gray-600
-                        font-medium
-                        w-full
-                        lg:w-4/12
-                        md:w-5/12
-                        sm:w-6/12
-                      "
-                    >
-                      Weight
-                    </div>
-                    <div
-                      class="
-                        text-gray-600 text-left
-                        md:w-7/12
-                        sm:w-6/12 sm:pl-3
-                      "
-                    >
-                      {{ itemDetails.weight_pounds }} lbs
-                    </div>
-                  </div>
-                  <div class="flex items-center mt-3 flex-wrap">
-                    <div
-                      class="
-                        text-left text-gray-600
-                        font-medium
-                        w-full
-                        lg:w-4/12
-                        md:w-5/12
-                        sm:w-6/12
-                      "
-                    >
-                      Dimension
-                    </div>
-                    <div
-                      class="
-                        text-gray-600 text-left
-                        md:w-7/12
-                        sm:w-6/12 sm:pl-3
-                      "
-                    >
-                      {{ itemDetails.item_length }}(l) x
-                      {{ itemDetails.item_width }}(w) x
-                      {{ itemDetails.item_height }}(h) inches
-                    </div>
-                  </div>
-                  <div class="flex items-center mt-3 flex-wrap">
-                    <div
-                      class="
-                        text-left text-gray-600
-                        font-medium
-                        w-full
-                        lg:w-4/12
-                        md:w-5/12
-                        sm:w-6/12
-                      "
-                    >
-                      Item Status
-                    </div>
-                    <div
-                      class="
-                        text-gray-600 text-left
-                        md:w-7/12
-                        sm:w-6/12 sm:pl-3
-                      "
-                    >
-                      {{
-                        itemDetails.item_status === 0 ? "Claimed" : "Unclaimed"
-                      }}
-                    </div>
-                  </div>
-                  <template v-if="itemDetails.item_status === 0">
-                    <div class="flex items-center mt-3 flex-wrap">
-                      <div
-                        class="
-                          text-left text-gray-600
-                          font-medium
-                          w-full
-                          lg:w-4/12
-                          md:w-5/12
-                          sm:w-6/12
-                        "
-                      >
-                        Receiver's Name
-                      </div>
-                      <div
-                        class="
-                          text-gray-600 text-left
-                          md:w-7/12
-                          sm:w-6/12 sm:pl-3
-                        "
-                      >
-                        {{ itemDetails.receiver_name }}
-                      </div>
-                    </div>
-
-                    <div class="flex items-center mt-3 flex-wrap">
-                      <div
-                        class="
-                          text-left text-gray-600
-                          font-medium
-                          w-full
-                          lg:w-4/12
-                          md:w-5/12
-                          sm:w-6/12
-                        "
-                      >
-                        Receiver's Email
-                      </div>
-                      <div
-                        class="
-                          text-gray-600 text-left
-                          md:w-7/12
-                          sm:w-6/12 sm:pl-3
-                        "
-                      >
-                        {{ itemDetails.receiver_email }}
-                      </div>
-                    </div>
-
-                    <div class="flex items-center mt-3 flex-wrap">
-                      <div
-                        class="
-                          text-left text-gray-600
-                          font-medium
-                          w-full
-                          lg:w-4/12
-                          md:w-5/12
-                          sm:w-6/12
-                        "
-                      >
-                        Receiver's Mobile No.
-                      </div>
-                      <div
-                        class="
-                          text-gray-600 text-left
-                          md:w-7/12
-                          sm:w-6/12 sm:pl-3
-                        "
-                      >
-                        {{ itemDetails.receiver_mobile_no }}
-                      </div>
-                    </div>
-                  </template>
                 </div>
                 <div
                   v-if="itemDetails.image"
@@ -410,7 +264,7 @@
                     sm:w-6/12
                   "
                 >
-                  Sender Affiliation
+                  Venue
                 </div>
                 <div class="text-gray-600 text-left md:w-7/12 sm:w-6/12">
                   {{ itemDetails.venu_type }}
@@ -830,7 +684,7 @@
                   v-show="insurance"
                   v-slot="{ errors }"
                   name="Insurance value"
-                  rules="numeric|insurance:2000"
+                  rules="numeric|insurance:1000"
                   class="block ml-4"
                 >
                   <BaseInput
@@ -1310,6 +1164,17 @@ export default {
   & > .vue-tel-input {
     @apply border-red-500 border-2 ring-4 ring-red-500 ring-opacity-10 rounded-lg  transition-none;
   }
+}
+
+.vue-tel-input {
+  border-radius: 0.5rem;
+  border: 1px solid #cccccc;
+}
+.vti__dropdown-list {
+  z-index: 100;
+}
+.vti__input {
+  border-radius: 50px;
 }
 
 .pac-item {
