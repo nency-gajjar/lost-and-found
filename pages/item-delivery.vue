@@ -589,6 +589,61 @@
             <div class="!my-6 space-y-4" v-show="deliveryType === '0'">
               <ValidationProvider
                 v-slot="{ errors }"
+                rules="required"
+                class="block"
+              >
+                <BaseInput
+                  v-model="receiverName"
+                  type="text"
+                  label="Receiver Name"
+                  :class="errors.length > 0 && 'error'"
+                />
+                <p
+                  v-if="errors.length"
+                  class="vee-validation-error mt-2 text-sm text-red-600"
+                >
+                  {{ errors[0] }}
+                </p>
+              </ValidationProvider>
+              <ValidationProvider
+                v-slot="{ errors }"
+                rules="required"
+                class="block"
+              >
+                <BaseInput
+                  v-model="receiverCompany"
+                  type="text"
+                  label="Company Name"
+                  :class="errors.length > 0 && 'error'"
+                />
+                <p
+                  v-if="errors.length"
+                  class="vee-validation-error mt-2 text-sm text-red-600"
+                >
+                  {{ errors[0] }}
+                </p>
+              </ValidationProvider>
+              <ValidationProvider
+                v-slot="{ errors }"
+                rules="required|email"
+                class="block"
+                name="Receiver Email"
+              >
+                <BaseInput
+                  v-model="receiverEmail"
+                  type="email"
+                  label="Receiver Email"
+                  :class="errors.length > 0 && 'error'"
+                />
+                <p
+                  v-if="errors.length"
+                  class="vee-validation-error mt-2 text-sm text-red-600"
+                >
+                  {{ errors[0] }}
+                </p>
+              </ValidationProvider>
+              <ValidationProvider
+                v-slot="{ errors }"
                 :rules="deliveryType === '0' ? 'required' : ''"
                 class="block"
               >
@@ -904,6 +959,9 @@ export default {
     isLoading: false,
     itemId: "",
     showValidateAlert: false,
+    receiverName: "",
+    receiverEmail: "",
+    receiverCompany: "",
     autoCompleteAddress: {
       address: "",
       city: "",
@@ -943,8 +1001,37 @@ export default {
         .then((response) => {
           if (response.status === 200) {
             this.isLoadingItemDetails = false;
-            // console.log("====response", response.data.data.Item);
             this.itemDetails = response.data.data.Item;
+            this.tempReceiverDetails = {
+              receiver_name: this.itemDetails.receiver_name || '',
+              receiver_email: this.itemDetails.receiver_email || '',
+              receiver_address: this.itemDetails.receiver_address || '',
+              receiver_city: this.itemDetails.receiver_city || '',
+              receiver_country: this.itemDetails.receiver_country || '',
+              receiver_state: this.itemDetails.receiver_state || '',
+              receiver_zipcode: this.itemDetails.receiver_zipcode || '',
+              receiver_mobile_no: this.itemDetails.receiver_mobile_no || '',
+            }
+            this.receiverName = this.itemDetails.receiver_name || '';
+            this.receiverEmail = this.itemDetails.receiver_email || '';
+            this.autoCompleteAddress.address = this.itemDetails.receiver_address || '';
+            this.autoCompleteAddress.city = this.itemDetails.receiver_city || '';
+            this.autoCompleteAddress.country = this.itemDetails.receiver_country || '';
+            this.autoCompleteAddress.state = this.itemDetails.receiver_state || '';
+            this.autoCompleteAddress.zipcode = this.itemDetails.receiver_zipcode || '';
+            this.autoCompleteAddress.phoneNo = this.itemDetails.receiver_mobile_no || '';
+            if(this.itemDetails.venu_type === "Airport") {
+              this.receiverCompany = "Airport Code";
+            }
+            else if(this.itemDetails.venu_type === "Hotel") {
+              this.receiverCompany = "Hotel Name";
+            }
+            else if(this.itemDetails.venu_type === "Restaurant") {
+              this.receiverCompany = "Restaurant Name";
+            }
+            else {
+              this.receiverCompany = "Venue Address";
+            }
           }
         })
         .catch((error) => {
@@ -1075,17 +1162,18 @@ export default {
       };
       let params_rateQuotes = {};
       if (this.deliveryType === "0") {
-        params.receiver_address = this.autoCompleteAddress.address;
-        params.receiver_city = this.autoCompleteAddress.city;
-        params.receiver_state = this.autoCompleteAddress.state;
-        params.receiver_country = this.autoCompleteAddress.country;
-        params.receiver_zipcode = this.autoCompleteAddress.zipcode;
-        params.receiver_mobile_no = this.formatMobileNumber(
+        if(this.tempReceiverDetails.receiver_name !== this.receiverName) params.receiver_name = this.receiverName;
+        if(this.tempReceiverDetails.receiver_address !== this.autoCompleteAddress.address) params.receiver_address = this.autoCompleteAddress.address;
+        if(this.tempReceiverDetails.receiver_city !== this.autoCompleteAddress.city) params.receiver_city = this.autoCompleteAddress.city;
+        if(this.tempReceiverDetails.receiver_state !== this.autoCompleteAddress.state) params.receiver_state = this.autoCompleteAddress.state;
+        if(this.tempReceiverDetails.receiver_country !== this.autoCompleteAddress.country) params.receiver_country = this.autoCompleteAddress.country;
+        if(this.tempReceiverDetails.receiver_zipcode !== this.autoCompleteAddress.zipcode) params.receiver_zipcode = this.autoCompleteAddress.zipcode;
+        if(this.tempReceiverDetails.receiver_mobile_no !== this.formatMobileNumber(this.autoCompleteAddress.phoneNo)) params.receiver_mobile_no = this.formatMobileNumber(
           this.autoCompleteAddress.phoneNo
         );
 
         params_rateQuotes.name = "Prem Panwala";
-        params_rateQuotes.company = "Bacancy Company";
+        params_rateQuotes.company = this.receiverCompany;
         params_rateQuotes.street1 = this.itemDetails.address;
         params_rateQuotes.city = this.itemDetails.city;
         params_rateQuotes.state = this.itemDetails.states;
@@ -1093,7 +1181,7 @@ export default {
         params_rateQuotes.phone = this.formatMobileNumber(
           this.itemDetails.venue_phone_no
         );
-        params_rateQuotes.toname = "Bhavya Makwana";
+        params_rateQuotes.toname = this.receiverName;
         params_rateQuotes.tocompany = "Bacancy Company";
         params_rateQuotes.tostreet1 = this.autoCompleteAddress.address;
         params_rateQuotes.tocity = this.autoCompleteAddress.city;
