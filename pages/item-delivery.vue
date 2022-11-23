@@ -628,7 +628,7 @@
                       rounded-lg
                       h-full
                     "
-                    v-model="autoCompleteAddress.phoneNo"
+                    v-model="receiverMobileNo"
                     @blur="validateUserPhone"
                     @validate="validateUserPhoneFormat"
                     v-bind="bindPhoneInputProps"
@@ -816,13 +816,14 @@ export default {
     receiverName: "",
     receiverEmail: "",
     receiverCompany: "",
+    receiverMobileNo: "",
     autoCompleteAddress: {
       address: "",
       city: "",
       state: "",
       country: "",
       zipcode: "",
-      phoneNo: "",
+      // phoneNo: "",
     },
     bindPhoneInputProps: {
       mode: "international",
@@ -857,33 +858,35 @@ export default {
             this.isLoadingItemDetails = false;
             this.itemDetails = response.data.data.Item;
             this.tempReceiverDetails = {
-              receiver_name: this.itemDetails.receiver_name || '',
-              receiver_email: this.itemDetails.receiver_email || '',
-              receiver_address: this.itemDetails.receiver_address || '',
-              receiver_city: this.itemDetails.receiver_city || '',
-              receiver_country: this.itemDetails.receiver_country || '',
-              receiver_state: this.itemDetails.receiver_state || '',
-              receiver_zipcode: this.itemDetails.receiver_zipcode || '',
-              receiver_mobile_no: this.itemDetails.receiver_mobile_no || '',
-            }
-            this.receiverName = this.itemDetails.receiver_name || '';
-            this.receiverEmail = this.itemDetails.receiver_email || '';
-            this.autoCompleteAddress.address = this.itemDetails.receiver_address || '';
-            this.autoCompleteAddress.city = this.itemDetails.receiver_city || '';
-            this.autoCompleteAddress.country = this.itemDetails.receiver_country || '';
-            this.autoCompleteAddress.state = this.itemDetails.receiver_state || '';
-            this.autoCompleteAddress.zipcode = this.itemDetails.receiver_zipcode || '';
-            this.autoCompleteAddress.phoneNo = this.itemDetails.receiver_mobile_no || '';
-            if(this.itemDetails.venu_type === "Airport") {
+              receiver_name: this.itemDetails.receiver_name || "",
+              receiver_email: this.itemDetails.receiver_email || "",
+              receiver_address: this.itemDetails.receiver_address || "",
+              receiver_city: this.itemDetails.receiver_city || "",
+              receiver_country: this.itemDetails.receiver_country || "",
+              receiver_state: this.itemDetails.receiver_state || "",
+              receiver_zipcode: this.itemDetails.receiver_zipcode || "",
+              receiver_mobile_no: this.itemDetails.receiver_mobile_no || "",
+            };
+            this.receiverName = this.itemDetails.receiver_name || "";
+            this.receiverEmail = this.itemDetails.receiver_email || "";
+            this.receiverMobileNo = this.itemDetails.receiver_mobile_no || "";
+            this.autoCompleteAddress.address =
+              this.itemDetails.receiver_address || "";
+            this.autoCompleteAddress.city =
+              this.itemDetails.receiver_city || "";
+            this.autoCompleteAddress.country =
+              this.itemDetails.receiver_country || "";
+            this.autoCompleteAddress.state =
+              this.itemDetails.receiver_state || "";
+            this.autoCompleteAddress.zipcode =
+              this.itemDetails.receiver_zipcode || "";
+            if (this.itemDetails.venu_type === "Airport") {
               this.receiverCompany = "Airport Code";
-            }
-            else if(this.itemDetails.venu_type === "Hotel") {
+            } else if (this.itemDetails.venu_type === "Hotel") {
               this.receiverCompany = "Hotel Name";
-            }
-            else if(this.itemDetails.venu_type === "Restaurant") {
+            } else if (this.itemDetails.venu_type === "Restaurant") {
               this.receiverCompany = "Restaurant Name";
-            }
-            else {
+            } else {
               this.receiverCompany = "Venue Address";
             }
           }
@@ -937,7 +940,7 @@ export default {
       }
     },
     validateUserPhone() {
-      if (!this.autoCompleteAddress.phoneNo) {
+      if (!this.receiverMobileNo) {
         this.isUserPhoneValid = false;
         this.userPhoneValidationMessage = "*Required";
       } else {
@@ -962,8 +965,6 @@ export default {
       autocomplete.addListener("place_changed", () => {
         let address = autocomplete.getPlace();
         this.autoCompleteAddress.address = address.formatted_address;
-        this.autoCompleteAddress.phoneNo =
-          address.international_phone_number || address.formatted_phone_number;
 
         address.address_components.forEach((component) => {
           component.types.forEach((type) => {
@@ -992,7 +993,6 @@ export default {
         state: "",
         country: "",
         zipcode: "",
-        phoneNo: "",
       };
     },
     formatMobileNumber(phoneNumber) {
@@ -1016,15 +1016,40 @@ export default {
       };
       let params_rateQuotes = {};
       if (this.deliveryType === "0") {
-        if(this.tempReceiverDetails.receiver_name !== this.receiverName) params.receiver_name = this.receiverName;
-        if(this.tempReceiverDetails.receiver_address !== this.autoCompleteAddress.address) params.receiver_address = this.autoCompleteAddress.address;
-        if(this.tempReceiverDetails.receiver_city !== this.autoCompleteAddress.city) params.receiver_city = this.autoCompleteAddress.city;
-        if(this.tempReceiverDetails.receiver_state !== this.autoCompleteAddress.state) params.receiver_state = this.autoCompleteAddress.state;
-        if(this.tempReceiverDetails.receiver_country !== this.autoCompleteAddress.country) params.receiver_country = this.autoCompleteAddress.country;
-        if(this.tempReceiverDetails.receiver_zipcode !== this.autoCompleteAddress.zipcode) params.receiver_zipcode = this.autoCompleteAddress.zipcode;
-        if(this.tempReceiverDetails.receiver_mobile_no !== this.formatMobileNumber(this.autoCompleteAddress.phoneNo)) params.receiver_mobile_no = this.formatMobileNumber(
-          this.autoCompleteAddress.phoneNo
-        );
+        if (this.tempReceiverDetails.receiver_name !== this.receiverName)
+          params.receiver_name = this.receiverName;
+        if (
+          this.tempReceiverDetails.receiver_address !==
+          this.autoCompleteAddress.address
+        )
+          params.receiver_address = this.autoCompleteAddress.address;
+        if (
+          this.tempReceiverDetails.receiver_city !==
+          this.autoCompleteAddress.city
+        )
+          params.receiver_city = this.autoCompleteAddress.city;
+        if (
+          this.tempReceiverDetails.receiver_state !==
+          this.autoCompleteAddress.state
+        )
+          params.receiver_state = this.autoCompleteAddress.state;
+        if (
+          this.tempReceiverDetails.receiver_country !==
+          this.autoCompleteAddress.country
+        )
+          params.receiver_country = this.autoCompleteAddress.country;
+        if (
+          this.tempReceiverDetails.receiver_zipcode !==
+          this.autoCompleteAddress.zipcode
+        )
+          params.receiver_zipcode = this.autoCompleteAddress.zipcode;
+        if (
+          this.tempReceiverDetails.receiver_mobile_no !==
+          this.formatMobileNumber(this.autoCompleteAddress.phoneNo)
+        )
+          params.receiver_mobile_no = this.formatMobileNumber(
+            this.autoCompleteAddress.phoneNo
+          );
 
         params_rateQuotes.name = "Prem Panwala";
         params_rateQuotes.company = this.receiverCompany;
@@ -1042,7 +1067,7 @@ export default {
         params_rateQuotes.tostate = this.autoCompleteAddress.state;
         params_rateQuotes.tozip = this.autoCompleteAddress.zipcode;
         params_rateQuotes.tophone = this.formatMobileNumber(
-          this.autoCompleteAddress.phoneNo
+          this.this.receiverMobileNo
         );
         params_rateQuotes.length = Number(this.itemDetails.item_length);
         params_rateQuotes.width = Number(this.itemDetails.item_width);
