@@ -48,6 +48,7 @@ export default {
     '@nuxtjs/axios',
     '@nuxtjs/auth',
     '@nuxtjs/toast',
+    'nuxt-stripe-module',
   ],
 
   // Toast notifications Configuration
@@ -78,6 +79,11 @@ export default {
   // Build Configuration: https://go.nuxtjs.dev/config-build
   build: {
     transpile: ['vee-validate/dist/rules'],
+  },
+
+  // Stripe Configuration
+  stripe: {
+    publishableKey: process.env.STRIPE_PUBLISHABLE_KEY,
   },
 
   auth: {
