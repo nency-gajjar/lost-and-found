@@ -18,6 +18,123 @@
       </div>
       <div class="flex flex-col md:flex-row justify-center gap-4">
         <div class="w-full">
+          <div class="w-full flex items-end relative">
+            <div
+              class="flex ml-auto items-center space-x-2 mr-6 !px-2 !font-body cursor-pointer"
+              @click="menuOpened = !menuOpened"
+            >
+              <span class="!font-medium">
+                SORT BY:
+                <span v-if="sortBy === 0" class="!font-bold uppercase">
+                  cheapest
+                </span>
+                <span v-else-if="sortBy === 1" class="!font-bold uppercase">
+                  fastest
+                </span>
+              </span>
+              <BaseIcon
+                icon="angle-down"
+                color="black"
+                size="1x"
+              />
+            </div>
+
+            <transition
+              enter-active-class="transition ease-out duration-200"
+              enter-from-class="opacity-0 translate-y-1"
+              enter-to-class="opacity-100 translate-y-0"
+              leave-active-class="transition ease-in duration-150"
+              leave-from-class="opacity-100 translate-y-0"
+              leave-to-class="opacity-0 translate-y-1"
+            >
+              <div
+                v-if="menuOpened"
+                class="
+                  z-10
+                  absolute
+                  right-6
+                  top-0
+                  transform
+                  mt-12
+                  px-2
+                  w-screen
+                  max-w-xs
+                  sm:px-0
+                "
+              >
+                <div
+                  class="
+                    rounded-lg
+                    shadow-lg
+                    ring-1 ring-black ring-opacity-5
+                    overflow-hidden
+                  "
+                >
+                  <div
+                    class="
+                      relative
+                      grid
+                      gap-6
+                      bg-white
+                      px-5
+                      py-6
+                      sm:gap-8 sm:p-8
+                    "
+                  >
+                    <button
+                      class="
+                        -m-3
+                        p-3
+                        block
+                        rounded-md
+                        hover:bg-primary-80
+                        transition
+                        ease-in-out
+                        duration-150
+                        text-left
+                      "
+                      @click="
+                        sortBy = 0;
+                        menuOpened = false;
+                      "
+                    >
+                      <p class="text-base font-medium text-primary-100">
+                        Cheapest
+                      </p>
+                      <p class="mt-1 text-sm text-grayText">
+                        Sort from lowest price to highest
+                      </p>
+                    </button>
+
+                    <button
+                      class="
+                        -m-3
+                        p-3
+                        block
+                        rounded-md
+                        hover:bg-primary-80
+                        transition
+                        ease-in-out
+                        duration-150
+                        text-left
+                      "
+                      @click="
+                        sortBy = 1;
+                        menuOpened = false;
+                      "
+                    >
+                      <p class="text-base font-medium text-primary-100">
+                        Fastest
+                      </p>
+                      <p class="mt-1 text-sm text-grayText">
+                        Sort from fastest delivery to slowest
+                      </p>
+                    </button>
+                  </div>
+                </div>
+              </div>
+            </transition>
+          </div>
           <div
             v-for="item in rateQuoteItems"
             :key="item.id"
@@ -355,6 +472,8 @@ export default {
       signature: null,
       rateQuoteItems: [],
       lableDetails: {},
+      menuOpened: false,
+      sortBy: 0,
     };
   },
   methods: {
