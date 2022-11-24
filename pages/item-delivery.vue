@@ -496,6 +496,40 @@
                   {{ errors[0] }}
                 </p>
               </ValidationProvider>
+              <div>
+                <label class="w-full font-bold text-sm">Mobile Number: </label>
+                <div
+                  class="block relative box-content h-12 w-full"
+                  :class="!isUserPhoneValid && 'error'"
+                >
+                  <vue-tel-input
+                    :inputOptions="{ placeholder: 'Phone Number' }"
+                    class="
+                      relative
+                      border
+                      inline-block
+                      border-gray-300
+                      w-full
+                      rounded-lg
+                      h-full
+                    "
+                    v-model="receiverMobileNo"
+                    @blur="validateUserPhone"
+                    @validate="validateUserPhoneFormat"
+                    v-bind="bindPhoneInputProps"
+                  ></vue-tel-input>
+                  <div
+                    v-if="!isUserPhoneValid"
+                    class="
+                      vee-validation-error
+                      top-margin-05
+                      text-sm text-red-600
+                    "
+                  >
+                    {{ userPhoneValidationMessage }}
+                  </div>
+                </div>
+              </div>
               <ValidationProvider
                 v-slot="{ errors }"
                 :rules="deliveryType === '0' ? 'required' : ''"
@@ -594,57 +628,24 @@
                   </p>
                 </ValidationProvider>
               </div>
-              <div class="grid lg:grid-cols-2 gap-4">
-                <ValidationProvider
-                  v-slot="{ errors }"
-                  :rules="deliveryType === '0' ? 'max:28|required' : ''"
-                  class="block lg:col-span-1"
+              <ValidationProvider
+                v-slot="{ errors }"
+                :rules="deliveryType === '0' ? 'max:28|required' : ''"
+                class="block"
+              >
+                <BaseInput
+                  v-model="autoCompleteAddress.country"
+                  label="Country"
+                  type="text"
+                  :class="errors.length > 0 && 'error'"
+                />
+                <p
+                  v-if="errors.length"
+                  class="vee-validation-error mt-2 text-sm text-red-600"
                 >
-                  <BaseInput
-                    v-model="autoCompleteAddress.country"
-                    label="Country"
-                    type="text"
-                    :class="errors.length > 0 && 'error'"
-                  />
-                  <p
-                    v-if="errors.length"
-                    class="vee-validation-error mt-2 text-sm text-red-600"
-                  >
-                    {{ errors[0] }}
-                  </p>
-                </ValidationProvider>
-                <div
-                  class="block relative box-content h-12"
-                  :class="!isUserPhoneValid && 'error'"
-                >
-                  <vue-tel-input
-                    :inputOptions="{ placeholder: 'Phone Number' }"
-                    class="
-                      relative
-                      border
-                      inline-block
-                      border-gray-300
-                      w-full
-                      rounded-lg
-                      h-full
-                    "
-                    v-model="receiverMobileNo"
-                    @blur="validateUserPhone"
-                    @validate="validateUserPhoneFormat"
-                    v-bind="bindPhoneInputProps"
-                  ></vue-tel-input>
-                  <div
-                    v-if="!isUserPhoneValid"
-                    class="
-                      vee-validation-error
-                      top-margin-05
-                      text-sm text-red-600
-                    "
-                  >
-                    {{ userPhoneValidationMessage }}
-                  </div>
-                </div>
-              </div>
+                  {{ errors[0] }}
+                </p>
+              </ValidationProvider>
               <div class="text-gray-500 flex flex-col space-y-4">
                 <div class="flex items-center space-x-3 ml-4">
                   <input
