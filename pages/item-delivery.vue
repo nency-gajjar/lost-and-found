@@ -901,7 +901,6 @@ export default {
   },
   mounted() {
     if (this.$route.query.id) {
-      localStorage.removeItem("InsuranceValue");
       this.itemId = this.$route.query.id;
     } else {
       this.$nextTick(() => {
@@ -1106,19 +1105,10 @@ export default {
                             return_address: response.data.return_address,
                             to_address: response.data.to_address,
                           };
-                          localStorage.setItem(
-                            "ShippingRates",
-                            JSON.stringify(shippingRates)
-                          );
-                          localStorage.setItem(
-                            "LableDetails",
-                            JSON.stringify(params_rateQuotes)
-                          );
+                          this.$store.commit("shipment/SET_SHIPPING_RATES", shippingRates);
+                          this.$store.commit("shipment/SET_LABLE_DETAILS", params_rateQuotes);
                           if (this.insuranceValue) {
-                            localStorage.setItem(
-                              "InsuranceValue",
-                              this.insuranceValue
-                            );
+                            this.$store.commit("shipment/SET_INSURANCE_VALUE", this.insuranceValue);
                           }
                           this.$nextTick(() => {
                             this.$router.push({

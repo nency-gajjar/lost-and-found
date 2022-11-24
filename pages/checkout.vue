@@ -241,11 +241,11 @@ export default {
   },
   mounted() {
     this.checkoutDetail = {
-      selectedRate: JSON.parse(localStorage.getItem("SelectedRate")),
-      insuranceValue: localStorage.getItem("InsuranceValue") || null,
-      shippingRates: JSON.parse(localStorage.getItem("ShippingRates")),
-      lableDetails: JSON.parse(localStorage.getItem("LableDetails")),
-      signature: JSON.parse(localStorage.getItem("Signature")),
+      selectedRate: JSON.parse(JSON.stringify(this.$store.getters['shipment/selectedRate'])),
+      insuranceValue: JSON.parse(JSON.stringify(this.$store.getters['shipment/insuranceValue'])) || null,
+      shippingRates: JSON.parse(JSON.stringify(this.$store.getters['shipment/shippingRates'])),
+      lableDetails: JSON.parse(JSON.stringify(this.$store.getters['shipment/lableDetails'])),
+      signature: JSON.parse(JSON.stringify(this.$store.getters['shipment/signature'])),
     };
 
     const elements = this.$stripe.elements({

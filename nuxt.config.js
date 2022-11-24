@@ -31,6 +31,7 @@ export default {
     "~/plugins/vue-cropper",
     "~/plugins/font-awesome",
     {src: "~/plugins/html2pdf", mode: 'client'},
+    {src: "~/plugins/persistedState", mode: 'client'},
   ],
 
   // Auto import components: https://go.nuxtjs.dev/config-components

@@ -500,10 +500,12 @@ export default {
     },
     selecteRateQuote(item) {
       this.selectedRate = item;
-      localStorage.setItem("SelectedRate", JSON.stringify(item));
+      this.$store.commit('shipment/SET_SELECTED_RATE', item);
+      // localStorage.setItem("SelectedRate", JSON.stringify(item));
     },
     proceedToCheckout() {
-      localStorage.setItem("Signature", this.signature);
+      // localStorage.setItem("Signature", this.signature);
+      this.$store.commit('shipment/SET_SIGNATURE', this.signature);
       this.$router.push({
         path: "/checkout",
         query: { id: this.$route.query.id },
@@ -516,13 +518,13 @@ export default {
     },
   },
   mounted() {
-    let shippingRates = JSON.parse(localStorage.getItem("ShippingRates"));
+    let shippingRates = JSON.parse(JSON.stringify(this.$store.getters['shipment/shippingRates']));
     this.rateQuoteItems = shippingRates.rates;
-    let lableDetails = JSON.parse(localStorage.getItem("LableDetails"));
+    let lableDetails = JSON.parse(JSON.stringify(this.$store.getters['shipment/lableDetails']));
     lableDetails.category = "My Own Packaging";
     lableDetails.type = "Box";
-    if (localStorage.getItem("InsuranceValue")) {
-      lableDetails.insuranceValue = localStorage.getItem("InsuranceValue");
+    if (this.$store.getters['shipment/insuranceValue']) {
+      lableDetails.insuranceValue = JSON.parse(JSON.stringify(this.$store.getters['shipment/insuranceValue']));
     }
     this.lableDetails = lableDetails;
     this.sortRateQuotes(0);

@@ -572,10 +572,28 @@ export default {
     return {
       isLoading: false,
       responseData: null,
+      itemDetails: {},
     };
   },
+  mounted(){
+    if(this.$route.query.id){
+      this.$axios
+        .get("/getsinglelostitem?id=" + this.$route.query.id)
+        .then((response) => {
+          if (response.status === 200) {
+            this.itemDetails = {...response.data.data.Item, onlyDisplay: true};
+          }
+        })
+        .catch((error) => {
+          console.log(error);
+        });
+    }
+    else{
+      this.itemDetails = JSON.parse(JSON.stringify(this.$store.getters['item/itemDetails']));
+    }
+  },
   computed: {
-    ...mapGetters("item", ["itemDetails"]),
+    // ...mapGetters("item", ["itemDetails"]),
     btnName() {
       return this.itemDetails.foundItemId ? "Update" : "Submit";
     },
@@ -641,6 +659,8 @@ export default {
                       ...this.responseData,
                     });
 
+                    this.$store.commit("item/SET_ITEM_DETAILS", {});
+
                     this.$router.push({
                       path: "/confirmation",
                       params: { data: this.responseData },
@@ -672,7 +692,9 @@ export default {
                 ...this.responseData,
               });
 
-              localStorage.setItem("itemId", this.responseData.id);
+              this.$store.commit("item/SET_ITEM_DETAILS", {});
+
+              // localStorage.setItem("itemId", this.responseData.id);
               this.$router.push({
                 path: "/confirmation",
                 params: { data: this.responseData },

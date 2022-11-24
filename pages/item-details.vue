@@ -1228,6 +1228,7 @@ import moment from "moment";
 
 export default {
   data: () => ({
+    itemDetails: {},
     imgSrc: "",
     showCrop: false,
     showDraw: false,
@@ -1332,7 +1333,7 @@ export default {
     ValidationProvider,
   },
   computed: {
-    ...mapGetters("item", ["itemDetails"]),
+    // ...mapGetters("item", ["itemDetails"]),
     venueLabel() {
       if (this.venueType === "Restaurant") {
         return "Restaurant Name";
@@ -1959,6 +1960,7 @@ export default {
     },
   },
   async mounted() {
+    this.itemDetails = JSON.parse(JSON.stringify(this.$store.getters['item/itemDetails']));
     this.mobileDevice = this.isMobile();
     await this.getItemDescriptionOptions();
     window.addEventListener("keydown", () => {
@@ -2084,7 +2086,65 @@ export default {
         this.receiverMobileNo = data.receiver_mobile_no;
       }
       this.isLoadingItemDetails = false;
-    } else {
+    }
+    else if(Object.keys(this.itemDetails).length > 0){
+      this.isLoadingItemDetails = false;
+      this.senderFormTitle = "EDIT SENDER'S DETAILS";
+      this.foundItemFormTitle = "EDIT FOUND ITEM'S DETAILS";
+      let data = JSON.parse(JSON.stringify(this.$store.getters['item/itemDetails']));
+      var index = this.venueOptions.indexOf(data.venu_type) !== -1;
+      if (index) this.venueType = data.venu_type;
+      else {
+        this.venueType = "Other";
+        this.manualVenue = data.venu_type;
+      }
+      var index1 =
+        this.itemDescriptionOptions.indexOf(data.item_description) !== -1;
+      if (index1) this.itemDescription = data.item_description;
+      else {
+        this.itemDescription = "Other";
+        this.itemDescriptionManually = true;
+        this.manualItemDescription = data.item_description;
+      }
+
+      if (data.foundItemId) {
+        this.foundItemId = data.foundItemId;
+      } else {
+        this.foundItemId = data.id;
+      }
+      this.foundDate = new Date(data.datse);
+      this.venueEmail = data.venue_email;
+      this.venueSecondaryEmail = data.secondary_email;
+      this.employeeMobileNo = data.employee_mobile_no;
+      this.addressArr.unshift(data.address);
+      this.address = data.address;
+      this.autoCompleteAddress.address = this.addressArr[0];
+      this.autoCompleteAddress.phoneNo = data.venue_phone_no;
+      this.autoCompleteAddress.city = data.city;
+      this.autoCompleteAddress.state = data.states;
+      this.autoCompleteAddress.country = data.country;
+      this.autoCompleteAddress.zipcode = data.zipcode;
+      this.imageKey = data.image_key;
+      this.image = data.image;
+      this.packageType = data.package_type;
+      this.weight = data.weight_pounds;
+      this.weightOunces = data.weight_ounces;
+      this.itemLength = data.item_length;
+      this.itemWidth = data.item_width;
+      this.itemHeight = data.item_height;
+      this.itemStatus =
+        data.item_status === 0
+          ? "Claimed (You know the actual owner of this item)"
+          : "Unclaimed (You do not know the actual owner of this item)";
+
+      if (data.item_status === 0) {
+        this.receiverName = data.receiver_name;
+        this.receiverEmail = data.receiver_email;
+        this.receiverMobileNo = data.receiver_mobile_no;
+      }
+      this.isLoadingItemDetails = false;
+    }
+    else {
       this.isLoadingItemDetails = false;
       this.senderFormTitle = "SENDER'S DETAILS";
       this.foundItemFormTitle = "FOUND ITEM'S DETAILS";

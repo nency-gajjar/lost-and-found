@@ -389,9 +389,12 @@ export default {
     return {
       itemDetails: {},
       showDialog: false,
+      itemConfirmationDetails: {},
     };
   },
-  created() {
+  mounted() {
+    this.itemConfirmationDetails = JSON.parse(JSON.stringify(this.$store.getters['item/itemConfirmationDetails']));
+    this.showDialog = true;
     if (Object.keys(this.itemConfirmationDetails).length > 0) {
       this.itemDetails = this.itemConfirmationDetails;
     } else if (this.$route.query.id) {
@@ -413,11 +416,8 @@ export default {
       });
     }
   },
-  mounted() {
-    this.showDialog = true;
-  },
   computed: {
-    ...mapGetters("item", ["itemConfirmationDetails"]),
+    // ...mapGetters("item", ["itemConfirmationDetails"]),
     dialogMessage() {
       if (!this.hasImage && !this.itemStatus) {
         return "We have sent a link for the same on your mail id. You can click on the link received over the mail to edit the item details in future, if required. Also, notification email is sent to the Item owner with the entered details. Now, the owner will have to select the Item Delivery to proceed further.";
@@ -441,6 +441,7 @@ export default {
   },
   methods: {
     routeToListing() {
+      this.$store.commit("item/SET_ITEM_CONFIRMATION_DETAILS", {});
       this.$router.push({ path: "/found-items" });
     },
     printDetails() {
