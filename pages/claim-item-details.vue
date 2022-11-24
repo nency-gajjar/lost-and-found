@@ -676,7 +676,7 @@ export default {
     } else {
       this.$nextTick(() => {
         this.$router.push({
-          name: "found-items",
+          name: "lost-items",
         });
       });
     }
@@ -737,7 +737,7 @@ export default {
       this.dialogMessage = "";
       this.rejectReson = "";
       this.$nextTick(() => {
-        this.$router.push({ path: "/found-items" });
+        this.$router.push({ path: "/lost-items" });
       });
     },
   },

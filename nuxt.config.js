@@ -1,7 +1,7 @@
 export default {
   // Global page headers: https://go.nuxtjs.dev/config-head
   head: {
-    title: 'lost-and-found-new',
+    title: 'lost-and-found',
     htmlAttrs: {
       lang: 'en'
     },

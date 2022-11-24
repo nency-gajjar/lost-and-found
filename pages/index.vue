@@ -359,7 +359,7 @@ export default {
     applyFilters() {
       this.$nextTick(() => {
         this.$router.push({
-          name: "found-items",
+          name: "lost-items",
           params: {
             appliedFilters: {
               itemDescription: this.itemDescription,

@@ -13,17 +13,11 @@
           mb-5
         "
       >
-        <!-- <h2
-          v-if="!isLoading && lostItems.length > 0"
-          class="text-2xl font-semibold leading-tight"
-        >
-          Found Items ({{ lostItems.length }})
-        </h2> -->
         <BaseButton
           class="sm:ml-2 grow mt-3 sm:mt-0 sm:grow-0"
           @click="addNewItem"
         >
-          + Add New Item
+          + Report Lost item
         </BaseButton>
       </div>
 
@@ -35,7 +29,7 @@
           <div class="inline-flex flex-auto w-full bg-white">
             <BaseInput
               v-model="address"
-              id="autocomplete-found-items"
+              id="autocomplete-lost-items"
               type="text"
               placeholder=""
               label="Location"
@@ -607,10 +601,10 @@ export default {
     },
     getAddress() {
       if (this.address == "") {
-        document.getElementById("autocomplete-found-items").placeholder = "";
+        document.getElementById("autocomplete-lost-items").placeholder = "";
       }
       const autocomplete = new google.maps.places.Autocomplete(
-        document.getElementById("autocomplete-found-items")
+        document.getElementById("autocomplete-lost-items")
       );
       autocomplete.addListener("place_changed", () => {
         let address = autocomplete.getPlace();
@@ -621,7 +615,7 @@ export default {
     },
     clearAddress() {
       this.address = "";
-      document.getElementById("autocomplete-found-items").placeholder = "";
+      document.getElementById("autocomplete-lost-items").placeholder = "";
     },
     filterItems() {
       let filterArray = [];

@@ -11,7 +11,7 @@
               <NuxtLink to="/dashboard" class="menu">Dashboard</NuxtLink>
             </div>
             <div v-else class="link-container">
-              <NuxtLink to="/found-items" class="menu">Found Items</NuxtLink>
+              <NuxtLink to="/lost-items" class="menu">Lost Items</NuxtLink>
             </div>
           </div>
           <div class="menu-right flex items-center">
@@ -22,8 +22,8 @@
               <div class="menu" @click="logoutAdmin('desktop')">Logout</div>
             </div>
             <div v-if="!isAdminLogin" class="drawer-container">
-              <NuxtLink to="/found-items" class="opacity-100 menu"
-                >Found Items</NuxtLink
+              <NuxtLink to="/lost-items" class="opacity-100 menu"
+                >Lost Items</NuxtLink
               >
             </div>
             <div v-else class="drawer-container">
@@ -47,10 +47,10 @@
         </div>
         <div v-else>
           <NuxtLink
-            to="/found-items"
+            to="/lost-items"
             @click.native="toggleMenu"
             class="opacity-100"
-            >Found Items</NuxtLink
+            >Lost Items</NuxtLink
           >
         </div>
         <template v-if="isAdminLogin">
