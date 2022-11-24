@@ -344,10 +344,10 @@
             <div class="grid grid-cols-2 gap-4 mt-6">
               <!-- Ship it to me -->
               <div
-                class="flex items-center pl-4 rounded border border-gray-300"
+                class="flex items-center pl-4 rounded-lg border border-gray-300"
                 :class="[
                   deliveryType === '0' &&
-                    '!border-accent-80 !ring-accent-60 !ring-[6px] !ring-offset-accent-80 !ring-offset-1',
+                    '!border-accent-80 !ring-accent-60 !ring-[4.5px] !ring-offset-accent-80 !ring-offset-1',
                 ]"
               >
                 <input
@@ -382,10 +382,10 @@
 
               <!-- Hold for pickup -->
               <div
-                class="flex items-center pl-4 rounded border border-gray-300"
+                class="flex items-center pl-4 rounded-lg border border-gray-300"
                 :class="[
                   deliveryType === '1' &&
-                    '!border-accent-80 !ring-accent-60 !ring-[6px] !ring-offset-accent-80 !ring-offset-1',
+                    '!border-accent-80 !ring-accent-60 !ring-[4.5px] !ring-offset-accent-80 !ring-offset-1',
                 ]"
               >
                 <input
