@@ -1045,10 +1045,10 @@ export default {
           params.receiver_zipcode = this.autoCompleteAddress.zipcode;
         if (
           this.tempReceiverDetails.receiver_mobile_no !==
-          this.formatMobileNumber(this.autoCompleteAddress.phoneNo)
+          this.formatMobileNumber(this.itemDetails.receiver_mobile_no)
         )
           params.receiver_mobile_no = this.formatMobileNumber(
-            this.autoCompleteAddress.phoneNo
+            this.itemDetails.receiver_mobile_no
           );
 
         params_rateQuotes.name = "Prem Panwala";
@@ -1067,7 +1067,7 @@ export default {
         params_rateQuotes.tostate = this.autoCompleteAddress.state;
         params_rateQuotes.tozip = this.autoCompleteAddress.zipcode;
         params_rateQuotes.tophone = this.formatMobileNumber(
-          this.this.receiverMobileNo
+          this.receiverMobileNo
         );
         params_rateQuotes.length = Number(this.itemDetails.item_length);
         params_rateQuotes.width = Number(this.itemDetails.item_width);
