@@ -198,7 +198,7 @@
                 :class="!isEmployeeMobileNoValid && 'error'"
               >
                 <vue-tel-input
-                  :inputOptions="{ placeholder: 'Employee Mobile No.' }"
+                  :inputOptions="{ placeholder: 'Employee Mobile Number' }"
                   class="
                     relative
                     border
@@ -405,7 +405,7 @@
                   :class="!isVenuePhoneValid && 'error'"
                 >
                   <vue-tel-input
-                    :inputOptions="{ placeholder: 'Phone Number' }"
+                    :inputOptions="{ placeholder: 'Mobile Number' }"
                     class="
                       relative
                       border
@@ -1166,7 +1166,7 @@
                   :class="!isReceiverMobileNoValid && 'error'"
                 >
                   <vue-tel-input
-                    :inputOptions="{ placeholder: 'Receiver Mobile No.' }"
+                    :inputOptions="{ placeholder: 'Receiver Mobile Number' }"
                     class="
                       relative
                       border
