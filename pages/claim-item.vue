@@ -510,7 +510,7 @@ export default {
     closeDialog() {
       this.showDialog = false;
       this.$nextTick(() => {
-        this.$router.push({ path: "/found-items" });
+        this.$router.push({ path: "/lost-items" });
       });
     },
   },
