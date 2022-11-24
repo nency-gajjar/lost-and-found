@@ -12,7 +12,7 @@
               sm:text-5xl
               font-medium
               leading-tight
-              text-center text-gray-700
+              text-center text-primary-100
             "
           >
             What have you lost?
@@ -23,22 +23,11 @@
                 w-40
                 border-t-4 border-solid border-orange-200
                 inline-block
-                mb-5
+                mb-2
               "
             ></span>
           </div>
-          <p class="text-gray-600 text-md">
-            Describe the item lost in one word
-            <span>
-              <BaseIcon
-                icon="circle-info"
-                color="gray"
-                style="max-width: 15px"
-                data-toggle="tooltip"
-                title="Leave blank to show all items"
-              />
-            </span>
-          </p>
+          <p class="text-gray-600 text-md">Leave Blank to show all Item</p>
           <div class="align-middle inline-block w-full mt-5">
             <!-- Location -->
             <div class="inline-flex flex-auto w-full bg-white">
