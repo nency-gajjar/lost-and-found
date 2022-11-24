@@ -497,7 +497,9 @@
                 </p>
               </ValidationProvider>
               <div>
-                <label class="w-full font-bold text-sm">Mobile Number: </label>
+                <label class="block text-sm font-medium text-gray-800 my-1"
+                  >Mobile Number:</label
+                >
                 <div
                   class="block relative box-content h-12 w-full"
                   :class="!isUserPhoneValid && 'error'"
@@ -518,16 +520,12 @@
                     @validate="validateUserPhoneFormat"
                     v-bind="bindPhoneInputProps"
                   ></vue-tel-input>
-                  <div
-                    v-if="!isUserPhoneValid"
-                    class="
-                      vee-validation-error
-                      top-margin-05
-                      text-sm text-red-600
-                    "
-                  >
-                    {{ userPhoneValidationMessage }}
-                  </div>
+                </div>
+                <div
+                  v-if="!isUserPhoneValid"
+                  class="vee-validation-error my-2 text-sm text-red-600"
+                >
+                  {{ userPhoneValidationMessage }}
                 </div>
               </div>
               <ValidationProvider
@@ -571,7 +569,7 @@
                   {{ errors[0] }}
                 </p>
               </ValidationProvider>
-              <div class="grid grid-cols-3 lg:grid-cols-3 gap-4">
+              <div class="grid grid-cols-2 lg:grid-cols-2 gap-4">
                 <ValidationProvider
                   v-slot="{ errors }"
                   :rules="deliveryType === '0' ? 'max:28|required' : ''"
@@ -627,25 +625,26 @@
                     {{ errors[0] }}
                   </p>
                 </ValidationProvider>
-              </div>
-              <ValidationProvider
-                v-slot="{ errors }"
-                :rules="deliveryType === '0' ? 'max:28|required' : ''"
-                class="block"
-              >
-                <BaseInput
-                  v-model="autoCompleteAddress.country"
-                  label="Country"
-                  type="text"
-                  :class="errors.length > 0 && 'error'"
-                />
-                <p
-                  v-if="errors.length"
-                  class="vee-validation-error mt-2 text-sm text-red-600"
+                <ValidationProvider
+                  v-slot="{ errors }"
+                  :rules="deliveryType === '0' ? 'max:28|required' : ''"
+                  class="block"
                 >
-                  {{ errors[0] }}
-                </p>
-              </ValidationProvider>
+                  <BaseInput
+                    v-model="autoCompleteAddress.country"
+                    label="Country"
+                    type="text"
+                    :class="errors.length > 0 && 'error'"
+                  />
+                  <p
+                    v-if="errors.length"
+                    class="vee-validation-error mt-2 text-sm text-red-600"
+                  >
+                    {{ errors[0] }}
+                  </p>
+                </ValidationProvider>
+              </div>
+
               <div class="text-gray-500 flex flex-col space-y-4">
                 <div class="flex items-center space-x-3 ml-4">
                   <input
