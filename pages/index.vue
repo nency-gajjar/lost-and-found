@@ -12,7 +12,7 @@
               sm:text-5xl
               font-medium
               leading-tight
-              text-center text-gray-700
+              text-center text-primary-100
             "
           >
             What have you lost?
@@ -23,10 +23,11 @@
                 w-40
                 border-t-4 border-solid border-orange-200
                 inline-block
-                mb-5
+                mb-2
               "
             ></span>
           </div>
+          <p class="text-gray-600 text-md">Leave Blank to show all Item</p>
           <div class="align-middle inline-block w-full mt-5">
             <!-- Location -->
             <div class="inline-flex flex-auto w-full bg-white">
@@ -347,7 +348,7 @@ export default {
     applyFilters() {
       this.$nextTick(() => {
         this.$router.push({
-          name: "found-items",
+          name: "lost-items",
           params: {
             appliedFilters: {
               itemDescription: this.itemDescription,

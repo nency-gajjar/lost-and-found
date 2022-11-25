@@ -411,7 +411,7 @@ export default {
     } else {
       this.$nextTick(() => {
         this.$router.push({
-          name: "found-items",
+          name: "lost-items",
         });
       });
     }
@@ -442,7 +442,7 @@ export default {
   methods: {
     routeToListing() {
       this.$store.commit("item/SET_ITEM_CONFIRMATION_DETAILS", {});
-      this.$router.push({ path: "/found-items" });
+      this.$router.push({ path: "/lost-items" });
     },
     printDetails() {
       let userAgent = navigator.userAgent.toLowerCase();

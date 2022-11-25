@@ -442,6 +442,7 @@
             </div>
           </div>
           <BaseButton
+            :disabled="Object.keys(selectedRate).length < 1"
             class="grow font-semibold text-md w-full md:max-w-sm mt-5 mx-auto"
             @click="proceedToCheckout"
           >

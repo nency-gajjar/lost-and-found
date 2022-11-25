@@ -133,114 +133,6 @@
                     text-left text-gray-800
                   "
                 >
-                  Address Details:
-                </h2>
-                <span
-                  class="
-                    w-20
-                    border-t-4 border-solid border-gray-300
-                    inline-block
-                    mb-1
-                  "
-                ></span>
-              </div>
-
-              <div class="flex items-center mt-3 flex-wrap">
-                <div
-                  class="
-                    text-left text-gray-600
-                    font-medium
-                    w-full
-                    lg:w-4/12
-                    md:w-5/12
-                    sm:w-6/12
-                  "
-                >
-                  Address
-                </div>
-                <div class="text-gray-600 text-left md:w-7/12 sm:w-6/12">
-                  {{ itemDetails.address }}
-                </div>
-              </div>
-              <div class="flex items-center mt-3 flex-wrap">
-                <div
-                  class="
-                    text-left text-gray-600
-                    font-medium
-                    w-full
-                    lg:w-4/12
-                    md:w-5/12
-                    sm:w-6/12
-                  "
-                >
-                  City
-                </div>
-                <div class="text-gray-600 text-left md:w-7/12 sm:w-6/12">
-                  {{ itemDetails.city }}
-                </div>
-              </div>
-              <div class="flex items-center mt-3 flex-wrap">
-                <div
-                  class="
-                    text-left text-gray-600
-                    font-medium
-                    w-full
-                    lg:w-4/12
-                    md:w-5/12
-                    sm:w-6/12
-                  "
-                >
-                  State
-                </div>
-                <div class="text-gray-600 text-left md:w-7/12 sm:w-6/12">
-                  {{ itemDetails.states }}
-                </div>
-              </div>
-              <div class="flex items-center mt-3 flex-wrap">
-                <div
-                  class="
-                    text-left text-gray-600
-                    font-medium
-                    w-full
-                    lg:w-4/12
-                    md:w-5/12
-                    sm:w-6/12
-                  "
-                >
-                  Country
-                </div>
-                <div class="text-gray-600 text-left md:w-7/12 sm:w-6/12">
-                  {{ itemDetails.country }}
-                </div>
-              </div>
-              <div class="flex items-center mt-3 flex-wrap">
-                <div
-                  class="
-                    text-left text-gray-600
-                    font-medium
-                    w-full
-                    lg:w-4/12
-                    md:w-5/12
-                    sm:w-6/12
-                  "
-                >
-                  Zipcode
-                </div>
-                <div class="text-gray-600 text-left md:w-7/12 sm:w-6/12">
-                  {{ itemDetails.zipcode }}
-                </div>
-              </div>
-            </div>
-            <div class="sections py-4">
-              <div class="form-title">
-                <h2
-                  class="
-                    text-lg text-accent-100
-                    font-medium
-                    leading-tight
-                    text-left text-gray-800
-                  "
-                >
                   Sender's Details:
                 </h2>
 
@@ -358,16 +250,104 @@
                   {{ itemDetails.employee_mobile_no }}
                 </div>
               </div>
+              <hr
+                class="flex-grow border-dashed border border-[#E1E3E6] my-5"
+              />
+              <div class="flex items-center mt-3 flex-wrap">
+                <div
+                  class="
+                    text-left text-gray-600
+                    font-medium
+                    w-full
+                    lg:w-4/12
+                    md:w-5/12
+                    sm:w-6/12
+                  "
+                >
+                  Address
+                </div>
+                <div class="text-gray-600 text-left md:w-7/12 sm:w-6/12">
+                  {{ itemDetails.address }}
+                </div>
+              </div>
+              <div class="flex items-center mt-3 flex-wrap">
+                <div
+                  class="
+                    text-left text-gray-600
+                    font-medium
+                    w-full
+                    lg:w-4/12
+                    md:w-5/12
+                    sm:w-6/12
+                  "
+                >
+                  City
+                </div>
+                <div class="text-gray-600 text-left md:w-7/12 sm:w-6/12">
+                  {{ itemDetails.city }}
+                </div>
+              </div>
+              <div class="flex items-center mt-3 flex-wrap">
+                <div
+                  class="
+                    text-left text-gray-600
+                    font-medium
+                    w-full
+                    lg:w-4/12
+                    md:w-5/12
+                    sm:w-6/12
+                  "
+                >
+                  State
+                </div>
+                <div class="text-gray-600 text-left md:w-7/12 sm:w-6/12">
+                  {{ itemDetails.states }}
+                </div>
+              </div>
+              <div class="flex items-center mt-3 flex-wrap">
+                <div
+                  class="
+                    text-left text-gray-600
+                    font-medium
+                    w-full
+                    lg:w-4/12
+                    md:w-5/12
+                    sm:w-6/12
+                  "
+                >
+                  Country
+                </div>
+                <div class="text-gray-600 text-left md:w-7/12 sm:w-6/12">
+                  {{ itemDetails.country }}
+                </div>
+              </div>
+              <div class="flex items-center mt-3 flex-wrap">
+                <div
+                  class="
+                    text-left text-gray-600
+                    font-medium
+                    w-full
+                    lg:w-4/12
+                    md:w-5/12
+                    sm:w-6/12
+                  "
+                >
+                  Zipcode
+                </div>
+                <div class="text-gray-600 text-left md:w-7/12 sm:w-6/12">
+                  {{ itemDetails.zipcode }}
+                </div>
+              </div>
             </div>
             <!-- Item Details End -->
 
             <div class="grid grid-cols-2 gap-4 mt-6">
               <!-- Ship it to me -->
               <div
-                class="flex items-center pl-4 rounded border border-gray-300"
+                class="flex items-center pl-4 rounded-lg border border-gray-300"
                 :class="[
                   deliveryType === '0' &&
-                    '!border-accent-80 !ring-accent-60 !ring-[6px] !ring-offset-accent-80 !ring-offset-1',
+                    '!border-accent-80 !ring-accent-60 !ring-[4.5px] !ring-offset-accent-80 !ring-offset-1',
                 ]"
               >
                 <input
@@ -402,10 +382,10 @@
 
               <!-- Hold for pickup -->
               <div
-                class="flex items-center pl-4 rounded border border-gray-300"
+                class="flex items-center pl-4 rounded-lg border border-gray-300"
                 :class="[
                   deliveryType === '1' &&
-                    '!border-accent-80 !ring-accent-60 !ring-[6px] !ring-offset-accent-80 !ring-offset-1',
+                    '!border-accent-80 !ring-accent-60 !ring-[4.5px] !ring-offset-accent-80 !ring-offset-1',
                 ]"
               >
                 <input
@@ -497,13 +477,15 @@
                 </p>
               </ValidationProvider>
               <div>
-                <label class="w-full font-bold text-sm">Mobile Number: </label>
+                <!-- <label class="block text-sm font-medium text-gray-800 my-1"
+                  >Mobile Number:</label
+                > -->
                 <div
                   class="block relative box-content h-12 w-full"
                   :class="!isUserPhoneValid && 'error'"
                 >
                   <vue-tel-input
-                    :inputOptions="{ placeholder: 'Phone Number' }"
+                    :inputOptions="{ placeholder: 'Mobile Number' }"
                     class="
                       relative
                       border
@@ -518,16 +500,12 @@
                     @validate="validateUserPhoneFormat"
                     v-bind="bindPhoneInputProps"
                   ></vue-tel-input>
-                  <div
-                    v-if="!isUserPhoneValid"
-                    class="
-                      vee-validation-error
-                      top-margin-05
-                      text-sm text-red-600
-                    "
-                  >
-                    {{ userPhoneValidationMessage }}
-                  </div>
+                </div>
+                <div
+                  v-if="!isUserPhoneValid"
+                  class="vee-validation-error my-2 text-sm text-red-600"
+                >
+                  {{ userPhoneValidationMessage }}
                 </div>
               </div>
               <ValidationProvider
@@ -571,7 +549,7 @@
                   {{ errors[0] }}
                 </p>
               </ValidationProvider>
-              <div class="grid grid-cols-3 lg:grid-cols-3 gap-4">
+              <div class="grid grid-cols-2 lg:grid-cols-2 gap-4">
                 <ValidationProvider
                   v-slot="{ errors }"
                   :rules="deliveryType === '0' ? 'max:28|required' : ''"
@@ -627,25 +605,26 @@
                     {{ errors[0] }}
                   </p>
                 </ValidationProvider>
-              </div>
-              <ValidationProvider
-                v-slot="{ errors }"
-                :rules="deliveryType === '0' ? 'max:28|required' : ''"
-                class="block"
-              >
-                <BaseInput
-                  v-model="autoCompleteAddress.country"
-                  label="Country"
-                  type="text"
-                  :class="errors.length > 0 && 'error'"
-                />
-                <p
-                  v-if="errors.length"
-                  class="vee-validation-error mt-2 text-sm text-red-600"
+                <ValidationProvider
+                  v-slot="{ errors }"
+                  :rules="deliveryType === '0' ? 'max:28|required' : ''"
+                  class="block"
                 >
-                  {{ errors[0] }}
-                </p>
-              </ValidationProvider>
+                  <BaseInput
+                    v-model="autoCompleteAddress.country"
+                    label="Country"
+                    type="text"
+                    :class="errors.length > 0 && 'error'"
+                  />
+                  <p
+                    v-if="errors.length"
+                    class="vee-validation-error mt-2 text-sm text-red-600"
+                  >
+                    {{ errors[0] }}
+                  </p>
+                </ValidationProvider>
+              </div>
+
               <div class="text-gray-500 flex flex-col space-y-4">
                 <div class="flex items-center space-x-3 ml-4">
                   <input
@@ -824,7 +803,6 @@ export default {
       state: "",
       country: "",
       zipcode: "",
-      // phoneNo: "",
     },
     bindPhoneInputProps: {
       mode: "international",
@@ -905,7 +883,7 @@ export default {
     } else {
       this.$nextTick(() => {
         this.$router.push({
-          name: "found-items",
+          name: "lost-items",
         });
       });
     }
@@ -1126,7 +1104,7 @@ export default {
     closeDialog() {
       this.showDialog = false;
       this.$nextTick(() => {
-        this.$router.push({ path: "/found-items" });
+        this.$router.push({ path: "/lost-items" });
       });
     },
   },
