@@ -4,6 +4,7 @@ export const state = () => ({
     selectedRate: {},
     insuranceValue: "",
     signature: null,
+    labelUrl: ""
 })
 
 export const getters = {
@@ -21,6 +22,9 @@ export const getters = {
     },
     signature: (state) => {
         return state.signature;
+    },
+    labelUrl: (state) => {
+        return state.labelUrl;
     }
 }
 
@@ -42,5 +46,8 @@ export const mutations = {
     },
     SET_SIGNATURE(state, signature) {
         state.signature = signature;
+    },
+    SET_LABEL_URL(state, labelUrl) {
+        state.labelUrl = labelUrl;
     },
 }

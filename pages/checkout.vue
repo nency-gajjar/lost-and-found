@@ -317,19 +317,49 @@ export default {
   methods: {
     async confirmAndPay() {
       this.isLoading = true;
-      try {
-        const result = await this.$stripe.confirmCardPayment(
-          "pi_3M7LYWAFBONdKhPx0ymeav5d_secret_27DJKW7f5SNggcwBaJmTY6kDB",
-          {
-            payment_method: {
-              card: this.card,
-            },
-          }
-        );
-      } catch (error) {
-        this.$toast.error(error);
-        this.isLoading = false;
+      // try {
+      //   const result = await this.$stripe.confirmCardPayment(
+      //     "pi_3M7LYWAFBONdKhPx0ymeav5d_secret_27DJKW7f5SNggcwBaJmTY6kDB",
+      //     {
+      //       payment_method: {
+      //         card: this.card,
+      //       },
+      //     }
+      //   );
+      // } catch (error) {
+      //   this.$toast.error(error);
+      //   this.isLoading = false;
+      // }
+      let shippingRates = JSON.parse(JSON.stringify(this.$store.getters['shipment/shippingRates']));
+      let selectedRate = JSON.parse(JSON.stringify(this.$store.getters['shipment/selectedRate']));
+      let insuranceValue = JSON.parse(JSON.stringify(this.$store.getters['shipment/insuranceValue']));
+      let params = {
+        carrier_accounts: selectedRate.carrier_account_id,
+        service: selectedRate.service,
+        to_address: shippingRates.to_address.id,
+        from_address: shippingRates.from_address.id,
+        parcel: shippingRates.parcel.id,
+        delivery_confirmation: false,
+        insurance: Number(insuranceValue)
       }
+      this.$axios
+      .post("/createShipping", params)
+      .then((response) => {
+        if (response.status === 200) {
+          this.$store.commit("shipment/SET_LABEL_URL", response.data.postage_label.label_url);
+          this.isLoading = false;
+          this.$nextTick(() => {
+            this.$router.push({
+              name: "success"
+            });
+          });
+        }
+      })
+      .catch((error) => {
+        console.log(error);
+        this.$toast.error("Something went wrong!");
+        this.isLoading = false;
+      });
     },
     stepBack() {
       this.$nextTick(() => {
