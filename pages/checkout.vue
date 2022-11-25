@@ -240,46 +240,55 @@ export default {
     };
   },
   mounted() {
-    this.checkoutDetail = {
-      selectedRate: JSON.parse(JSON.stringify(this.$store.getters['shipment/selectedRate'])),
-      insuranceValue: JSON.parse(JSON.stringify(this.$store.getters['shipment/insuranceValue'])) || null,
-      shippingRates: JSON.parse(JSON.stringify(this.$store.getters['shipment/shippingRates'])),
-      lableDetails: JSON.parse(JSON.stringify(this.$store.getters['shipment/lableDetails'])),
-      signature: JSON.parse(JSON.stringify(this.$store.getters['shipment/signature'])),
-    };
-
-    const elements = this.$stripe.elements({
-      fonts: [
-        {
-          cssSrc: "https://fonts.googleapis.com/css?family=Rubik:500",
-        },
-      ],
-    });
-    const style = {
-      base: {
-        color: "#361C5D",
-        fontFamily: "Rubik, sans-serif",
-        fontWeight: 500,
-        fontSmoothing: "antialiased",
-        fontSize: "16px",
-        "::placeholder": {
+    if(this.$route.params.fromRatePage){
+      this.checkoutDetail = {
+        selectedRate: JSON.parse(JSON.stringify(this.$store.getters['shipment/selectedRate'])),
+        insuranceValue: JSON.parse(JSON.stringify(this.$store.getters['shipment/insuranceValue'])) || null,
+        shippingRates: JSON.parse(JSON.stringify(this.$store.getters['shipment/shippingRates'])),
+        lableDetails: JSON.parse(JSON.stringify(this.$store.getters['shipment/lableDetails'])),
+        signature: JSON.parse(JSON.stringify(this.$store.getters['shipment/signature'])),
+      };
+  
+      const elements = this.$stripe.elements({
+        fonts: [
+          {
+            cssSrc: "https://fonts.googleapis.com/css?family=Rubik:500",
+          },
+        ],
+      });
+      const style = {
+        base: {
           color: "#361C5D",
+          fontFamily: "Rubik, sans-serif",
+          fontWeight: 500,
+          fontSmoothing: "antialiased",
+          fontSize: "16px",
+          "::placeholder": {
+            color: "#361C5D",
+          },
         },
-      },
-      invalid: {
-        fontFamily: "Rubik, sans-serif",
-        fontWeight: 500,
-        color: "#dc2626",
-        iconColor: "#dc2626",
-      },
-    };
-    const card = elements.create("card", {
-      style,
-      iconStyle: "solid",
-      hidePostalCode: true,
-    });
-    card.mount("#card-element");
-    this.card = card;
+        invalid: {
+          fontFamily: "Rubik, sans-serif",
+          fontWeight: 500,
+          color: "#dc2626",
+          iconColor: "#dc2626",
+        },
+      };
+      const card = elements.create("card", {
+        style,
+        iconStyle: "solid",
+        hidePostalCode: true,
+      });
+      card.mount("#card-element");
+      this.card = card;
+    }
+    else{
+      this.$nextTick(() => {
+        this.$router.push({
+          name: "item-delivery"
+        });
+      });
+    }
   },
   computed: {
     packageDimensionsString() {
@@ -324,7 +333,11 @@ export default {
     },
     stepBack() {
       this.$nextTick(() => {
-        this.$router.go(-1);
+        this.$router.push({
+          name: "rate-quotes",
+          query: { id: this.$route.query.id },
+          params: { fromItemDelivery: true }
+        });
       });
     },
   },

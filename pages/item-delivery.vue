@@ -995,6 +995,11 @@ export default {
         zipcode: "",
       };
     },
+    formatMobileNumber2(phoneNumber) {
+      let arr = phoneNumber.split(" ");
+      let countryCode = arr.shift();
+      return countryCode + " " + arr.join("");
+    },
     formatMobileNumber(phoneNumber) {
       let arr = phoneNumber.split(" ");
       arr.shift();
@@ -1045,10 +1050,10 @@ export default {
           params.receiver_zipcode = this.autoCompleteAddress.zipcode;
         if (
           this.tempReceiverDetails.receiver_mobile_no !==
-          this.formatMobileNumber(this.itemDetails.receiver_mobile_no)
+          this.formatMobileNumber2(this.receiverMobileNo)
         )
-          params.receiver_mobile_no = this.formatMobileNumber(
-            this.itemDetails.receiver_mobile_no
+          params.receiver_mobile_no = this.formatMobileNumber2(
+            this.receiverMobileNo
           );
 
         params_rateQuotes.name = "Prem Panwala";
@@ -1091,36 +1096,17 @@ export default {
                   if (this.deliveryType === "1") {
                     this.showDialog = true;
                   } else {
-                    this.$axios
-                      .post("/getshippingrates", params_rateQuotes)
-                      .then((response) => {
-                        if (response.status === 200) {
-                          this.isLoading = false;
-                          let shippingRates = {
-                            buyer_address: response.data.buyer_address,
-                            from_address: response.data.from_address,
-                            id: response.data.id,
-                            parcel: response.data.parcel,
-                            rates: response.data.rates,
-                            return_address: response.data.return_address,
-                            to_address: response.data.to_address,
-                          };
-                          this.$store.commit("shipment/SET_SHIPPING_RATES", shippingRates);
-                          this.$store.commit("shipment/SET_LABLE_DETAILS", params_rateQuotes);
-                          if (this.insuranceValue) {
-                            this.$store.commit("shipment/SET_INSURANCE_VALUE", this.insuranceValue);
-                          }
-                          this.$nextTick(() => {
-                            this.$router.push({
-                              name: "rate-quotes",
-                              query: { id: this.itemId },
-                            });
-                          });
-                        }
-                      })
-                      .catch((error) => {
-                        console.log(error);
+                    this.$store.commit("shipment/SET_LABLE_DETAILS", params_rateQuotes);
+                    if (this.insuranceValue) {
+                      this.$store.commit("shipment/SET_INSURANCE_VALUE", this.insuranceValue);
+                    }
+                    this.$nextTick(() => {
+                      this.$router.push({
+                        name: "rate-quotes",
+                        query: { id: this.itemId },
+                        params: { fromItemDelivery: true }
                       });
+                    });
                   }
                 }
               })
