@@ -556,11 +556,15 @@
           <BaseButton
             class="flex-auto"
             :is-loading="isLoading['Approve']"
-            @click="handleItemApprove('Approve')"
+            @click="handleItemApprove()"
           >
             Approve
           </BaseButton>
-          <BaseButton class="flex-auto" @click="showItemRejectDialog = true">
+          <BaseButton
+            class="flex-auto"
+            @click="showItemRejectDialog = true"
+            :disabled="isLoading['Approve']"
+          >
             Reject
           </BaseButton>
         </div>
@@ -682,7 +686,7 @@ export default {
     }
   },
   methods: {
-    async handleItemApprove(type) {
+    async handleItemApprove() {
       await this.handleUpdateLostItem("Approve");
     },
     async handleItemReject() {

@@ -203,92 +203,40 @@
               <td class="py-3 px-2 text-center">
                 <div class="flex item-center gap-3">
                   <template v-if="index < originalItemsLength">
-                    <button
+                    <BaseButton
                       v-show="item.isEdit"
+                      class="!capitalize !px-4 !py-2 !mr-1 !mb-1"
+                      varient="green"
                       @click="editItemDesc(item)"
-                      class="
-                        bg-green-600
-                        text-white
-                        font-bold
-                        text-sm
-                        px-4
-                        py-2
-                        rounded
-                        shadow
-                        hover:shadow-md
-                        outline-none
-                        focus:outline-none
-                        mr-1
-                        mb-1
-                      "
-                      type="button"
                     >
                       Update
-                    </button>
-                    <button
-                      @click="enableFields(item.id)"
+                    </BaseButton>
+                    <BaseButton
                       v-show="!item.isEdit"
-                      class="
-                        bg-blue-500
-                        text-white
-                        font-bold
-                        text-sm
-                        px-4
-                        py-2
-                        rounded
-                        shadow
-                        hover:shadow-md
-                        outline-none
-                        focus:outline-none
-                        mr-1
-                        mb-1
-                      "
-                      type="button"
+                      class="!capitalize !px-4 !py-2 !mr-1 !mb-1"
+                      varient="blue"
+                      @click="enableFields(item.id)"
                     >
                       Edit
-                    </button>
+                    </BaseButton>
                   </template>
                   <BaseButton
-                    class="
-                      !capitalize
-                      !bg-red-500
-                      !px-4
-                      !py-2
-                      !outline-none
-                      !ring-0
-                      !focus:outline-none
-                      !mr-1
-                      !mb-1
-                    "
-                    type="button"
                     v-if="index < originalItemsLength"
-                    @click="deleteItemDesc(item)"
                     :is-loading="isRemovingItem[item.id]"
-                    >Delete</BaseButton
+                    class="!capitalize !px-4 !py-2 !mr-1 !mb-1"
+                    varient="red"
+                    @click="deleteItemDesc(item)"
                   >
-                  <button
+                    Delete
+                  </BaseButton>
+                  <BaseButton
                     v-else
+                    class="!capitalize !px-4 !py-2 !mr-1 !mb-1"
                     @click="items.splice(index, 1)"
-                    class="
-                      bg-gray bg-white
-                      hover:bg-gray-100
-                      text-gray-600 text-sm
-                      font-bold
-                      px-4
-                      py-2
-                      rounded
-                      shadow
-                      hover:shadow-md
-                      outline-none
-                      border border-gray-300
-                      focus:outline-none
-                      mr-1
-                      mb-1
-                    "
-                    type="button"
+                    varient="gray"
                   >
                     Remove
-                  </button>
+                  </BaseButton>
                 </div>
               </td>
             </tr>
@@ -301,35 +249,20 @@
           <BaseLoader :needFullScreen="false" />
         </div>
         <div class="flex justify-start my-5 ml-2">
-          <button
-            class="
-              bg-green-600
-              text-white
-              active:bg-green-700
-              font-bold
-              text-sm
-              px-4
-              py-2
-              rounded
-              shadow
-              hover:shadow-md
-              outline-none
-              focus:outline-none
-              mr-1
-              mb-1
-            "
-            type="button"
+          <BaseButton
+            class="!capitalize !px-4 !py-2 !mr-1 !mb-1"
+            varient="green"
             @click="validate().then(addNewItem)"
           >
             + Add New Item
-          </button>
+          </BaseButton>
         </div>
       </div>
       <template v-slot:footer>
         <BaseButton
           :is-loading="isLoading"
           @click="validate().then(onSave)"
-          button-type="submit"
+          type="submit"
           v-show="enableSaveButton"
         >
           Save

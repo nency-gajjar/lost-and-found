@@ -367,7 +367,7 @@
                 class="flex items-center pl-4 rounded border border-gray-300"
                 :class="[
                   deliveryType === '0' &&
-                    '!border-accent-80 !ring-accent-60 !ring-[6px] !ring-offset-accent-80 !ring-offset-1',
+                    'border-primary-100 ring-primary-80 ring-[6px] ring-offset-primary-100 ring-offset-1',
                 ]"
               >
                 <input
@@ -379,10 +379,10 @@
                   class="
                     w-4
                     h-4
-                    text-accent-100
+                    text-primary-100
                     bg-gray-100
                     border-gray-300
-                    focus:ring-accent-200 focus:ring-2
+                    focus:ring-primary-200 focus:ring-2
                   "
                 />
                 <label
@@ -405,7 +405,7 @@
                 class="flex items-center pl-4 rounded border border-gray-300"
                 :class="[
                   deliveryType === '1' &&
-                    '!border-accent-80 !ring-accent-60 !ring-[6px] !ring-offset-accent-80 !ring-offset-1',
+                    'border-primary-100 ring-primary-80 ring-[6px] ring-offset-primary-100 ring-offset-1',
                 ]"
               >
                 <input
@@ -418,10 +418,10 @@
                   class="
                     w-4
                     h-4
-                    text-accent-100
+                    text-primary-100
                     bg-gray-100
                     border-gray-300
-                    focus:ring-accent-200 focus:ring-2
+                    focus:ring-primary-200 focus:ring-2
                   "
                 />
                 <label
@@ -717,7 +717,7 @@
               fields and try submitting again.
             </div>
             <div class="flex justify-end">
-              <BaseButton :is-loading="isLoading" button-type="submit">
+              <BaseButton :is-loading="isLoading" type="submit">
                 Submit
               </BaseButton>
             </div>

@@ -58,11 +58,7 @@
                 <span class="font-medium">Oops!</span> Please fill all required
                 fields and try submitting again.
               </div>
-              <BaseButton
-                :is-loading="isLoading"
-                button-type="submit"
-                class="w-full"
-              >
+              <BaseButton :is-loading="isLoading" type="submit" class="w-full">
                 Send Email
               </BaseButton>
             </form>
@@ -132,10 +128,9 @@ export default {
           })
           .catch((error) => {
             this.isLoading = false;
-            if(error.response.status === 400){
+            if (error.response.status === 400) {
               this.$toast.error(error.response.data.data);
-            }
-            else{
+            } else {
               this.$toast.error("Something went wrong! Please try again.");
             }
           });

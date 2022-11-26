@@ -13,9 +13,9 @@
 export default {
   inheritAttrs: false,
   props: {
-    icon: { type: String, default: "account" },
-    color: { type: String, default: "white" },
-    type: { type: String, default: "fas" },
+    icon: { type: String, default: "account", required: false },
+    color: { type: String, default: "white", required: false },
+    type: { type: String, default: "fas", required: false },
     size: {
       type: String,
       default: "1x",
