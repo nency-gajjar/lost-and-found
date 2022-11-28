@@ -18,7 +18,7 @@ export const actions = {
 
 export const mutations = {
     SET_ITEM_DETAILS(state, itemDetails) {
-        localStorage.setItem('itemDetails', JSON.stringify(itemDetails));
+        // localStorage.setItem('itemDetails', JSON.stringify(itemDetails));
         state.itemDetails = itemDetails
     },
     SET_ITEM_CONFIRMATION_DETAILS(state, itemConfirmationDetails) {

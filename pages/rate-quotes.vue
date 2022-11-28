@@ -442,6 +442,7 @@
             </div>
           </div>
           <BaseButton
+            :disabled="Object.keys(selectedRate).length < 1"
             class="grow font-semibold text-md w-full md:max-w-sm mt-5 mx-auto"
             @click="proceedToCheckout"
           >
@@ -500,32 +501,68 @@ export default {
     },
     selecteRateQuote(item) {
       this.selectedRate = item;
-      localStorage.setItem("SelectedRate", JSON.stringify(item));
+      this.$store.commit('shipment/SET_SELECTED_RATE', item);
+      // localStorage.setItem("SelectedRate", JSON.stringify(item));
     },
     proceedToCheckout() {
-      localStorage.setItem("Signature", this.signature);
-      this.$router.push({
-        path: "/checkout",
-        query: { id: this.$route.query.id },
+      // localStorage.setItem("Signature", this.signature);
+      this.$store.commit('shipment/SET_SIGNATURE', this.signature);
+      this.$nextTick(() => {
+        this.$router.push({
+          name: "checkout",
+          params: { fromRatePage: true },
+          query: { id: this.$route.query.id },
+        });
       });
     },
     stepBack() {
       this.$nextTick(() => {
-        this.$router.go(-1);
+        this.$router.push({
+          name: "item-delivery",
+          query: { id: this.$route.query.id },
+        });
       });
     },
   },
   mounted() {
-    let shippingRates = JSON.parse(localStorage.getItem("ShippingRates"));
-    this.rateQuoteItems = shippingRates.rates;
-    let lableDetails = JSON.parse(localStorage.getItem("LableDetails"));
-    lableDetails.category = "My Own Packaging";
-    lableDetails.type = "Box";
-    if (localStorage.getItem("InsuranceValue")) {
-      lableDetails.insuranceValue = localStorage.getItem("InsuranceValue");
+    if(this.$route.params.fromItemDelivery){
+      this.$axios
+      .post("/getshippingrates", JSON.parse(JSON.stringify(this.$store.getters['shipment/lableDetails'])))
+      .then((response) => {
+        if (response.status === 200) {
+          let shippingRates = {
+            buyer_address: response.data.buyer_address,
+            from_address: response.data.from_address,
+            id: response.data.id,
+            parcel: response.data.parcel,
+            rates: response.data.rates,
+            return_address: response.data.return_address,
+            to_address: response.data.to_address,
+          };
+          this.$store.commit("shipment/SET_SHIPPING_RATES", shippingRates);
+          let ratesQuotes = JSON.parse(JSON.stringify(this.$store.getters['shipment/shippingRates']));
+          this.rateQuoteItems = ratesQuotes.rates;
+        }
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+      let lableDetails = JSON.parse(JSON.stringify(this.$store.getters['shipment/lableDetails']));
+      lableDetails.category = "My Own Packaging";
+      lableDetails.type = "Box";
+      if (this.$store.getters['shipment/insuranceValue']) {
+        lableDetails.insuranceValue = JSON.parse(JSON.stringify(this.$store.getters['shipment/insuranceValue']));
+      }
+      this.lableDetails = lableDetails;
+      this.sortRateQuotes(0);
     }
-    this.lableDetails = lableDetails;
-    this.sortRateQuotes(0);
+    else{
+      this.$nextTick(() => {
+        this.$router.push({
+          name: "item-delivery"
+        });
+      });
+    }
   },
 };
 </script>

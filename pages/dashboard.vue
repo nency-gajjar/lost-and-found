@@ -553,10 +553,10 @@ export default {
           });
         });
       } else {
-        this.$store.commit("item/SET_ITEM_DETAILS", {
-          ...item,
-          onlyDisplay: true,
-        });
+        // this.$store.commit("item/SET_ITEM_DETAILS", {
+        //   ...item,
+        //   onlyDisplay: true,
+        // });
         this.$nextTick(() => {
           this.$router.push({
             path: "/detail-confirmation",

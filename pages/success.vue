@@ -55,7 +55,7 @@
         Thank you for choosing Lost and Found! Your next step is to print the
         label, attach it to your package and wait for pickup.
       </p>
-      <BaseButton> Print Label </BaseButton>
+      <BaseButton @click="printLabel"> Print Label </BaseButton>
     </div>
     <!-- <p class="text-gray-800">
       Optionally, you can schedule a pickup for your package:
@@ -74,7 +74,38 @@
 </template>
 
 <script>
-export default {};
+export default {
+  data() {
+    return {
+      labelUrl: "",
+    }
+  },
+  mounted(){
+    this.labelUrl = JSON.parse(JSON.stringify(this.$store.getters['shipment/labelUrl']));
+  },
+  methods: {
+    printLabel() {
+      const mywindow = window.open("", "PRINT", "height=1200,width=600");
+      mywindow.document.write("<html><head>");
+      mywindow.document.write(`<style>
+        div{
+          display: flex;
+          justify-content: center;
+        }
+        img{
+          width: 500px;
+        }
+      </style>`);
+      mywindow.document.write("</head><body>");
+      mywindow.document.write("<div><img src="+this.labelUrl+"></div>");
+      mywindow.document.write("</body></html>");
+      setTimeout(() => {
+        mywindow.print();
+        setTimeout(mywindow.close, 0);
+      }, 2000);
+    },
+  },
+};
 </script>
 
 <style>

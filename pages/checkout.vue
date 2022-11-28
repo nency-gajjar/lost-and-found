@@ -240,12 +240,24 @@ export default {
     };
   },
   mounted() {
+    if(this.$route.params.fromRatePage){
     this.checkoutDetail = {
-      selectedRate: JSON.parse(localStorage.getItem("SelectedRate")),
-      insuranceValue: localStorage.getItem("InsuranceValue") || null,
-      shippingRates: JSON.parse(localStorage.getItem("ShippingRates")),
-      lableDetails: JSON.parse(localStorage.getItem("LableDetails")),
-      signature: JSON.parse(localStorage.getItem("Signature")),
+      selectedRate: JSON.parse(
+        JSON.stringify(this.$store.getters["shipment/selectedRate"])
+      ),
+      insuranceValue:
+        JSON.parse(
+          JSON.stringify(this.$store.getters["shipment/insuranceValue"])
+        ) || null,
+      shippingRates: JSON.parse(
+        JSON.stringify(this.$store.getters["shipment/shippingRates"])
+      ),
+      lableDetails: JSON.parse(
+        JSON.stringify(this.$store.getters["shipment/lableDetails"])
+      ),
+      signature: JSON.parse(
+        JSON.stringify(this.$store.getters["shipment/signature"])
+      ),
     };
 
     const elements = this.$stripe.elements({
@@ -280,6 +292,15 @@ export default {
     });
     card.mount("#card-element");
     this.card = card;
+
+    }
+    else{
+      this.$nextTick(() => {
+        this.$router.push({
+          name: "item-delivery"
+        });
+      });
+    }
   },
   computed: {
     packageDimensionsString() {
@@ -308,23 +329,81 @@ export default {
   methods: {
     async confirmAndPay() {
       this.isLoading = true;
-      try {
-        const result = await this.$stripe.confirmCardPayment(
-          "pi_3M7LYWAFBONdKhPx0ymeav5d_secret_27DJKW7f5SNggcwBaJmTY6kDB",
-          {
-            payment_method: {
-              card: this.card,
-            },
+      let totalPrice = 5000;
+      this.$axios
+        .post("/createPaymentIntent", {
+          amount: totalPrice,
+        })
+        .then(async (response) => {
+          try {
+            const result = await this.$stripe.confirmCardPayment(
+              response.data.client_secret,
+              {
+                payment_method: {
+                  card: this.card,
+                },
+              }
+            );
+            if (result.paymentIntent.status) {
+              let shippingRates = JSON.parse(
+                JSON.stringify(this.$store.getters["shipment/shippingRates"])
+              );
+              let selectedRate = JSON.parse(
+                JSON.stringify(this.$store.getters["shipment/selectedRate"])
+              );
+              let insuranceValue = JSON.parse(
+                JSON.stringify(this.$store.getters["shipment/insuranceValue"])
+              );
+              let params = {
+                carrier_accounts: selectedRate.carrier_account_id,
+                service: selectedRate.service,
+                to_address: shippingRates.to_address.id,
+                from_address: shippingRates.from_address.id,
+                parcel: shippingRates.parcel.id,
+                delivery_confirmation: false,
+                insurance: Number(insuranceValue),
+              };
+              this.$axios
+                .post("/createShipping", params)
+                .then((response) => {
+                  if (response.status === 200) {
+                    this.$store.commit(
+                      "shipment/SET_LABEL_URL",
+                      response.data.postage_label.label_url
+                    );
+                    this.isLoading = false;
+                    this.$nextTick(() => {
+                      this.$router.push({
+                        name: "success",
+                      });
+                    });
+                  }
+                })
+                .catch((error) => {
+                  console.log(error);
+                  this.$toast.error("Something went wrong!");
+                  this.isLoading = false;
+                });
+            }
+            this.isLoading = false;
+          } catch (error) {
+            console.log(error);
+            this.$toast.error(error);
+            this.isLoading = false;
           }
-        );
-      } catch (error) {
-        this.$toast.error(error);
-        this.isLoading = false;
-      }
+        })
+        .catch((err) => {
+          console.log(err);
+          this.isLoading = true;
+        });
     },
     stepBack() {
       this.$nextTick(() => {
-        this.$router.go(-1);
+        this.$router.push({
+          name: "rate-quotes",
+          query: { id: this.$route.query.id },
+          params: { fromItemDelivery: true },
+        });
       });
     },
   },
