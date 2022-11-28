@@ -104,7 +104,7 @@
             </div>
           </div>
           <div class="flex items-center justify-center m-8">
-            <BaseButton @click="applyFilters" class="sm:py-4 sm:px-14">
+            <BaseButton @click="applyFilters" class="sm:h-12">
               Search
             </BaseButton>
           </div>
@@ -195,34 +195,11 @@
                     <span class="line-clamp-1"> {{ item.address }}</span>
                   </li>
                 </ul>
-                <button
-                  type="button"
+                <BaseButton
+                  class="w-full px-5 py-2 !capitalize"
                   @click="viewItem(item)"
-                  class="
-                    w-full
-                    font-medium
-                    text-sm
-                    px-5
-                    py-2
-                    rounded-lg
-                    button
-                    focus:outline-none
-                    focus:ring-2
-                    focus:ring-offset-2
-                    focus:ring-offset-primary-60
-                    transition-all
-                    font-display
-                    disabled:cursor-not-allowed
-                    bg-accent-100
-                    text-white
-                    focus:ring-accent-100
-                    shadow-accent
-                    hover:bg-accent-200
-                  "
+                  >View Item</BaseButton
                 >
-                  <span class="button__text"> View Item </span>
-                </button>
-                <!-- </div> -->
               </div>
             </div>
           </VueSlickCarousel>

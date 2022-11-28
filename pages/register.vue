@@ -78,11 +78,7 @@
                 <span class="font-medium">Oops!</span> Please fill all required
                 fields and try submitting again.
               </div>
-              <BaseButton
-                :is-loading="isLoading"
-                button-type="submit"
-                class="w-full"
-              >
+              <BaseButton :is-loading="isLoading" type="submit" class="w-full">
                 Register
               </BaseButton>
               <p class="text-sm font-light text-gray-500 cursor-pointer">
