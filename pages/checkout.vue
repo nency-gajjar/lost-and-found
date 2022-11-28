@@ -329,7 +329,7 @@ export default {
   methods: {
     async confirmAndPay() {
       this.isLoading = true;
-      let totalPrice = Number(Math.ceil(this.totalPrice.split('$')[1]));
+      let totalPrice = (Number(this.totalPrice.split('$')[1]).toFixed(2)) * 100; // convert usd to cents
       this.$axios
         .post("/createPaymentIntent", {
           amount: totalPrice,
@@ -344,7 +344,7 @@ export default {
                 },
               }
             );
-            if (result.paymentIntent.status) {
+            if (result.paymentIntent.status === 'succeeded') {
               let shippingRates = JSON.parse(
                 JSON.stringify(this.$store.getters["shipment/shippingRates"])
               );
