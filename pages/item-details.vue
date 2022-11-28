@@ -14,32 +14,39 @@
       "
       style="box-shadow: rgba(54, 28, 93, 0.04) -10px 18px 32px"
     >
-      <div v-if="!isLoadingItemDetails || Object.keys(itemDetails).length > 0">
+      <div v-if="!isLoadingItemDetails || Object.keys(this.itemDetails).length > 0">
         <ValidationObserver v-slot="{ validate }" ref="observer">
           <form @submit.prevent="validate().then(onSubmit)">
             <div class="sm:p-6 p-4 space-y-4">
-              <div class="form-title">
-                <h1
-                  class="
-                    w-full
-                    my-2
-                    text-xl
-                    font-bold
-                    leading-tight
-                    text-gray-700
-                  "
-                >
-                  {{ senderFormTitle }}
-                </h1>
-                <div class="flex justify-start">
-                  <span
+              <div class="form-title flex justify-between items-center">
+                <div>
+                  <h1
                     class="
-                      w-20
-                      border-t-4 border-solid border-orange-200
-                      inline-block
-                      mb-3
+                      w-full
+                      my-2
+                      text-xl
+                      font-bold
+                      leading-tight
+                      text-gray-700
                     "
-                  ></span>
+                  >
+                    {{ senderFormTitle }}
+                  </h1>
+                  <div class="flex justify-start">
+                    <span
+                      class="
+                        w-20
+                        border-t-4 border-solid border-orange-200
+                        inline-block
+                        mb-3
+                      "
+                    ></span>
+                  </div>
+                </div>
+                <div v-if="showResetButton">
+                  <BaseButton @click="resetItemDetailsStore">
+                    Reset
+                  </BaseButton>
                 </div>
               </div>
 
@@ -1228,6 +1235,7 @@ import moment from "moment";
 
 export default {
   data: () => ({
+    showResetButton: false,
     itemDetails: {},
     imgSrc: "",
     showCrop: false,
@@ -1358,6 +1366,232 @@ export default {
     },
   },
   methods: {
+    resetItemDetailsStore(){
+      this.$store.commit("item/SET_ITEM_DETAILS", {});
+      this.getItemsData();
+    },
+    async getItemsData(){
+      this.showResetButton = false;
+      this.itemDetails = JSON.parse(JSON.stringify(this.$store.getters['item/itemDetails']));
+      this.mobileDevice = this.isMobile();
+      await this.getItemDescriptionOptions();
+      window.addEventListener("keydown", () => {
+        this.showValidateAlert = false;
+      });
+      window.addEventListener("click", () => {
+        this.showValidateAlert = false;
+      });
+      if (this.$route.query.id) {
+        this.isLoadingItemDetails = true;
+        this.foundItemId = this.$route.query.id;
+        this.senderFormTitle = "EDIT SENDER'S DETAILS";
+        this.foundItemFormTitle = "EDIT FOUND ITEM'S DETAILS";
+        this.$axios
+          .get("/getsinglelostitem?id=" + this.$route.query.id)
+          .then((response) => {
+            if (response.status === 200) {
+              this.isLoadingItemDetails = false;
+              let data = response.data.data.Item;
+              let index = this.venueOptions.indexOf(data.venu_type) !== -1;
+              if (index) this.venueType = data.venu_type;
+              else {
+                this.venueType = "Other";
+                this.manualVenue = data.venu_type;
+              }
+
+              var index1 =
+                this.itemDescriptionOptions.indexOf(data.item_description) !== -1;
+              if (index1) this.itemDescription = data.item_description;
+              else {
+                this.itemDescription = "Other";
+                this.itemDescriptionManually = true;
+                this.manualItemDescription = data.item_description;
+              }
+              this.foundDate = new Date(data.datse);
+              this.venueEmail = data.venue_email;
+              this.venueSecondaryEmail = data.secondary_email;
+              this.employeeMobileNo = data.employee_mobile_no;
+              this.addressArr.unshift(data.address);
+              this.address = data.address;
+              this.autoCompleteAddress.address = this.addressArr[0];
+              this.autoCompleteAddress.phoneNo = data.venue_phone_no;
+              this.autoCompleteAddress.city = data.city;
+              this.autoCompleteAddress.state = data.states;
+              this.autoCompleteAddress.country = data.country;
+              this.autoCompleteAddress.zipcode = data.zipcode;
+              this.image = data.image;
+              this.packageType = data.package_type;
+              this.weight = data.weight_pounds;
+              this.weightOunces = data.weight_ounces;
+              this.itemLength = data.item_length;
+              this.itemWidth = data.item_width;
+              this.itemHeight = data.item_height;
+              this.itemStatus =
+                data.item_status === 0
+                  ? "Claimed (You know the actual owner of this item)"
+                  : "Unclaimed (You do not know the actual owner of this item)";
+
+              if (data.item_status === 0) {
+                this.receiverName = data.receiver_name;
+                this.receiverEmail = data.receiver_email;
+                this.receiverMobileNo = data.receiver_mobile_no;
+              }
+            }
+          })
+          .catch((error) => {
+            this.$toast.error("Something went wrong! Please try again.");
+            console.log(error);
+          });
+      } else if (this.$route.params?.itemDetails) {
+        this.isLoadingItemDetails = false;
+        this.senderFormTitle = "EDIT SENDER'S DETAILS";
+        this.foundItemFormTitle = "EDIT FOUND ITEM'S DETAILS";
+        let data = this.$route.params.itemDetails;
+        var index = this.venueOptions.indexOf(data.venu_type) !== -1;
+        if (index) this.venueType = data.venu_type;
+        else {
+          this.venueType = "Other";
+          this.manualVenue = data.venu_type;
+        }
+        var index1 =
+          this.itemDescriptionOptions.indexOf(data.item_description) !== -1;
+        if (index1) this.itemDescription = data.item_description;
+        else {
+          this.itemDescription = "Other";
+          this.itemDescriptionManually = true;
+          this.manualItemDescription = data.item_description;
+        }
+
+        if (data.foundItemId) {
+          this.foundItemId = data.foundItemId;
+        } else {
+          this.foundItemId = data.id;
+        }
+        this.foundDate = new Date(data.datse);
+        this.venueEmail = data.venue_email;
+        this.venueSecondaryEmail = data.secondary_email;
+        this.employeeMobileNo = data.employee_mobile_no;
+        this.addressArr.unshift(data.address);
+        this.address = data.address;
+        this.autoCompleteAddress.address = this.addressArr[0];
+        this.autoCompleteAddress.phoneNo = data.venue_phone_no;
+        this.autoCompleteAddress.city = data.city;
+        this.autoCompleteAddress.state = data.states;
+        this.autoCompleteAddress.country = data.country;
+        this.autoCompleteAddress.zipcode = data.zipcode;
+        this.imageKey = data.image_key;
+        this.image = data.image;
+        this.packageType = data.package_type;
+        this.weight = data.weight_pounds;
+        this.weightOunces = data.weight_ounces;
+        this.itemLength = data.item_length;
+        this.itemWidth = data.item_width;
+        this.itemHeight = data.item_height;
+        this.itemStatus =
+          data.item_status === 0
+            ? "Claimed (You know the actual owner of this item)"
+            : "Unclaimed (You do not know the actual owner of this item)";
+
+        if (data.item_status === 0) {
+          this.receiverName = data.receiver_name;
+          this.receiverEmail = data.receiver_email;
+          this.receiverMobileNo = data.receiver_mobile_no;
+        }
+        this.isLoadingItemDetails = false;
+      }
+      else if(Object.keys(this.itemDetails).length > 0){
+        this.showResetButton = true;
+        this.isLoadingItemDetails = false;
+        this.senderFormTitle = "EDIT SENDER'S DETAILS";
+        this.foundItemFormTitle = "EDIT FOUND ITEM'S DETAILS";
+        let data = JSON.parse(JSON.stringify(this.$store.getters['item/itemDetails']));
+        var index = this.venueOptions.indexOf(data.venu_type) !== -1;
+        if (index) this.venueType = data.venu_type;
+        else {
+          this.venueType = "Other";
+          this.manualVenue = data.venu_type;
+        }
+        var index1 =
+          this.itemDescriptionOptions.indexOf(data.item_description) !== -1;
+        if (index1) this.itemDescription = data.item_description;
+        else {
+          this.itemDescription = "Other";
+          this.itemDescriptionManually = true;
+          this.manualItemDescription = data.item_description;
+        }
+
+        if (data.foundItemId) {
+          this.foundItemId = data.foundItemId;
+        } else {
+          this.foundItemId = data.id;
+        }
+        this.foundDate = new Date(data.datse);
+        this.venueEmail = data.venue_email;
+        this.venueSecondaryEmail = data.secondary_email;
+        this.employeeMobileNo = data.employee_mobile_no;
+        this.addressArr.unshift(data.address);
+        this.address = data.address;
+        this.autoCompleteAddress.address = this.addressArr[0];
+        this.autoCompleteAddress.phoneNo = data.venue_phone_no;
+        this.autoCompleteAddress.city = data.city;
+        this.autoCompleteAddress.state = data.states;
+        this.autoCompleteAddress.country = data.country;
+        this.autoCompleteAddress.zipcode = data.zipcode;
+        this.imageKey = data.image_key;
+        this.image = data.image;
+        this.packageType = data.package_type;
+        this.weight = data.weight_pounds;
+        this.weightOunces = data.weight_ounces;
+        this.itemLength = data.item_length;
+        this.itemWidth = data.item_width;
+        this.itemHeight = data.item_height;
+        this.itemStatus =
+          data.item_status === 0
+            ? "Claimed (You know the actual owner of this item)"
+            : "Unclaimed (You do not know the actual owner of this item)";
+
+        if (data.item_status === 0) {
+          this.receiverName = data.receiver_name;
+          this.receiverEmail = data.receiver_email;
+          this.receiverMobileNo = data.receiver_mobile_no;
+        }
+        this.isLoadingItemDetails = false;
+      }
+      else {
+        this.isLoadingItemDetails = false;
+        this.senderFormTitle = "SENDER'S DETAILS";
+        this.foundItemFormTitle = "FOUND ITEM'S DETAILS";
+        this.venueType = "";
+        this.manualVenue = "";
+        this.itemDescription = "";
+        this.itemDescriptionManually = false;
+        this.manualItemDescription = "";
+        this.foundItemId = "";
+        this.foundDate = new Date();
+        this.venueEmail = "";
+        this.venueSecondaryEmail = "";
+        this.employeeMobileNo = "";
+        this.address = "";
+        this.autoCompleteAddress.address = "";
+        this.autoCompleteAddress.phoneNo = "";
+        this.autoCompleteAddress.city = "";
+        this.autoCompleteAddress.state = "";
+        this.autoCompleteAddress.country = "";
+        this.autoCompleteAddress.zipcode = "";
+        this.imageKey = "";
+        this.image = "";
+        this.packageType = "";
+        this.weight = "";
+        this.weightOunces = "";
+        this.itemLength = "";
+        this.itemWidth = "";
+        this.itemHeight = "";
+        this.itemStatus = "";
+        this.receiverName = "";
+        this.receiverEmail = "";
+        this.receiverMobileNo = "";
+      }
+    },
     isMobile() {
       if (
         /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(
@@ -1376,8 +1610,7 @@ export default {
           .then((response) => {
             if (response.status === 200) {
               this.itemDescriptionResponse = response.data?.data?.Items || [];
-              this.itemDescriptionResponse.map((item) => {
-                this.itemDescriptionOptions.unshift(item.item_description);
+              this.itemDescriptionOptions = this.itemDescriptionResponse.map((item) => {
                 return item.item_description;
               });
               resolve();
@@ -1959,197 +2192,8 @@ export default {
       }
     },
   },
-  async mounted() {
-    this.itemDetails = JSON.parse(JSON.stringify(this.$store.getters['item/itemDetails']));
-    this.mobileDevice = this.isMobile();
-    await this.getItemDescriptionOptions();
-    window.addEventListener("keydown", () => {
-      this.showValidateAlert = false;
-    });
-    window.addEventListener("click", () => {
-      this.showValidateAlert = false;
-    });
-    if (this.$route.query.id) {
-      this.isLoadingItemDetails = true;
-      this.foundItemId = this.$route.query.id;
-      this.senderFormTitle = "EDIT SENDER'S DETAILS";
-      this.foundItemFormTitle = "EDIT FOUND ITEM'S DETAILS";
-      this.$axios
-        .get("/getsinglelostitem?id=" + this.$route.query.id)
-        .then((response) => {
-          if (response.status === 200) {
-            this.isLoadingItemDetails = false;
-            let data = response.data.data.Item;
-            let index = this.venueOptions.indexOf(data.venu_type) !== -1;
-            if (index) this.venueType = data.venu_type;
-            else {
-              this.venueType = "Other";
-              this.manualVenue = data.venu_type;
-            }
-
-            var index1 =
-              this.itemDescriptionOptions.indexOf(data.item_description) !== -1;
-            if (index1) this.itemDescription = data.item_description;
-            else {
-              this.itemDescription = "Other";
-              this.itemDescriptionManually = true;
-              this.manualItemDescription = data.item_description;
-            }
-            this.foundDate = new Date(data.datse);
-            this.venueEmail = data.venue_email;
-            this.venueSecondaryEmail = data.secondary_email;
-            this.employeeMobileNo = data.employee_mobile_no;
-            this.addressArr.unshift(data.address);
-            this.address = data.address;
-            this.autoCompleteAddress.address = this.addressArr[0];
-            this.autoCompleteAddress.phoneNo = data.venue_phone_no;
-            this.autoCompleteAddress.city = data.city;
-            this.autoCompleteAddress.state = data.states;
-            this.autoCompleteAddress.country = data.country;
-            this.autoCompleteAddress.zipcode = data.zipcode;
-            this.image = data.image;
-            this.packageType = data.package_type;
-            this.weight = data.weight_pounds;
-            this.weightOunces = data.weight_ounces;
-            this.itemLength = data.item_length;
-            this.itemWidth = data.item_width;
-            this.itemHeight = data.item_height;
-            this.itemStatus =
-              data.item_status === 0
-                ? "Claimed (You know the actual owner of this item)"
-                : "Unclaimed (You do not know the actual owner of this item)";
-
-            if (data.item_status === 0) {
-              this.receiverName = data.receiver_name;
-              this.receiverEmail = data.receiver_email;
-              this.receiverMobileNo = data.receiver_mobile_no;
-            }
-          }
-        })
-        .catch((error) => {
-          this.$toast.error("Something went wrong! Please try again.");
-          console.log(error);
-        });
-    } else if (this.$route.params?.itemDetails) {
-      this.isLoadingItemDetails = false;
-      this.senderFormTitle = "EDIT SENDER'S DETAILS";
-      this.foundItemFormTitle = "EDIT FOUND ITEM'S DETAILS";
-      let data = this.$route.params.itemDetails;
-      var index = this.venueOptions.indexOf(data.venu_type) !== -1;
-      if (index) this.venueType = data.venu_type;
-      else {
-        this.venueType = "Other";
-        this.manualVenue = data.venu_type;
-      }
-      var index1 =
-        this.itemDescriptionOptions.indexOf(data.item_description) !== -1;
-      if (index1) this.itemDescription = data.item_description;
-      else {
-        this.itemDescription = "Other";
-        this.itemDescriptionManually = true;
-        this.manualItemDescription = data.item_description;
-      }
-
-      if (data.foundItemId) {
-        this.foundItemId = data.foundItemId;
-      } else {
-        this.foundItemId = data.id;
-      }
-      this.foundDate = new Date(data.datse);
-      this.venueEmail = data.venue_email;
-      this.venueSecondaryEmail = data.secondary_email;
-      this.employeeMobileNo = data.employee_mobile_no;
-      this.addressArr.unshift(data.address);
-      this.address = data.address;
-      this.autoCompleteAddress.address = this.addressArr[0];
-      this.autoCompleteAddress.phoneNo = data.venue_phone_no;
-      this.autoCompleteAddress.city = data.city;
-      this.autoCompleteAddress.state = data.states;
-      this.autoCompleteAddress.country = data.country;
-      this.autoCompleteAddress.zipcode = data.zipcode;
-      this.imageKey = data.image_key;
-      this.image = data.image;
-      this.packageType = data.package_type;
-      this.weight = data.weight_pounds;
-      this.weightOunces = data.weight_ounces;
-      this.itemLength = data.item_length;
-      this.itemWidth = data.item_width;
-      this.itemHeight = data.item_height;
-      this.itemStatus =
-        data.item_status === 0
-          ? "Claimed (You know the actual owner of this item)"
-          : "Unclaimed (You do not know the actual owner of this item)";
-
-      if (data.item_status === 0) {
-        this.receiverName = data.receiver_name;
-        this.receiverEmail = data.receiver_email;
-        this.receiverMobileNo = data.receiver_mobile_no;
-      }
-      this.isLoadingItemDetails = false;
-    }
-    else if(Object.keys(this.itemDetails).length > 0){
-      this.isLoadingItemDetails = false;
-      this.senderFormTitle = "EDIT SENDER'S DETAILS";
-      this.foundItemFormTitle = "EDIT FOUND ITEM'S DETAILS";
-      let data = JSON.parse(JSON.stringify(this.$store.getters['item/itemDetails']));
-      var index = this.venueOptions.indexOf(data.venu_type) !== -1;
-      if (index) this.venueType = data.venu_type;
-      else {
-        this.venueType = "Other";
-        this.manualVenue = data.venu_type;
-      }
-      var index1 =
-        this.itemDescriptionOptions.indexOf(data.item_description) !== -1;
-      if (index1) this.itemDescription = data.item_description;
-      else {
-        this.itemDescription = "Other";
-        this.itemDescriptionManually = true;
-        this.manualItemDescription = data.item_description;
-      }
-
-      if (data.foundItemId) {
-        this.foundItemId = data.foundItemId;
-      } else {
-        this.foundItemId = data.id;
-      }
-      this.foundDate = new Date(data.datse);
-      this.venueEmail = data.venue_email;
-      this.venueSecondaryEmail = data.secondary_email;
-      this.employeeMobileNo = data.employee_mobile_no;
-      this.addressArr.unshift(data.address);
-      this.address = data.address;
-      this.autoCompleteAddress.address = this.addressArr[0];
-      this.autoCompleteAddress.phoneNo = data.venue_phone_no;
-      this.autoCompleteAddress.city = data.city;
-      this.autoCompleteAddress.state = data.states;
-      this.autoCompleteAddress.country = data.country;
-      this.autoCompleteAddress.zipcode = data.zipcode;
-      this.imageKey = data.image_key;
-      this.image = data.image;
-      this.packageType = data.package_type;
-      this.weight = data.weight_pounds;
-      this.weightOunces = data.weight_ounces;
-      this.itemLength = data.item_length;
-      this.itemWidth = data.item_width;
-      this.itemHeight = data.item_height;
-      this.itemStatus =
-        data.item_status === 0
-          ? "Claimed (You know the actual owner of this item)"
-          : "Unclaimed (You do not know the actual owner of this item)";
-
-      if (data.item_status === 0) {
-        this.receiverName = data.receiver_name;
-        this.receiverEmail = data.receiver_email;
-        this.receiverMobileNo = data.receiver_mobile_no;
-      }
-      this.isLoadingItemDetails = false;
-    }
-    else {
-      this.isLoadingItemDetails = false;
-      this.senderFormTitle = "SENDER'S DETAILS";
-      this.foundItemFormTitle = "FOUND ITEM'S DETAILS";
-      this.isLoadingItemDetails = false;
-    }
+  mounted() {
+    this.getItemsData();
   },
   beforeDestroy() {
     window.removeEventListener("click", () => {});
