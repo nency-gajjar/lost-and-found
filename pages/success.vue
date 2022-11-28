@@ -57,7 +57,7 @@
       </p>
       <BaseButton @click="printLabel"> Print Label </BaseButton>
     </div>
-    <!-- <p class="text-gray-800">
+    <p class="text-gray-800">
       Optionally, you can schedule a pickup for your package:
     </p>
     <BaseButton
@@ -67,21 +67,35 @@
         shadow-primary
         hover:bg-primary-200
       "
+      @click="showSchedulePickup = true"
     >
       Schedule Pickup
-    </BaseButton> -->
+    </BaseButton>
+    <SchedulePickupModal
+      v-if="showSchedulePickup"
+      :show-modal="showSchedulePickup"
+      @close="showSchedulePickup = false"
+    />
   </main>
 </template>
 
 <script>
+import SchedulePickupModal from "~/components/SchedulePickupModal.vue";
+
 export default {
+  components: {
+    SchedulePickupModal,
+  },
   data() {
     return {
       labelUrl: "",
-    }
+      showSchedulePickup: false,
+    };
   },
-  mounted(){
-    this.labelUrl = JSON.parse(JSON.stringify(this.$store.getters['shipment/labelUrl']));
+  mounted() {
+    this.labelUrl = JSON.parse(
+      JSON.stringify(this.$store.getters["shipment/labelUrl"])
+    );
   },
   methods: {
     printLabel() {
@@ -97,7 +111,7 @@ export default {
         }
       </style>`);
       mywindow.document.write("</head><body>");
-      mywindow.document.write("<div><img src="+this.labelUrl+"></div>");
+      mywindow.document.write("<div><img src=" + this.labelUrl + "></div>");
       mywindow.document.write("</body></html>");
       setTimeout(() => {
         mywindow.print();

@@ -19,7 +19,7 @@
         </div>
         <div v-if="footer" class="base-modal-footer">
           <slot name="footer" />
-          <slot name="actions">
+          <slot v-if="!hideCancel" name="actions">
             <button
               type="submit"
               class="
@@ -135,7 +135,7 @@ export default {
     }
 
     &.is-xsmall {
-      max-width: 400px;
+      max-width: 500px;
     }
 
     &.is-small {
