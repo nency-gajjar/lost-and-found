@@ -329,7 +329,7 @@ export default {
   methods: {
     async confirmAndPay() {
       this.isLoading = true;
-      let totalPrice = 5000;
+      let totalPrice = Number(Math.ceil(this.totalPrice.split('$')[1]));
       this.$axios
         .post("/createPaymentIntent", {
           amount: totalPrice,
