@@ -36,9 +36,9 @@
               </table>
             </td>
           </tr>
-          <tr v-if="itemDetails.link" class="qr-code-container">
-            <td align="center" class="pt-3 pb-5 px-3">
-              <div class="w-40 h-40">
+          <tr v-if="itemDetails.link">
+            <td class="pt-3 pb-5 px-3">
+              <div class="w-40 h-40 qr-code-container">
                 <img :src="itemDetails.link" alt="" />
               </div>
             </td>
@@ -463,8 +463,9 @@ export default {
                     tr td:first-child {
                       width: 250px;
                     }
-                    .qr-code-container td, .w-full {
-                      width: 100% !important;
+                    .qr-code-container {
+                      margin: 0px auto 30px auto;
+                      
                     }
                     .text-center {
                       text-align: center;
@@ -608,9 +609,8 @@ export default {
 tr td:first-child {
   width: 250px;
 }
-.qr-code-container td,
-.w-full {
-  width: 100% !important;
+.qr-code-container {
+  margin: auto;
 }
 .text-center {
   text-align: center;
