@@ -60,17 +60,14 @@
     <p class="text-gray-800">
       Optionally, you can schedule a pickup for your package:
     </p>
-    <BaseButton
-      class="
-        bg-primary-100
-        focus:ring-primary-100
-        shadow-primary
-        hover:bg-primary-200
-      "
-      @click="showSchedulePickup = true"
-    >
-      Schedule Pickup
-    </BaseButton>
+    <div class="flex gap-4 items-center justify-center">
+      <BaseButton varient="secondary" @click="showSchedulePickup = true">
+        Schedule Pickup
+      </BaseButton>
+      <BaseButton varient="primaryAlt" @click="$router.push('lost-items')">
+        Back to listing
+      </BaseButton>
+    </div>
     <SchedulePickupModal
       v-if="showSchedulePickup"
       :show-modal="showSchedulePickup"
@@ -96,22 +93,23 @@ export default {
     };
   },
   async mounted() {
-    if(this.$store.getters["shipment/labelUrl"]){
+    if (this.$store.getters["shipment/labelUrl"]) {
       this.labelUrl = JSON.parse(
         JSON.stringify(this.$store.getters["shipment/labelUrl"])
       );
     }
-    if(this.$store.getters["shipment/itemId"]){
+    if (this.$store.getters["shipment/itemId"]) {
       this.itemId = JSON.parse(
         JSON.stringify(this.$store.getters["shipment/itemId"])
       );
-      try{
-        let response = await this.$axios.get("/getsinglelostitem?id=" + this.itemId);
+      try {
+        let response = await this.$axios.get(
+          "/getsinglelostitem?id=" + this.itemId
+        );
         let itemDetails = response.data.data.Item;
         this.itemImage = itemDetails.image;
         this.itemDescription = itemDetails.item_description;
-      }
-      catch(err){
+      } catch (err) {
         console.log(err);
       }
     }
@@ -137,11 +135,19 @@ export default {
         }
       </style>`);
       mywindow.document.write("</head><body>");
-      mywindow.document.write("<div><h3 class='text-center'>Item Description: " + this.itemDescription + "</h3></div>");
-      if(this.itemImage){
-        mywindow.document.write("<div class='itemImgContainer'><img src=" + this.itemImage + "></div>");
+      mywindow.document.write(
+        "<div><h3 class='text-center'>Item Description: " +
+          this.itemDescription +
+          "</h3></div>"
+      );
+      if (this.itemImage) {
+        mywindow.document.write(
+          "<div class='itemImgContainer'><img src=" + this.itemImage + "></div>"
+        );
       }
-      mywindow.document.write("<div class='labelContainer'><img src=" + this.labelUrl + "></div>");
+      mywindow.document.write(
+        "<div class='labelContainer'><img src=" + this.labelUrl + "></div>"
+      );
       mywindow.document.write("</body></html>");
       setTimeout(() => {
         mywindow.print();
