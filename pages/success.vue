@@ -89,29 +89,59 @@ export default {
   data() {
     return {
       labelUrl: "",
+      itemId: "",
       showSchedulePickup: false,
+      itemImage: "",
+      itemDescription: "",
     };
   },
-  mounted() {
-    this.labelUrl = JSON.parse(
-      JSON.stringify(this.$store.getters["shipment/labelUrl"])
-    );
+  async mounted() {
+    if(this.$store.getters["shipment/labelUrl"]){
+      this.labelUrl = JSON.parse(
+        JSON.stringify(this.$store.getters["shipment/labelUrl"])
+      );
+    }
+    if(this.$store.getters["shipment/itemId"]){
+      this.itemId = JSON.parse(
+        JSON.stringify(this.$store.getters["shipment/itemId"])
+      );
+      try{
+        let response = await this.$axios.get("/getsinglelostitem?id=" + this.itemId);
+        let itemDetails = response.data.data.Item;
+        this.itemImage = itemDetails.image;
+        this.itemDescription = itemDetails.item_description;
+      }
+      catch(err){
+        console.log(err);
+      }
+    }
   },
   methods: {
     printLabel() {
       const mywindow = window.open("", "PRINT", "height=1200,width=600");
       mywindow.document.write("<html><head>");
       mywindow.document.write(`<style>
-        div{
+        .labelContainer, .itemImgContainer{
           display: flex;
           justify-content: center;
+          margin-top: 20px;
         }
-        img{
+        .labelContainer img{
           width: 500px;
+        }
+        .itemImgContainer img{
+          width: 200px;
+        }
+        .text-center{
+          text-align: center;
         }
       </style>`);
       mywindow.document.write("</head><body>");
-      mywindow.document.write("<div><img src=" + this.labelUrl + "></div>");
+      mywindow.document.write("<div><h3 class='text-center'>Item Description: " + this.itemDescription + "</h3></div>");
+      if(this.itemImage){
+        mywindow.document.write("<div class='itemImgContainer'><img src=" + this.itemImage + "></div>");
+      }
+      mywindow.document.write("<div class='labelContainer'><img src=" + this.labelUrl + "></div>");
       mywindow.document.write("</body></html>");
       setTimeout(() => {
         mywindow.print();

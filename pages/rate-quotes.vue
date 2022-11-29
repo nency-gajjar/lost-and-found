@@ -139,136 +139,144 @@
               </div>
             </transition>
           </div>
-          <div
-            v-for="item in rateQuoteItems"
-            :key="item.id"
-            @click="selecteRateQuote(item)"
-            class="
-              cursor-pointer
-              py-6
-              px-12
-              mt-4
-              flex
-              sm:flex-row
-              flex-col
-              justify-between
-              bg-white
-              rounded-lg
-              border
-              shadow-md
-              relative
-            "
-            :class="{
-              'border-primary-100 ring-primary-80 ring-[6px] ring-offset-primary-100 ring-offset-1':
-                selectedRate.id === item.id,
-            }"
-          >
+          <div v-if="!isLoading && rateQuoteItems.length > 0">
             <div
-              v-if="selectedRate.id === item.id"
-              style="width: 25px; height: 25px"
-              class="rounded-50 absolute left-2 top-40 z-[40] bg-primary-100"
-            >
-              <BaseIcon icon="check" color="white" size="1x" />
-            </div>
-            <div
+              v-for="item in rateQuoteItems"
+              :key="item.id"
+              @click="selecteRateQuote(item)"
               class="
+                cursor-pointer
+                py-6
+                px-12
+                mt-4
                 flex
-                sm:items-center
-                flex-col
                 sm:flex-row
-                justify-left justify-around
-                sm:gap-4
+                flex-col
+                justify-between
+                bg-white
+                rounded-lg
+                border
+                shadow-md
+                relative
               "
+              :class="{
+                'border-primary-100 ring-primary-80 ring-[6px] ring-offset-primary-100 ring-offset-1':
+                  selectedRate.id === item.id,
+              }"
             >
               <div
+                v-if="selectedRate.id === item.id"
+                style="width: 25px; height: 25px"
+                class="rounded-50 absolute left-2 top-40 z-[40] bg-primary-100"
+              >
+                <BaseIcon icon="check" color="white" size="1x" />
+              </div>
+              <div
                 class="
-                  flex flex-col
-                  text-center
-                  justify-between
-                  leading-normal
-                  gap-3
+                  flex
+                  sm:items-center
+                  flex-col
+                  sm:flex-row
+                  justify-left justify-around
+                  sm:gap-4
                 "
               >
-                <div class="mb-1 flex-col items-start justify-center text-left">
-                  <h4
-                    class="font-semibold text-[#212B36] text-lg tracking-wide"
-                  >
-                    {{ displayItemService(item.service) }}
-                  </h4>
-                  <h4 class="text-green-500 font-display text-2xl">
-                    ${{ item.rate }}
-                  </h4>
-                </div>
-                <div class="text-left">
-                  <div>
-                    <h5 class="text-sm font-[#212B36] font-medium">
-                      Estimated Delivery
-                    </h5>
-                  </div>
-                  <div>
-                    <span
-                      v-if="item && item.delivery_days"
-                      class="text-sm tracking-wider text-[#637381]"
+                <div
+                  class="
+                    flex flex-col
+                    text-center
+                    justify-between
+                    leading-normal
+                    gap-3
+                  "
+                >
+                  <div class="mb-1 flex-col items-start justify-center text-left">
+                    <h4
+                      class="font-semibold text-[#212B36] text-lg tracking-wide"
                     >
-                      {{ item.delivery_days }} Day{{
-                        item.delivery_days > 1 ? "s" : null
-                      }}
-                    </span>
-                    <span v-else>Unknown</span>
+                      {{ displayItemService(item.service) }}
+                    </h4>
+                    <h4 class="text-green-500 font-display text-2xl">
+                      ${{ item.rate }}
+                    </h4>
+                  </div>
+                  <div class="text-left">
+                    <div>
+                      <h5 class="text-sm font-[#212B36] font-medium">
+                        Estimated Delivery
+                      </h5>
+                    </div>
+                    <div>
+                      <span
+                        v-if="item && item.delivery_days"
+                        class="text-sm tracking-wider text-[#637381]"
+                      >
+                        {{ item.delivery_days }} Day{{
+                          item.delivery_days > 1 ? "s" : null
+                        }}
+                      </span>
+                      <span v-else>Unknown</span>
+                    </div>
                   </div>
                 </div>
               </div>
+              <div class="flex items-center my-4 sm:my-0 gap-3 rateLogoContainer">
+                <img
+                  v-if="item.carrier === 'USPS'"
+                  class="
+                    w-full
+                    h-auto
+                    mx-auto
+                    my-auto
+                    object-contain
+                    transition
+                    duration-500
+                    ease
+                    hover:transform hover:scale-[110%]
+                  "
+                  src="@/assets/images/usps-logo.svg"
+                  alt="USPS"
+                />
+                <img
+                  v-else-if="item.carrier === 'UPS'"
+                  class="
+                    w-full
+                    h-auto
+                    mx-auto
+                    my-auto
+                    object-contain
+                    transition
+                    duration-500
+                    ease
+                    hover:transform hover:scale-[110%]
+                  "
+                  src="@/assets/images/ups-logo.svg"
+                  alt="UPS"
+                />
+                <img
+                  v-else
+                  class="
+                    w-full
+                    h-auto
+                    mx-auto
+                    my-auto
+                    object-contain
+                    transition
+                    duration-500
+                    ease
+                    hover:transform hover:scale-[110%]
+                  "
+                  src="@/assets/images/fedex-logo.svg"
+                  alt="FedEx"
+                />
+              </div>
             </div>
-            <div class="flex items-center my-4 sm:my-0 gap-3 rateLogoContainer">
-              <img
-                v-if="item.carrier === 'USPS'"
-                class="
-                  w-full
-                  h-auto
-                  mx-auto
-                  my-auto
-                  object-contain
-                  transition
-                  duration-500
-                  ease
-                  hover:transform hover:scale-[110%]
-                "
-                src="@/assets/images/usps-logo.svg"
-                alt="USPS"
-              />
-              <img
-                v-else-if="item.carrier === 'UPS'"
-                class="
-                  w-full
-                  h-auto
-                  mx-auto
-                  my-auto
-                  object-contain
-                  transition
-                  duration-500
-                  ease
-                  hover:transform hover:scale-[110%]
-                "
-                src="@/assets/images/ups-logo.svg"
-                alt="UPS"
-              />
-              <img
-                v-else
-                class="
-                  w-full
-                  h-auto
-                  mx-auto
-                  my-auto
-                  object-contain
-                  transition
-                  duration-500
-                  ease
-                  hover:transform hover:scale-[110%]
-                "
-                src="@/assets/images/fedex-logo.svg"
-                alt="FedEx"
-              />
-            </div>
+          </div>
+          <div v-else-if="!isLoading && rateQuoteItems.length === 0">
+            <p class="mt-5">No result found</p>
+          </div>
+          <div v-else>
+            <BaseLoader />
           </div>
         </div>
         <div class="w-full md:max-w-sm">
@@ -476,6 +484,7 @@ export default {
       lableDetails: {},
       menuOpened: false,
       sortBy: 0,
+      isLoading: true,
     };
   },
   methods: {
@@ -522,6 +531,7 @@ export default {
   },
   mounted() {
     if (this.$route.params.fromItemDelivery) {
+      this.isLoading = true;
       this.$axios
         .post(
           "/getshippingrates",
@@ -545,15 +555,17 @@ export default {
               JSON.stringify(this.$store.getters["shipment/shippingRates"])
             );
             this.rateQuoteItems = ratesQuotes.rates;
+            this.isLoading = false;
           }
         })
         .catch((error) => {
+          this.isLoading = false;
           console.log(error);
         });
       let lableDetails = JSON.parse(
         JSON.stringify(this.$store.getters["shipment/lableDetails"])
       );
-
+      
       lableDetails.type = "Box";
       if (this.$store.getters["shipment/insuranceValue"]) {
         lableDetails.insuranceValue = JSON.parse(

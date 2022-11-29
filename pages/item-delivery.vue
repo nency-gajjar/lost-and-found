@@ -1033,6 +1033,11 @@ export default {
           params.receiver_mobile_no = this.formatMobileNumber2(
             this.receiverMobileNo
           );
+        if (
+          this.tempReceiverDetails.receiver_email !==
+          this.receiverEmail
+        )
+          params.receiver_email = this.receiverEmail;
 
         params_rateQuotes.name = "Prem Panwala";
         params_rateQuotes.company = this.receiverCompany;

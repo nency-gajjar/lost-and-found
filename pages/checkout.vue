@@ -346,12 +346,13 @@ export default {
                 JSON.stringify(this.$store.getters["shipment/insuranceValue"])
               );
               let params = {
+                id: this.$route.query.id,
                 carrier_accounts: selectedRate.carrier_account_id,
                 service: selectedRate.service,
                 to_address: shippingRates.to_address.id,
                 from_address: shippingRates.from_address.id,
                 parcel: shippingRates.parcel.id,
-                delivery_confirmation: false,
+                delivery_confirmation: this.checkoutDetail.signature === true ? true : false,
                 insurance: Number(insuranceValue),
               };
               this.$axios
@@ -359,8 +360,11 @@ export default {
                 .then((response) => {
                   if (response.status === 200) {
                     this.$store.commit(
-                      "shipment/SET_LABEL_URL",
-                      response.data.postage_label.label_url
+                      "shipment/SET_LABEL_DETAILS",
+                      {
+                        lableUrl: response.data.postage_label.label_url,
+                        itemId: this.$route.query.id
+                      }
                     );
                     this.isLoading = false;
                     this.$nextTick(() => {
