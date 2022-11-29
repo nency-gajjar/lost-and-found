@@ -133,114 +133,6 @@
                     text-left text-gray-800
                   "
                 >
-                  Address Details:
-                </h2>
-                <span
-                  class="
-                    w-20
-                    border-t-4 border-solid border-gray-300
-                    inline-block
-                    mb-1
-                  "
-                ></span>
-              </div>
-
-              <div class="flex items-center mt-3 flex-wrap">
-                <div
-                  class="
-                    text-left text-gray-600
-                    font-medium
-                    w-full
-                    lg:w-4/12
-                    md:w-5/12
-                    sm:w-6/12
-                  "
-                >
-                  Address
-                </div>
-                <div class="text-gray-600 text-left md:w-7/12 sm:w-6/12">
-                  {{ itemDetails.address }}
-                </div>
-              </div>
-              <div class="flex items-center mt-3 flex-wrap">
-                <div
-                  class="
-                    text-left text-gray-600
-                    font-medium
-                    w-full
-                    lg:w-4/12
-                    md:w-5/12
-                    sm:w-6/12
-                  "
-                >
-                  City
-                </div>
-                <div class="text-gray-600 text-left md:w-7/12 sm:w-6/12">
-                  {{ itemDetails.city }}
-                </div>
-              </div>
-              <div class="flex items-center mt-3 flex-wrap">
-                <div
-                  class="
-                    text-left text-gray-600
-                    font-medium
-                    w-full
-                    lg:w-4/12
-                    md:w-5/12
-                    sm:w-6/12
-                  "
-                >
-                  State
-                </div>
-                <div class="text-gray-600 text-left md:w-7/12 sm:w-6/12">
-                  {{ itemDetails.states }}
-                </div>
-              </div>
-              <div class="flex items-center mt-3 flex-wrap">
-                <div
-                  class="
-                    text-left text-gray-600
-                    font-medium
-                    w-full
-                    lg:w-4/12
-                    md:w-5/12
-                    sm:w-6/12
-                  "
-                >
-                  Country
-                </div>
-                <div class="text-gray-600 text-left md:w-7/12 sm:w-6/12">
-                  {{ itemDetails.country }}
-                </div>
-              </div>
-              <div class="flex items-center mt-3 flex-wrap">
-                <div
-                  class="
-                    text-left text-gray-600
-                    font-medium
-                    w-full
-                    lg:w-4/12
-                    md:w-5/12
-                    sm:w-6/12
-                  "
-                >
-                  Zipcode
-                </div>
-                <div class="text-gray-600 text-left md:w-7/12 sm:w-6/12">
-                  {{ itemDetails.zipcode }}
-                </div>
-              </div>
-            </div>
-            <div class="sections py-4">
-              <div class="form-title">
-                <h2
-                  class="
-                    text-lg text-accent-100
-                    font-medium
-                    leading-tight
-                    text-left text-gray-800
-                  "
-                >
                   Sender's Details:
                 </h2>
 
@@ -358,13 +250,101 @@
                   {{ itemDetails.employee_mobile_no }}
                 </div>
               </div>
+              <hr
+                class="flex-grow border-dashed border border-[#E1E3E6] my-5"
+              />
+              <div class="flex items-center mt-3 flex-wrap">
+                <div
+                  class="
+                    text-left text-gray-600
+                    font-medium
+                    w-full
+                    lg:w-4/12
+                    md:w-5/12
+                    sm:w-6/12
+                  "
+                >
+                  Address
+                </div>
+                <div class="text-gray-600 text-left md:w-7/12 sm:w-6/12">
+                  {{ itemDetails.address }}
+                </div>
+              </div>
+              <div class="flex items-center mt-3 flex-wrap">
+                <div
+                  class="
+                    text-left text-gray-600
+                    font-medium
+                    w-full
+                    lg:w-4/12
+                    md:w-5/12
+                    sm:w-6/12
+                  "
+                >
+                  City
+                </div>
+                <div class="text-gray-600 text-left md:w-7/12 sm:w-6/12">
+                  {{ itemDetails.city }}
+                </div>
+              </div>
+              <div class="flex items-center mt-3 flex-wrap">
+                <div
+                  class="
+                    text-left text-gray-600
+                    font-medium
+                    w-full
+                    lg:w-4/12
+                    md:w-5/12
+                    sm:w-6/12
+                  "
+                >
+                  State
+                </div>
+                <div class="text-gray-600 text-left md:w-7/12 sm:w-6/12">
+                  {{ itemDetails.states }}
+                </div>
+              </div>
+              <div class="flex items-center mt-3 flex-wrap">
+                <div
+                  class="
+                    text-left text-gray-600
+                    font-medium
+                    w-full
+                    lg:w-4/12
+                    md:w-5/12
+                    sm:w-6/12
+                  "
+                >
+                  Country
+                </div>
+                <div class="text-gray-600 text-left md:w-7/12 sm:w-6/12">
+                  {{ itemDetails.country }}
+                </div>
+              </div>
+              <div class="flex items-center mt-3 flex-wrap">
+                <div
+                  class="
+                    text-left text-gray-600
+                    font-medium
+                    w-full
+                    lg:w-4/12
+                    md:w-5/12
+                    sm:w-6/12
+                  "
+                >
+                  Zipcode
+                </div>
+                <div class="text-gray-600 text-left md:w-7/12 sm:w-6/12">
+                  {{ itemDetails.zipcode }}
+                </div>
+              </div>
             </div>
             <!-- Item Details End -->
 
             <div class="grid grid-cols-2 gap-4 mt-6">
               <!-- Ship it to me -->
               <div
-                class="flex items-center pl-4 rounded border border-gray-300"
+                class="flex items-center pl-4 rounded-lg border border-gray-300"
                 :class="[
                   deliveryType === '0' &&
                     'border-primary-100 ring-primary-80 ring-[6px] ring-offset-primary-100 ring-offset-1',
@@ -402,7 +382,7 @@
 
               <!-- Hold for pickup -->
               <div
-                class="flex items-center pl-4 rounded border border-gray-300"
+                class="flex items-center pl-4 rounded-lg border border-gray-300"
                 :class="[
                   deliveryType === '1' &&
                     'border-primary-100 ring-primary-80 ring-[6px] ring-offset-primary-100 ring-offset-1',
@@ -441,6 +421,93 @@
             </div>
 
             <div class="!my-6 space-y-4" v-show="deliveryType === '0'">
+              <ValidationProvider
+                v-slot="{ errors }"
+                rules="required"
+                class="block"
+              >
+                <BaseInput
+                  v-model="receiverName"
+                  type="text"
+                  label="Receiver Name"
+                  :class="errors.length > 0 && 'error'"
+                />
+                <p
+                  v-if="errors.length"
+                  class="vee-validation-error mt-2 text-sm text-red-600"
+                >
+                  {{ errors[0] }}
+                </p>
+              </ValidationProvider>
+              <ValidationProvider
+                v-slot="{ errors }"
+                rules="required"
+                class="block"
+              >
+                <BaseInput
+                  v-model="receiverCompany"
+                  type="text"
+                  label="Company Name"
+                  :class="errors.length > 0 && 'error'"
+                />
+                <p
+                  v-if="errors.length"
+                  class="vee-validation-error mt-2 text-sm text-red-600"
+                >
+                  {{ errors[0] }}
+                </p>
+              </ValidationProvider>
+              <ValidationProvider
+                v-slot="{ errors }"
+                rules="required|email"
+                class="block"
+                name="Receiver Email"
+              >
+                <BaseInput
+                  v-model="receiverEmail"
+                  type="email"
+                  label="Receiver Email"
+                  :class="errors.length > 0 && 'error'"
+                />
+                <p
+                  v-if="errors.length"
+                  class="vee-validation-error mt-2 text-sm text-red-600"
+                >
+                  {{ errors[0] }}
+                </p>
+              </ValidationProvider>
+              <div>
+                <!-- <label class="block text-sm font-medium text-gray-800 my-1"
+                  >Mobile Number:</label
+                > -->
+                <div
+                  class="block relative box-content h-12 w-full"
+                  :class="!isUserPhoneValid && 'error'"
+                >
+                  <vue-tel-input
+                    :inputOptions="{ placeholder: 'Mobile Number' }"
+                    class="
+                      relative
+                      border
+                      inline-block
+                      border-gray-300
+                      w-full
+                      rounded-lg
+                      h-full
+                    "
+                    v-model="receiverMobileNo"
+                    @blur="validateUserPhone"
+                    @validate="validateUserPhoneFormat"
+                    v-bind="bindPhoneInputProps"
+                  ></vue-tel-input>
+                </div>
+                <div
+                  v-if="!isUserPhoneValid"
+                  class="vee-validation-error my-2 text-sm text-red-600"
+                >
+                  {{ userPhoneValidationMessage }}
+                </div>
+              </div>
               <ValidationProvider
                 v-slot="{ errors }"
                 :rules="deliveryType === '0' ? 'required' : ''"
@@ -482,7 +549,7 @@
                   {{ errors[0] }}
                 </p>
               </ValidationProvider>
-              <div class="grid grid-cols-3 lg:grid-cols-3 gap-4">
+              <div class="grid grid-cols-2 lg:grid-cols-2 gap-4">
                 <ValidationProvider
                   v-slot="{ errors }"
                   :rules="deliveryType === '0' ? 'max:28|required' : ''"
@@ -538,12 +605,10 @@
                     {{ errors[0] }}
                   </p>
                 </ValidationProvider>
-              </div>
-              <div class="grid lg:grid-cols-2 gap-4">
                 <ValidationProvider
                   v-slot="{ errors }"
                   :rules="deliveryType === '0' ? 'max:28|required' : ''"
-                  class="block lg:col-span-1"
+                  class="block"
                 >
                   <BaseInput
                     v-model="autoCompleteAddress.country"
@@ -558,38 +623,8 @@
                     {{ errors[0] }}
                   </p>
                 </ValidationProvider>
-                <div
-                  class="block relative box-content h-12"
-                  :class="!isUserPhoneValid && 'error'"
-                >
-                  <vue-tel-input
-                    :inputOptions="{ placeholder: 'Phone Number' }"
-                    class="
-                      relative
-                      border
-                      inline-block
-                      border-gray-300
-                      w-full
-                      rounded-lg
-                      h-full
-                    "
-                    v-model="autoCompleteAddress.phoneNo"
-                    @blur="validateUserPhone"
-                    @validate="validateUserPhoneFormat"
-                    v-bind="bindPhoneInputProps"
-                  ></vue-tel-input>
-                  <div
-                    v-if="!isUserPhoneValid"
-                    class="
-                      vee-validation-error
-                      top-margin-05
-                      text-sm text-red-600
-                    "
-                  >
-                    {{ userPhoneValidationMessage }}
-                  </div>
-                </div>
               </div>
+
               <div class="text-gray-500 flex flex-col space-y-4">
                 <div class="flex items-center space-x-3 ml-4">
                   <input
@@ -758,13 +793,16 @@ export default {
     isLoading: false,
     itemId: "",
     showValidateAlert: false,
+    receiverName: "",
+    receiverEmail: "",
+    receiverCompany: "",
+    receiverMobileNo: "",
     autoCompleteAddress: {
       address: "",
       city: "",
       state: "",
       country: "",
       zipcode: "",
-      phoneNo: "",
     },
     bindPhoneInputProps: {
       mode: "international",
@@ -797,8 +835,39 @@ export default {
         .then((response) => {
           if (response.status === 200) {
             this.isLoadingItemDetails = false;
-            // console.log("====response", response.data.data.Item);
             this.itemDetails = response.data.data.Item;
+            this.tempReceiverDetails = {
+              receiver_name: this.itemDetails.receiver_name || "",
+              receiver_email: this.itemDetails.receiver_email || "",
+              receiver_address: this.itemDetails.receiver_address || "",
+              receiver_city: this.itemDetails.receiver_city || "",
+              receiver_country: this.itemDetails.receiver_country || "",
+              receiver_state: this.itemDetails.receiver_state || "",
+              receiver_zipcode: this.itemDetails.receiver_zipcode || "",
+              receiver_mobile_no: this.itemDetails.receiver_mobile_no || "",
+            };
+            this.receiverName = this.itemDetails.receiver_name || "";
+            this.receiverEmail = this.itemDetails.receiver_email || "";
+            this.receiverMobileNo = this.itemDetails.receiver_mobile_no || "";
+            this.autoCompleteAddress.address =
+              this.itemDetails.receiver_address || "";
+            this.autoCompleteAddress.city =
+              this.itemDetails.receiver_city || "";
+            this.autoCompleteAddress.country =
+              this.itemDetails.receiver_country || "";
+            this.autoCompleteAddress.state =
+              this.itemDetails.receiver_state || "";
+            this.autoCompleteAddress.zipcode =
+              this.itemDetails.receiver_zipcode || "";
+            if (this.itemDetails.venu_type === "Airport") {
+              this.receiverCompany = "Airport Code";
+            } else if (this.itemDetails.venu_type === "Hotel") {
+              this.receiverCompany = "Hotel Name";
+            } else if (this.itemDetails.venu_type === "Restaurant") {
+              this.receiverCompany = "Restaurant Name";
+            } else {
+              this.receiverCompany = "Venue Address";
+            }
           }
         })
         .catch((error) => {
@@ -810,7 +879,6 @@ export default {
   },
   mounted() {
     if (this.$route.query.id) {
-      localStorage.removeItem("InsuranceValue");
       this.itemId = this.$route.query.id;
     } else {
       this.$nextTick(() => {
@@ -850,7 +918,7 @@ export default {
       }
     },
     validateUserPhone() {
-      if (!this.autoCompleteAddress.phoneNo) {
+      if (!this.receiverMobileNo) {
         this.isUserPhoneValid = false;
         this.userPhoneValidationMessage = "*Required";
       } else {
@@ -875,8 +943,6 @@ export default {
       autocomplete.addListener("place_changed", () => {
         let address = autocomplete.getPlace();
         this.autoCompleteAddress.address = address.formatted_address;
-        this.autoCompleteAddress.phoneNo =
-          address.international_phone_number || address.formatted_phone_number;
 
         address.address_components.forEach((component) => {
           component.types.forEach((type) => {
@@ -905,8 +971,12 @@ export default {
         state: "",
         country: "",
         zipcode: "",
-        phoneNo: "",
       };
+    },
+    formatMobileNumber2(phoneNumber) {
+      let arr = phoneNumber.split(" ");
+      let countryCode = arr.shift();
+      return countryCode + " " + arr.join("");
     },
     formatMobileNumber(phoneNumber) {
       let arr = phoneNumber.split(" ");
@@ -929,17 +999,45 @@ export default {
       };
       let params_rateQuotes = {};
       if (this.deliveryType === "0") {
-        params.receiver_address = this.autoCompleteAddress.address;
-        params.receiver_city = this.autoCompleteAddress.city;
-        params.receiver_state = this.autoCompleteAddress.state;
-        params.receiver_country = this.autoCompleteAddress.country;
-        params.receiver_zipcode = this.autoCompleteAddress.zipcode;
-        params.receiver_mobile_no = this.formatMobileNumber(
-          this.autoCompleteAddress.phoneNo
-        );
+        if (this.tempReceiverDetails.receiver_name !== this.receiverName)
+          params.receiver_name = this.receiverName;
+        if (
+          this.tempReceiverDetails.receiver_address !==
+          this.autoCompleteAddress.address
+        )
+          params.receiver_address = this.autoCompleteAddress.address;
+        if (
+          this.tempReceiverDetails.receiver_city !==
+          this.autoCompleteAddress.city
+        )
+          params.receiver_city = this.autoCompleteAddress.city;
+        if (
+          this.tempReceiverDetails.receiver_state !==
+          this.autoCompleteAddress.state
+        )
+          params.receiver_state = this.autoCompleteAddress.state;
+        if (
+          this.tempReceiverDetails.receiver_country !==
+          this.autoCompleteAddress.country
+        )
+          params.receiver_country = this.autoCompleteAddress.country;
+        if (
+          this.tempReceiverDetails.receiver_zipcode !==
+          this.autoCompleteAddress.zipcode
+        )
+          params.receiver_zipcode = this.autoCompleteAddress.zipcode;
+        if (
+          this.tempReceiverDetails.receiver_mobile_no !==
+          this.formatMobileNumber2(this.receiverMobileNo)
+        )
+          params.receiver_mobile_no = this.formatMobileNumber2(
+            this.receiverMobileNo
+          );
+        if (this.tempReceiverDetails.receiver_email !== this.receiverEmail)
+          params.receiver_email = this.receiverEmail;
 
         params_rateQuotes.name = "Prem Panwala";
-        params_rateQuotes.company = "Bacancy Company";
+        params_rateQuotes.company = this.receiverCompany;
         params_rateQuotes.street1 = this.itemDetails.address;
         params_rateQuotes.city = this.itemDetails.city;
         params_rateQuotes.state = this.itemDetails.states;
@@ -947,14 +1045,14 @@ export default {
         params_rateQuotes.phone = this.formatMobileNumber(
           this.itemDetails.venue_phone_no
         );
-        params_rateQuotes.toname = "Bhavya Makwana";
+        params_rateQuotes.toname = this.receiverName;
         params_rateQuotes.tocompany = "Bacancy Company";
         params_rateQuotes.tostreet1 = this.autoCompleteAddress.address;
         params_rateQuotes.tocity = this.autoCompleteAddress.city;
         params_rateQuotes.tostate = this.autoCompleteAddress.state;
         params_rateQuotes.tozip = this.autoCompleteAddress.zipcode;
         params_rateQuotes.tophone = this.formatMobileNumber(
-          this.autoCompleteAddress.phoneNo
+          this.receiverMobileNo
         );
         params_rateQuotes.length = Number(this.itemDetails.item_length);
         params_rateQuotes.width = Number(this.itemDetails.item_width);
@@ -978,45 +1076,23 @@ export default {
                   if (this.deliveryType === "1") {
                     this.showDialog = true;
                   } else {
-                    this.$axios
-                      .post("/getshippingrates", params_rateQuotes)
-                      .then((response) => {
-                        if (response.status === 200) {
-                          this.isLoading = false;
-                          let shippingRates = {
-                            buyer_address: response.data.buyer_address,
-                            from_address: response.data.from_address,
-                            id: response.data.id,
-                            parcel: response.data.parcel,
-                            rates: response.data.rates,
-                            return_address: response.data.return_address,
-                            to_address: response.data.to_address,
-                          };
-                          localStorage.setItem(
-                            "ShippingRates",
-                            JSON.stringify(shippingRates)
-                          );
-                          localStorage.setItem(
-                            "LableDetails",
-                            JSON.stringify(params_rateQuotes)
-                          );
-                          if (this.insuranceValue) {
-                            localStorage.setItem(
-                              "InsuranceValue",
-                              this.insuranceValue
-                            );
-                          }
-                          this.$nextTick(() => {
-                            this.$router.push({
-                              name: "rate-quotes",
-                              query: { id: this.itemId },
-                            });
-                          });
-                        }
-                      })
-                      .catch((error) => {
-                        console.log(error);
+                    this.$store.commit(
+                      "shipment/SET_LABLE_DETAILS",
+                      params_rateQuotes
+                    );
+                    if (this.insuranceValue) {
+                      this.$store.commit(
+                        "shipment/SET_INSURANCE_VALUE",
+                        this.insuranceValue
+                      );
+                    }
+                    this.$nextTick(() => {
+                      this.$router.push({
+                        name: "rate-quotes",
+                        query: { id: this.itemId },
+                        params: { fromItemDelivery: true },
                       });
+                    });
                   }
                 }
               })

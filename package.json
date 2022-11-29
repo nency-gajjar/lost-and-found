@@ -22,6 +22,7 @@
     "lodash": "^4.17.21",
     "moment": "^2.29.4",
     "nuxt": "^2.15.8",
+    "nuxt-stripe-module": "^3.2.0",
     "vee-validate": "^3.0.8",
     "vue": "^2.6.14",
     "vue-cropperjs": "^4.2.0",
@@ -31,6 +32,7 @@
     "vue-tel-input": "^5.12.0",
     "vue-template-compiler": "^2.6.14",
     "vue2-datepicker": "^3.11.0",
+    "vuex-persistedstate": "^4.1.0",
     "webpack": "^4.46.0"
   },
   "devDependencies": {
