@@ -6,6 +6,7 @@ export const state = () => ({
     signature: null,
     labelUrl: "",
     itemId: "",
+    shipmentId: "",
 })
 
 export const getters = {
@@ -29,6 +30,9 @@ export const getters = {
     },
     itemId: (state) => {
         return state.itemId;
+    },
+    shipmentId: (state) => {
+        return state.shipmentId;
     },
 }
 
@@ -54,5 +58,6 @@ export const mutations = {
     SET_LABEL_DETAILS(state, labelDetails) {
         state.labelUrl = labelDetails.lableUrl;
         state.itemId = labelDetails.itemId;
+        state.shipmentId = labelDetails.shipmentId;
     },
 }
