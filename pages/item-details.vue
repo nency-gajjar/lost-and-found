@@ -14,7 +14,7 @@
       "
       style="box-shadow: rgba(54, 28, 93, 0.04) -10px 18px 32px"
     >
-      <div v-if="!isLoadingItemDetails || Object.keys(this.itemDetails).length > 0">
+      <div v-if="!isLoadingItemDetails || Object.keys(itemDetails).length > 0">
         <ValidationObserver v-slot="{ validate }" ref="observer">
           <form @submit.prevent="validate().then(onSubmit)">
             <div class="sm:p-6 p-4 space-y-4">
@@ -1366,13 +1366,15 @@ export default {
     },
   },
   methods: {
-    resetItemDetailsStore(){
+    resetItemDetailsStore() {
       this.$store.commit("item/SET_ITEM_DETAILS", {});
       this.getItemsData();
     },
-    async getItemsData(){
+    async getItemsData() {
       this.showResetButton = false;
-      this.itemDetails = JSON.parse(JSON.stringify(this.$store.getters['item/itemDetails']));
+      this.itemDetails = JSON.parse(
+        JSON.stringify(this.$store.getters["item/itemDetails"])
+      );
       this.mobileDevice = this.isMobile();
       await this.getItemDescriptionOptions();
       window.addEventListener("keydown", () => {
@@ -1400,7 +1402,8 @@ export default {
               }
 
               var index1 =
-                this.itemDescriptionOptions.indexOf(data.item_description) !== -1;
+                this.itemDescriptionOptions.indexOf(data.item_description) !==
+                -1;
               if (index1) this.itemDescription = data.item_description;
               else {
                 this.itemDescription = "Other";
@@ -1498,13 +1501,14 @@ export default {
           this.receiverMobileNo = data.receiver_mobile_no;
         }
         this.isLoadingItemDetails = false;
-      }
-      else if(Object.keys(this.itemDetails).length > 0){
+      } else if (Object.keys(this.itemDetails).length > 0) {
         this.showResetButton = true;
         this.isLoadingItemDetails = false;
         this.senderFormTitle = "EDIT SENDER'S DETAILS";
         this.foundItemFormTitle = "EDIT FOUND ITEM'S DETAILS";
-        let data = JSON.parse(JSON.stringify(this.$store.getters['item/itemDetails']));
+        let data = JSON.parse(
+          JSON.stringify(this.$store.getters["item/itemDetails"])
+        );
         var index = this.venueOptions.indexOf(data.venu_type) !== -1;
         if (index) this.venueType = data.venu_type;
         else {
@@ -1556,8 +1560,7 @@ export default {
           this.receiverMobileNo = data.receiver_mobile_no;
         }
         this.isLoadingItemDetails = false;
-      }
-      else {
+      } else {
         this.isLoadingItemDetails = false;
         this.senderFormTitle = "SENDER'S DETAILS";
         this.foundItemFormTitle = "FOUND ITEM'S DETAILS";
@@ -1610,9 +1613,11 @@ export default {
           .then((response) => {
             if (response.status === 200) {
               this.itemDescriptionResponse = response.data?.data?.Items || [];
-              this.itemDescriptionOptions = this.itemDescriptionResponse.map((item) => {
-                return item.item_description;
-              });
+              this.itemDescriptionOptions = this.itemDescriptionResponse.map(
+                (item) => {
+                  return item.item_description;
+                }
+              );
               resolve();
             }
           })

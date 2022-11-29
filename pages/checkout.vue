@@ -34,35 +34,14 @@
           <h3 class="font-bold text-[#37322C] tracking-wider uppercase text-md">
             summary
           </h3>
-          <div class="flex justify-between space-x-4 mt-5">
-            <button class="text-left" @click="expanded = !expanded">
-              <span
-                v-if="checkoutDetail && checkoutDetail.selectedRate"
-                class="font-medium text-md"
-                >{{ checkoutDetail.selectedRate.service }}</span
-              >
-              <span
-                v-if="checkoutDetail.lableDetails"
-                class="text-gray-500 text-sm"
-              >
-                {{ packageDimensionsString }}, {{ packageWeightString }},
-                {{ fromAddressString }} {{ toAddressString }}
-              </span>
-              <span>
-                <BaseIcon
-                  v-if="!expanded"
-                  icon="angle-down"
-                  color="black"
-                  size="1x"
-                  style="max-width: 15px"
-                />
-                <BaseIcon v-else icon="angle-up" color="black" size="1x" />
-              </span>
-            </button>
-            <p
-              v-if="checkoutDetail.selectedRate"
-              class="text-display tracking-wide text-gray-700 font-medium"
-            >
+          <div
+            v-if="!isEmpty(checkoutDetail) && checkoutDetail.selectedRate"
+            class="flex justify-between space-x-4 mt-5"
+          >
+            <span class="font-medium text-md">
+              {{ displayItemService(checkoutDetail.selectedRate.service) }}
+            </span>
+            <p class="text-display tracking-wide text-gray-700 font-medium">
               {{
                 new Intl.NumberFormat("en-US", {
                   style: "currency",
@@ -72,8 +51,8 @@
             </p>
           </div>
           <div
-            v-if="expanded"
-            class="mt-2 mb-4 grid sm:grid-cols-3 gap-4 sm:gap-0"
+            v-if="!isEmpty(checkoutDetail) && checkoutDetail.lableDetails"
+            class="mt-2 mb-4 grid sm:grid-cols-2 gap-4 sm:gap-0"
           >
             <div>
               <p class="font-bold text-primary-100 uppercase">from</p>
@@ -101,28 +80,38 @@
                 </p>
               </template>
             </div>
-            <div>
-              <p class="font-bold text-primary-100 uppercase">package</p>
-              <template class="text-gray-800">
-                <p>Box</p>
-                <p>{{ packageDimensionsString }}, {{ packageWeightString }}</p>
-                <p v-if="checkoutDetail.insuranceValue">
-                  Insured for:
-                  {{
-                    new Intl.NumberFormat("en-US", {
-                      style: "currency",
-                      currency: "USD",
-                    }).format(checkoutDetail.insuranceValue)
-                  }}
-                </p>
-                <p v-if="checkoutDetail.signature">
-                  Signature Confirmation: $05.00
-                </p>
-              </template>
-            </div>
           </div>
+          <p
+            class="flex justify-between"
+            v-if="!isEmpty(checkoutDetail) && checkoutDetail.insuranceValue"
+          >
+            <span class="font-medium text-md"> Insured for: </span>
+            <span class="text-display tracking-wide text-gray-700 font-medium">
+              {{
+                new Intl.NumberFormat("en-US", {
+                  style: "currency",
+                  currency: "USD",
+                }).format(checkoutDetail.insuranceValue)
+              }}
+            </span>
+          </p>
+          <p
+            class="flex justify-between"
+            v-if="!isEmpty(checkoutDetail) && checkoutDetail.signature"
+          >
+            <span class="font-medium text-md"> Signature Confirmation:</span>
+            <span class="text-display tracking-wide text-gray-700 font-medium">
+              {{
+                new Intl.NumberFormat("en-US", {
+                  style: "currency",
+                  currency: "USD",
+                }).format(5)
+              }}
+            </span>
+          </p>
+
           <hr class="my-5" />
-          <div>
+          <div v-if="!isEmpty(checkoutDetail) && checkoutDetail.selectedRate">
             <div class="flex justify-between mt-6">
               <p class="font-semibold text-lg text-gray-800">Total Price</p>
               <p
@@ -230,74 +219,72 @@
 </template>
 
 <script>
+import { isEmpty, startCase, camelCase } from "lodash";
 export default {
   data() {
     return {
-      expanded: false,
       checkoutDetail: {},
       card: null,
       isLoading: false,
     };
   },
   mounted() {
-    if(this.$route.params.fromRatePage){
-    this.checkoutDetail = {
-      selectedRate: JSON.parse(
-        JSON.stringify(this.$store.getters["shipment/selectedRate"])
-      ),
-      insuranceValue:
-        JSON.parse(
-          JSON.stringify(this.$store.getters["shipment/insuranceValue"])
-        ) || null,
-      shippingRates: JSON.parse(
-        JSON.stringify(this.$store.getters["shipment/shippingRates"])
-      ),
-      lableDetails: JSON.parse(
-        JSON.stringify(this.$store.getters["shipment/lableDetails"])
-      ),
-      signature: JSON.parse(
-        JSON.stringify(this.$store.getters["shipment/signature"])
-      ),
-    };
+    if (this.$route.params.fromRatePage) {
+      this.checkoutDetail = {
+        selectedRate: JSON.parse(
+          JSON.stringify(this.$store.getters["shipment/selectedRate"])
+        ),
+        insuranceValue:
+          JSON.parse(
+            JSON.stringify(this.$store.getters["shipment/insuranceValue"])
+          ) || null,
+        shippingRates: JSON.parse(
+          JSON.stringify(this.$store.getters["shipment/shippingRates"])
+        ),
+        lableDetails: JSON.parse(
+          JSON.stringify(this.$store.getters["shipment/lableDetails"])
+        ),
+        signature: JSON.parse(
+          JSON.stringify(this.$store.getters["shipment/signature"])
+        ),
+      };
 
-    const elements = this.$stripe.elements({
-      fonts: [
-        {
-          cssSrc: "https://fonts.googleapis.com/css?family=Rubik:500",
-        },
-      ],
-    });
-    const style = {
-      base: {
-        color: "#361C5D",
-        fontFamily: "Rubik, sans-serif",
-        fontWeight: 500,
-        fontSmoothing: "antialiased",
-        fontSize: "16px",
-        "::placeholder": {
+      const elements = this.$stripe.elements({
+        fonts: [
+          {
+            cssSrc: "https://fonts.googleapis.com/css?family=Rubik:500",
+          },
+        ],
+      });
+      const style = {
+        base: {
           color: "#361C5D",
+          fontFamily: "Rubik, sans-serif",
+          fontWeight: 500,
+          fontSmoothing: "antialiased",
+          fontSize: "16px",
+          "::placeholder": {
+            color: "#361C5D",
+          },
         },
-      },
-      invalid: {
-        fontFamily: "Rubik, sans-serif",
-        fontWeight: 500,
-        color: "#dc2626",
-        iconColor: "#dc2626",
-      },
-    };
-    const card = elements.create("card", {
-      style,
-      iconStyle: "solid",
-      hidePostalCode: true,
-    });
-    card.mount("#card-element");
-    this.card = card;
-
-    }
-    else{
+        invalid: {
+          fontFamily: "Rubik, sans-serif",
+          fontWeight: 500,
+          color: "#dc2626",
+          iconColor: "#dc2626",
+        },
+      };
+      const card = elements.create("card", {
+        style,
+        iconStyle: "solid",
+        hidePostalCode: true,
+      });
+      card.mount("#card-element");
+      this.card = card;
+    } else {
       this.$nextTick(() => {
         this.$router.push({
-          name: "item-delivery"
+          name: "item-delivery",
         });
       });
     }
@@ -327,9 +314,13 @@ export default {
     },
   },
   methods: {
+    isEmpty,
+    displayItemService(service) {
+      return startCase(camelCase(service));
+    },
     async confirmAndPay() {
       this.isLoading = true;
-      let totalPrice = (Number(this.totalPrice.split('$')[1]).toFixed(2)) * 100; // convert usd to cents
+      let totalPrice = Number(this.totalPrice.split("$")[1]).toFixed(2) * 100; // convert usd to cents
       this.$axios
         .post("/createPaymentIntent", {
           amount: totalPrice,
@@ -344,7 +335,7 @@ export default {
                 },
               }
             );
-            if (result.paymentIntent.status === 'succeeded') {
+            if (result.paymentIntent.status === "succeeded") {
               let shippingRates = JSON.parse(
                 JSON.stringify(this.$store.getters["shipment/shippingRates"])
               );

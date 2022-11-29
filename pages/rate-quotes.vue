@@ -147,7 +147,7 @@
               cursor-pointer
               py-6
               px-12
-              mt-5
+              mt-4
               flex
               sm:flex-row
               flex-col
@@ -274,7 +274,7 @@
         <div class="w-full md:max-w-sm">
           <div
             class="
-              mt-5
+              mt-10
               max-w-sm
               hidden
               md:grid
@@ -361,10 +361,6 @@
                 >
                   Package
                 </h3>
-              </div>
-              <div class="flex justify-between text-sm leading-6">
-                <p>Category</p>
-                <p>{{ lableDetails.category }}</p>
               </div>
               <div class="flex justify-between text-sm leading-6">
                 <p>Type</p>
@@ -501,12 +497,12 @@ export default {
     },
     selecteRateQuote(item) {
       this.selectedRate = item;
-      this.$store.commit('shipment/SET_SELECTED_RATE', item);
+      this.$store.commit("shipment/SET_SELECTED_RATE", item);
       // localStorage.setItem("SelectedRate", JSON.stringify(item));
     },
     proceedToCheckout() {
       // localStorage.setItem("Signature", this.signature);
-      this.$store.commit('shipment/SET_SIGNATURE', this.signature);
+      this.$store.commit("shipment/SET_SIGNATURE", this.signature);
       this.$nextTick(() => {
         this.$router.push({
           name: "checkout",
@@ -525,41 +521,51 @@ export default {
     },
   },
   mounted() {
-    if(this.$route.params.fromItemDelivery){
+    if (this.$route.params.fromItemDelivery) {
       this.$axios
-      .post("/getshippingrates", JSON.parse(JSON.stringify(this.$store.getters['shipment/lableDetails'])))
-      .then((response) => {
-        if (response.status === 200) {
-          let shippingRates = {
-            buyer_address: response.data.buyer_address,
-            from_address: response.data.from_address,
-            id: response.data.id,
-            parcel: response.data.parcel,
-            rates: response.data.rates,
-            return_address: response.data.return_address,
-            to_address: response.data.to_address,
-          };
-          this.$store.commit("shipment/SET_SHIPPING_RATES", shippingRates);
-          let ratesQuotes = JSON.parse(JSON.stringify(this.$store.getters['shipment/shippingRates']));
-          this.rateQuoteItems = ratesQuotes.rates;
-        }
-      })
-      .catch((error) => {
-        console.log(error);
-      });
-      let lableDetails = JSON.parse(JSON.stringify(this.$store.getters['shipment/lableDetails']));
-      lableDetails.category = "My Own Packaging";
+        .post(
+          "/getshippingrates",
+          JSON.parse(
+            JSON.stringify(this.$store.getters["shipment/lableDetails"])
+          )
+        )
+        .then((response) => {
+          if (response.status === 200) {
+            let shippingRates = {
+              buyer_address: response.data.buyer_address,
+              from_address: response.data.from_address,
+              id: response.data.id,
+              parcel: response.data.parcel,
+              rates: response.data.rates,
+              return_address: response.data.return_address,
+              to_address: response.data.to_address,
+            };
+            this.$store.commit("shipment/SET_SHIPPING_RATES", shippingRates);
+            let ratesQuotes = JSON.parse(
+              JSON.stringify(this.$store.getters["shipment/shippingRates"])
+            );
+            this.rateQuoteItems = ratesQuotes.rates;
+          }
+        })
+        .catch((error) => {
+          console.log(error);
+        });
+      let lableDetails = JSON.parse(
+        JSON.stringify(this.$store.getters["shipment/lableDetails"])
+      );
+
       lableDetails.type = "Box";
-      if (this.$store.getters['shipment/insuranceValue']) {
-        lableDetails.insuranceValue = JSON.parse(JSON.stringify(this.$store.getters['shipment/insuranceValue']));
+      if (this.$store.getters["shipment/insuranceValue"]) {
+        lableDetails.insuranceValue = JSON.parse(
+          JSON.stringify(this.$store.getters["shipment/insuranceValue"])
+        );
       }
       this.lableDetails = lableDetails;
       this.sortRateQuotes(0);
-    }
-    else{
+    } else {
       this.$nextTick(() => {
         this.$router.push({
-          name: "item-delivery"
+          name: "item-delivery",
         });
       });
     }
