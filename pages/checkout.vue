@@ -363,7 +363,8 @@ export default {
                       "shipment/SET_LABEL_DETAILS",
                       {
                         lableUrl: response.data.postage_label.label_url,
-                        itemId: this.$route.query.id
+                        itemId: this.$route.query.id,
+                        shipmentId: response.data.id
                       }
                     );
                     this.isLoading = false;
