@@ -301,7 +301,7 @@
                 fields and try submitting again.
               </div>
               <div class="flex justify-end">
-                <BaseButton :is-loading="isLoading" button-type="submit">
+                <BaseButton :is-loading="isLoading" type="submit">
                   Submit
                 </BaseButton>
               </div>

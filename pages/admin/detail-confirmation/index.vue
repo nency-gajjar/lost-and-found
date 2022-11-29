@@ -702,6 +702,9 @@
             :is-loading="isLoading['Approve']"
             class="flex-1"
             @click="handleItemApprove('Approve')"
+            :disabled="
+              isLoading['Approve'] || isLoading['Approve without Image']
+            "
           >
             Approve
           </BaseButton>
@@ -712,6 +715,9 @@
             :is-loading="isLoading['Approve without Image']"
             class="flex-auto"
             @click="handleItemApprove('Approve without Image')"
+            :disabled="
+              isLoading['Approve'] || isLoading['Approve without Image']
+            "
           >
             Approve without Image
           </BaseButton>
@@ -728,29 +734,9 @@
           >
             <p class="text-center text-gray-400 font-medium mx-4 mb-0">OR</p>
           </div>
-          <button
-            type="submit"
-            class="
-              inline-block
-              px-7
-              py-3
-              bg-gray
-              hover:shadow-lg hover:bg-gray-100
-              text-gray-600 text-sm
-              leading-snug
-              uppercase
-              rounded-md
-              font-medium
-              transition
-              duration-150
-              ease-in-out
-              w-full
-              border border-gray-300
-            "
-            @click="editImage()"
+          <BaseButton class="w-full" varient="gray" @click="editImage()"
+            >Edit Image</BaseButton
           >
-            Edit Image
-          </button>
         </div>
       </section>
     </div>

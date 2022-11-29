@@ -20,24 +20,13 @@
         <div v-if="footer" class="base-modal-footer">
           <slot name="footer" />
           <slot v-if="!hideCancel" name="actions">
-            <button
+            <BaseButton
+              class="!capitalize"
+              varient="gray"
               type="submit"
-              class="
-                py-2.5
-                px-12
-                text-md
-                font-medium
-                leading-5
-                bg-gray
-                hover:shadow-lg hover:bg-gray-100
-                text-gray-600 text-md
-                rounded-md
-                border border-gray-300
-              "
               @click="$emit('close')"
-            >
-              Cancel
-            </button>
+              >Cancel
+            </BaseButton>
           </slot>
         </div>
       </div>

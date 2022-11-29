@@ -115,11 +115,7 @@
               >
                 <span class="font-medium">Oops!</span> {{ alertMessage }}
               </div>
-              <BaseButton
-                :is-loading="isLoading"
-                button-type="submit"
-                class="w-full"
-              >
+              <BaseButton :is-loading="isLoading" type="submit" class="w-full">
                 Reset Password
               </BaseButton>
             </form>

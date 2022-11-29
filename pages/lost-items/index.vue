@@ -102,59 +102,33 @@
                 gap-2
               "
             >
-              <button
+              <BaseButton
+                :icon="{
+                  name: 'filter',
+                  color: 'white',
+                  size: '1x',
+                }"
+                class="
+                  !tracking-normal
+                  !capitalize
+                  !px-4
+                  !py-2
+                  !inline-flex
+                  !items-center
+                  mr-1
+                  mb-1
+                "
+                :varient="isFilterApplied ? 'green' : 'blue'"
                 @click="applyFilters"
-                :class="
-                  isFilterApplied
-                    ? 'bg-green-600 hover:bg-green-700'
-                    : 'bg-blue-500 hover:bg-blue-600'
-                "
-                class="
-                  text-white
-                  font-bold
-                  text-sm
-                  px-4
-                  py-2
-                  rounded
-                  shadow
-                  hover:shadow-md
-                  outline-none
-                  focus:outline-none
-                  mr-1
-                  mb-1
-                "
-                type="button"
               >
-                <BaseIcon
-                  icon="filter"
-                  color="white"
-                  style="max-width: 15px"
-                  class="mr-1"
-                />
                 {{ isFilterApplied ? "Filters Applied" : "Apply Filters" }}
-              </button>
-              <button
+              </BaseButton>
+              <BaseButton
                 @click="clearFilters"
-                class="
-                  bg-gray bg-white
-                  hover:shadow-lg hover:bg-gray-100
-                  text-gray-600 text-sm
-                  font-bold
-                  px-4
-                  py-2
-                  rounded
-                  shadow
-                  hover:shadow-md
-                  outline-none
-                  border border-gray-300
-                  focus:outline-none
-                  mr-1
-                  mb-1
-                "
-                type="button"
+                varient="gray"
+                class="!bg-white !px-4 !py-2 mr-1 mb-1 !capitalize"
+                >Clear</BaseButton
               >
-                Clear
-              </button>
             </div>
           </div>
         </div>
@@ -434,25 +408,13 @@
             </div>
           </div>
           <div class="flex items-center my-4 sm:my-0 gap-3">
-            <button
-              class="
-                whitespace-nowrap
-                font-medium
-                text-sm
-                px-5
-                py-2
-                rounded-md
-                text-white
-                transition
-                duration-300
-                bg-red-500
-                hover:bg-red-600
-                focus:outline-none
-              "
+            <BaseButton
+              class="!px-5 !py-2 !capitalize"
+              varient="red"
               @click.stop="claimItem(item)"
             >
               Claim Item
-            </button>
+            </BaseButton>
           </div>
         </div>
       </div>

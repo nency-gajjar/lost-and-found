@@ -452,21 +452,12 @@
           >
             PROCEED TO CHECKOUT
           </BaseButton>
-          <button
-            class="
-              font-semibold
-              text-sm text-gray-600
-              grow
-              uppercase
-              w-full
-              md:max-w-sm
-              mt-5
-              mx-auto
-            "
+          <BaseButton
+            class="w-full mt-4"
+            varient="transparent"
             @click="stepBack"
+            >STEP BACK</BaseButton
           >
-            STEP BACK
-          </button>
         </div>
       </div>
     </div>

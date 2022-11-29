@@ -347,7 +347,7 @@
                 class="flex items-center pl-4 rounded-lg border border-gray-300"
                 :class="[
                   deliveryType === '0' &&
-                    '!border-accent-80 !ring-accent-60 !ring-[4.5px] !ring-offset-accent-80 !ring-offset-1',
+                    'border-primary-100 ring-primary-80 ring-[6px] ring-offset-primary-100 ring-offset-1',
                 ]"
               >
                 <input
@@ -359,10 +359,10 @@
                   class="
                     w-4
                     h-4
-                    text-accent-100
+                    text-primary-100
                     bg-gray-100
                     border-gray-300
-                    focus:ring-accent-200 focus:ring-2
+                    focus:ring-primary-200 focus:ring-2
                   "
                 />
                 <label
@@ -385,7 +385,7 @@
                 class="flex items-center pl-4 rounded-lg border border-gray-300"
                 :class="[
                   deliveryType === '1' &&
-                    '!border-accent-80 !ring-accent-60 !ring-[4.5px] !ring-offset-accent-80 !ring-offset-1',
+                    'border-primary-100 ring-primary-80 ring-[6px] ring-offset-primary-100 ring-offset-1',
                 ]"
               >
                 <input
@@ -398,10 +398,10 @@
                   class="
                     w-4
                     h-4
-                    text-accent-100
+                    text-primary-100
                     bg-gray-100
                     border-gray-300
-                    focus:ring-accent-200 focus:ring-2
+                    focus:ring-primary-200 focus:ring-2
                   "
                 />
                 <label
@@ -752,7 +752,7 @@
               fields and try submitting again.
             </div>
             <div class="flex justify-end">
-              <BaseButton :is-loading="isLoading" button-type="submit">
+              <BaseButton :is-loading="isLoading" type="submit">
                 Submit
               </BaseButton>
             </div>
@@ -1033,10 +1033,7 @@ export default {
           params.receiver_mobile_no = this.formatMobileNumber2(
             this.receiverMobileNo
           );
-        if (
-          this.tempReceiverDetails.receiver_email !==
-          this.receiverEmail
-        )
+        if (this.tempReceiverDetails.receiver_email !== this.receiverEmail)
           params.receiver_email = this.receiverEmail;
 
         params_rateQuotes.name = "Prem Panwala";
@@ -1079,15 +1076,21 @@ export default {
                   if (this.deliveryType === "1") {
                     this.showDialog = true;
                   } else {
-                    this.$store.commit("shipment/SET_LABLE_DETAILS", params_rateQuotes);
+                    this.$store.commit(
+                      "shipment/SET_LABLE_DETAILS",
+                      params_rateQuotes
+                    );
                     if (this.insuranceValue) {
-                      this.$store.commit("shipment/SET_INSURANCE_VALUE", this.insuranceValue);
+                      this.$store.commit(
+                        "shipment/SET_INSURANCE_VALUE",
+                        this.insuranceValue
+                      );
                     }
                     this.$nextTick(() => {
                       this.$router.push({
                         name: "rate-quotes",
                         query: { id: this.itemId },
-                        params: { fromItemDelivery: true }
+                        params: { fromItemDelivery: true },
                       });
                     });
                   }
