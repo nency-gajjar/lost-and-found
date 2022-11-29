@@ -352,27 +352,26 @@ export default {
                 to_address: shippingRates.to_address.id,
                 from_address: shippingRates.from_address.id,
                 parcel: shippingRates.parcel.id,
-                delivery_confirmation: this.checkoutDetail.signature === true ? true : false,
+                delivery_confirmation:
+                  this.checkoutDetail.signature === true ? true : false,
                 insurance: Number(insuranceValue),
               };
               this.$axios
                 .post("/createShipping", params)
                 .then((response) => {
                   if (response.status === 200) {
-                    this.$store.commit(
-                      "shipment/SET_LABEL_DETAILS",
-                      {
-                        lableUrl: response.data.postage_label.label_url,
-                        itemId: this.$route.query.id,
-                        shipmentId: response.data.id
-                      }
-                    );
-                    this.isLoading = false;
+                    this.$store.commit("shipment/SET_LABEL_DETAILS", {
+                      lableUrl: response.data.postage_label.label_url,
+                      itemId: this.$route.query.id,
+                      shipmentId: response.data.id,
+                    });
                     this.$nextTick(() => {
                       this.$router.push({
                         name: "success",
+                        query: { id: this.$route.query.id },
                       });
                     });
+                    this.isLoading = false;
                   }
                 })
                 .catch((error) => {
