@@ -133,24 +133,60 @@ export default {
       const mywindow = window.open("", "PRINT", "height=1200,width=600");
       mywindow.document.write("<html><head>");
       mywindow.document.write(`<style>
+        .flex {
+          display: flex;
+        }
+        .justify-center {
+          justify-content: center;
+        }
+        .justify-between {
+          justify-content: space-between;
+        }
         .labelContainer, .itemImgContainer{
           display: flex;
           justify-content: center;
-          margin-top: 20px;
+          margin-top: 10px;
+        }
+        .text-accent-100 {
+          color: rgb(240 107 4);
+        }
+        .text-gray-600 {
+          color: rgb(82 82 82);
         }
         .labelContainer img{
-          width: 500px;
+          width: 300px;
         }
         .itemImgContainer img{
-          width: 200px;
+          width: 100px;
         }
         .text-center{
           text-align: center;
         }
+        .font-bold{
+          font-weight: bold;
+        }
+        .w-20 {
+          width: 3rem;
+        }
+        .border-t-4 {
+          border-top-width: 4px;
+        }
+        .border-solid {
+          border-style: solid;
+        }
+        .border-gray-300 {
+          border-color: rgb(212 212 212);
+        }
+        .inline-block {
+          display: inline-block;
+        }
+        table tr td {
+          padding: 10px 20px;
+        }
       </style>`);
       mywindow.document.write("</head><body>");
       mywindow.document.write(
-        "<div><h3 class='text-center'>Item Description: " +
+        "<div class='flex justify-center'><h3 class='text-center text-accent-100'>Item Description: </h3><h3 class='text-gray-600'>" +
           this.itemDetails.item_description +
           "</h3></div>"
       );
@@ -159,6 +195,68 @@ export default {
           "<div class='itemImgContainer'><img src=" + this.itemDetails.image + "></div>"
         );
       }
+      mywindow.document.write(
+        `
+        <table>
+        <tr>
+          <td>
+            <p class='text-accent-100 font-bold'>Sender's Details: </p>
+            <span
+              class="
+                w-20
+                border-t-4 border-solid border-gray-300
+                inline-block
+              "
+            ></span>
+            <p>Sender Affiliation: ${this.itemDetails.venue_type}</p>
+            <p>Email: ${this.itemDetails.venue_email}</p>
+            <p>Mobile number: ${this.itemDetails.venue_phone_no}</p>
+          </td>
+          <td>
+            <p class='text-accent-100 font-bold'>Receiver's Details: </p>
+            <span
+              class="
+                w-20
+                border-t-4 border-solid border-gray-300
+                inline-block
+              "
+            ></span>
+            <p>Name: ${this.itemDetails.receiver_name}</p>
+            <p>Email: ${this.itemDetails.receiver_email}</p>
+            <p>Mobile number: ${this.itemDetails.receiver_mobile_no}</p>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <p class='text-accent-100 font-bold'>Package Details: </p>
+            <span
+              class="
+                w-20
+                border-t-4 border-solid border-gray-300
+                inline-block
+              "
+            ></span>
+            <p>Item Description: ${this.itemDetails.item_description}</p>
+            <p>Weight: ${this.itemDetails.weight_pounds} lbs</p>
+            <p>Dimension: ${this.itemDetails.item_length}(l) x ${this.itemDetails.item_width}(w) x ${this.itemDetails.item_height}(h) </p>
+          </td>
+          <td>
+            <p class='text-accent-100 font-bold'>Shipping Details: </p>
+            <span
+              class="
+                w-20
+                border-t-4 border-solid border-gray-300
+                inline-block
+              "
+            ></span>
+            <p>Name: $ ${this.itemDetails.total_amount / 100}</p>
+            <p>Service: ${this.itemDetails.service_name}</p>
+            <p>Service provider: ${this.itemDetails.service_provider}</p>
+          </td>
+        </tr>
+        </table>
+        `
+      );
       mywindow.document.write(
         "<div class='labelContainer'><img src=" + this.labelUrl + "></div>"
       );
