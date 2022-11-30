@@ -134,6 +134,25 @@ export default {
         try{
           let response = await this.$axios.post("/schedulePickup", params);
           this.$toast.info("Pickup scheduled successfully!");
+          let update_params = {
+            min_datetime: moment(this.dateTimeRange[0]).format("YYYY-MM-DD HH:mm:ss"),
+            max_datetime: moment(this.dateTimeRange[1]).format("YYYY-MM-DD HH:mm:ss"),
+            shipment: JSON.parse(JSON.stringify(this.$store.getters["shipment/shipmentId"])),
+            scheduled_pickup: true
+          }
+
+          if (this.$store.getters["shipment/itemId"]) {
+            this.itemId = JSON.parse(
+              JSON.stringify(this.$store.getters["shipment/itemId"])
+            );
+            try {
+              let response = await this.$axios.post(
+                "/updatesinglelostitem?id=" + this.itemId, update_params
+              );
+            } catch (err) {
+              console.log(err);
+            }
+          }
         }
         catch(error){
           this.$toast.error("Something went wrong! Please try again.");

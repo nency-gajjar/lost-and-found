@@ -441,24 +441,6 @@
               </ValidationProvider>
               <ValidationProvider
                 v-slot="{ errors }"
-                rules="required"
-                class="block"
-              >
-                <BaseInput
-                  v-model="receiverCompany"
-                  type="text"
-                  label="Company Name"
-                  :class="errors.length > 0 && 'error'"
-                />
-                <p
-                  v-if="errors.length"
-                  class="vee-validation-error mt-2 text-sm text-red-600"
-                >
-                  {{ errors[0] }}
-                </p>
-              </ValidationProvider>
-              <ValidationProvider
-                v-slot="{ errors }"
                 rules="required|email"
                 class="block"
                 name="Receiver Email"
@@ -796,13 +778,16 @@ export default {
     receiverName: "",
     receiverEmail: "",
     receiverCompany: "",
+    venueName: "",
     receiverMobileNo: "",
+    senderCompany: "",
     autoCompleteAddress: {
       address: "",
       city: "",
       state: "",
       country: "",
       zipcode: "",
+      country: ""
     },
     bindPhoneInputProps: {
       mode: "international",
@@ -846,6 +831,7 @@ export default {
               receiver_zipcode: this.itemDetails.receiver_zipcode || "",
               receiver_mobile_no: this.itemDetails.receiver_mobile_no || "",
             };
+            this.venueName = this.itemDetails.venue_name || "";
             this.receiverName = this.itemDetails.receiver_name || "";
             this.receiverEmail = this.itemDetails.receiver_email || "";
             this.receiverMobileNo = this.itemDetails.receiver_mobile_no || "";
@@ -860,13 +846,13 @@ export default {
             this.autoCompleteAddress.zipcode =
               this.itemDetails.receiver_zipcode || "";
             if (this.itemDetails.venu_type === "Airport") {
-              this.receiverCompany = "Airport Code";
+              this.senderCompany = "Airport Code";
             } else if (this.itemDetails.venu_type === "Hotel") {
-              this.receiverCompany = "Hotel Name";
+              this.senderCompany = "Hotel Name";
             } else if (this.itemDetails.venu_type === "Restaurant") {
-              this.receiverCompany = "Restaurant Name";
+              this.senderCompany = "Restaurant Name";
             } else {
-              this.receiverCompany = "Venue Address";
+              this.senderCompany = "Venue Address";
             }
           }
         })
@@ -880,6 +866,10 @@ export default {
   mounted() {
     if (this.$route.query.id) {
       this.itemId = this.$route.query.id;
+      this.$store.commit(
+        "shipment/SET_ITEM_DELIVERY_ID",
+        this.itemId
+      );
     } else {
       this.$nextTick(() => {
         this.$router.push({
@@ -942,6 +932,7 @@ export default {
       );
       autocomplete.addListener("place_changed", () => {
         let address = autocomplete.getPlace();
+        this.receiverCompany = address.name;
         this.autoCompleteAddress.address = address.formatted_address;
 
         address.address_components.forEach((component) => {
@@ -971,6 +962,7 @@ export default {
         state: "",
         country: "",
         zipcode: "",
+        country: ""
       };
     },
     formatMobileNumber2(phoneNumber) {
@@ -1036,21 +1028,23 @@ export default {
         if (this.tempReceiverDetails.receiver_email !== this.receiverEmail)
           params.receiver_email = this.receiverEmail;
 
-        params_rateQuotes.name = "Prem Panwala";
-        params_rateQuotes.company = this.receiverCompany;
+        params_rateQuotes.name = this.venueName;
+        params_rateQuotes.company = this.senderCompany;
         params_rateQuotes.street1 = this.itemDetails.address;
         params_rateQuotes.city = this.itemDetails.city;
         params_rateQuotes.state = this.itemDetails.states;
         params_rateQuotes.zip = this.itemDetails.zipcode;
+        params_rateQuotes.country = this.itemDetails.country.trim();
         params_rateQuotes.phone = this.formatMobileNumber(
           this.itemDetails.venue_phone_no
         );
         params_rateQuotes.toname = this.receiverName;
-        params_rateQuotes.tocompany = "Bacancy Company";
+        params_rateQuotes.tocompany = this.receiverCompany;
         params_rateQuotes.tostreet1 = this.autoCompleteAddress.address;
         params_rateQuotes.tocity = this.autoCompleteAddress.city;
         params_rateQuotes.tostate = this.autoCompleteAddress.state;
         params_rateQuotes.tozip = this.autoCompleteAddress.zipcode;
+        params_rateQuotes.tocountry = this.autoCompleteAddress.country;
         params_rateQuotes.tophone = this.formatMobileNumber(
           this.receiverMobileNo
         );
@@ -1069,31 +1063,12 @@ export default {
         .post("/updatesinglelostitem?id=" + this.itemId, params)
         .then((response) => {
           if (response.status === 200) {
-            this.$axios
+            if(this.deliveryType === "1"){
+              this.$axios
               .post("/holdforpickupmail?id=" + this.itemId)
               .then((response) => {
                 if (response.status === 200) {
-                  if (this.deliveryType === "1") {
-                    this.showDialog = true;
-                  } else {
-                    this.$store.commit(
-                      "shipment/SET_LABLE_DETAILS",
-                      params_rateQuotes
-                    );
-                    if (this.insuranceValue) {
-                      this.$store.commit(
-                        "shipment/SET_INSURANCE_VALUE",
-                        this.insuranceValue
-                      );
-                    }
-                    this.$nextTick(() => {
-                      this.$router.push({
-                        name: "rate-quotes",
-                        query: { id: this.itemId },
-                        params: { fromItemDelivery: true },
-                      });
-                    });
-                  }
+                  this.showDialog = true;
                 }
               })
               .catch((error) => {
@@ -1101,6 +1076,26 @@ export default {
                 this.$toast.error("Something went wrong! Please try again.");
                 this.isLoading = false;
               });
+            }
+            else{
+              this.$store.commit(
+                "shipment/SET_LABLE_DETAILS",
+                params_rateQuotes
+              );
+              if (this.insuranceValue) {
+                this.$store.commit(
+                  "shipment/SET_INSURANCE_VALUE",
+                  this.insuranceValue
+                );
+              }
+              this.$nextTick(() => {
+                this.$router.push({
+                  name: "rate-quotes",
+                  query: { id: this.itemId },
+                  params: { fromItemDelivery: true },
+                });
+              });
+            }
           }
         })
         .catch((error) => {

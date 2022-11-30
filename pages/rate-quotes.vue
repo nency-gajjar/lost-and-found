@@ -566,11 +566,21 @@ export default {
       this.lableDetails = lableDetails;
       this.sortRateQuotes(0);
     } else {
-      this.$nextTick(() => {
-        this.$router.push({
-          name: "item-delivery",
+      if(JSON.parse(JSON.stringify(this.$store.getters["shipment/itemDeliveryId"]))){
+        this.$nextTick(() => {
+          this.$router.push({
+            name: "item-delivery",
+            query: { id: JSON.parse(JSON.stringify(this.$store.getters["shipment/itemDeliveryId"])) },
+          });
         });
-      });
+      }
+      else{
+        this.$nextTick(() => {
+          this.$router.push({
+            name: "lost-items",
+          });
+        });
+      }
     }
   },
 };

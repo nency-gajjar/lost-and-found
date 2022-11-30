@@ -92,6 +92,18 @@
                     </div>
                   </td>
                 </tr>
+                <tr v-show="itemDetails.venue_name" class="l-2">
+                  <td>
+                    <div class="text-left text-gray-600 font-medium">
+                      Venue Name
+                    </div>
+                  </td>
+                  <td>
+                    <div class="text-gray-600 text-left">
+                      {{ itemDetails.venue_name }}
+                    </div>
+                  </td>
+                </tr>
                 <tr class="l-2">
                   <td>
                     <div class="text-left text-gray-600 font-medium">

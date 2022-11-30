@@ -88,8 +88,7 @@ export default {
       labelUrl: "",
       itemId: "",
       showSchedulePickup: false,
-      itemImage: "",
-      itemDescription: "",
+      itemDetails: {},
     };
   },
   async mounted() {
@@ -102,13 +101,28 @@ export default {
       this.itemId = JSON.parse(
         JSON.stringify(this.$store.getters["shipment/itemId"])
       );
+
+      let update_params = {
+        from_address: JSON.parse(JSON.stringify(this.$store.getters["shipment/shippingRates"])).from_address.id,
+        to_address: JSON.parse(JSON.stringify(this.$store.getters["shipment/shippingRates"])).to_address.id,
+        carrier_accounts: JSON.parse(JSON.stringify(this.$store.getters["shipment/selectedRate"])).carrier_account_id,
+        parcel: JSON.parse(JSON.stringify(this.$store.getters["shipment/shippingRates"])).parcel.id,
+        delivery_confirmation: JSON.parse(JSON.stringify(this.$store.getters["shipment/signature"])) === true ? true : false,
+      }
+
+      try {
+        let response = await this.$axios.post(
+          "/updatesinglelostitem?id=" + this.itemId, update_params
+        );
+      } catch (err) {
+        console.log(err);
+      }
+
       try {
         let response = await this.$axios.get(
           "/getsinglelostitem?id=" + this.itemId
         );
-        let itemDetails = response.data.data.Item;
-        this.itemImage = itemDetails.image;
-        this.itemDescription = itemDetails.item_description;
+        this.itemDetails = response.data.data.Item;
       } catch (err) {
         console.log(err);
       }
@@ -137,12 +151,12 @@ export default {
       mywindow.document.write("</head><body>");
       mywindow.document.write(
         "<div><h3 class='text-center'>Item Description: " +
-          this.itemDescription +
+          this.itemDetails.item_description +
           "</h3></div>"
       );
-      if (this.itemImage) {
+      if (this.itemDetails.image) {
         mywindow.document.write(
-          "<div class='itemImgContainer'><img src=" + this.itemImage + "></div>"
+          "<div class='itemImgContainer'><img src=" + this.itemDetails.image + "></div>"
         );
       }
       mywindow.document.write(
