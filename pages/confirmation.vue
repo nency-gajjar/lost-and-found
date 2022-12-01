@@ -465,8 +465,12 @@ export default {
         this.$html2pdf(document.getElementById("printMe"), {
           margin: 1,
           filename: "item-detprintMeails.pdf",
-          image: { type: "jpeg", quality: 0.98 },
-          html2canvas: { dpi: 192, letterRendering: true },
+          image: { type: "jpg", quality: 0.98 },
+          html2canvas: {
+            dpi: 300,
+            letterRendering: true,
+            useCORS: true
+          },
           jsPDF: { unit: "in", format: "letter", orientation: "portrait" },
         });
       } else {

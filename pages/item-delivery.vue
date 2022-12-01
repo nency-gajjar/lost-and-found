@@ -1088,6 +1088,12 @@ export default {
                   this.insuranceValue
                 );
               }
+              else{
+                this.$store.commit(
+                  "shipment/SET_INSURANCE_VALUE",
+                  ""
+                );
+              }
               this.$nextTick(() => {
                 this.$router.push({
                   name: "rate-quotes",
