@@ -337,7 +337,7 @@ export default {
     },
     async confirmAndPay() {
       this.isLoading = true;
-      let totalPrice = Number(this.totalPrice.split("$")[1]).toFixed(2) * 100; // convert usd to cents
+      let totalPrice =  Math.floor(Number(this.totalPrice.split("$")[1]).toFixed(2) * 100); // convert usd to cents
       this.$axios
         .post("/createPaymentIntent", {
           amount: totalPrice,
