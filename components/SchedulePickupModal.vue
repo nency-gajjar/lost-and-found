@@ -10,7 +10,10 @@
       class="bg-primary-60 space-y-4 !shadow-primary flex flex-col text-left"
     >
       <ValidationObserver v-slot="{ validate }" ref="observer">
-        <form class="grid gap-4 mt-1" @submit.prevent="validate().then(onSubmit)">
+        <form
+          class="grid gap-4 mt-1"
+          @submit.prevent="validate().then(onSubmit)"
+        >
           <ValidationProvider
             v-slot="{ errors }"
             rules="required"
@@ -51,7 +54,10 @@
                 transition-shadow
                 text-gray-800
               "
-              :class="errors.length > 0 && 'border-red-500 border-2 ring-4 ring-red-500 ring-opacity-10 rounded-lg  transition-none'"
+              :class="
+                errors.length > 0 &&
+                'border-red-500 border-2 ring-4 ring-red-500 ring-opacity-10 rounded-lg  transition-none'
+              "
             ></textarea>
 
             <p
@@ -88,9 +94,9 @@
             </p>
           </ValidationProvider>
           <BaseButton
-            variant="primary"
             type="submit"
             class="max-w-[16rem] w-full mx-auto my-2"
+            :is-loading="isLoading"
           >
             Submit
           </BaseButton>
@@ -110,28 +116,38 @@ export default {
     showModal: { type: Boolean, default: false },
   },
   components: {
-    DatePicker
+    DatePicker,
   },
   data() {
     return {
       reference: "",
       instructions: "",
-      dateTimeRange: []
+      dateTimeRange: [],
+      isLoading: false,
     };
   },
   methods: {
-    async onSubmit(){
+    async onSubmit() {
       const isValid = await this.$refs.observer.validate();
-      if(isValid){
+      if (isValid) {
+        this.isLoading = true;
         let params = {
-          address: JSON.parse(JSON.stringify(this.$store.getters["shipment/shippingRates"])).from_address.id,
-          shipment: JSON.parse(JSON.stringify(this.$store.getters["shipment/shipmentId"])),
+          address: JSON.parse(
+            JSON.stringify(this.$store.getters["shipment/shippingRates"])
+          ).from_address.id,
+          shipment: JSON.parse(
+            JSON.stringify(this.$store.getters["shipment/shipmentId"])
+          ),
           reference: this.reference,
-          min_datetime: moment(this.dateTimeRange[0]).format("YYYY-MM-DD HH:mm:ss"),
-          max_datetime: moment(this.dateTimeRange[1]).format("YYYY-MM-DD HH:mm:ss"),
+          min_datetime: moment(this.dateTimeRange[0]).format(
+            "YYYY-MM-DD HH:mm:ss"
+          ),
+          max_datetime: moment(this.dateTimeRange[1]).format(
+            "YYYY-MM-DD HH:mm:ss"
+          ),
           instructions: this.instructions,
         };
-        try{
+        try {
           let response = await this.$axios.post("/schedulePickup", params);
           this.$toast.info("Pickup scheduled successfully!");
           let update_params = {
@@ -149,18 +165,21 @@ export default {
               let response = await this.$axios.post(
                 "/updatesinglelostitem?id=" + this.itemId, update_params
               );
+              this.isLoading = false;
             } catch (err) {
               console.log(err);
+              this.isLoading = false;
             }
           }
         }
         catch(error){
           this.$toast.error("Something went wrong! Please try again.");
           console.log(error);
+          this.isLoading = false;
         }
       }
-    }
-  }
+    },
+  },
 };
 </script>
 
