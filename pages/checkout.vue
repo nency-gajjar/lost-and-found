@@ -282,15 +282,22 @@ export default {
       card.mount("#card-element");
       this.card = card;
     } else {
-      if(JSON.parse(JSON.stringify(this.$store.getters["shipment/itemDeliveryId"]))){
+      if (
+        JSON.parse(
+          JSON.stringify(this.$store.getters["shipment/itemDeliveryId"])
+        )
+      ) {
         this.$nextTick(() => {
           this.$router.push({
             name: "item-delivery",
-            query: { id: JSON.parse(JSON.stringify(this.$store.getters["shipment/itemDeliveryId"])) },
+            query: {
+              id: JSON.parse(
+                JSON.stringify(this.$store.getters["shipment/itemDeliveryId"])
+              ),
+            },
           });
         });
-      }
-      else{
+      } else {
         this.$nextTick(() => {
           this.$router.push({
             name: "lost-items",
@@ -362,7 +369,8 @@ export default {
                 to_address: shippingRates.to_address.id,
                 from_address: shippingRates.from_address.id,
                 parcel: shippingRates.parcel.id,
-                delivery_confirmation: this.checkoutDetail.signature === true ? true : false,
+                delivery_confirmation:
+                  this.checkoutDetail.signature === true ? true : false,
                 insurance: Number(insuranceValue),
               };
               this.$axios
@@ -371,31 +379,41 @@ export default {
                   if (response.status === 200) {
                     let shippingResponse = response;
                     this.$axios
-                      .post("/updatesinglelostitem?id=" + this.$route.query.id, {
-                        total_amount: totalPrice,
-                        service_name: this.checkoutDetail.selectedRate.service,
-                        service_provider: this.checkoutDetail.selectedRate.carrier,
-                        scheduled_pickup: false
-                      })
+                      .post(
+                        "/updatesinglelostitem?id=" + this.$route.query.id,
+                        {
+                          total_amount: totalPrice,
+                          service_name:
+                            this.checkoutDetail.selectedRate.service,
+                          service_provider:
+                            this.checkoutDetail.selectedRate.carrier,
+                          scheduled_pickup: false,
+                        }
+                      )
                       .then((response) => {
-                        this.$store.commit(
-                          "shipment/SET_LABEL_DETAILS",
-                          {
-                            lableUrl: shippingResponse.data.postage_label.label_url,
-                            itemId: this.$route.query.id,
-                            shipmentId: shippingResponse.data.id
-                          }
-                        );
+                        this.$store.commit("shipment/SET_LABEL_DETAILS", {
+                          lableUrl:
+                            shippingResponse.data.postage_label.label_url,
+                          itemId: this.$route.query.id,
+                          shipmentId: shippingResponse.data.id,
+                        });
                         this.isLoading = false;
                         this.$nextTick(() => {
                           this.$router.push({
                             name: "success",
+                            query: {
+                              id: JSON.parse(
+                                JSON.stringify(
+                                  this.$store.getters["shipment/itemDeliveryId"]
+                                )
+                              ),
+                            },
                           });
                         });
                       })
                       .catch((error) => {
                         console.log(error);
-                      })
+                      });
                   }
                 })
                 .catch((error) => {

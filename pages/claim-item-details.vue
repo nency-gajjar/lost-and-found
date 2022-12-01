@@ -702,6 +702,11 @@ export default {
         sender_approval: type === "Approve" ? true : false,
         receiver_name: this.claimDetails.claimpersonitemname,
         receiver_email: this.claimDetails.claimpersonemail,
+        receiver_address: this.claimDetails.claimpersonlocation,
+        receiver_city: this.claimDetails.claimpersoncity,
+        receiver_country: this.claimDetails.claimpersoncountry,
+        receiver_state: this.claimDetails.claimpersonstate,
+        receiver_zipcode: this.claimDetails.claimpersonzipcode,
         receiver_mobile_no: this.claimDetails.claimpersonmobileno,
       };
       this.isLoading[type] = true;

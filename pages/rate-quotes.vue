@@ -190,7 +190,9 @@
                     gap-3
                   "
                 >
-                  <div class="mb-1 flex-col items-start justify-center text-left">
+                  <div
+                    class="mb-1 flex-col items-start justify-center text-left"
+                  >
                     <h4
                       class="font-semibold text-[#212B36] text-lg tracking-wide"
                     >
@@ -220,7 +222,9 @@
                   </div>
                 </div>
               </div>
-              <div class="flex items-center my-4 sm:my-0 gap-3 rateLogoContainer">
+              <div
+                class="flex items-center my-4 sm:my-0 gap-3 rateLogoContainer"
+              >
                 <img
                   v-if="item.carrier === 'USPS'"
                   class="
@@ -320,7 +324,7 @@
                 <p class="text-sm leading-6">{{ lableDetails.phone }}</p>
               </div>
               <div class="text-sm leading-6">
-                <p>{{ lableDetails.name }}</p>
+                <!-- <p>{{ lableDetails.name }}</p> -->
                 <p>{{ lableDetails.company }}</p>
                 <p>{{ lableDetails.street1 }}</p>
                 <p>
@@ -556,7 +560,7 @@ export default {
       let lableDetails = JSON.parse(
         JSON.stringify(this.$store.getters["shipment/lableDetails"])
       );
-      
+
       lableDetails.type = "Box";
       if (this.$store.getters["shipment/insuranceValue"]) {
         lableDetails.insuranceValue = JSON.parse(
@@ -566,15 +570,22 @@ export default {
       this.lableDetails = lableDetails;
       this.sortRateQuotes(0);
     } else {
-      if(JSON.parse(JSON.stringify(this.$store.getters["shipment/itemDeliveryId"]))){
+      if (
+        JSON.parse(
+          JSON.stringify(this.$store.getters["shipment/itemDeliveryId"])
+        )
+      ) {
         this.$nextTick(() => {
           this.$router.push({
             name: "item-delivery",
-            query: { id: JSON.parse(JSON.stringify(this.$store.getters["shipment/itemDeliveryId"])) },
+            query: {
+              id: JSON.parse(
+                JSON.stringify(this.$store.getters["shipment/itemDeliveryId"])
+              ),
+            },
           });
         });
-      }
-      else{
+      } else {
         this.$nextTick(() => {
           this.$router.push({
             name: "lost-items",

@@ -486,12 +486,12 @@ export default {
           claimpersondescription: this.itemDescription,
           claimpersondatelost: moment(this.itemLostDate).format("YYYY-MM-DD"),
           claimpersonlocation: this.autoCompleteAddress.address,
+          claimpersoncity: this.autoCompleteAddress.city,
+          claimpersoncountry: this.autoCompleteAddress.country,
+          claimpersonstate: this.autoCompleteAddress.state,
+          claimpersonzipcode: this.autoCompleteAddress.zipcode,
           itemid: this.itemId,
-          venue_email: this.venueEmail,
         };
-        if (this.secondaryEmail) {
-          params.secondary_email = this.secondaryEmail;
-        }
         this.$axios
           .post("/sendclaimitemmail", params)
           .then((response) => {

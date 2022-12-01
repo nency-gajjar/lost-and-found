@@ -78,6 +78,7 @@
 
 <script>
 import SchedulePickupModal from "~/components/SchedulePickupModal.vue";
+import { startCase, camelCase } from "lodash";
 
 export default {
   components: {
@@ -103,16 +104,30 @@ export default {
       );
 
       let update_params = {
-        from_address: JSON.parse(JSON.stringify(this.$store.getters["shipment/shippingRates"])).from_address.id,
-        to_address: JSON.parse(JSON.stringify(this.$store.getters["shipment/shippingRates"])).to_address.id,
-        carrier_accounts: JSON.parse(JSON.stringify(this.$store.getters["shipment/selectedRate"])).carrier_account_id,
-        parcel: JSON.parse(JSON.stringify(this.$store.getters["shipment/shippingRates"])).parcel.id,
-        delivery_confirmation: JSON.parse(JSON.stringify(this.$store.getters["shipment/signature"])) === true ? true : false,
-      }
+        from_address: JSON.parse(
+          JSON.stringify(this.$store.getters["shipment/shippingRates"])
+        ).from_address.id,
+        to_address: JSON.parse(
+          JSON.stringify(this.$store.getters["shipment/shippingRates"])
+        ).to_address.id,
+        carrier_accounts: JSON.parse(
+          JSON.stringify(this.$store.getters["shipment/selectedRate"])
+        ).carrier_account_id,
+        parcel: JSON.parse(
+          JSON.stringify(this.$store.getters["shipment/shippingRates"])
+        ).parcel.id,
+        delivery_confirmation:
+          JSON.parse(
+            JSON.stringify(this.$store.getters["shipment/signature"])
+          ) === true
+            ? true
+            : false,
+      };
 
       try {
         let response = await this.$axios.post(
-          "/updatesinglelostitem?id=" + this.itemId, update_params
+          "/updatesinglelostitem?id=" + this.itemId,
+          update_params
         );
       } catch (err) {
         console.log(err);
@@ -129,6 +144,9 @@ export default {
     }
   },
   methods: {
+    displayItemService(service) {
+      return startCase(camelCase(service));
+    },
     printLabel() {
       const mywindow = window.open("", "PRINT", "height=1200,width=600");
       mywindow.document.write("<html><head>");
@@ -185,14 +203,11 @@ export default {
         }
       </style>`);
       mywindow.document.write("</head><body>");
-      mywindow.document.write(
-        "<div class='flex justify-center'><h3 class='text-center text-accent-100'>Item Description: </h3><h3 class='text-gray-600'>" +
-          this.itemDetails.item_description +
-          "</h3></div>"
-      );
       if (this.itemDetails.image) {
         mywindow.document.write(
-          "<div class='itemImgContainer'><img src=" + this.itemDetails.image + "></div>"
+          "<div class='itemImgContainer'><img src=" +
+            this.itemDetails.image +
+            "></div>"
         );
       }
       mywindow.document.write(
@@ -201,26 +216,12 @@ export default {
         <tr>
           <td>
             <p class='text-accent-100 font-bold'>Sender's Details: </p>
-            <span
-              class="
-                w-20
-                border-t-4 border-solid border-gray-300
-                inline-block
-              "
-            ></span>
-            <p>Sender Affiliation: ${this.itemDetails.venue_type}</p>
+            <p>Sender Affiliation: ${this.itemDetails.venu_type}</p>
             <p>Email: ${this.itemDetails.venue_email}</p>
             <p>Mobile number: ${this.itemDetails.venue_phone_no}</p>
           </td>
           <td>
             <p class='text-accent-100 font-bold'>Receiver's Details: </p>
-            <span
-              class="
-                w-20
-                border-t-4 border-solid border-gray-300
-                inline-block
-              "
-            ></span>
             <p>Name: ${this.itemDetails.receiver_name}</p>
             <p>Email: ${this.itemDetails.receiver_email}</p>
             <p>Mobile number: ${this.itemDetails.receiver_mobile_no}</p>
@@ -229,28 +230,18 @@ export default {
         <tr>
           <td>
             <p class='text-accent-100 font-bold'>Package Details: </p>
-            <span
-              class="
-                w-20
-                border-t-4 border-solid border-gray-300
-                inline-block
-              "
-            ></span>
             <p>Item Description: ${this.itemDetails.item_description}</p>
-            <p>Weight: ${this.itemDetails.weight_pounds} lbs</p>
-            <p>Dimension: ${this.itemDetails.item_length}(l) x ${this.itemDetails.item_width}(w) x ${this.itemDetails.item_height}(h) </p>
+            <p>Weight: ${this.itemDetails.weight_pounds} LBS</p>
+            <p>Dimension: ${this.itemDetails.item_length}(l) x ${
+          this.itemDetails.item_width
+        }(w) x ${this.itemDetails.item_height}(h) </p>
           </td>
           <td>
             <p class='text-accent-100 font-bold'>Shipping Details: </p>
-            <span
-              class="
-                w-20
-                border-t-4 border-solid border-gray-300
-                inline-block
-              "
-            ></span>
-            <p>Name: $ ${this.itemDetails.total_amount / 100}</p>
-            <p>Service: ${this.itemDetails.service_name}</p>
+            <p>Amount: $ ${this.itemDetails.total_amount / 100}</p>
+            <p>Service: ${this.displayItemService(
+              this.itemDetails.service_name
+            )}</p>
             <p>Service provider: ${this.itemDetails.service_provider}</p>
           </td>
         </tr>

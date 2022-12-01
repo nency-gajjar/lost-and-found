@@ -156,10 +156,10 @@
                     sm:w-6/12
                   "
                 >
-                  Venue
+                  Venue Name
                 </div>
                 <div class="text-gray-600 text-left md:w-7/12 sm:w-6/12">
-                  {{ itemDetails.venu_type }}
+                  {{ itemDetails.venue_name }}
                 </div>
               </div>
               <div class="flex items-center mt-3 flex-wrap">
@@ -778,16 +778,15 @@ export default {
     receiverName: "",
     receiverEmail: "",
     receiverCompany: "",
-    venueName: "",
+    // venueName: "",
     receiverMobileNo: "",
-    senderCompany: "",
+    // senderCompany: "",
     autoCompleteAddress: {
       address: "",
       city: "",
       state: "",
       country: "",
       zipcode: "",
-      country: ""
     },
     bindPhoneInputProps: {
       mode: "international",
@@ -831,7 +830,7 @@ export default {
               receiver_zipcode: this.itemDetails.receiver_zipcode || "",
               receiver_mobile_no: this.itemDetails.receiver_mobile_no || "",
             };
-            this.venueName = this.itemDetails.venue_name || "";
+            // this.venueName = this.itemDetails.venue_name || "";
             this.receiverName = this.itemDetails.receiver_name || "";
             this.receiverEmail = this.itemDetails.receiver_email || "";
             this.receiverMobileNo = this.itemDetails.receiver_mobile_no || "";
@@ -845,15 +844,15 @@ export default {
               this.itemDetails.receiver_state || "";
             this.autoCompleteAddress.zipcode =
               this.itemDetails.receiver_zipcode || "";
-            if (this.itemDetails.venu_type === "Airport") {
-              this.senderCompany = "Airport Code";
-            } else if (this.itemDetails.venu_type === "Hotel") {
-              this.senderCompany = "Hotel Name";
-            } else if (this.itemDetails.venu_type === "Restaurant") {
-              this.senderCompany = "Restaurant Name";
-            } else {
-              this.senderCompany = "Venue Address";
-            }
+            // if (this.itemDetails.venu_type === "Airport") {
+            //   this.senderCompany = "Airport Code";
+            // } else if (this.itemDetails.venu_type === "Hotel") {
+            //   this.senderCompany = "Hotel Name";
+            // } else if (this.itemDetails.venu_type === "Restaurant") {
+            //   this.senderCompany = "Restaurant Name";
+            // } else {
+            //   this.senderCompany = "Venue Address";
+            // }
           }
         })
         .catch((error) => {
@@ -866,10 +865,7 @@ export default {
   mounted() {
     if (this.$route.query.id) {
       this.itemId = this.$route.query.id;
-      this.$store.commit(
-        "shipment/SET_ITEM_DELIVERY_ID",
-        this.itemId
-      );
+      this.$store.commit("shipment/SET_ITEM_DELIVERY_ID", this.itemId);
     } else {
       this.$nextTick(() => {
         this.$router.push({
@@ -962,7 +958,6 @@ export default {
         state: "",
         country: "",
         zipcode: "",
-        country: ""
       };
     },
     formatMobileNumber2(phoneNumber) {
@@ -1027,9 +1022,10 @@ export default {
           );
         if (this.tempReceiverDetails.receiver_email !== this.receiverEmail)
           params.receiver_email = this.receiverEmail;
-
-        params_rateQuotes.name = this.venueName;
-        params_rateQuotes.company = this.senderCompany;
+        params_rateQuotes.name = this.itemDetails.venue_name;
+        params_rateQuotes.company = this.itemDetails.venue_name;
+        // params_rateQuotes.name = this.itemDetails.itemDetails;
+        // params_rateQuotes.company = this.itemDetails.venue_name;
         params_rateQuotes.street1 = this.itemDetails.address;
         params_rateQuotes.city = this.itemDetails.city;
         params_rateQuotes.state = this.itemDetails.states;
@@ -1063,21 +1059,20 @@ export default {
         .post("/updatesinglelostitem?id=" + this.itemId, params)
         .then((response) => {
           if (response.status === 200) {
-            if(this.deliveryType === "1"){
+            if (this.deliveryType === "1") {
               this.$axios
-              .post("/holdforpickupmail?id=" + this.itemId)
-              .then((response) => {
-                if (response.status === 200) {
-                  this.showDialog = true;
-                }
-              })
-              .catch((error) => {
-                console.log(error);
-                this.$toast.error("Something went wrong! Please try again.");
-                this.isLoading = false;
-              });
-            }
-            else{
+                .post("/holdforpickupmail?id=" + this.itemId)
+                .then((response) => {
+                  if (response.status === 200) {
+                    this.showDialog = true;
+                  }
+                })
+                .catch((error) => {
+                  console.log(error);
+                  this.$toast.error("Something went wrong! Please try again.");
+                  this.isLoading = false;
+                });
+            } else {
               this.$store.commit(
                 "shipment/SET_LABLE_DETAILS",
                 params_rateQuotes
