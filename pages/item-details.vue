@@ -1205,6 +1205,7 @@ import moment from "moment";
 
 export default {
   data: () => ({
+    venueName: "",
     showResetButton: false,
     itemDetails: {},
     imgSrc: "",
@@ -1380,6 +1381,7 @@ export default {
                 this.itemDescriptionManually = true;
                 this.manualItemDescription = data.item_description;
               }
+              this.venueName = data.venue_name;
               this.foundDate = new Date(data.datse);
               this.venueEmail = data.venue_email;
               this.venueSecondaryEmail = data.secondary_email;
@@ -1440,6 +1442,7 @@ export default {
         } else {
           this.foundItemId = data.id;
         }
+        this.venueName = data.venue_name;
         this.foundDate = new Date(data.datse);
         this.venueEmail = data.venue_email;
         this.venueSecondaryEmail = data.secondary_email;
@@ -1499,6 +1502,7 @@ export default {
         } else {
           this.foundItemId = data.id;
         }
+        this.venueName = data.venue_name;
         this.foundDate = new Date(data.datse);
         this.venueEmail = data.venue_email;
         this.venueSecondaryEmail = data.secondary_email;
@@ -1535,6 +1539,7 @@ export default {
         this.senderFormTitle = "SENDER'S DETAILS";
         this.foundItemFormTitle = "FOUND ITEM'S DETAILS";
         this.venueType = "";
+        this.venueName = "";
         this.manualVenue = "";
         this.itemDescription = "";
         this.itemDescriptionManually = false;
@@ -1613,6 +1618,7 @@ export default {
           phoneNo: "",
         };
         let address = autocomplete.getPlace();
+        this.venueName = address.name;
         let index = this.addressArr.findIndex((addressObj) => {
           return addressObj == address.formatted_address;
         });
@@ -1854,6 +1860,7 @@ export default {
         let employeeMobileNo = this.formatMobileNumber(this.employeeMobileNo);
         this.showValidateAlert = false;
         const params = {
+          venue_name: this.venueName,
           venu_type:
             this.venueType === "Other" ? this.manualVenue : this.venueType,
           datse: moment(this.foundDate).format("YYYY-MM-DD"),

@@ -78,6 +78,7 @@
 
 <script>
 import SchedulePickupModal from "~/components/SchedulePickupModal.vue";
+import { startCase, camelCase } from "lodash";
 
 export default {
   components: {
@@ -88,8 +89,7 @@ export default {
       labelUrl: "",
       itemId: "",
       showSchedulePickup: false,
-      itemImage: "",
-      itemDescription: "",
+      itemDetails: {},
     };
   },
   async mounted() {
@@ -102,57 +102,179 @@ export default {
       this.itemId = JSON.parse(
         JSON.stringify(this.$store.getters["shipment/itemId"])
       );
+
+      let update_params = {
+        from_address: JSON.parse(
+          JSON.stringify(this.$store.getters["shipment/shippingRates"])
+        ).from_address.id,
+        to_address: JSON.parse(
+          JSON.stringify(this.$store.getters["shipment/shippingRates"])
+        ).to_address.id,
+        carrier_accounts: JSON.parse(
+          JSON.stringify(this.$store.getters["shipment/selectedRate"])
+        ).carrier_account_id,
+        parcel: JSON.parse(
+          JSON.stringify(this.$store.getters["shipment/shippingRates"])
+        ).parcel.id,
+        delivery_confirmation:
+          JSON.parse(
+            JSON.stringify(this.$store.getters["shipment/signature"])
+          ) === true
+            ? true
+            : false,
+      };
+
+      try {
+        let response = await this.$axios.post(
+          "/updatesinglelostitem?id=" + this.itemId,
+          update_params
+        );
+      } catch (err) {
+        console.log(err);
+      }
+
       try {
         let response = await this.$axios.get(
           "/getsinglelostitem?id=" + this.itemId
         );
-        let itemDetails = response.data.data.Item;
-        this.itemImage = itemDetails.image;
-        this.itemDescription = itemDetails.item_description;
+        this.itemDetails = response.data.data.Item;
       } catch (err) {
         console.log(err);
       }
     }
   },
   methods: {
+    displayItemService(service) {
+      return startCase(camelCase(service));
+    },
     printLabel() {
-      const mywindow = window.open("", "PRINT", "height=1200,width=600");
-      mywindow.document.write("<html><head>");
-      mywindow.document.write(`<style>
-        .labelContainer, .itemImgContainer{
-          display: flex;
-          justify-content: center;
-          margin-top: 20px;
-        }
-        .labelContainer img{
-          width: 500px;
-        }
-        .itemImgContainer img{
-          width: 200px;
-        }
-        .text-center{
-          text-align: center;
-        }
-      </style>`);
-      mywindow.document.write("</head><body>");
-      mywindow.document.write(
-        "<div><h3 class='text-center'>Item Description: " +
-          this.itemDescription +
-          "</h3></div>"
-      );
-      if (this.itemImage) {
-        mywindow.document.write(
-          "<div class='itemImgContainer'><img src=" + this.itemImage + "></div>"
-        );
+      let imgHtml = "";
+      if (this.itemDetails.image) {
+        imgHtml =
+          "<div class='itemImgContainer'><img src=" +
+          this.itemDetails.image +
+          "></div>";
       }
-      mywindow.document.write(
-        "<div class='labelContainer'><img src=" + this.labelUrl + "></div>"
-      );
-      mywindow.document.write("</body></html>");
-      setTimeout(() => {
-        mywindow.print();
-        setTimeout(mywindow.close, 0);
-      }, 2000);
+      let htmlToPrint = `
+      <html><head>
+      <style>
+          .flex {
+            display: flex;
+          }
+          .justify-center {
+            justify-content: center;
+          }
+          .justify-between {
+            justify-content: space-between;
+          }
+          .labelContainer, .itemImgContainer{
+            display: flex;
+            justify-content: center;
+            margin-top: 10px;
+          }
+          .text-accent-100 {
+            color: rgb(240 107 4);
+          }
+          .text-gray-600 {
+            color: rgb(82 82 82);
+          }
+          .labelContainer img{
+            width: 300px;
+          }
+          .itemImgContainer img{
+            width: 100px;
+          }
+          .text-center{
+            text-align: center;
+          }
+          .font-bold{
+            font-weight: bold;
+          }
+          .w-20 {
+            width: 3rem;
+          }
+          .border-t-4 {
+            border-top-width: 4px;
+          }
+          .border-solid {
+            border-style: solid;
+          }
+          .border-gray-300 {
+            border-color: rgb(212 212 212);
+          }
+          .inline-block {
+            display: inline-block;
+          }
+          table tr td {
+            padding: 10px 20px;
+          }
+        </style>
+        </head><body>
+        ${imgHtml}
+        <table>
+          <tr>
+            <td>
+              <p class='text-accent-100 font-bold'>Sender's Details: </p>
+              <p>Sender Affiliation: ${this.itemDetails.venu_type}</p>
+              <p>Email: ${this.itemDetails.venue_email}</p>
+              <p>Mobile number: ${this.itemDetails.venue_phone_no}</p>
+            </td>
+            <td>
+              <p class='text-accent-100 font-bold'>Receiver's Details: </p>
+              <p>Name: ${this.itemDetails.receiver_name}</p>
+              <p>Email: ${this.itemDetails.receiver_email}</p>
+              <p>Mobile number: ${this.itemDetails.receiver_mobile_no}</p>
+            </td>
+          </tr>
+          <tr>
+            <td>
+              <p class='text-accent-100 font-bold'>Package Details: </p>
+              <p>Item Description: ${this.itemDetails.item_description}</p>
+              <p>Weight: ${this.itemDetails.weight_pounds} LBS</p>
+              <p>Dimension: ${this.itemDetails.item_length}(l) x ${
+        this.itemDetails.item_width
+      }(w) x ${this.itemDetails.item_height}(h) </p>
+            </td>
+            <td>
+              <p class='text-accent-100 font-bold'>Shipping Details: </p>
+              <p>Name: $ ${this.itemDetails.total_amount / 100}</p>
+              <p>Service: ${this.displayItemService(
+                this.itemDetails.service_name
+              )}</p>
+              <p>Service provider: ${this.itemDetails.service_provider}</p>
+            </td>
+          </tr>
+          </table>
+          <div class='labelContainer'><img src=${this.labelUrl}></div>
+          </body></html>
+      `;
+      let userAgent = navigator.userAgent.toLowerCase();
+      let mobile = userAgent.indexOf("mobile") > -1;
+      let android = userAgent.indexOf("android") > -1;
+
+      let htmlElement = document.createElement("html");
+      htmlElement.innerHTML = htmlToPrint;
+      console.log(htmlElement);
+
+      if (mobile || android) {
+        this.$html2pdf(htmlElement, {
+          filename: "label.pdf",
+          image: { type: "jpg", quality: 0.98 },
+          html2canvas: {
+            dpi: 300,
+            letterRendering: true,
+            useCORS: true,
+          },
+          jsPDF: { unit: "in", format: "letter", orientation: "portrait" },
+        });
+      } else {
+        const mywindow = window.open("", "PRINT", "height=1200,width=600");
+        mywindow.document.write(htmlToPrint);
+        setTimeout(() => {
+          mywindow.print();
+          setTimeout(mywindow.close, 0);
+        }, 2000);
+      }
     },
   },
 };

@@ -7,6 +7,7 @@ export const state = () => ({
     labelUrl: "",
     itemId: "",
     shipmentId: "",
+    itemDeliveryId: "",
 })
 
 export const getters = {
@@ -34,6 +35,9 @@ export const getters = {
     shipmentId: (state) => {
         return state.shipmentId;
     },
+    itemDeliveryId: (state) => {
+        return state.itemDeliveryId;
+    },
 }
 
 export const actions = {
@@ -59,5 +63,8 @@ export const mutations = {
         state.labelUrl = labelDetails.lableUrl;
         state.itemId = labelDetails.itemId;
         state.shipmentId = labelDetails.shipmentId;
+    },
+    SET_ITEM_DELIVERY_ID(state, itemDeliveryId) {
+        state.itemDeliveryId = itemDeliveryId;
     },
 }

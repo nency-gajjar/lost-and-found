@@ -149,15 +149,33 @@ export default {
         };
         try {
           let response = await this.$axios.post("/schedulePickup", params);
-          if (response.status === 200) {
-            this.isLoading = false;
-            this.$toast.info("Pickup scheduled successfully!");
-            this.$emit("close");
+          this.$toast.info("Pickup scheduled successfully!");
+          let update_params = {
+            min_datetime: moment(this.dateTimeRange[0]).format("YYYY-MM-DD HH:mm:ss"),
+            max_datetime: moment(this.dateTimeRange[1]).format("YYYY-MM-DD HH:mm:ss"),
+            shipment: JSON.parse(JSON.stringify(this.$store.getters["shipment/shipmentId"])),
+            scheduled_pickup: true
           }
-        } catch (error) {
-          this.isLoading = false;
+
+          if (this.$store.getters["shipment/itemId"]) {
+            this.itemId = JSON.parse(
+              JSON.stringify(this.$store.getters["shipment/itemId"])
+            );
+            try {
+              let response = await this.$axios.post(
+                "/updatesinglelostitem?id=" + this.itemId, update_params
+              );
+              this.isLoading = false;
+            } catch (err) {
+              console.log(err);
+              this.isLoading = false;
+            }
+          }
+        }
+        catch(error){
           this.$toast.error("Something went wrong! Please try again.");
           console.log(error);
+          this.isLoading = false;
         }
       }
     },

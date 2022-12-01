@@ -86,6 +86,23 @@
               {{ itemDetails.datse }}
             </div>
           </div>
+          <div v-show="itemDetails.venue_name" class="flex items-center mt-3 flex-wrap">
+            <div
+              class="
+                text-left text-gray-600
+                font-medium
+                w-full
+                lg:w-4/12
+                md:w-5/12
+                sm:w-6/12
+              "
+            >
+              Venue Name
+            </div>
+            <div class="text-gray-600 text-left md:w-7/12 sm:w-6/12">
+              {{ itemDetails.venue_name }}
+            </div>
+          </div>
           <div class="flex items-center mt-3 flex-wrap">
             <div
               class="

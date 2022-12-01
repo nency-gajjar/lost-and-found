@@ -92,6 +92,18 @@
                     </div>
                   </td>
                 </tr>
+                <tr v-show="itemDetails.venue_name" class="l-2">
+                  <td>
+                    <div class="text-left text-gray-600 font-medium">
+                      Venue Name
+                    </div>
+                  </td>
+                  <td>
+                    <div class="text-gray-600 text-left">
+                      {{ itemDetails.venue_name }}
+                    </div>
+                  </td>
+                </tr>
                 <tr class="l-2">
                   <td>
                     <div class="text-left text-gray-600 font-medium">
@@ -453,8 +465,12 @@ export default {
         this.$html2pdf(document.getElementById("printMe"), {
           margin: 1,
           filename: "item-detprintMeails.pdf",
-          image: { type: "jpeg", quality: 0.98 },
-          html2canvas: { dpi: 192, letterRendering: true },
+          image: { type: "jpg", quality: 0.98 },
+          html2canvas: {
+            dpi: 300,
+            letterRendering: true,
+            useCORS: true
+          },
           jsPDF: { unit: "in", format: "letter", orientation: "portrait" },
         });
       } else {
