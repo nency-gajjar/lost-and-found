@@ -61,7 +61,7 @@
       Optionally, you can schedule a pickup for your package:
     </p>
     <div class="flex gap-4 items-center justify-center">
-      <BaseButton varient="secondary" @click="showSchedulePickup = true">
+      <BaseButton :disabled="itemDetails.scheduled_pickup" varient="secondary" @click="showSchedulePickup = true">
         Schedule Pickup
       </BaseButton>
       <BaseButton varient="primaryAlt" @click="$router.push('lost-items')">
@@ -138,7 +138,7 @@ export default {
           "/getsinglelostitem?id=" + this.itemId
         );
         this.itemDetails = response.data.data.Item;
-      } catch (err) {
+        } catch (err) {
         console.log(err);
       }
     }
@@ -254,7 +254,6 @@ export default {
 
       let htmlElement = document.createElement("html");
       htmlElement.innerHTML = htmlToPrint;
-      console.log(htmlElement);
 
       if (mobile || android) {
         this.$html2pdf(htmlElement, {
@@ -273,7 +272,7 @@ export default {
         setTimeout(() => {
           mywindow.print();
           setTimeout(mywindow.close, 0);
-        }, 2000);
+        }, 3000);
       }
     },
   },
