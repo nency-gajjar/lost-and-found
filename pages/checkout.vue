@@ -191,6 +191,7 @@
                 mx-auto
                 uppercase
               "
+              :disabled="!isCardValid"
               :is-loading="isLoading"
               @click="confirmAndPay"
             >
@@ -226,6 +227,7 @@ export default {
       checkoutDetail: {},
       card: null,
       isLoading: false,
+      isCardValid: false,
     };
   },
   mounted() {
@@ -280,6 +282,16 @@ export default {
         hidePostalCode: true,
       });
       card.mount("#card-element");
+      card.on('change', () => {
+        setTimeout(() => {
+          if(document.getElementById("card-element").classList.contains('StripeElement--complete')){
+            this.isCardValid = true;
+          }
+          else{
+            this.isCardValid = false;
+          }
+        }, 200);
+      })
       this.card = card;
     } else {
       if (
@@ -337,7 +349,7 @@ export default {
     },
     async confirmAndPay() {
       this.isLoading = true;
-      let totalPrice = Number(this.totalPrice.split("$")[1]).toFixed(2) * 100; // convert usd to cents
+      let totalPrice =  Math.floor(Number(this.totalPrice.split("$")[1]).toFixed(2) * 100); // convert usd to cents
       this.$axios
         .post("/createPaymentIntent", {
           amount: totalPrice,

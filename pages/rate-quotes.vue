@@ -258,7 +258,7 @@
                   alt="UPS"
                 />
                 <img
-                  v-else
+                  v-else-if="item.carrier === 'FedEx'"
                   class="
                     w-full
                     h-auto
@@ -272,6 +272,22 @@
                   "
                   src="@/assets/images/fedex-logo.svg"
                   alt="FedEx"
+                />
+                <img
+                  v-else-if="item.carrier === 'DHLExpress'"
+                  class="
+                    w-full
+                    h-auto
+                    mx-auto
+                    my-auto
+                    object-contain
+                    transition
+                    duration-500
+                    ease
+                    hover:transform hover:scale-[110%]
+                  "
+                  src="@/assets/images/dhl-express-logo.png"
+                  alt="DHLExpress"
                 />
               </div>
             </div>
