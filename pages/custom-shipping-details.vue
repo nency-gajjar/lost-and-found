@@ -276,7 +276,7 @@ export default {
               quantity: 1,
               weight: Number(this.itemDetails.weight_pounds),
               value: Number(this.customItemsValue),
-              origin_country: this.itemDetails.country
+              origin_country: this.itemDetails.country.trim()
             }
           ]
         }
@@ -284,7 +284,7 @@ export default {
         this.$nextTick(() => {
           this.$router.push({
             name: "rate-quotes",
-            query: { id: this.itemId },
+            query: { id: this.$route.query.id },
             params: { fromItemDelivery: true },
           });
         });

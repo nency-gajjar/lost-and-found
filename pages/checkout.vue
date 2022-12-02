@@ -109,6 +109,20 @@
               }}
             </span>
           </p>
+          <p
+            class="flex justify-between"
+            v-if="this.insuranceCharges"
+          >
+            <span class="font-medium text-md"> Insurance Charges:</span>
+            <span class="text-display tracking-wide text-gray-700 font-medium">
+              {{
+                new Intl.NumberFormat("en-US", {
+                  style: "currency",
+                  currency: "USD",
+                }).format(this.insuranceCharges)
+              }}
+            </span>
+          </p>
 
           <hr class="my-5" />
           <div v-if="!isEmpty(checkoutDetail) && checkoutDetail.selectedRate">
@@ -228,10 +242,14 @@ export default {
       card: null,
       isLoading: false,
       isCardValid: false,
+      insuranceCharges: 0
     };
   },
   mounted() {
     if (this.$route.params.fromRatePage) {
+      
+      this.insuranceCharges = JSON.parse(JSON.stringify(this.$store.getters["shipment/insuranceCharges"]))
+
       this.checkoutDetail = {
         selectedRate: JSON.parse(
           JSON.stringify(this.$store.getters["shipment/selectedRate"])
@@ -336,10 +354,11 @@ export default {
       const insuranceValue = Number(this.checkoutDetail?.insuranceValue) || 0;
       const rate = Number(this.checkoutDetail?.selectedRate?.rate);
       const signature = this.checkoutDetail.signature ? 5 : 0;
+      const insuranceCharges = this.insuranceCharges;
       return new Intl.NumberFormat("en-US", {
         style: "currency",
         currency: "USD",
-      }).format(rate + insuranceValue + signature);
+      }).format(rate + insuranceValue + signature + insuranceCharges);
     },
   },
   methods: {
