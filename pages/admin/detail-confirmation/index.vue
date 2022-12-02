@@ -708,7 +708,13 @@
           >
             Approve
           </BaseButton>
-          <BaseButton class="flex-1" @click="showItemRejectDialog = true">
+          <BaseButton
+            class="flex-1"
+            @click="showItemRejectDialog = true"
+            :disabled="
+              isLoading['Approve'] || isLoading['Approve without Image']
+            "
+          >
             Reject
           </BaseButton>
           <BaseButton
@@ -746,14 +752,18 @@
       :message="dialogMessage"
       :title="dialogTitle"
       buttonTitle="Okay"
-      @close="closeDialog"
+      @close="
+        showDialog = false;
+        $router.push('/dashboard');
+      "
     />
     <BaseDialog
       :showDialog="showItemRejectDialog"
       :icon="{ name: 'circle-info', color: 'blue', size: '3x' }"
       :message="dialogMessage"
-      title="Please enter Rejection reason"
+      title="Please enter rejection reason"
       :showClose="false"
+      @close="closeRejectDialog"
     >
       <template v-slot:input>
         <ValidationObserver v-slot="{ validate }" ref="observer">
@@ -1080,9 +1090,6 @@ export default {
               this.setDialogBody(type);
               this.showDialog = true;
               this.isLoading[type] = false;
-              this.$nextTick(() => {
-                this.$router.push({ path: "/dashboard" });
-              });
             }
           })
           .catch((error) => {
@@ -1107,14 +1114,11 @@ export default {
           "Item is approved without Image & listed accordingly. User who uploaded this item will be notified with the status.";
       }
     },
-    closeDialog() {
-      this.showDialog = false;
+    closeRejectDialog() {
+      this.showItemRejectDialog = false;
       this.dialogTitle = "";
       this.dialogMessage = "";
       this.rejectReson = "";
-      this.$nextTick(() => {
-        this.$router.push({ path: "/lost-items" });
-      });
     },
   },
 };

@@ -23,7 +23,7 @@
               p-3
               bg-blue-600
               transition-shadow
-              border
+              border border-blue-800
               rounded-lg
               shadow-sm
               hover:shadow-lg
@@ -62,7 +62,7 @@
               p-3
               bg-pink-600
               transition-shadow
-              border
+              border border-pink-800
               rounded-lg
               shadow-sm
               hover:shadow-lg
@@ -106,7 +106,7 @@
               p-3
               bg-yellow-600
               transition-shadow
-              border
+              border border-yellow-800
               rounded-lg
               shadow-sm
               hover:shadow-lg
@@ -150,7 +150,7 @@
               p-3
               bg-cyan-600
               transition-shadow
-              border
+              border border-cyan-800
               rounded-lg
               shadow-sm
               hover:shadow-lg
@@ -194,7 +194,7 @@
               p-3
               bg-indigo-600
               transition-shadow
-              border
+              border border-indigo-800
               rounded-lg
               shadow-sm
               hover:shadow-lg
@@ -235,10 +235,8 @@
         </section>
         <!-- </div> -->
       </main>
-      <div class="w-full flex gap-3 flex-auto mt-3 justify-end">
-        <div
-          class="w-full sm:w-7/12 flex justify-end items-center pt-5 relative"
-        >
+      <div class="w-full flex gap-3 flex-auto mt-3 sm:mt-0 sm:w-7/12">
+        <div class="w-full flex justify-end items-center pt-5 relative">
           <input
             v-model="searchQuery"
             @input="filterItems"
@@ -250,7 +248,7 @@
               py-3
               w-full
               border
-              rounded-full
+              rounded-md
               border-gray-300
               outline-none
             "

@@ -59,10 +59,23 @@
               >
                 <BaseInput
                   v-model="password"
-                  type="password"
+                  :type="hidePassword ? 'password' : 'text'"
                   label="Password"
                   :class="errors.length > 0 && 'error'"
-                />
+                >
+                  <template v-slot:icon>
+                    <div
+                      class="absolute inset-y-0 right-0 flex items-center p-5"
+                      @click="hidePassword = !hidePassword"
+                    >
+                      <BaseIcon
+                        :icon="hidePassword ? 'eye' : 'eye-slash'"
+                        color="gray"
+                      />
+                    </div>
+                  </template>
+                </BaseInput>
+
                 <p
                   v-if="errors.length"
                   class="vee-validation-error mt-2 text-sm text-red-600"
@@ -115,6 +128,7 @@ export default {
       password: "",
       isLoading: false,
       showValidateAlert: false,
+      hidePassword: true,
     };
   },
   mounted() {

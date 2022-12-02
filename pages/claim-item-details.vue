@@ -576,14 +576,18 @@
       :title="dialogTitle"
       :message="dialogMessage"
       buttonTitle="Okay"
-      @close="closeDialog"
+      @close="
+        showDialog = false;
+        $router.push('/lost-items');
+      "
     />
     <BaseDialog
       :showDialog="showItemRejectDialog"
       :icon="{ name: 'circle-info', color: 'blue', size: '3x' }"
       :message="dialogMessage"
-      title="Please enter Rejection reason"
+      title="Please enter rejection reason"
       :showClose="false"
+      @close="closeRejectDialog"
     >
       <template v-slot:input>
         <ValidationObserver v-slot="{ validate }" ref="observer">
@@ -700,7 +704,7 @@ export default {
     handleUpdateLostItem(type) {
       const params = {
         sender_approval: type === "Approve" ? true : false,
-        receiver_name: this.claimDetails.claimpersonitemname,
+        receiver_name: this.claimDetails.claimpersonname,
         receiver_email: this.claimDetails.claimpersonemail,
         receiver_address: this.claimDetails.claimpersonlocation,
         receiver_city: this.claimDetails.claimpersoncity,
@@ -740,14 +744,11 @@ export default {
           "Claim request has been rejected successfully. Item owner will be notified via email for their claim request rejection along with the rejection reason.";
       }
     },
-    closeDialog() {
-      this.showDialog = false;
+    closeRejectDialog() {
+      this.showItemRejectDialog = false;
       this.dialogTitle = "";
       this.dialogMessage = "";
       this.rejectReson = "";
-      this.$nextTick(() => {
-        this.$router.push({ path: "/lost-items" });
-      });
     },
   },
 };
