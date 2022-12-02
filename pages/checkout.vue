@@ -374,6 +374,9 @@ export default {
               let insuranceValue = JSON.parse(
                 JSON.stringify(this.$store.getters["shipment/insuranceValue"])
               );
+              let customInfo = JSON.parse(
+                JSON.stringify(this.$store.getters["shipment/customInfo"])
+              );
               let params = {
                 id: this.$route.query.id,
                 carrier_accounts: selectedRate.carrier_account_id,
@@ -384,6 +387,7 @@ export default {
                 delivery_confirmation:
                   this.checkoutDetail.signature === true ? true : false,
                 insurance: Number(insuranceValue),
+                customs_info: customInfo,
               };
               this.$axios
                 .post("/createShipping", params)

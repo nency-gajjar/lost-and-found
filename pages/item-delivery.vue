@@ -647,7 +647,7 @@
                   v-slot="{ errors }"
                   name="Insurance value"
                   rules="numeric|insurance:1000"
-                  class="block ml-4"
+                  class="block"
                 >
                   <BaseInput
                     v-model="insuranceValue"
@@ -879,6 +879,7 @@ export default {
     window.addEventListener("click", () => {
       this.showValidateAlert = false;
     });
+    this.$store.commit("shipment/SET_CUSTOM_INFO", {});
   },
   computed: {
     dialogMessage() {
@@ -1089,13 +1090,24 @@ export default {
                   ""
                 );
               }
-              this.$nextTick(() => {
-                this.$router.push({
-                  name: "rate-quotes",
-                  query: { id: this.itemId },
-                  params: { fromItemDelivery: true },
+              if(params_rateQuotes.country !== params_rateQuotes.tocountry){
+                this.$nextTick(() => {
+                  this.$router.push({
+                    name: "custom-shipping-details",
+                    query: { id: this.itemId },
+                    params: { fromItemDelivery: true },
+                  });
                 });
-              });
+              }
+              else{
+                this.$nextTick(() => {
+                  this.$router.push({
+                    name: "rate-quotes",
+                    query: { id: this.itemId },
+                    params: { fromItemDelivery: true },
+                  });
+                });
+              }
             }
           }
         })
