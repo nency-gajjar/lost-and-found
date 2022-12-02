@@ -235,10 +235,8 @@
         </section>
         <!-- </div> -->
       </main>
-      <div class="w-full flex gap-3 flex-auto mt-3 justify-end">
-        <div
-          class="w-full sm:w-7/12 flex justify-end items-center pt-5 relative"
-        >
+      <div class="w-full flex gap-3 flex-auto mt-3 sm:mt-0 sm:w-7/12">
+        <div class="w-full flex justify-end items-center pt-5 relative">
           <input
             v-model="searchQuery"
             @input="filterItems"
@@ -250,7 +248,7 @@
               py-3
               w-full
               border
-              rounded-full
+              rounded-md
               border-gray-300
               outline-none
             "
