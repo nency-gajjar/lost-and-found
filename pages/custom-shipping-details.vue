@@ -1,0 +1,194 @@
+<template>
+  <div class="wrapper">
+    <div
+      class="
+        w-full
+        mx-6
+        lg:mx-0
+        md:w-8/12
+        lg:w-7/12
+        xl:w-6/12
+        bg-white
+        border border-[#E1E3E6]
+        rounded-lg
+      "
+      style="box-shadow: rgba(54, 28, 93, 0.04) -10px 18px 32px"
+    >
+      <ValidationObserver v-slot="{ validate }" ref="observer">
+        <form @submit.prevent="validate().then(onSubmit)">
+          <div class="sm:p-6 p-4 space-y-4">
+            <div class="form-title">
+              <div>
+                <h1
+                  class="
+                    w-full
+                    my-2
+                    text-xl
+                    font-bold
+                    leading-tight
+                    text-gray-700
+                  "
+                >
+                  CUSTOM SHIPPING DETAILS
+                </h1>
+                <div class="flex justify-start">
+                  <span
+                    class="
+                      w-20
+                      border-t-4 border-solid border-orange-200
+                      inline-block
+                      mb-3
+                    "
+                  ></span>
+                </div>
+              </div>
+            </div>
+
+            <!-- EEL code or PFC -->
+            <ValidationProvider
+              v-slot="{ errors }"
+              rules="required"
+              class="block"
+            >
+              <BaseInput
+                v-model="eel_pfc"
+                type="text"
+                label="EEL code or PFC"
+                :class="errors.length > 0 && 'error'"
+              />
+              <p
+                v-if="errors.length"
+                class="vee-validation-error mt-2 text-sm text-red-600"
+              >
+                {{ errors[0] }}
+              </p>
+            </ValidationProvider>
+
+            <!-- Contents Explanation -->
+            <div>
+              <textarea
+                v-model="contentsExplanation"
+                placeholder="Contents Explanation"
+                class="
+                  border
+                  inline-block
+                  border-gray-300
+                  w-full
+                  rounded-lg
+                  px-4
+                  h-full
+                  text-sm
+                  pt-4
+                  pb-2
+                  transition-shadow
+                  text-gray-800
+                "
+              ></textarea>
+            </div>
+
+            <!-- Restriction Comments -->
+            <div>
+              <textarea
+                v-model="restrictionComments"
+                placeholder="Restriction Comments"
+                class="
+                  border
+                  inline-block
+                  border-gray-300
+                  w-full
+                  rounded-lg
+                  px-4
+                  h-full
+                  text-sm
+                  pt-4
+                  pb-2
+                  transition-shadow
+                  text-gray-800
+                "
+              ></textarea>
+            </div>
+
+            <!-- Custom Items Value -->
+            <ValidationProvider
+              v-slot="{ errors }"
+              rules="required|numeric"
+              class="block"
+            >
+              <BaseInput
+                v-model="customItemsValue"
+                type="text"
+                label="Custom Items Value"
+                :class="errors.length > 0 && 'error'"
+              />
+              <p
+                v-if="errors.length"
+                class="vee-validation-error mt-2 text-sm text-red-600"
+              >
+                {{ errors[0] }}
+              </p>
+            </ValidationProvider>
+
+            <!-- Customs Certify -->
+            <div class="text-gray-500 flex items-center space-x-3 ml-4">
+              <input
+                v-model="customsCertify"
+                id="customs-certify"
+                type="checkbox"
+                class="
+                  text-accent-100
+                  rounded-sm
+                  focus:ring-accent-100
+                  border-gray-300
+                  transition-all
+                  h-5
+                  w-5
+                "
+              />
+              <label for="customs-certify"> Customs Certify</label>
+            </div>
+            <ValidationProvider
+              v-if="customsCertify"
+              v-slot="{ errors }"
+              name="Customs Signer"
+              class="block ml-4"
+            >
+              <BaseInput
+                v-model="customsSigner"
+                type="text"
+                label="Customs Signer"
+                :class="errors.length > 0 && 'error'"
+              />
+              <p
+                v-if="errors.length"
+                class="vee-validation-error mt-2 text-sm text-red-600"
+              >
+                {{ errors[0] }}
+              </p>
+            </ValidationProvider>
+          </div>
+        </form>
+      </ValidationObserver>
+    </div>
+  </div>
+</template>
+
+<script>
+export default {
+  data() {
+    return {
+      eel_pfc: "",
+      contentsExplanation: "",
+      restrictionComments: "",
+      customItemsValue: "",
+      customsCertify: false,
+      customsSigner: "",
+    };
+  },
+};
+</script>
+
+<style lang="scss">
+.wrapper {
+  @apply min-h-screen flex justify-center py-10 mx-auto;
+}
+</style>
