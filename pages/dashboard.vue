@@ -23,7 +23,7 @@
               p-3
               bg-blue-600
               transition-shadow
-              border
+              border border-blue-800
               rounded-lg
               shadow-sm
               hover:shadow-lg
@@ -62,7 +62,7 @@
               p-3
               bg-pink-600
               transition-shadow
-              border
+              border border-pink-800
               rounded-lg
               shadow-sm
               hover:shadow-lg
@@ -106,7 +106,7 @@
               p-3
               bg-yellow-600
               transition-shadow
-              border
+              border border-yellow-800
               rounded-lg
               shadow-sm
               hover:shadow-lg
@@ -150,7 +150,7 @@
               p-3
               bg-cyan-600
               transition-shadow
-              border
+              border border-cyan-800
               rounded-lg
               shadow-sm
               hover:shadow-lg
@@ -194,7 +194,7 @@
               p-3
               bg-indigo-600
               transition-shadow
-              border
+              border border-indigo-800
               rounded-lg
               shadow-sm
               hover:shadow-lg

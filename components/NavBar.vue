@@ -15,9 +15,20 @@
             </div>
           </div>
           <div class="menu-right flex items-center">
-            <div v-if="isAdminLogin" class="link-container">
-              <NuxtLink to="/register" class="menu">Register</NuxtLink>
+            <div
+              v-if="!mobileDevice && !isAdminLogin"
+              class="link-container"
+              @click="$router.push('/item-details')"
+            >
+              <BaseButton class="!text-xs !py-2 !px-6"
+                >+ Report Lost item
+              </BaseButton>
             </div>
+            <!-- <div v-if="isAdminLogin" class="link-container">
+              <NuxtLink to="/register" class="menu"
+                >Register New Admin</NuxtLink
+              >
+            </div> -->
             <div v-if="isAdminLogin" class="link-container cursor-pointer">
               <div class="menu" @click="logoutAdmin('desktop')">Logout</div>
             </div>
@@ -54,14 +65,14 @@
           >
         </div>
         <template v-if="isAdminLogin">
-          <div>
+          <!-- <div>
             <NuxtLink
               to="/register"
               @click.native="toggleMenu"
               class="opacity-100"
-              >Register</NuxtLink
+              >Register New Admin</NuxtLink
             >
-          </div>
+          </div> -->
           <div>
             <div @click="logoutAdmin('mobile')" class="opacity-100">Logout</div>
           </div>
@@ -77,7 +88,11 @@ export default {
     return {
       menuVisible: false,
       isLogin: false,
+      mobileDevice: false,
     };
+  },
+  mounted() {
+    this.mobileDevice = this.isMobile();
   },
   methods: {
     toggleMenu() {
@@ -87,6 +102,17 @@ export default {
       await this.$auth.logout();
       if (device === "mobile") {
         this.toggleMenu();
+      }
+    },
+    isMobile() {
+      if (
+        /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(
+          navigator.userAgent
+        )
+      ) {
+        return true;
+      } else {
+        return false;
       }
     },
   },
@@ -119,7 +145,7 @@ export default {
   }
 
   .menu {
-    @apply px-4 py-2 text-gray-500 rounded-lg font-medium;
+    @apply md:px-4 md:py-2 text-gray-500 rounded-lg font-medium;
 
     &.nuxt-link-exact-active {
       @apply bg-orange-100 text-orange-700;

@@ -53,6 +53,13 @@
             bg-white
           "
         >
+          <BaseIcon
+            class="close-icon absolute right-4 top-4"
+            icon="close"
+            size="lg"
+            color="gray"
+            @click="$emit('close')"
+          />
           <div>
             <div class="text-center p-3 flex-auto justify-center leading-6">
               <BaseIcon

@@ -1,201 +1,128 @@
 <template>
   <div class="wrapper">
-    <div
-      class="
-        mt-5
-        overflow-x-auto
-        rounded-tl-lg rounded-tr-lg
-        inline-block
-        w-full
-        bg-white
-        shadow-lg
-      "
-    >
-      <div
-        class="
-          align-middle
-          inline-block
-          min-w-full
-          whitespace-nowrap
-          overflow-hidden rounded-bl-lg
-          rounded-br-lg
-        "
-      >
-        <table class="min-w-full">
-          <thead>
-            <tr
-              class="bg-accent-100 text-white uppercase text-sm leading-normal"
-            >
-              <th data-priority="1" class="py-3 px-6 text-left">Image</th>
-              <th class="py-3 px-6 text-left">Item description</th>
-              <th class="py-3 px-6 text-center">Sender Affiliation</th>
-              <th class="py-3 px-6 text-center">Sender's Email</th>
-              <th class="py-3 px-6 text-center">Sender's Phone</th>
-              <th class="py-3 px-6 text-center">Receiver's Name</th>
-              <th class="py-3 px-6 text-center">Receiver's Email</th>
-              <th class="py-3 px-6 text-center">Receiver's Phone</th>
-              <th class="py-3 px-6 text-center">Package weight</th>
-              <th class="py-3 px-6 text-center">Package dimensions</th>
-              <th class="py-3 px-6 text-center">Total paid amount</th>
-              <th class="py-3 px-6 text-center">Service</th>
-              <th class="py-3 px-6 text-center">Provider</th>
-              <!-- <th class="py-3 px-6 text-center">Actions</th> -->
-            </tr>
-          </thead>
-          <tbody class="bg-white">
-            <tr v-for="detail in shippingDetails" :key="detail.id" class="border-b border-gray-200 hover:bg-gray-100">
-              <td class="py-3 px-6 text-left">
-                <div class="flex items-center">
-                  <div class="mr-2">
-                    <img
-                      v-if="detail.image"
-                      class="img-width"
-                      :src="detail.image"
-                    />
-                    <img
-                      v-else
-                      class="img-width"
-                      src="@/assets/images/no-image4.png"
-                    />
-                  </div>
-                </div>
-              </td>
-              <td class="py-3 px-6 text-left">
-                  <p>{{ detail.item_description }}</p>
-              </td>
-              <td class="py-3 px-6 text-left">
-                  <p>{{ detail.venu_type }}</p>
-              </td>
-              <td class="py-3 px-6 text-left">
-                  <p>{{ detail.venue_email }}</p>
-              </td>
-              <td class="py-3 px-6 text-left">
-                  <p>{{ detail.venue_phone_no }}</p>
-              </td>
-              <td class="py-3 px-6 text-left">
-                  <p>{{ detail.receiver_name }}</p>
-              </td>
-              <td class="py-3 px-6 text-left">
-                  <p>{{ detail.receiver_email }}</p>
-              </td>
-              <td class="py-3 px-6 text-left">
-                  <p>{{ detail.receiver_mobile_no }}</p>
-              </td>
-              <td class="py-3 px-6 text-left">
-                  <p>{{ detail.weight_pounds }} lbs</p>
-              </td>
-              <td class="py-3 px-6 text-left">
-                  <p>{{detail.item_length}}(l) x {{detail.item_width}}(w) x {{detail.item_height}}(h)</p>
-              </td>
-              <td class="py-3 px-6 text-left">
-                  <p>$ {{ detail.total_amount / 100 }}</p>
-              </td>
-              <td class="py-3 px-6 text-center">
-                <span
+    <div class="container max-w-full mx-auto px-4">
+      <main class="my-10 space-y-6">
+        <div class="flex flex-col md:space-y-0 md:flex-row justify-between">
+          <div class="mr-6 order-2 md:order-1 mt-3 md:mt-0">
+            <h1 class="text-2xl text-gray-600 font-semibold">
+              Shipping Details
+            </h1>
+          </div>
+        </div>
+        <div
+          class="
+            overflow-x-auto
+            rounded-tl-lg rounded-tr-lg
+            inline-block
+            w-full
+            bg-white
+            shadow-lg
+          "
+        >
+          <div
+            class="
+              align-middle
+              inline-block
+              min-w-full
+              whitespace-nowrap
+              overflow-hiddenrounded-bl-lg
+              rounded-br-lg
+            "
+          >
+            <table class="min-w-full">
+              <thead class="sticky top-0 z-20">
+                <tr
                   class="
-                    bg-purple-200
-                    text-purple-600
-                    py-1
-                    px-3
-                    rounded-full
-                    text-xs
+                    bg-accent-100
+                    text-white
+                    uppercase
+                    text-sm
+                    leading-normal
                   "
-                  >{{ detail.service_name }}</span
                 >
-              </td>
-              <td class="py-3 px-6 text-center">
-                <span
-                  class="
-                    bg-purple-200
-                    text-purple-600
-                    py-1
-                    px-3
-                    rounded-full
-                    text-xs
-                  "
-                  >{{ detail.service_provider }}</span
+                  <th data-priority="1" class="py-3 px-6 text-left">Image</th>
+                  <th class="py-3 px-6 text-left">Item description</th>
+                  <th class="py-3 px-6 text-left">Sender's Details</th>
+                  <th class="py-3 px-6 text-left">Receiver's Details</th>
+                  <th class="py-3 px-6 text-left">Amount</th>
+                  <th class="py-3 px-6 text-left">Service</th>
+                </tr>
+              </thead>
+              <tbody class="bg-white text-gray-800">
+                <tr
+                  v-for="detail in shippingDetails"
+                  :key="detail.id"
+                  class="border-b border-gray-200 hover:bg-gray-100"
                 >
-              </td>
-              <!-- <td class="py-3 px-6 text-center">
-                <div class="flex item-center justify-center">
-                  <div
-                    class="
-                      w-4
-                      mr-2
-                      transform
-                      hover:text-purple-500 hover:scale-110
-                    "
-                  >
-                    <svg
-                      xmlns="http://www.w3.org/2000/svg"
-                      fill="none"
-                      viewBox="0 0 24 24"
-                      stroke="currentColor"
+                  <td class="py-3 px-6 text-left">
+                    <div class="flex items-center">
+                      <div class="mr-2">
+                        <img
+                          v-if="detail.image"
+                          class="img-width"
+                          :src="detail.image"
+                        />
+                        <img
+                          v-else
+                          class="img-width"
+                          src="@/assets/images/no-image4.png"
+                        />
+                      </div>
+                    </div>
+                  </td>
+                  <td class="py-3 px-6 text-left">
+                    <p>{{ detail.item_description }}</p>
+                    <p>
+                      <span class="text-gray-600 text-sm">
+                        ({{ packageDimensionsString(detail) }},{{
+                          detail.weight_pounds
+                        }}
+                        lbs)
+                      </span>
+                    </p>
+                  </td>
+                  <td class="py-3 px-6 text-left">
+                    <p>{{ detail.venu_type }}</p>
+                    <p>{{ detail.venue_email }}</p>
+                    <p>{{ detail.venue_phone_no }}</p>
+                  </td>
+                  <td class="py-3 px-6 text-left">
+                    <p>{{ detail.receiver_name }}</p>
+                    <p>{{ detail.receiver_email }}</p>
+                    <p>{{ detail.receiver_mobile_no }}</p>
+                  </td>
+                  <td class="py-3 px-6 text-left">
+                    <p>
+                      {{
+                        new Intl.NumberFormat("en-US", {
+                          style: "currency",
+                          currency: "USD",
+                        }).format(detail.total_amount / 100)
+                      }}
+                    </p>
+                  </td>
+                  <td class="py-3 px-6 text-left">
+                    <p>{{ displayItemService(detail.service_name) }}</p>
+                    <span
+                      :class="
+                        detail.service_provider === 'USPS'
+                          ? 'bg-blue-200 text-blue-600'
+                          : detail.service_provider === 'UPS'
+                          ? 'bg-yellow-200 text-amber-600'
+                          : detail.service_provider === 'FedEx'
+                          ? 'bg-orange-200 text-orange-600'
+                          : detail.service_provider === 'DHLExpress'
+                          ? 'bg-red-200 text-red-600'
+                          : 'bg-gray-200 text-gray-700'
+                      "
+                      class="py-1 px-3 rounded-full text-xs"
+                      >{{ detail.service_provider }}</span
                     >
-                      <path
-                        stroke-linecap="round"
-                        stroke-linejoin="round"
-                        stroke-width="2"
-                        d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"
-                      />
-                      <path
-                        stroke-linecap="round"
-                        stroke-linejoin="round"
-                        stroke-width="2"
-                        d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"
-                      />
-                    </svg>
-                  </div>
-                  <div
-                    class="
-                      w-4
-                      mr-2
-                      transform
-                      hover:text-purple-500 hover:scale-110
-                    "
-                  >
-                    <svg
-                      xmlns="http://www.w3.org/2000/svg"
-                      fill="none"
-                      viewBox="0 0 24 24"
-                      stroke="currentColor"
-                    >
-                      <path
-                        stroke-linecap="round"
-                        stroke-linejoin="round"
-                        stroke-width="2"
-                        d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z"
-                      />
-                    </svg>
-                  </div>
-                  <div
-                    class="
-                      w-4
-                      mr-2
-                      transform
-                      hover:text-purple-500 hover:scale-110
-                    "
-                  >
-                    <svg
-                      xmlns="http://www.w3.org/2000/svg"
-                      fill="none"
-                      viewBox="0 0 24 24"
-                      stroke="currentColor"
-                    >
-                      <path
-                        stroke-linecap="round"
-                        stroke-linejoin="round"
-                        stroke-width="2"
-                        d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"
-                      />
-                    </svg>
-                  </div>
-                </div>
-              </td> -->
-            </tr>
-          </tbody>
-        </table>
-        <!-- <div class="flex justify-between items-center px-4 my-4 work-sans">
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+            <!-- <div class="flex justify-between items-center px-4 my-4 work-sans">
           <p class="text-sm leading-5 text-accent-100">
             Showing
             <span class="font-medium">1</span>
@@ -391,19 +318,23 @@
             </nav>
           </div>
         </div> -->
-      </div>
+          </div>
+        </div>
+      </main>
     </div>
   </div>
 </template>
 
 <script>
+import { startCase, camelCase } from "lodash";
 export default {
   middleware: ["auth-admin"],
   data() {
     return {
-        shippingDetails: [],
+      shippingDetails: [],
     };
   },
+  computed: {},
   methods: {
     // async fetchNextData(){
     //   if(this.shippingDetails[0].has_more){
@@ -412,8 +343,14 @@ export default {
     //     this.shippingDetails = response.data;
     //   }
     // }
+    packageDimensionsString(detail) {
+      return `${detail?.item_length} x ${detail?.item_width} x ${detail?.item_height}`;
+    },
+    displayItemService(service) {
+      return startCase(camelCase(service));
+    },
   },
-  async mounted(){
+  async mounted() {
     let response = await this.$axios.post("/getAllShippingDetails");
     this.shippingDetails = response.data;
     console.log(this.shippingDetails);
@@ -423,9 +360,9 @@ export default {
 
 <style lang="scss" scoped>
 .wrapper {
-  @apply flex flex-col p-5 justify-start pt-0 items-center text-center mx-auto;
+  @apply flex flex-col justify-start pt-0 items-center text-center mx-8;
 }
 .img-width {
-  width: 50px;
+  width: 100px;
 }
 </style>
