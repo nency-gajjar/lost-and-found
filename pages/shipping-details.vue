@@ -26,26 +26,19 @@
             <tr
               class="bg-accent-100 text-white uppercase text-sm leading-normal"
             >
-              <th data-priority="1" class="py-3 px-6 text-left">Image</th>
-              <th class="py-3 px-6 text-left">Item description</th>
-              <th class="py-3 px-6 text-center">Sender Affiliation</th>
-              <th class="py-3 px-6 text-center">Sender's Email</th>
-              <th class="py-3 px-6 text-center">Sender's Phone</th>
-              <th class="py-3 px-6 text-center">Receiver's Name</th>
-              <th class="py-3 px-6 text-center">Receiver's Email</th>
-              <th class="py-3 px-6 text-center">Receiver's Phone</th>
-              <th class="py-3 px-6 text-center">Package weight</th>
-              <th class="py-3 px-6 text-center">Package dimensions</th>
+              <th data-priority="1" class="py-3 px-6 text-center">Item Details</th>
+              <th class="py-3 px-6 text-center">Sender's Details</th>
+              <th class="py-3 px-6 text-center">Receiver's Details</th>
+              <th class="py-3 px-6 text-center">Package Details</th>
               <th class="py-3 px-6 text-center">Total paid amount</th>
               <th class="py-3 px-6 text-center">Service</th>
               <th class="py-3 px-6 text-center">Provider</th>
-              <!-- <th class="py-3 px-6 text-center">Actions</th> -->
             </tr>
           </thead>
           <tbody class="bg-white">
             <tr v-for="detail in shippingDetails" :key="detail.id" class="border-b border-gray-200 hover:bg-gray-100">
               <td class="py-3 px-6 text-left">
-                <div class="flex items-center">
+                <div class="flex items-center justify-center">
                   <div class="mr-2">
                     <img
                       v-if="detail.image"
@@ -59,33 +52,21 @@
                     />
                   </div>
                 </div>
+                <p class="text-center">Item description: {{ detail.item_description }}</p>
               </td>
               <td class="py-3 px-6 text-left">
-                  <p>{{ detail.item_description }}</p>
+                  <p>Sender Affliation: {{ detail.venu_type }}</p>
+                  <p>Sender's Email: {{ detail.venue_email }}</p>
+                  <p>Sender's Phone: {{ detail.venue_phone_no }}</p>
               </td>
               <td class="py-3 px-6 text-left">
-                  <p>{{ detail.venu_type }}</p>
+                  <p>Receiver's Name: {{ detail.receiver_name }}</p>
+                  <p>Receiver's Email: {{ detail.receiver_email }}</p>
+                  <p>Receiver's Phone: {{ detail.receiver_mobile_no }}</p>
               </td>
               <td class="py-3 px-6 text-left">
-                  <p>{{ detail.venue_email }}</p>
-              </td>
-              <td class="py-3 px-6 text-left">
-                  <p>{{ detail.venue_phone_no }}</p>
-              </td>
-              <td class="py-3 px-6 text-left">
-                  <p>{{ detail.receiver_name }}</p>
-              </td>
-              <td class="py-3 px-6 text-left">
-                  <p>{{ detail.receiver_email }}</p>
-              </td>
-              <td class="py-3 px-6 text-left">
-                  <p>{{ detail.receiver_mobile_no }}</p>
-              </td>
-              <td class="py-3 px-6 text-left">
-                  <p>{{ detail.weight_pounds }} lbs</p>
-              </td>
-              <td class="py-3 px-6 text-left">
-                  <p>{{detail.item_length}}(l) x {{detail.item_width}}(w) x {{detail.item_height}}(h)</p>
+                  <p>Item Weight: {{ detail.weight_pounds }} lbs</p>
+                  <p>Item Dimensions: {{detail.item_length}}(l) x {{detail.item_width}}(w) x {{detail.item_height}}(h) inches</p>
               </td>
               <td class="py-3 px-6 text-left">
                   <p>$ {{ detail.total_amount / 100 }}</p>
@@ -426,6 +407,6 @@ export default {
   @apply flex flex-col p-5 justify-start pt-0 items-center text-center mx-auto;
 }
 .img-width {
-  width: 50px;
+  width: 100px;
 }
 </style>
