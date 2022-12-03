@@ -406,8 +406,10 @@ export default {
                 delivery_confirmation:
                   this.checkoutDetail.signature === true ? true : false,
                 insurance: Number(insuranceValue),
-                customs_info: customInfo,
               };
+              if(Object.keys(customInfo).length > 0){
+                params.customs_info = customInfo;
+              }
               this.$axios
                 .post("/createShipping", params)
                 .then((response) => {
