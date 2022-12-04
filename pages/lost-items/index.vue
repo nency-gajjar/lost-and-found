@@ -1,6 +1,6 @@
 <template>
   <div class="wrapper">
-    <div class="container max-w-7xl mx-auto px-4">
+    <div class="container max-w-7xl mx-auto px-4 pb-6">
       <div
         class="
           justify-end
@@ -14,6 +14,7 @@
         "
       >
         <BaseButton
+          v-if="mobileDevice"
           class="sm:ml-2 grow mt-3 sm:mt-0 sm:grow-0"
           @click="addNewItem"
         >
@@ -63,10 +64,27 @@
               flex-wrap
               md:flex-nowrap
               sm:flex-row
-              items-center
             "
           >
-            <div class="w-full flex gap-3 flex-auto mt-3 sm:mt-0 sm:w-6/12">
+            <!-- Item Description -->
+            <div class="h-full flex-auto w-full mt-3 md:mt-0 md:w-2/12">
+              <BaseSelect
+                v-model="itemDescription"
+                :options="itemDescriptionOptions"
+                label="Item Description"
+              />
+            </div>
+            <div
+              class="
+                w-full
+                flex flex-wrap
+                sm:flex-nowrap
+                gap-3
+                flex-auto
+                mt-3
+                md:mt-0 md:w-6/12
+              "
+            >
               <client-only>
                 <date-picker
                   placeholder="Start date"
@@ -83,21 +101,13 @@
               </client-only>
             </div>
 
-            <!-- Item Description -->
-            <div class="h-full flex-auto w-full mt-3 sm:mt-0 sm:w-2/12">
-              <BaseSelect
-                v-model="itemDescription"
-                :options="itemDescriptionOptions"
-                label="Item Description"
-              />
-            </div>
             <div
               class="
                 w-full
                 flex
                 item-center
                 justify-end
-                sm:mt-0 sm:w-2/12
+                md:mt-0 md:w-2/12
                 flex-auto
                 gap-2
               "
@@ -432,8 +442,6 @@
 import DatePicker from "vue2-datepicker";
 import "vue2-datepicker/index.css";
 import moment from "moment";
-// import { itemDescriptionOptions } from "../../static/defaults.js";
-import { cloneDeep } from "lodash";
 export default {
   components: { DatePicker },
   data() {
@@ -451,6 +459,7 @@ export default {
       lat: "",
       long: "",
       isFilterApplied: false,
+      mobileDevice: false,
     };
   },
   computed: {
@@ -468,6 +477,17 @@ export default {
     },
   },
   methods: {
+    isMobile() {
+      if (
+        /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(
+          navigator.userAgent
+        )
+      ) {
+        return true;
+      } else {
+        return false;
+      }
+    },
     addNewItem() {
       this.$router.push({ name: "item-details" });
     },
@@ -655,6 +675,7 @@ export default {
     // }
   },
   async mounted() {
+    this.mobileDevice = this.isMobile();
     await this.getItemDescriptionOptions();
     if (this.$route.params?.appliedFilters) {
       this.itemDescription = this.$route.params.appliedFilters.itemDescription;

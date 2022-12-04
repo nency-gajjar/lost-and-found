@@ -1,53 +1,77 @@
 <template>
-  <main class="text-center mt-8 space-y-5 max-w-5xl mx-auto">
-    <div
-      class="
-        border border-[#E1E3E6]
-        rounded-lg
-        bg-white
-        md:mt-14
-        mt-24
-        mx-4
-        md:px-12
-        px-6
-        sm:space-x-2
-        lg:space-x-0 lg:h-[10.375rem]
-        flex
-        justify-between
-        flex-col
-        sm:flex-row
-      "
-      style="box-shadow: -10px 18px 32px rgba(54, 28, 93, 0.04)"
-    >
+  <main class="text-center sm:mt-8 space-y-5 max-w-5xl mx-auto">
+    <div class="flex space-y-5 max-w-5xl mx-auto">
       <div
         class="
-          space-y-2
-          lg:mt-9
-          sm:w-1/2
+          border border-[#E1E3E6]
+          rounded-lg
+          bg-white
+          sm:mt-14
+          mt-8
+          mx-4
+          md:px-12
+          px-6
+          sm:space-x-2
+          lg:space-x-0
           w-full
-          text-center
-          sm:text-left
-          py-4
-          lg:py-0
-          max-w-md
+          flex
+          justify-between
+          flex-col
+          sm:flex-row
         "
+        style="box-shadow: -10px 18px 32px rgba(54, 28, 93, 0.04)"
       >
-        <h2
+        <div
           class="
-            font-bold
-            text-4xl
-            md:text-[2.625rem] md:leading-[3.125rem]
-            text-accent-100
+            sm:w-1/2
+            w-full
+            text-center
+            sm:text-left
+            py-4
+            lg:py-0
+            sm:max-w-md
+            flex flex-col
+            items-center
+            justify-center
+            sm:items-start
+            mb-8
+            sm:mb-0
           "
         >
-          Success!
-        </h2>
-        <p class="text-gray-800 text-sm max-w-[21.875rem]">
-          Your shipment created successfully!
-        </p>
+          <h2
+            class="
+              font-bold
+              text-4xl
+              md:text-[2.625rem] md:leading-[3.125rem]
+              text-accent-100
+            "
+          >
+            Success!
+          </h2>
+          <p class="text-gray-800 text-sm max-w-[21.875rem]">
+            Your shipment created successfully!
+          </p>
+        </div>
+        <div
+          class="
+            sm:w-1/2
+            w-full
+            text-center
+            sm:text-left sm:max-w-md
+            relative
+            flex
+            justify-center
+            md:justify-end
+          "
+        >
+          <img
+            class="h-[250px] mt-0 sm:-mt-10 lg:-mt-12"
+            src="../assets/images/successfull-payment.svg"
+          />
+        </div>
       </div>
     </div>
-    <div class="text-center mt-8 space-y-5 max-w-xl mx-auto">
+    <div class="text-center mt-8 space-y-5 max-w-xl mx-auto px-4">
       <h3 class="text-xl font-medium text-primary-100 font-display">
         You have succesfully created a label!
       </h3>
@@ -60,11 +84,31 @@
     <p class="text-gray-800">
       Optionally, you can schedule a pickup for your package:
     </p>
-    <div class="flex gap-4 items-center justify-center">
-      <BaseButton :disabled="itemDetails.scheduled_pickup" varient="secondary" @click="showSchedulePickup = true">
+    <div
+      class="
+        flex flex-col
+        sm:flex-row
+        flex-wrap
+        sm:flex-nowrap
+        gap-4
+        items-center
+        justify-center
+        px-4
+      "
+    >
+      <BaseButton
+        class="w-full sm:w-fit"
+        :disabled="itemDetails.scheduled_pickup"
+        varient="secondary"
+        @click="showSchedulePickup = true"
+      >
         Schedule Pickup
       </BaseButton>
-      <BaseButton varient="primaryAlt" @click="$router.push('lost-items')">
+      <BaseButton
+        class="w-full sm:w-fit"
+        varient="primaryAlt"
+        @click="$router.push('lost-items')"
+      >
         Back to listing
       </BaseButton>
     </div>
@@ -138,7 +182,7 @@ export default {
           "/getsinglelostitem?id=" + this.itemId
         );
         this.itemDetails = response.data.data.Item;
-        } catch (err) {
+      } catch (err) {
         console.log(err);
       }
     }

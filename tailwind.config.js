@@ -18,7 +18,7 @@ module.exports = {
     extend: {
       colors: {
         emerald: colors.emerald,
-        gray: colors.trueGray,
+        gray: colors.gray,
         primary: {
           200: '#4a326d', // we use this on hover secondary button
           100: '#361C5D',

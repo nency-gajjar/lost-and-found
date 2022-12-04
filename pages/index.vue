@@ -1,10 +1,81 @@
 <template>
-  <div>
-    <div class="wrapper -mt-14">
+  <div class="sm:mt-8">
+    <div class="flex space-y-5 max-w-5xl mx-auto">
+      <div
+        class="
+          border border-[#E1E3E6]
+          rounded-lg
+          bg-white
+          sm:mt-14
+          mt-8
+          mx-4
+          md:px-12
+          px-6
+          sm:space-x-2
+          lg:space-x-0
+          w-full
+          flex
+          justify-between
+          flex-col
+          sm:flex-row
+        "
+        style="box-shadow: -10px 18px 32px rgba(54, 28, 93, 0.04)"
+      >
+        <div
+          class="
+            sm:w-1/2
+            w-full
+            text-center
+            sm:text-left
+            py-4
+            lg:py-0
+            sm:max-w-md
+            flex flex-col
+            items-center
+            justify-center
+            sm:items-start
+            mb-8
+            sm:mb-0
+          "
+        >
+          <h2
+            class="
+              font-bold
+              text-4xl
+              md:text-[2.625rem] md:leading-[3.125rem]
+              text-accent-100
+            "
+          >
+            Have you <span class="text-primary-100"> Lost</span> anything!
+          </h2>
+          <p class="text-gray-800 text-sm max-w-[21.875rem]">
+            Describe your lost item!
+          </p>
+        </div>
+        <div
+          class="
+            sm:w-1/2
+            w-full
+            text-center
+            sm:text-left sm:max-w-md
+            relative
+            flex
+            justify-center
+            md:justify-end
+          "
+        >
+          <img
+            class="h-[250px] mt-0 sm:-mt-10 lg:-mt-12"
+            src="../assets/images/lost-found.svg"
+          />
+        </div>
+      </div>
+    </div>
+    <div class="wrapper">
       <!-- Lost Item Filter -->
       <section class="p-6 sm:w-8/12">
-        <div class="container mx-auto m-8">
-          <h1
+        <div class="container mx-auto">
+          <!-- <h1
             class="
               w-full
               my-4
@@ -27,7 +98,7 @@
               "
             ></span>
           </div>
-          <p class="text-gray-600 text-md">Leave Blank to show all Item</p>
+          <p class="text-gray-600 text-md">Leave Blank to show all Item</p> -->
           <div class="align-middle inline-block w-full mt-5">
             <!-- Location -->
             <div class="inline-flex flex-auto w-full bg-white">
@@ -59,9 +130,6 @@
           </div>
 
           <div class="align-middle inline-block w-full mt-5">
-            <label class="block text-md font-medium text-gray-800 text-left m-2"
-              >Date when lost?</label
-            >
             <div
               class="
                 flex
@@ -71,28 +139,9 @@
                 flex-wrap
                 md:flex-nowrap
                 sm:flex-row
-                items-center
+                items-end
               "
             >
-              <div class="w-full flex gap-4 flex-auto mt-3 sm:mt-0 sm:w-9/12">
-                <client-only>
-                  <date-picker
-                    placeholder="Approx. Start date"
-                    v-model="startDate"
-                    formate="YYYY-MM-DD"
-                  >
-                  </date-picker>
-                </client-only>
-                <client-only>
-                  <date-picker
-                    placeholder="Approx. End date"
-                    v-model="endDate"
-                    formate="YYYY-MM-DD"
-                  >
-                  </date-picker>
-                </client-only>
-              </div>
-
               <!-- Item Description -->
               <div class="h-full flex-auto w-full mt-3 sm:mt-0 sm:w-3/12">
                 <BaseSelect
@@ -101,10 +150,34 @@
                   label="Item Description"
                 />
               </div>
+              <div class="w-full flex flex-col mt-3 sm:mt-0 sm:w-9/12">
+                <label
+                  class="block text-md font-medium text-gray-800 text-left m-2"
+                  >Date when lost?</label
+                >
+                <div class="flex gap-4 flex-auto">
+                  <client-only>
+                    <date-picker
+                      placeholder="Approx. Start date"
+                      v-model="startDate"
+                      formate="YYYY-MM-DD"
+                    >
+                    </date-picker>
+                  </client-only>
+                  <client-only>
+                    <date-picker
+                      placeholder="Approx. End date"
+                      v-model="endDate"
+                      formate="YYYY-MM-DD"
+                    >
+                    </date-picker>
+                  </client-only>
+                </div>
+              </div>
             </div>
           </div>
           <div class="flex items-center justify-center m-8">
-            <BaseButton @click="applyFilters" class="sm:h-12">
+            <BaseButton @click="applyFilters" class="sm:py-4 sm:px-14">
               Search
             </BaseButton>
           </div>
@@ -377,7 +450,7 @@ export default {
 }
 */
 .wrapper {
-  @apply flex min-h-screen justify-center items-center text-center mx-auto;
+  @apply flex  justify-center items-center text-center mx-auto;
 }
 
 .gradient {
