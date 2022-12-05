@@ -19,7 +19,7 @@
           "
         >
           <BaseButton
-            @click="showSurchargeModel = true"
+            @click="showSurchargeModel = true; mode = 'create'"
             class="sm:ml-2 mt-3 sm:mt-0"
           >
             + Create
@@ -95,16 +95,18 @@
                     <div class="flex justify-content-center gap-4">
                       <div class="bg-blue-600 px-3 py-2 rounded">
                         <BaseIcon
+                          @click="editSurcharge"
                           icon="pencil"
                           color="white"
                         />
                       </div>
                       <div class="bg-red-600 px-3 py-2 rounded">
                         <BaseIcon
+                          @click="deleteSurcharge" 
                           icon="trash"
                           color="white"
                         />
-                        </div>
+                      </div>
                     </div>
                   </td>
                 </tr>
@@ -136,16 +138,18 @@
                     <div class="flex justify-content-center gap-4">
                       <div class="bg-blue-600 px-3 py-2 rounded">
                         <BaseIcon
+                          @click="editSurcharge"
                           icon="pencil"
                           color="white"
                         />
                       </div>
                       <div class="bg-red-600 px-3 py-2 rounded">
                         <BaseIcon
+                          @click="deleteSurcharge" 
                           icon="trash"
                           color="white"
                         />
-                        </div>
+                      </div>
                     </div>
                   </td>
                 </tr>
@@ -177,16 +181,18 @@
                     <div class="flex justify-content-center gap-4">
                       <div class="bg-blue-600 px-3 py-2 rounded">
                         <BaseIcon
+                          @click="editSurcharge"
                           icon="pencil"
                           color="white"
                         />
                       </div>
                       <div class="bg-red-600 px-3 py-2 rounded">
                         <BaseIcon
+                          @click="deleteSurcharge" 
                           icon="trash"
                           color="white"
                         />
-                        </div>
+                      </div>
                     </div>
                   </td>
                 </tr>
@@ -199,6 +205,8 @@
     <SurchargeModel
       v-if="showSurchargeModel"
       :show-modal="showSurchargeModel"
+      :mode="mode"
+      :data="tempSurchargeData"
       @close="showSurchargeModel = false"
     />
   </div>
@@ -212,8 +220,27 @@ export default {
   data() {
     return {
       showSurchargeModel: false,
+      mode: "create",
+      tempSurchargeData: {
+        key: "Any",
+        service: "Any",
+        packageType: "Any",
+        effectiveAfter: new Date(),
+        effectiveBefore: new Date(),
+        dollarAmount: 200,
+        percentage: 3,
+      }
     }
-  }
+  },
+  methods: {
+    editSurcharge() {
+      this.mode = "edit";
+      this.showSurchargeModel = true;
+    },
+    deleteSurcharge() {
+      console.log("delete")
+    },
+  },
 };
 </script>
 

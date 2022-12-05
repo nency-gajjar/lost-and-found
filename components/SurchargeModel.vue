@@ -132,7 +132,9 @@
               />
             </div>
           </div>
-          <p v-show="!isAmountValid" class="text-rose-600">Any one field is required between dollor amount and percentage</p>
+          <p v-show="!isAmountValid" class="text-rose-600">
+            Any one field is required between dollor amount and percentage
+          </p>
           <BaseButton
             type="submit"
             class="max-w-[16rem] w-full mx-auto my-2"
@@ -154,6 +156,8 @@ import moment from "moment";
 export default {
   props: {
     showModal: { type: Boolean, default: false },
+    mode: { type: String, default: "create" },
+    data: { type: Object, default: {} },
   },
   components: {
     DatePicker,
@@ -173,6 +177,17 @@ export default {
       isLoading: false,
       isAmountValid: true
     };
+  },
+  mounted() {
+    if(this.mode === "edit"){
+      this.key = this.data.key;
+      this.service = this.data.service;
+      this.packageType = this.data.packageType;
+      this.effectiveAfter = this.data.effectiveAfter;
+      this.effectiveBefore = this.data.effectiveBefore;
+      this.dollarAmount = this.data.dollarAmount;
+      this.percentage = this.data.percentage;
+    }
   },
   methods: {
     async onSubmit() {
