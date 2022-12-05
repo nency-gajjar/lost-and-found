@@ -327,8 +327,10 @@ import { ValidationObserver, ValidationProvider } from "vee-validate";
 import DatePicker from "vue2-datepicker";
 import "vue2-datepicker/index.css";
 import moment from "moment";
+import formatMobileNumber from "../mixins/formatMobileNumber.js";
 
 export default {
+  mixins: [formatMobileNumber],
   components: {
     ValidationObserver,
     ValidationProvider,
@@ -461,11 +463,6 @@ export default {
           this.isPhoneNoValid = false;
         }
       }
-    },
-    formatMobileNumber(phoneNumber) {
-      let arr = phoneNumber.split(" ");
-      let countryCode = arr.shift();
-      return countryCode + " " + arr.join("");
     },
     async onSubmit() {
       this.isLoading = true;

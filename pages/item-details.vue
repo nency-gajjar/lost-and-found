@@ -1203,9 +1203,10 @@ import "vue2-datepicker/index.css";
 import moment from "moment";
 import DetectBrowser from "~/mixins/detectBrowser";
 import ImageEditor from "@/mixins/imageEditor";
+import formatMobileNumber from "../mixins/formatMobileNumber.js";
 
 export default {
-  mixins: [DetectBrowser, ImageEditor],
+  mixins: [DetectBrowser, ImageEditor, formatMobileNumber],
   data: () => ({
     venueName: "",
     showResetButton: false,
@@ -1770,11 +1771,6 @@ export default {
           this.isReceiverMobileNoValid = false;
         }
       }
-    },
-    formatMobileNumber(phoneNumber) {
-      let arr = phoneNumber.split(" ");
-      let countryCode = arr.shift();
-      return countryCode + " " + arr.join("");
     },
     setItemDetails() {
       let value = this.itemDescription;
