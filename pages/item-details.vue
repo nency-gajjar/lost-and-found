@@ -1194,7 +1194,6 @@
 
 <script>
 import { ValidationObserver, ValidationProvider } from "vee-validate";
-import { mapGetters } from "vuex";
 import RedactImage from "~/components/redactEditor/RedactImage.vue";
 import VueCropper from "vue-cropperjs";
 import "cropperjs/dist/cropper.css";
@@ -1202,17 +1201,15 @@ import { weightOuncesOptions, venueOptions } from "static/defaults.js";
 import DatePicker from "vue2-datepicker";
 import "vue2-datepicker/index.css";
 import moment from "moment";
+import DetectBrowser from "~/mixins/detectBrowser";
+import ImageEditor from "@/mixins/imageEditor";
 
 export default {
+  mixins: [DetectBrowser, ImageEditor],
   data: () => ({
     venueName: "",
     showResetButton: false,
     itemDetails: {},
-    imgSrc: "",
-    showCrop: false,
-    showDraw: false,
-    imgPreview: false,
-    showUndo: false,
     showValidateAlert: false,
     senderFormTitle: "SENDER'S DETAILS",
     foundItemFormTitle: "FOUND ITEM'S DETAILS",
@@ -1250,13 +1247,7 @@ export default {
     receiverEmail: "",
     receiverMobileNo: "",
     addressArr: ["Other"],
-    itemImage: "",
-    showEditor: false,
-    size_icon: "2x",
-    isSavingImage: false,
     imageRecognitionData: [],
-    image: "",
-    imageKey: "",
     isImageValid: true,
     imageValidationMessage: "",
     isLoadingRemoveImage: false,
@@ -1299,7 +1290,6 @@ export default {
       phoneNo: "",
     },
     autoCompleteAddressArr: [],
-    mobileDevice: false,
     venuePhoneValidationMessage: "",
     employeePhoneValidationMessage: "",
     receiverPhoneValidationMessage: "",
@@ -1346,7 +1336,6 @@ export default {
       this.itemDetails = JSON.parse(
         JSON.stringify(this.$store.getters["item/itemDetails"])
       );
-      this.mobileDevice = this.isMobile();
       await this.getItemDescriptionOptions();
       window.addEventListener("keydown", () => {
         this.showValidateAlert = false;
@@ -1568,17 +1557,6 @@ export default {
         this.receiverName = "";
         this.receiverEmail = "";
         this.receiverMobileNo = "";
-      }
-    },
-    isMobile() {
-      if (
-        /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(
-          navigator.userAgent
-        )
-      ) {
-        return true;
-      } else {
-        return false;
       }
     },
     getItemDescriptionOptions() {
@@ -1911,24 +1889,6 @@ export default {
         }, 300);
       }
     },
-    undo() {
-      this.$refs.redacter.revert();
-    },
-    toggleUndo(length) {
-      if (length > 0) {
-        this.showUndo = true;
-      } else {
-        this.showUndo = false;
-      }
-    },
-    closeEditor() {
-      this.showEditor = false;
-      this.imgSrc = "";
-      this.showCrop = false;
-      this.showDraw = false;
-      this.imgPreview = false;
-      // this.enableEdit = false;
-    },
     deleteEditable(showToastr = true) {
       return new Promise((resolve) => {
         if (this.imageKey) {
@@ -1961,105 +1921,6 @@ export default {
         }
       });
     },
-    addSquare() {
-      this.imgPreview = false;
-      this.showDraw = true;
-      this.showCrop = false;
-    },
-    crop() {
-      this.imgPreview = false;
-      this.showCrop = true;
-      this.showDraw = false;
-    },
-    applyEdit() {
-      if (this.showDraw) {
-        this.imgSrc = this.$refs.redacter.canvas().toDataURL();
-      } else {
-        this.imgSrc = this.$refs.cropper.getCroppedCanvas().toDataURL();
-      }
-      this.showCrop = false;
-      this.showDraw = false;
-      this.imgPreview = true;
-    },
-    async editImage() {
-      this.showEditor = false;
-      if (this.image) {
-        const data = await fetch(this.image, { cache: "no-cache" });
-        const blob = await data.blob();
-        this.imgSrc = await this.process_image(blob);
-        this.showEditor = true;
-      } else {
-        this.showEditor = false;
-      }
-    },
-    async reduce_image_file_size(base64Str, MAX_WIDTH = 450, MAX_HEIGHT = 450) {
-      let resized_base64 = await new Promise((resolve) => {
-        let img = new Image();
-        img.src = base64Str;
-        img.onload = () => {
-          let canvas = document.createElement("canvas");
-          let width = img.width;
-          let height = img.height;
-
-          if (width > height) {
-            if (width > MAX_WIDTH) {
-              height *= MAX_WIDTH / width;
-              width = MAX_WIDTH;
-            }
-          } else {
-            if (height > MAX_HEIGHT) {
-              width *= MAX_HEIGHT / height;
-              height = MAX_HEIGHT;
-            }
-          }
-          canvas.width = width;
-          canvas.height = height;
-          let ctx = canvas.getContext("2d");
-          ctx.drawImage(img, 0, 0, width, height);
-          resolve(canvas.toDataURL()); // this will return base64 image results after resize
-        };
-      });
-      return resized_base64;
-    },
-    calc_image_size(image) {
-      let y = 1;
-      if (image.endsWith("==")) {
-        y = 2;
-      }
-      const x_size = image.length * (3 / 4) - y;
-      return Math.round(x_size / 1024);
-    },
-    async image_to_base64(file) {
-      let result_base64 = await new Promise((resolve) => {
-        let fileReader = new FileReader();
-        fileReader.onload = (e) => resolve(fileReader.result);
-        fileReader.onerror = (error) => {
-          console.log(error);
-          this.$toast.error(
-            "An Error occurred please try again, File might be corrupt"
-          );
-        };
-        fileReader.readAsDataURL(file);
-      });
-      return result_base64;
-    },
-    async process_image(file, min_image_size = 300) {
-      const res = await this.image_to_base64(file);
-      if (res) {
-        const old_size = this.calc_image_size(res);
-        if (old_size > min_image_size) {
-          const resized = await this.reduce_image_file_size(res);
-          const new_size = this.calc_image_size(resized);
-          return resized;
-        } else {
-          console.log("image already small enough");
-          return res;
-        }
-      } else {
-        console.log("return err");
-        return null;
-      }
-    },
     async uploadImg(event) {
       const allowedExtensions = /(\.jpg|\.jpeg|\.png)$/i;
       const filePath = event.target?.files[0];
@@ -2081,7 +1942,6 @@ export default {
       }
     },
     saveImg() {
-      // this.deleteEditable(false);
       this.isSavingImage = true;
       let file = null;
       if (this.showDraw) {

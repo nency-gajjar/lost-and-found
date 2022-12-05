@@ -83,17 +83,16 @@
 </template>
 
 <script>
+import DetectBrowser from "~/mixins/detectBrowser";
 export default {
+  mixins: [DetectBrowser],
   data() {
     return {
       menuVisible: false,
       isLogin: false,
-      mobileDevice: false,
     };
   },
-  mounted() {
-    this.mobileDevice = this.isMobile();
-  },
+
   methods: {
     toggleMenu() {
       this.menuVisible = !this.menuVisible;
@@ -102,17 +101,6 @@ export default {
       await this.$auth.logout();
       if (device === "mobile") {
         this.toggleMenu();
-      }
-    },
-    isMobile() {
-      if (
-        /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(
-          navigator.userAgent
-        )
-      ) {
-        return true;
-      } else {
-        return false;
       }
     },
   },

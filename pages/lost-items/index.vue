@@ -442,8 +442,10 @@
 import DatePicker from "vue2-datepicker";
 import "vue2-datepicker/index.css";
 import moment from "moment";
+import DetectBrowser from "~/mixins/detectBrowser";
 export default {
   components: { DatePicker },
+  mixins: [DetectBrowser],
   data() {
     return {
       lostItems: [],
@@ -459,7 +461,6 @@ export default {
       lat: "",
       long: "",
       isFilterApplied: false,
-      mobileDevice: false,
     };
   },
   computed: {
@@ -477,17 +478,6 @@ export default {
     },
   },
   methods: {
-    isMobile() {
-      if (
-        /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(
-          navigator.userAgent
-        )
-      ) {
-        return true;
-      } else {
-        return false;
-      }
-    },
     addNewItem() {
       this.$router.push({ name: "item-details" });
     },
@@ -675,7 +665,6 @@ export default {
     // }
   },
   async mounted() {
-    this.mobileDevice = this.isMobile();
     await this.getItemDescriptionOptions();
     if (this.$route.params?.appliedFilters) {
       this.itemDescription = this.$route.params.appliedFilters.itemDescription;

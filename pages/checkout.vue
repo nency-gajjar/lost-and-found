@@ -42,12 +42,7 @@
               {{ displayItemService(checkoutDetail.selectedRate.service) }}
             </span>
             <p class="text-display tracking-wide text-gray-700 font-medium">
-              {{
-                new Intl.NumberFormat("en-US", {
-                  style: "currency",
-                  currency: "USD",
-                }).format(checkoutDetail.selectedRate.rate)
-              }}
+              {{ Number(checkoutDetail.selectedRate.rate) | currency }}
             </p>
           </div>
           <div
@@ -87,12 +82,7 @@
           >
             <span class="font-medium text-md"> Insured for: </span>
             <span class="text-display tracking-wide text-gray-700 font-medium">
-              {{
-                new Intl.NumberFormat("en-US", {
-                  style: "currency",
-                  currency: "USD",
-                }).format(checkoutDetail.insuranceValue)
-              }}
+              {{ Number(checkoutDetail.insuranceValue) | currency }}
             </span>
           </p>
           <p
@@ -101,12 +91,7 @@
           >
             <span class="font-medium text-md"> Signature Confirmation:</span>
             <span class="text-display tracking-wide text-gray-700 font-medium">
-              {{
-                new Intl.NumberFormat("en-US", {
-                  style: "currency",
-                  currency: "USD",
-                }).format(5)
-              }}
+              {{ 5 | currency }}
             </span>
           </p>
 
@@ -123,7 +108,7 @@
                   leading-relaxed
                 "
               >
-                {{ totalPrice }}
+                {{ Number(totalPrice) | currency }}
               </p>
             </div>
           </div>
@@ -221,7 +206,9 @@
 
 <script>
 import { isEmpty, startCase, camelCase } from "lodash";
+import FormatCurrency from "@/mixins/formatCurrency";
 export default {
+  mixins: [FormatCurrency],
   data() {
     return {
       checkoutDetail: {},
@@ -282,16 +269,19 @@ export default {
         hidePostalCode: true,
       });
       card.mount("#card-element");
-      card.on('change', () => {
+      card.on("change", () => {
         setTimeout(() => {
-          if(document.getElementById("card-element").classList.contains('StripeElement--complete')){
+          if (
+            document
+              .getElementById("card-element")
+              .classList.contains("StripeElement--complete")
+          ) {
             this.isCardValid = true;
-          }
-          else{
+          } else {
             this.isCardValid = false;
           }
         }, 200);
-      })
+      });
       this.card = card;
     } else {
       if (
@@ -336,10 +326,7 @@ export default {
       const insuranceValue = Number(this.checkoutDetail?.insuranceValue) || 0;
       const rate = Number(this.checkoutDetail?.selectedRate?.rate);
       const signature = this.checkoutDetail.signature ? 5 : 0;
-      return new Intl.NumberFormat("en-US", {
-        style: "currency",
-        currency: "USD",
-      }).format(rate + insuranceValue + signature);
+      return rate + insuranceValue + signature;
     },
   },
   methods: {
@@ -349,7 +336,9 @@ export default {
     },
     async confirmAndPay() {
       this.isLoading = true;
-      let totalPrice =  Math.floor(Number(this.totalPrice.split("$")[1]).toFixed(2) * 100); // convert usd to cents
+      let totalPrice = Math.floor(
+        Number(this.totalPrice.split("$")[1]).toFixed(2) * 100
+      ); // convert usd to cents
       this.$axios
         .post("/createPaymentIntent", {
           amount: totalPrice,
