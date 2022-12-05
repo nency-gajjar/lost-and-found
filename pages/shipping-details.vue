@@ -360,7 +360,7 @@ export default {
 
 <style lang="scss" scoped>
 .wrapper {
-  @apply flex flex-col justify-start pt-0 items-center text-center mx-8;
+  @apply flex flex-col justify-start pt-0 items-center text-center mx-0 sm:mx-8;
 }
 .img-width {
   width: 100px;

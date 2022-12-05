@@ -44,6 +44,26 @@
               </div>
             </div>
 
+            <!-- Custom Items Value -->
+            <ValidationProvider
+              v-slot="{ errors }"
+              rules="required|numeric"
+              class="block"
+            >
+              <BaseInput
+                v-model="customItemsValue"
+                type="text"
+                label="Custom Items Value"
+                :class="errors.length > 0 && 'error'"
+              />
+              <p
+                v-if="errors.length"
+                class="vee-validation-error mt-2 text-sm text-red-600"
+              >
+                {{ errors[0] }}
+              </p>
+            </ValidationProvider>
+
             <!-- EEL code or PFC -->
             <ValidationProvider
               v-slot="{ errors }"
@@ -108,26 +128,6 @@
               ></textarea>
             </div>
 
-            <!-- Custom Items Value -->
-            <ValidationProvider
-              v-slot="{ errors }"
-              rules="required|numeric"
-              class="block"
-            >
-              <BaseInput
-                v-model="customItemsValue"
-                type="text"
-                label="Custom Items Value"
-                :class="errors.length > 0 && 'error'"
-              />
-              <p
-                v-if="errors.length"
-                class="vee-validation-error mt-2 text-sm text-red-600"
-              >
-                {{ errors[0] }}
-              </p>
-            </ValidationProvider>
-
             <!-- Customs Certify -->
             <div class="text-gray-500 flex items-center space-x-3 ml-4">
               <input
@@ -150,7 +150,7 @@
               v-if="customsCertify"
               v-slot="{ errors }"
               name="Customs Signer"
-              class="block ml-4"
+              class="block"
             >
               <BaseInput
                 v-model="customsSigner"
@@ -165,6 +165,19 @@
                 {{ errors[0] }}
               </p>
             </ValidationProvider>
+          </div>
+          <div
+            v-show="showValidateAlert"
+            class="p-4 mb-4 text-sm text-red-700 bg-red-100 rounded-lg"
+            role="alert"
+          >
+            <span class="font-medium">Oops!</span> Please fill all required
+            fields and try submitting again.
+          </div>
+          <div class="flex justify-end mr-6">
+            <BaseButton type="submit">
+              Submit
+            </BaseButton>
           </div>
         </form>
       </ValidationObserver>
@@ -182,7 +195,104 @@ export default {
       customItemsValue: "",
       customsCertify: false,
       customsSigner: "",
+      itemDetails: {},
+      showValidateAlert: false,
     };
+  },
+  async mounted() {
+    if(!this.$route.params.fromItemDelivery) {
+      if (
+        JSON.parse(
+          JSON.stringify(this.$store.getters["shipment/itemDeliveryId"])
+        )
+      ) {
+        this.$nextTick(() => {
+          this.$router.push({
+            name: "item-delivery",
+            query: {
+              id: JSON.parse(
+                JSON.stringify(this.$store.getters["shipment/itemDeliveryId"])
+              ),
+            },
+          });
+        });
+      } else {
+        this.$nextTick(() => {
+          this.$router.push({
+            name: "lost-items",
+          });
+        });
+      }
+    }
+    else{
+      try {
+        let response = await this.$axios.get(
+          "/getsinglelostitem?id=" + this.$route.query.id
+        );
+        this.itemDetails = response.data.data.Item;
+        } catch (err) {
+        console.log(err);
+      }
+    }
+    
+    window.addEventListener("keydown", () => {
+      this.showValidateAlert = false;
+    });
+    window.addEventListener("click", () => {
+      this.showValidateAlert = false;
+    });
+  },
+  beforeDestroy() {
+    window.removeEventListener("click", () => {});
+    window.removeEventListener("keydown", () => {});
+  },
+  watch: {
+    customItemsValue(value){
+      if(value === ""){
+        this.eel_pfc = "";
+      }
+      else if(Number(value) < 2500){
+        this.eel_pfc = "NOEEI 30.37(a)";
+      }
+      else{
+        this.eel_pfc = "AES X20120502123456";
+      }
+    }
+  },
+  methods: {
+    async onSubmit(){
+      const isValid = await this.$refs.observer.validate();
+      if(isValid){
+        let params = {
+          eel_pfc: this.eel_pfc,
+          customs_certify: this.customsCertify,
+          customs_signer: this.customsSigner,
+          contents_explanation: this.contentsExplanation,
+          restriction_type: "none",
+          restriction_comments: this.restrictionComments,
+          customs_items: [
+            {
+              description: this.itemDetails.item_description,
+              quantity: 1,
+              weight: Number(this.itemDetails.weight_pounds),
+              value: Number(this.customItemsValue),
+              origin_country: this.itemDetails.country.trim()
+            }
+          ]
+        }
+        this.$store.commit("shipment/SET_CUSTOM_INFO", params);
+        this.$nextTick(() => {
+          this.$router.push({
+            name: "rate-quotes",
+            query: { id: this.$route.query.id },
+            params: { fromItemDelivery: true },
+          });
+        });
+      }
+      else{
+        this.showValidateAlert = true;
+      }
+    }
   },
 };
 </script>
