@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="noPrint">
     <nav>
       <div class="appbar-container justify-between md:justify-start">
         <div class="menu flex justify-between w-full">
@@ -185,6 +185,12 @@ export default {
   }
   .mobile-menu > div:not(:last-child) {
     border-bottom: 1px solid #ececee;
+  }
+}
+
+@media print {
+  .noPrint{
+    display: none;
   }
 }
 </style>

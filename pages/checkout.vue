@@ -94,6 +94,17 @@
               {{ 5 | currency }}
             </span>
           </p>
+          <p class="flex justify-between" v-if="this.insuranceCharges">
+            <span class="font-medium text-md"> Insurance Charges:</span>
+            <span class="text-display tracking-wide text-gray-700 font-medium">
+              {{
+                new Intl.NumberFormat("en-US", {
+                  style: "currency",
+                  currency: "USD",
+                }).format(this.insuranceCharges)
+              }}
+            </span>
+          </p>
 
           <hr class="my-5" />
           <div v-if="!isEmpty(checkoutDetail) && checkoutDetail.selectedRate">
@@ -215,10 +226,15 @@ export default {
       card: null,
       isLoading: false,
       isCardValid: false,
+      insuranceCharges: 0,
     };
   },
   mounted() {
     if (this.$route.params.fromRatePage) {
+      this.insuranceCharges = JSON.parse(
+        JSON.stringify(this.$store.getters["shipment/insuranceCharges"])
+      );
+
       this.checkoutDetail = {
         selectedRate: JSON.parse(
           JSON.stringify(this.$store.getters["shipment/selectedRate"])
@@ -326,7 +342,8 @@ export default {
       const insuranceValue = Number(this.checkoutDetail?.insuranceValue) || 0;
       const rate = Number(this.checkoutDetail?.selectedRate?.rate);
       const signature = this.checkoutDetail.signature ? 5 : 0;
-      return rate + insuranceValue + signature;
+      const insuranceCharges = this.insuranceCharges;
+      return rate + insuranceValue + signature + insuranceCharges;
     },
   },
   methods: {
@@ -363,6 +380,9 @@ export default {
               let insuranceValue = JSON.parse(
                 JSON.stringify(this.$store.getters["shipment/insuranceValue"])
               );
+              let customInfo = JSON.parse(
+                JSON.stringify(this.$store.getters["shipment/customInfo"])
+              );
               let params = {
                 id: this.$route.query.id,
                 carrier_accounts: selectedRate.carrier_account_id,
@@ -374,6 +394,9 @@ export default {
                   this.checkoutDetail.signature === true ? true : false,
                 insurance: Number(insuranceValue),
               };
+              if (Object.keys(customInfo).length > 0) {
+                params.customs_info = customInfo;
+              }
               this.$axios
                 .post("/createShipping", params)
                 .then((response) => {

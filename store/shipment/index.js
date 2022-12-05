@@ -2,7 +2,9 @@ export const state = () => ({
     shippingRates: {},
     lableDetails: {},
     selectedRate: {},
+    customInfo: {},
     insuranceValue: "",
+    insuranceCharges: 0,
     signature: null,
     labelUrl: "",
     itemId: "",
@@ -38,6 +40,12 @@ export const getters = {
     itemDeliveryId: (state) => {
         return state.itemDeliveryId;
     },
+    customInfo: (state) => {
+        return state.customInfo;
+    },
+    insuranceCharges: (state) => {
+        return state.insuranceCharges;
+    },
 }
 
 export const actions = {
@@ -66,5 +74,11 @@ export const mutations = {
     },
     SET_ITEM_DELIVERY_ID(state, itemDeliveryId) {
         state.itemDeliveryId = itemDeliveryId;
+    },
+    SET_CUSTOM_INFO(state, customInfo) {
+        state.customInfo = customInfo;
+    },
+    SET_INSURANCE_CHARGES(state, insuranceCharges) {
+        state.insuranceCharges = insuranceCharges;
     },
 }

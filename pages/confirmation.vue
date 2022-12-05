@@ -17,10 +17,10 @@
       <table id="printMe" width="100%" class="table-style">
         <tbody>
           <tr>
-            <td class="padding-1rem w-full">
+            <td class="padding-1rem w-full w-full-imp">
               <table width="100%" cellspacing="0" cellpadding="0">
                 <tr>
-                  <td align="center" class="w-full">
+                  <td align="center" class="w-full w-full-imp">
                     <h2
                       class="
                         text-2xl
@@ -37,8 +37,8 @@
             </td>
           </tr>
           <tr v-if="itemDetails.link">
-            <td class="pt-3 pb-5 px-3">
-              <div class="w-40 h-40 qr-code-container">
+            <td class="pt-3 pb-5 px-3 w-full-imp">
+              <div class="w-full-imp qr-code-container flex-imp justify-center-imp">
                 <img :src="itemDetails.link" alt="" />
               </div>
             </td>
@@ -374,7 +374,7 @@
           <img v-if="itemDetails.image" :src="itemDetails.image" alt="" />
         </div>
       </table>
-      <div class="flex flex-wrap gap-2 m-5">
+      <div class="noPrint flex flex-wrap gap-2 m-5">
         <BaseButton class="flex-auto" @click="printDetails">
           Print Details
         </BaseButton>
@@ -474,149 +474,7 @@ export default {
           jsPDF: { unit: "in", format: "letter", orientation: "portrait" },
         });
       } else {
-        const mywindow = window.open("", "PRINT", "height=1200,width=600");
-        mywindow.document.write("<html><head>");
-        mywindow.document.write(`<style>
-                    tr td:first-child {
-                      width: 250px;
-                    }
-                    .qr-code-container {
-                      margin: 0px auto 30px auto;
-                      
-                    }
-                    .text-center {
-                      text-align: center;
-                    }
-                    th,
-                    td {
-                      overflow: hidden;
-                      word-break: normal;
-                    }
-                    .table-style {
-                      background-color: #ffffff;
-                      margin: 0 auto;
-                    }
-                    .pb-5 {
-                      padding-bottom: 1.25rem;
-                    }
-                    .pt-3 {
-                      padding-top: 0.75rem;
-                    }
-                    .px-3 {
-                      padding-left: 0.75rem;
-                      padding-right: 0.75rem;
-                    }
-                    .py-4 {
-                      padding-top: 1rem;
-                      padding-bottom: 1rem;
-                    }
-                    .px-6 {
-                      padding-left: 1.5rem;
-                      padding-right: 1.5rem;
-                    }
-                    .pb-2 {
-                      padding-bottom: 0.5rem;
-                    }
-                    .padding-1rem {
-                      padding: 1rem;
-                    }
-                    .text-2xl {
-                      font-size: 1.5rem;
-                      line-height: 2;
-                    }
-                    .text-lg {
-                      font-size: 1.125rem;
-                      line-height: 1.75rem;
-                    }
-                    .font-bold {
-                      font-weight: 700;
-                    }
-                    .text-gray-800 {
-                      --tw-text-opacity: 1;
-                      color: rgb(38 38 38 / var(--tw-text-opacity));
-                    }
-                    .text-accent-100 {
-                      color: rgb(240 107 4);
-                    }
-                    .border-b {
-                      border-bottom-width: 1px;
-                    }
-                    .border-t-4 {
-                      border-top-width: 4px;
-                    }
-                    .border-solid {
-                      border-style: solid;
-                    }
-                    .border-gray-300 {
-                      border-color: rgb(212 212 212);
-                    }
-                    .w-40 {
-                      width: 10rem;
-                    }
-                    .w-20 {
-                      width: 5rem;
-                    }
-                    .text-left {
-                      text-align: left;
-                    }
-                    .font-medium {
-                      font-weight: 500;
-                    }
-                    .h-40 {
-                      height: 10rem;
-                    }
-                    .l-2 {
-                      height: 2.25rem;
-                    }
-                    .text-gray-600 {
-                      color: rgb(82 82 82);
-                    }
-                    .leading-tight {
-                      line-height: 1.25;
-                    }
-                    .inline-block {
-                      display: inline-block;
-                    }
-                    .mb-1 {
-                      margin-bottom: 0.25rem;
-                    }
-                    
-                    .item-img-container {
-                      max-width: 450px;
-                      margin-top: 1.25rem;
-                      margin-left: auto;
-                      margin-right: auto;
-                    }
-
-                    @media (min-width: 640px) {
-                      .sm\:w-40 {
-                        width: 10rem;
-                      }
-                    }
-                    @media all and (max-width: 479px) {
-                      table,
-                      thead,
-                      tbody,
-                      th,
-                      td,
-                      tr {
-                        display: block;
-                      }
-                      tr {
-                        margin-top: 25px;
-                      }
-                    }
-                </style>`);
-        mywindow.document.write("</head><body>");
-        mywindow.document.write(document.getElementById("printMe").innerHTML);
-        mywindow.document.write("</body></html>");
-        console.log("====After Document Write");
-        setTimeout(() => {
-          mywindow.print();
-          console.log("====After Print");
-          setTimeout(mywindow.close, 0);
-          console.log("====After Close");
-        }, 250);
+        window.print();
       }
     },
   },
@@ -625,6 +483,15 @@ export default {
 <style scoped>
 tr td:first-child {
   width: 250px;
+}
+.w-full-imp{
+  width: 100% !important;
+}
+.flex-imp {
+  display: flex !important;
+}
+.justify-center-imp {
+  justify-content: center !important;
 }
 .qr-code-container {
   margin: auto;
@@ -749,6 +616,12 @@ td {
   }
   tr {
     margin-top: 25px;
+  }
+}
+
+@media print {
+  .noPrint{
+    display: none;
   }
 }
 </style>
