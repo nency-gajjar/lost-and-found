@@ -152,19 +152,26 @@ export default {
                 "YYYY-MM-DD HH:mm:ss"
               ),
               instructions: this.instructions,
-              id: this.itemId
+              id: this.itemId,
             };
             let response = await this.$axios.post("/schedulePickup", params);
             this.$toast.info("Pickup scheduled successfully!");
             let update_params = {
-              min_datetime: moment(this.dateTimeRange[0]).format("YYYY-MM-DD HH:mm:ss"),
-              max_datetime: moment(this.dateTimeRange[1]).format("YYYY-MM-DD HH:mm:ss"),
-              shipment: JSON.parse(JSON.stringify(this.$store.getters["shipment/shipmentId"])),
-              scheduled_pickup: true
-            }
+              min_datetime: moment(this.dateTimeRange[0]).format(
+                "YYYY-MM-DD HH:mm:ss"
+              ),
+              max_datetime: moment(this.dateTimeRange[1]).format(
+                "YYYY-MM-DD HH:mm:ss"
+              ),
+              shipment: JSON.parse(
+                JSON.stringify(this.$store.getters["shipment/shipmentId"])
+              ),
+              scheduled_pickup: true,
+            };
             try {
               let response = await this.$axios.post(
-                "/updatesinglelostitem?id=" + this.itemId, update_params
+                "/updatesinglelostitem?id=" + this.itemId,
+                update_params
               );
               this.isLoading = false;
             } catch (err) {
@@ -172,8 +179,7 @@ export default {
               this.isLoading = false;
             }
           }
-        }
-        catch(error){
+        } catch (error) {
           this.$toast.error("Something went wrong! Please try again.");
           console.log(error);
           this.isLoading = false;
@@ -185,9 +191,5 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-.error {
-  & > .mx-datepicker {
-    @apply border-red-500 border-2 ring-4 ring-red-500 ring-opacity-10 rounded-lg transition-none;
-  }
-}
+@import "./assets/styles/date-picker.scss";
 </style>

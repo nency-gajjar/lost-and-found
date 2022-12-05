@@ -2041,213 +2041,22 @@ export default {
 </script>
 
 <style lang="scss">
-.mx-input-wrapper i {
-  margin-right: 10px;
-}
-.mx-input:hover {
-  @apply border-gray-300;
-}
-.mx-datepicker {
-  width: 100% !important;
-}
-.mx-datepicker input {
-  height: 3rem;
-  border-radius: 0.5rem;
-  border-color: rgb(212 212 212);
-  cursor: pointer;
-}
+@import "./assets/styles/date-picker.scss";
+@import "./assets/styles/image-editor.scss";
+@import "./assets/styles/address-autocomplete.scss";
+@import "./assets/styles/phone-number-input.scss";
 .wrapper-form {
   @apply min-h-screen flex justify-center py-10 mx-auto;
-}
-
-.editor-container {
-  min-width: 200px;
-  min-height: 200px;
-}
-
-.editor-tools {
-  @apply flex flex-wrap w-full justify-between;
-  margin-bottom: 20px;
-}
-
-.editor-tools .icons {
-  @apply flex items-center;
-}
-.editor-tools .save-upload .button__text {
-  @apply flex items-center;
-}
-.editor-tools .save-upload .button__text svg {
-  margin-right: 10px;
-  width: 18px;
-}
-
-.custom-editor {
-  @apply flex justify-center;
-  border: 1px solid #808080;
-  background-color: #ffffff;
-}
-
-.editor-tools .icons {
-  div {
-    // padding-right: 7px;
-    p {
-      font-size: 12px;
-      text-align: center;
-    }
-    div {
-      cursor: pointer;
-      &:hover {
-        background: #dfdfdf;
-        border-radius: 14px;
-      }
-      // padding: 5px 15px;
-      // margin-bottom: 5px;
-      svg {
-        width: 18px;
-      }
-    }
-  }
 }
 
 .top-margin-05 {
   margin-top: 0.5rem !important;
 }
 
-.previewCard h1,
-h2,
-h3,
-h4,
-h5,
-h6 {
-  font-size: revert;
-  font-weight: revert;
-}
-
-canvas {
-  object-fit: contain;
-}
-
-.error {
-  & > .mx-datepicker {
-    @apply border-red-500 border-2 ring-4 ring-red-500 ring-opacity-10 rounded-lg transition-none;
-  }
-}
-
-.error {
-  & > .vue-tel-input {
-    @apply border-red-500 border-2 ring-4 ring-red-500 ring-opacity-10 rounded-lg  transition-none;
-  }
-}
-
 .error {
   select {
     @apply border-red-500 border-2 ring-4 ring-red-500 ring-opacity-10 transition-none;
   }
-}
-
-.top-margin-3 {
-  margin-top: 3px !important;
-}
-
-.vue-cropper-container {
-  min-width: 40vw;
-}
-
-.previewImage {
-  max-height: 300px;
-}
-
-.vue-cropper-container {
-  img {
-    max-height: 300px !important;
-  }
-}
-
-@media only screen and (max-width: 650px) {
-  .redact {
-    canvas {
-      min-width: 0 !important;
-      min-height: 0 !important;
-      width: 500px !important;
-      height: 100% !important;
-    }
-  }
-}
-
-@media only screen and (max-width: 510px) {
-  .redact {
-    canvas {
-      min-width: 0 !important;
-      min-height: 0 !important;
-      width: 350px !important;
-      height: 100% !important;
-    }
-  }
-}
-
-@media only screen and (max-width: 410px) {
-  .redact {
-    canvas {
-      min-width: 0 !important;
-      min-height: 0 !important;
-      width: 300px !important;
-      height: 100% !important;
-    }
-  }
-}
-
-.vue-tel-input {
-  border-radius: 0.5rem;
-  border: 1px solid #cccccc;
-}
-.vti__dropdown-list {
-  z-index: 100;
-}
-.vti__input {
-  border-radius: 50px;
-}
-
-.loader {
-  border-top-color: orange;
-  -webkit-animation: spinner 1.5s linear infinite;
-  animation: spinner 1.5s linear infinite;
-}
-
-@-webkit-keyframes spinner {
-  0% {
-    -webkit-transform: rotate(0deg);
-  }
-  100% {
-    -webkit-transform: rotate(360deg);
-  }
-}
-
-@keyframes spinner {
-  0% {
-    transform: rotate(0deg);
-  }
-  100% {
-    transform: rotate(360deg);
-  }
-}
-
-.pac-item {
-  padding: 6px;
-  font-size: 14px;
-  cursor: pointer;
-
-  &:hover {
-    background-color: #ececec;
-  }
-}
-
-.pac-item-query {
-  font-size: 14px;
-}
-
-.readonly .vti__dropdown,
-.readonly input {
-  @apply bg-gray-100 cursor-pointer;
 }
 
 .toasted-container .toasted .action.icon svg {

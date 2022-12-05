@@ -682,59 +682,10 @@ export default {
 };
 </script>
 
-<style>
-.mx-input {
-  height: 3rem !important;
-}
-@media (max-width: 750px) {
-  .mx-datepicker-main {
-    max-width: 92%;
-  }
-  .mx-range-wrapper {
-    flex-wrap: wrap;
-    flex-direction: row;
-  }
-  .mx-range-wrapper .mx-calendar-panel-date {
-    flex: auto;
-  }
-}
-</style>
+<style scoped lang="scss">
+@import "./assets/styles/date-picker.scss";
 
-<style scoped>
 .wrapper {
   @apply flex flex-col justify-start pt-0 items-center text-center mx-auto;
-}
-
-.loader-container {
-  height: calc(100vh - theme("spacing.52"));
-}
-
-.loader {
-  border-top-color: orange;
-  -webkit-animation: spinner 1.5s linear infinite;
-  animation: spinner 1.5s linear infinite;
-}
-
-.mx-datepicker {
-  width: 100% !important;
-}
-@-webkit-keyframes spinner {
-  0% {
-    -webkit-transform: rotate(0deg);
-  }
-
-  100% {
-    -webkit-transform: rotate(360deg);
-  }
-}
-
-@keyframes spinner {
-  0% {
-    transform: rotate(0deg);
-  }
-
-  100% {
-    transform: rotate(360deg);
-  }
 }
 </style>

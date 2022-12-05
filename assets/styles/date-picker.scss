@@ -1,0 +1,24 @@
+.mx-input-wrapper i {
+    margin-right: 10px;
+}
+
+.mx-input:hover {
+    @apply border-gray-300;
+}
+
+.mx-datepicker {
+    width: 100% !important;
+}
+
+.mx-datepicker input {
+    height: 3rem;
+    border-radius: 0.5rem;
+    border-color: rgb(212 212 212);
+    cursor: pointer;
+}
+
+.error {
+    &>.mx-datepicker {
+        @apply border-red-500 border-2 ring-4 ring-red-500 ring-opacity-10 rounded-lg transition-none;
+    }
+}

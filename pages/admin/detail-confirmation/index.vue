@@ -185,7 +185,6 @@
     </div>
     <div
       class="
-        card
         w-full
         mx-6
         lg:mx-0
@@ -995,126 +994,11 @@ export default {
 </script>
   
 <style lang="scss">
+@import "./assets/styles/image-editor.scss";
 .wrapper-admin {
   @apply min-h-screen flex justify-center py-10 mx-auto;
 }
-.editor-container {
-  min-width: 200px;
-  min-height: 200px;
-}
 
-.editor-tools {
-  @apply flex flex-wrap w-full justify-between;
-  margin-bottom: 20px;
-}
-
-.editor-tools .icons {
-  @apply flex items-center;
-}
-.editor-tools .save-upload .button__text {
-  @apply flex items-center;
-}
-.editor-tools .save-upload .button__text svg {
-  margin-right: 10px;
-  width: 18px;
-}
-
-.custom-editor {
-  @apply flex justify-center;
-  border: 1px solid #808080;
-  background-color: #ffffff;
-}
-
-.editor-tools .icons {
-  div {
-    // padding-right: 7px;
-    p {
-      font-size: 12px;
-      text-align: center;
-    }
-    div {
-      cursor: pointer;
-      &:hover {
-        background: #dfdfdf;
-        border-radius: 14px;
-      }
-      // padding: 5px 15px;
-      // margin-bottom: 5px;
-      svg {
-        width: 18px;
-      }
-    }
-  }
-}
-
-canvas {
-  object-fit: contain;
-}
-.card {
-  @apply rounded-lg text-indigo-500;
-  .title {
-    @apply text-6xl font-bold;
-  }
-}
-.text-gray-600 {
-  @apply sm:px-3;
-}
-
-.vue-cropper-container {
-  min-width: 40vw;
-}
-
-.previewImage {
-  max-height: 300px;
-}
-
-.vue-cropper-container {
-  img {
-    max-height: 300px !important;
-  }
-}
-
-@media only screen and (max-width: 650px) {
-  .foundItemContainer {
-    @apply flex-col;
-  }
-  .img-container {
-    @apply mt-3;
-  }
-  .text-gray-600 {
-    @apply pr-2;
-  }
-  .redact {
-    canvas {
-      min-width: 0 !important;
-      min-height: 0 !important;
-      width: 500px !important;
-      height: 100% !important;
-    }
-  }
-}
-
-@media only screen and (max-width: 510px) {
-  .redact {
-    canvas {
-      min-width: 0 !important;
-      min-height: 0 !important;
-      width: 350px !important;
-      height: 100% !important;
-    }
-  }
-}
-
-@media only screen and (max-width: 410px) {
-  .redact {
-    canvas {
-      min-width: 0 !important;
-      min-height: 0 !important;
-      width: 300px !important;
-      height: 100% !important;
-    }
-  }
-}
 textarea.error {
   @apply border-red-500 border-2 ring-4 ring-red-500 ring-opacity-10 transition-none;
 }

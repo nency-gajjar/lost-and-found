@@ -1075,42 +1075,30 @@ export default {
                   "shipment/SET_INSURANCE_VALUE",
                   this.insuranceValue
                 );
-                if(Number(this.insuranceValue) <= 0){
-                  this.$store.commit(
-                    "shipment/SET_INSURANCE_CHARGES",
-                    0
-                  );
+                if (Number(this.insuranceValue) <= 0) {
+                  this.$store.commit("shipment/SET_INSURANCE_CHARGES", 0);
                 }
-                if(Number(this.insuranceValue) > 0 && Number(this.insuranceValue) < 100){
-                  this.$store.commit(
-                    "shipment/SET_INSURANCE_CHARGES",
-                    1
-                  );
+                if (
+                  Number(this.insuranceValue) > 0 &&
+                  Number(this.insuranceValue) < 100
+                ) {
+                  this.$store.commit("shipment/SET_INSURANCE_CHARGES", 1);
+                } else if (
+                  Number(this.insuranceValue) >= 100 &&
+                  Number(this.insuranceValue) < 200
+                ) {
+                  this.$store.commit("shipment/SET_INSURANCE_CHARGES", 2);
+                } else if (
+                  Number(this.insuranceValue) >= 200 &&
+                  Number(this.insuranceValue) < 300
+                ) {
+                  this.$store.commit("shipment/SET_INSURANCE_CHARGES", 3);
                 }
-                else if(Number(this.insuranceValue) >= 100 && Number(this.insuranceValue) < 200){
-                  this.$store.commit(
-                    "shipment/SET_INSURANCE_CHARGES",
-                    2
-                  );
-                }
-                else if(Number(this.insuranceValue) >= 200 && Number(this.insuranceValue) < 300){
-                  this.$store.commit(
-                    "shipment/SET_INSURANCE_CHARGES",
-                    3
-                  );
-                }
+              } else {
+                this.$store.commit("shipment/SET_INSURANCE_VALUE", "");
+                this.$store.commit("shipment/SET_INSURANCE_CHARGES", 0);
               }
-              else{
-                this.$store.commit(
-                  "shipment/SET_INSURANCE_VALUE",
-                  ""
-                );
-                this.$store.commit(
-                  "shipment/SET_INSURANCE_CHARGES",
-                  0
-                );
-              }
-              if(params_rateQuotes.country !== params_rateQuotes.tocountry){
+              if (params_rateQuotes.country !== params_rateQuotes.tocountry) {
                 this.$nextTick(() => {
                   this.$router.push({
                     name: "custom-shipping-details",
@@ -1118,8 +1106,7 @@ export default {
                     params: { fromItemDelivery: true },
                   });
                 });
-              }
-              else{
+              } else {
                 this.$nextTick(() => {
                   this.$router.push({
                     name: "rate-quotes",
@@ -1152,58 +1139,10 @@ export default {
 </script>
   
 <style lang="scss">
+@import "./assets/styles/date-picker.scss";
+@import "./assets/styles/address-autocomplete.scss";
+@import "./assets/styles/phone-number-input.scss";
 .wrapper {
   @apply min-h-screen flex justify-center py-10 mx-auto;
-}
-.mx-input-wrapper i {
-  margin-right: 10px;
-}
-.mx-input:hover {
-  @apply border-gray-300;
-}
-.mx-datepicker {
-  width: 100% !important;
-}
-.mx-datepicker input {
-  height: 3rem;
-  border-radius: 0.5rem;
-  border-color: rgb(212 212 212);
-  cursor: pointer;
-}
-.error {
-  & > .mx-datepicker {
-    @apply border-red-500 border-2 ring-4 ring-red-500 ring-opacity-10 rounded-lg transition-none;
-  }
-}
-
-.error {
-  & > .vue-tel-input {
-    @apply border-red-500 border-2 ring-4 ring-red-500 ring-opacity-10 rounded-lg  transition-none;
-  }
-}
-
-.vue-tel-input {
-  border-radius: 0.5rem;
-  border: 1px solid #cccccc;
-}
-.vti__dropdown-list {
-  z-index: 100;
-}
-.vti__input {
-  border-radius: 50px;
-}
-
-.pac-item {
-  padding: 6px;
-  font-size: 14px;
-  cursor: pointer;
-
-  &:hover {
-    background-color: #ececec;
-  }
-}
-
-.pac-item-query {
-  font-size: 14px;
 }
 </style>
