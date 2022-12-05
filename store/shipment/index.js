@@ -4,7 +4,6 @@ export const state = () => ({
     selectedRate: {},
     customInfo: {},
     insuranceValue: "",
-    insuranceCharges: 0,
     signature: null,
     labelUrl: "",
     itemId: "",
@@ -43,9 +42,6 @@ export const getters = {
     customInfo: (state) => {
         return state.customInfo;
     },
-    insuranceCharges: (state) => {
-        return state.insuranceCharges;
-    },
 }
 
 export const actions = {
@@ -77,8 +73,5 @@ export const mutations = {
     },
     SET_CUSTOM_INFO(state, customInfo) {
         state.customInfo = customInfo;
-    },
-    SET_INSURANCE_CHARGES(state, insuranceCharges) {
-        state.insuranceCharges = insuranceCharges;
     },
 }

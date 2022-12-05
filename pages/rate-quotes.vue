@@ -411,8 +411,11 @@
                 <p>{{ lableDetails.weight }} LBS</p>
               </div>
               <div class="flex justify-between text-sm leading-6">
-                <p>Insurance</p>
-                <p>$ {{ lableDetails.insuranceValue || "0" }}</p>
+                <p>Insurance Charges</p>
+                <p>$ {{ calculateInsuranceCharges(lableDetails.insuranceValue) || "0" }}</p>
+              </div>
+              <div class="flex justify-between text-sm leading-6">
+                <p>(Insured for: $ {{ lableDetails.insuranceValue || "0" }})</p>
               </div>
             </div>
           </div>
@@ -486,7 +489,10 @@
 
 <script>
 import { startCase, camelCase } from "lodash";
+import calculateInsuranceCharges from "../mixins/calculateInsuranceCharges.js"
+
 export default {
+  mixins: [calculateInsuranceCharges],
   data() {
     return {
       selectedRate: {},
