@@ -124,6 +124,7 @@ export default {
       instructions: "",
       dateTimeRange: [],
       isLoading: false,
+      itemId: "",
     };
   },
   methods: {
@@ -131,36 +132,36 @@ export default {
       const isValid = await this.$refs.observer.validate();
       if (isValid) {
         this.isLoading = true;
-        let params = {
-          address: JSON.parse(
-            JSON.stringify(this.$store.getters["shipment/shippingRates"])
-          ).from_address.id,
-          shipment: JSON.parse(
-            JSON.stringify(this.$store.getters["shipment/shipmentId"])
-          ),
-          reference: this.reference,
-          min_datetime: moment(this.dateTimeRange[0]).format(
-            "YYYY-MM-DD HH:mm:ss"
-          ),
-          max_datetime: moment(this.dateTimeRange[1]).format(
-            "YYYY-MM-DD HH:mm:ss"
-          ),
-          instructions: this.instructions,
-        };
         try {
-          let response = await this.$axios.post("/schedulePickup", params);
-          this.$toast.info("Pickup scheduled successfully!");
-          let update_params = {
-            min_datetime: moment(this.dateTimeRange[0]).format("YYYY-MM-DD HH:mm:ss"),
-            max_datetime: moment(this.dateTimeRange[1]).format("YYYY-MM-DD HH:mm:ss"),
-            shipment: JSON.parse(JSON.stringify(this.$store.getters["shipment/shipmentId"])),
-            scheduled_pickup: true
-          }
-
           if (this.$store.getters["shipment/itemId"]) {
             this.itemId = JSON.parse(
               JSON.stringify(this.$store.getters["shipment/itemId"])
             );
+            let params = {
+              address: JSON.parse(
+                JSON.stringify(this.$store.getters["shipment/shippingRates"])
+              ).from_address.id,
+              shipment: JSON.parse(
+                JSON.stringify(this.$store.getters["shipment/shipmentId"])
+              ),
+              reference: this.reference,
+              min_datetime: moment(this.dateTimeRange[0]).format(
+                "YYYY-MM-DD HH:mm:ss"
+              ),
+              max_datetime: moment(this.dateTimeRange[1]).format(
+                "YYYY-MM-DD HH:mm:ss"
+              ),
+              instructions: this.instructions,
+              id: this.itemId
+            };
+            let response = await this.$axios.post("/schedulePickup", params);
+            this.$toast.info("Pickup scheduled successfully!");
+            let update_params = {
+              min_datetime: moment(this.dateTimeRange[0]).format("YYYY-MM-DD HH:mm:ss"),
+              max_datetime: moment(this.dateTimeRange[1]).format("YYYY-MM-DD HH:mm:ss"),
+              shipment: JSON.parse(JSON.stringify(this.$store.getters["shipment/shipmentId"])),
+              scheduled_pickup: true
+            }
             try {
               let response = await this.$axios.post(
                 "/updatesinglelostitem?id=" + this.itemId, update_params
