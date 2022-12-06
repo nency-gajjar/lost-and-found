@@ -352,14 +352,13 @@ export default {
       return `from ${this.checkoutDetail?.lableDetails?.tocity}`;
     },
     totalPrice() {
-      const insuranceValue = Number(this.checkoutDetail?.insuranceValue) || 0;
       const rate = Number(this.checkoutDetail?.selectedRate?.rate);
       const signature = this.checkoutDetail.signature ? 5 : 0;
       const insuranceCharges = this.insuranceCharges;
       return new Intl.NumberFormat("en-US", {
         style: "currency",
         currency: "USD",
-      }).format(rate + insuranceValue + signature + insuranceCharges);
+      }).format(rate + signature + insuranceCharges);
     },
   },
   methods: {
