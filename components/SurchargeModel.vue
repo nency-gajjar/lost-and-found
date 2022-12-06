@@ -1,6 +1,6 @@
 <template>
   <BaseModal
-    header="Create a new surcharge"
+    :header="headerText"
     :show-modal="showModal"
     size="is-xsmall"
     @close="$emit('close')"
@@ -115,21 +115,20 @@
               </p>
             </ValidationProvider>
           </div>
+          <p v-show="!isDateRangeValid" class="text-rose-600">
+            Effective after should be less than Effective before.
+          </p>
           <div class="flex justify-between">
             <div class="block">
               <BaseInput
                 v-model="dollarAmount"
-                type="number"
+                type="text"
                 label="Doller Amount"
               />
             </div>
             <div class="block flex items-center">AND</div>
             <div class="block">
-              <BaseInput
-                v-model="percentage"
-                type="number"
-                label="Percentage"
-              />
+              <BaseInput v-model="percentage" type="text" label="Percentage" />
             </div>
           </div>
           <p v-show="!isAmountValid" class="text-rose-600">
@@ -175,33 +174,111 @@ export default {
       dollarAmount: "",
       percentage: "",
       isLoading: false,
-      isAmountValid: true
+      isAmountValid: true,
+      isDateRangeValid: true,
+      surchargeId: "",
+      tempEditData: {}
     };
   },
   mounted() {
-    if(this.mode === "edit"){
-      this.key = this.data.key;
-      this.service = this.data.service;
-      this.packageType = this.data.packageType;
-      this.effectiveAfter = this.data.effectiveAfter;
-      this.effectiveBefore = this.data.effectiveBefore;
-      this.dollarAmount = this.data.dollarAmount;
-      this.percentage = this.data.percentage;
+    if (this.mode === "edit") {
+      this.surchargeId = this.data.id,
+      this.key = this.data.catergory.toLowerCase() === "any" ? "Any" : this.data.catergory;
+      this.service = this.data.service.toLowerCase() === "any" ? "Any" : this.data.service;
+      this.packageType = this.data.packagetype.toLowerCase() === "any" ? "Any" : this.data.packagetpe;
+      this.effectiveAfter = new Date(this.data.mindate);
+      this.effectiveBefore = new Date(this.data.maxdate);
+      this.dollarAmount = String(this.data.srchargeamont);
+      this.percentage = String(this.data.srchargepercentage);
+      this.tempEditData = {
+        key: this.key,
+        service: this.service,
+        packageType: this.packageType,
+        effectiveAfter: this.effectiveAfter,
+        effectiveBefore: this.effectiveBefore,
+        dollarAmount: this.dollarAmount,
+        percentage: this.percentage,
+      }
     }
+  },
+  computed: {
+    headerText() {
+      if(this.mode === "edit"){
+        return "Edit Surcharge";
+      }
+      return "Create a new Surcharge"
+    },
   },
   methods: {
     async onSubmit() {
+      this.isDateRangeValid = true;
       const isValid = await this.$refs.observer.validate();
-      if(this.dollarAmount || this.percentage){
+      if (this.dollarAmount || this.percentage) {
         this.isAmountValid = true;
         if (isValid) {
-        } else {
-            console.log("invalid");
+          if(this.effectiveBefore < this.effectiveAfter){
+            this.isDateRangeValid = false;
+          }
+          else{
+            if(this.mode === "edit"){
+              let updateParams = {};
+              if (this.key !== this.tempEditData.key) {
+                updateParams.catergory = this.key.toUpperCase();
+              }
+              if (this.service !== this.tempEditData.service) {
+                updateParams.service = this.service.toUpperCase()
+              }
+              if (this.packageType !== this.tempEditData.packageType) {
+                updateParams.packagetype = this.packageType.toUpperCase();
+              }
+              if (this.effectiveAfter !== this.tempEditData.effectiveAfter) {
+                updateParams.mindate = moment(this.effectiveAfter).format("YYYY-MM-DDTHH:mm:ss") + "Z";
+                updateParams.maxdate = moment(this.effectiveBefore).format("YYYY-MM-DDTHH:mm:ss") + "Z";
+              }
+              if (this.effectiveBefore !== this.tempEditData.effectiveBefore) {
+                updateParams.mindate = moment(this.effectiveAfter).format("YYYY-MM-DDTHH:mm:ss") + "Z";
+                updateParams.maxdate = moment(this.effectiveBefore).format("YYYY-MM-DDTHH:mm:ss") + "Z";
+              }
+              if (this.dollarAmount !== this.tempEditData.dollarAmount) {
+                updateParams.srchargeamont = Number(this.dollarAmount);
+              }
+              if (this.percentage !== this.tempEditData.percentage) {
+                updateParams.srchargepercentage = Number(this.percentage);
+              }
+               this.$axios
+                .post("/updateSingleSurchargeDetails?id="+this.surchargeId, updateParams)
+                .then((response) => {
+                  this.$toast.info("Surcharge edited successfully!");
+                })
+              .catch((error) => {
+                this.$toast.error("Something went wrong! Please try again.");
+              })
+            }
+            else{
+              let storeParams = {
+                catergory: this.key.toUpperCase(),
+                service: this.service.toUpperCase(),
+                packagetype: this.packageType.toUpperCase(),
+                mindate: moment(this.effectiveAfter).format("YYYY-MM-DDTHH:mm:ss") + "Z",
+                maxdate: moment(this.effectiveBefore).format("YYYY-MM-DDTHH:mm:ss") + "Z",
+                srchargeamont: Number(this.dollarAmount),
+              };
+              if (this.percentage) {
+                storeParams.srchargepercentage = Number(this.percentage);
+              }
+              this.$axios
+                .post("/storeSurchargeDetails", storeParams)
+                .then((response) => {
+                  this.$toast.info("Surcharge added successfully!");
+                })
+                .catch((error) => {
+                  this.$toast.error("Something went wrong! Please try again.");
+                })
+            }
+          }
         }
-      }
-      else{
-        console.log("invalid");
-        this.isAmountValid = false
+      } else {
+        this.isAmountValid = false;
       }
     },
   },

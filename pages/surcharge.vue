@@ -69,126 +69,39 @@
               <tbody class="bg-white text-gray-800">
                 <tr
                   class="border-b border-gray-200 hover:bg-gray-100"
+                  v-for="data in surChargeData" :key="data.id"
                 >
                   <td class="py-3 px-6 text-left">
-                    <p>Any</p>
+                    <p>{{ data.catergory }}</p>
                   </td>
                   <td class="py-3 px-6 text-left">
-                    <p>Any</p>
+                    <p>{{ data.service }}</p>
                   </td>
                   <td class="py-3 px-6 text-left">
-                    <p>Any</p>
+                    <p>{{ data.packagetype }}</p>
                   </td>
                   <td class="py-3 px-6 text-left">
-                    <p>Any</p>
+                    <p>{{ formatDate(data.mindate) }}</p>
                   </td>
                   <td class="py-3 px-6 text-left">
-                    <p>Any</p>
+                    <p>{{ formatDate(data.maxdate) }}</p>
                   </td>
                   <td class="py-3 px-6 text-left">
-                    <p>Any</p>
+                    <p>$ {{ data.srchargeamont }}</p>
                   </td>
                   <td class="py-3 px-6 text-left">
-                    <p>Any</p>
+                    <p>{{ data.srchargepercentage ? data.srchargepercentage : '-' }}</p>
                   </td>
                   <td class="py-3 px-6 text-left">
                     <div class="flex justify-content-center gap-4">
-                      <div class="bg-blue-600 px-3 py-2 rounded">
+                      <div @click="editSurcharge(data)" class="bg-blue-600 px-3 py-2 rounded cursor-pointer">
                         <BaseIcon
-                          @click="editSurcharge"
                           icon="pencil"
                           color="white"
                         />
                       </div>
-                      <div class="bg-red-600 px-3 py-2 rounded">
+                      <div @click="deleteSurcharge(data.id)" class="bg-red-600 px-3 py-2 rounded cursor-pointer">
                         <BaseIcon
-                          @click="deleteSurcharge" 
-                          icon="trash"
-                          color="white"
-                        />
-                      </div>
-                    </div>
-                  </td>
-                </tr>
-                <tr
-                  class="border-b border-gray-200 hover:bg-gray-100"
-                >
-                  <td class="py-3 px-6 text-left">
-                    <p>Any</p>
-                  </td>
-                  <td class="py-3 px-6 text-left">
-                    <p>Any</p>
-                  </td>
-                  <td class="py-3 px-6 text-left">
-                    <p>Any</p>
-                  </td>
-                  <td class="py-3 px-6 text-left">
-                    <p>Any</p>
-                  </td>
-                  <td class="py-3 px-6 text-left">
-                    <p>Any</p>
-                  </td>
-                  <td class="py-3 px-6 text-left">
-                    <p>Any</p>
-                  </td>
-                  <td class="py-3 px-6 text-left">
-                    <p>Any</p>
-                  </td>
-                  <td class="py-3 px-6 text-left">
-                    <div class="flex justify-content-center gap-4">
-                      <div class="bg-blue-600 px-3 py-2 rounded">
-                        <BaseIcon
-                          @click="editSurcharge"
-                          icon="pencil"
-                          color="white"
-                        />
-                      </div>
-                      <div class="bg-red-600 px-3 py-2 rounded">
-                        <BaseIcon
-                          @click="deleteSurcharge" 
-                          icon="trash"
-                          color="white"
-                        />
-                      </div>
-                    </div>
-                  </td>
-                </tr>
-                <tr
-                  class="border-b border-gray-200 hover:bg-gray-100"
-                >
-                  <td class="py-3 px-6 text-left">
-                    <p>Any</p>
-                  </td>
-                  <td class="py-3 px-6 text-left">
-                    <p>Any</p>
-                  </td>
-                  <td class="py-3 px-6 text-left">
-                    <p>Any</p>
-                  </td>
-                  <td class="py-3 px-6 text-left">
-                    <p>Any</p>
-                  </td>
-                  <td class="py-3 px-6 text-left">
-                    <p>Any</p>
-                  </td>
-                  <td class="py-3 px-6 text-left">
-                    <p>Any</p>
-                  </td>
-                  <td class="py-3 px-6 text-left">
-                    <p>Any</p>
-                  </td>
-                  <td class="py-3 px-6 text-left">
-                    <div class="flex justify-content-center gap-4">
-                      <div class="bg-blue-600 px-3 py-2 rounded">
-                        <BaseIcon
-                          @click="editSurcharge"
-                          icon="pencil"
-                          color="white"
-                        />
-                      </div>
-                      <div class="bg-red-600 px-3 py-2 rounded">
-                        <BaseIcon
-                          @click="deleteSurcharge" 
                           icon="trash"
                           color="white"
                         />
@@ -206,39 +119,58 @@
       v-if="showSurchargeModel"
       :show-modal="showSurchargeModel"
       :mode="mode"
-      :data="tempSurchargeData"
-      @close="showSurchargeModel = false"
+      :data="editData"
+      @close="showSurchargeModel = false; fetchSurcharge();"
     />
   </div>
 </template>
 
 <script>
 import SurchargeModel from '~/components/SurchargeModel.vue';
+import moment from "moment";
 export default {
   components: { SurchargeModel },
   middleware: ["auth-admin"],
   data() {
     return {
+      surChargeData: {},
       showSurchargeModel: false,
       mode: "create",
-      tempSurchargeData: {
-        key: "Any",
-        service: "Any",
-        packageType: "Any",
-        effectiveAfter: new Date(),
-        effectiveBefore: new Date(),
-        dollarAmount: 200,
-        percentage: 3,
-      }
+      editData: {}
     }
   },
+  mounted(){
+      this.fetchSurcharge();
+  },
   methods: {
-    editSurcharge() {
+    fetchSurcharge(){
+      this.$axios
+        .get("/getAllSurchargedetails")
+        .then((response) => {
+          this.surChargeData = response.data.data.Items;
+        })
+        .catch((error) => {
+          console.log(error);
+        })
+    },
+    formatDate(date){
+      return moment(date).format("YYYY-MM-DD");
+    },
+    editSurcharge(data) {
+      this.editData = data;
       this.mode = "edit";
       this.showSurchargeModel = true;
     },
-    deleteSurcharge() {
-      console.log("delete")
+    deleteSurcharge(id) {
+      this.$axios
+        .post("/deletesingleSurcharge?id="+id)
+        .then((response) => {
+          this.$toast.info("Surcharge deleted successfully!");
+          this.fetchSurcharge();
+        })
+        .catch((error) => {
+          this.$toast.error("Something went wrong! Please try again.");
+        })
     },
   },
 };
