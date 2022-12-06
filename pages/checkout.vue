@@ -83,20 +83,6 @@
           </div>
           <p
             class="flex justify-between"
-            v-if="!isEmpty(checkoutDetail) && checkoutDetail.insuranceValue"
-          >
-            <span class="font-medium text-md"> Insured for: </span>
-            <span class="text-display tracking-wide text-gray-700 font-medium">
-              {{
-                new Intl.NumberFormat("en-US", {
-                  style: "currency",
-                  currency: "USD",
-                }).format(checkoutDetail.insuranceValue)
-              }}
-            </span>
-          </p>
-          <p
-            class="flex justify-between"
             v-if="!isEmpty(checkoutDetail) && checkoutDetail.signature"
           >
             <span class="font-medium text-md"> Signature Confirmation:</span>
@@ -121,6 +107,18 @@
                   currency: "USD",
                 }).format(this.insuranceCharges)
               }}
+            </span>
+          </p>
+          <p>
+            <span class="font-medium text-md"> ( Insured for: </span>
+            <span class="text-display tracking-wide text-gray-700 font-medium">
+              {{
+                new Intl.NumberFormat("en-US", {
+                  style: "currency",
+                  currency: "USD",
+                }).format(checkoutDetail.insuranceValue)
+              }}
+            )
             </span>
           </p>
 
@@ -235,7 +233,10 @@
 
 <script>
 import { isEmpty, startCase, camelCase } from "lodash";
+import calculateInsuranceCharges from "../mixins/calculateInsuranceCharges.js"
+
 export default {
+  mixins: [calculateInsuranceCharges],
   data() {
     return {
       checkoutDetail: {},
@@ -248,8 +249,6 @@ export default {
   mounted() {
     if (this.$route.params.fromRatePage) {
       
-      this.insuranceCharges = JSON.parse(JSON.stringify(this.$store.getters["shipment/insuranceCharges"]))
-
       this.checkoutDetail = {
         selectedRate: JSON.parse(
           JSON.stringify(this.$store.getters["shipment/selectedRate"])
@@ -268,6 +267,8 @@ export default {
           JSON.stringify(this.$store.getters["shipment/signature"])
         ),
       };
+
+      this.insuranceCharges = this.calculateInsuranceCharges(this.checkoutDetail.insuranceValue);
 
       const elements = this.$stripe.elements({
         fonts: [
@@ -351,14 +352,13 @@ export default {
       return `from ${this.checkoutDetail?.lableDetails?.tocity}`;
     },
     totalPrice() {
-      const insuranceValue = Number(this.checkoutDetail?.insuranceValue) || 0;
       const rate = Number(this.checkoutDetail?.selectedRate?.rate);
       const signature = this.checkoutDetail.signature ? 5 : 0;
       const insuranceCharges = this.insuranceCharges;
       return new Intl.NumberFormat("en-US", {
         style: "currency",
         currency: "USD",
-      }).format(rate + insuranceValue + signature + insuranceCharges);
+      }).format(rate + signature + insuranceCharges);
     },
   },
   methods: {

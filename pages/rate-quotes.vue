@@ -411,8 +411,11 @@
                 <p>{{ lableDetails.weight }} LBS</p>
               </div>
               <div class="flex justify-between text-sm leading-6">
-                <p>Insurance</p>
-                <p>$ {{ lableDetails.insuranceValue || "0" }}</p>
+                <p>Insurance Charges</p>
+                <p>$ {{ calculateInsuranceCharges(lableDetails.insuranceValue) || "0" }}</p>
+              </div>
+              <div class="flex justify-between text-sm leading-6">
+                <p>(Insured for: $ {{ lableDetails.insuranceValue || "0" }})</p>
               </div>
             </div>
           </div>
@@ -486,7 +489,10 @@
 
 <script>
 import { startCase, camelCase } from "lodash";
+import calculateInsuranceCharges from "../mixins/calculateInsuranceCharges.js"
+
 export default {
+  mixins: [calculateInsuranceCharges],
   data() {
     return {
       selectedRate: {},
@@ -552,14 +558,29 @@ export default {
         )
         .then((response) => {
           if (response.status === 200) {
+            let surchargeData = response.data.surcharge[0];
+            let ratesData = response.data.demo.rates;
+            let ratesUpdated = ratesData.map((data) => {
+              let updatedRate = Number(data.rate);
+              if(surchargeData.srchargepercentage){
+                updatedRate = updatedRate + ((Number(data.rate) * Number(surchargeData.srchargepercentage))/100);
+              }
+              if(surchargeData.srchargeamont){
+                updatedRate = updatedRate + Number(surchargeData.srchargeamont);
+              }
+              return {
+                ...data,
+                rate: updatedRate.toFixed(2)
+              }
+            })
             let shippingRates = {
-              buyer_address: response.data.buyer_address,
-              from_address: response.data.from_address,
-              id: response.data.id,
-              parcel: response.data.parcel,
-              rates: response.data.rates,
-              return_address: response.data.return_address,
-              to_address: response.data.to_address,
+              buyer_address: response.data.demo.buyer_address,
+              from_address: response.data.demo.from_address,
+              id: response.data.demo.id,
+              parcel: response.data.demo.parcel,
+              rates: ratesUpdated,
+              return_address: response.data.demo.return_address,
+              to_address: response.data.demo.to_address,
             };
             this.$store.commit("shipment/SET_SHIPPING_RATES", shippingRates);
             let ratesQuotes = JSON.parse(

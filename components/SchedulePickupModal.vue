@@ -9,6 +9,12 @@
     <div
       class="bg-primary-60 space-y-4 !shadow-primary flex flex-col text-left"
     >
+      <div class="text-sm text-gray-800">
+        <p class="font-medium text-base">Pickup address:</p>
+        <p>{{ fromVenueName }}</p>
+        <p>{{ fromAddress }}</p>
+        <p>{{ fromCity }}, {{ fromState }}, {{ fromCountry }}, {{ fromZip }}</p>
+      </div>
       <ValidationObserver v-slot="{ validate }" ref="observer">
         <form
           class="grid gap-4 mt-1"
@@ -125,7 +131,30 @@ export default {
       dateTimeRange: [],
       isLoading: false,
       itemId: "",
+      fromVenueName: "",
+      fromAddress: "",
+      fromCity: "",
+      fromState: "",
+      fromCountry: "",
+      fromZip: "",
     };
+  },
+  mounted(){
+    if (this.$store.getters["shipment/itemId"]) {
+      this.itemId = JSON.parse(JSON.stringify(this.$store.getters["shipment/itemId"]));
+      this.$axios.get("/getsinglelostitem?id="+this.itemId)
+        .then((response) => {
+          this.fromVenueName = response.data.data.Item.venue_name;
+          this.fromAddress = response.data.data.Item.address.split(",")[0];
+          this.fromCity = response.data.data.Item.city;
+          this.fromState = response.data.data.Item.states;
+          this.fromCountry = response.data.data.Item.country;
+          this.fromZip = response.data.data.Item.zipcode;
+        })
+        .catch((error) => {
+          console.log(error);
+        })
+    }
   },
   methods: {
     async onSubmit() {
@@ -133,10 +162,7 @@ export default {
       if (isValid) {
         this.isLoading = true;
         try {
-          if (this.$store.getters["shipment/itemId"]) {
-            this.itemId = JSON.parse(
-              JSON.stringify(this.$store.getters["shipment/itemId"])
-            );
+          if (this.itemId) {
             let params = {
               address: JSON.parse(
                 JSON.stringify(this.$store.getters["shipment/shippingRates"])
