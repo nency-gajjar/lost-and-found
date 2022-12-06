@@ -2,7 +2,7 @@
   <BaseModal
     :header="headerText"
     :show-modal="showModal"
-    size="is-xsmall"
+    size="is-small"
     @close="$emit('close')"
     :hideCancel="true"
   >
