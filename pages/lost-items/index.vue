@@ -18,7 +18,7 @@
           class="sm:ml-2 grow mt-3 sm:mt-0 sm:grow-0"
           @click="addNewItem"
         >
-          + Report Lost item
+          + ADD A FOUND ITEM
         </BaseButton>
       </div>
 
@@ -479,7 +479,7 @@ export default {
   },
   methods: {
     addNewItem() {
-      this.$router.push({ name: "item-details" });
+      this.$router.push({ name: "found" });
     },
     resetAddress() {
       this.clearAddress();

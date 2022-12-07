@@ -26,10 +26,10 @@
             <div
               v-if="!mobileDevice && !isAdminLogin"
               class="link-container"
-              @click="$router.push('/item-details')"
+              @click="$router.push('/found')"
             >
               <BaseButton class="!text-xs !py-2 !px-6"
-                >+ Report Lost item
+                >+ ADD A FOUND ITEM
               </BaseButton>
             </div>
             <!-- <div v-if="isAdminLogin" class="link-container">
@@ -141,7 +141,7 @@ export default {
 
 <style lang="scss" scoped>
 .nav-logo{
-  width: 100px;
+  width: 80px;
 }
 
 .appbar-container {

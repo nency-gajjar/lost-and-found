@@ -18,35 +18,72 @@
         <ValidationObserver v-slot="{ validate }" ref="observer">
           <form @submit.prevent="validate().then(onSubmit)">
             <div class="sm:p-6 p-4 space-y-4">
-              <div class="form-title flex justify-between items-center">
-                <div>
-                  <h1
-                    class="
-                      w-full
-                      my-2
-                      text-xl
-                      font-bold
-                      leading-tight
-                      text-gray-700
-                    "
-                  >
-                    {{ senderFormTitle }}
-                  </h1>
-                  <div class="flex justify-start">
-                    <span
-                      class="
-                        w-20
-                        border-t-4 border-solid border-orange-200
-                        inline-block
-                        mb-3
-                      "
-                    ></span>
+              <div class="form-title">
+                <div class="w-full">
+                  <div class="w-full flex sm:justify-start justify-center">
+                    <img src="../assets/images/found-shelf-icon.svg" class="mb-3 logo-img" alt="">
                   </div>
-                </div>
-                <div v-if="showResetButton">
-                  <BaseButton @click="resetItemDetailsStore">
-                    Reset
-                  </BaseButton>
+                  <div class="flex justify-between items-center">
+                    <div>
+                      <h1
+                        v-if="senderFormTitle !== `SENDER'S DETAILS`"
+                        class="
+                          w-full
+                          my-2
+                          sm:text-xl
+                          text-lg
+                          font-bold
+                          leading-tight
+                          text-gray-700
+                        "
+                      >
+                        {{ senderFormTitle }}
+                      </h1>
+                      <div v-else>
+                        <h1
+                          class="
+                            w-full
+                            my-2
+                            sm:text-xl
+                            text-lg
+                            font-bold
+                            leading-tight
+                            text-gray-700
+                          "
+                        >
+                          Found an Item that belongs to a guest?
+                        </h1>
+                        <h1
+                          class="
+                            w-full
+                            my-2
+                            sm:text-lg
+                            text-md
+                            font-bold
+                            leading-tight
+                            text-gray-600
+                          "
+                        >
+                          Let’s add few details and leave the rest to us!
+                        </h1>
+                      </div>
+                      <div class="flex justify-start">
+                        <span
+                          class="
+                            w-20
+                            border-t-4 border-solid border-orange-200
+                            inline-block
+                            mb-3
+                          "
+                        ></span>
+                      </div>
+                    </div>
+                    <div v-if="showResetButton">
+                      <BaseButton @click="resetItemDetailsStore">
+                        Reset
+                      </BaseButton>
+                    </div>
+                  </div>
                 </div>
               </div>
 
@@ -60,7 +97,7 @@
                 <BaseSelect
                   v-model="venueType"
                   :options="venueOptions"
-                  label="Sender Affiliation"
+                  label="Your Affiliation"
                   :class="errors.length > 0 && 'error'"
                 />
                 <p
@@ -84,31 +121,6 @@
                   label="Type manually"
                   :class="errors.length > 0 && 'error'"
                 />
-                <p
-                  v-if="errors.length"
-                  class="vee-validation-error mt-2 text-sm text-red-600"
-                >
-                  {{ errors[0] }}
-                </p>
-              </ValidationProvider>
-
-              <!-- Found Item Date -->
-              <label class="block text-md font-medium text-gray-800"
-                >Found Item Date:</label
-              >
-              <ValidationProvider
-                v-slot="{ errors }"
-                rules="required"
-                class="block"
-              >
-                <client-only>
-                  <div :class="errors.length && 'error'">
-                    <date-picker
-                      v-model="foundDate"
-                      formate="YYYY-MM-DD"
-                    ></date-picker>
-                  </div>
-                </client-only>
                 <p
                   v-if="errors.length"
                   class="vee-validation-error mt-2 text-sm text-red-600"
@@ -169,7 +181,7 @@
                 <BaseInput
                   v-model="venueEmail"
                   type="email"
-                  label="Venue Email"
+                  label="Your Email"
                   :class="errors.length > 0 && 'error'"
                 />
                 <p
@@ -190,7 +202,7 @@
                 <BaseInput
                   v-model="venueSecondaryEmail"
                   type="email"
-                  label="Secondary Venue Email (Optional)"
+                  label="Secondary Email (Optional)"
                   :class="errors.length > 0 && 'error'"
                 />
                 <p
@@ -229,7 +241,7 @@
                 />
                 &nbsp;&nbsp;
                 <p style="color: #939393; font-size: 14px">
-                  Your contact will not be shared with anyone.
+                  Your mobile is only for notification purpose that is related to this item. We do share your mobile to item owner, or anyone else.
                 </p>
               </div>
               <div
@@ -241,7 +253,7 @@
 
               <!-- AUTOCOMPLETE ADDRESS DETAILS -->
               <div class="flex items-center gap-1">
-                <span class="text-md font-medium text-gray-800">Address:</span>
+                <span class="text-md font-medium text-gray-800">{{ addressTitle }}</span>
                 <BaseIcon
                   icon="circle-info"
                   color="gray"
@@ -260,7 +272,7 @@
                 <BaseSelect
                   v-model="autoCompleteAddress.address"
                   :options="addressArr"
-                  label="Auto complete address"
+                  label="Address"
                   :class="errors.length > 0 && 'error'"
                   @input="updateAddress"
                 />
@@ -479,6 +491,33 @@
                   ></span>
                 </div>
               </div>
+
+              
+
+              <!-- Found Item Date -->
+              <label class="block text-md font-medium text-gray-800"
+                >Found Item Date:</label
+              >
+              <ValidationProvider
+                v-slot="{ errors }"
+                rules="required"
+                class="block"
+              >
+                <client-only>
+                  <div :class="errors.length && 'error'">
+                    <date-picker
+                      v-model="foundDate"
+                      formate="YYYY-MM-DD"
+                    ></date-picker>
+                  </div>
+                </client-only>
+                <p
+                  v-if="errors.length"
+                  class="vee-validation-error mt-2 text-sm text-red-600"
+                >
+                  {{ errors[0] }}
+                </p>
+              </ValidationProvider>
 
               <div class="block">
                 <label
@@ -1274,6 +1313,7 @@ export default {
     isVenuePhoneFormatValid: true,
     isEmployeeMobileNoFormatValid: true,
     isReceiverMobileNoFormatValid: true,
+    addressLine: "",
     autoCompleteAddress: {
       address: "",
       city: "",
@@ -1306,11 +1346,22 @@ export default {
     // ...mapGetters("item", ["itemDetails"]),
     venueLabel() {
       if (this.venueType === "Restaurant") {
-        return "Restaurant Name";
+        return "Your Restaurant Name";
       } else if (this.venueType === "Hotel") {
-        return "Hotel Name";
+        return "Your Hotel Name";
       } else if (this.venueType === "Airport") {
-        return "Airport Code";
+        return "Airport Name or Code";
+      } else {
+        return "Venue Address";
+      }
+    },
+    addressTitle() {
+      if (this.venueType === "Restaurant") {
+        return "Restaurant Address";
+      } else if (this.venueType === "Hotel") {
+        return "Hotel Address";
+      } else if (this.venueType === "Airport") {
+        return "Airport Address";
       } else {
         return "Venue Address";
       }
@@ -1347,7 +1398,7 @@ export default {
       if (this.$route.query.id) {
         this.isLoadingItemDetails = true;
         this.foundItemId = this.$route.query.id;
-        this.senderFormTitle = "EDIT SENDER'S DETAILS";
+        this.senderFormTitle = "EDIT DETAILS";
         this.foundItemFormTitle = "EDIT FOUND ITEM'S DETAILS";
         this.$axios
           .get("/getsinglelostitem?id=" + this.$route.query.id)
@@ -1376,9 +1427,10 @@ export default {
               this.venueEmail = data.venue_email;
               this.venueSecondaryEmail = data.secondary_email;
               this.employeeMobileNo = data.employee_mobile_no;
-              this.addressArr.unshift(data.address);
-              this.address = data.address;
-              this.autoCompleteAddress.address = this.addressArr[0];
+              this.addressArr.unshift(data.venue_name);
+              this.address = this.venueName;
+              this.addressLine = data.address;
+              this.autoCompleteAddress.address = this.venueName;
               this.autoCompleteAddress.phoneNo = data.venue_phone_no;
               this.autoCompleteAddress.city = data.city;
               this.autoCompleteAddress.state = data.states;
@@ -1409,7 +1461,7 @@ export default {
           });
       } else if (this.$route.params?.itemDetails) {
         this.isLoadingItemDetails = false;
-        this.senderFormTitle = "EDIT SENDER'S DETAILS";
+        this.senderFormTitle = "EDIT DETAILS";
         this.foundItemFormTitle = "EDIT FOUND ITEM'S DETAILS";
         let data = this.$route.params.itemDetails;
         var index = this.venueOptions.indexOf(data.venu_type) !== -1;
@@ -1437,9 +1489,10 @@ export default {
         this.venueEmail = data.venue_email;
         this.venueSecondaryEmail = data.secondary_email;
         this.employeeMobileNo = data.employee_mobile_no;
-        this.addressArr.unshift(data.address);
-        this.address = data.address;
-        this.autoCompleteAddress.address = this.addressArr[0];
+        this.addressArr.unshift(data.venue_name);
+        this.address = this.venueName;
+        this.addressLine = data.address;
+        this.autoCompleteAddress.address = this.venueName;
         this.autoCompleteAddress.phoneNo = data.venue_phone_no;
         this.autoCompleteAddress.city = data.city;
         this.autoCompleteAddress.state = data.states;
@@ -1467,7 +1520,7 @@ export default {
       } else if (Object.keys(this.itemDetails).length > 0) {
         this.showResetButton = true;
         this.isLoadingItemDetails = false;
-        this.senderFormTitle = "EDIT SENDER'S DETAILS";
+        this.senderFormTitle = "EDIT DETAILS";
         this.foundItemFormTitle = "EDIT FOUND ITEM'S DETAILS";
         let data = JSON.parse(
           JSON.stringify(this.$store.getters["item/itemDetails"])
@@ -1497,9 +1550,10 @@ export default {
         this.venueEmail = data.venue_email;
         this.venueSecondaryEmail = data.secondary_email;
         this.employeeMobileNo = data.employee_mobile_no;
-        this.addressArr.unshift(data.address);
-        this.address = data.address;
-        this.autoCompleteAddress.address = this.addressArr[0];
+        this.addressArr.unshift(data.venue_name);
+        this.address = this.venueName;
+        this.addressLine = data.address;
+        this.autoCompleteAddress.address = this.venueName;
         this.autoCompleteAddress.phoneNo = data.venue_phone_no;
         this.autoCompleteAddress.city = data.city;
         this.autoCompleteAddress.state = data.states;
@@ -1541,6 +1595,7 @@ export default {
         this.employeeMobileNo = "";
         this.address = "";
         this.autoCompleteAddress.address = "";
+        this.addressLine = "";
         this.autoCompleteAddress.phoneNo = "";
         this.autoCompleteAddress.city = "";
         this.autoCompleteAddress.state = "";
@@ -1599,15 +1654,16 @@ export default {
         let address = autocomplete.getPlace();
         this.venueName = address.name;
         let index = this.addressArr.findIndex((addressObj) => {
-          return addressObj == address.formatted_address;
+          return addressObj == address.name;
         });
         if (index == "-1") {
-          this.addressArr.unshift(address.formatted_address);
+          this.addressArr.unshift(address.name);
         }
         let obj = {};
-        this.autoCompleteAddress.address = this.addressArr[0];
-        this.address = this.addressArr[0];
-        obj.address = this.addressArr[0];
+        this.autoCompleteAddress.address = this.venueName;
+        this.address = this.venueName;
+        this.addressLine = address.formatted_address;
+        obj.address = this.venueName;
         this.autoCompleteAddress.phoneNo =
           address.international_phone_number || address.formatted_phone_number;
         obj.phoneNo = this.autoCompleteAddress.phoneNo;
@@ -1845,7 +1901,7 @@ export default {
           address:
             this.autoCompleteAddress.address === "Other"
               ? this.manualAddress
-              : this.autoCompleteAddress.address,
+              : this.addressLine,
           city: this.autoCompleteAddress.city,
           states: this.autoCompleteAddress.state,
           country: this.autoCompleteAddress.country,
@@ -2045,6 +2101,11 @@ export default {
 @import "./assets/styles/image-editor.scss";
 @import "./assets/styles/address-autocomplete.scss";
 @import "./assets/styles/phone-number-input.scss";
+
+.logo-img {
+  width: 100px;
+}
+
 .wrapper-form {
   @apply min-h-screen flex justify-center py-10 mx-auto;
 }

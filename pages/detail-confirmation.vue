@@ -709,7 +709,7 @@ export default {
     editDetails() {
       this.$nextTick(() => {
         this.$router.push({
-          name: "item-details",
+          name: "found",
           params: { itemDetails: this.itemDetails },
         });
       });
