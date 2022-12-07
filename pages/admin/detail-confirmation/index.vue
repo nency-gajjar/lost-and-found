@@ -185,7 +185,6 @@
     </div>
     <div
       class="
-        card
         w-full
         mx-6
         lg:mx-0
@@ -821,6 +820,7 @@
 import RedactImage from "~/components/redactEditor/RedactImage.vue";
 import VueCropper from "vue-cropperjs";
 import "cropperjs/dist/cropper.css";
+import ImageEditor from "@/mixins/imageEditor";
 
 export default {
   middleware({ $auth, redirect }) {
@@ -828,34 +828,22 @@ export default {
       return redirect("/login");
     }
   },
+  mixins: [ImageEditor],
   components: {
     RedactImage,
     VueCropper,
   },
   data() {
     return {
-      imgSrc: "",
-      showCrop: false,
-      showDraw: false,
-      imgPreview: false,
-      showUndo: false,
-      size_icon: "2x",
       isLoading: {
         Approve: false,
         Deny: false,
         "Approve without Image": false,
       },
       isLoadingItemDetails: false,
-      foundItemId: "",
       responseData: {},
-      image: "",
-      imageKey: "",
-      isSavingImage: false,
       isImageEdited: false,
-      showEditor: false,
-      loadingSpinner: false,
       imageRecognitionData: [],
-      imageKey: "",
       showDialog: false,
       showItemRejectDialog: false,
       dialogTitle: "",
@@ -871,7 +859,6 @@ export default {
   mounted() {
     if (this.$route.query.id) {
       this.isLoadingItemDetails = true;
-      this.foundItemId = this.$route.query.id;
       this.$axios
         .get("/getsinglelostitem?id=" + this.$route.query.id)
         .then((response) => {
@@ -894,124 +881,6 @@ export default {
     }
   },
   methods: {
-    undo() {
-      this.$refs.redacter.revert();
-    },
-    toggleUndo(length) {
-      if (length > 0) {
-        this.showUndo = true;
-      } else {
-        this.showUndo = false;
-      }
-    },
-    addSquare() {
-      this.imgPreview = false;
-      this.showDraw = true;
-      this.showCrop = false;
-    },
-    crop() {
-      this.imgPreview = false;
-      this.showCrop = true;
-      this.showDraw = false;
-    },
-    applyEdit() {
-      if (this.showDraw) {
-        this.imgSrc = this.$refs.redacter.canvas().toDataURL();
-      } else {
-        this.imgSrc = this.$refs.cropper.getCroppedCanvas().toDataURL();
-      }
-      this.showCrop = false;
-      this.showDraw = false;
-      this.imgPreview = true;
-    },
-    async reduce_image_file_size(base64Str, MAX_WIDTH = 450, MAX_HEIGHT = 450) {
-      let resized_base64 = await new Promise((resolve) => {
-        let img = new Image();
-        img.src = base64Str;
-        img.onload = () => {
-          let canvas = document.createElement("canvas");
-          let width = img.width;
-          let height = img.height;
-
-          if (width > height) {
-            if (width > MAX_WIDTH) {
-              height *= MAX_WIDTH / width;
-              width = MAX_WIDTH;
-            }
-          } else {
-            if (height > MAX_HEIGHT) {
-              width *= MAX_HEIGHT / height;
-              height = MAX_HEIGHT;
-            }
-          }
-          canvas.width = width;
-          canvas.height = height;
-          let ctx = canvas.getContext("2d");
-          ctx.drawImage(img, 0, 0, width, height);
-          resolve(canvas.toDataURL()); // this will return base64 image results after resize
-        };
-      });
-      return resized_base64;
-    },
-    calc_image_size(image) {
-      let y = 1;
-      if (image.endsWith("==")) {
-        y = 2;
-      }
-      const x_size = image.length * (3 / 4) - y;
-      return Math.round(x_size / 1024);
-    },
-    async image_to_base64(file) {
-      let result_base64 = await new Promise((resolve) => {
-        let fileReader = new FileReader();
-        fileReader.onload = (e) => resolve(fileReader.result);
-        fileReader.onerror = (error) => {
-          console.log(error);
-          this.$toast.error(
-            "An Error occurred please try again, File might be corrupt"
-          );
-        };
-        fileReader.readAsDataURL(file);
-      });
-      return result_base64;
-    },
-    async process_image(file, min_image_size = 300) {
-      const res = await this.image_to_base64(file);
-      if (res) {
-        const old_size = this.calc_image_size(res);
-        if (old_size > min_image_size) {
-          const resized = await this.reduce_image_file_size(res);
-          const new_size = this.calc_image_size(resized);
-          console.log("new_size=> ", new_size, "KB");
-          console.log("old_size=> ", old_size, "KB");
-          return resized;
-        } else {
-          console.log("image already small enough");
-          return res;
-        }
-      } else {
-        console.log("return err");
-        return null;
-      }
-    },
-    async editImage() {
-      this.showEditor = false;
-      if (this.image) {
-        const data = await fetch(this.image, { cache: "no-cache" });
-        const blob = await data.blob();
-        this.imgSrc = await this.process_image(blob);
-        this.showEditor = true;
-      } else {
-        this.showEditor = false;
-      }
-    },
-    closeEditor() {
-      this.showEditor = false;
-      this.imgSrc = "";
-      this.showCrop = false;
-      this.showDraw = false;
-      this.imgPreview = false;
-    },
     saveImg() {
       this.isSavingImage = true;
       let file = null;
@@ -1125,126 +994,11 @@ export default {
 </script>
   
 <style lang="scss">
+@import "./assets/styles/image-editor.scss";
 .wrapper-admin {
   @apply min-h-screen flex justify-center py-10 mx-auto;
 }
-.editor-container {
-  min-width: 200px;
-  min-height: 200px;
-}
 
-.editor-tools {
-  @apply flex flex-wrap w-full justify-between;
-  margin-bottom: 20px;
-}
-
-.editor-tools .icons {
-  @apply flex items-center;
-}
-.editor-tools .save-upload .button__text {
-  @apply flex items-center;
-}
-.editor-tools .save-upload .button__text svg {
-  margin-right: 10px;
-  width: 18px;
-}
-
-.custom-editor {
-  @apply flex justify-center;
-  border: 1px solid #808080;
-  background-color: #ffffff;
-}
-
-.editor-tools .icons {
-  div {
-    // padding-right: 7px;
-    p {
-      font-size: 12px;
-      text-align: center;
-    }
-    div {
-      cursor: pointer;
-      &:hover {
-        background: #dfdfdf;
-        border-radius: 14px;
-      }
-      // padding: 5px 15px;
-      // margin-bottom: 5px;
-      svg {
-        width: 18px;
-      }
-    }
-  }
-}
-
-canvas {
-  object-fit: contain;
-}
-.card {
-  @apply rounded-lg text-indigo-500;
-  .title {
-    @apply text-6xl font-bold;
-  }
-}
-.text-gray-600 {
-  @apply sm:px-3;
-}
-
-.vue-cropper-container {
-  min-width: 40vw;
-}
-
-.previewImage {
-  max-height: 300px;
-}
-
-.vue-cropper-container {
-  img {
-    max-height: 300px !important;
-  }
-}
-
-@media only screen and (max-width: 650px) {
-  .foundItemContainer {
-    @apply flex-col;
-  }
-  .img-container {
-    @apply mt-3;
-  }
-  .text-gray-600 {
-    @apply pr-2;
-  }
-  .redact {
-    canvas {
-      min-width: 0 !important;
-      min-height: 0 !important;
-      width: 500px !important;
-      height: 100% !important;
-    }
-  }
-}
-
-@media only screen and (max-width: 510px) {
-  .redact {
-    canvas {
-      min-width: 0 !important;
-      min-height: 0 !important;
-      width: 350px !important;
-      height: 100% !important;
-    }
-  }
-}
-
-@media only screen and (max-width: 410px) {
-  .redact {
-    canvas {
-      min-width: 0 !important;
-      min-height: 0 !important;
-      width: 300px !important;
-      height: 100% !important;
-    }
-  }
-}
 textarea.error {
   @apply border-red-500 border-2 ring-4 ring-red-500 ring-opacity-10 transition-none;
 }

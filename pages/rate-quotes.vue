@@ -562,10 +562,10 @@ export default {
             let ratesData = response.data.demo.rates;
             let ratesUpdated = ratesData.map((data) => {
               let updatedRate = Number(data.rate);
-              if(surchargeData.srchargepercentage){
+              if(surchargeData?.srchargepercentage){
                 updatedRate = updatedRate + ((Number(data.rate) * Number(surchargeData.srchargepercentage))/100);
               }
-              if(surchargeData.srchargeamont){
+              if(surchargeData?.srchargeamont){
                 updatedRate = updatedRate + Number(surchargeData.srchargeamont);
               }
               return {

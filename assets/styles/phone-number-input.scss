@@ -1,0 +1,23 @@
+.vue-tel-input {
+    border-radius: 0.5rem;
+    border: 1px solid #cccccc;
+}
+
+.vti__dropdown-list {
+    z-index: 100;
+}
+
+.vti__input {
+    border-radius: 50px;
+}
+
+.readonly .vti__dropdown,
+.readonly input {
+    @apply bg-gray-100 cursor-pointer;
+}
+
+.error {
+    &>.vue-tel-input {
+        @apply border-red-500 border-2 ring-4 ring-red-500 ring-opacity-10 rounded-lg transition-none;
+    }
+}

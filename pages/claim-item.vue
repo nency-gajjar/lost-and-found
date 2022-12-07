@@ -327,8 +327,10 @@ import { ValidationObserver, ValidationProvider } from "vee-validate";
 import DatePicker from "vue2-datepicker";
 import "vue2-datepicker/index.css";
 import moment from "moment";
+import formatMobileNumber from "../mixins/formatMobileNumber.js";
 
 export default {
+  mixins: [formatMobileNumber],
   components: {
     ValidationObserver,
     ValidationProvider,
@@ -462,11 +464,6 @@ export default {
         }
       }
     },
-    formatMobileNumber(phoneNumber) {
-      let arr = phoneNumber.split(" ");
-      let countryCode = arr.shift();
-      return countryCode + " " + arr.join("");
-    },
     async onSubmit() {
       this.isLoading = true;
       this.validateUserPhone();
@@ -522,80 +519,14 @@ export default {
 </script>
 
 <style lang="scss">
+@import "./assets/styles/date-picker.scss";
+@import "./assets/styles/address-autocomplete.scss";
+@import "./assets/styles/phone-number-input.scss";
 .wrapper-form {
   @apply min-h-screen flex justify-center py-10 mx-auto;
-}
-.vue-tel-input {
-  border-radius: 0.5rem;
-  border: 1px solid #cccccc;
-}
-.vti__dropdown-list {
-  z-index: 100;
-}
-.vti__input {
-  border-radius: 50px;
-}
-
-.mx-input-wrapper i {
-  margin-right: 10px;
-}
-.mx-input:hover {
-  @apply border-gray-300;
-}
-.mx-datepicker {
-  width: 100% !important;
-}
-.mx-datepicker input {
-  height: 3rem;
-  border-radius: 0.5rem;
-  border-color: rgb(212 212 212);
-  cursor: pointer;
-}
-
-.error {
-  & > .mx-datepicker {
-    @apply border-red-500 border-2 ring-4 ring-red-500 ring-opacity-10 rounded-lg transition-none;
-  }
-}
-
-.pac-item {
-  padding: 6px;
-  font-size: 14px;
-  cursor: pointer;
-
-  &:hover {
-    background-color: #ececec;
-  }
-}
-
-.pac-item-query {
-  font-size: 14px;
 }
 
 textarea.error {
   @apply border-red-500 border-2 ring-4 ring-red-500 ring-opacity-10 transition-none;
-}
-
-.mx-datepicker {
-  width: 100% !important;
-}
-
-.mx-datepicker input {
-  height: 3rem;
-  border-radius: 0.5rem;
-  border-color: rgb(212 212 212);
-  cursor: pointer;
-}
-
-.error {
-  & > .mx-datepicker {
-    @apply border-red-500 border-2 ring-4 ring-red-500 ring-opacity-10 rounded-lg transition-none;
-  }
-}
-
-.error {
-  & > .vue-tel-input {
-    @apply border-red-500 border-2 ring-4 ring-red-500 ring-opacity-10 rounded-lg  transition-none;
-  }
 }
 </style>

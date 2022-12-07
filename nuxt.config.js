@@ -28,7 +28,6 @@ export default {
     '~/plugins/base-components',
     '~/plugins/vee-validate',
     "~/plugins/vue-tel-input",
-    "~/plugins/vue-cropper",
     "~/plugins/font-awesome",
     {src: "~/plugins/html2pdf", mode: 'client'},
     {src: "~/plugins/persistedState", mode: 'client'},
