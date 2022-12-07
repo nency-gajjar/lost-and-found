@@ -350,7 +350,6 @@ export default {
   async mounted() {
     let response = await this.$axios.post("/getAllShippingDetails");
     this.shippingDetails = response.data;
-    console.log(this.shippingDetails);
   },
 };
 </script>

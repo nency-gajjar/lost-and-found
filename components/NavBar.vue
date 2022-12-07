@@ -10,6 +10,12 @@
             <div v-if="isAdminLogin" class="link-container">
               <NuxtLink to="/dashboard" class="menu">Dashboard</NuxtLink>
             </div>
+            <div v-if="isAdminLogin" class="link-container">
+              <NuxtLink to="/shipping-details" class="menu">Shipping Details</NuxtLink>
+            </div>
+            <div v-if="isAdminLogin" class="link-container">
+              <NuxtLink to="/surcharge" class="menu">Surcharge</NuxtLink>
+            </div>
             <div v-else class="link-container">
               <NuxtLink to="/lost-items" class="menu">Lost Items</NuxtLink>
             </div>
@@ -54,6 +60,22 @@
             @click.native="toggleMenu"
             class="opacity-100"
             >Dashboard</NuxtLink
+          >
+        </div>
+        <div v-if="isAdminLogin">
+          <NuxtLink
+            to="/shipping-details"
+            @click.native="toggleMenu"
+            class="opacity-100"
+            >Shipping Details</NuxtLink
+          >
+        </div>
+        <div v-if="isAdminLogin">
+          <NuxtLink
+            to="/surcharge"
+            @click.native="toggleMenu"
+            class="opacity-100"
+            >Surcharge</NuxtLink
           >
         </div>
         <div v-else>

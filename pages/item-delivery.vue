@@ -1075,30 +1075,14 @@ export default {
                   "shipment/SET_INSURANCE_VALUE",
                   this.insuranceValue
                 );
-                if (Number(this.insuranceValue) <= 0) {
-                  this.$store.commit("shipment/SET_INSURANCE_CHARGES", 0);
-                }
-                if (
-                  Number(this.insuranceValue) > 0 &&
-                  Number(this.insuranceValue) < 100
-                ) {
-                  this.$store.commit("shipment/SET_INSURANCE_CHARGES", 1);
-                } else if (
-                  Number(this.insuranceValue) >= 100 &&
-                  Number(this.insuranceValue) < 200
-                ) {
-                  this.$store.commit("shipment/SET_INSURANCE_CHARGES", 2);
-                } else if (
-                  Number(this.insuranceValue) >= 200 &&
-                  Number(this.insuranceValue) < 300
-                ) {
-                  this.$store.commit("shipment/SET_INSURANCE_CHARGES", 3);
-                }
-              } else {
-                this.$store.commit("shipment/SET_INSURANCE_VALUE", "");
-                this.$store.commit("shipment/SET_INSURANCE_CHARGES", 0);
               }
-              if (params_rateQuotes.country !== params_rateQuotes.tocountry) {
+              else{
+                this.$store.commit(
+                  "shipment/SET_INSURANCE_VALUE",
+                  ""
+                );
+              }
+              if(params_rateQuotes.country !== params_rateQuotes.tocountry){
                 this.$nextTick(() => {
                   this.$router.push({
                     name: "custom-shipping-details",
