@@ -18,6 +18,30 @@
       </div>
       <div class="my-5">
         <div
+          v-if="Object.keys(itemDetails).length > 0"
+          class="
+            py-6
+            px-12
+            mt-5
+            text-left
+            justify-between
+            bg-white
+            rounded-lg
+            border
+            shadow-md
+            relative
+          "
+        >
+          <h3 class="font-bold text-[#37322C] tracking-wider uppercase text-md">
+            Item Details
+          </h3>
+          <p class="mt-5"> <span class="font-medium">Item Description: </span> {{ itemDetails.item_description }}</p>
+          <div v-if="itemDetails.image">
+            <p class="font-medium">Item Image:</p>
+            <img :src="itemDetails.image" class="mt-2 item-img" alt="">
+          </div>
+        </div>
+        <div
           class="
             py-6
             px-12
@@ -85,28 +109,16 @@
               {{ 5 | currency }}
             </span>
           </p>
-          <p class="flex justify-between" v-if="this.insuranceCharges">
+          <p class="flex justify-between" v-if="insuranceCharges">
             <span class="font-medium text-md"> Insurance Charges:</span>
             <span class="text-display tracking-wide text-gray-700 font-medium">
-              {{ Number(this.insuranceCharges) | currency }}
+              {{ Number(insuranceCharges) | currency }}
             </span>
           </p>
-          <p>
+          <p v-if="checkoutDetail.insuranceValue">
             <span class="font-medium text-md"> ( Insured for: </span>
             <span class="text-display tracking-wide text-gray-700 font-medium">
               {{ Number(checkoutDetail.insuranceValue) | currency }}
-            )
-            </span>
-          </p>
-          <p>
-            <span class="font-medium text-md"> ( Insured for: </span>
-            <span class="text-display tracking-wide text-gray-700 font-medium">
-              {{
-                new Intl.NumberFormat("en-US", {
-                  style: "currency",
-                  currency: "USD",
-                }).format(checkoutDetail.insuranceValue)
-              }}
             )
             </span>
           </p>
@@ -233,11 +245,20 @@ export default {
       card: null,
       isLoading: false,
       isCardValid: false,
+      itemDetails: {},
       insuranceCharges: 0,
     };
   },
   mounted() {
     if (this.$route.params.fromRatePage) {
+
+    this.$axios.get("/getsinglelostitem?id=" + this.$route.query.id)
+      .then((response) => {
+        this.itemDetails = response.data.data.Item;
+      })
+      .catch((error) => {
+        console.log(error);
+      })
       
       this.checkoutDetail = {
         selectedRate: JSON.parse(
@@ -258,7 +279,9 @@ export default {
         ),
       };
 
-      this.insuranceCharges = this.calculateInsuranceCharges(this.checkoutDetail.insuranceValue);
+      if(this.checkoutDetail.insuranceValue){
+        this.insuranceCharges = this.calculateInsuranceCharges(this.checkoutDetail.insuranceValue);
+      }
 
       const elements = this.$stripe.elements({
         fonts: [
@@ -479,5 +502,9 @@ export default {
 <style scoped>
 .wrapper {
   @apply flex flex-col justify-start pt-0 items-center text-center mx-auto;
+}
+
+.item-img {
+  max-width: 150px;
 }
 </style>

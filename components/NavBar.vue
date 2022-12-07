@@ -5,7 +5,9 @@
         <div class="menu flex justify-between w-full">
           <div class="menu-left flex items-center">
             <div class="logo-container">
-              <NuxtLink to="/" class="logo">Lost & Found</NuxtLink>
+              <NuxtLink to="/" class="logo">
+                <img class="nav-logo" src="../assets/images/found-shelf-icon.svg" alt="Found Shelf">
+              </NuxtLink>
             </div>
             <div v-if="isAdminLogin" class="link-container">
               <NuxtLink to="/dashboard" class="menu">Dashboard</NuxtLink>
@@ -138,6 +140,10 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+.nav-logo{
+  width: 100px;
+}
+
 .appbar-container {
   z-index: 100;
   @apply flex items-center px-6 md:px-10 w-full bg-white shadow-lg;
@@ -147,10 +153,9 @@ export default {
   }
 
   .logo-container {
-    @apply py-4;
-
+    @apply flex items-center;
     .logo {
-      @apply pr-4 py-2 font-bold;
+      @apply pr-4 font-bold;
     }
   }
 
@@ -189,6 +194,13 @@ export default {
 }
 
 @media screen and (max-width: 767px) {
+  .logo {
+    @apply py-2;
+    .nav-logo {
+      width: 70px;
+    }
+  }
+
   .link-container {
     @apply hidden;
   }
