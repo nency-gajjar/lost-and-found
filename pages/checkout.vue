@@ -42,12 +42,7 @@
               {{ displayItemService(checkoutDetail.selectedRate.service) }}
             </span>
             <p class="text-display tracking-wide text-gray-700 font-medium">
-              {{
-                new Intl.NumberFormat("en-US", {
-                  style: "currency",
-                  currency: "USD",
-                }).format(checkoutDetail.selectedRate.rate)
-              }}
+              {{ Number(checkoutDetail.selectedRate.rate) | currency }}
             </p>
           </div>
           <div
@@ -87,26 +82,20 @@
           >
             <span class="font-medium text-md"> Signature Confirmation:</span>
             <span class="text-display tracking-wide text-gray-700 font-medium">
-              {{
-                new Intl.NumberFormat("en-US", {
-                  style: "currency",
-                  currency: "USD",
-                }).format(5)
-              }}
+              {{ 5 | currency }}
             </span>
           </p>
-          <p
-            class="flex justify-between"
-            v-if="this.insuranceCharges"
-          >
+          <p class="flex justify-between" v-if="this.insuranceCharges">
             <span class="font-medium text-md"> Insurance Charges:</span>
             <span class="text-display tracking-wide text-gray-700 font-medium">
-              {{
-                new Intl.NumberFormat("en-US", {
-                  style: "currency",
-                  currency: "USD",
-                }).format(this.insuranceCharges)
-              }}
+              {{ Number(this.insuranceCharges) | currency }}
+            </span>
+          </p>
+          <p>
+            <span class="font-medium text-md"> ( Insured for: </span>
+            <span class="text-display tracking-wide text-gray-700 font-medium">
+              {{ Number(checkoutDetail.insuranceValue) | currency }}
+            )
             </span>
           </p>
           <p>
@@ -135,7 +124,7 @@
                   leading-relaxed
                 "
               >
-                {{ totalPrice }}
+                {{ Number(totalPrice) | currency }}
               </p>
             </div>
           </div>
@@ -233,17 +222,18 @@
 
 <script>
 import { isEmpty, startCase, camelCase } from "lodash";
+import FormatCurrency from "@/mixins/formatCurrency";
 import calculateInsuranceCharges from "../mixins/calculateInsuranceCharges.js"
 
 export default {
-  mixins: [calculateInsuranceCharges],
+  mixins: [FormatCurrency, calculateInsuranceCharges],
   data() {
     return {
       checkoutDetail: {},
       card: null,
       isLoading: false,
       isCardValid: false,
-      insuranceCharges: 0
+      insuranceCharges: 0,
     };
   },
   mounted() {
@@ -301,16 +291,19 @@ export default {
         hidePostalCode: true,
       });
       card.mount("#card-element");
-      card.on('change', () => {
+      card.on("change", () => {
         setTimeout(() => {
-          if(document.getElementById("card-element").classList.contains('StripeElement--complete')){
+          if (
+            document
+              .getElementById("card-element")
+              .classList.contains("StripeElement--complete")
+          ) {
             this.isCardValid = true;
-          }
-          else{
+          } else {
             this.isCardValid = false;
           }
         }, 200);
-      })
+      });
       this.card = card;
     } else {
       if (
@@ -355,10 +348,7 @@ export default {
       const rate = Number(this.checkoutDetail?.selectedRate?.rate);
       const signature = this.checkoutDetail.signature ? 5 : 0;
       const insuranceCharges = this.insuranceCharges;
-      return new Intl.NumberFormat("en-US", {
-        style: "currency",
-        currency: "USD",
-      }).format(rate + signature + insuranceCharges);
+      return rate + signature + insuranceCharges;
     },
   },
   methods: {
@@ -368,7 +358,9 @@ export default {
     },
     async confirmAndPay() {
       this.isLoading = true;
-      let totalPrice =  Math.floor(Number(this.totalPrice.split("$")[1]).toFixed(2) * 100); // convert usd to cents
+      let totalPrice = Math.floor(
+        Number(this.totalPrice).toFixed(2) * 100
+      ); // convert usd to cents
       this.$axios
         .post("/createPaymentIntent", {
           amount: totalPrice,
@@ -407,7 +399,7 @@ export default {
                   this.checkoutDetail.signature === true ? true : false,
                 insurance: Number(insuranceValue),
               };
-              if(Object.keys(customInfo).length > 0){
+              if (Object.keys(customInfo).length > 0) {
                 params.customs_info = customInfo;
               }
               this.$axios
@@ -430,9 +422,9 @@ export default {
                       .then((response) => {
                         this.$store.commit("shipment/SET_LABEL_DETAILS", {
                           lableUrl:
-                            shippingResponse.data.postage_label.label_url,
-                          itemId: this.$route.query.id,
-                          shipmentId: shippingResponse.data.id,
+                            shippingResponse.data.label_url,
+                            itemId: this.$route.query.id,
+                            shipmentId: shippingResponse.data.shipment_id,
                         });
                         this.isLoading = false;
                         this.$nextTick(() => {

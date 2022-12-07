@@ -473,6 +473,8 @@ export default {
 </style>
 
 <style lang="scss">
+@import "./assets/styles/date-picker.scss";
+@import "./assets/styles/address-autocomplete.scss";
 .slick-prev,
 .slick-next {
   height: 35px !important;
@@ -487,56 +489,5 @@ export default {
   font-size: 34px;
   opacity: 1;
   /* line-height: 41.5px; */
-}
-
-/* .mx-input {
-  height: 3rem !important;
-} */
-
-.mx-datepicker-range {
-  width: 100%;
-}
-
-.mx-input-wrapper i {
-  margin-right: 10px;
-}
-.mx-input:hover {
-  @apply border-gray-300;
-}
-.mx-datepicker {
-  width: 100% !important;
-}
-.mx-datepicker input {
-  height: 3rem;
-  border-radius: 0.5rem;
-  border-color: rgb(212 212 212);
-  cursor: pointer;
-}
-
-@media (max-width: 750px) {
-  .mx-datepicker-main {
-    max-width: 92%;
-  }
-  .mx-range-wrapper {
-    flex-wrap: wrap;
-    flex-direction: row;
-  }
-  .mx-range-wrapper .mx-calendar-panel-date {
-    flex: auto;
-  }
-}
-
-.pac-item {
-  padding: 6px;
-  font-size: 14px;
-  cursor: pointer;
-
-  &:hover {
-    background-color: #ececec;
-  }
-}
-
-.pac-item-query {
-  font-size: 14px;
 }
 </style>

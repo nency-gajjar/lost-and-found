@@ -442,8 +442,10 @@
 import DatePicker from "vue2-datepicker";
 import "vue2-datepicker/index.css";
 import moment from "moment";
+import DetectBrowser from "~/mixins/detectBrowser";
 export default {
   components: { DatePicker },
+  mixins: [DetectBrowser],
   data() {
     return {
       lostItems: [],
@@ -459,7 +461,6 @@ export default {
       lat: "",
       long: "",
       isFilterApplied: false,
-      mobileDevice: false,
     };
   },
   computed: {
@@ -477,17 +478,6 @@ export default {
     },
   },
   methods: {
-    isMobile() {
-      if (
-        /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(
-          navigator.userAgent
-        )
-      ) {
-        return true;
-      } else {
-        return false;
-      }
-    },
     addNewItem() {
       this.$router.push({ name: "item-details" });
     },
@@ -675,7 +665,6 @@ export default {
     // }
   },
   async mounted() {
-    this.mobileDevice = this.isMobile();
     await this.getItemDescriptionOptions();
     if (this.$route.params?.appliedFilters) {
       this.itemDescription = this.$route.params.appliedFilters.itemDescription;
@@ -693,59 +682,10 @@ export default {
 };
 </script>
 
-<style>
-.mx-input {
-  height: 3rem !important;
-}
-@media (max-width: 750px) {
-  .mx-datepicker-main {
-    max-width: 92%;
-  }
-  .mx-range-wrapper {
-    flex-wrap: wrap;
-    flex-direction: row;
-  }
-  .mx-range-wrapper .mx-calendar-panel-date {
-    flex: auto;
-  }
-}
-</style>
+<style scoped lang="scss">
+@import "./assets/styles/date-picker.scss";
 
-<style scoped>
 .wrapper {
   @apply flex flex-col justify-start pt-0 items-center text-center mx-auto;
-}
-
-.loader-container {
-  height: calc(100vh - theme("spacing.52"));
-}
-
-.loader {
-  border-top-color: orange;
-  -webkit-animation: spinner 1.5s linear infinite;
-  animation: spinner 1.5s linear infinite;
-}
-
-.mx-datepicker {
-  width: 100% !important;
-}
-@-webkit-keyframes spinner {
-  0% {
-    -webkit-transform: rotate(0deg);
-  }
-
-  100% {
-    -webkit-transform: rotate(360deg);
-  }
-}
-
-@keyframes spinner {
-  0% {
-    transform: rotate(0deg);
-  }
-
-  100% {
-    transform: rotate(360deg);
-  }
 }
 </style>

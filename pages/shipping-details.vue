@@ -93,12 +93,7 @@
                   </td>
                   <td class="py-3 px-6 text-left">
                     <p>
-                      {{
-                        new Intl.NumberFormat("en-US", {
-                          style: "currency",
-                          currency: "USD",
-                        }).format(detail.total_amount / 100)
-                      }}
+                      {{ Number(detail.total_amount / 100) | currency }}
                     </p>
                   </td>
                   <td class="py-3 px-6 text-left">
@@ -327,8 +322,10 @@
 
 <script>
 import { startCase, camelCase } from "lodash";
+import FormatCurrency from "~/mixins/formatCurrency";
 export default {
   middleware: ["auth-admin"],
+  mixins: [FormatCurrency],
   data() {
     return {
       shippingDetails: [],

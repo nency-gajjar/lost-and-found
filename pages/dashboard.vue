@@ -554,34 +554,4 @@ export default {
 .wrapper {
   @apply flex flex-col justify-start pt-0 items-center text-center mx-auto;
 }
-
-.loader-container {
-  height: calc(100vh - theme("spacing.52"));
-}
-
-.loader {
-  border-top-color: orange;
-  -webkit-animation: spinner 1.5s linear infinite;
-  animation: spinner 1.5s linear infinite;
-}
-
-@-webkit-keyframes spinner {
-  0% {
-    -webkit-transform: rotate(0deg);
-  }
-
-  100% {
-    -webkit-transform: rotate(360deg);
-  }
-}
-
-@keyframes spinner {
-  0% {
-    transform: rotate(0deg);
-  }
-
-  100% {
-    transform: rotate(360deg);
-  }
-}
 </style>

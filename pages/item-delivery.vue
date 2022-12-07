@@ -764,8 +764,11 @@
 <script>
 import DatePicker from "vue2-datepicker";
 import "vue2-datepicker/index.css";
+import formatMobileNumber from "../mixins/formatMobileNumber.js";
+import formatMobileNumber2 from "../mixins/formatMobileNumber-2.js";
 
 export default {
+  mixins: [formatMobileNumber, formatMobileNumber2],
   data: () => ({
     showDialog: false,
     deliveryType: "0",
@@ -961,17 +964,6 @@ export default {
         zipcode: "",
       };
     },
-    formatMobileNumber2(phoneNumber) {
-      let arr = phoneNumber.split(" ");
-      let countryCode = arr.shift();
-      return countryCode + " " + arr.join("");
-    },
-    formatMobileNumber(phoneNumber) {
-      let arr = phoneNumber.split(" ");
-      arr.shift();
-      let phone = arr.join("");
-      return phone.slice(0, 3) + "-" + phone.slice(3, 6) + "-" + phone.slice(6);
-    },
     async onSubmit() {
       if (this.deliveryType === "0") this.validateUserPhone();
       this.isLoading = true;
@@ -1016,9 +1008,9 @@ export default {
           params.receiver_zipcode = this.autoCompleteAddress.zipcode;
         if (
           this.tempReceiverDetails.receiver_mobile_no !==
-          this.formatMobileNumber2(this.receiverMobileNo)
+          this.formatMobileNumber(this.receiverMobileNo)
         )
-          params.receiver_mobile_no = this.formatMobileNumber2(
+          params.receiver_mobile_no = this.formatMobileNumber(
             this.receiverMobileNo
           );
         if (this.tempReceiverDetails.receiver_email !== this.receiverEmail)
@@ -1032,7 +1024,7 @@ export default {
         params_rateQuotes.state = this.itemDetails.states;
         params_rateQuotes.zip = this.itemDetails.zipcode;
         params_rateQuotes.country = this.itemDetails.country.trim();
-        params_rateQuotes.phone = this.formatMobileNumber(
+        params_rateQuotes.phone = this.formatMobileNumber2(
           this.itemDetails.venue_phone_no
         );
         params_rateQuotes.toname = this.receiverName;
@@ -1042,7 +1034,7 @@ export default {
         params_rateQuotes.tostate = this.autoCompleteAddress.state;
         params_rateQuotes.tozip = this.autoCompleteAddress.zipcode;
         params_rateQuotes.tocountry = this.autoCompleteAddress.country;
-        params_rateQuotes.tophone = this.formatMobileNumber(
+        params_rateQuotes.tophone = this.formatMobileNumber2(
           this.receiverMobileNo
         );
         params_rateQuotes.length = Number(this.itemDetails.item_length);
@@ -1098,8 +1090,7 @@ export default {
                     params: { fromItemDelivery: true },
                   });
                 });
-              }
-              else{
+              } else {
                 this.$nextTick(() => {
                   this.$router.push({
                     name: "rate-quotes",
@@ -1132,58 +1123,10 @@ export default {
 </script>
   
 <style lang="scss">
+@import "./assets/styles/date-picker.scss";
+@import "./assets/styles/address-autocomplete.scss";
+@import "./assets/styles/phone-number-input.scss";
 .wrapper {
   @apply min-h-screen flex justify-center py-10 mx-auto;
-}
-.mx-input-wrapper i {
-  margin-right: 10px;
-}
-.mx-input:hover {
-  @apply border-gray-300;
-}
-.mx-datepicker {
-  width: 100% !important;
-}
-.mx-datepicker input {
-  height: 3rem;
-  border-radius: 0.5rem;
-  border-color: rgb(212 212 212);
-  cursor: pointer;
-}
-.error {
-  & > .mx-datepicker {
-    @apply border-red-500 border-2 ring-4 ring-red-500 ring-opacity-10 rounded-lg transition-none;
-  }
-}
-
-.error {
-  & > .vue-tel-input {
-    @apply border-red-500 border-2 ring-4 ring-red-500 ring-opacity-10 rounded-lg  transition-none;
-  }
-}
-
-.vue-tel-input {
-  border-radius: 0.5rem;
-  border: 1px solid #cccccc;
-}
-.vti__dropdown-list {
-  z-index: 100;
-}
-.vti__input {
-  border-radius: 50px;
-}
-
-.pac-item {
-  padding: 6px;
-  font-size: 14px;
-  cursor: pointer;
-
-  &:hover {
-    background-color: #ececec;
-  }
-}
-
-.pac-item-query {
-  font-size: 14px;
 }
 </style>
