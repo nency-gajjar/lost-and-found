@@ -88,23 +88,13 @@
           <p class="flex justify-between" v-if="this.insuranceCharges">
             <span class="font-medium text-md"> Insurance Charges:</span>
             <span class="text-display tracking-wide text-gray-700 font-medium">
-              {{
-                new Intl.NumberFormat("en-US", {
-                  style: "currency",
-                  currency: "USD",
-                }).format(this.insuranceCharges)
-              }}
+              {{ Number(this.insuranceCharges) | currency }}
             </span>
           </p>
           <p>
             <span class="font-medium text-md"> ( Insured for: </span>
             <span class="text-display tracking-wide text-gray-700 font-medium">
-              {{
-                new Intl.NumberFormat("en-US", {
-                  style: "currency",
-                  currency: "USD",
-                }).format(checkoutDetail.insuranceValue)
-              }}
+              {{ Number(checkoutDetail.insuranceValue) | currency }}
             )
             </span>
           </p>
