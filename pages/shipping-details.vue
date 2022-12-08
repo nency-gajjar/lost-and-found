@@ -48,7 +48,7 @@
                   <th class="py-3 px-6 text-left">Service</th>
                 </tr>
               </thead>
-              <tbody class="bg-white text-gray-800">
+              <tbody v-if="shippingDetails.length > 0" class="bg-white text-gray-800">
                 <tr
                   v-for="detail in shippingDetails"
                   :key="detail.id"
@@ -117,202 +117,14 @@
                 </tr>
               </tbody>
             </table>
-            <!-- <div class="flex justify-between items-center px-4 my-4 work-sans">
-          <p class="text-sm leading-5 text-accent-100">
-            Showing
-            <span class="font-medium">1</span>
-            to
-            <span class="font-medium">200</span>
-            of
-            <span class="font-medium">2000</span>
-            results
-          </p>
-          <div>
-            <nav class="relative z-0 inline-flex items-center shadow-sm">
-              <a
-                href="#"
-                class="
-                  relative
-                  inline-flex
-                  items-center
-                  px-2
-                  py-2
-                  rounded-l-md
-                  border border-gray-300
-                  bg-white
-                  text-sm
-                  leading-5
-                  font-medium
-                  text-gray-500
-                  hover:text-gray-400
-                  focus:z-10
-                  focus:outline-none
-                  focus:border-blue-300
-                  focus:shadow-outline-blue
-                  active:bg-gray-100 active:text-gray-500
-                  transition
-                  ease-in-out
-                  duration-150
-                "
-                aria-label="Previous"
-              >
-                <svg class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
-                  <path
-                    fill-rule="evenodd"
-                    d="M12.707 5.293a1 1 0 010 1.414L9.414 10l3.293 3.293a1 1 0 01-1.414 1.414l-4-4a1 1 0 010-1.414l4-4a1 1 0 011.414 0z"
-                    clip-rule="evenodd"
-                  />
-                </svg>
-              </a>
-              <div>
-                <a
-                  href="#"
-                  class="
-                    -ml-px
-                    relative
-                    inline-flex
-                    items-center
-                    px-4
-                    py-2
-                    border border-gray-300
-                    bg-white
-                    text-sm
-                    leading-5
-                    font-medium
-                    text-blue-700
-                    focus:z-10
-                    focus:outline-none
-                    focus:border-blue-300
-                    focus:shadow-outline-blue
-                    active:bg-tertiary active:text-gray-700
-                    transition
-                    ease-in-out
-                    duration-150
-                    hover:bg-tertiary
-                  "
-                >
-                  1
-                </a>
-                <a
-                  href="#"
-                  class="
-                    -ml-px
-                    relative
-                    inline-flex
-                    items-center
-                    px-4
-                    py-2
-                    border border-gray-300
-                    bg-white
-                    text-sm
-                    leading-5
-                    font-medium
-                    text-blue-600
-                    focus:z-10
-                    focus:outline-none
-                    focus:border-blue-300
-                    focus:shadow-outline-blue
-                    active:bg-tertiary active:text-gray-700
-                    transition
-                    ease-in-out
-                    duration-150
-                    hover:bg-tertiary
-                  "
-                >
-                  2
-                </a>
-                <a
-                  href="#"
-                  class="
-                    -ml-px
-                    relative
-                    inline-flex
-                    items-center
-                    px-4
-                    py-2
-                    border border-gray-300
-                    bg-white
-                    text-sm
-                    leading-5
-                    font-medium
-                    text-blue-600
-                    focus:z-10
-                    focus:outline-none
-                    focus:border-blue-300
-                    focus:shadow-outline-blue
-                    active:bg-tertiary active:text-gray-700
-                    transition
-                    ease-in-out
-                    duration-150
-                    hover:bg-tertiary
-                  "
-                >
-                  3
-                </a>
-                <a
-                  href="#"
-                  class="
-                    -ml-px
-                    relative
-                    inline-flex
-                    items-center
-                    px-4
-                    py-2
-                    border border-gray-300
-                    bg-white
-                    text-sm
-                    leading-5
-                    font-medium
-                    text-blue-600
-                    focus:z-10
-                    focus:outline-none
-                    focus:border-blue-300
-                    focus:shadow-outline-blue
-                    active:bg-tertiary active:text-gray-700
-                    transition
-                    ease-in-out
-                    duration-150
-                    hover:bg-tertiary
-                  "
-                >
-                  4
-                </a>
-              </div>
-              <div>
-                <a
-                  @click="fetchNextData"
-                  class="
-                    -ml-px
-                    relative
-                    inline-flex
-                    items-center
-                    px-2
-                    py-2
-                    rounded
-                    border border-gray-300
-                    bg-white
-                    text-sm
-                    leading-5
-                    font-medium
-                    text-gray-500
-                    hover:text-gray-400
-                    focus:z-10
-                    focus:outline-none
-                    focus:border-blue-300
-                    focus:shadow-outline-blue
-                    active:bg-gray-100 active:text-gray-500
-                    transition
-                    ease-in-out
-                    duration-150
-                  "
-                  aria-label="Next"
-                >
-                  Next
-                </a>
-              </div>
-            </nav>
-          </div>
-        </div> -->
+            <div v-if="!isLoading && shippingDetails.length === 0">
+              <p class="py-3">
+                No shipping details found!
+              </p>
+            </div>
+            <div class="py-3" v-if="isLoading">
+              <BaseLoader :needFullScreen="false" />
+            </div>
           </div>
         </div>
       </main>
@@ -329,17 +141,11 @@ export default {
   data() {
     return {
       shippingDetails: [],
+      isLoading: true,
     };
   },
   computed: {},
   methods: {
-    // async fetchNextData(){
-    //   if(this.shippingDetails[0].has_more){
-    //     let length = this.shippingDetails.length;
-    //     let response = await this.$axios.post("/getAllShippingDetails", {abc: 123, after_id: this.shippingDetails[length - 1].tracker.shipment_id});
-    //     this.shippingDetails = response.data;
-    //   }
-    // }
     packageDimensionsString(detail) {
       return `${detail?.item_length} x ${detail?.item_width} x ${detail?.item_height}`;
     },
@@ -348,8 +154,10 @@ export default {
     },
   },
   async mounted() {
+    this.isLoading = true;
     let response = await this.$axios.post("/getAllShippingDetails");
     this.shippingDetails = response.data;
+    this.isLoading = false;
   },
 };
 </script>

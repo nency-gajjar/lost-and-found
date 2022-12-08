@@ -410,11 +410,11 @@
                 <p>Weight</p>
                 <p>{{ lableDetails.weight }} LBS</p>
               </div>
-              <div class="flex justify-between text-sm leading-6">
+              <div v-if="lableDetails.insuranceValue" class="flex justify-between text-sm leading-6">
                 <p>Insurance Charges</p>
                 <p>$ {{ calculateInsuranceCharges(lableDetails.insuranceValue) || "0" }}</p>
               </div>
-              <div class="flex justify-between text-sm leading-6">
+              <div v-if="lableDetails.insuranceValue" class="flex justify-between text-sm leading-6">
                 <p>(Insured for: $ {{ lableDetails.insuranceValue || "0" }})</p>
               </div>
             </div>

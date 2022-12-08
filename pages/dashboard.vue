@@ -427,13 +427,13 @@ export default {
     tabSelectedChanged(value) {
       this.searchQuery = "";
       if (value === 1) {
-        this.lostItems = this.dashboardDetails[0].totallostitemslisted || [];
+        this.lostItems = this.dashboardDetails[0]?.totallostitemslisted || [];
       } else if (value === 2) {
-        this.lostItems = this.dashboardDetails[1].totalclaimitems || [];
+        this.lostItems = this.dashboardDetails[1]?.totalclaimitems || [];
       } else if (value === 3) {
-        this.lostItems = this.dashboardDetails[2].totalitemslistedtoday || [];
+        this.lostItems = this.dashboardDetails[2]?.totalitemslistedtoday || [];
       } else if (value === 4) {
-        this.lostItems = this.dashboardDetails[3].totalclaimitemstoday || [];
+        this.lostItems = this.dashboardDetails[3]?.totalclaimitemstoday || [];
       } else if (value === 5) {
         this.lostItems = this.pendingListDetails;
       }
@@ -473,6 +473,9 @@ export default {
           if (response.status === 200) {
             this.isLoading = false;
             this.dashboardDetails = response?.data?.data;
+            if(!this.dashboardDetails){
+              this.dashboardDetails = [];
+            }
             this.tabSelectedChanged(this.tabSelected);
           }
         })
@@ -493,6 +496,9 @@ export default {
         .then((response) => {
           if (response.status === 200) {
             this.pendingListDetails = response?.data?.data?.Items;
+            if(!this.pendingListDetails){
+              this.pendingListDetails = [];
+            }
           }
         })
         .catch((err) => {

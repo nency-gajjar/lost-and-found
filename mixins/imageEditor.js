@@ -44,14 +44,17 @@ export default {
       this.imgPreview = true;
     },
     async editImage() {
+      this.isLoadingEditImage = true;
       this.showEditor = false;
       if (this.image) {
         const data = await fetch(this.image, { cache: "no-cache" });
         const blob = await data.blob();
         this.imgSrc = await this.process_image(blob);
         this.showEditor = true;
+        this.isLoadingEditImage = false;
       } else {
         this.showEditor = false;
+        this.isLoadingEditImage = false;
       }
     },
     async process_image(file, min_image_size = 300) {

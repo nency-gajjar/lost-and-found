@@ -280,7 +280,7 @@
       </div>
     </section>
     <div v-else-if="!isLoading && recentItemList.length === 0">
-      <p class="text-gray-600 font-medium m-14">No Result Found</p>
+      <p class="text-gray-600 font-medium m-14 text-center">No Result Found</p>
     </div>
     <div v-else>
       <BaseLoader />
@@ -335,7 +335,7 @@ export default {
       lostItemAddress: "",
       lat: "",
       long: "",
-      isLoading: false,
+      isLoading: true,
       recentItemList: [],
     };
   },
@@ -420,6 +420,9 @@ export default {
           if (response.status === 200) {
             this.isLoading = false;
             this.recentItemList = response?.data?.data?.Items.reverse();
+            if(!this.recentItemList){
+              this.recentItemList = [];
+            }
           }
         })
         .catch((error) => {

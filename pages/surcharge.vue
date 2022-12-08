@@ -66,7 +66,7 @@
                   <th class="py-3 px-6 text-left">Actions</th>
                 </tr>
               </thead>
-              <tbody class="bg-white text-gray-800">
+              <tbody v-if="surChargeData.length > 0" class="bg-white text-gray-800">
                 <tr
                   class="border-b border-gray-200 hover:bg-gray-100"
                   v-for="data in surChargeData" :key="data.id"
@@ -101,7 +101,29 @@
                         />
                       </div>
                       <div @click="deleteSurcharge(data.id)" class="bg-red-600 px-3 py-2 rounded cursor-pointer">
+                        <svg
+                          v-if="isRemovingItem[data.id]"
+                          class="w-5 h-5 text-white animate-spin"
+                          fill="none"
+                          viewBox="0 0 24 24"
+                          xmlns="http://www.w3.org/2000/svg"
+                        >
+                          <circle
+                            class="opacity-25"
+                            cx="12"
+                            cy="12"
+                            r="10"
+                            stroke="currentColor"
+                            stroke-width="4"
+                          ></circle>
+                          <path
+                            class="opacity-75"
+                            d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
+                            fill="currentColor"
+                          ></path>
+                        </svg>
                         <BaseIcon
+                          v-else
                           icon="trash"
                           color="white"
                         />
@@ -111,6 +133,14 @@
                 </tr>
               </tbody>
             </table>
+            <div v-if="!isLoading && surChargeData.length === 0">
+              <p class="py-3">
+                No surcharge data found!
+              </p>
+            </div>
+            <div class="py-3" v-if="isLoading">
+              <BaseLoader :needFullScreen="false" />
+            </div>
           </div>
         </div>
       </main>
@@ -136,20 +166,25 @@ export default {
       surChargeData: {},
       showSurchargeModel: false,
       mode: "create",
-      editData: {}
+      editData: {},
+      isLoading: true,
+      isRemovingItem: {}
     }
   },
   mounted(){
-      this.fetchSurcharge();
+    this.fetchSurcharge();
   },
   methods: {
     fetchSurcharge(){
+      this.isLoading = true;
       this.$axios
         .get("/getAllSurchargedetails")
         .then((response) => {
           this.surChargeData = response.data.data.Items;
+          this.isLoading = false;
         })
         .catch((error) => {
+          this.isLoading = false;
           console.log(error);
         })
     },
@@ -162,14 +197,17 @@ export default {
       this.showSurchargeModel = true;
     },
     deleteSurcharge(id) {
+      this.$set(this.isRemovingItem, id, true);
       this.$axios
         .post("/deletesingleSurcharge?id="+id)
         .then((response) => {
           this.$toast.info("Surcharge deleted successfully!");
           this.fetchSurcharge();
+          this.isRemovingItem[id] = false;
         })
         .catch((error) => {
           this.$toast.error("Something went wrong! Please try again.");
+          this.isRemovingItem[id] = false;
         })
     },
   },

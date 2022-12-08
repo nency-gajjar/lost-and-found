@@ -207,6 +207,7 @@
                       v-show="item.isEdit"
                       class="!capitalize !px-4 !py-2 !mr-1 !mb-1"
                       varient="green"
+                      :is-loading="isEditingItem[item.id]"
                       @click="editItemDesc(item)"
                     >
                       Update
@@ -304,6 +305,7 @@ export default {
     isLoading: false,
     isLoadingItemDesc: false,
     isRemovingItem: {},
+    isEditingItem: {},
     originalItemsLength: null,
   }),
   computed: {
@@ -358,6 +360,7 @@ export default {
     async editItemDesc(item) {
       const isValid = await this.$refs.observer.validate();
       if (isValid) {
+        this.$set(this.isEditingItem, item.id, true);
         let id = item.id;
         const data = omit(item, ["id", "isEdit"]);
         this.$axios
@@ -375,14 +378,13 @@ export default {
               if (index !== -1) {
                 this.items[index].isEdit = false;
               }
+              this.isEditingItem[item.id] = false;
             }
-            console.log(res);
           })
           .catch((err) => {
+            this.isEditingItem[item.id] = false;
             console.log(err);
           });
-      } else {
-        console.log("invalid");
       }
     },
     deleteItemDesc(item) {
@@ -396,7 +398,6 @@ export default {
         })
         .then((res) => {
           if (res.status === 200) {
-            console.log(res);
             this.isRemovingItem[item.id] = false;
             this.getItemDescriptionOptions();
           }
@@ -420,8 +421,6 @@ export default {
           isNew: true,
         };
         this.items.push(itemObject);
-      } else {
-        console.log("invalid");
       }
     },
     async onSave() {
@@ -439,15 +438,12 @@ export default {
           .then((res) => {
             if (res.status === 200) {
               this.isLoading = false;
-              console.log(res);
               this.getItemDescriptionOptions();
             }
           })
           .catch((err) => {
             console.log(err);
           });
-      } else {
-        console.log("invalid");
       }
     },
   },

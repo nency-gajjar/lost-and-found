@@ -202,6 +202,18 @@ export default {
       let htmlToPrint = `
       <html><head>
       <style>
+          .border-dashed {
+            border-style: dashed;
+          }
+          .w-full {
+            width: 100% !important;
+          }
+          .border {
+            border-width: 1px;
+          }
+          .border-accent {
+            border-color: #000000;
+          }
           .flex {
             display: flex;
           }
@@ -223,7 +235,7 @@ export default {
             color: rgb(82 82 82);
           }
           .labelContainer img{
-            width: 300px;
+            height: 630px;
           }
           .itemImgContainer img{
             width: 100px;
@@ -289,6 +301,12 @@ export default {
             </td>
           </tr>
           </table>
+          <div class="flex">
+            <div style="width: 20px">
+              <svg style="color: rgb(240, 107, 4);" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256"><rect width="256" height="256" fill="none"></rect><circle cx="60" cy="76" r="28" fill="none" stroke="#000" stroke-linecap="round" stroke-linejoin="round" stroke-width="12"></circle><circle cx="60" cy="180" r="28" fill="none" stroke="#000" stroke-linecap="round" stroke-linejoin="round" stroke-width="12"></circle><line x1="136" y1="128" x2="83.1" y2="164.2" fill="none" stroke="#000" stroke-linecap="round" stroke-linejoin="round" stroke-width="12"></line><line x1="232" y1="62.3" x2="164.3" y2="108.6" fill="none" stroke="#000" stroke-linecap="round" stroke-linejoin="round" stroke-width="12"></line><line x1="232" y1="193.7" x2="83.1" y2="91.8" fill="none" stroke="#000" stroke-linecap="round" stroke-linejoin="round" stroke-width="12"></line></svg>
+            </div>
+            <hr class="w-full border-dashed border border-accent" />
+          </div>
           <div class='labelContainer'><img src=${this.labelUrl}></div>
           </body></html>
       `;
