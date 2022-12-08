@@ -41,6 +41,14 @@
               <div class="w-full-imp qr-code-container flex-imp justify-center-imp">
                 <img :src="itemDetails.link" alt="" />
               </div>
+              <div class="px-6 flex items-center justify-center">
+                <BaseIcon
+                  icon="circle-info"
+                  color="gray"
+                  style="max-width: 15px"
+                />
+                <p class="pl-2 font-medium">Scan this QR code to edit the details of this item.</p>
+              </div>
             </td>
           </tr>
           <tr class="border-b">
@@ -128,119 +136,11 @@
                     </div>
                   </td>
                 </tr>
-                <tr class="l-2">
-                  <td>
-                    <div class="text-left text-gray-600 font-medium">
-                      Venue Phone No.
-                    </div>
-                  </td>
-                  <td>
-                    <div class="text-gray-600 text-left">
-                      {{ itemDetails.venue_phone_no }}
-                    </div>
-                  </td>
-                </tr>
-                <tr class="l-2">
-                  <td>
-                    <div class="text-left text-gray-600 font-medium">
-                      Employee Mobile No.
-                    </div>
-                  </td>
-                  <td>
-                    <div class="text-gray-600 text-left">
-                      {{ itemDetails.employee_mobile_no }}
-                    </div>
-                  </td>
-                </tr>
               </table>
             </td>
           </tr>
-          <tr class="border-b">
-            <td class="px-6 py-4">
-              <table width="100%">
-                <tr>
-                  <td colspan="2" class="pb-2">
-                    <h2
-                      class="
-                        text-lg text-accent-100
-                        font-medium
-                        leading-tight
-                        text-left text-gray-800
-                      "
-                    >
-                      Address Details:
-                    </h2>
-                    <span
-                      class="
-                        w-20
-                        border-t-4 border-solid border-gray-300
-                        inline-block
-                        mb-1
-                      "
-                    ></span>
-                  </td>
-                </tr>
-                <tr class="l-2">
-                  <td>
-                    <div class="text-left text-gray-600 font-medium">
-                      Address
-                    </div>
-                  </td>
-                  <td>
-                    <div class="text-gray-600 text-left">
-                      {{ itemDetails.address }}
-                    </div>
-                  </td>
-                </tr>
-                <tr class="l-2">
-                  <td>
-                    <div class="text-left text-gray-600 font-medium">City</div>
-                  </td>
-                  <td>
-                    <div class="text-gray-600 text-left">
-                      {{ itemDetails.city }}
-                    </div>
-                  </td>
-                </tr>
-                <tr class="l-2">
-                  <td>
-                    <div class="text-left text-gray-600 font-medium">State</div>
-                  </td>
-                  <td>
-                    <div class="text-gray-600 text-left">
-                      {{ itemDetails.state || itemDetails.states }}
-                    </div>
-                  </td>
-                </tr>
-                <tr class="l-2">
-                  <td>
-                    <div class="text-left text-gray-600 font-medium">
-                      Country
-                    </div>
-                  </td>
-                  <td>
-                    <div class="text-gray-600 text-left">
-                      {{ itemDetails.country }}
-                    </div>
-                  </td>
-                </tr>
-                <tr class="l-2">
-                  <td>
-                    <div class="text-left text-gray-600 font-medium">
-                      Zipcode
-                    </div>
-                  </td>
-                  <td>
-                    <div class="text-gray-600 text-left">
-                      {{ itemDetails.zipcode }}
-                    </div>
-                  </td>
-                </tr>
-              </table>
-            </td>
-          </tr>
-          <tr class="border-b">
-            <td class="px-6 py-4">
+          <tr class="border-b flex sm:flex-row flex-col justify-between items-center">
+            <td class="px-6 py-4 w-full-imp">
               <table width="100%" cellspacing="0" cellpadding="0">
                 <tr>
                   <td colspan="2" class="pb-2">
@@ -368,25 +268,37 @@
                 </template>
               </table>
             </td>
+            <div class="item-img-container">
+              <img v-if="itemDetails.image" :src="itemDetails.image" alt="" />
+            </div>
           </tr>
         </tbody>
-        <div class="item-img-container">
-          <img v-if="itemDetails.image" :src="itemDetails.image" alt="" />
-        </div>
       </table>
-      <div class="noPrint flex flex-wrap gap-2 m-5">
-        <BaseButton class="flex-auto" @click="printDetails">
-          Print Details
-        </BaseButton>
-        <BaseButton class="flex-auto" @click="routeToListing">
-          Back To Listing
-        </BaseButton>
+      <div class="noPrint">
+        <div class="flex flex-wrap gap-2 m-5">
+          <BaseButton class="flex-auto" @click="printDetails">
+            Print Details
+          </BaseButton>
+          <BaseButton class="flex-auto" @click="routeToListing">
+            Back To Listing
+          </BaseButton>
+        </div>
+        <div class="flex flex-wrap gap-2 m-5">
+          <BaseButton class="flex-auto" @click="editListing">
+            Edit the listing
+          </BaseButton>
+        </div>
+        <div class="flex flex-wrap gap-2 m-5">
+          <BaseButton class="flex-auto" @click="addFoundItem">
+            Add another Found Item
+          </BaseButton>
+        </div>
       </div>
     </div>
     <BaseDialog
       :showDialog="showDialog"
       :icon="{ name: 'circle-check', color: 'green', size: '3x' }"
-      title="Item details submitted successfully!"
+      title="Awesome, you are a legend!"
       :message="dialogMessage"
       buttonTitle="Okay"
       @close="showDialog = false"
@@ -431,15 +343,12 @@ export default {
   computed: {
     // ...mapGetters("item", ["itemConfirmationDetails"]),
     dialogMessage() {
-      if (!this.hasImage && !this.itemStatus) {
-        return "We have sent a link for the same on your mail id. You can click on the link received over the mail to edit the item details in future, if required. Also, notification email is sent to the Item owner with the entered details. Now, the owner will have to select the Item Delivery to proceed further.";
-      } else if (!this.hasImage && this.itemStatus) {
-        return "Your item is listed and we have sent an link for the same on your mail id. You can click on the link received on the mail  to edit the item details, if required. You will be notified further if anyone claims the uploaded item.";
-      } else if (this.hasImage && !this.itemStatus) {
-        return "Item submitted to the admin for review. Please wait for the Admin to review the item details. Once reviewed & approved successfully, we will notify you for the same on your mail id. You can click on the link received over the mail to edit the item details in future, if required. Also, notification email will be sent to the Item owner with the entered details. Post that, the owner will have to select the Item Delivery to proceed further.";
-      } else if (this.hasImage && this.itemStatus) {
-        return "Item submitted to the admin for review. Please wait for the Admin to review the item details. Once reviewed & approved successfully, your submitted item will be listed and we will notify you for the same on your mail id. You can click on the link received on the mail to edit the item details, if required. You will be notified further if anyone claims the uploaded item.";
-      }
+      return `
+        <p class="pb-2">We also emailed you the confirmation. You can print it and tape it on the item.</p>
+        <p class="pb-2">After the review, we will notify the lucky owner. If the owner would like it shipped, then FoundShelf will create and email you a shipping label. If the owner would like to pick it up instead, then we notify you with an expected pick up date and time.</p>
+        <p class="pb-2">Need to edit the details? No problem, just click the link provided in the confirmation email, or scan the special QR code that is on the confirmation page.</p>
+        <p class="pb-2">You did a lot of work today. Why don’t you take rest of the day off.</p>
+      `;
     },
     itemStatus() {
       return this.itemDetails.item_status;
@@ -452,6 +361,23 @@ export default {
     },
   },
   methods: {
+    editListing(){
+      this.$nextTick(() => {
+          this.$router.push({
+            name: "found",
+            query: {
+              id: this.itemDetails.id
+            },
+          });
+        });
+    },
+    addFoundItem(){
+      this.$nextTick(() => {
+          this.$router.push({
+            name: "found"
+          });
+        });
+    },
     routeToListing() {
       this.$store.commit("item/SET_ITEM_CONFIRMATION_DETAILS", {});
       this.$router.push({ path: "/lost-items" });

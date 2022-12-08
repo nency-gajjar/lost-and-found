@@ -1627,6 +1627,7 @@ export default {
                   return item.item_description;
                 }
               );
+              this.itemDescriptionOptions.push("Other");
               resolve();
             }
           })
