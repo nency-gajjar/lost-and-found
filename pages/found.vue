@@ -1658,6 +1658,7 @@ export default {
           return addressObj == address.name;
         });
         if (index == "-1") {
+          this.addressArr = ["Other"];
           this.addressArr.unshift(address.name);
         }
         let obj = {};
