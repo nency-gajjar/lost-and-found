@@ -639,7 +639,7 @@
                           !items-center
                         "
                         varient="red"
-                        @click="deleteEditable"
+                        @click="showDialog = true"
                       >
                         Remove Image
                       </BaseButton>
@@ -986,7 +986,7 @@
                 <!-- Weight Pounds-->
                 <ValidationProvider
                   v-slot="{ errors }"
-                  rules="int|weight"
+                  rules="int|weight|positiveNumber"
                   class="block"
                   name="Pounds"
                 >
@@ -1198,6 +1198,14 @@
       <div v-else>
         <BaseLoader />
       </div>
+      <BaseDialog
+        :showDialog="showDialog"
+        :icon="{ name: 'trash-can', color: 'red', size: '3x' }"
+        buttonTitle="Yes please!"
+        title="Are you sure?"
+        message="Do you want to remove the image!"
+        @close="showDialog= false; deleteEditable()"
+    />
     </div>
   </div>
 </template>
@@ -1306,6 +1314,7 @@ export default {
     venuePhoneValidationMessage: "",
     employeePhoneValidationMessage: "",
     receiverPhoneValidationMessage: "",
+    showDialog: false
   }),
   components: {
     DatePicker,
@@ -1942,9 +1951,16 @@ export default {
               console.log(error);
               resolve();
             });
-        } else {
-          resolve();
         }
+         else {
+          resolve();
+          this.imgSrc = "";
+          this.showCrop = false;
+          this.showDraw = false;
+          this.imgPreview = false;
+          this.imageKey = "";
+          this.image = "";
+        } 
       });
     },
     async uploadImg(event) {

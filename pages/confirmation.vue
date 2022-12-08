@@ -389,7 +389,7 @@ export default {
       if (mobile || android) {
         this.$html2pdf(document.getElementById("printMe"), {
           margin: 1,
-          filename: "item-detprintMeails.pdf",
+          filename: "Item-Details.pdf",
           image: { type: "jpg", quality: 0.98 },
           html2canvas: {
             dpi: 300,

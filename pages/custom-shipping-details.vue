@@ -49,11 +49,12 @@
               v-slot="{ errors }"
               rules="required|numeric"
               class="block"
+              name="Custom Item's value"
             >
               <BaseInput
                 v-model="customItemsValue"
                 type="text"
-                label="Custom Items Value"
+                label="Custom Item's Value"
                 :class="errors.length > 0 && 'error'"
               />
               <p
