@@ -335,7 +335,7 @@ export default {
       lostItemAddress: "",
       lat: "",
       long: "",
-      isLoading: false,
+      isLoading: true,
       recentItemList: [],
     };
   },

@@ -674,9 +674,9 @@
                       </BaseButton>
 
                       <BaseButton
-                        :is-loading="isLoadingRemoveImage"
+                        :is-loading="isLoadingEditImage"
                         :icon="{
-                          name: 'trash-can',
+                          name: 'pencil',
                           color: 'white',
                           size: '1x',
                         }"
@@ -1307,6 +1307,7 @@ export default {
     foundItemId: "",
     isLoading: false,
     isLoadingItemDetails: true,
+    isLoadingEditImage: false,
     isVenuePhoneValid: true,
     isEmployeeMobileNoValid: true,
     isReceiverMobileNoValid: true,

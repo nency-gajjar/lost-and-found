@@ -221,6 +221,7 @@ export default {
           }
           else{
             if(this.mode === "edit"){
+              this.isLoading = true;
               let updateParams = {};
               if (this.key !== this.tempEditData.key) {
                 updateParams.catergory = this.key.toUpperCase();
@@ -249,12 +250,15 @@ export default {
                 .post("/updateSingleSurchargeDetails?id="+this.surchargeId, updateParams)
                 .then((response) => {
                   this.$toast.info("Surcharge edited successfully!");
+                  this.isLoading = false;
                 })
-              .catch((error) => {
-                this.$toast.error("Something went wrong! Please try again.");
-              })
+                .catch((error) => {
+                  this.$toast.error("Something went wrong! Please try again.");
+                  this.isLoading = false;
+                })
             }
             else{
+              this.isLoading = true;
               let storeParams = {
                 catergory: this.key.toUpperCase(),
                 service: this.service.toUpperCase(),
@@ -270,9 +274,11 @@ export default {
                 .post("/storeSurchargeDetails", storeParams)
                 .then((response) => {
                   this.$toast.info("Surcharge added successfully!");
+                  this.isLoading = false;
                 })
                 .catch((error) => {
                   this.$toast.error("Something went wrong! Please try again.");
+                  this.isLoading = false;
                 })
             }
           }
