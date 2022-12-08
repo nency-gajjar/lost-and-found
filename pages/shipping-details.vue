@@ -28,6 +28,7 @@
               overflow-hiddenrounded-bl-lg
               rounded-br-lg
             "
+            style="min-height: 300px;"
           >
             <table class="min-w-full">
               <thead class="sticky top-0 z-20">
@@ -48,7 +49,7 @@
                   <th class="py-3 px-6 text-left">Service</th>
                 </tr>
               </thead>
-              <tbody v-if="shippingDetails.length > 0" class="bg-white text-gray-800">
+              <tbody v-if="!isLoading && shippingDetails.length > 0" class="bg-white text-gray-800">
                 <tr
                   v-for="detail in shippingDetails"
                   :key="detail.id"
@@ -123,7 +124,7 @@
               </p>
             </div>
             <div class="py-3" v-if="isLoading">
-              <BaseLoader :needFullScreen="false" />
+              <BaseLoader :needFullScreen="false" style="min-height:200px;" />
             </div>
           </div>
         </div>
