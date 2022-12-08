@@ -20,13 +20,12 @@
             <div class="sm:p-6 p-4 space-y-4">
               <div class="form-title">
                 <div class="w-full">
-                  <div class="w-full flex sm:justify-start justify-center">
+                  <div class="w-full flex justify-center">
                     <img src="../assets/images/found-shelf-icon.svg" class="mb-3 logo-img" alt="">
                   </div>
                   <div class="flex justify-between items-center">
                     <div>
                       <h1
-                        v-if="senderFormTitle !== `SENDER'S DETAILS`"
                         class="
                           w-full
                           my-2
@@ -39,34 +38,6 @@
                       >
                         {{ senderFormTitle }}
                       </h1>
-                      <div v-else>
-                        <h1
-                          class="
-                            w-full
-                            my-2
-                            sm:text-xl
-                            text-lg
-                            font-bold
-                            leading-tight
-                            text-gray-700
-                          "
-                        >
-                          Found an Item that belongs to a guest?
-                        </h1>
-                        <h1
-                          class="
-                            w-full
-                            my-2
-                            sm:text-lg
-                            text-md
-                            font-bold
-                            leading-tight
-                            text-gray-600
-                          "
-                        >
-                          Let’s add few details and leave the rest to us!
-                        </h1>
-                      </div>
                       <div class="flex justify-start">
                         <span
                           class="
@@ -1251,8 +1222,8 @@ export default {
     showResetButton: false,
     itemDetails: {},
     showValidateAlert: false,
-    senderFormTitle: "SENDER'S DETAILS",
-    foundItemFormTitle: "FOUND ITEM'S DETAILS",
+    senderFormTitle: "Found an Item that belongs to a guest? Let’s add few details and leave the rest to us!",
+    foundItemFormTitle: "Found item details",
     venueEmail: "",
     venueSecondaryEmail: "",
     manualAddressSelected: false,
@@ -1399,8 +1370,8 @@ export default {
       if (this.$route.query.id) {
         this.isLoadingItemDetails = true;
         this.foundItemId = this.$route.query.id;
-        this.senderFormTitle = "EDIT DETAILS";
-        this.foundItemFormTitle = "EDIT FOUND ITEM'S DETAILS";
+        this.senderFormTitle = "Edit details";
+        this.foundItemFormTitle = "Edit found item's details";
         this.$axios
           .get("/getsinglelostitem?id=" + this.$route.query.id)
           .then((response) => {
@@ -1462,8 +1433,8 @@ export default {
           });
       } else if (this.$route.params?.itemDetails) {
         this.isLoadingItemDetails = false;
-        this.senderFormTitle = "EDIT DETAILS";
-        this.foundItemFormTitle = "EDIT FOUND ITEM'S DETAILS";
+        this.senderFormTitle = "Edit details";
+        this.foundItemFormTitle = "Edit found item's details";
         let data = this.$route.params.itemDetails;
         var index = this.venueOptions.indexOf(data.venu_type) !== -1;
         if (index) this.venueType = data.venu_type;
@@ -1521,8 +1492,8 @@ export default {
       } else if (Object.keys(this.itemDetails).length > 0) {
         this.showResetButton = true;
         this.isLoadingItemDetails = false;
-        this.senderFormTitle = "EDIT DETAILS";
-        this.foundItemFormTitle = "EDIT FOUND ITEM'S DETAILS";
+        this.senderFormTitle = "Edit details";
+        this.foundItemFormTitle = "Edit found item's details";
         let data = JSON.parse(
           JSON.stringify(this.$store.getters["item/itemDetails"])
         );
@@ -1581,8 +1552,8 @@ export default {
         this.isLoadingItemDetails = false;
       } else {
         this.isLoadingItemDetails = false;
-        this.senderFormTitle = "SENDER'S DETAILS";
-        this.foundItemFormTitle = "FOUND ITEM'S DETAILS";
+        this.senderFormTitle = "Found an Item that belongs to a guest? Let’s add few details and leave the rest to us!";
+        this.foundItemFormTitle = "Found item's details";
         this.venueType = "";
         this.venueName = "";
         this.manualVenue = "";

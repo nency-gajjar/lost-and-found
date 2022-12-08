@@ -5,7 +5,7 @@
         card
         w-12/12
         mx-4
-        md:mx-auto md:w-8/12
+        md:mx-auto 
         lg:w-6/12
         mx-auto
         rounded-lg
@@ -37,7 +37,7 @@
             </td>
           </tr>
           <tr v-if="itemDetails.link">
-            <td class="pt-3 pb-5 px-3 w-full-imp">
+            <td class="w-full-imp">
               <div class="w-full-imp qr-code-container flex-imp justify-center-imp">
                 <img :src="itemDetails.link" alt="" />
               </div>
@@ -47,7 +47,7 @@
                   color="gray"
                   style="max-width: 15px"
                 />
-                <p class="pl-2 font-medium">Scan this QR code to edit the details of this item.</p>
+                <p class="pl-2 font-medium text-gray-700">Scan this QR code to edit the details of this item.</p>
               </div>
             </td>
           </tr>
@@ -268,8 +268,8 @@
                 </template>
               </table>
             </td>
-            <div class="item-img-container">
-              <img v-if="itemDetails.image" :src="itemDetails.image" alt="" />
+            <div v-if="itemDetails.image" class="m-6 sm:w-64 sm:mt-20 md:w-80">
+              <img class="max-w-full h-auto" :src="itemDetails.image" alt="" />
             </div>
           </tr>
         </tbody>
@@ -279,17 +279,17 @@
           <BaseButton class="flex-auto" @click="printDetails">
             Print Details
           </BaseButton>
-          <BaseButton class="flex-auto" @click="routeToListing">
+          <BaseButton class="flex-auto"  @click="routeToListing">
             Back To Listing
           </BaseButton>
         </div>
         <div class="flex flex-wrap gap-2 m-5">
-          <BaseButton class="flex-auto" @click="editListing">
+          <BaseButton class="flex-auto" varient="primaryAlt"  @click="editListing">
             Edit the listing
           </BaseButton>
         </div>
         <div class="flex flex-wrap gap-2 m-5">
-          <BaseButton class="flex-auto" @click="addFoundItem">
+          <BaseButton class="flex-auto" varient="secondary"  @click="addFoundItem">
             Add another Found Item
           </BaseButton>
         </div>
@@ -307,7 +307,6 @@
 </template>
 
 <script>
-import { mapGetters } from "vuex";
 export default {
   data() {
     return {
@@ -539,9 +538,6 @@ td {
   td,
   tr {
     display: block;
-  }
-  tr {
-    margin-top: 25px;
   }
 }
 

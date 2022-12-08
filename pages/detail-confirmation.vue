@@ -31,12 +31,7 @@
           </h1>
         </div>
         <div v-if="showInformativeTxt" class="p-6 flex items-center">
-          <BaseIcon
-            icon="circle-info"
-            color="gray"
-            style="max-width: 15px"
-          />
-          <p class="pl-2 font-medium">Let’s make sure you got everything right before you Submit.</p>
+          <p class="font-medium text-gray-700 text-lg">Let’s make sure you got everything right before you Submit.</p>
         </div>
         <div class="sections py-4 px-6">
           <div class="form-title">
