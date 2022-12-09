@@ -20,17 +20,17 @@ module.exports = {
         emerald: colors.emerald,
         gray: colors.gray,
         primary: {
-          200: '#970584', // we use this on hover secondary button
-          100: '#970584ba',
-          80: '#97058482',
-          60: '#97058429',
+          200: '#2e9705', // we use this on hover secondary button
+          100: '#2e9705eb',
+          80: '#2e9705db2',
+          60: '#2e9705c9',
         },
         accent: {
-          200: '#2e9705', // we use this on hover primary button
-          100: '#2e9705eb',
-          80: '#2e9705db',
-          60: '#2e9705c9',
-          20: '#2e9705ad',
+          200: '#970584', // we use this on hover primary button
+          100: '#970584ba',
+          80: '#97058482',
+          60: '#97058482',
+          20: '#97058429',
         },
         orange: {
           200: '#970584ba'

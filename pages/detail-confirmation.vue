@@ -55,12 +55,12 @@
               "
             ></span>
           </div>
-          <div class="flex items-center mt-3 flex-wrap">
+          <div class="flex sm:items-center items-start mt-3 flex-wrap md:flex-nowrap sm:flex-row flex-col">
             <div
               class="
                 text-left text-gray-600
                 font-medium
-                w-full
+                w-250-px
                 lg:w-4/12
                 md:w-5/12
                 sm:w-6/12
@@ -72,12 +72,12 @@
               {{ itemDetails.venu_type }}
             </div>
           </div>
-          <div class="flex items-center mt-3 flex-wrap">
+          <div class="flex sm:items-center items-start mt-3 flex-wrap md:flex-nowrap sm:flex-row flex-col">
             <div
               class="
                 text-left text-gray-600
                 font-medium
-                w-full
+                w-250-px
                 lg:w-4/12
                 md:w-5/12
                 sm:w-6/12
@@ -89,12 +89,12 @@
               {{ itemDetails.datse }}
             </div>
           </div>
-          <div v-show="itemDetails.venue_name" class="flex items-center mt-3 flex-wrap">
+          <div v-show="itemDetails.venue_name" class="flex sm:items-center items-start mt-3 flex-wrap md:flex-nowrap sm:flex-row flex-col">
             <div
               class="
                 text-left text-gray-600
                 font-medium
-                w-full
+                w-250-px
                 lg:w-4/12
                 md:w-5/12
                 sm:w-6/12
@@ -106,12 +106,12 @@
               {{ itemDetails.venue_name }}
             </div>
           </div>
-          <div class="flex items-center mt-3 flex-wrap">
+          <div class="flex sm:items-center items-start mt-3 flex-wrap md:flex-nowrap sm:flex-row flex-col">
             <div
               class="
                 text-left text-gray-600
                 font-medium
-                w-full
+                w-250-px
                 lg:w-4/12
                 md:w-5/12
                 sm:w-6/12
@@ -125,13 +125,13 @@
           </div>
           <div
             v-if="itemDetails.secondary_email"
-            class="flex items-center mt-3 flex-wrap"
+            class="flex sm:items-center items-start mt-3 flex-wrap md:flex-nowrap sm:flex-row flex-col"
           >
             <div
               class="
                 text-left text-gray-600
                 font-medium
-                w-full
+                w-250-px
                 lg:w-4/12
                 md:w-5/12
                 sm:w-6/12
@@ -143,12 +143,12 @@
               {{ itemDetails.secondary_email }}
             </div>
           </div>
-          <div class="flex items-center mt-3 flex-wrap">
+          <div class="flex sm:items-center items-start mt-3 flex-wrap md:flex-nowrap sm:flex-row flex-col">
             <div
               class="
                 text-left text-gray-600
                 font-medium
-                w-full
+                w-250-px
                 lg:w-4/12
                 md:w-5/12
                 sm:w-6/12
@@ -160,12 +160,12 @@
               {{ itemDetails.venue_phone_no }}
             </div>
           </div>
-          <div class="flex items-center mt-3 flex-wrap">
+          <div class="flex sm:items-center items-start mt-3 flex-wrap md:flex-nowrap sm:flex-row flex-col">
             <div
               class="
                 text-left text-gray-600
                 font-medium
-                w-full
+                w-250-px
                 lg:w-4/12
                 md:w-5/12
                 sm:w-6/12
@@ -229,12 +229,12 @@
             ></span>
           </div>
 
-          <div class="flex items-center mt-3 flex-wrap">
+          <div class="flex sm:items-center items-start mt-3 flex-wrap md:flex-nowrap sm:flex-row flex-col">
             <div
               class="
                 text-left text-gray-600
                 font-medium
-                w-full
+                w-250-px
                 lg:w-4/12
                 md:w-5/12
                 sm:w-6/12
@@ -246,12 +246,12 @@
               {{ filterAddressLine(itemDetails) }}
             </div>
           </div>
-          <div class="flex items-center mt-3 flex-wrap">
+          <div class="flex sm:items-center items-start mt-3 flex-wrap md:flex-nowrap sm:flex-row flex-col">
             <div
               class="
                 text-left text-gray-600
                 font-medium
-                w-full
+                w-250-px
                 lg:w-4/12
                 md:w-5/12
                 sm:w-6/12
@@ -263,12 +263,12 @@
               {{ itemDetails.city }}
             </div>
           </div>
-          <div class="flex items-center mt-3 flex-wrap">
+          <div class="flex sm:items-center items-start mt-3 flex-wrap md:flex-nowrap sm:flex-row flex-col">
             <div
               class="
                 text-left text-gray-600
                 font-medium
-                w-full
+                w-250-px
                 lg:w-4/12
                 md:w-5/12
                 sm:w-6/12
@@ -280,12 +280,12 @@
               {{ itemDetails.states }}
             </div>
           </div>
-          <div class="flex items-center mt-3 flex-wrap">
+          <div class="flex sm:items-center items-start mt-3 flex-wrap md:flex-nowrap sm:flex-row flex-col">
             <div
               class="
                 text-left text-gray-600
                 font-medium
-                w-full
+                w-250-px
                 lg:w-4/12
                 md:w-5/12
                 sm:w-6/12
@@ -297,12 +297,12 @@
               {{ itemDetails.country }}
             </div>
           </div>
-          <div class="flex items-center mt-3 flex-wrap">
+          <div class="flex sm:items-center items-start mt-3 flex-wrap md:flex-nowrap sm:flex-row flex-col">
             <div
               class="
                 text-left text-gray-600
                 font-medium
-                w-full
+                w-250-px
                 lg:w-4/12
                 md:w-5/12
                 sm:w-6/12
@@ -367,12 +367,12 @@
 
           <div class="flex foundItemContainer">
             <div class="flex flex-col grow">
-              <div class="flex items-center mt-3 flex-wrap">
+              <div class="flex sm:items-center items-start mt-3 flex-wrap md:flex-nowrap sm:flex-row flex-col">
                 <div
                   class="
                     text-left text-gray-600
                     font-medium
-                    w-full
+                    w-250-px
                     lg:w-4/12
                     md:w-5/12
                     sm:w-6/12
@@ -381,17 +381,17 @@
                   Item Description
                 </div>
                 <div
-                  class="text-gray-600 text-left md:w-7/12 sm:w-6/12 sm:pl-3"
+                  class="text-gray-600 text-left md:w-7/12 sm:w-6/12"
                 >
                   {{ itemDetails.item_description }}
                 </div>
               </div>
-              <div class="flex items-center mt-3 flex-wrap">
+              <div class="flex sm:items-center items-start mt-3 flex-wrap md:flex-nowrap sm:flex-row flex-col">
                 <div
                   class="
                     text-left text-gray-600
                     font-medium
-                    w-full
+                    w-250-px
                     lg:w-4/12
                     md:w-5/12
                     sm:w-6/12
@@ -400,17 +400,17 @@
                   Package Type
                 </div>
                 <div
-                  class="text-gray-600 text-left md:w-7/12 sm:w-6/12 sm:pl-3"
+                  class="text-gray-600 text-left md:w-7/12 sm:w-6/12"
                 >
                   {{ itemDetails.package_type }}
                 </div>
               </div>
-              <div class="flex items-center mt-3 flex-wrap">
+              <div class="flex sm:items-center items-start mt-3 flex-wrap md:flex-nowrap sm:flex-row flex-col">
                 <div
                   class="
                     text-left text-gray-600
                     font-medium
-                    w-full
+                    w-250-px
                     lg:w-4/12
                     md:w-5/12
                     sm:w-6/12
@@ -419,17 +419,17 @@
                   Weight
                 </div>
                 <div
-                  class="text-gray-600 text-left md:w-7/12 sm:w-6/12 sm:pl-3"
+                  class="text-gray-600 text-left md:w-7/12 sm:w-6/12"
                 >
                   {{ itemDetails.weight_pounds }} lbs
                 </div>
               </div>
-              <div class="flex items-center mt-3 flex-wrap">
+              <div class="flex sm:items-center items-start mt-3 flex-wrap md:flex-nowrap sm:flex-row flex-col">
                 <div
                   class="
                     text-left text-gray-600
                     font-medium
-                    w-full
+                    w-250-px
                     lg:w-4/12
                     md:w-5/12
                     sm:w-6/12
@@ -438,19 +438,19 @@
                   Dimension
                 </div>
                 <div
-                  class="text-gray-600 text-left md:w-7/12 sm:w-6/12 sm:pl-3"
+                  class="text-gray-600 text-left md:w-7/12 sm:w-6/12"
                 >
                   {{ itemDetails.item_length }}(l) x
                   {{ itemDetails.item_width }}(w) x
                   {{ itemDetails.item_height }}(h) inches
                 </div>
               </div>
-              <div class="flex items-center mt-3 flex-wrap">
+              <div class="flex sm:items-center items-start mt-3 flex-wrap md:flex-nowrap sm:flex-row flex-col">
                 <div
                   class="
                     text-left text-gray-600
                     font-medium
-                    w-full
+                    w-250-px
                     lg:w-4/12
                     md:w-5/12
                     sm:w-6/12
@@ -459,13 +459,13 @@
                   Item Status
                 </div>
                 <div
-                  class="text-gray-600 text-left md:w-7/12 sm:w-6/12 sm:pl-3"
+                  class="text-gray-600 text-left md:w-7/12 sm:w-6/12"
                 >
                   {{ itemDetails.item_status === 0 ? "Claimed" : "Unclaimed" }}
                 </div>
               </div>
               <template v-if="itemDetails.item_status === 0">
-                <div class="flex items-center mt-3 flex-wrap">
+                <div class="flex sm:items-center items-start mt-3 flex-wrap md:flex-nowrap sm:flex-row flex-col">
                   <div
                     class="
                       text-left text-gray-600
@@ -479,13 +479,13 @@
                     Receiver's Name
                   </div>
                   <div
-                    class="text-gray-600 text-left md:w-7/12 sm:w-6/12 sm:pl-3"
+                    class="text-gray-600 text-left md:w-7/12 sm:w-6/12"
                   >
                     {{ itemDetails.receiver_name }}
                   </div>
                 </div>
 
-                <div class="flex items-center mt-3 flex-wrap">
+                <div class="flex sm:items-center items-start mt-3 flex-wrap md:flex-nowrap sm:flex-row flex-col">
                   <div
                     class="
                       text-left text-gray-600
@@ -499,13 +499,13 @@
                     Receiver's Email
                   </div>
                   <div
-                    class="text-gray-600 text-left md:w-7/12 sm:w-6/12 sm:pl-3"
+                    class="text-gray-600 text-left md:w-7/12 sm:w-6/12"
                   >
                     {{ itemDetails.receiver_email }}
                   </div>
                 </div>
 
-                <div class="flex items-center mt-3 flex-wrap">
+                <div class="flex sm:items-center items-start mt-3 flex-wrap md:flex-nowrap sm:flex-row flex-col">
                   <div
                     class="
                       text-left text-gray-600
@@ -519,16 +519,17 @@
                     Receiver's Mobile No.
                   </div>
                   <div
-                    class="text-gray-600 text-left md:w-7/12 sm:w-6/12 sm:pl-3"
+                    class="text-gray-600 text-left md:w-7/12 sm:w-6/12"
                   >
                     {{ itemDetails.receiver_mobile_no }}
                   </div>
                 </div>
               </template>
             </div>
-
-            <div v-if="itemDetails.image" class="mt-4 sm:mt-0 sm:w-60 w-full">
-              <img class="w-full" :src="itemDetails.image" alt="" />
+            <div class="flex mt-16-px justify-center">
+              <div v-if="itemDetails.image" class="mt-4 sm:mt-0 h-40 w-40 w-full">
+                <img class="w-full h-full object-cover" :src="itemDetails.image" alt="" />
+              </div>
             </div>
           </div>
         </div>
@@ -727,6 +728,14 @@ export default {
 <style lang="scss" scoped>
 .wrapper {
   @apply min-h-screen flex justify-center py-10 mx-auto;
+}
+
+.mt-16-px {
+  margin-top: 16px;
+}
+
+.w-250-px {
+  width: 200px;
 }
 
 @media only screen and (max-width: 650px) {

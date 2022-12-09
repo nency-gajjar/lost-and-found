@@ -268,8 +268,10 @@
                 </template>
               </table>
             </td>
-            <div v-if="itemDetails.image" class="m-6 sm:w-64 sm:mt-20 md:w-80">
-              <img class="max-w-full h-auto" :src="itemDetails.image" alt="" />
+            <div class="flex mt-70-px justify-center pr-6">
+              <div v-if="itemDetails.image" class="mt-4 sm:mt-0 h-40 w-40 w-full">
+                <img class="w-full h-full object-cover" :src="itemDetails.image" alt="" />
+              </div>
             </div>
           </tr>
         </tbody>
@@ -424,6 +426,9 @@ tr td:first-child {
 .text-center {
   text-align: center;
 }
+.mt-70-px {
+  margin-top: 70px;
+}
 th,
 td {
   overflow: hidden;
@@ -438,6 +443,9 @@ td {
 }
 .pt-3 {
   padding-top: 0.75rem;
+}
+.pr-6 {
+  padding-right: 1.5rem;
 }
 .px-3 {
   padding-left: 0.75rem;
@@ -473,7 +481,7 @@ td {
   color: rgb(38 38 38 / var(--tw-text-opacity));
 }
 .text-accent-100 {
-  color: #2e9705eb;
+  color: #970584ba;
 }
 .border-b {
   border-bottom-width: 1px;
@@ -530,6 +538,13 @@ td {
     width: 10rem;
   }
 }
+
+@media (max-width: 640px) {
+  .mt-70-px {
+    margin-top: 0px;
+  }
+}
+
 @media all and (max-width: 479px) {
   table,
   thead,
