@@ -212,7 +212,7 @@
                 />
                 &nbsp;&nbsp;
                 <p style="color: #939393; font-size: 14px">
-                  Your mobile is only for notification purpose that is related to this item. We do share your mobile to item owner, or anyone else.
+                  Your mobile number is only for notification purpose that is related to this item. We do not share your mobile number to item owner, or anyone else.
                 </p>
               </div>
               <div

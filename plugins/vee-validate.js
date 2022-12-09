@@ -47,7 +47,7 @@ extend('insurance', {
   // eslint-disable-next-line no-template-curly-in-string
   message: '{_field_} cannot exceed ${max}.',
 })
-extend('email', email)
+extend('email', {...email, message: "Please enter a valid Email"})
 extend('min', min)
 extend('password', {
   params: ['target'],
