@@ -78,7 +78,7 @@ export default {
 
 <style lang="scss" scoped>
 .base {
-  @apply font-medium tracking-widest text-sm rounded-md leading-5 relative uppercase py-2.5 px-12 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-primary-60 transition-all  disabled:cursor-not-allowed;
+  @apply font-medium tracking-widest text-sm rounded-md leading-5 relative uppercase py-2.5 px-12 focus:outline-none focus:ring-2 focus:ring-offset-2 transition-all  disabled:cursor-not-allowed;
 }
 .primary {
   @apply bg-accent-100 text-white focus:ring-accent-100  hover:bg-accent-200;
