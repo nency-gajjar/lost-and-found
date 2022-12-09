@@ -163,11 +163,11 @@ export default {
     @apply md:px-4 md:py-2 text-gray-500 rounded-lg font-medium;
 
     &.nuxt-link-exact-active {
-      @apply bg-orange-100 text-orange-700;
+      @apply bg-primary-60 text-primary-200;
     }
   }
   .menu .menu-left div a:hover {
-    @apply text-orange-700;
+    @apply text-primary-200;
   }
 }
 

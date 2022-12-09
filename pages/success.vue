@@ -203,16 +203,16 @@ export default {
       <html><head>
       <style>
           .border-dashed {
-            border-style: dashed;
+            border-top-style: dashed;
           }
           .w-full {
             width: 100% !important;
           }
           .border {
-            border-width: 1px;
+            border-width: 2px;
           }
           .border-accent {
-            border-color: #000000;
+            border-top-color: #000000;
           }
           .flex {
             display: flex;
@@ -229,7 +229,7 @@ export default {
             margin-top: 10px;
           }
           .text-accent-100 {
-            color: rgb(240 107 4);
+            color: #2e9705eb;
           }
           .text-gray-600 {
             color: rgb(82 82 82);

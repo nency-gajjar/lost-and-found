@@ -473,7 +473,7 @@ td {
   color: rgb(38 38 38 / var(--tw-text-opacity));
 }
 .text-accent-100 {
-  color: rgb(240 107 4);
+  color: #2e9705eb;
 }
 .border-b {
   border-bottom-width: 1px;
