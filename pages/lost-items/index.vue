@@ -89,6 +89,7 @@
                 <date-picker
                   placeholder="Start date"
                   v-model="startDate"
+                  :disabled-date="disableStartDate"
                   formate="YYYY-MM-DD"
                 ></date-picker>
               </client-only>
@@ -478,6 +479,9 @@ export default {
     },
   },
   methods: {
+    disableStartDate(date){
+      return date > new Date();
+    },
     addNewItem() {
       this.$router.push({ name: "found" });
     },

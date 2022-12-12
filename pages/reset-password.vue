@@ -128,7 +128,10 @@
 
 <script>
 import { ValidationObserver, ValidationProvider } from "vee-validate";
+import eventListners from "../mixins/eventListners.js";
+
 export default {
+  mixins: [eventListners],
   middleware({ $auth, redirect }) {
     if ($auth.loggedIn) {
       return redirect("/dashboard");
@@ -151,12 +154,7 @@ export default {
     };
   },
   mounted() {
-    window.addEventListener("keydown", () => {
-      this.showValidateAlert = false;
-    });
-    window.addEventListener("click", () => {
-      this.showValidateAlert = false;
-    });
+    this.callEventListners();
     this.email = this.$route.params.email;
     if (!this.email) {
       this.showEmail = true;
@@ -207,10 +205,6 @@ export default {
           });
       }
     },
-  },
-  beforeDestroy() {
-    window.removeEventListener("click", () => {});
-    window.removeEventListener("keydown", () => {});
   },
 };
 </script>

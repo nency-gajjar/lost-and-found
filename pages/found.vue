@@ -1222,9 +1222,10 @@ import moment from "moment";
 import DetectBrowser from "~/mixins/detectBrowser";
 import ImageEditor from "@/mixins/imageEditor";
 import formatMobileNumber from "../mixins/formatMobileNumber.js";
+import eventListners from "../mixins/eventListners.js";
 
 export default {
-  mixins: [DetectBrowser, ImageEditor, formatMobileNumber],
+  mixins: [DetectBrowser, ImageEditor, formatMobileNumber, eventListners],
   data: () => ({
     venueName: "",
     showResetButton: false,
@@ -1270,19 +1271,6 @@ export default {
     isImageValid: true,
     imageValidationMessage: "",
     isLoadingRemoveImage: false,
-    bindPhoneInputProps: {
-      mode: "international",
-      autoDefaultCountry: true,
-      validCharactersOnly: true,
-      autoFormat: true,
-      preferredCountries: ["US", "CN"],
-      placeholder: "Enter a phone number",
-      name: "telephone",
-      maxLen: 15,
-      inputOptions: {
-        showDialCode: false,
-      },
-    },
     foundItemId: "",
     isLoading: false,
     isLoadingItemDetails: true,
@@ -1370,12 +1358,7 @@ export default {
         JSON.stringify(this.$store.getters["item/itemDetails"])
       );
       await this.getItemDescriptionOptions();
-      window.addEventListener("keydown", () => {
-        this.showValidateAlert = false;
-      });
-      window.addEventListener("click", () => {
-        this.showValidateAlert = false;
-      });
+      this.callEventListners();
       if (this.$route.query.id) {
         this.isLoadingItemDetails = true;
         this.foundItemId = this.$route.query.id;
@@ -2078,10 +2061,6 @@ export default {
   },
   mounted() {
     this.getItemsData();
-  },
-  beforeDestroy() {
-    window.removeEventListener("click", () => {});
-    window.removeEventListener("keydown", () => {});
   },
 };
 </script>

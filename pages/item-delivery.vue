@@ -766,9 +766,10 @@ import DatePicker from "vue2-datepicker";
 import "vue2-datepicker/index.css";
 import formatMobileNumber from "../mixins/formatMobileNumber.js";
 import formatMobileNumber2 from "../mixins/formatMobileNumber-2.js";
+import eventListners from "../mixins/eventListners.js";
 
 export default {
-  mixins: [formatMobileNumber, formatMobileNumber2],
+  mixins: [formatMobileNumber, formatMobileNumber2, eventListners],
   data: () => ({
     showDialog: false,
     deliveryType: "0",
@@ -790,19 +791,6 @@ export default {
       state: "",
       country: "",
       zipcode: "",
-    },
-    bindPhoneInputProps: {
-      mode: "international",
-      autoDefaultCountry: true,
-      validCharactersOnly: true,
-      autoFormat: true,
-      preferredCountries: ["US", "CN"],
-      placeholder: "Enter a phone number",
-      name: "telephone",
-      maxLen: 15,
-      inputOptions: {
-        showDialCode: false,
-      },
     },
     isUserPhoneFormatValid: true,
     isUserPhoneValid: true,
@@ -876,12 +864,7 @@ export default {
         });
       });
     }
-    window.addEventListener("keydown", () => {
-      this.showValidateAlert = false;
-    });
-    window.addEventListener("click", () => {
-      this.showValidateAlert = false;
-    });
+    this.callEventListners();
     this.$store.commit("shipment/SET_CUSTOM_INFO", {});
   },
   computed: {
@@ -1114,10 +1097,6 @@ export default {
         this.$router.push({ path: "/lost-items" });
       });
     },
-  },
-  beforeDestroy() {
-    window.removeEventListener("click", () => {});
-    window.removeEventListener("keydown", () => {});
   },
 };
 </script>

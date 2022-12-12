@@ -7,7 +7,7 @@
     :hideCancel="true"
   >
     <div
-      class="bg-primary-60 space-y-4 !shadow-primary flex flex-col text-left"
+      class="space-y-4 !shadow-primary flex flex-col text-left"
     >
       <ValidationObserver v-slot="{ validate }" ref="observer">
         <form

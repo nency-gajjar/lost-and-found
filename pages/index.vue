@@ -161,6 +161,7 @@
                       placeholder="Approx. Start date"
                       v-model="startDate"
                       formate="YYYY-MM-DD"
+                      :disabled-date="disableStartDate"
                     >
                     </date-picker>
                   </client-only>
@@ -217,36 +218,30 @@
           <VueSlickCarousel class="w-5/6" v-bind="sliderSetting">
             <div v-for="item in recentItemList" :key="item.id">
               <div class="sliderCard cursor-pointer shadow-md border">
-                <img
-                  v-if="item.image"
-                  class="
-                    object-cover
-                    w-full
-                    rounded-t-lg
-                    md:h-28 md:w-28
-                    sm:h-16 sm:w-16
-                    w-14
-                    h-14
-                    md:rounded-none md:rounded-l-lg
-                  "
-                  :src="item.image"
-                  alt=""
-                />
-                <img
-                  v-else
-                  class="
-                    object-cover
-                    w-full
-                    rounded-t-lg
-                    md:h-28 md:w-28
-                    sm:h-16 sm:w-16
-                    w-14
-                    h-14
-                    md:rounded-none md:rounded-l-lg
-                  "
-                  src="@/assets/images/no-image4.png"
-                  alt=""
-                />
+                <div class="flex items-center md:h-28 md:w-28 sm:h-16 sm:w-16 w-14 h-14">
+                  <img
+                    v-if="item.image"
+                    class="
+                      object-cover
+                      w-full
+                      rounded-t-lg
+                      md:rounded-none md:rounded-l-lg
+                    "
+                    :src="item.image"
+                    alt=""
+                  />
+                  <img
+                    v-else
+                    class="
+                      object-cover
+                      w-full
+                      rounded-t-lg
+                      md:rounded-none md:rounded-l-lg
+                    "
+                    src="@/assets/images/no-image4.png"
+                    alt=""
+                  />
+                </div>
                 <h5 class="m-4 text-lg font-semibold">
                   {{ item.item_description }}
                 </h5>
@@ -312,14 +307,14 @@ export default {
         pauseOnHover: true,
         responsive: [
           {
-            breakpoint: 600,
+            breakpoint: 883,
             settings: {
               slidesToShow: 2,
               slidesToScroll: 2,
             },
           },
           {
-            breakpoint: 480,
+            breakpoint: 589,
             settings: {
               slidesToShow: 1,
               slidesToScroll: 1,
@@ -358,6 +353,9 @@ export default {
     },
   },
   methods: {
+    disableStartDate(date){
+      return date > new Date();
+    },
     getItemDescriptionOptions() {
       this.$axios
         .get("/viewallItemdescriptionDetails")
@@ -480,11 +478,12 @@ export default {
 @import "./assets/styles/address-autocomplete.scss";
 .slick-prev,
 .slick-next {
+  padding-top: 3px;
   height: 35px !important;
   width: 35px !important;
   background: none !important;
   border-radius: 60px;
-  background-color: #f06b04 !important;
+  background-color: #970584ba !important;
 }
 .slick-prev:before,
 .slick-next:before {

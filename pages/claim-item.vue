@@ -328,9 +328,10 @@ import DatePicker from "vue2-datepicker";
 import "vue2-datepicker/index.css";
 import moment from "moment";
 import formatMobileNumber from "../mixins/formatMobileNumber.js";
+import eventListners from "../mixins/eventListners.js";
 
 export default {
-  mixins: [formatMobileNumber],
+  mixins: [formatMobileNumber, eventListners],
   components: {
     ValidationObserver,
     ValidationProvider,
@@ -342,19 +343,6 @@ export default {
       claimPersonName: "",
       claimPersonEmail: "",
       claimPersonPhoneNo: "",
-      bindPhoneInputProps: {
-        mode: "international",
-        autoDefaultCountry: true,
-        validCharactersOnly: true,
-        autoFormat: true,
-        preferredCountries: ["US", "CN"],
-        placeholder: "Enter a phone number",
-        name: "telephone",
-        maxLen: 15,
-        inputOptions: {
-          showDialCode: false,
-        },
-      },
       isPhoneNoValid: true,
       isPhoneNoFormateValid: true,
       phoneNoValidateMessage: "",
@@ -378,12 +366,7 @@ export default {
     };
   },
   mounted() {
-    window.addEventListener("keydown", () => {
-      this.showValidateAlert = false;
-    });
-    window.addEventListener("click", () => {
-      this.showValidateAlert = false;
-    });
+    this.callEventListners();
     if (this.$route.params.item) {
       this.itemId = this.$route.params.item.id;
       this.venueEmail = this.$route.params.item.venue_email;
@@ -510,10 +493,6 @@ export default {
         this.$router.push({ path: "/lost-items" });
       });
     },
-  },
-  beforeDestroy() {
-    window.removeEventListener("click", () => {});
-    window.removeEventListener("keydown", () => {});
   },
 };
 </script>

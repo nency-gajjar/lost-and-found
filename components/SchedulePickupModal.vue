@@ -7,7 +7,7 @@
     :hideCancel="true"
   >
     <div
-      class="bg-primary-60 space-y-4 !shadow-primary flex flex-col text-left"
+      class="space-y-4 !shadow-primary flex flex-col text-left"
     >
       <div class="text-sm text-gray-800">
         <p class="font-medium text-base">Pickup address:</p>

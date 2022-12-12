@@ -79,7 +79,10 @@
 
 <script>
 import { ValidationObserver, ValidationProvider } from "vee-validate";
+import eventListners from "../mixins/eventListners.js";
+
 export default {
+  mixins: [eventListners],
   middleware({ $auth, redirect }) {
     if ($auth.loggedIn) {
       return redirect("/dashboard");
@@ -98,12 +101,7 @@ export default {
     };
   },
   mounted() {
-    window.addEventListener("keydown", () => {
-      this.showValidateAlert = false;
-    });
-    window.addEventListener("click", () => {
-      this.showValidateAlert = false;
-    });
+    this.callEventListners();
   },
   methods: {
     async onSubmit() {

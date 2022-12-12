@@ -79,7 +79,7 @@
         Thank you for choosing Lost and Found! Your next step is to print the
         label, attach it to your package and wait for pickup.
       </p>
-      <BaseButton @click="printLabel"> Print Label </BaseButton>
+      <BaseButton v-if="!itemDetails.scheduled_pickup" @click="printLabel"> Print Label </BaseButton>
     </div>
     <p class="text-gray-800">
       Optionally, you can schedule a pickup for your package:

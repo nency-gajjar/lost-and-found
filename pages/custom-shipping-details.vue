@@ -187,7 +187,10 @@
 </template>
 
 <script>
+import eventListners from "../mixins/eventListners.js";
+
 export default {
+  mixins: [eventListners],
   data() {
     return {
       eel_pfc: "",
@@ -236,16 +239,7 @@ export default {
       }
     }
     
-    window.addEventListener("keydown", () => {
-      this.showValidateAlert = false;
-    });
-    window.addEventListener("click", () => {
-      this.showValidateAlert = false;
-    });
-  },
-  beforeDestroy() {
-    window.removeEventListener("click", () => {});
-    window.removeEventListener("keydown", () => {});
+    this.callEventListners();
   },
   watch: {
     customItemsValue(value){
