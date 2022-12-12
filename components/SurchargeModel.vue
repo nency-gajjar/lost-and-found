@@ -155,8 +155,10 @@
 import DatePicker from "vue2-datepicker";
 import "vue2-datepicker/index.css";
 import moment from "moment";
+import scrollToError from "../mixins/scrollToError.js";
 
 export default {
+  mixins: [scrollToError],
   props: {
     showModal: { type: Boolean, default: false },
     mode: { type: String, default: "create" },
@@ -222,6 +224,7 @@ export default {
         if (isValid) {
           if(this.effectiveBefore < this.effectiveAfter){
             this.isDateRangeValid = false;
+            this.scrollToError();
           }
           else{
             if(this.mode === "edit"){
@@ -287,8 +290,12 @@ export default {
             }
           }
         }
+        else{
+          this.scrollToError();
+        }
       } else {
         this.isAmountValid = false;
+        this.scrollToError();
       }
     },
   },

@@ -190,9 +190,10 @@
 
 <script>
 import eventListners from "../mixins/eventListners.js";
+import scrollToError from "../mixins/scrollToError.js";
 
 export default {
-  mixins: [eventListners],
+  mixins: [eventListners, scrollToError],
   data() {
     return {
       eel_pfc: "",
@@ -287,6 +288,7 @@ export default {
         });
       }
       else{
+        this.scrollToError();
         this.showValidateAlert = true;
       }
     }

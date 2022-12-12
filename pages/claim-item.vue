@@ -341,9 +341,10 @@ import "vue2-datepicker/index.css";
 import moment from "moment";
 import formatMobileNumber from "../mixins/formatMobileNumber.js";
 import eventListners from "../mixins/eventListners.js";
+import scrollToError from "../mixins/scrollToError.js";
 
 export default {
-  mixins: [formatMobileNumber, eventListners],
+  mixins: [formatMobileNumber, eventListners, scrollToError],
   components: {
     ValidationObserver,
     ValidationProvider,
@@ -467,6 +468,7 @@ export default {
       if (!isValid || !this.isPhoneNoValid) {
         this.showValidateAlert = true;
         this.isLoading = false;
+        this.scrollToError();
       } else {
         this.showValidateAlert = false;
 

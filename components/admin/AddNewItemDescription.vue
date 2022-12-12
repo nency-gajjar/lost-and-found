@@ -286,7 +286,9 @@ import {
 } from "static/defaults.js";
 import { ValidationObserver, ValidationProvider } from "vee-validate";
 import { omit } from "lodash";
+import scrollToError from "../../mixins/scrollToError.js";
 export default {
+  mixins: [scrollToError],
   props: {
     showModal: { type: Boolean, default: false },
   },
@@ -450,6 +452,9 @@ export default {
           .catch((err) => {
             console.log(err);
           });
+      }
+      else{
+        this.scrollToError();
       }
     },
   },

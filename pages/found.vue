@@ -1253,9 +1253,10 @@ import DetectBrowser from "~/mixins/detectBrowser";
 import ImageEditor from "@/mixins/imageEditor";
 import formatMobileNumber from "../mixins/formatMobileNumber.js";
 import eventListners from "../mixins/eventListners.js";
+import scrollToError from "../mixins/scrollToError.js";
 
 export default {
-  mixins: [DetectBrowser, ImageEditor, formatMobileNumber, eventListners],
+  mixins: [DetectBrowser, ImageEditor, formatMobileNumber, eventListners, scrollToError],
   data: () => ({
     venueName: "",
     showResetButton: false,
@@ -1877,6 +1878,7 @@ export default {
         !this.isEmployeeMobileNoValid ||
         !this.isReceiverMobileNoValid
       ) {
+        this.scrollToError();
         this.showValidateAlert = true;
         this.isLoading = false;
       } else {

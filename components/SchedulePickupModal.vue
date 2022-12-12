@@ -117,8 +117,10 @@
 import DatePicker from "vue2-datepicker";
 import "vue2-datepicker/index.css";
 import moment from "moment";
+import scrollToError from "../mixins/scrollToError.js";
 
 export default {
+  mixins: [scrollToError],
   props: {
     showModal: { type: Boolean, default: false },
   },
@@ -211,6 +213,9 @@ export default {
           console.log(error);
           this.isLoading = false;
         }
+      }
+      else {
+        this.scrollToError();
       }
     },
   },
