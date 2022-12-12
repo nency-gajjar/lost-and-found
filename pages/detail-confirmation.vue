@@ -182,7 +182,6 @@
         <div data-v-272705a6="" class="flex items-center my-2">
           <div
             class="
-              h-6
               w-6
               box-content
               border-r border-[#E1E3E6]
@@ -195,7 +194,6 @@
           <hr class="flex-grow border-dashed border border-[#E1E3E6]" />
           <div
             class="
-              h-6
               w-6
               box-border
               border-l border-[#E1E3E6]
@@ -319,7 +317,6 @@
         <div data-v-272705a6="" class="flex items-center my-2">
           <div
             class="
-              h-6
               w-6
               box-content
               border-r border-[#E1E3E6]
@@ -332,7 +329,6 @@
           <hr class="flex-grow border-dashed border border-[#E1E3E6]" />
           <div
             class="
-              h-6
               w-6
               box-border
               border-l border-[#E1E3E6]
