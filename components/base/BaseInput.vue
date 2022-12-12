@@ -1,14 +1,10 @@
 <template>
-  <div class="block relative box-content h-12">
+  <div class="mb-8 block relative box-content h-12 bg-transparent">
     <label class="block relative box-content h-12 cursor-text">
       <div
-        :class="[
-          'absolute px-4 transition-all text-gray-500 z-10',
-          (active || type == 'date') && 'my-2 text-[0.725rem] leading-3',
-          !active && type != 'date' && 'my-3.5 text-sm',
-        ]"
+        class="transition-all text-gray-500 z-10 text-left"
       >
-        {{ label }}
+        {{ label }} <span v-if="isRequired" class="text-red-500">*</span>
       </div>
       <input
         :id="id"
@@ -25,7 +21,7 @@
           px-4
           h-full
           text-sm
-          pt-4
+          pt-2
           pb-2
           transition-shadow
           text-gray-800
@@ -37,11 +33,9 @@
         ]"
         :readonly="readonly"
         @blur="
-          active = value !== '';
           $emit('blur', $event);
         "
         @focus="
-          active = true;
           $emit('focus', $event);
         "
         @keyup="$emit('keyup', $event)"
@@ -66,6 +60,7 @@
 <script>
 export default {
   props: {
+    isRequired: { type: Boolean, default: false },
     value: { type: String | Number, default: "" },
     label: { type: String, default: "" },
     type: { type: String, default: "" },
@@ -76,32 +71,18 @@ export default {
     hideValue: { type: Boolean, default: false },
     readonly: { type: Boolean, default: false },
   },
-  data() {
-    return {
-      active: false,
-    };
-  },
   methods: {
     updateValue(event) {
       this.$emit("input", event.target.value);
     },
   },
-  watch: {
-    value(newValue, oldValue) {
-      if (newValue != oldValue) {
-        this.active = newValue.length === 0 ? false : true;
-      }
-    },
-  },
-  created() {
-    if (this.value.length != 0) {
-      this.active = true;
-    }
-  },
 };
 </script>
 
 <style scoped>
+.error label div{
+  @apply text-red-500;
+}
 .error input {
   @apply border-red-500 border-2 ring-4 ring-red-500 ring-opacity-10 transition-none;
 }

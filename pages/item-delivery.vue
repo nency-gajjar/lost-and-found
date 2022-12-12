@@ -427,6 +427,7 @@
                 class="block"
               >
                 <BaseInput
+                  :isRequired="true"
                   v-model="receiverName"
                   type="text"
                   label="Receiver Name"
@@ -446,6 +447,7 @@
                 name="Receiver Email"
               >
                 <BaseInput
+                  :isRequired="true"
                   v-model="receiverEmail"
                   type="email"
                   label="Receiver Email"
@@ -459,13 +461,13 @@
                 </p>
               </ValidationProvider>
               <div>
-                <!-- <label class="block text-sm font-medium text-gray-800 my-1"
-                  >Mobile Number:</label
-                > -->
                 <div
-                  class="block relative box-content h-12 w-full"
+                  class="block !mb-8 relative box-content h-12 w-full"
                   :class="!isUserPhoneValid && 'error'"
                 >
+                  <label class="text-gray-500" :class="!isUserPhoneValid && 'text-red-500'"
+                    >Mobile Number <span class="text-red-500">*</span> </label
+                  >
                   <vue-tel-input
                     :inputOptions="{ placeholder: 'Mobile Number' }"
                     class="
@@ -485,7 +487,7 @@
                 </div>
                 <div
                   v-if="!isUserPhoneValid"
-                  class="vee-validation-error my-2 text-sm text-red-600"
+                  class="vee-validation-error my-2 !mt-8 text-sm text-red-600"
                 >
                   {{ userPhoneValidationMessage }}
                 </div>
@@ -493,9 +495,10 @@
               <ValidationProvider
                 v-slot="{ errors }"
                 :rules="deliveryType === '0' ? 'required' : ''"
-                class="block"
+                class="block !mt-2"
               >
                 <BaseInput
+                  :isRequired="true"
                   v-model="autoCompleteAddress.address"
                   id="autocomplete-item-delivery"
                   type="text"
@@ -507,7 +510,7 @@
                   <template v-slot:icon>
                     <div
                       v-if="autoCompleteAddress.address"
-                      class="absolute inset-y-0 right-0 flex items-center p-5"
+                      class="absolute inset-y-0 top-7 right-0 flex items-center p-5"
                     >
                       <BaseIcon
                         @click="clearAddress"
@@ -517,7 +520,7 @@
                     </div>
                     <div
                       v-else
-                      class="absolute inset-y-0 right-0 flex items-center p-5"
+                      class="absolute inset-y-0 top-7 right-0 flex items-center p-5"
                     >
                       <BaseIcon icon="location-arrow" color="lightgray" />
                     </div>
@@ -538,6 +541,7 @@
                   class="block lg:col-span-1"
                 >
                   <BaseInput
+                    :isRequired="true"
                     v-model="autoCompleteAddress.city"
                     label="City"
                     type="text"
@@ -556,6 +560,7 @@
                   class="block col-span-1"
                 >
                   <BaseInput
+                    :isRequired="true"
                     v-model="autoCompleteAddress.state"
                     label="State"
                     type="text"
@@ -575,6 +580,7 @@
                   name="Zipcode"
                 >
                   <BaseInput
+                    :isRequired="true"
                     v-model="autoCompleteAddress.zipcode"
                     label="Zip Code"
                     type="text"
@@ -593,6 +599,7 @@
                   class="block"
                 >
                   <BaseInput
+                    :isRequired="true"
                     v-model="autoCompleteAddress.country"
                     label="Country"
                     type="text"
@@ -657,7 +664,7 @@
                   >
                     <template v-slot:icon>
                       <div
-                        class="absolute inset-y-0 right-0 flex items-center p-5"
+                        class="absolute inset-y-0 top-7 right-0 flex items-center p-5"
                       >
                         <BaseIcon icon="dollar" color="lightgray" />
                       </div>
@@ -682,6 +689,7 @@
                 class="block mb-4"
               >
                 <BaseInput
+                  :isRequired="true"
                   v-model="pickupPersonName"
                   type="text"
                   label="Pickup Person Name"
@@ -701,14 +709,14 @@
                   label="Additional Person Name (optional)"
                 />
               </div>
-              <label class="block text-md font-medium text-gray-800"
-                >Expected Pickup Date:</label
-              >
               <ValidationProvider
                 v-slot="{ errors }"
                 rules="required"
                 class="block mb-4 mt-2"
               >
+                <label class="text-gray-500" :class="errors.length > 0 && 'text-red-500'"
+                  >Expected Pickup Date <span class="text-red-500">*</span> </label
+                >
                 <client-only>
                   <div :class="errors.length && 'error'">
                     <date-picker

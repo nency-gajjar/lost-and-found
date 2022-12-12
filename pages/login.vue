@@ -38,6 +38,7 @@
                 name="Email"
               >
                 <BaseInput
+                  :isRequired="true"
                   v-model="email"
                   id="email"
                   type="email"
@@ -57,6 +58,7 @@
                 class="block"
               >
                 <BaseInput
+                  :isRequired="true"
                   v-model="password"
                   id="password"
                   :type="hidePassword ? 'password' : 'text'"
@@ -65,7 +67,7 @@
                 >
                   <template v-slot:icon>
                     <div
-                      class="absolute inset-y-0 right-0 flex items-center p-5"
+                      class="absolute inset-y-0 top-7 right-0 flex items-center p-5"
                       @click="hidePassword = !hidePassword"
                     >
                       <BaseIcon

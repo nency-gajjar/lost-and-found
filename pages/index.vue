@@ -101,7 +101,7 @@
           <p class="text-gray-600 text-md">Leave Blank to show all Item</p> -->
           <div class="align-middle inline-block w-full mt-5">
             <!-- Location -->
-            <div class="inline-flex flex-auto w-full bg-white">
+            <div class="inline-flex flex-auto w-full">
               <BaseInput
                 v-model="address"
                 id="autocomplete-main"
@@ -114,13 +114,13 @@
                 <template v-slot:icon>
                   <div
                     v-if="address"
-                    class="absolute inset-y-0 right-0 flex items-center p-5"
+                    class="absolute inset-y-0 top-7 right-0 flex items-center p-5"
                   >
                     <BaseIcon @click="clearAddress" icon="xmark" color="gray" />
                   </div>
                   <div
                     v-else
-                    class="absolute inset-y-0 right-0 flex items-center p-5"
+                    class="absolute inset-y-0 top-7 right-0 flex items-center p-5"
                   >
                     <BaseIcon icon="location-arrow" color="lightgray" />
                   </div>
@@ -143,19 +143,19 @@
               "
             >
               <!-- Item Description -->
-              <div class="h-full flex-auto w-full mt-3 sm:mt-0 sm:w-3/12">
+              <div class="h-full flex-auto w-full mt-3 sm:mt-0 sm:w-1/2">
                 <BaseSelect
                   v-model="itemDescription"
                   :options="itemDescriptionOptions"
                   label="Item Description"
                 />
               </div>
-              <div class="w-full flex flex-col mt-3 sm:mt-0 sm:w-9/12">
+              <div class="mb-9-px w-full flex flex-col mt-3 sm:mt-0">
                 <label
-                  class="block text-md font-medium text-gray-800 text-left m-2"
+                  class="block text-md font-medium text-gray-800 text-left"
                   >Date when lost?</label
                 >
-                <div class="flex gap-4 flex-auto">
+                <div class="flex gap-4 flex-auto w-full">
                   <client-only>
                     <date-picker
                       placeholder="Approx. Start date"
@@ -470,6 +470,10 @@ export default {
 .sliderCard {
   @apply flex justify-center items-center flex-col bg-gray-100 mx-5 p-4 rounded-lg;
   display: flex !important;
+}
+
+.mb-9-px {
+  margin-bottom: 9px;
 }
 </style>
 

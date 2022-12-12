@@ -45,6 +45,7 @@
               <td class="py-3 px-2 text-left">
                 <ValidationProvider v-slot="{ errors }" rules="required">
                   <BaseInput
+                    :isRequired="true"
                     :readonly="isFieldsEnable(index, item)"
                     class="w-80"
                     v-model="item.item_description"
@@ -68,6 +69,7 @@
               <td class="py-3 px-2 text-left">
                 <ValidationProvider v-slot="{ errors }" rules="required">
                   <BaseSelect
+                    :isRequired="true"
                     :disabled="isFieldsEnable(index, item)"
                     v-model="item.package_type"
                     :options="packageTypeOptions"
@@ -96,6 +98,7 @@
                     name="Pounds"
                   >
                     <BaseInput
+                      :isRequired="true"
                       :readonly="isFieldsEnable(index, item)"
                       v-model="item.weight_pounds"
                       class="w-20"
@@ -135,6 +138,7 @@
                     name="Length"
                   >
                     <BaseInput
+                      :isRequired="true"
                       :readonly="isFieldsEnable(index, item)"
                       class="w-20"
                       v-model="item.item_length"
@@ -158,6 +162,7 @@
                     name="Width"
                   >
                     <BaseInput
+                      :isRequired="true"
                       :readonly="isFieldsEnable(index, item)"
                       class="w-20"
                       v-model="item.item_width"
@@ -181,6 +186,7 @@
                     name="Height"
                   >
                     <BaseInput
+                      :isRequired="true"
                       :readonly="isFieldsEnable(index, item)"
                       class="w-20"
                       v-model="item.item_height"

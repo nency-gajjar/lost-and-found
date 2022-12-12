@@ -52,6 +52,7 @@
                 class="block"
               >
                 <BaseInput
+                  :isRequired="true"
                   v-model="claimPersonName"
                   type="text"
                   label="Your Name"
@@ -71,6 +72,7 @@
                 name="Email"
               >
                 <BaseInput
+                  :isRequired="true"
                   v-model="claimPersonEmail"
                   type="email"
                   label="Your Email"
@@ -87,6 +89,7 @@
                 class="block relative box-content h-12"
                 :class="!isPhoneNoValid && 'error'"
               >
+                <div class="text-gray-500" :class="!isPhoneNoValid && 'text-red-500'">Mobile Number <span class="text-red-500">*</span> </div>
                 <vue-tel-input
                   :inputOptions="{ placeholder: 'Mobile Number' }"
                   class="
@@ -110,7 +113,7 @@
                   {{ phoneNoValidateMessage }}
                 </div>
               </div>
-              <label class="block mb-1 !mt-10 text-sm font-medium text-gray-800"
+              <label class="block mb-1 !mt-14 text-sm font-medium text-gray-800"
                 >Item Details:</label
               >
               <ValidationProvider
@@ -119,6 +122,7 @@
                 class="block"
               >
                 <BaseInput
+                  :isRequired="true"
                   v-model="itemName"
                   type="text"
                   label="Item Description"
@@ -131,7 +135,8 @@
                   {{ errors[0] }}
                 </p>
               </ValidationProvider>
-              <div class="block">
+              <div class="text-gray-500">Description (Optional) </div>
+              <div class="block !mt-0">
                 <textarea
                   v-model="itemDescription"
                   placeholder="Description"
@@ -155,7 +160,9 @@
                 v-slot="{ errors }"
                 rules="required"
                 class="block"
-                ><client-only>
+              >
+              <div class="text-gray-500" :class="errors.length > 0 && 'text-red-500'">Date of Lost <span class="text-red-500">*</span> </div>
+                <client-only>
                   <div :class="errors.length && 'error'">
                     <date-picker
                       v-model="itemLostDate"
@@ -180,6 +187,7 @@
                 class="block"
               >
                 <BaseInput
+                  :isRequired="true"
                   v-model="autoCompleteAddress.address"
                   id="autocomplete-claim-item"
                   type="text"
@@ -191,7 +199,7 @@
                   <template v-slot:icon>
                     <div
                       v-if="autoCompleteAddress.address"
-                      class="absolute inset-y-0 right-0 flex items-center p-5"
+                      class="absolute inset-y-0 top-7 right-0 flex items-center p-5"
                     >
                       <BaseIcon
                         @click="clearAddress"
@@ -201,7 +209,7 @@
                     </div>
                     <div
                       v-else
-                      class="absolute inset-y-0 right-0 flex items-center p-5"
+                      class="absolute inset-y-0 top-7 right-0 flex items-center p-5"
                     >
                       <BaseIcon icon="location-arrow" color="lightgray" />
                     </div>
@@ -222,6 +230,7 @@
                   class="block lg:col-span-2"
                 >
                   <BaseInput
+                    :isRequired="true"
                     v-model="autoCompleteAddress.city"
                     label="City"
                     type="text"
@@ -240,6 +249,7 @@
                   class="block col-span-1"
                 >
                   <BaseInput
+                    :isRequired="true"
                     v-model="autoCompleteAddress.state"
                     label="State"
                     type="text"
@@ -260,6 +270,7 @@
                   class="block lg:col-span-2"
                 >
                   <BaseInput
+                    :isRequired="true"
                     v-model="autoCompleteAddress.country"
                     label="Country"
                     type="text"
@@ -279,6 +290,7 @@
                   name="Zipcode"
                 >
                   <BaseInput
+                    :isRequired="true"
                     v-model="autoCompleteAddress.zipcode"
                     label="Zip Code"
                     type="text"

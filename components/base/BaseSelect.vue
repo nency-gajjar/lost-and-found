@@ -1,18 +1,14 @@
 <template>
-  <label class="block relative box-content h-12 bg-white">
+  <label class="mb-8 block relative box-content h-12">
     <div
-      :class="[
-        'absolute px-4 transition-all text-gray-500',
-        active && 'my-2 text-[0.625rem] leading-3',
-        !active && 'my-3.5 text-sm',
-      ]"
+      class="transition-all text-gray-500 text-left"
     >
-      {{ label }}
+      {{ label }} <span v-if="isRequired" class="text-red-500">*</span>
     </div>
     <select
       v-show="!isComponentLoaded"
       class="
-        relative
+        bg-white
         border
         inline-block
         border-gray-300
@@ -22,7 +18,6 @@
         text-sm
         transition-shadow
         text-gray-800
-        bg-transparent
       "
     >
     </select>
@@ -30,7 +25,7 @@
       v-show="isComponentLoaded"
       :value="value"
       class="
-        relative
+        bg-white
         border
         inline-block
         border-gray-300
@@ -40,12 +35,11 @@
         text-sm
         transition-shadow
         text-gray-800
-        bg-transparent
       "
       :class="[
         inputClasses,
         hideValue && '!text-transparent',
-        active && 'pl-3 pr-4 pt-4 pb-2',
+        active && 'pl-3 pr-4 pt-2 pb-2',
         !active && 'p-0',
       ]"
       :disabled="disabled"
@@ -73,6 +67,7 @@
 <script>
 export default {
   props: {
+    isRequired: { type: Boolean, default: false },
     value: { type: String, default: "" },
     options: { type: Array },
     label: { type: String },
