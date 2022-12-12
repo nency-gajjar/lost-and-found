@@ -526,9 +526,9 @@
                 </div>
               </template>
             </div>
-            <div class="flex mt-16-px justify-center">
-              <div v-if="itemDetails.image" class="mt-4 sm:mt-0 h-40 w-40 w-full">
-                <img class="w-full h-full object-cover" :src="itemDetails.image" alt="" />
+            <div class="flex justify-center items-center">
+              <div v-if="itemDetails.image" class="flex justify-center items-center mt-4 sm:mt-0 h-48 w-48 w-full">
+                <img class="w-full object-cover" :src="itemDetails.image" alt="" />
               </div>
             </div>
           </div>
@@ -738,10 +738,13 @@ export default {
   width: 200px;
 }
 
-@media only screen and (max-width: 650px) {
+@media only screen and (max-width: 1170px) {
   .foundItemContainer {
     @apply flex-col;
   }
+}
+
+@media only screen and (max-width: 650px) {
 
   .img-container {
     @apply mt-3;

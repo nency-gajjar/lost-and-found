@@ -139,7 +139,7 @@
               </table>
             </td>
           </tr>
-          <tr class="border-b flex sm:flex-row flex-col justify-between items-center">
+          <tr class="border-b items-center flex xl:flex-row lg:flex-col md:flex-row flex-col justify-between items-center">
             <td class="px-6 py-4 w-full-imp">
               <table width="100%" cellspacing="0" cellpadding="0">
                 <tr>
@@ -268,9 +268,9 @@
                 </template>
               </table>
             </td>
-            <div class="flex mt-70-px justify-center pr-6">
-              <div v-if="itemDetails.image" class="mt-4 sm:mt-0 h-40 w-40 w-full">
-                <img class="w-full h-full object-cover" :src="itemDetails.image" alt="" />
+            <div class="flex justify-center items-center px-6">
+              <div v-if="itemDetails.image" class="flex justify-center items-center mt-4 sm:mt-0 h-48 w-48 w-full">
+                <img class="w-full object-cover" :src="itemDetails.image" alt="" />
               </div>
             </div>
           </tr>

@@ -689,9 +689,9 @@
                 </div>
               </template>
             </div>
-            <div class="flex mt-16-px justify-center">
-              <div v-if="itemDetails.image" class="mt-4 sm:mt-0 h-40 w-40 w-full">
-                <img class="w-full h-full object-cover" :src="itemDetails.image" alt="" />
+            <div class="flex mt-16-px items-center justify-center">
+              <div v-if="itemDetails.image" class="flex items-center justify-center mt-4 sm:mt-0 h-48 w-48 w-full">
+                <img class="w-full object-cover" :src="itemDetails.image" alt="" />
               </div>
             </div>
           </div>
@@ -1011,5 +1011,11 @@ textarea.error {
 
 .w-250-px {
   width: 200px;
+}
+
+@media only screen and (max-width: 1170px) {
+  .foundItemContainer {
+    @apply flex-col;
+  }
 }
 </style>
