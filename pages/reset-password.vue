@@ -39,6 +39,7 @@
                 name="Email"
               >
                 <BaseInput
+                  :isRequired="true"
                   v-model="email"
                   type="email"
                   label="Email"
@@ -57,6 +58,7 @@
                 class="block"
               >
                 <BaseInput
+                  :isRequired="true"
                   id="verificationCode"
                   v-model="verificationCode"
                   type="text"
@@ -76,6 +78,7 @@
                 class="block"
               >
                 <BaseInput
+                  :isRequired="true"
                   id="password"
                   v-model="password"
                   type="password"
@@ -95,6 +98,7 @@
                 class="block"
               >
                 <BaseInput
+                  :isRequired="true"
                   id="confirmPassword"
                   v-model="confirmPassword"
                   type="password"

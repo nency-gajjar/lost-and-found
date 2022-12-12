@@ -16,7 +16,7 @@
     >
       <div v-if="!isLoadingItemDetails || Object.keys(itemDetails).length > 0">
         <ValidationObserver v-slot="{ validate }" ref="observer">
-          <form @submit.prevent="validate().then(onSubmit)">
+          <form autocomplete="off" @submit.prevent="validate().then(onSubmit)">
             <div class="sm:p-6 p-4 space-y-4">
               <div class="form-title">
                 <div class="w-full">
@@ -66,6 +66,7 @@
                 class="block"
               >
                 <BaseSelect
+                  :isRequired="true"
                   v-model="venueType"
                   :options="venueOptions"
                   label="Your Affiliation"
@@ -87,6 +88,7 @@
                 class="block"
               >
                 <BaseInput
+                  :isRequired="true"
                   v-model="manualVenue"
                   type="text"
                   label="Type manually"
@@ -107,18 +109,20 @@
                 class="block"
               >
                 <BaseInput
+                  :isRequired="true"
                   v-model="address"
                   id="autocomplete"
                   type="text"
                   placeholder=""
                   :label="venueLabel"
+                  autocomplete="off"
                   :class="errors.length > 0 && 'error'"
                   @input="getAddress"
                 >
                   <template v-slot:icon>
                     <div
                       v-if="address"
-                      class="absolute inset-y-0 right-0 flex items-center p-5"
+                      class="absolute inset-y-0 top-7 right-0 flex items-center p-5"
                     >
                       <BaseIcon
                         icon="xmark"
@@ -128,7 +132,7 @@
                     </div>
                     <div
                       v-else
-                      class="absolute inset-y-0 right-0 flex items-center p-5"
+                      class="absolute inset-y-0 top-7 right-0 flex items-center p-5"
                     >
                       <BaseIcon icon="location-arrow" color="lightgray" />
                     </div>
@@ -151,6 +155,7 @@
               >
                 <BaseInput
                   v-model="venueEmail"
+                  :isRequired="true"
                   type="email"
                   label="Your Email"
                   :class="errors.length > 0 && 'error'"
@@ -184,9 +189,13 @@
                 </p>
               </ValidationProvider>
               <div
-                class="block relative box-content h-12"
-                :class="!isEmployeeMobileNoValid && 'error'"
+                class="block box-content h-12"
+                :class="[
+                  isEmployeeMobileNoValid && '!mt-0',
+                  !isEmployeeMobileNoValid && 'error'
+                ]"
               >
+                <div class="text-gray-500" :class="!isEmployeeMobileNoValid && 'text-red-500'">Employee Mobile Number <span class="text-red-500">*</span> </div>
                 <vue-tel-input
                   :inputOptions="{ placeholder: 'Employee Mobile Number' }"
                   class="
@@ -204,7 +213,13 @@
                   @validate="validateEmployeePhoneFormat"
                 ></vue-tel-input>
               </div>
-              <div class="flex items-center" style="margin: 2px 5px !important">
+              <div
+                v-if="!isEmployeeMobileNoValid"
+                class="vee-validation-error mt-1_7-rem text-sm text-red-600"
+              >
+                {{ employeePhoneValidationMessage }}
+              </div>
+              <div class="flex items-center" style="margin: 25px 5px 0px 5px !important">
                 <BaseIcon
                   icon="shield-alt"
                   color="lightgray"
@@ -214,12 +229,6 @@
                 <p style="color: #939393; font-size: 14px">
                   Your mobile number is only for notification purpose that is related to this item. We do not share your mobile number to item owner, or anyone else.
                 </p>
-              </div>
-              <div
-                v-if="!isEmployeeMobileNoValid"
-                class="vee-validation-error top-margin-05 text-sm text-red-600"
-              >
-                {{ employeePhoneValidationMessage }}
               </div>
 
               <!-- AUTOCOMPLETE ADDRESS DETAILS -->
@@ -241,6 +250,7 @@
                 class="block"
               >
                 <BaseSelect
+                  :isRequired="true"
                   v-model="autoCompleteAddress.address"
                   :options="addressArr"
                   label="Address"
@@ -263,6 +273,7 @@
                 class="block"
               >
                 <BaseInput
+                  :isRequired="true"
                   v-model="manualAddress"
                   type="text"
                   label="Address Line"
@@ -284,6 +295,7 @@
                   class="block col-span-1"
                 >
                   <BaseInput
+                    :isRequired="true"
                     v-model="autoCompleteAddress.city"
                     label="City"
                     type="text"
@@ -312,6 +324,7 @@
                 >
                   <BaseInput
                     v-model="autoCompleteAddress.state"
+                    :isRequired="true"
                     label="State"
                     type="text"
                     :class="{
@@ -342,6 +355,7 @@
                   <BaseInput
                     v-model="autoCompleteAddress.zipcode"
                     label="Zipcode"
+                    :isRequired="true"
                     type="text"
                     :class="{
                       error: errors.length > 0,
@@ -362,7 +376,7 @@
                 </ValidationProvider>
               </div>
 
-              <div class="grid lg:grid-cols-2 gap-4">
+              <div class="grid lg:grid-cols-2 lg:gap-4 gap-0 !mt-0">
                 <!-- Country -->
                 <ValidationProvider
                   v-slot="{ errors }"
@@ -370,6 +384,7 @@
                   class="block col-span-1"
                 >
                   <BaseInput
+                    :isRequired="true"
                     v-model="autoCompleteAddress.country"
                     label="Country"
                     type="text"
@@ -390,39 +405,42 @@
                     {{ errors[0] }}
                   </p>
                 </ValidationProvider>
-                <div
-                  class="block relative box-content h-12"
-                  :class="!isVenuePhoneValid && 'error'"
-                >
-                  <vue-tel-input
-                    :inputOptions="{ placeholder: 'Mobile Number' }"
-                    class="
-                      relative
-                      border
-                      inline-block
-                      border-gray-300
-                      w-full
-                      rounded-lg
-                      h-full
-                    "
-                    :class="{
-                      readonly:
-                        tempAutoCompleteAddress.phoneNo && autoAddressSelected,
-                    }"
-                    v-model="autoCompleteAddress.phoneNo"
-                    @blur="validateVenuePhoneNo"
-                    @validate="validateVenuePhoneFormat"
-                    v-bind="bindPhoneInputProps"
-                  ></vue-tel-input>
+                <div>
                   <div
-                    v-if="!isVenuePhoneValid"
-                    class="
-                      vee-validation-error
-                      top-margin-05
-                      text-sm text-red-600
-                    "
+                    class="block relative box-content h-12"
+                    :class="!isVenuePhoneValid && 'error'"
                   >
-                    {{ venuePhoneValidationMessage }}
+                    <div class="text-gray-500" :class="!isVenuePhoneValid && 'text-red-500'">Mobile Number <span class="text-red-500">*</span> </div>
+                    <vue-tel-input
+                      :inputOptions="{ placeholder: 'Mobile Number' }"
+                      class="
+                        relative
+                        border
+                        inline-block
+                        border-gray-300
+                        w-full
+                        rounded-lg
+                        h-full
+                      "
+                      :class="{
+                        readonly:
+                          tempAutoCompleteAddress.phoneNo && autoAddressSelected,
+                      }"
+                      v-model="autoCompleteAddress.phoneNo"
+                      @blur="validateVenuePhoneNo"
+                      @validate="validateVenuePhoneFormat"
+                      v-bind="bindPhoneInputProps"
+                    ></vue-tel-input>
+                    <div
+                      v-if="!isVenuePhoneValid"
+                      class="
+                        vee-validation-error
+                        top-margin-05
+                        text-sm text-red-600
+                      "
+                    >
+                      {{ venuePhoneValidationMessage }}
+                    </div>
                   </div>
                 </div>
               </div>
@@ -901,6 +919,7 @@
                 rules="required"
                 class="block"
               >
+                <div class="text-gray-500" :class="errors.length > 0 && 'text-red-500'">Item Description <span class="text-red-500">*</span> </div>
                 <div :class="errors.length > 0 && 'error'">
                   <select
                     class="
@@ -965,6 +984,7 @@
                 class="block col-span-1"
               >
                 <BaseSelect
+                  :isRequired="true"
                   v-model="packageType"
                   :options="packageTypeOptions"
                   label="Package Type"
@@ -982,7 +1002,7 @@
               <label class="block text-md font-medium text-gray-800"
                 >Weight</label
               >
-              <div class="grid lg:grid-cols-2 gap-4">
+              <div class="grid lg:grid-cols-2 lg:gap-4 gap-0">
                 <!-- Weight Pounds-->
                 <ValidationProvider
                   v-slot="{ errors }"
@@ -991,6 +1011,7 @@
                   name="Pounds"
                 >
                   <BaseInput
+                    :isRequired="true"
                     v-model="weight"
                     label="Pounds"
                     type="text"
@@ -1027,6 +1048,7 @@
                   name="Length"
                 >
                   <BaseInput
+                    :isRequired="true"
                     v-model="itemLength"
                     label="Length"
                     type="text"
@@ -1048,6 +1070,7 @@
                   name="Width"
                 >
                   <BaseInput
+                    :isRequired="true"
                     v-model="itemWidth"
                     label="Width"
                     type="text"
@@ -1069,6 +1092,7 @@
                   name="Height"
                 >
                   <BaseInput
+                    :isRequired="true"
                     v-model="itemHeight"
                     label="Height"
                     type="text"
@@ -1084,15 +1108,13 @@
               </div>
 
               <!-- Item Status -->
-              <label class="block text-md font-medium text-gray-800"
-                >Item Status</label
-              >
               <ValidationProvider
                 v-slot="{ errors }"
                 rules="required"
-                class="block"
+                class="block pb-3"
               >
                 <BaseSelect
+                  :isRequired="true"
                   v-model="itemStatus"
                   :options="itemStatusOptions"
                   label="Item Status"
@@ -1112,9 +1134,10 @@
                 <ValidationProvider
                   v-slot="{ errors }"
                   rules="max:100|required"
-                  class="block"
+                  class="block !mt-0"
                 >
                   <BaseInput
+                    :isRequired="true"
                     v-model="receiverName"
                     type="text"
                     label="Receiver's Name"
@@ -1136,6 +1159,7 @@
                   name="Receiver's Email"
                 >
                   <BaseInput
+                    :isRequired="true"
                     v-model="receiverEmail"
                     type="email"
                     label="Receiver's Email"
@@ -1150,8 +1174,12 @@
                 </ValidationProvider>
                 <div
                   class="block relative box-content h-12"
-                  :class="!isReceiverMobileNoValid && 'error'"
+                  :class="[
+                    !isReceiverMobileNoValid && 'error',
+                    isReceiverMobileNoValid && '!mt-0',
+                  ]"
                 >
+                  <div class="text-gray-500" :class="!isReceiverMobileNoValid && 'text-red-500'">Receiver Mobile Number  <span class="text-red-500">*</span> </div>
                   <vue-tel-input
                     :inputOptions="{ placeholder: 'Receiver Mobile Number' }"
                     class="
@@ -1177,13 +1205,15 @@
                 </div>
               </template>
 
-              <div
-                v-show="showValidateAlert"
-                class="p-4 mb-4 text-sm text-red-700 bg-red-100 rounded-lg"
-                role="alert"
-              >
-                <span class="font-medium">Oops!</span> Please fill all required
-                fields and try submitting again.
+              <div :class="showReceiverInputs && 'pt-10'">
+                <div
+                  v-show="showValidateAlert"
+                  class="p-4 mb-4 text-sm text-red-700 bg-red-100 rounded-lg"
+                  role="alert"
+                >
+                  <span class="font-medium">Oops!</span> Please fill all required
+                  fields and try submitting again.
+                </div>
               </div>
 
               <div class="flex justify-end">
@@ -2091,5 +2121,9 @@ export default {
 
 .toasted-container .toasted .action.icon svg {
   font-size: 16px;
+}
+
+.mt-1_7-rem {
+  margin-top: 1.7rem !important;
 }
 </style>

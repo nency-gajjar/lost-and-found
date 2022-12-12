@@ -19,7 +19,7 @@
             rules="required"
             class="block"
           >
-            <BaseSelect v-model="key" :options="keyOptions" label="Key" />
+            <BaseSelect :isRequired="true" v-model="key" :options="keyOptions" label="Key" />
             <p
               v-if="errors.length"
               class="vee-validation-error mt-2 text-sm text-red-600"
@@ -34,6 +34,7 @@
               class="block col-span-1"
             >
               <BaseSelect
+                :isRequired="true"
                 v-model="service"
                 :options="serviceOptions"
                 label="Service"
@@ -51,6 +52,7 @@
               class="block col-span-1"
             >
               <BaseSelect
+                :isRequired="true"
                 v-model="packageType"
                 :options="packageTypeOptions"
                 label="Package Type"
@@ -69,8 +71,9 @@
               rules="required"
               class="block col-span-1"
             >
-              <label class="block text-sm mt-2 font-medium text-gray-800"
-                >Effective After:</label
+              <label class="block text-sm mt-2 text-gray-500"
+                     :class="errors.length && 'text-red-500'"
+                >Effective After: <span class="text-red-500">*</span> </label
               >
               <client-only>
                 <div :class="errors.length && 'error'">
@@ -94,8 +97,9 @@
               rules="required"
               class="block col-span-1"
             >
-              <label class="block text-sm mt-2 font-medium text-gray-800"
-                >Effective Before:</label
+              <label class="block text-sm mt-2 text-gray-500"
+                     :class="errors.length && 'text-red-500'"
+                >Effective Before: <span class="text-red-500">*</span> </label
               >
               <client-only>
                 <div :class="errors.length && 'error'">

@@ -52,6 +52,7 @@
               name="Custom Item's value"
             >
               <BaseInput
+                :isRequired="true"
                 v-model="customItemsValue"
                 type="text"
                 label="Custom Item's Value"
@@ -72,6 +73,7 @@
               class="block"
             >
               <BaseInput
+                :isRequired="true"
                 v-model="eel_pfc"
                 type="text"
                 label="EEL code or PFC"
@@ -89,7 +91,7 @@
             <div>
               <textarea
                 v-model="contentsExplanation"
-                placeholder="Contents Explanation"
+                placeholder="Contents Explanation (Optional)"
                 class="
                   border
                   inline-block
@@ -111,7 +113,7 @@
             <div>
               <textarea
                 v-model="restrictionComments"
-                placeholder="Restriction Comments"
+                placeholder="Restriction Comments (Optional)"
                 class="
                   border
                   inline-block

@@ -27,6 +27,7 @@
           >
             <BaseInput
               v-model="reference"
+              :isRequired="true"
               type="text"
               label="Insert reference"
               :class="errors.length > 0 && 'error'"
@@ -43,6 +44,7 @@
             rules="required"
             class="block"
           >
+            <div class="text-gray-500" :class="errors.length > 0 && 'text-red-500'">Add instructions <span class="text-red-500">*</span> </div>
             <textarea
               v-model="instructions"
               placeholder="Add instructions"
@@ -73,14 +75,13 @@
               {{ errors[0] }}
             </p>
           </ValidationProvider>
-          <label class="block text-md mt-2 font-medium text-gray-800"
-            >Select min and max date range:</label
-          >
           <ValidationProvider
             v-slot="{ errors }"
             rules="required"
             class="block"
           >
+            <label class="block text-md mt-10 text-gray-500" :class="errors.length > 0 && 'text-red-500'">Select min and max date range: <span class="text-red-500">*</span> </label
+            >
             <client-only>
               <div :class="errors.length && 'error'">
                 <date-picker

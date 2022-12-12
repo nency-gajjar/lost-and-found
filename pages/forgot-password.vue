@@ -38,6 +38,7 @@
                 name="Email"
               >
                 <BaseInput
+                  :isRequired="true"
                   v-model="email"
                   type="email"
                   label="Email"

@@ -27,7 +27,7 @@
       <div class="flex flex-col gap-3">
         <div class="align-middle inline-block w-full">
           <!-- Location -->
-          <div class="inline-flex flex-auto w-full bg-white">
+          <div class="inline-flex flex-auto w-full">
             <BaseInput
               v-model="address"
               id="autocomplete-lost-items"
@@ -40,13 +40,13 @@
               <template v-slot:icon>
                 <div
                   v-if="address"
-                  class="absolute inset-y-0 right-0 flex items-center p-5"
+                  class="absolute inset-y-0 top-7 right-0 flex items-center p-5"
                 >
                   <BaseIcon @click="clearAddress" icon="xmark" color="gray" />
                 </div>
                 <div
                   v-else
-                  class="absolute inset-y-0 right-0 flex items-center p-5"
+                  class="absolute inset-y-0 top-7 right-0 flex items-center p-5"
                 >
                   <BaseIcon icon="location-arrow" color="lightgray" />
                 </div>
@@ -67,39 +67,35 @@
             "
           >
             <!-- Item Description -->
-            <div class="h-full flex-auto w-full mt-3 md:mt-0 md:w-2/12">
+            <div class="h-full flex-auto w-full md:mt-0 md:w-1/4">
               <BaseSelect
                 v-model="itemDescription"
                 :options="itemDescriptionOptions"
                 label="Item Description"
               />
             </div>
-            <div
-              class="
-                w-full
-                flex flex-wrap
-                sm:flex-nowrap
-                gap-3
-                flex-auto
-                mt-3
-                md:mt-0 md:w-6/12
-              "
-            >
-              <client-only>
-                <date-picker
-                  placeholder="Start date"
-                  v-model="startDate"
-                  :disabled-date="disableStartDate"
-                  formate="YYYY-MM-DD"
-                ></date-picker>
-              </client-only>
-              <client-only>
-                <date-picker
-                  placeholder="End date"
-                  v-model="endDate"
-                  formate="YYYY-MM-DD"
-                ></date-picker>
-              </client-only>
+            <div class="w-full flex flex-col mt-3 sm:mt-0 md:w-1/3">
+              <label
+                class="block text-md font-medium text-gray-800 text-left"
+                >Date when lost?</label
+              >
+              <div class="w-full flex flex-auto gap-4">
+                <client-only>
+                  <date-picker
+                    placeholder="Start date"
+                    v-model="startDate"
+                    :disabled-date="disableStartDate"
+                    formate="YYYY-MM-DD"
+                  ></date-picker>
+                </client-only>
+                <client-only>
+                  <date-picker
+                    placeholder="End date"
+                    v-model="endDate"
+                    formate="YYYY-MM-DD"
+                  ></date-picker>
+                </client-only>
+              </div>
             </div>
 
             <div
