@@ -68,12 +68,12 @@
 
               <div class="flex foundItemContainer">
                 <div class="flex flex-col grow">
-                  <div class="flex items-center mt-3 flex-wrap">
+                  <div class="flex sm:items-center items-start mt-3 flex-wrap md:flex-nowrap sm:flex-row flex-col">
                     <div
                       class="
                         text-left text-gray-600
                         font-medium
-                        w-full
+                        w-250-px
                         lg:w-4/12
                         md:w-5/12
                         sm:w-6/12
@@ -85,18 +85,18 @@
                       class="
                         text-gray-600 text-left
                         md:w-7/12
-                        sm:w-6/12 sm:pl-3
+                        sm:w-6/12
                       "
                     >
                       {{ itemDetails.item_description }}
                     </div>
                   </div>
-                  <div class="flex items-center mt-3 flex-wrap">
+                  <div class="flex sm:items-center items-start mt-3 flex-wrap md:flex-nowrap sm:flex-row flex-col">
                     <div
                       class="
                         text-left text-gray-600
                         font-medium
-                        w-full
+                        w-250-px
                         lg:w-4/12
                         md:w-5/12
                         sm:w-6/12
@@ -108,18 +108,17 @@
                       class="
                         text-gray-600 text-left
                         md:w-7/12
-                        sm:w-6/12 sm:pl-3
+                        sm:w-6/12
                       "
                     >
                       {{ itemDetails.package_type }}
                     </div>
                   </div>
                 </div>
-                <div
-                  v-if="itemDetails.image"
-                  class="w-40 h-40 flex justify-center"
-                >
-                  <img class="w-full" :src="itemDetails.image" alt="" />
+                <div class="img-container">
+                  <div v-if="itemDetails.image" class="mt-4 sm:mt-0 w-48 w-full">
+                    <img class="w-full object-cover" :src="itemDetails.image" alt="" />
+                  </div>
                 </div>
               </div>
             </div>
@@ -145,12 +144,12 @@
                   "
                 ></span>
               </div>
-              <div class="flex items-center mt-3 flex-wrap">
+              <div class="flex sm:items-center items-start mt-3 flex-wrap md:flex-nowrap sm:flex-row flex-col">
                 <div
                   class="
                     text-left text-gray-600
                     font-medium
-                    w-full
+                    w-250-px
                     lg:w-4/12
                     md:w-5/12
                     sm:w-6/12
@@ -162,12 +161,12 @@
                   {{ itemDetails.venue_name }}
                 </div>
               </div>
-              <div class="flex items-center mt-3 flex-wrap">
+              <div class="flex sm:items-center items-start mt-3 flex-wrap md:flex-nowrap sm:flex-row flex-col">
                 <div
                   class="
                     text-left text-gray-600
                     font-medium
-                    w-full
+                    w-250-px
                     lg:w-4/12
                     md:w-5/12
                     sm:w-6/12
@@ -179,12 +178,12 @@
                   {{ itemDetails.datse }}
                 </div>
               </div>
-              <div class="flex items-center mt-3 flex-wrap">
+              <div class="flex sm:items-center items-start mt-3 flex-wrap md:flex-nowrap sm:flex-row flex-col">
                 <div
                   class="
                     text-left text-gray-600
                     font-medium
-                    w-full
+                    w-250-px
                     lg:w-4/12
                     md:w-5/12
                     sm:w-6/12
@@ -198,13 +197,13 @@
               </div>
               <div
                 v-if="itemDetails.secondary_email"
-                class="flex items-center mt-3 flex-wrap"
+                class="flex sm:items-center items-start mt-3 flex-wrap md:flex-nowrap sm:flex-row flex-col"
               >
                 <div
                   class="
                     text-left text-gray-600
                     font-medium
-                    w-full
+                    w-250-px
                     lg:w-4/12
                     md:w-5/12
                     sm:w-6/12
@@ -216,12 +215,12 @@
                   {{ itemDetails.secondary_email }}
                 </div>
               </div>
-              <div class="flex items-center mt-3 flex-wrap">
+              <div class="flex sm:items-center items-start mt-3 flex-wrap md:flex-nowrap sm:flex-row flex-col">
                 <div
                   class="
                     text-left text-gray-600
                     font-medium
-                    w-full
+                    w-250-px
                     lg:w-4/12
                     md:w-5/12
                     sm:w-6/12
@@ -233,12 +232,12 @@
                   {{ itemDetails.venue_phone_no }}
                 </div>
               </div>
-              <div class="flex items-center mt-3 flex-wrap">
+              <div class="flex sm:items-center items-start mt-3 flex-wrap md:flex-nowrap sm:flex-row flex-col">
                 <div
                   class="
                     text-left text-gray-600
                     font-medium
-                    w-full
+                    w-250-px
                     lg:w-4/12
                     md:w-5/12
                     sm:w-6/12
@@ -253,12 +252,12 @@
               <hr
                 class="flex-grow border-dashed border border-[#E1E3E6] my-5"
               />
-              <div class="flex items-center mt-3 flex-wrap">
+              <div class="flex sm:items-center items-start mt-3 flex-wrap md:flex-nowrap sm:flex-row flex-col">
                 <div
                   class="
                     text-left text-gray-600
                     font-medium
-                    w-full
+                    w-250-px
                     lg:w-4/12
                     md:w-5/12
                     sm:w-6/12
@@ -270,12 +269,12 @@
                   {{ itemDetails.address }}
                 </div>
               </div>
-              <div class="flex items-center mt-3 flex-wrap">
+              <div class="flex sm:items-center items-start mt-3 flex-wrap md:flex-nowrap sm:flex-row flex-col">
                 <div
                   class="
                     text-left text-gray-600
                     font-medium
-                    w-full
+                    w-250-px
                     lg:w-4/12
                     md:w-5/12
                     sm:w-6/12
@@ -287,12 +286,12 @@
                   {{ itemDetails.city }}
                 </div>
               </div>
-              <div class="flex items-center mt-3 flex-wrap">
+              <div class="flex sm:items-center items-start mt-3 flex-wrap md:flex-nowrap sm:flex-row flex-col">
                 <div
                   class="
                     text-left text-gray-600
                     font-medium
-                    w-full
+                    w-250-px
                     lg:w-4/12
                     md:w-5/12
                     sm:w-6/12
@@ -304,12 +303,12 @@
                   {{ itemDetails.states }}
                 </div>
               </div>
-              <div class="flex items-center mt-3 flex-wrap">
+              <div class="flex sm:items-center items-start mt-3 flex-wrap md:flex-nowrap sm:flex-row flex-col">
                 <div
                   class="
                     text-left text-gray-600
                     font-medium
-                    w-full
+                    w-250-px
                     lg:w-4/12
                     md:w-5/12
                     sm:w-6/12
@@ -321,12 +320,12 @@
                   {{ itemDetails.country }}
                 </div>
               </div>
-              <div class="flex items-center mt-3 flex-wrap">
+              <div class="flex sm:items-center items-start mt-3 flex-wrap md:flex-nowrap sm:flex-row flex-col">
                 <div
                   class="
                     text-left text-gray-600
                     font-medium
-                    w-full
+                    w-250-px
                     lg:w-4/12
                     md:w-5/12
                     sm:w-6/12
@@ -1117,5 +1116,23 @@ export default {
 @import "./assets/styles/phone-number-input.scss";
 .wrapper {
   @apply min-h-screen flex justify-center py-10 mx-auto;
+}
+
+.w-250-px {
+  width: 200px;
+}
+
+.img-container {
+  @apply pt-0;
+}
+
+@media only screen and (max-width: 1170px) {
+  .foundItemContainer {
+    @apply flex-col;
+  }
+
+  .img-container{
+    @apply pt-5 flex justify-center items-center w-full;
+  }
 }
 </style>

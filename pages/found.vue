@@ -20,8 +20,9 @@
             <div class="sm:p-6 p-4 space-y-4">
               <div class="form-title">
                 <div class="w-full">
-                  <div class="w-full flex justify-center">
+                  <div class="w-full flex justify-between">
                     <img src="../assets/images/found-shelf-icon.svg" class="mb-3 logo-img" alt="">
+                    <img src="../assets/images/found-qr.png" class="mb-3 qr-img" alt="">
                   </div>
                   <div class="flex justify-between items-center">
                     <div>
@@ -460,7 +461,7 @@
               </ValidationProvider>
 
               <div class="block">
-                <label class="text-gray-500"
+                <label style="font-size:15px;" class="text-gray-500"
                   >Found Item Image</label
                 >
                 <div
@@ -862,57 +863,26 @@
                 </div>
               </div>
 
-              <!-- Item Description -->
-              <ValidationProvider
-                v-slot="{ errors }"
-                rules="required"
-                class="block"
-              >
-                <div style="font-size:15px;" class="text-gray-500" :class="errors.length > 0 && 'text-red-500'">Item Description <span class="text-red-500">*</span> </div>
-                <div :class="errors.length > 0 && 'error'">
-                  <select
-                    class="
-                      h-12
-                      relative
-                      border
-                      inline-block
-                      border-gray-300
-                      w-full
-                      rounded-lg
-                      text-sm
-                      transition-shadow
-                      text-gray-800
-                      bg-transparent
-                    "
-                    v-model="itemDescription"
-                    @change="setItemDetails"
-                  >
-                    <option disabled value="">Item Description</option>
-                    <option
-                      :value="descriptionOption"
-                      v-for="descriptionOption in itemDescriptionOptions"
-                      :key="descriptionOption"
-                    >
-                      {{ descriptionOption }}
-                    </option>
-                  </select>
-                </div>
-              </ValidationProvider>
-
               <!-- Manual Item Description -->
-              <ValidationProvider
-                v-if="itemDescriptionManually"
-                v-slot="{ errors }"
-                rules="required"
-                class="block"
-              >
-                <BaseInput
-                  v-model="manualItemDescription"
-                  type="text"
-                  label="Manual Item Description"
-                  :class="errors.length > 0 && 'error'"
-                />
-              </ValidationProvider>
+              <div id="manualItemDescription" class="block">
+                <label style="font-size:15px;" class="text-gray-500">Enter Item Description <span class="text-red-500">*</span> </label>
+                <div class="block !mt-0">
+                  <v-select taggable v-model="manualItemDescription" :options="itemDescriptionOptions"></v-select>
+                </div>
+              </div>
+
+              <div class="flex justify-center items-center">
+                <hr class="w-1/2 border-slate-400"><p class="px-3">OR</p><hr class="w-1/2 border-slate-400">
+              </div>
+
+              <!-- Item Description -->
+
+              <div id="selectItemDescription" class="block">
+                <label style="font-size:15px;" class="text-gray-500">Select Item Description <span class="text-red-500">*</span> </label>
+                <div class="block !mt-0">
+                  <v-select v-model="itemDescription" :options="itemDescriptionOptions"></v-select>
+                </div>
+              </div>
 
               <!-- Package Type -->
               <ValidationProvider
@@ -1129,8 +1099,8 @@
                   class="p-4 mb-4 text-sm text-red-700 bg-red-100 rounded-lg"
                   role="alert"
                 >
-                  <span class="font-medium">Oops!</span> Please fill all required
-                  fields and try submitting again.
+                  <span class="font-medium">Oops!</span>
+                  {{ alertMessage }}
                 </div>
               </div>
 
@@ -1172,6 +1142,8 @@ import ImageEditor from "@/mixins/imageEditor";
 import formatMobileNumber from "../mixins/formatMobileNumber.js";
 import eventListners from "../mixins/eventListners.js";
 import scrollToError from "../mixins/scrollToError.js";
+import vSelect from 'vue-select';
+import 'vue-select/dist/vue-select.css';
 
 export default {
   mixins: [DetectBrowser, ImageEditor, formatMobileNumber, eventListners, scrollToError],
@@ -1180,6 +1152,7 @@ export default {
     showResetButton: false,
     itemDetails: {},
     showValidateAlert: false,
+    alertMessage: "Please fill all required fields and try submitting again.",
     senderFormTitle: "Found an Item that belongs to a guest? Let’s add few details and leave the rest to us!",
     foundItemFormTitle: "Found item details",
     venueEmail: "",
@@ -1194,9 +1167,8 @@ export default {
     foundDate: new Date(),
     venueManually: false,
     itemDescription: "",
-    itemDescriptionOptions: ["Other"],
+    itemDescriptionOptions: [],
     itemDescriptionResponse: [],
-    itemDescriptionManually: false,
     manualItemDescription: "",
     packageType: "",
     packageTypeOptions: ["Box", "Envelope"],
@@ -1251,7 +1223,7 @@ export default {
     venuePhoneValidationMessage: "",
     employeePhoneValidationMessage: "",
     receiverPhoneValidationMessage: "",
-    showDialog: false
+    showDialog: false,
   }),
   components: {
     DatePicker,
@@ -1259,6 +1231,7 @@ export default {
     VueCropper,
     ValidationObserver,
     ValidationProvider,
+    vSelect,
   },
   computed: {
     // ...mapGetters("item", ["itemDetails"]),
@@ -1331,8 +1304,6 @@ export default {
                 -1;
               if (index1) this.itemDescription = data.item_description;
               else {
-                this.itemDescription = "Other";
-                this.itemDescriptionManually = true;
                 this.manualItemDescription = data.item_description;
               }
               this.venueName = data.venue_name;
@@ -1387,8 +1358,6 @@ export default {
           this.itemDescriptionOptions.indexOf(data.item_description) !== -1;
         if (index1) this.itemDescription = data.item_description;
         else {
-          this.itemDescription = "Other";
-          this.itemDescriptionManually = true;
           this.manualItemDescription = data.item_description;
         }
 
@@ -1448,8 +1417,6 @@ export default {
           this.itemDescriptionOptions.indexOf(data.item_description) !== -1;
         if (index1) this.itemDescription = data.item_description;
         else {
-          this.itemDescription = "Other";
-          this.itemDescriptionManually = true;
           this.manualItemDescription = data.item_description;
         }
 
@@ -1499,7 +1466,6 @@ export default {
         this.venueName = "";
         this.manualVenue = "";
         this.itemDescription = "";
-        this.itemDescriptionManually = false;
         this.manualItemDescription = "";
         this.foundItemId = "";
         this.foundDate = new Date();
@@ -1540,7 +1506,6 @@ export default {
                   return item.item_description;
                 }
               );
-              this.itemDescriptionOptions.push("Other");
               resolve();
             }
           })
@@ -1651,10 +1616,9 @@ export default {
     },
     resetItemDescriptionFields() {
       this.itemDescription = "";
-      this.itemDescriptionOptions = ["Other"];
+      this.itemDescriptionOptions = [];
       this.getItemDescriptionOptions();
       this.itemDescriptionResponse = [];
-      this.itemDescriptionManually = false;
       this.packageType = "";
       this.itemLength = "";
       this.itemWidth = "";
@@ -1743,16 +1707,10 @@ export default {
         }
       }
     },
-    setItemDetails() {
-      let value = this.itemDescription;
+    setItemDetails(value) {
       let index = this.itemDescriptionResponse.findIndex((item) => {
         return item.item_description === value;
       });
-      if (value === "Other") this.itemDescriptionManually = true;
-      else {
-        this.itemDescription = value;
-        this.itemDescriptionManually = false;
-      }
 
       if (index != -1) {
         this.packageType = this.itemDescriptionResponse[index].package_type;
@@ -1798,6 +1756,11 @@ export default {
       ) {
         this.scrollToError();
         this.showValidateAlert = true;
+        this.alertMessage = "Please fill all required fields and try submitting again.";
+        this.isLoading = false;
+      } else if(!this.itemDescription && !this.manualItemDescription){
+        this.showValidateAlert = true;
+        this.alertMessage = "Item description is required field!";
         this.isLoading = false;
       } else {
         let venuePhoneNo = this.formatMobileNumber(
@@ -1824,10 +1787,7 @@ export default {
           zipcode: this.autoCompleteAddress.zipcode,
           image: this.image,
           image_key: this.imageKey,
-          item_description:
-            this.itemDescription === "Other"
-              ? this.manualItemDescription
-              : this.itemDescription,
+          item_description: this.itemDescription ? this.itemDescription : this.manualItemDescription,
           package_type: this.packageType,
           weight_pounds: this.weight,
           weight_ounces: this.weightOunces,
@@ -1949,12 +1909,20 @@ export default {
               .map((obj) => {
                 return obj.name;
               });
-            responseItemData.forEach((item) => {
-              if (!this.itemDescriptionOptions.includes(item)) {
-                this.itemDescriptionOptions.unshift(item);
+            if(responseItemData.length > 0){
+              let predictedValue = responseItemData[0];
+              let index = this.itemDescriptionOptions.findIndex((item) => {
+                return item.toLowerCase().includes(predictedValue.toLowerCase()) || predictedValue.toLowerCase().includes(item.toLowerCase())
+              })
+
+              if(index !== -1){
+                this.manualItemDescription = this.itemDescriptionOptions[index];
               }
-            });
-            this.itemDescription = this.itemDescriptionOptions[0];
+              else{
+                this.manualItemDescription = responseItemData[0];
+              }
+
+            }
             this.image =
               this.imageRecognitionData[
                 this.imageRecognitionData.length - 1
@@ -2000,11 +1968,25 @@ export default {
     },
     itemDescription(newValue, oldValue) {
       if (newValue != oldValue) {
-        if (newValue == "Other") {
-          this.itemDescription = "Other";
-          this.itemDescriptionManually = true;
-        } else {
-          this.itemDescriptionManually = false;
+        if(newValue){
+          this.manualItemDescription = "";
+          this.setItemDetails(this.itemDescription);
+        }
+        if(!this.itemDescription && !this.manualItemDescription){
+          this.resetItemDescriptionFields();
+        }
+      }
+    },
+    manualItemDescription(newValue, oldValue) {
+      if (newValue != oldValue) {
+        if(newValue){
+          this.itemDescription = "";
+          if(this.itemDescriptionOptions.includes(newValue)){
+            this.setItemDetails(newValue);
+          }
+        }
+        if(!this.itemDescription && !this.manualItemDescription){
+          this.resetItemDescriptionFields();
         }
       }
     },
@@ -2025,6 +2007,10 @@ export default {
   width: 100px;
 }
 
+.qr-img {
+  width: 61px;
+}
+
 .wrapper-form {
   @apply min-h-screen flex justify-center py-10 mx-auto;
 }
@@ -2038,5 +2024,13 @@ export default {
 
 .toasted-container .toasted .action.icon svg {
   font-size: 16px;
+}
+
+.vs__dropdown-toggle {
+  @apply h-12 border border-gray-300 rounded-lg;
+}
+
+#manualItemDescription .vs__actions{
+  display: none !important;
 }
 </style>
