@@ -72,12 +72,6 @@
                   label="Your Affiliation"
                   :class="errors.length > 0 && 'error'"
                 />
-                <p
-                  v-if="errors.length"
-                  class="vee-validation-error mt-2 text-sm text-red-600"
-                >
-                  {{ errors[0] }}
-                </p>
               </ValidationProvider>
 
               <!-- Manual Venue -->
@@ -94,12 +88,6 @@
                   label="Type manually"
                   :class="errors.length > 0 && 'error'"
                 />
-                <p
-                  v-if="errors.length"
-                  class="vee-validation-error mt-2 text-sm text-red-600"
-                >
-                  {{ errors[0] }}
-                </p>
               </ValidationProvider>
 
               <!-- Address -->
@@ -138,12 +126,6 @@
                     </div>
                   </template>
                 </BaseInput>
-                <p
-                  v-if="errors.length"
-                  class="vee-validation-error mt-2 text-sm text-red-600"
-                >
-                  {{ errors[0] }}
-                </p>
               </ValidationProvider>
 
               <!-- Venue Email -->
@@ -178,7 +160,7 @@
                 <BaseInput
                   v-model="venueSecondaryEmail"
                   type="email"
-                  label="Secondary Email (Optional)"
+                  label="Secondary Email"
                   :class="errors.length > 0 && 'error'"
                 />
                 <p
@@ -195,9 +177,8 @@
                   !isEmployeeMobileNoValid && 'error'
                 ]"
               >
-                <div class="text-gray-500" :class="!isEmployeeMobileNoValid && 'text-red-500'">Employee Mobile Number <span class="text-red-500">*</span> </div>
+                <div style="font-size:15px;" class="text-gray-500" :class="!isEmployeeMobileNoValid && 'text-red-500'">Employee Mobile Number <span class="text-red-500">*</span> </div>
                 <vue-tel-input
-                  :inputOptions="{ placeholder: 'Employee Mobile Number' }"
                   class="
                     relative
                     border
@@ -215,7 +196,7 @@
               </div>
               <div
                 v-if="!isEmployeeMobileNoValid"
-                class="vee-validation-error mt-1_7-rem text-sm text-red-600"
+                class="vee-validation-error !mt-8 text-sm text-red-600"
               >
                 {{ employeePhoneValidationMessage }}
               </div>
@@ -233,7 +214,7 @@
 
               <!-- AUTOCOMPLETE ADDRESS DETAILS -->
               <div class="flex items-center gap-1">
-                <span class="text-md font-medium text-gray-800">{{ addressTitle }}</span>
+                <span class="text-md font-medium text-gray-800">{{ addressTitle }} <span class="text-red-500">*</span></span>
                 <BaseIcon
                   icon="circle-info"
                   color="gray"
@@ -250,19 +231,12 @@
                 class="block"
               >
                 <BaseSelect
-                  :isRequired="true"
                   v-model="autoCompleteAddress.address"
                   :options="addressArr"
                   label="Address"
                   :class="errors.length > 0 && 'error'"
                   @input="updateAddress"
                 />
-                <p
-                  v-if="errors.length"
-                  class="vee-validation-error mt-2 text-sm text-red-600"
-                >
-                  {{ errors[0] }}
-                </p>
               </ValidationProvider>
 
               <!-- Manual address -->
@@ -273,29 +247,21 @@
                 class="block"
               >
                 <BaseInput
-                  :isRequired="true"
                   v-model="manualAddress"
                   type="text"
                   label="Address Line"
                   :class="errors.length > 0 && 'error'"
                 />
-                <p
-                  v-if="errors.length"
-                  class="vee-validation-error mt-2 text-sm text-red-600"
-                >
-                  {{ errors[0] }}
-                </p>
               </ValidationProvider>
 
               <div class="grid grid-cols-3 lg:grid-cols-3 gap-4">
                 <!-- City -->
                 <ValidationProvider
                   v-slot="{ errors }"
-                  rules="max:28|required"
-                  class="block col-span-1"
+                  rules="required"
+                  class="block"
                 >
                   <BaseInput
-                    :isRequired="true"
                     v-model="autoCompleteAddress.city"
                     label="City"
                     type="text"
@@ -308,23 +274,16 @@
                       tempAutoCompleteAddress.city !== '' && autoAddressSelected
                     "
                   />
-                  <p
-                    v-if="errors.length"
-                    class="vee-validation-error mt-2 text-sm text-red-600"
-                  >
-                    {{ errors[0] }}
-                  </p>
                 </ValidationProvider>
 
                 <!-- State -->
                 <ValidationProvider
                   v-slot="{ errors }"
                   rules="required"
-                  class="block col-span-1"
+                  class="block"
                 >
                   <BaseInput
                     v-model="autoCompleteAddress.state"
-                    :isRequired="true"
                     label="State"
                     type="text"
                     :class="{
@@ -337,25 +296,18 @@
                       autoAddressSelected
                     "
                   />
-                  <p
-                    v-if="errors.length"
-                    class="vee-validation-error mt-2 text-sm text-red-600"
-                  >
-                    {{ errors[0] }}
-                  </p>
                 </ValidationProvider>
 
                 <!-- Zip -->
                 <ValidationProvider
                   v-slot="{ errors }"
                   rules="required|max:10"
-                  class="block col-span-1"
+                  class="block"
                   name="Zipcode"
                 >
                   <BaseInput
                     v-model="autoCompleteAddress.zipcode"
                     label="Zipcode"
-                    :isRequired="true"
                     type="text"
                     :class="{
                       error: errors.length > 0,
@@ -380,11 +332,10 @@
                 <!-- Country -->
                 <ValidationProvider
                   v-slot="{ errors }"
-                  rules="max:28|required"
+                  rules="required"
                   class="block col-span-1"
                 >
                   <BaseInput
-                    :isRequired="true"
                     v-model="autoCompleteAddress.country"
                     label="Country"
                     type="text"
@@ -398,21 +349,14 @@
                       autoAddressSelected
                     "
                   />
-                  <p
-                    v-if="errors.length"
-                    class="vee-validation-error mt-2 text-sm text-red-600"
-                  >
-                    {{ errors[0] }}
-                  </p>
                 </ValidationProvider>
                 <div>
                   <div
                     class="block relative box-content h-12"
                     :class="!isVenuePhoneValid && 'error'"
                   >
-                    <div class="text-gray-500" :class="!isVenuePhoneValid && 'text-red-500'">Mobile Number <span class="text-red-500">*</span> </div>
+                    <div style="font-size:15px;"  class="text-gray-500" :class="!isVenuePhoneValid && 'text-red-500'">Mobile Number</div>
                     <vue-tel-input
-                      :inputOptions="{ placeholder: 'Mobile Number' }"
                       class="
                         relative
                         border
@@ -435,7 +379,7 @@
                       v-if="!isVenuePhoneValid"
                       class="
                         vee-validation-error
-                        top-margin-05
+                        mt-2
                         text-sm text-red-600
                       "
                     >
@@ -445,19 +389,35 @@
                 </div>
               </div>
             </div>
-            <div class="flex mt-2">
-              <span
+            <div data-v-272705a6="" class="flex items-center">
+              <div
                 class="
-                  w-full
-                  border-t border-solid border-gray-200
-                  inline-block
-                "
-              ></span>
+                  w-6
+                  box-content
+                  border-r border-[#E1E3E6]
+                  rounded-r-full
+                  relative
+                  right-3.5
+                  bg-primary-60
+                  ">
+              </div>
+              <hr class="flex-grow border-dashed border border-[#E1E3E6]" />
+              <div
+                class="
+                  w-6
+                  box-border
+                  border-l border-[#E1E3E6]
+                  rounded-l-full
+                  relative
+                  left-3.5
+                  bg-primary-60
+                ">
+              </div>
             </div>
 
             <!-- FOUND ITEM'S DETAILS -->
-            <div class="card sm:p-6 p-4 space-y-4">
-              <div class="form-title">
+            <div class="sm:p-6 p-4 space-y-4">
+              <div class="form-title mb-4">
                 <h1
                   class="
                     w-full
@@ -480,17 +440,14 @@
                   ></span>
                 </div>
               </div>
-
               
-
               <!-- Found Item Date -->
-              <label class="block text-md font-medium text-gray-800"
-                >Found Item Date:</label
-              >
+              <label style="font-size:15px;" class="text-gray-500"
+                >Found Item Date</label
+              > <span class="text-red-500">*</span>
               <ValidationProvider
                 v-slot="{ errors }"
                 rules="required"
-                class="block"
               >
                 <client-only>
                   <div :class="errors.length && 'error'">
@@ -500,19 +457,11 @@
                     ></date-picker>
                   </div>
                 </client-only>
-                <p
-                  v-if="errors.length"
-                  class="vee-validation-error mt-2 text-sm text-red-600"
-                >
-                  {{ errors[0] }}
-                </p>
               </ValidationProvider>
 
               <div class="block">
-                <label
-                  class="block text-md mb-3 font-medium text-gray-800"
-                  for="itemImage"
-                  >Found item image</label
+                <label class="text-gray-500"
+                  >Found Item Image</label
                 >
                 <div
                   class="
@@ -919,7 +868,7 @@
                 rules="required"
                 class="block"
               >
-                <div class="text-gray-500" :class="errors.length > 0 && 'text-red-500'">Item Description <span class="text-red-500">*</span> </div>
+                <div style="font-size:15px;" class="text-gray-500" :class="errors.length > 0 && 'text-red-500'">Item Description <span class="text-red-500">*</span> </div>
                 <div :class="errors.length > 0 && 'error'">
                   <select
                     class="
@@ -948,12 +897,6 @@
                     </option>
                   </select>
                 </div>
-                <p
-                  v-if="errors.length"
-                  class="vee-validation-error mt-2 text-sm text-red-600"
-                >
-                  {{ errors[0] }}
-                </p>
               </ValidationProvider>
 
               <!-- Manual Item Description -->
@@ -969,19 +912,13 @@
                   label="Manual Item Description"
                   :class="errors.length > 0 && 'error'"
                 />
-                <p
-                  v-if="errors.length"
-                  class="vee-validation-error mt-2 text-sm text-red-600"
-                >
-                  {{ errors[0] }}
-                </p>
               </ValidationProvider>
 
               <!-- Package Type -->
               <ValidationProvider
                 v-slot="{ errors }"
                 rules="required"
-                class="block col-span-1"
+                class="block"
               >
                 <BaseSelect
                   :isRequired="true"
@@ -990,23 +927,17 @@
                   label="Package Type"
                   :class="errors.length > 0 && 'error'"
                 />
-                <p
-                  v-if="errors.length"
-                  class="vee-validation-error mt-2 text-sm text-red-600"
-                >
-                  {{ errors[0] }}
-                </p>
               </ValidationProvider>
 
               <!-- WEIGHT -->
-              <label class="block text-md font-medium text-gray-800"
+              <!-- <label class="block text-md font-medium text-gray-800"
                 >Weight</label
-              >
+              > -->
               <div class="grid lg:grid-cols-2 lg:gap-4 gap-0">
                 <!-- Weight Pounds-->
                 <ValidationProvider
                   v-slot="{ errors }"
-                  rules="int|weight|positiveNumber"
+                  rules="required|int|positiveNumber"
                   class="block"
                   name="Pounds"
                 >
@@ -1036,9 +967,9 @@
               </div>
 
               <!-- DIMENSIONS -->
-              <label class="block text-md font-medium text-gray-800"
+              <!-- <label class="block text-md font-medium text-gray-800"
                 >Dimensions (Inches)</label
-              >
+              > -->
               <div class="flex justify-between gap-4">
                 <!-- Length -->
                 <ValidationProvider
@@ -1111,7 +1042,7 @@
               <ValidationProvider
                 v-slot="{ errors }"
                 rules="required"
-                class="block pb-3"
+                class="block"
               >
                 <BaseSelect
                   :isRequired="true"
@@ -1120,12 +1051,6 @@
                   label="Item Status"
                   :class="errors.length > 0 && 'error'"
                 />
-                <p
-                  v-if="errors.length"
-                  class="vee-validation-error mt-2 text-sm text-red-600"
-                >
-                  {{ errors[0] }}
-                </p>
               </ValidationProvider>
 
               <!-- RECEIVER DETAILS -->
@@ -1133,7 +1058,7 @@
                 <!-- Receiver Name -->
                 <ValidationProvider
                   v-slot="{ errors }"
-                  rules="max:100|required"
+                  rules="required"
                   class="block !mt-0"
                 >
                   <BaseInput
@@ -1143,12 +1068,6 @@
                     label="Receiver's Name"
                     :class="errors.length > 0 && 'error'"
                   />
-                  <p
-                    v-if="errors.length"
-                    class="vee-validation-error mt-2 text-sm text-red-600"
-                  >
-                    {{ errors[0] }}
-                  </p>
                 </ValidationProvider>
 
                 <!-- Receiver Email -->
@@ -1179,9 +1098,8 @@
                     isReceiverMobileNoValid && '!mt-0',
                   ]"
                 >
-                  <div class="text-gray-500" :class="!isReceiverMobileNoValid && 'text-red-500'">Receiver Mobile Number  <span class="text-red-500">*</span> </div>
+                  <div style="font-size:15px;" class="text-gray-500" :class="!isReceiverMobileNoValid && 'text-red-500'">Receiver Mobile Number  <span class="text-red-500">*</span> </div>
                   <vue-tel-input
-                    :inputOptions="{ placeholder: 'Receiver Mobile Number' }"
                     class="
                       relative
                       border
@@ -1753,18 +1671,18 @@ export default {
         } else {
           this.isVenuePhoneFormatValid = false;
           this.isVenuePhoneValid = false;
-          this.venuePhoneValidationMessage = "Please enter valid Phone number";
+          this.venuePhoneValidationMessage = "Please enter valid phone number";
         }
       }
     },
     validateVenuePhoneNo() {
       if (!this.autoCompleteAddress.phoneNo) {
         this.isVenuePhoneValid = false;
-        this.venuePhoneValidationMessage = "*Required";
+        // this.venuePhoneValidationMessage = "*Required";
       } else {
         if (this.isVenuePhoneFormatValid) {
           this.isVenuePhoneValid = true;
-          this.venuePhoneValidationMessage = "";
+          // this.venuePhoneValidationMessage = "";
         } else {
           this.isVenuePhoneValid = false;
         }
@@ -1780,18 +1698,18 @@ export default {
           this.isEmployeeMobileNoFormatValid = false;
           this.isEmployeeMobileNoValid = false;
           this.employeePhoneValidationMessage =
-            "Please enter valid Phone number";
+            "Please enter valid phone number";
         }
       }
     },
     validateEmployeeMobileNo() {
       if (!this.employeeMobileNo) {
         this.isEmployeeMobileNoValid = false;
-        this.employeePhoneValidationMessage = "*Required";
+        // this.employeePhoneValidationMessage = "*Required";
       } else {
         if (this.isEmployeeMobileNoFormatValid) {
           this.isEmployeeMobileNoValid = true;
-          this.employeePhoneValidationMessage = "";
+          // this.employeePhoneValidationMessage = "";
         } else {
           this.isEmployeeMobileNoValid = false;
         }
@@ -1807,19 +1725,19 @@ export default {
           this.isReceiverMobileNoFormatValid = false;
           this.isReceiverMobileNoValid = false;
           this.receiverPhoneValidationMessage =
-            "Please enter valid Phone number";
+            "Please enter valid phone number";
         }
       }
     },
     validateReceiverMobileNo() {
       if (!this.receiverMobileNo) {
         this.isReceiverMobileNoValid = false;
-        this.receiverPhoneValidationMessage = "*Required";
+        // this.receiverPhoneValidationMessage = "*Required";
       } else {
         this.isReceiverMobileNoValid = true;
         if (this.isReceiverMobileNoFormatValid) {
           this.isReceiverMobileNoValid = true;
-          this.receiverPhoneValidationMessage = "";
+          // this.receiverPhoneValidationMessage = "";
         } else {
           this.isReceiverMobileNoValid = false;
         }
@@ -2111,9 +2029,6 @@ export default {
   @apply min-h-screen flex justify-center py-10 mx-auto;
 }
 
-.top-margin-05 {
-  margin-top: 0.5rem !important;
-}
 
 .error {
   select {
@@ -2123,9 +2038,5 @@ export default {
 
 .toasted-container .toasted .action.icon svg {
   font-size: 16px;
-}
-
-.mt-1_7-rem {
-  margin-top: 1.7rem !important;
 }
 </style>

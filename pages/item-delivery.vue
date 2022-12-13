@@ -706,7 +706,7 @@
                 <BaseInput
                   v-model="additionalPersonName"
                   type="text"
-                  label="Additional Person Name (optional)"
+                  label="Additional Person Name"
                 />
               </div>
               <ValidationProvider
@@ -895,18 +895,18 @@ export default {
         } else {
           this.isUserPhoneFormatValid = false;
           this.isUserPhoneValid = false;
-          this.userPhoneValidationMessage = "Please enter valid Phone number";
+          this.userPhoneValidationMessage = "Please enter valid phone number";
         }
       }
     },
     validateUserPhone() {
       if (!this.receiverMobileNo) {
         this.isUserPhoneValid = false;
-        this.userPhoneValidationMessage = "*Required";
+        // this.userPhoneValidationMessage = "*Required";
       } else {
         if (this.isUserPhoneFormatValid) {
           this.isUserPhoneValid = true;
-          this.userPhoneValidationMessage = "";
+          // this.userPhoneValidationMessage = "";
         } else {
           this.isUserPhoneValid = false;
         }

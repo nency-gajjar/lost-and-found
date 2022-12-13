@@ -113,7 +113,7 @@
             <div>
               <textarea
                 v-model="restrictionComments"
-                placeholder="Restriction Comments (Optional)"
+                placeholder="Restriction Comments"
                 class="
                   border
                   inline-block

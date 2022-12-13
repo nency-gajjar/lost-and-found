@@ -28,11 +28,11 @@ Vue.component('ValidationProvider', ValidationProvider)
 Vue.component('ValidationObserver', ValidationObserver)
 
 const dictionary = {
-    en: {
-        messages: {
-            required: () => '* Required',
-        },
+  en: {
+    messages: {
+      required: () => '',
     },
+  },
 };
 
 // Install required rule.
@@ -47,7 +47,7 @@ extend('insurance', {
   // eslint-disable-next-line no-template-curly-in-string
   message: '{_field_} cannot exceed ${max}.',
 })
-extend('email', {...email, message: "Please enter a valid Email"})
+extend('email', { ...email, message: "Please enter a valid email" })
 extend('min', min)
 extend('password', {
   params: ['target'],
@@ -84,7 +84,7 @@ extend('venueName', {
         !['', null, undefined].includes(target),
     }
   },
-  message: "Please fill Venue name.",
+  message: "Please enter venue name.",
   computesRequired: true,
 })
 
@@ -98,7 +98,7 @@ extend('address', {
         !['', null, undefined].includes(target),
     }
   },
-  message: "Please fill your address",
+  message: "Please enter your address",
   computesRequired: true,
 })
 

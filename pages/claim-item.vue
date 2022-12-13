@@ -135,7 +135,7 @@
                   {{ errors[0] }}
                 </p>
               </ValidationProvider>
-              <div class="text-gray-500">Description (Optional) </div>
+              <div class="text-gray-500">Description</div>
               <div class="block !mt-0">
                 <textarea
                   v-model="itemDescription"
@@ -443,7 +443,7 @@ export default {
         } else {
           this.isPhoneNoFormateValid = false;
           this.isPhoneNoValid = false;
-          this.phoneNoValidateMessage = "Please enter valid Phone number";
+          this.phoneNoValidateMessage = "Please enter valid phone number";
         }
       }
     },

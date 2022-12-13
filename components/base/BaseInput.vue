@@ -4,7 +4,7 @@
       <div
         class="transition-all text-gray-500 z-10 text-left"
       >
-        {{ label }} <span v-if="isRequired" class="text-red-500">*</span>
+        <span style="font-size:15px;">{{ label }}</span> <span v-if="isRequired" class="text-red-500">*</span>
       </div>
       <input
         :id="id"
