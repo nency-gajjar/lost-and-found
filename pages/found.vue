@@ -22,7 +22,7 @@
                 <div class="w-full">
                   <div class="w-full flex justify-between">
                     <img src="../assets/images/found-shelf-icon.svg" class="mb-3 logo-img" alt="">
-                    <img src="../assets/images/found-qr.png" class="mb-3 qr-img" alt="">
+                    <!-- <img src="../assets/images/found-qr.png" class="mb-3 qr-img" alt=""> -->
                   </div>
                   <div class="flex justify-between items-center">
                     <div>
@@ -871,9 +871,17 @@
                 </div>
               </div>
 
-              <div class="flex justify-center items-center">
-                <hr class="w-1/2 border-slate-400"><p class="px-3">OR</p><hr class="w-1/2 border-slate-400">
-              </div>
+             <div
+              class="
+                flex
+                items-center
+                my-4
+                before:flex-1 before:border-t before:border-gray-300 before:mt-0.5
+                after:flex-1 after:border-t after:border-gray-300 after:mt-0.5
+              "
+              >
+              <p class="text-center text-gray-500 font-medium mx-4 mb-0">OR</p>
+            </div>
 
               <!-- Item Description -->
 
