@@ -29,7 +29,7 @@
                   text-gray-700
                 "
               >
-                Select Item Delivery
+                We Found Your Item!
               </h1>
               <div class="flex justify-start">
                 <span
@@ -89,29 +89,6 @@
                       "
                     >
                       {{ itemDetails.item_description }}
-                    </div>
-                  </div>
-                  <div class="flex sm:items-center items-start mt-3 flex-wrap md:flex-nowrap sm:flex-row flex-col">
-                    <div
-                      class="
-                        text-left text-gray-600
-                        font-medium
-                        w-250-px
-                        lg:w-4/12
-                        md:w-5/12
-                        sm:w-6/12
-                      "
-                    >
-                      Package Type
-                    </div>
-                    <div
-                      class="
-                        text-gray-600 text-left
-                        md:w-7/12
-                        sm:w-6/12
-                      "
-                    >
-                      {{ itemDetails.package_type }}
                     </div>
                   </div>
                 </div>
@@ -243,104 +220,17 @@
                     sm:w-6/12
                   "
                 >
-                  Employee Mobile No.
-                </div>
-                <div class="text-gray-600 text-left md:w-7/12 sm:w-6/12">
-                  {{ itemDetails.employee_mobile_no }}
-                </div>
-              </div>
-              <hr
-                class="flex-grow border-dashed border border-[#E1E3E6] my-5"
-              />
-              <div class="flex sm:items-center items-start mt-3 flex-wrap md:flex-nowrap sm:flex-row flex-col">
-                <div
-                  class="
-                    text-left text-gray-600
-                    font-medium
-                    w-250-px
-                    lg:w-4/12
-                    md:w-5/12
-                    sm:w-6/12
-                  "
-                >
                   Address
                 </div>
                 <div class="text-gray-600 text-left md:w-7/12 sm:w-6/12">
-                  {{ itemDetails.address }}
-                </div>
-              </div>
-              <div class="flex sm:items-center items-start mt-3 flex-wrap md:flex-nowrap sm:flex-row flex-col">
-                <div
-                  class="
-                    text-left text-gray-600
-                    font-medium
-                    w-250-px
-                    lg:w-4/12
-                    md:w-5/12
-                    sm:w-6/12
-                  "
-                >
-                  City
-                </div>
-                <div class="text-gray-600 text-left md:w-7/12 sm:w-6/12">
-                  {{ itemDetails.city }}
-                </div>
-              </div>
-              <div class="flex sm:items-center items-start mt-3 flex-wrap md:flex-nowrap sm:flex-row flex-col">
-                <div
-                  class="
-                    text-left text-gray-600
-                    font-medium
-                    w-250-px
-                    lg:w-4/12
-                    md:w-5/12
-                    sm:w-6/12
-                  "
-                >
-                  State
-                </div>
-                <div class="text-gray-600 text-left md:w-7/12 sm:w-6/12">
-                  {{ itemDetails.states }}
-                </div>
-              </div>
-              <div class="flex sm:items-center items-start mt-3 flex-wrap md:flex-nowrap sm:flex-row flex-col">
-                <div
-                  class="
-                    text-left text-gray-600
-                    font-medium
-                    w-250-px
-                    lg:w-4/12
-                    md:w-5/12
-                    sm:w-6/12
-                  "
-                >
-                  Country
-                </div>
-                <div class="text-gray-600 text-left md:w-7/12 sm:w-6/12">
-                  {{ itemDetails.country }}
-                </div>
-              </div>
-              <div class="flex sm:items-center items-start mt-3 flex-wrap md:flex-nowrap sm:flex-row flex-col">
-                <div
-                  class="
-                    text-left text-gray-600
-                    font-medium
-                    w-250-px
-                    lg:w-4/12
-                    md:w-5/12
-                    sm:w-6/12
-                  "
-                >
-                  Zipcode
-                </div>
-                <div class="text-gray-600 text-left md:w-7/12 sm:w-6/12">
-                  {{ itemDetails.zipcode }}
+                  {{ senderAddress(itemDetails.address, itemDetails.city, itemDetails.states, itemDetails.country, itemDetails.zipcode) }}
                 </div>
               </div>
             </div>
             <!-- Item Details End -->
 
-            <div class="grid grid-cols-2 gap-4 mt-6">
+            <div class="text-gray-800 font-medium mt-6">How would you like to proceed?</div>
+            <div class="grid grid-cols-2 gap-4 mt-2">
               <!-- Ship it to me -->
               <div
                 class="flex items-center pl-4 rounded-lg border border-gray-300"
@@ -429,7 +319,7 @@
                   :isRequired="true"
                   v-model="receiverName"
                   type="text"
-                  label="Receiver Name"
+                  label="Your Name"
                   :class="errors.length > 0 && 'error'"
                 />
                 <p
@@ -443,13 +333,13 @@
                 v-slot="{ errors }"
                 rules="required|email"
                 class="block"
-                name="Receiver Email"
+                name="Email"
               >
                 <BaseInput
                   :isRequired="true"
                   v-model="receiverEmail"
                   type="email"
-                  label="Receiver Email"
+                  label="Your Email"
                   :class="errors.length > 0 && 'error'"
                 />
                 <p
@@ -465,7 +355,7 @@
                   :class="!isUserPhoneValid && 'error'"
                 >
                   <label class="text-gray-500" :class="!isUserPhoneValid && 'text-red-500'"
-                    >Mobile Number <span class="text-red-500">*</span> </label
+                    >Your Number <span class="text-red-500">*</span> </label
                   >
                   <vue-tel-input
                     :inputOptions="{ placeholder: 'Mobile Number' }"
@@ -502,7 +392,7 @@
                   id="autocomplete-item-delivery"
                   type="text"
                   placeholder=""
-                  label="Your Location"
+                  label="Your Mailing Address"
                   @input="getAddress"
                   :class="errors.length > 0 && 'error'"
                 >
@@ -533,6 +423,13 @@
                   {{ errors[0] }}
                 </p>
               </ValidationProvider>
+              <div class="block">
+                <BaseInput
+                  v-model="autoCompleteAddress.addressLine2"
+                  type="text"
+                  label="Address Line 2"
+                />
+              </div>
               <div class="grid grid-cols-2 lg:grid-cols-2 gap-4">
                 <ValidationProvider
                   v-slot="{ errors }"
@@ -742,7 +639,7 @@
             </div>
             <div class="flex justify-end">
               <BaseButton :is-loading="isLoading" type="submit">
-                Submit
+                Next Step
               </BaseButton>
             </div>
           </div>
@@ -795,6 +692,7 @@ export default {
     // senderCompany: "",
     autoCompleteAddress: {
       address: "",
+      addressLine2: "",
       city: "",
       state: "",
       country: "",
@@ -823,6 +721,7 @@ export default {
               receiver_name: this.itemDetails.receiver_name || "",
               receiver_email: this.itemDetails.receiver_email || "",
               receiver_address: this.itemDetails.receiver_address || "",
+              receiver_addressLine2: this.itemDetails?.receiver_addressLine2  || "",
               receiver_city: this.itemDetails.receiver_city || "",
               receiver_country: this.itemDetails.receiver_country || "",
               receiver_state: this.itemDetails.receiver_state || "",
@@ -835,6 +734,8 @@ export default {
             this.receiverMobileNo = this.itemDetails.receiver_mobile_no || "";
             this.autoCompleteAddress.address =
               this.itemDetails.receiver_address || "";
+            this.autoCompleteAddress.addressLine2 =
+              this.itemDetails?.receiver_addressLine2 || "";
             this.autoCompleteAddress.city =
               this.itemDetails.receiver_city || "";
             this.autoCompleteAddress.country =
@@ -885,6 +786,9 @@ export default {
     },
   },
   methods: {
+    senderAddress(addressLine, city, state, country, zip){
+      return `${addressLine}, ${city}, ${state}, ${country}, ${zip}`;
+    },
     validateUserPhoneFormat(vueTelObj) {
       if (vueTelObj.valid !== undefined) {
         if (vueTelObj.valid) {
@@ -924,7 +828,7 @@ export default {
       autocomplete.addListener("place_changed", () => {
         let address = autocomplete.getPlace();
         this.receiverCompany = address.name;
-        this.autoCompleteAddress.address = address.formatted_address;
+        this.autoCompleteAddress.address = address.name;
 
         address.address_components.forEach((component) => {
           component.types.forEach((type) => {
@@ -978,6 +882,11 @@ export default {
           this.autoCompleteAddress.address
         )
           params.receiver_address = this.autoCompleteAddress.address;
+        if (
+          this.tempReceiverDetails.receiver_addressLine2 !==
+          this.autoCompleteAddress.addressLine2
+        )
+          params.receiver_addressLine2 = this.autoCompleteAddress.addressLine2;
         if (
           this.tempReceiverDetails.receiver_city !==
           this.autoCompleteAddress.city

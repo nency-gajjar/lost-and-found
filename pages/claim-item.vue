@@ -407,7 +407,7 @@ export default {
         if (index == "-1") {
           this.addressArr.unshift(address.formatted_address);
         }
-        this.autoCompleteAddress.address = this.addressArr[0];
+        this.autoCompleteAddress.address = address.name;
         this.autoCompleteAddress.phoneNumber =
           address.international_phone_number || address.formatted_phone_number;
         ("");
