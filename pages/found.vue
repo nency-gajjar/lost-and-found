@@ -1980,7 +1980,18 @@ export default {
                 return obj.name;
               });
             if(responseItemData.length > 0){
-              this.manualItemDescription = responseItemData[0];
+              let predictedValue = responseItemData[0];
+              let index = this.itemDescriptionOptions.findIndex((item) => {
+                return item.toLowerCase().includes(predictedValue.toLowerCase()) || predictedValue.toLowerCase().includes(item.toLowerCase())
+              })
+
+              if(index !== -1){
+                this.manualItemDescription = this.itemDescriptionOptions[index];
+              }
+              else{
+                this.manualItemDescription = responseItemData[0];
+              }
+
             }
             this.image =
               this.imageRecognitionData[
