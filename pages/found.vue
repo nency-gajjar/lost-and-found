@@ -356,7 +356,7 @@
                     class="block relative box-content h-12"
                     :class="!isVenuePhoneValid && 'error'"
                   >
-                    <div style="font-size:15px;"  class="text-gray-500" :class="!isVenuePhoneValid && 'text-red-500'">Mobile Number</div>
+                    <div style="font-size:15px;"  class="text-gray-500" :class="!isVenuePhoneValid && 'text-red-500'">Phone Number</div>
                     <vue-tel-input
                       class="
                         relative
@@ -952,10 +952,9 @@
                 </div>
               </template>
 
-              <div :class="showReceiverInputs && 'pt-10'">
+              <div v-if="showValidateAlert" class="my-8">
                 <div
-                  v-show="showValidateAlert"
-                  class="p-4 mb-4 text-sm text-red-700 bg-red-100 rounded-lg"
+                  class="p-4 text-sm text-red-700 bg-red-100 rounded-lg"
                   role="alert"
                 >
                   <span class="font-medium">Oops!</span>
@@ -963,7 +962,7 @@
                 </div>
               </div>
 
-              <div class="flex justify-end">
+              <div class="flex justify-end !mt-12">
                 <BaseButton :is-loading="isLoading" type="submit">
                   Preview
                 </BaseButton>

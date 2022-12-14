@@ -65,40 +65,88 @@
                   "
                 ></span>
               </div>
-
-              <div class="flex foundItemContainer">
-                <div class="flex flex-col grow">
-                  <div class="flex sm:items-center items-start mt-3 flex-wrap md:flex-nowrap sm:flex-row flex-col">
+              <div v-if="!itemDetails.image" class="flex sm:items-center items-start mt-3 flex-wrap md:flex-nowrap sm:flex-row flex-col">
+                <div
+                  class="
+                    text-left text-gray-600
+                    font-medium
+                    w-250-px
+                    lg:w-4/12
+                    md:w-5/12
+                    sm:w-6/12
+                  "
+                >
+                  Item Description
+                </div>
+                <div class="text-gray-600 text-left md:w-7/12 sm:w-6/12">
+                  {{ itemDetails.item_description }}
+                </div>
+              </div>
+              <div v-else
+                class="
+                  py-2
+                  px-5
+                  flex
+                  sm:flex-row
+                  border
+                  shadow-md
+                "
+              >
+                <div
+                  class="
+                    w-full
+                    flex justify-between
+                    sm:items-center
+                    flex-col-reverse
+                    sm:flex-row
+                    sm:gap-4
+                  "
+                >
+                  
+                  <div class="w-full flex items-center sm:flex-row flex-col sm:gap-14">
                     <div
-                      class="
-                        text-left text-gray-600
-                        font-medium
-                        w-250-px
-                        lg:w-4/12
-                        md:w-5/12
-                        sm:w-6/12
-                      "
+                      class="text-gray-600 font-medium"
                     >
                       Item Description
                     </div>
                     <div
-                      class="
-                        text-gray-600 text-left
-                        md:w-7/12
-                        sm:w-6/12
-                      "
+                      class="text-gray-600 text-left"
                     >
                       {{ itemDetails.item_description }}
                     </div>
                   </div>
-                </div>
-                <div class="img-container">
-                  <div v-if="itemDetails.image" class="mt-4 sm:mt-0 w-48 w-full">
-                    <img class="w-full object-cover" :src="itemDetails.image" alt="" />
+
+                  <div class="flex items-center my-4 sm:my-0 gap-3">
+            
+                  <div
+                    class="
+                      w-56
+                      sm:w-24
+                      min-w-[80px]
+                      mx-auto
+                      sm:mx-0
+                      flex
+                      items-center
+                      mb-3
+                      sm:mb-0
+                    "
+                  >
+                    <img
+                      v-if="itemDetails.image"
+                      class="w-full"
+                      :src="itemDetails.image"
+                      alt=""
+                    />
                   </div>
+                </div>
+
+          
                 </div>
               </div>
             </div>
+            <!-- Item Details End -->
+
+            <!-- Sender's Details -->
             <div class="sections py-4">
               <div class="form-title">
                 <h2
@@ -227,7 +275,7 @@
                 </div>
               </div>
             </div>
-            <!-- Item Details End -->
+            <!-- Sender's Details End-->
 
             <div class="text-gray-800 font-medium mt-6">How would you like to proceed?</div>
             <div class="grid grid-cols-2 gap-4 mt-2">
@@ -322,12 +370,6 @@
                   label="Your Name"
                   :class="errors.length > 0 && 'error'"
                 />
-                <p
-                  v-if="errors.length"
-                  class="vee-validation-error mt-2 text-sm text-red-600"
-                >
-                  {{ errors[0] }}
-                </p>
               </ValidationProvider>
               <ValidationProvider
                 v-slot="{ errors }"
@@ -358,7 +400,6 @@
                     >Your Number <span class="text-red-500">*</span> </label
                   >
                   <vue-tel-input
-                    :inputOptions="{ placeholder: 'Mobile Number' }"
                     class="
                       relative
                       border
@@ -415,14 +456,8 @@
                     </div>
                   </template>
                 </BaseInput>
-
-                <p
-                  v-if="errors.length"
-                  class="vee-validation-error mt-2 text-sm text-red-600"
-                >
-                  {{ errors[0] }}
-                </p>
               </ValidationProvider>
+
               <div class="block">
                 <BaseInput
                   v-model="autoCompleteAddress.addressLine2"
@@ -433,7 +468,7 @@
               <div class="grid grid-cols-2 lg:grid-cols-2 gap-4">
                 <ValidationProvider
                   v-slot="{ errors }"
-                  :rules="deliveryType === '0' ? 'max:28|required' : ''"
+                  :rules="deliveryType === '0' ? 'required' : ''"
                   class="block lg:col-span-1"
                 >
                   <BaseInput
@@ -443,12 +478,6 @@
                     type="text"
                     :class="errors.length > 0 && 'error'"
                   />
-                  <p
-                    v-if="errors.length"
-                    class="vee-validation-error mt-2 text-sm text-red-600"
-                  >
-                    {{ errors[0] }}
-                  </p>
                 </ValidationProvider>
                 <ValidationProvider
                   v-slot="{ errors }"
@@ -462,12 +491,6 @@
                     type="text"
                     :class="errors.length > 0 && 'error'"
                   />
-                  <p
-                    v-if="errors.length"
-                    class="vee-validation-error mt-2 text-sm text-red-600"
-                  >
-                    {{ errors[0] }}
-                  </p>
                 </ValidationProvider>
                 <ValidationProvider
                   :rules="deliveryType === '0' ? 'required|max:10' : ''"
@@ -491,7 +514,7 @@
                 </ValidationProvider>
                 <ValidationProvider
                   v-slot="{ errors }"
-                  :rules="deliveryType === '0' ? 'max:28|required' : ''"
+                  :rules="deliveryType === '0' ? 'required' : ''"
                   class="block"
                 >
                   <BaseInput
@@ -501,12 +524,6 @@
                     type="text"
                     :class="errors.length > 0 && 'error'"
                   />
-                  <p
-                    v-if="errors.length"
-                    class="vee-validation-error mt-2 text-sm text-red-600"
-                  >
-                    {{ errors[0] }}
-                  </p>
                 </ValidationProvider>
               </div>
 
@@ -577,8 +594,6 @@
             </div>
 
             <div class="!my-6" v-show="deliveryType === '1'">
-              <!-- TODO: -->
-              <!-- rules="required" -->
               <ValidationProvider
                 v-slot="{ errors }"
                 :rules="deliveryType === '1' ? 'required' : ''"
@@ -591,12 +606,6 @@
                   label="Pickup Person Name"
                   :class="errors.length > 0 && 'error'"
                 />
-                <p
-                  v-if="errors.length"
-                  class="vee-validation-error mt-2 text-sm text-red-600"
-                >
-                  {{ errors[0] }}
-                </p>
               </ValidationProvider>
               <div class="block mb-4">
                 <BaseInput
@@ -621,12 +630,6 @@
                     ></date-picker>
                   </div>
                 </client-only>
-                <p
-                  v-if="errors.length"
-                  class="vee-validation-error mt-2 text-sm text-red-600"
-                >
-                  {{ errors[0] }}
-                </p>
               </ValidationProvider>
             </div>
             <div
@@ -1029,19 +1032,5 @@ export default {
 
 .w-250-px {
   width: 200px;
-}
-
-.img-container {
-  @apply pt-0;
-}
-
-@media only screen and (max-width: 1170px) {
-  .foundItemContainer {
-    @apply flex-col;
-  }
-
-  .img-container{
-    @apply pt-5 flex justify-center items-center w-full;
-  }
 }
 </style>

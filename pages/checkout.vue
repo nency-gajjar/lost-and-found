@@ -35,11 +35,58 @@
           <h3 class="font-bold text-[#37322C] tracking-wider uppercase text-md">
             Item Details
           </h3>
-          <p class="mt-5"> <span class="font-medium">Item Description: </span> {{ itemDetails.item_description }}</p>
-          <div v-if="itemDetails.image">
-            <p class="font-medium">Item Image:</p>
-            <img :src="itemDetails.image" class="mt-2 item-img" alt="">
-          </div>
+           <div
+                class="
+                  flex
+                  sm:flex-row
+                "
+              >
+                <div
+                  class="
+                    w-full
+                    flex justify-between
+                    sm:items-center
+                    flex-col-reverse
+                    sm:flex-row
+                  "
+                >
+                  
+                  <div class="w-full sm:grid sm:grid grid-cols-2" :class="itemDetails.image && 'sm:gap-24'">
+                    <div
+                      class="font-medium text-md"
+                    >
+                      Item Description
+                    </div>
+                    <div>
+                      {{ itemDetails.item_description }}
+                    </div>
+                  </div>
+
+                  <div class="flex items-center my-4 sm:my-0 gap-3">
+            
+                  <div v-if="itemDetails.image"
+                    class="
+                      w-56
+                      sm:w-24
+                      min-w-[80px]
+                      mx-auto
+                      sm:mx-0
+                      flex
+                      items-center
+                      mb-3
+                      sm:mb-0
+                    "
+                  >
+                    <img
+                      v-if="itemDetails.image"
+                      class="w-full"
+                      :src="itemDetails.image"
+                      alt=""
+                    />
+                  </div>
+                </div>
+                </div>
+              </div>
         </div>
         <div
           class="
@@ -351,7 +398,7 @@ export default {
           });
         });
       }
-    }
+    } 
   },
   computed: {
     packageDimensionsString() {

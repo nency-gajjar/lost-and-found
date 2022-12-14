@@ -188,7 +188,6 @@
 
     <!-- Recently Added Items -->
     <section
-      v-if="!isLoading && recentItemList.length > 0"
       class="bg-white border-b py-8"
     >
       <div class="container max-w-6xl mx-auto m-8">
@@ -214,7 +213,7 @@
             "
           ></span>
         </div>
-        <div class="flex justify-center my-5">
+        <div v-if="!isLoading && recentItemList.length > 0" class="flex justify-center my-5">
           <VueSlickCarousel class="w-5/6" v-bind="sliderSetting">
             <div v-for="item in recentItemList" :key="item.id">
               <div class="sliderCard cursor-pointer shadow-md border">
@@ -272,14 +271,15 @@
             </div>
           </VueSlickCarousel>
         </div>
+        <div v-else-if="!isLoading && recentItemList.length === 0">
+        <p class="text-gray-600 font-medium m-14 text-center">There's not any items have been added recently.</p>
+        </div>
+        <div v-else>
+          <BaseLoader  class="h-64"/>
+        </div>
       </div>
     </section>
-    <div v-else-if="!isLoading && recentItemList.length === 0">
-      <p class="text-gray-600 font-medium m-14 text-center">No Result Found</p>
-    </div>
-    <div v-else>
-      <BaseLoader />
-    </div>
+    
   </div>
 </template>
 

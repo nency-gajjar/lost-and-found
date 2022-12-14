@@ -587,6 +587,7 @@ export default {
               JSON.stringify(this.$store.getters["shipment/shippingRates"])
             );
             this.rateQuoteItems = ratesQuotes.rates;
+            this.sortRateQuotes(this.sortBy)
             this.isLoading = false;
           }
         })
