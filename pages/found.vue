@@ -231,27 +231,13 @@
                 rules="required"
                 class="block"
               >
-                <BaseSelect
-                  v-model="autoCompleteAddress.address"
-                  :options="addressArr"
-                  label="Address"
-                  :class="errors.length > 0 && 'error'"
-                  @input="updateAddress"
-                />
-              </ValidationProvider>
-
-              <!-- Manual address -->
-              <ValidationProvider
-                v-if="manualAddressSelected"
-                v-slot="{ errors }"
-                rules="required"
-                class="block"
-              >
                 <BaseInput
-                  v-model="manualAddress"
+                  v-model="autoCompleteAddress.address"
+                  label="Address"
                   type="text"
-                  label="Address Line"
-                  :class="errors.length > 0 && 'error'"
+                  :class="{
+                    error: errors.length > 0
+                  }"
                 />
               </ValidationProvider>
 
@@ -267,13 +253,8 @@
                     label="City"
                     type="text"
                     :class="{
-                      error: errors.length > 0,
-                      readonly:
-                        tempAutoCompleteAddress.city && autoAddressSelected,
+                      error: errors.length > 0
                     }"
-                    :readonly="
-                      tempAutoCompleteAddress.city !== '' && autoAddressSelected
-                    "
                   />
                 </ValidationProvider>
 
@@ -288,14 +269,8 @@
                     label="State"
                     type="text"
                     :class="{
-                      error: errors.length > 0,
-                      readonly:
-                        tempAutoCompleteAddress.state && autoAddressSelected,
+                      error: errors.length > 0
                     }"
-                    :readonly="
-                      tempAutoCompleteAddress.state !== '' &&
-                      autoAddressSelected
-                    "
                   />
                 </ValidationProvider>
 
@@ -311,14 +286,8 @@
                     label="Zipcode"
                     type="text"
                     :class="{
-                      error: errors.length > 0,
-                      readonly:
-                        tempAutoCompleteAddress.zipcode && autoAddressSelected,
+                      error: errors.length > 0
                     }"
-                    :readonly="
-                      tempAutoCompleteAddress.zipcode !== '' &&
-                      autoAddressSelected
-                    "
                   />
                   <p
                     v-if="errors.length"
@@ -341,14 +310,8 @@
                     label="Country"
                     type="text"
                     :class="{
-                      error: errors.length > 0,
-                      readonly:
-                        tempAutoCompleteAddress.country && autoAddressSelected,
+                      error: errors.length > 0
                     }"
-                    :readonly="
-                      tempAutoCompleteAddress.country !== '' &&
-                      autoAddressSelected
-                    "
                   />
                 </ValidationProvider>
                 <div>
@@ -367,10 +330,6 @@
                         rounded-lg
                         h-full
                       "
-                      :class="{
-                        readonly:
-                          tempAutoCompleteAddress.phoneNo && autoAddressSelected,
-                      }"
                       v-model="autoCompleteAddress.phoneNo"
                       @blur="validateVenuePhoneNo"
                       @validate="validateVenuePhoneFormat"
@@ -1015,8 +974,6 @@ export default {
     foundItemFormTitle: "Found item details",
     venueEmail: "",
     venueSecondaryEmail: "",
-    manualAddressSelected: false,
-    manualAddress: "",
     address: "",
     manualVenue: "",
     venueType: "",
@@ -1044,7 +1001,6 @@ export default {
     receiverName: "",
     receiverEmail: "",
     receiverMobileNo: "",
-    addressArr: ["Other"],
     imageRecognitionData: [],
     isImageValid: true,
     imageValidationMessage: "",
@@ -1059,7 +1015,6 @@ export default {
     isVenuePhoneFormatValid: true,
     isEmployeeMobileNoFormatValid: true,
     isReceiverMobileNoFormatValid: true,
-    addressLine: "",
     autoCompleteAddress: {
       address: "",
       city: "",
@@ -1068,15 +1023,6 @@ export default {
       zipcode: "",
       phoneNo: "",
     },
-    tempAutoCompleteAddress: {
-      address: "",
-      city: "",
-      state: "",
-      country: "",
-      zipcode: "",
-      phoneNo: "",
-    },
-    autoCompleteAddressArr: [],
     venuePhoneValidationMessage: "",
     employeePhoneValidationMessage: "",
     receiverPhoneValidationMessage: "",
@@ -1161,10 +1107,8 @@ export default {
               this.venueEmail = data.venue_email;
               this.venueSecondaryEmail = data.secondary_email;
               this.employeeMobileNo = data.employee_mobile_no;
-              this.addressArr.unshift(data.venue_name);
               this.address = this.venueName;
-              this.addressLine = data.address;
-              this.autoCompleteAddress.address = this.venueName;
+              this.autoCompleteAddress.address = data.address;
               this.autoCompleteAddress.phoneNo = data.venue_phone_no;
               this.autoCompleteAddress.city = data.city;
               this.autoCompleteAddress.state = data.states;
@@ -1216,10 +1160,8 @@ export default {
         this.venueEmail = data.venue_email;
         this.venueSecondaryEmail = data.secondary_email;
         this.employeeMobileNo = data.employee_mobile_no;
-        this.addressArr.unshift(data.venue_name);
         this.address = this.venueName;
-        this.addressLine = data.address;
-        this.autoCompleteAddress.address = this.venueName;
+        this.autoCompleteAddress.address = data.address;
         this.autoCompleteAddress.phoneNo = data.venue_phone_no;
         this.autoCompleteAddress.city = data.city;
         this.autoCompleteAddress.state = data.states;
@@ -1270,10 +1212,8 @@ export default {
         this.venueEmail = data.venue_email;
         this.venueSecondaryEmail = data.secondary_email;
         this.employeeMobileNo = data.employee_mobile_no;
-        this.addressArr.unshift(data.venue_name);
         this.address = this.venueName;
-        this.addressLine = data.address;
-        this.autoCompleteAddress.address = this.venueName;
+        this.autoCompleteAddress.address = data.address;
         this.autoCompleteAddress.phoneNo = data.venue_phone_no;
         this.autoCompleteAddress.city = data.city;
         this.autoCompleteAddress.state = data.states;
@@ -1313,7 +1253,6 @@ export default {
         this.employeeMobileNo = "";
         this.address = "";
         this.autoCompleteAddress.address = "";
-        this.addressLine = "";
         this.autoCompleteAddress.phoneNo = "";
         this.autoCompleteAddress.city = "";
         this.autoCompleteAddress.state = "";
@@ -1371,65 +1310,28 @@ export default {
         };
         let address = autocomplete.getPlace();
         this.venueName = address.name;
-        let index = this.addressArr.findIndex((addressObj) => {
-          return addressObj == address.name;
-        });
-        if (index == "-1") {
-          this.addressArr = ["Other"];
-          this.addressArr.unshift(address.name);
-        }
-        let obj = {};
-        this.autoCompleteAddress.address = this.venueName;
+        this.autoCompleteAddress.address = address.formatted_address;
         this.address = this.venueName;
-        this.addressLine = address.formatted_address;
-        obj.address = this.venueName;
         this.autoCompleteAddress.phoneNo =
           address.international_phone_number || address.formatted_phone_number;
-        obj.phoneNo = this.autoCompleteAddress.phoneNo;
 
         address.address_components.forEach((component) => {
           component.types.forEach((type) => {
             if (type === "locality" || type === "postal_town") {
               this.autoCompleteAddress.city = component.long_name;
-              obj.city = component.long_name;
             }
             if (type === "administrative_area_level_1") {
               this.autoCompleteAddress.state = component.long_name;
-              obj.state = component.long_name;
             }
             if (type === "country") {
               this.autoCompleteAddress.country = component.long_name;
-              obj.country = component.long_name;
             }
             if (type === "postal_code") {
               this.autoCompleteAddress.zipcode = component.long_name;
-              obj.zipcode = component.long_name;
             }
           });
         });
-        this.tempAutoCompleteAddress = { ...this.autoCompleteAddress };
-        this.autoCompleteAddressArr.push(obj);
       });
-    },
-    updateAddress(value) {
-      if (value === "Other") {
-        this.manualAddressSelected = true;
-        this.resetAddressFields();
-      } else {
-        this.manualAddressSelected = false;
-        this.autoCompleteAddressArr.forEach((addressObj) => {
-          if (value == addressObj.address) {
-            this.autoCompleteAddress = {
-              address: addressObj.address,
-              city: addressObj.city,
-              state: addressObj.state,
-              country: addressObj.country,
-              zipcode: addressObj.zipcode,
-              phoneNo: addressObj.phoneNo,
-            };
-          }
-        });
-      }
     },
     clearAddress() {
       this.address = "";
@@ -1615,10 +1517,7 @@ export default {
           secondary_email: this.venueSecondaryEmail,
           venue_phone_no: venuePhoneNo,
           employee_mobile_no: employeeMobileNo,
-          address:
-            this.autoCompleteAddress.address === "Other"
-              ? this.manualAddress
-              : this.addressLine,
+          address: this.autoCompleteAddress.address,
           city: this.autoCompleteAddress.city,
           states: this.autoCompleteAddress.state,
           country: this.autoCompleteAddress.country,
