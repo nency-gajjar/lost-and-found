@@ -85,14 +85,14 @@
                     placeholder="Start date"
                     v-model="startDate"
                     :disabled-date="disableStartDate"
-                    formate="YYYY-MM-DD"
+                    format="MM-DD-YYYY"
                   ></date-picker>
                 </client-only>
                 <client-only>
                   <date-picker
                     placeholder="End date"
                     v-model="endDate"
-                    formate="YYYY-MM-DD"
+                    format="MM-DD-YYYY"
                   ></date-picker>
                 </client-only>
               </div>
@@ -463,11 +463,23 @@ export default {
   computed: {
     formatedStartDate() {
       if (this.startDate) {
+        return moment(this.startDate).format("MM-DD-YYYY");
+      }
+      return moment(new Date()).format("MM-DD-YYYY");
+    },
+    formatedEndDate() {
+      if (this.endDate) {
+        return moment(this.endDate).format("MM-DD-YYYY");
+      }
+      return moment(new Date()).format("MM-DD-YYYY");
+    },
+    apiFormatedStartDate() {
+      if (this.startDate) {
         return moment(this.startDate).format("YYYY-MM-DD");
       }
       return moment(new Date()).format("YYYY-MM-DD");
     },
-    formatedEndDate() {
+    apiFormatedEndDate() {
       if (this.endDate) {
         return moment(this.endDate).format("YYYY-MM-DD");
       }
@@ -519,8 +531,8 @@ export default {
       }
       if (itemDescription) params.item_description = itemDescription;
       if (this.startDate || this.endDate) {
-        params.datse = this.formatedStartDate;
-        params.datse1 = this.formatedEndDate;
+        params.datse = this.apiFormatedStartDate;
+        params.datse1 = this.apiFormatedEndDate;
       }
       if (this.lostItemAddress) params.address = this.lostItemAddress;
       if (this.lat) params.lat = this.lat;

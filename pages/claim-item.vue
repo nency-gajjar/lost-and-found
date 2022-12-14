@@ -153,7 +153,7 @@
                   <div :class="errors.length && 'error'">
                     <date-picker
                       v-model="itemLostDate"
-                      formate="YYYY-MM-DD"
+                      format="MM-DD-YYYY"
                       placeholder="Date of Lost"
                     ></date-picker>
                   </div>

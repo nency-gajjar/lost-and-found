@@ -285,7 +285,7 @@
                     <div :class="errors.length && 'error'">
                       <date-picker
                         v-model="itemDetails.datse"
-                        formate="YYYY-MM-DD"
+                        format="MM-DD-YYYY"
                       ></date-picker>
                     </div>
                   </client-only>
