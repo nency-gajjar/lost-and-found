@@ -16,7 +16,7 @@
     >
       <div v-if="!isLoadingItemDetails || Object.keys(itemDetails).length > 0">
         <ValidationObserver v-slot="{ validate }" ref="observer">
-          <form autocomplete="off" @submit.prevent="validate().then(onSubmit)">
+          <form @submit.prevent="validate().then(onSubmit)">
             <div class="sm:p-6 p-4 space-y-4">
               <div class="form-title">
                 <div class="w-full">
@@ -104,7 +104,7 @@
                   type="text"
                   placeholder=""
                   :label="venueLabel"
-                  autocomplete="off"
+                  name="address"
                   :class="errors.length > 0 && 'error'"
                   @input="getAddress"
                 >

@@ -7,8 +7,10 @@
         <span style="font-size:15px;">{{ label }}</span> <span v-if="isRequired" class="text-red-500">*</span>
       </div>
       <input
+        autocomplete="chrome-off"
         :id="id"
         ref="input"
+        :name="name"
         :value="value"
         :type="type"
         :step="step"
@@ -61,6 +63,7 @@
 export default {
   props: {
     isRequired: { type: Boolean, default: false },
+    name: { type: String, default: "", rquired:false },
     value: { type: String | Number, default: "" },
     label: { type: String, default: "" },
     type: { type: String, default: "" },
