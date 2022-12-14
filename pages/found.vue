@@ -390,31 +390,6 @@
                 </div>
               </div>
             </div>
-            <div data-v-272705a6="" class="flex items-center">
-              <div
-                class="
-                  w-6
-                  box-content
-                  border-r border-[#E1E3E6]
-                  rounded-r-full
-                  relative
-                  right-3.5
-                  bg-primary-60
-                  ">
-              </div>
-              <hr class="flex-grow border-dashed border border-[#E1E3E6]" />
-              <div
-                class="
-                  w-6
-                  box-border
-                  border-l border-[#E1E3E6]
-                  rounded-l-full
-                  relative
-                  left-3.5
-                  bg-primary-60
-                ">
-              </div>
-            </div>
 
             <!-- FOUND ITEM'S DETAILS -->
             <div class="sm:p-6 p-4 space-y-4">
@@ -863,33 +838,18 @@
                 </div>
               </div>
 
-              <!-- Manual Item Description -->
-              <div id="manualItemDescription" class="block">
-                <label style="font-size:15px;" class="text-gray-500">Enter Item Description <span class="text-red-500">*</span> </label>
-                <div class="block !mt-0">
-                  <v-select taggable v-model="manualItemDescription" :options="itemDescriptionOptions"></v-select>
-                </div>
-              </div>
-
-             <div
-              class="
-                flex
-                items-center
-                my-4
-                before:flex-1 before:border-t before:border-gray-300 before:mt-0.5
-                after:flex-1 after:border-t after:border-gray-300 after:mt-0.5
-              "
-              >
-              <p class="text-center text-gray-500 font-medium mx-4 mb-0">OR</p>
-            </div>
-
               <!-- Item Description -->
-
-              <div id="selectItemDescription" class="block">
-                <label style="font-size:15px;" class="text-gray-500">Select Item Description <span class="text-red-500">*</span> </label>
-                <div class="block !mt-0">
-                  <v-select v-model="itemDescription" :options="itemDescriptionOptions"></v-select>
-                </div>
+              <div id="manualItemDescription">
+                <label style="font-size:15px;" class="text-gray-500">Enter Item Description <span class="text-red-500">*</span> </label>
+                  <ValidationProvider
+                    v-slot="{ errors }"
+                    rules="required"
+                    class="block"
+                  >
+                    <div :class="errors.length > 0 && 'error'">
+                      <v-select taggable v-model="itemDescription" :options="itemDescriptionOptions"></v-select>
+                    </div>
+                  </ValidationProvider>
               </div>
 
               <!-- Package Type -->
@@ -906,115 +866,6 @@
                   :class="errors.length > 0 && 'error'"
                 />
               </ValidationProvider>
-
-              <!-- WEIGHT -->
-              <!-- <label class="block text-md font-medium text-gray-800"
-                >Weight</label
-              > -->
-              <div class="grid lg:grid-cols-2 lg:gap-4 gap-0">
-                <!-- Weight Pounds-->
-                <ValidationProvider
-                  v-slot="{ errors }"
-                  rules="required|int|positiveNumber"
-                  class="block"
-                  name="Pounds"
-                >
-                  <BaseInput
-                    :isRequired="true"
-                    v-model="weight"
-                    label="Pounds"
-                    type="text"
-                    :class="errors.length > 0 && 'error'"
-                  />
-                  <p
-                    v-if="errors.length"
-                    class="vee-validation-error mt-2 text-sm text-red-600"
-                  >
-                    {{ errors[0] }}
-                  </p>
-                </ValidationProvider>
-
-                <!-- Weight Ounces -->
-                <div class="block">
-                  <BaseSelect
-                    v-model="weightOunces"
-                    :options="weightOuncesOptions"
-                    label="Ounces"
-                  />
-                </div>
-              </div>
-
-              <!-- DIMENSIONS -->
-              <!-- <label class="block text-md font-medium text-gray-800"
-                >Dimensions (Inches)</label
-              > -->
-              <div class="flex justify-between gap-4">
-                <!-- Length -->
-                <ValidationProvider
-                  v-slot="{ errors }"
-                  rules="required|float|positiveNumber"
-                  class="block lg:col-span-2"
-                  name="Length"
-                >
-                  <BaseInput
-                    :isRequired="true"
-                    v-model="itemLength"
-                    label="Length"
-                    type="text"
-                    :class="errors.length > 0 && 'error'"
-                  />
-                  <p
-                    v-if="errors.length"
-                    class="vee-validation-error mt-2 text-sm text-red-600"
-                  >
-                    {{ errors[0] }}
-                  </p>
-                </ValidationProvider>
-
-                <!-- Width -->
-                <ValidationProvider
-                  v-slot="{ errors }"
-                  rules="required|float|positiveNumber"
-                  class="block lg:col-span-2"
-                  name="Width"
-                >
-                  <BaseInput
-                    :isRequired="true"
-                    v-model="itemWidth"
-                    label="Width"
-                    type="text"
-                    :class="errors.length > 0 && 'error'"
-                  />
-                  <p
-                    v-if="errors.length"
-                    class="vee-validation-error mt-2 text-sm text-red-600"
-                  >
-                    {{ errors[0] }}
-                  </p>
-                </ValidationProvider>
-
-                <!-- Height -->
-                <ValidationProvider
-                  v-slot="{ errors }"
-                  rules="required|float|positiveNumber"
-                  class="block lg:col-span-2"
-                  name="Height"
-                >
-                  <BaseInput
-                    :isRequired="true"
-                    v-model="itemHeight"
-                    label="Height"
-                    type="text"
-                    :class="errors.length > 0 && 'error'"
-                  />
-                  <p
-                    v-if="errors.length"
-                    class="vee-validation-error mt-2 text-sm text-red-600"
-                  >
-                    {{ errors[0] }}
-                  </p>
-                </ValidationProvider>
-              </div>
 
               <!-- Item Status -->
               <ValidationProvider
@@ -1177,7 +1028,6 @@ export default {
     itemDescription: "",
     itemDescriptionOptions: [],
     itemDescriptionResponse: [],
-    manualItemDescription: "",
     packageType: "",
     packageTypeOptions: ["Box", "Envelope"],
     weight: "",
@@ -1306,14 +1156,7 @@ export default {
                 this.venueType = "Other";
                 this.manualVenue = data.venu_type;
               }
-
-              var index1 =
-                this.itemDescriptionOptions.indexOf(data.item_description) !==
-                -1;
-              if (index1) this.itemDescription = data.item_description;
-              else {
-                this.manualItemDescription = data.item_description;
-              }
+              this.itemDescription = data.item_description;
               this.venueName = data.venue_name;
               this.foundDate = new Date(data.datse);
               this.venueEmail = data.venue_email;
@@ -1362,12 +1205,7 @@ export default {
           this.venueType = "Other";
           this.manualVenue = data.venu_type;
         }
-        var index1 =
-          this.itemDescriptionOptions.indexOf(data.item_description) !== -1;
-        if (index1) this.itemDescription = data.item_description;
-        else {
-          this.manualItemDescription = data.item_description;
-        }
+        this.itemDescription = data.item_description;
 
         if (data.foundItemId) {
           this.foundItemId = data.foundItemId;
@@ -1421,12 +1259,7 @@ export default {
           this.venueType = "Other";
           this.manualVenue = data.venu_type;
         }
-        var index1 =
-          this.itemDescriptionOptions.indexOf(data.item_description) !== -1;
-        if (index1) this.itemDescription = data.item_description;
-        else {
-          this.manualItemDescription = data.item_description;
-        }
+        this.itemDescription = data.item_description;
 
         if (data.foundItemId) {
           this.foundItemId = data.foundItemId;
@@ -1474,7 +1307,6 @@ export default {
         this.venueName = "";
         this.manualVenue = "";
         this.itemDescription = "";
-        this.manualItemDescription = "";
         this.foundItemId = "";
         this.foundDate = new Date();
         this.venueEmail = "";
@@ -1729,13 +1561,6 @@ export default {
         this.weightOunces = String(
           this.itemDescriptionResponse[index].weight_ounces
         );
-      } else {
-        this.packageType = "";
-        this.itemLength = "";
-        this.itemWidth = "";
-        this.itemHeight = "";
-        this.weight = "";
-        this.weightOunces = "0";
       }
     },
     async onSubmit() {
@@ -1766,17 +1591,23 @@ export default {
         this.showValidateAlert = true;
         this.alertMessage = "Please fill all required fields and try submitting again.";
         this.isLoading = false;
-      } else if(!this.itemDescription && !this.manualItemDescription){
-        this.showValidateAlert = true;
-        this.alertMessage = "Item description is required field!";
-        this.isLoading = false;
       } else {
         let venuePhoneNo = this.formatMobileNumber(
           this.autoCompleteAddress.phoneNo
         );
         let employeeMobileNo = this.formatMobileNumber(this.employeeMobileNo);
         this.showValidateAlert = false;
+        let is_default = "Approve";
+        let it_type = 1;
+        if(this.image || !this.itemDescriptionOptions.includes(this.itemDescription)){
+          is_default = "Pending";
+        }
+        if(!this.itemDescriptionOptions.includes(this.itemDescription)){
+          it_type = 0;
+        }
         const params = {
+          is_default: is_default,
+          it_type: it_type,
           venue_name: this.venueName,
           venu_type:
             this.venueType === "Other" ? this.manualVenue : this.venueType,
@@ -1795,7 +1626,7 @@ export default {
           zipcode: this.autoCompleteAddress.zipcode,
           image: this.image,
           image_key: this.imageKey,
-          item_description: this.itemDescription ? this.itemDescription : this.manualItemDescription,
+          item_description: this.itemDescription,
           package_type: this.packageType,
           weight_pounds: this.weight,
           weight_ounces: this.weightOunces,
@@ -1924,11 +1755,17 @@ export default {
               })
 
               if(index !== -1){
-                this.manualItemDescription = this.itemDescriptionOptions[index];
+                this.itemDescription = this.itemDescriptionOptions[index];
               }
               else{
-                this.manualItemDescription = responseItemData[0];
+                this.itemDescription = responseItemData[0];
               }
+
+              responseItemData.forEach(item => {
+                if(!this.itemDescriptionOptions.includes(item)){
+                  this.itemDescriptionOptions.push(item);
+                }
+              })
 
             }
             this.image =
@@ -1976,26 +1813,7 @@ export default {
     },
     itemDescription(newValue, oldValue) {
       if (newValue != oldValue) {
-        if(newValue){
-          this.manualItemDescription = "";
-          this.setItemDetails(this.itemDescription);
-        }
-        if(!this.itemDescription && !this.manualItemDescription){
-          this.resetItemDescriptionFields();
-        }
-      }
-    },
-    manualItemDescription(newValue, oldValue) {
-      if (newValue != oldValue) {
-        if(newValue){
-          this.itemDescription = "";
-          if(this.itemDescriptionOptions.includes(newValue)){
-            this.setItemDetails(newValue);
-          }
-        }
-        if(!this.itemDescription && !this.manualItemDescription){
-          this.resetItemDescriptionFields();
-        }
+        this.setItemDetails(this.itemDescription);
       }
     },
   },
@@ -2023,7 +1841,6 @@ export default {
   @apply min-h-screen flex justify-center py-10 mx-auto;
 }
 
-
 .error {
   select {
     @apply border-red-500 border-2 ring-4 ring-red-500 ring-opacity-10 transition-none;
@@ -2036,6 +1853,12 @@ export default {
 
 .vs__dropdown-toggle {
   @apply h-12 border border-gray-300 rounded-lg;
+}
+
+.error {
+  .vs__dropdown-toggle {
+    @apply border-red-500 border-2 ring-4 ring-red-500 ring-opacity-10 transition-none;
+  }
 }
 
 #manualItemDescription .vs__actions{

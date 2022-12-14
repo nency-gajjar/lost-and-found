@@ -191,32 +191,6 @@
                 <tr class="l-2">
                   <td>
                     <div class="text-left text-gray-600 font-medium">
-                      Weight
-                    </div>
-                  </td>
-                  <td>
-                    <div class="text-gray-600 text-left">
-                      {{ itemDetails.weight_pounds }} lbs
-                    </div>
-                  </td>
-                </tr>
-                <tr class="l-2">
-                  <td>
-                    <div class="text-left text-gray-600 font-medium">
-                      Dimension
-                    </div>
-                  </td>
-                  <td>
-                    <div class="text-gray-600 text-left">
-                      {{ itemDetails.item_length }}(l) x
-                      {{ itemDetails.item_width }}(w) x
-                      {{ itemDetails.item_height }}(h) inches
-                    </div>
-                  </td>
-                </tr>
-                <tr class="l-2">
-                  <td>
-                    <div class="text-left text-gray-600 font-medium">
                       Item Status
                     </div>
                   </td>
