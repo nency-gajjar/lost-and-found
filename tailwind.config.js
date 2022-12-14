@@ -15,6 +15,9 @@ module.exports = {
   },
   darkMode: false, // or 'media' or 'class'
   theme: {
+    fontFamily: {
+      display: ['Rubik']
+    },
     extend: {
       colors: {
         emerald: colors.emerald,

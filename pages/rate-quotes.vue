@@ -412,10 +412,10 @@
               </div>
               <div v-if="lableDetails.insuranceValue" class="flex justify-between text-sm leading-6">
                 <p>Insurance Charges</p>
-                <p>$ {{ calculateInsuranceCharges(lableDetails.insuranceValue) || "0" }}</p>
+                <p>{{ calculateInsuranceCharges(lableDetails.insuranceValue ? Number(lableDetails.insuranceValue) : 0) | currency }}</p>
               </div>
               <div v-if="lableDetails.insuranceValue" class="flex justify-between text-sm leading-6">
-                <p>(Insured for: $ {{ lableDetails.insuranceValue || "0" }})</p>
+                <p style="font-size:13px" class="text-gray-600 !-my-2">(Insured for: {{ (lableDetails.insuranceValue ? Number(lableDetails.insuranceValue) : 0) | currency }})</p>
               </div>
             </div>
           </div>
@@ -490,9 +490,9 @@
 <script>
 import { startCase, camelCase } from "lodash";
 import calculateInsuranceCharges from "../mixins/calculateInsuranceCharges.js"
-
+import FormatCurrency from "~/mixins/formatCurrency";
 export default {
-  mixins: [calculateInsuranceCharges],
+  mixins: [calculateInsuranceCharges, FormatCurrency],
   data() {
     return {
       selectedRate: {},
