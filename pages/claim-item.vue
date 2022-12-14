@@ -48,7 +48,7 @@
               >
               <ValidationProvider
                 v-slot="{ errors }"
-                rules="max:100|required"
+                rules="required"
                 class="block"
               >
                 <BaseInput
@@ -58,12 +58,6 @@
                   label="Your Name"
                   :class="errors.length > 0 && 'error'"
                 />
-                <p
-                  v-if="errors.length"
-                  class="vee-validation-error mt-2 text-sm text-red-600"
-                >
-                  {{ errors[0] }}
-                </p>
               </ValidationProvider>
               <ValidationProvider
                 v-slot="{ errors }"
@@ -91,7 +85,6 @@
               >
                 <div class="text-gray-500" :class="!isPhoneNoValid && 'text-red-500'">Mobile Number <span class="text-red-500">*</span> </div>
                 <vue-tel-input
-                  :inputOptions="{ placeholder: 'Mobile Number' }"
                   class="
                     relative
                     border
@@ -118,7 +111,7 @@
               >
               <ValidationProvider
                 v-slot="{ errors }"
-                rules="max:100|required"
+                rules="required"
                 class="block"
               >
                 <BaseInput
@@ -128,12 +121,6 @@
                   label="Item Description"
                   :class="errors.length > 0 && 'error'"
                 />
-                <p
-                  v-if="errors.length"
-                  class="vee-validation-error mt-2 text-sm text-red-600"
-                >
-                  {{ errors[0] }}
-                </p>
               </ValidationProvider>
               <div class="text-gray-500">Description</div>
               <div class="block !mt-0">
@@ -171,13 +158,8 @@
                     ></date-picker>
                   </div>
                 </client-only>
-                <p
-                  v-if="errors.length"
-                  class="vee-validation-error mt-2 text-sm text-red-600"
-                >
-                  {{ errors[0] }}
-                </p>
               </ValidationProvider>
+
               <label class="block mb-1 !mt-10 text-sm font-medium text-gray-800"
                 >Lost Item Address:</label
               >
@@ -216,17 +198,11 @@
                   </template>
                 </BaseInput>
 
-                <p
-                  v-if="errors.length"
-                  class="vee-validation-error mt-2 text-sm text-red-600"
-                >
-                  {{ errors[0] }}
-                </p>
               </ValidationProvider>
               <div class="grid grid-cols-2 lg:grid-cols-3 gap-4">
                 <ValidationProvider
                   v-slot="{ errors }"
-                  rules="max:28|required"
+                  rules="required"
                   class="block lg:col-span-2"
                 >
                   <BaseInput
@@ -236,12 +212,6 @@
                     type="text"
                     :class="errors.length > 0 && 'error'"
                   />
-                  <p
-                    v-if="errors.length"
-                    class="vee-validation-error mt-2 text-sm text-red-600"
-                  >
-                    {{ errors[0] }}
-                  </p>
                 </ValidationProvider>
                 <ValidationProvider
                   v-slot="{ errors }"
@@ -255,18 +225,12 @@
                     type="text"
                     :class="errors.length > 0 && 'error'"
                   />
-                  <p
-                    v-if="errors.length"
-                    class="vee-validation-error mt-2 text-sm text-red-600"
-                  >
-                    {{ errors[0] }}
-                  </p>
                 </ValidationProvider>
               </div>
               <div class="grid grid-cols-2 lg:grid-cols-3 gap-4">
                 <ValidationProvider
                   v-slot="{ errors }"
-                  rules="max:28|required"
+                  rules="required"
                   class="block lg:col-span-2"
                 >
                   <BaseInput
@@ -276,12 +240,6 @@
                     type="text"
                     :class="errors.length > 0 && 'error'"
                   />
-                  <p
-                    v-if="errors.length"
-                    class="vee-validation-error mt-2 text-sm text-red-600"
-                  >
-                    {{ errors[0] }}
-                  </p>
                 </ValidationProvider>
                 <ValidationProvider
                   rules="required|max:10"
@@ -450,11 +408,11 @@ export default {
     validateUserPhone() {
       if (!this.claimPersonPhoneNo) {
         this.isPhoneNoValid = false;
-        this.phoneNoValidateMessage = "*Required";
+        // this.phoneNoValidateMessage = "*Required";
       } else {
         if (this.isPhoneNoFormateValid) {
           this.isPhoneNoValid = true;
-          this.phoneNoValidateMessage = "";
+          // this.phoneNoValidateMessage = "";
         } else {
           this.isPhoneNoValid = false;
         }

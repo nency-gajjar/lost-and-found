@@ -322,12 +322,6 @@
                   label="Your Name"
                   :class="errors.length > 0 && 'error'"
                 />
-                <p
-                  v-if="errors.length"
-                  class="vee-validation-error mt-2 text-sm text-red-600"
-                >
-                  {{ errors[0] }}
-                </p>
               </ValidationProvider>
               <ValidationProvider
                 v-slot="{ errors }"
@@ -415,14 +409,8 @@
                     </div>
                   </template>
                 </BaseInput>
-
-                <p
-                  v-if="errors.length"
-                  class="vee-validation-error mt-2 text-sm text-red-600"
-                >
-                  {{ errors[0] }}
-                </p>
               </ValidationProvider>
+
               <div class="block">
                 <BaseInput
                   v-model="autoCompleteAddress.addressLine2"
@@ -433,7 +421,7 @@
               <div class="grid grid-cols-2 lg:grid-cols-2 gap-4">
                 <ValidationProvider
                   v-slot="{ errors }"
-                  :rules="deliveryType === '0' ? 'max:28|required' : ''"
+                  :rules="deliveryType === '0' ? 'required' : ''"
                   class="block lg:col-span-1"
                 >
                   <BaseInput
@@ -443,12 +431,6 @@
                     type="text"
                     :class="errors.length > 0 && 'error'"
                   />
-                  <p
-                    v-if="errors.length"
-                    class="vee-validation-error mt-2 text-sm text-red-600"
-                  >
-                    {{ errors[0] }}
-                  </p>
                 </ValidationProvider>
                 <ValidationProvider
                   v-slot="{ errors }"
@@ -462,12 +444,6 @@
                     type="text"
                     :class="errors.length > 0 && 'error'"
                   />
-                  <p
-                    v-if="errors.length"
-                    class="vee-validation-error mt-2 text-sm text-red-600"
-                  >
-                    {{ errors[0] }}
-                  </p>
                 </ValidationProvider>
                 <ValidationProvider
                   :rules="deliveryType === '0' ? 'required|max:10' : ''"
@@ -491,7 +467,7 @@
                 </ValidationProvider>
                 <ValidationProvider
                   v-slot="{ errors }"
-                  :rules="deliveryType === '0' ? 'max:28|required' : ''"
+                  :rules="deliveryType === '0' ? 'required' : ''"
                   class="block"
                 >
                   <BaseInput
@@ -501,12 +477,6 @@
                     type="text"
                     :class="errors.length > 0 && 'error'"
                   />
-                  <p
-                    v-if="errors.length"
-                    class="vee-validation-error mt-2 text-sm text-red-600"
-                  >
-                    {{ errors[0] }}
-                  </p>
                 </ValidationProvider>
               </div>
 
@@ -591,12 +561,6 @@
                   label="Pickup Person Name"
                   :class="errors.length > 0 && 'error'"
                 />
-                <p
-                  v-if="errors.length"
-                  class="vee-validation-error mt-2 text-sm text-red-600"
-                >
-                  {{ errors[0] }}
-                </p>
               </ValidationProvider>
               <div class="block mb-4">
                 <BaseInput
@@ -621,12 +585,6 @@
                     ></date-picker>
                   </div>
                 </client-only>
-                <p
-                  v-if="errors.length"
-                  class="vee-validation-error mt-2 text-sm text-red-600"
-                >
-                  {{ errors[0] }}
-                </p>
               </ValidationProvider>
             </div>
             <div

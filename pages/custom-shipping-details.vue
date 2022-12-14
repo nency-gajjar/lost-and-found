@@ -58,12 +58,6 @@
                 label="Custom Item's Value"
                 :class="errors.length > 0 && 'error'"
               />
-              <p
-                v-if="errors.length"
-                class="vee-validation-error mt-2 text-sm text-red-600"
-              >
-                {{ errors[0] }}
-              </p>
             </ValidationProvider>
 
             <!-- EEL code or PFC -->
@@ -79,12 +73,6 @@
                 label="EEL code or PFC"
                 :class="errors.length > 0 && 'error'"
               />
-              <p
-                v-if="errors.length"
-                class="vee-validation-error mt-2 text-sm text-red-600"
-              >
-                {{ errors[0] }}
-              </p>
             </ValidationProvider>
 
             <!-- Contents Explanation -->
@@ -113,7 +101,7 @@
             <div>
               <textarea
                 v-model="restrictionComments"
-                placeholder="Restriction Comments"
+                placeholder="Restriction Comments (Optional)"
                 class="
                   border
                   inline-block
