@@ -454,6 +454,7 @@
                   <div :class="errors.length && 'error'">
                     <date-picker
                       v-model="foundDate"
+                      :disabled-date="disableStartDate"
                       formate="YYYY-MM-DD"
                     ></date-picker>
                   </div>
@@ -1277,6 +1278,9 @@ export default {
     },
   },
   methods: {
+    disableStartDate(date){
+      return date > new Date();
+    },
     resetItemDetailsStore() {
       this.$store.commit("item/SET_ITEM_DETAILS", {});
       this.getItemsData();
