@@ -184,7 +184,7 @@ export default {
   mixins: [eventListners, scrollToError],
   data() {
     return {
-      eel_pfc: "",
+      eel_pfc: "NOEEI 30.37(a)",
       contentsExplanation: "",
       restrictionComments: "",
       customItemsValue: "",
@@ -228,6 +228,11 @@ export default {
         } catch (err) {
         console.log(err);
       }
+      if(this.$store.getters["shipment/insuranceValue"]) {
+        this.customItemsValue = JSON.parse(
+          JSON.stringify(this.$store.getters["shipment/insuranceValue"])
+        )
+      }
     }
     
     this.callEventListners();
@@ -235,7 +240,7 @@ export default {
   watch: {
     customItemsValue(value){
       if(value === ""){
-        this.eel_pfc = "";
+        this.eel_pfc = "NOEEI 30.37(a)";
       }
       else if(Number(value) < 2500){
         this.eel_pfc = "NOEEI 30.37(a)";

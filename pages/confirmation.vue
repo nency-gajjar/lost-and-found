@@ -19,8 +19,9 @@
           <tr>
             <td class="padding-1rem w-full w-full-imp">
               <table width="100%" cellspacing="0" cellpadding="0">
-                <tr>
-                  <td align="center" class="w-full w-full-imp">
+                <tr class="flex justify-center w-full">
+                  <td align="right" class="hidden logo-hidden w-full"><img class="found-logo" src="../assets/images/found-shelf-icon.svg" alt="Found Shelf"></td>
+                  <td align="left" class="w-full">
                     <h2
                       class="
                         text-2xl
@@ -382,6 +383,9 @@ export default {
 };
 </script>
 <style scoped>
+.found-logo {
+  width: 80px;
+}
 tr td:first-child {
   width: 250px;
 }
@@ -533,6 +537,10 @@ td {
 @media print {
   .noPrint{
     display: none;
+  }
+
+  .logo-hidden{
+    display: block;
   }
 }
 </style>
