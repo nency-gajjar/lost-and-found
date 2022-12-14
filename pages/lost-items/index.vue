@@ -92,6 +92,7 @@
                   <date-picker
                     placeholder="End date"
                     v-model="endDate"
+                    :disabled-date="disableEndDate"
                     formate="YYYY-MM-DD"
                   ></date-picker>
                 </client-only>
@@ -477,6 +478,9 @@ export default {
   methods: {
     disableStartDate(date){
       return date > new Date();
+    },
+    disableEndDate(date) {
+      return date < this.startDate || date > new Date();
     },
     addNewItem() {
       this.$router.push({ name: "found" });

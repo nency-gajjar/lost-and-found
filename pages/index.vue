@@ -170,6 +170,7 @@
                       placeholder="Approx. End date"
                       v-model="endDate"
                       formate="YYYY-MM-DD"
+                      :disabled-date="disableEndDate"
                     >
                     </date-picker>
                   </client-only>
@@ -355,6 +356,9 @@ export default {
   methods: {
     disableStartDate(date){
       return date > new Date();
+    },
+    disableEndDate(date) {
+      return date < this.startDate || date > new Date();
     },
     getItemDescriptionOptions() {
       this.$axios
