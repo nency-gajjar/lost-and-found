@@ -160,7 +160,7 @@
                     <date-picker
                       placeholder="Approx. Start date"
                       v-model="startDate"
-                      formate="YYYY-MM-DD"
+                      format="MM-DD-YYYY"
                       :disabled-date="disableStartDate"
                     >
                     </date-picker>
@@ -169,7 +169,7 @@
                     <date-picker
                       placeholder="Approx. End date"
                       v-model="endDate"
-                      formate="YYYY-MM-DD"
+                      format="MM-DD-YYYY"
                       :disabled-date="disableEndDate"
                     >
                     </date-picker>

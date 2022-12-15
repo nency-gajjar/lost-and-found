@@ -14,7 +14,7 @@ export default {
     link: [
       { rel: 'icon', type: 'image/x-icon', href: '/favicon.ico' }
     ],
-    script: [{ src: "https://maps.googleapis.com/maps/api/js?key=AIzaSyDpIqDtSFQIzLR1aN1NRm6pQAPdlCo4vuY&libraries=places "}],
+    script: [{ src: `https://maps.googleapis.com/maps/api/js?key=${process.env.GOOGLE_MAP_KEY}&libraries=places`}],
   },
 
   loading: { color: 'purple', height: '3px' },
@@ -68,6 +68,10 @@ export default {
         toastObject.goAway(0)
       },
     },
+  },
+
+  env: {
+    GOOGLE_MAP_KEY: process.env.GOOGLE_MAP_KEY
   },
 
   // Axios module configuration: https://go.nuxtjs.dev/config-axios

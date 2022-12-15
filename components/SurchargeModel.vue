@@ -79,7 +79,7 @@
                 <div :class="errors.length && 'error'">
                   <date-picker
                     v-model="effectiveAfter"
-                    formate="YYYY-MM-DD"
+                    format="MM-DD-YYYY"
                     type="date"
                     :confirm="true"
                   ></date-picker>
@@ -105,7 +105,7 @@
                 <div :class="errors.length && 'error'">
                   <date-picker
                     v-model="effectiveBefore"
-                    formate="YYYY-MM-DD"
+                    format="MM-DD-YYYY"
                     type="date"
                     :confirm="true"
                   ></date-picker>

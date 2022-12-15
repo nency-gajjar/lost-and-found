@@ -86,7 +86,7 @@
               <div :class="errors.length && 'error'">
                 <date-picker
                   v-model="dateTimeRange"
-                  formate="YYYY-MM-DD"
+                  format="MM-DD-YYYY HH:mm:ss"
                   type="datetime"
                   range
                   :confirm="true"
