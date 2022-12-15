@@ -115,7 +115,7 @@
                     <date-picker
                       v-model="itemLostDate"
                       :disabled-date="disableStartDate"
-                      formate="YYYY-MM-DD"
+                      format="MM-DD-YYYY"
                       placeholder="Date of Lost"
                     ></date-picker>
                   </div>

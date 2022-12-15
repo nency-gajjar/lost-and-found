@@ -332,7 +332,7 @@
                     <date-picker
                       v-model="foundDate"
                       :disabled-date="disableStartDate"
-                      formate="YYYY-MM-DD"
+                      format="MM-DD-YYYY"
                     ></date-picker>
                   </div>
                 </client-only>

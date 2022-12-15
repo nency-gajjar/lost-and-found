@@ -132,7 +132,6 @@ export default {
     return {
       labelUrl: "",
       itemId: "",
-      shipmentId: "",
       showSchedulePickup: false,
       itemDetails: {},
     };
@@ -141,11 +140,6 @@ export default {
     if (this.$store.getters["shipment/labelUrl"]) {
       this.labelUrl = JSON.parse(
         JSON.stringify(this.$store.getters["shipment/labelUrl"])
-      );
-    }
-    if (this.$store.getters["shipment/shipmentId"]) {
-      this.shipmentId = JSON.parse(
-        JSON.stringify(this.$store.getters["shipment/shipmentId"])
       );
     }
     if (this.$store.getters["shipment/itemId"]) {
@@ -317,7 +311,7 @@ export default {
             </td>
           </tr>
           </table>
-          <div class="flex justify-center"><p>Tracking ID: ${this.shipmentId}</p></div>
+          <div class="flex justify-center"><p>Tracking ID: ${this.itemDetails.tracking_id}</p></div>
           <div class="flex">
             <div style="width: 20px">
               <svg style="color: rgb(240, 107, 4);" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256"><rect width="256" height="256" fill="none"></rect><circle cx="60" cy="76" r="28" fill="none" stroke="#000" stroke-linecap="round" stroke-linejoin="round" stroke-width="12"></circle><circle cx="60" cy="180" r="28" fill="none" stroke="#000" stroke-linecap="round" stroke-linejoin="round" stroke-width="12"></circle><line x1="136" y1="128" x2="83.1" y2="164.2" fill="none" stroke="#000" stroke-linecap="round" stroke-linejoin="round" stroke-width="12"></line><line x1="232" y1="62.3" x2="164.3" y2="108.6" fill="none" stroke="#000" stroke-linecap="round" stroke-linejoin="round" stroke-width="12"></line><line x1="232" y1="193.7" x2="83.1" y2="91.8" fill="none" stroke="#000" stroke-linecap="round" stroke-linejoin="round" stroke-width="12"></line></svg>

@@ -93,7 +93,7 @@
                     placeholder="End date"
                     v-model="endDate"
                     :disabled-date="disableEndDate"
-                    formate="YYYY-MM-DD"
+                    format="MM-DD-YYYY"
                   ></date-picker>
                 </client-only>
               </div>

@@ -163,7 +163,7 @@
                     <date-picker
                       placeholder="Approx. End date"
                       v-model="endDate"
-                      formate="YYYY-MM-DD"
+                      format="MM-DD-YYYY"
                       :disabled-date="disableEndDate"
                     >
                     </date-picker>
