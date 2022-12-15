@@ -1,19 +1,6 @@
 <template>
   <div class="wrapper">
-    <div
-      class="
-        w-full
-        mx-6
-        lg:mx-0
-        md:w-8/12
-        lg:w-7/12
-        xl:w-6/12
-        bg-white
-        border border-[#E1E3E6]
-        rounded-lg
-      "
-      style="box-shadow: rgba(54, 28, 93, 0.04) -10px 18px 32px"
-    >
+    <BaseCard class="md:w-8/12 lg:w-7/12 xl:w-6/12">
       <ValidationObserver v-slot="{ validate }" ref="observer">
         <form @submit.prevent="validate().then(onSubmit)">
           <div class="sm:p-6 p-4 space-y-4">
@@ -167,7 +154,7 @@
           </div>
         </form>
       </ValidationObserver>
-    </div>
+    </BaseCard>
   </div>
 </template>
 

@@ -1,25 +1,19 @@
 <template>
   <div class="sm:mt-8">
     <div class="flex space-y-5 max-w-5xl mx-auto">
-      <div
+      <BaseCard
         class="
-          border border-[#E1E3E6]
-          rounded-lg
-          bg-white
           sm:mt-14
           mt-8
-          mx-4
           md:px-12
           px-6
           sm:space-x-2
           lg:space-x-0
-          w-full
           flex
           justify-between
           flex-col
           sm:flex-row
         "
-        style="box-shadow: -10px 18px 32px rgba(54, 28, 93, 0.04)"
       >
         <div
           class="
@@ -69,7 +63,7 @@
             src="../assets/images/lost-found.svg"
           />
         </div>
-      </div>
+      </BaseCard>
     </div>
     <div class="wrapper">
       <!-- Lost Item Filter -->
@@ -461,14 +455,6 @@ export default {
 .gradient {
   background: linear-gradient(90deg, #d53369 0%, #daae51 100%);
   color: #fff;
-}
-
-.card {
-  @apply p-10 rounded-lg text-indigo-500 bg-indigo-100 shadow-lg;
-
-  .title {
-    @apply text-6xl font-bold;
-  }
 }
 
 .sliderCard {

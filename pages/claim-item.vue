@@ -1,20 +1,6 @@
 <template>
   <div class="wrapper-form">
-    <div
-      class="
-        card
-        w-full
-        mx-6
-        lg:mx-0
-        md:w-8/12
-        lg:w-7/12
-        xl:w-6/12
-        bg-white
-        border border-[#E1E3E6]
-        rounded-lg
-      "
-      style="box-shadow: rgba(54, 28, 93, 0.04) -10px 18px 32px"
-    >
+    <BaseCard class="md:w-8/12 lg:w-7/12 xl:w-6/12">
       <div>
         <ValidationObserver v-slot="{ validate }" ref="observer">
           <form @submit.prevent="validate().then(onSubmit)">
@@ -275,7 +261,7 @@
           </form>
         </ValidationObserver>
       </div>
-    </div>
+    </BaseCard>
 
     <BaseDialog
       :showDialog="showDialog"

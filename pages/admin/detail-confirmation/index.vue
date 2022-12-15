@@ -184,22 +184,8 @@
           </div>
         </div>
       </div>
-      <div
-        class="
-          w-full
-          mx-6
-          lg:mx-0
-          md:w-8/12
-          lg:w-7/12
-          xl:w-6/12
-          overflow-hidden
-          bg-white
-          border border-[#E1E3E6]
-          rounded-lg
-        "
-        style="box-shadow: rgba(54, 28, 93, 0.04) -10px 18px 32px"
-      >
-        <section class="bg-white">
+      <BaseCard class="md:w-8/12 lg:w-7/12 xl:w-6/12 overflow-hidden">
+        <section>
           <div class="main-title bg-accent-100 text-white mb-3">
             <h1
               class="
@@ -1113,7 +1099,7 @@
             >
           </div>
         </section>
-      </div>
+      </BaseCard>
       <BaseDialog
         :showDialog="showDialog"
         :icon="{ name: 'circle-check', color: 'green', size: '3x' }"

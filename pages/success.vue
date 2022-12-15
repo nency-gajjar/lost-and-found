@@ -1,25 +1,19 @@
 <template>
   <main class="text-center space-y-5 max-w-5xl mx-auto">
     <div class="flex space-y-5 max-w-5xl mx-auto">
-      <div
+      <BaseCard
         class="
-          border border-[#E1E3E6]
-          rounded-lg
-          bg-white
           sm:mt-14
           mt-8
-          mx-4
           md:px-12
           px-6
           sm:space-x-2
           lg:space-x-0
-          w-full
           flex
           justify-between
           flex-col
           sm:flex-row
         "
-        style="box-shadow: -10px 18px 32px rgba(54, 28, 93, 0.04)"
       >
         <div
           class="
@@ -69,7 +63,7 @@
             src="../assets/images/successfull-payment.svg"
           />
         </div>
-      </div>
+      </BaseCard>
     </div>
     <div class="text-center mt-8 space-y-5 max-w-4xl mx-auto px-4">
       <h3 class="text-xl font-medium text-primary-100">
