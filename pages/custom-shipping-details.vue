@@ -156,19 +156,14 @@
                 {{ errors[0] }}
               </p>
             </ValidationProvider>
-          </div>
-          <div
-            v-show="showValidateAlert"
-            class="p-4 mb-4 text-sm text-red-700 bg-red-100 rounded-lg"
-            role="alert"
-          >
-            <span class="font-medium">Oops!</span> Please fill all required
-            fields and try submitting again.
-          </div>
-          <div class="flex justify-end mr-6">
-            <BaseButton type="submit">
-              Submit
-            </BaseButton>
+
+            <ValidationAlert :show-alert="showValidateAlert" />
+
+            <div class="flex justify-end">
+              <BaseButton type="submit">
+                Submit
+              </BaseButton>
+            </div>
           </div>
         </form>
       </ValidationObserver>
@@ -179,9 +174,13 @@
 <script>
 import eventListners from "../mixins/eventListners.js";
 import scrollToError from "../mixins/scrollToError.js";
+import ValidationAlert from '~/components/shared/ValidationAlert.vue'
 
 export default {
   mixins: [eventListners, scrollToError],
+  components: {
+    ValidationAlert
+  },
   data() {
     return {
       eel_pfc: "NOEEI 30.37(a)",

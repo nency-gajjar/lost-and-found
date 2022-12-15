@@ -51,14 +51,9 @@
                   {{ errors[0] }}
                 </p>
               </ValidationProvider>
-              <div
-                v-show="showValidateAlert"
-                class="p-4 mb-4 text-sm text-red-700 bg-red-100 rounded-lg"
-                role="alert"
-              >
-                <span class="font-medium">Oops!</span> Please fill all required
-                fields and try submitting again.
-              </div>
+
+              <ValidationAlert :show-alert="showValidateAlert" />
+
               <BaseButton :is-loading="isLoading" type="submit" class="w-full">
                 Send Email
               </BaseButton>
@@ -80,6 +75,7 @@
 
 <script>
 import { ValidationObserver, ValidationProvider } from "vee-validate";
+import ValidationAlert from '~/components/shared/ValidationAlert.vue'
 import eventListners from "../mixins/eventListners.js";
 
 export default {
@@ -92,6 +88,7 @@ export default {
   components: {
     ValidationObserver,
     ValidationProvider,
+    ValidationAlert
   },
   data() {
     return {

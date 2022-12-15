@@ -848,7 +848,7 @@
                 <ValidationProvider
                   v-slot="{ errors }"
                   rules="required"
-                  class="block !mt-0"
+                  class="block"
                 >
                   <BaseInput
                     :isRequired="true"
@@ -911,16 +911,8 @@
                   </div>
                 </div>
               </template>
-
-              <div v-if="showValidateAlert" class="my-8">
-                <div
-                  class="p-4 text-sm text-red-700 bg-red-100 rounded-lg"
-                  role="alert"
-                >
-                  <span class="font-medium">Oops!</span>
-                  {{ alertMessage }}
-                </div>
-              </div>
+              
+              <ValidationAlert class="!my-8" :show-alert="showValidateAlert" />
 
               <div class="flex justify-end !mt-12">
                 <BaseButton :is-loading="isLoading" type="submit">
@@ -962,6 +954,7 @@ import eventListners from "../mixins/eventListners.js";
 import scrollToError from "../mixins/scrollToError.js";
 import vSelect from 'vue-select';
 import 'vue-select/dist/vue-select.css';
+import ValidationAlert from '~/components/shared/ValidationAlert.vue'
 
 export default {
   mixins: [DetectBrowser, ImageEditor, formatMobileNumber, eventListners, scrollToError],
@@ -970,7 +963,6 @@ export default {
     showResetButton: false,
     itemDetails: {},
     showValidateAlert: false,
-    alertMessage: "Please fill all required fields and try submitting again.",
     senderFormTitle: "Found an Item that belongs to a guest? Let’s add few details and leave the rest to us!",
     foundItemFormTitle: "Found item details",
     venueEmail: "",
@@ -1035,6 +1027,7 @@ export default {
     VueCropper,
     ValidationObserver,
     ValidationProvider,
+    ValidationAlert,
     vSelect,
   },
   computed: {
@@ -1494,7 +1487,6 @@ export default {
       ) {
         this.scrollToError();
         this.showValidateAlert = true;
-        this.alertMessage = "Please fill all required fields and try submitting again.";
         this.isLoading = false;
       } else {
         let venuePhoneNo = this.formatMobileNumber(

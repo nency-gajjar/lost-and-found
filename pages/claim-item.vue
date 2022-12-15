@@ -263,14 +263,9 @@
                   </p>
                 </ValidationProvider>
               </div>
-              <div
-                v-show="showValidateAlert"
-                class="p-4 mb-4 text-sm text-red-700 bg-red-100 rounded-lg"
-                role="alert"
-              >
-                <span class="font-medium">Oops!</span> Please fill all required
-                fields and try submitting again.
-              </div>
+
+              <ValidationAlert :show-alert="showValidateAlert" />
+              
               <div class="flex justify-end">
                 <BaseButton :is-loading="isLoading" type="submit">
                   Submit
@@ -301,12 +296,14 @@ import moment from "moment";
 import formatMobileNumber from "../mixins/formatMobileNumber.js";
 import eventListners from "../mixins/eventListners.js";
 import scrollToError from "../mixins/scrollToError.js";
+import ValidationAlert from '~/components/shared/ValidationAlert.vue'
 
 export default {
   mixins: [formatMobileNumber, eventListners, scrollToError],
   components: {
     ValidationObserver,
     ValidationProvider,
+    ValidationAlert,
     DatePicker,
   },
   data() {

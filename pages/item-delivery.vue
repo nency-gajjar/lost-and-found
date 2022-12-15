@@ -632,14 +632,9 @@
                 </client-only>
               </ValidationProvider>
             </div>
-            <div
-              v-show="showValidateAlert"
-              class="p-4 mb-4 text-sm text-red-700 bg-red-100 rounded-lg"
-              role="alert"
-            >
-              <span class="font-medium">Oops!</span> Please fill all required
-              fields and try submitting again.
-            </div>
+            
+            <ValidationAlert :show-alert="showValidateAlert" />
+
             <div class="flex justify-end">
               <BaseButton :is-loading="isLoading" type="submit">
                 Next Step
@@ -676,9 +671,11 @@ import formatMobileNumber2 from "../mixins/formatMobileNumber-2.js";
 import eventListners from "../mixins/eventListners.js";
 import scrollToError from "../mixins/scrollToError.js";
 import moment from "moment";
+import ValidationAlert from '~/components/shared/ValidationAlert.vue'
 
 export default {
   mixins: [formatMobileNumber, formatMobileNumber2, eventListners, scrollToError],
+  components: { DatePicker, ValidationAlert },
   data: () => ({
     showDialog: false,
     deliveryType: "0",
@@ -711,7 +708,6 @@ export default {
     isLoadingItemDetails: true,
     itemDetails: {},
   }),
-  components: { DatePicker },
   async created() {
     if (this.$route.query.id) {
       this.isLoadingItemDetails = true;
