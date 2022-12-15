@@ -1,5 +1,5 @@
 <template>
-  <main class="text-center sm:mt-8 space-y-5 max-w-5xl mx-auto">
+  <main class="text-center space-y-5 max-w-5xl mx-auto">
     <div class="flex space-y-5 max-w-5xl mx-auto">
       <div
         class="
@@ -71,13 +71,15 @@
         </div>
       </div>
     </div>
-    <div class="text-center mt-8 space-y-5 max-w-xl mx-auto px-4">
-      <h3 class="text-xl font-medium text-primary-100 font-display">
-        You have succesfully created a label!
+    <div class="text-center mt-8 space-y-5 max-w-4xl mx-auto px-4">
+      <h3 class="text-xl font-medium text-primary-100">
+        You have successfully created a shipping label!
       </h3>
       <p class="text-gray-800">
-        Thank you for choosing Lost and Found! Your next step is to print the
-        label, attach it to your package and wait for pickup.
+        Your label will be automatically sent to the sender’s email address: <span class="font-semibold">{{ itemDetails.venue_email }}</span>, and also to your email address: <span class="font-semibold">{{ itemDetails.receiver_email }}</span>. Please be sure to check the spam if you have not received the email.
+      </p><br/>
+      <p class="text-gray-800">
+        We recommend that you call the sender below to ensure that they have received the email containing the label. <br> <span class="font-semibold text-gray-700">Sender name:</span> {{ itemDetails.venue_name }} <br> <span class="font-semibold text-gray-700">Sender Mobile No:</span> <a :href="`tel: ${itemDetails.venue_phone_no}`" class="font-display underline decoration-1">{{ itemDetails.venue_phone_no }}</a>
       </p>
       <BaseButton v-if="!itemDetails.scheduled_pickup" @click="printLabel"> Print Label </BaseButton>
     </div>
@@ -112,6 +114,10 @@
         Back to listing
       </BaseButton>
     </div>
+    <p class="text-gray-800">
+      Need help? Reach out to us at <a href="mailto:support@foundshelf.com" class="font-display underline decoration-1">support@foundshelf.com</a>
+      In most cases, we will send you a reply in an hour!
+    </p>
     <SchedulePickupModal
       v-if="showSchedulePickup"
       :show-modal="showSchedulePickup"

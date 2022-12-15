@@ -153,6 +153,7 @@
                   <div :class="errors.length && 'error'">
                     <date-picker
                       v-model="itemLostDate"
+                      :disabled-date="disableStartDate"
                       format="MM-DD-YYYY"
                       placeholder="Date of Lost"
                     ></date-picker>
@@ -350,6 +351,9 @@ export default {
     },
   },
   methods: {
+    disableStartDate(date){
+      return date > new Date();
+    },
     getAddress() {
       if (this.address == "") {
         document.getElementById("autocomplete-claim-item").placeholder = "";

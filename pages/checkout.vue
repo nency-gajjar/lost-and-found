@@ -112,7 +112,7 @@
             <span class="font-medium text-md">
               {{ displayItemService(checkoutDetail.selectedRate.service) }}
             </span>
-            <p class="text-display tracking-wide text-gray-700 font-medium">
+            <p class="text-display tracking-wide text-gray-700 font-medium font-display">
               {{ Number(checkoutDetail.selectedRate.rate) | currency }}
             </p>
           </div>
@@ -151,20 +151,20 @@
             class="flex justify-between"
             v-if="!isEmpty(checkoutDetail) && checkoutDetail.signature"
           >
-            <span class="font-medium text-md"> Signature Confirmation:</span>
-            <span class="text-display tracking-wide text-gray-700 font-medium">
+            <span class="font-medium text-md"> Signature Confirmation</span>
+            <span class="font-display tracking-wide text-gray-700 font-medium">
               {{ 5 | currency }}
             </span>
           </p>
           <p class="flex justify-between" v-if="insuranceCharges">
-            <span class="font-medium text-md"> Insurance Charges:</span>
-            <span class="text-display tracking-wide text-gray-700 font-medium">
+            <span class="font-medium text-md"> Insurance Charges</span>
+            <span class="font-display tracking-wide text-gray-700 font-medium">
               {{ Number(insuranceCharges) | currency }}
             </span>
           </p>
-          <p v-if="checkoutDetail.insuranceValue">
-            <span class="font-medium text-md"> ( Insured for: </span>
-            <span class="text-display tracking-wide text-gray-700 font-medium">
+          <p v-if="checkoutDetail.insuranceValue" class="!-my-1">
+            <span class="text-gray-600 font-medium text-sm"> ( Insured for </span>
+            <span class="font-display tracking-wide text-gray-700 font-medium text-sm">
               {{ Number(checkoutDetail.insuranceValue) | currency }}
             )
             </span>
@@ -491,13 +491,15 @@ export default {
                         }
                       )
                       .then((response) => {
-                        this.$store.commit("shipment/SET_LABEL_DETAILS", {
-                          lableUrl:
+                        if (response.status === 200) {
+                          this.$store.commit("shipment/SET_LABEL_DETAILS", {
+                            lableUrl:
                             shippingResponse.data.label_url,
                             itemId: this.$route.query.id,
                             shipmentId: shippingResponse.data.shipment_id,
-                        });
-                        this.isLoading = false;
+                          });
+                          this.isLoading = false;
+                        }
                         this.$nextTick(() => {
                           this.$router.push({
                             name: "success",
@@ -522,7 +524,6 @@ export default {
                   this.isLoading = false;
                 });
             }
-            this.isLoading = false;
           } catch (error) {
             console.log(error);
             this.$toast.error(error);
