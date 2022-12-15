@@ -626,7 +626,7 @@
                   <div :class="errors.length && 'error'">
                     <date-picker
                       v-model="expectedPickupDate"
-                      formate="YYYY-MM-DD"
+                      format="MM-DD-YYYY"
                     ></date-picker>
                   </div>
                 </client-only>
@@ -675,6 +675,7 @@ import formatMobileNumber from "../mixins/formatMobileNumber.js";
 import formatMobileNumber2 from "../mixins/formatMobileNumber-2.js";
 import eventListners from "../mixins/eventListners.js";
 import scrollToError from "../mixins/scrollToError.js";
+import moment from "moment";
 
 export default {
   mixins: [formatMobileNumber, formatMobileNumber2, eventListners, scrollToError],
@@ -950,7 +951,7 @@ export default {
       if (this.deliveryType === "1") {
         params.pickup_person_name = this.pickupPersonName;
         params.additional_person_name = this.additionalPersonName;
-        params.pickup_date = this.expectedPickupDate;
+        params.pickup_date = moment(this.expectedPickupDate).format("YYYY-MM-DD");
       }
       this.$axios
         .post("/updatesinglelostitem?id=" + this.itemId, params)

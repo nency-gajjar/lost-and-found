@@ -189,7 +189,7 @@ export default {
         })
     },
     formatDate(date){
-      return moment(date).format("YYYY-MM-DD");
+      return moment(date).format("MM-DD-YYYY");
     },
     editSurcharge(data) {
       this.editData = data;

@@ -138,6 +138,7 @@ export default {
     return {
       labelUrl: "",
       itemId: "",
+      shipmentId: "",
       showSchedulePickup: false,
       itemDetails: {},
     };
@@ -146,6 +147,11 @@ export default {
     if (this.$store.getters["shipment/labelUrl"]) {
       this.labelUrl = JSON.parse(
         JSON.stringify(this.$store.getters["shipment/labelUrl"])
+      );
+    }
+    if (this.$store.getters["shipment/shipmentId"]) {
+      this.shipmentId = JSON.parse(
+        JSON.stringify(this.$store.getters["shipment/shipmentId"])
       );
     }
     if (this.$store.getters["shipment/itemId"]) {
@@ -201,9 +207,13 @@ export default {
       let imgHtml = "";
       if (this.itemDetails.image) {
         imgHtml =
-          "<div class='itemImgContainer'><img src=" +
+          "<div class='flex justify-around w-100-px'> <img src='http://34.197.126.8/_nuxt/assets/images/found-shelf-icon.svg' /> <img src=" +
           this.itemDetails.image +
           "></div>";
+      }
+      else {
+        imgHtml =
+          "<div class='itemImgContainer'><img src='http://34.197.126.8/_nuxt/assets/images/found-shelf-icon.svg' /></div>";
       }
       let htmlToPrint = `
       <html><head>
@@ -229,21 +239,27 @@ export default {
           .justify-between {
             justify-content: space-between;
           }
+          .justify-around {
+            justify-content: space-around;
+          }
           .labelContainer, .itemImgContainer{
             display: flex;
             justify-content: center;
             margin-top: 10px;
           }
           .text-accent-100 {
-            color: #2e9705eb;
+            color: #970584ba;
           }
           .text-gray-600 {
             color: rgb(82 82 82);
           }
           .labelContainer img{
-            height: 630px;
+            height: 600px;
           }
           .itemImgContainer img{
+            width: 100px;
+          }
+          .w-100-px img{
             width: 100px;
           }
           .text-center{
@@ -299,7 +315,7 @@ export default {
             </td>
             <td>
               <p class='text-accent-100 font-bold'>Shipping Details: </p>
-              <p>Name: $ ${this.itemDetails.total_amount / 100}</p>
+              <p>Amount: $ ${this.itemDetails.total_amount / 100}</p>
               <p>Service: ${this.displayItemService(
                 this.itemDetails.service_name
               )}</p>
@@ -307,6 +323,7 @@ export default {
             </td>
           </tr>
           </table>
+          <div class="flex justify-center"><p>Tracking ID: ${this.shipmentId}</p></div>
           <div class="flex">
             <div style="width: 20px">
               <svg style="color: rgb(240, 107, 4);" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256"><rect width="256" height="256" fill="none"></rect><circle cx="60" cy="76" r="28" fill="none" stroke="#000" stroke-linecap="round" stroke-linejoin="round" stroke-width="12"></circle><circle cx="60" cy="180" r="28" fill="none" stroke="#000" stroke-linecap="round" stroke-linejoin="round" stroke-width="12"></circle><line x1="136" y1="128" x2="83.1" y2="164.2" fill="none" stroke="#000" stroke-linecap="round" stroke-linejoin="round" stroke-width="12"></line><line x1="232" y1="62.3" x2="164.3" y2="108.6" fill="none" stroke="#000" stroke-linecap="round" stroke-linejoin="round" stroke-width="12"></line><line x1="232" y1="193.7" x2="83.1" y2="91.8" fill="none" stroke="#000" stroke-linecap="round" stroke-linejoin="round" stroke-width="12"></line></svg>

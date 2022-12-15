@@ -412,46 +412,6 @@
                     sm:w-6/12
                   "
                 >
-                  Weight
-                </div>
-                <div
-                  class="text-gray-600 text-left md:w-7/12 sm:w-6/12"
-                >
-                  {{ itemDetails.weight_pounds }} lbs
-                </div>
-              </div>
-              <div class="flex sm:items-center items-start mt-3 flex-wrap md:flex-nowrap sm:flex-row flex-col">
-                <div
-                  class="
-                    text-left text-gray-600
-                    font-medium
-                    w-250-px
-                    lg:w-4/12
-                    md:w-5/12
-                    sm:w-6/12
-                  "
-                >
-                  Dimension
-                </div>
-                <div
-                  class="text-gray-600 text-left md:w-7/12 sm:w-6/12"
-                >
-                  {{ itemDetails.item_length }}(l) x
-                  {{ itemDetails.item_width }}(w) x
-                  {{ itemDetails.item_height }}(h) inches
-                </div>
-              </div>
-              <div class="flex sm:items-center items-start mt-3 flex-wrap md:flex-nowrap sm:flex-row flex-col">
-                <div
-                  class="
-                    text-left text-gray-600
-                    font-medium
-                    w-250-px
-                    lg:w-4/12
-                    md:w-5/12
-                    sm:w-6/12
-                  "
-                >
                   Item Status
                 </div>
                 <div
@@ -620,6 +580,10 @@ export default {
             if (response.status === 200) {
               this.isLoadingItemDetails = false;
               let obj1 = response.data.data.Item;
+              if(params.item_description === obj1.item_description){
+                params.is_default = obj1.is_default;
+                params.it_type = obj1.it_type;
+              }
               const diff = Object.keys(obj1).reduce((result, key) => {
                 if (!params.hasOwnProperty(key)) {
                   result.push(key);
@@ -629,10 +593,6 @@ export default {
                 }
                 return result;
               }, Object.keys(params));
-              const index = diff.indexOf("is_default");
-              if (index > -1) {
-                diff.splice(index, 1);
-              }
               const index2 = diff.indexOf("id");
               if (index2 > -1) {
                 diff.splice(index2, 1);

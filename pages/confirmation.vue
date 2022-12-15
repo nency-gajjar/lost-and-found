@@ -19,8 +19,9 @@
           <tr>
             <td class="padding-1rem w-full w-full-imp">
               <table width="100%" cellspacing="0" cellpadding="0">
-                <tr>
-                  <td align="center" class="w-full w-full-imp">
+                <tr class="flex justify-center w-full">
+                  <td align="right" class="hidden logo-hidden w-full"><img class="found-logo" src="../assets/images/found-shelf-icon.svg" alt="Found Shelf"></td>
+                  <td align="left" class="w-full">
                     <h2
                       class="
                         text-2xl
@@ -185,32 +186,6 @@
                   <td>
                     <div class="text-gray-600 text-left">
                       {{ itemDetails.package_type }}
-                    </div>
-                  </td>
-                </tr>
-                <tr class="l-2">
-                  <td>
-                    <div class="text-left text-gray-600 font-medium">
-                      Weight
-                    </div>
-                  </td>
-                  <td>
-                    <div class="text-gray-600 text-left">
-                      {{ itemDetails.weight_pounds }} lbs
-                    </div>
-                  </td>
-                </tr>
-                <tr class="l-2">
-                  <td>
-                    <div class="text-left text-gray-600 font-medium">
-                      Dimension
-                    </div>
-                  </td>
-                  <td>
-                    <div class="text-gray-600 text-left">
-                      {{ itemDetails.item_length }}(l) x
-                      {{ itemDetails.item_width }}(w) x
-                      {{ itemDetails.item_height }}(h) inches
                     </div>
                   </td>
                 </tr>
@@ -408,6 +383,9 @@ export default {
 };
 </script>
 <style scoped>
+.found-logo {
+  width: 80px;
+}
 tr td:first-child {
   width: 250px;
 }
@@ -559,6 +537,10 @@ td {
 @media print {
   .noPrint{
     display: none;
+  }
+
+  .logo-hidden{
+    display: block;
   }
 }
 </style>
