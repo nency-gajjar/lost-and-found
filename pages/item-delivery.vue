@@ -955,7 +955,7 @@ export default {
       }
       this.$axios
         .post("/updatesinglelostitem?id=" + this.itemId, params)
-        .then((response) => {
+        .then(async (response) => {
           if (response.status === 200) {
             if (this.deliveryType === "1") {
               this.$axios
@@ -987,7 +987,25 @@ export default {
                   ""
                 );
               }
-              if(params_rateQuotes.country !== params_rateQuotes.tocountry){
+              let senderAddressResponse = await this.$axios.get(`https://maps.googleapis.com/maps/api/geocode/json?address=${this.itemDetails.zipcode}&sensor=true&key=${process.env.GOOGLE_MAP_KEY}`);
+              let receiverAddressResponse = await this.$axios.get(`https://maps.googleapis.com/maps/api/geocode/json?address=${this.autoCompleteAddress.zipcode}&sensor=true&key=${process.env.GOOGLE_MAP_KEY}`);
+              let senderCountry = "";
+              let receiverCountry = "";
+              senderAddressResponse?.data?.results?.[0]?.address_components?.forEach(address => {
+                address.types.forEach((type) => {
+                  if (type === "country") {
+                    senderCountry = address.long_name;
+                  }
+                });
+              });
+              receiverAddressResponse?.data?.results?.[0]?.address_components?.forEach(address => {
+                address.types.forEach((type) => {
+                  if (type === "country") {
+                    receiverCountry = address.long_name;
+                  }
+                });
+              });
+              if(senderCountry !== receiverCountry){
                 this.$nextTick(() => {
                   this.$router.push({
                     name: "custom-shipping-details",
