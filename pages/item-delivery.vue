@@ -5,51 +5,13 @@
         <form @submit.prevent="validate().then(onSubmit)">
           <div class="p-6">
             <div class="form-title">
-              <h1
-                class="
-                  w-full
-                  my-2
-                  text-xl
-                  font-bold
-                  leading-tight
-                  text-gray-700
-                "
-              >
-                We Found Your Item!
-              </h1>
-              <div class="flex justify-start">
-                <span
-                  class="
-                    w-20
-                    border-t-4 border-solid border-orange-200
-                    inline-block
-                    mb-3
-                  "
-                ></span>
-              </div>
+              <BaseHeader varient="gray">We Found Your Item!</BaseHeader>
             </div>
 
             <!-- Item Details -->
             <div class="sections py-4">
               <div class="form-title">
-                <h2
-                  class="
-                    text-lg text-accent-100
-                    font-medium
-                    leading-tight
-                    text-left text-gray-800
-                  "
-                >
-                  Item's Details:
-                </h2>
-                <span
-                  class="
-                    w-20
-                    border-t-4 border-solid border-gray-300
-                    inline-block
-                    mb-1
-                  "
-                ></span>
+                <BaseHeader varient="accent">Item's Details:</BaseHeader>
               </div>
               <div v-if="!itemDetails.image" class="flex sm:items-center items-start mt-3 flex-wrap md:flex-nowrap sm:flex-row flex-col">
                 <div
@@ -70,6 +32,7 @@
               </div>
               <div v-else
                 class="
+                  mt-2
                   py-2
                   px-5
                   flex
@@ -135,25 +98,7 @@
             <!-- Sender's Details -->
             <div class="sections py-4">
               <div class="form-title">
-                <h2
-                  class="
-                    text-lg text-accent-100
-                    font-medium
-                    leading-tight
-                    text-left text-gray-800
-                  "
-                >
-                  Sender's Details:
-                </h2>
-
-                <span
-                  class="
-                    w-20
-                    border-t-4 border-solid border-gray-300
-                    inline-block
-                    mb-1
-                  "
-                ></span>
+                <BaseHeader varient="accent">Sender's Details:</BaseHeader>
               </div>
               <div class="flex sm:items-center items-start mt-3 flex-wrap md:flex-nowrap sm:flex-row flex-col">
                 <div
@@ -263,7 +208,9 @@
             </div>
             <!-- Sender's Details End-->
 
-            <div class="text-gray-800 font-medium mt-6">How would you like to proceed?</div>
+            <div class="form-title mt-4">
+              <BaseHeader varient="accent">How would you like to proceed?</BaseHeader>
+            </div>
             <div class="grid grid-cols-2 gap-4 mt-2">
               <!-- Ship it to me -->
               <div

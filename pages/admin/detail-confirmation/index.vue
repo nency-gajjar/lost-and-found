@@ -37,28 +37,20 @@
           >
             <div class="relative">
               <div class="title bg-accent-100 pl-6 py-4 mb-4">
-                <h3 class="text-white">Upload Image</h3>
+                <h3 class="text-white">Edit Image</h3>
               </div>
               <span
                 @click="closeEditor"
-                class="absolute right-5 top-5 inline-block z-10 cursor-pointer"
+                class="
+                  absolute
+                  right-5
+                  top-5
+                  inline-block
+                  z-10
+                  cursor-pointer
+                "
               >
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  class="icon icon-tabler icon-tabler-x"
-                  width="24"
-                  height="24"
-                  viewBox="0 0 24 24"
-                  stroke-width="1.5"
-                  stroke="#ffffff"
-                  fill="none"
-                  stroke-linecap="round"
-                  stroke-linejoin="round"
-                >
-                  <path stroke="none" d="M0 0h24v24H0z" fill="none" />
-                  <line x1="18" y1="6" x2="6" y2="18" />
-                  <line x1="6" y1="6" x2="18" y2="18" />
-                </svg>
+                <BaseIcon icon="xmark" size="lg" />
               </span>
             </div>
             <div
@@ -187,40 +179,11 @@
       <BaseCard class="md:w-8/12 lg:w-7/12 xl:w-6/12 overflow-hidden">
         <section>
           <div class="main-title bg-accent-100 text-white mb-3">
-            <h1
-              class="
-                w-full
-                py-3
-                text-2xl
-                font-bold
-                leading-tight
-                text-center text-white
-              "
-            >
-              ITEM DETAILS
-            </h1>
+            <BaseHeader varient="details">ITEM DETAILS</BaseHeader>
           </div>
           <div class="sections py-4 px-6">
             <div class="form-title">
-              <h2
-                class="
-                  text-lg text-accent-100
-                  font-medium
-                  leading-tight
-                  text-left text-gray-800
-                "
-              >
-                Sender's Details:
-              </h2>
-
-              <span
-                class="
-                  w-20
-                  border-t-4 border-solid border-gray-300
-                  inline-block
-                  mb-1
-                "
-              ></span>
+              <BaseHeader varient="accent">Sender's Details:</BaseHeader>
             </div>
             <div class="flex sm:items-center items-start mt-3 flex-wrap md:flex-nowrap sm:flex-row flex-col">
               <div
@@ -469,24 +432,7 @@
 
           <div class="sections px-6 py-4">
             <div class="form-title">
-              <h2
-                class="
-                  text-lg text-accent-100
-                  font-medium
-                  leading-tight
-                  text-left text-gray-800
-                "
-              >
-                Address Details:
-              </h2>
-              <span
-                class="
-                  w-20
-                  border-t-4 border-solid border-gray-300
-                  inline-block
-                  mb-1
-                "
-              ></span>
+              <BaseHeader varient="accent">Address Details::</BaseHeader>
             </div>
 
             <div class="flex sm:items-center items-start mt-3 flex-wrap md:flex-nowrap sm:flex-row flex-col">
@@ -664,24 +610,7 @@
           </div>
           <div class="sections px-6 py-4">
             <div class="form-title">
-              <h2
-                class="
-                  text-lg text-accent-100
-                  font-medium
-                  leading-tight
-                  text-left text-gray-800
-                "
-              >
-                Found Item's Details:
-              </h2>
-              <span
-                class="
-                  w-20
-                  border-t-4 border-solid border-gray-300
-                  inline-block
-                  mb-1
-                "
-              ></span>
+              <BaseHeader varient="accent">Found Item's Details:</BaseHeader>
             </div>
 
             <div class="flex foundItemContainer">

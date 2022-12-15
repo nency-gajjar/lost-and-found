@@ -68,10 +68,7 @@
                 :color="icon.color"
                 :size="icon.size"
               />
-
-              <h2 v-if="title" class="text-xl font-semibold py-4 text-gray-800">
-                {{ title }}
-              </h2>
+              <BaseHeader v-if="title" class="py-4" varient="h4">{{ title }}</BaseHeader>
               <slot name="input" />
               <div v-if="message" class="text-md text-gray-600 px-8">
                 <p v-html="message"></p>

@@ -4,10 +4,7 @@
       <main class="my-10 space-y-6">
         <div class="flex flex-col md:space-y-0 md:flex-row justify-between">
           <div class="mr-6 order-2 md:order-1 mt-3 md:mt-0">
-            <h1 class="text-2xl text-gray-600 font-semibold">
-              Admin Dashboard
-            </h1>
-            <!-- <h2 class="text-gray-600 ml-0.5">Content here</h2> -->
+            <BaseHeader class="text-left" varient="h4">Admin Dashboard</BaseHeader>
           </div>
           <BaseButton
             class="order-1 md:order-2 sm:ml-2 grow sm:grow-0 mt-0"

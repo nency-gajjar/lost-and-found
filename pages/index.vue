@@ -186,28 +186,7 @@
       class="bg-white border-b py-8"
     >
       <div class="container max-w-6xl mx-auto m-8">
-        <h3
-          class="
-            w-full
-            my-2
-            text-2xl
-            font-bold
-            leading-tight
-            text-center text-gray-700
-          "
-        >
-          Recently Found Items
-        </h3>
-        <div class="flex justify-center">
-          <span
-            class="
-              w-20
-              border-t-4 border-solid border-orange-200
-              inline-block
-              mb-3
-            "
-          ></span>
-        </div>
+        <BaseHeader class="text-center" varient="gray">Recently Found Items</BaseHeader>
         <div v-if="!isLoading && recentItemList.length > 0" class="flex justify-center my-5">
           <VueSlickCarousel class="w-5/6" v-bind="sliderSetting">
             <div v-for="item in recentItemList" :key="item.id">
@@ -236,9 +215,9 @@
                     alt=""
                   />
                 </div>
-                <h5 class="m-4 text-lg font-semibold">
+                <div class="m-4 text-lg font-semibold">
                   {{ item.item_description }}
-                </h5>
+                </div>
                 <ul role="list" class="mb-4 text-left text-gray-500">
                   <li
                     class="flex items-center space-x-2"

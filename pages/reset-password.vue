@@ -10,21 +10,7 @@
       <div class="w-full bg-white rounded-lg shadow md:mt-0 sm:max-w-md xl:p-0">
         <div class="p-6 space-y-4 md:space-y-6 sm:p-8">
           <div class="form-title">
-            <h1
-              class="w-full my-2 text-xl font-bold leading-tight text-gray-700"
-            >
-              Reset Password
-            </h1>
-            <div class="flex justify-start">
-              <span
-                class="
-                  w-20
-                  border-t-4 border-solid border-orange-200
-                  inline-block
-                  mb-3
-                "
-              ></span>
-            </div>
+            <BaseHeader varient="gray">Reset Password</BaseHeader>
           </div>
           <ValidationObserver v-slot="{ validate }" ref="observer">
             <form

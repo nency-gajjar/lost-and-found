@@ -5,30 +5,7 @@
         <form @submit.prevent="validate().then(onSubmit)">
           <div class="sm:p-6 p-4 space-y-4">
             <div class="form-title">
-              <div>
-                <h1
-                  class="
-                    w-full
-                    my-2
-                    text-xl
-                    font-bold
-                    leading-tight
-                    text-gray-700
-                  "
-                >
-                  CUSTOM SHIPPING DETAILS
-                </h1>
-                <div class="flex justify-start">
-                  <span
-                    class="
-                      w-20
-                      border-t-4 border-solid border-orange-200
-                      inline-block
-                      mb-3
-                    "
-                  ></span>
-                </div>
-              </div>
+              <BaseHeader varient="gray">Custom Shipping Details</BaseHeader>
             </div>
 
             <!-- Custom Items Value -->

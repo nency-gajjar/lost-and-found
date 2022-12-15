@@ -23,7 +23,7 @@
       </div>
 
       <!-- Filter Panel -->
-      <h3 class="text-lg text-left font-medium text-gray-800 my-2">Filters:</h3>
+      <BaseHeader class="text-left" varient="h5">Filters:</BaseHeader>
       <div class="flex flex-col gap-3">
         <div class="align-middle inline-block w-full">
           <!-- Location -->
@@ -256,12 +256,7 @@
           mb-5
         "
       >
-        <h2
-          v-if="!isLoading && lostItems.length > 0"
-          class="text-2xl font-semibold leading-tight"
-        >
-          Search Results ({{ lostItems.length }})
-        </h2>
+        <BaseHeader class="text-left" varient="h4">Search Results ({{ lostItems.length }})</BaseHeader>
       </div>
 
       <div class="flex flex-col gap-3">

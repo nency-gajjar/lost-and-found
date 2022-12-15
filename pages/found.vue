@@ -12,31 +12,7 @@
                     <!-- <img src="../assets/images/found-qr.png" class="mb-3 qr-img" alt=""> -->
                   </div>
                   <div class="flex justify-between items-center">
-                    <div>
-                      <h1
-                        class="
-                          w-full
-                          my-2
-                          sm:text-xl
-                          text-lg
-                          font-bold
-                          leading-tight
-                          text-gray-700
-                        "
-                      >
-                        {{ senderFormTitle }}
-                      </h1>
-                      <div class="flex justify-start">
-                        <span
-                          class="
-                            w-20
-                            border-t-4 border-solid border-orange-200
-                            inline-block
-                            mb-3
-                          "
-                        ></span>
-                      </div>
-                    </div>
+                    <BaseHeader varient="gray">{{ senderFormTitle }}</BaseHeader>
                     <div v-if="showResetButton">
                       <BaseButton @click="resetItemDetailsStore">
                         Reset
@@ -202,7 +178,7 @@
 
               <!-- AUTOCOMPLETE ADDRESS DETAILS -->
               <div class="flex items-center gap-1">
-                <span class="text-md font-medium text-gray-800">{{ addressTitle }} <span class="text-red-500">*</span></span>
+                <BaseHeader varient="subheader">{{ addressTitle }}</BaseHeader><span class="text-red-500">*</span>
                 <BaseIcon
                   icon="circle-info"
                   color="gray"
@@ -340,27 +316,7 @@
             <!-- FOUND ITEM'S DETAILS -->
             <div class="sm:p-6 p-4 space-y-4">
               <div class="form-title mb-4">
-                <h1
-                  class="
-                    w-full
-                    text-xl
-                    font-bold
-                    leading-tight
-                    text-gray-700
-                    mb-3
-                  "
-                >
-                  {{ foundItemFormTitle }}
-                </h1>
-                <div class="flex justify-start">
-                  <span
-                    class="
-                      w-20
-                      border-t-4 border-solid border-orange-200
-                      inline-block
-                    "
-                  ></span>
-                </div>
+                <BaseHeader varient="gray">{{ foundItemFormTitle }}</BaseHeader>
               </div>
               
               <!-- Found Item Date -->

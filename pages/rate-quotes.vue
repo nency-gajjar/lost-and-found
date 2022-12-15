@@ -2,19 +2,7 @@
   <div class="wrapper pb-10">
     <div class="container max-w-7xl mx-auto px-4">
       <div class="form-title my-5">
-        <h1 class="w-full mt-10 text-xl font-bold leading-tight text-gray-700">
-          Select Your Rate Quote
-        </h1>
-        <div class="flex justify-center my-2">
-          <span
-            class="
-              w-20
-              border-t-4 border-solid border-orange-200
-              inline-block
-              mb-3
-            "
-          ></span>
-        </div>
+        <BaseHeader class="mt-10" varient="gray">Select Your Rate Quote</BaseHeader>
       </div>
       <div class="flex flex-col md:flex-row justify-center gap-4">
         <div class="w-full">

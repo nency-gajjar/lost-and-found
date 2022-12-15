@@ -2,19 +2,7 @@
   <div class="wrapper pb-10">
     <div class="container max-w-4xl mx-auto px-4">
       <div class="form-title my-5">
-        <h1 class="w-full mt-10 text-xl font-bold leading-tight text-gray-700">
-          Checkout
-        </h1>
-        <div class="flex justify-center my-2">
-          <span
-            class="
-              w-20
-              border-t-4 border-solid border-orange-200
-              inline-block
-              mb-3
-            "
-          ></span>
-        </div>
+        <BaseHeader class="mt-10" varient="gray">Checkout</BaseHeader>
       </div>
       <div class="my-5">
         <div
@@ -35,12 +23,7 @@
           <h3 class="font-bold text-[#37322C] tracking-wider uppercase text-md">
             Item Details
           </h3>
-           <div
-                class="
-                  flex
-                  sm:flex-row
-                "
-              >
+            <div class="flex sm:flex-row">
                 <div
                   class="
                     w-full
@@ -86,7 +69,7 @@
                   </div>
                 </div>
                 </div>
-              </div>
+            </div>
         </div>
         <div
           class="
