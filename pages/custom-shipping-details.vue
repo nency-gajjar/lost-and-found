@@ -88,11 +88,11 @@
                   rounded-lg
                   px-4
                   h-full
-                  text-sm
+                  text-base
                   pt-4
                   pb-2
                   transition-shadow
-                  text-gray-800
+                  text-gray-700
                 "
               ></textarea>
             </div>
@@ -110,11 +110,11 @@
                   rounded-lg
                   px-4
                   h-full
-                  text-sm
+                  text-base
                   pt-4
                   pb-2
                   transition-shadow
-                  text-gray-800
+                  text-gray-700
                 "
               ></textarea>
             </div>
