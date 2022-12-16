@@ -1201,9 +1201,9 @@ import vSelect from 'vue-select';
 import 'vue-select/dist/vue-select.css';
 
 export default {
-  middleware({ $auth, redirect }) {
+  middleware({ $auth, redirect, route }) {
     if (!$auth.loggedIn) {
-      return redirect("/login");
+      return redirect(`/login?redirect=${route.path}?id=${route.query.id}`);
     }
   },
   mixins: [ImageEditor, formatMobileNumber],

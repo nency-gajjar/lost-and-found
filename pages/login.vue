@@ -170,7 +170,8 @@ export default {
               this.isLoading = false;
               this.$toast.info("Login successfully!");
               this.$nextTick(() => {
-                this.$router.push({ path: "/dashboard" });
+                let redirect_url = this.$route.query.redirect || '/dashboard'
+                this.$router.push(redirect_url);
               });
             }
           })
