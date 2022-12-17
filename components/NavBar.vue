@@ -18,6 +18,9 @@
             <div v-if="isAdminLogin" class="link-container">
               <NuxtLink to="/surcharge" class="menu">Surcharge</NuxtLink>
             </div>
+            <div v-if="isAdminLogin" class="link-container">
+              <NuxtLink to="/item-description" class="menu">Item Description</NuxtLink>
+            </div>
             <div v-else class="link-container">
               <NuxtLink to="/lost-items" class="menu">Lost Items</NuxtLink>
             </div>
@@ -41,7 +44,7 @@
               <div class="menu" @click="logoutAdmin('desktop')">Logout</div>
             </div>
             <div v-if="!isAdminLogin" class="drawer-container">
-              <NuxtLink to="/lost-items" class="opacity-100 menu"
+              <NuxtLink to="/lost-items" class="opacity-100 menu px-4 py-2"
                 >Lost Items</NuxtLink
               >
             </div>
@@ -78,6 +81,14 @@
             @click.native="toggleMenu"
             class="opacity-100"
             >Surcharge</NuxtLink
+          >
+        </div>
+        <div v-if="isAdminLogin">
+          <NuxtLink
+            to="/item-description"
+            @click.native="toggleMenu"
+            class="opacity-100"
+            >Item Description</NuxtLink
           >
         </div>
         <div v-else>
@@ -193,7 +204,7 @@ export default {
   @apply hidden;
 }
 
-@media screen and (max-width: 767px) {
+@media screen and (max-width: 810px) {
   .logo {
     @apply py-2;
     .nav-logo {

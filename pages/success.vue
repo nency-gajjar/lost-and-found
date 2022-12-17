@@ -239,7 +239,11 @@ export default {
       }
       let htmlToPrint = `
       <html><head>
+      <link href='https://fonts.googleapis.com/css?family=Rubik' rel='stylesheet'>
       <style>
+          body {
+            font-family: 'Rubik';
+          }
           .border-dashed {
             border-top-style: dashed;
           }
@@ -307,6 +311,9 @@ export default {
           }
           table tr td {
             padding: 10px 20px;
+          }
+          p {
+            margin: 5px 0;
           }
         </style>
         </head><body>

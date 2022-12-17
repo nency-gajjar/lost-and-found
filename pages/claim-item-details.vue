@@ -408,8 +408,8 @@
                 </div>
               </div>
             </div>
-            <div class="flex justify-center items-center mt-3 lg:mt-0">
-              <div v-if="itemDetails.image" class="flex justify-center items-center mt-4 sm:mt-0 h-48 w-48 w-full">
+            <div class="flex justify-center item-img-container items-center mt-3 lg:mt-0">
+              <div v-if="itemDetails.image" class="flex justify-center items-center mt-4 sm:mt-0 w-48 w-full">
                 <img class="w-full object-cover" :src="itemDetails.image" alt="" />
               </div>
             </div>
@@ -764,6 +764,9 @@ export default {
 @media only screen and (max-width: 1170px) {
   .foundItemContainer {
     @apply flex-col;
+  }
+  .item-img-container {
+    @apply mt-5;
   }
 }
 

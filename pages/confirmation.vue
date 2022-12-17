@@ -247,7 +247,7 @@
               </table>
             </td>
             <div class="flex justify-center items-center px-6">
-              <div v-if="itemDetails.image" class="flex justify-center items-center mt-4 sm:mt-0 h-48 w-48 w-full">
+              <div v-if="itemDetails.image" class="flex justify-center items-center mt-4 sm:mt-0 w-48 w-full">
                 <img class="w-full object-cover" :src="itemDetails.image" alt="" />
               </div>
             </div>
@@ -298,9 +298,7 @@ export default {
   mounted() {
     this.itemConfirmationDetails = JSON.parse(JSON.stringify(this.$store.getters['item/itemConfirmationDetails']));
     this.showDialog = true;
-    if (Object.keys(this.itemConfirmationDetails).length > 0) {
-      this.itemDetails = this.itemConfirmationDetails;
-    } else if (this.$route.query.id) {
+    if (this.$route.query.id) {
       this.$axios
         .get("/getsinglelostitem?id=" + this.$route.query.id)
         .then((response) => {
@@ -311,6 +309,8 @@ export default {
         .catch((error) => {
           console.log(error);
         });
+    } else if (Object.keys(this.itemConfirmationDetails).length > 0) {
+      this.itemDetails = this.itemConfirmationDetails;
     } else {
       this.$nextTick(() => {
         this.$router.push({

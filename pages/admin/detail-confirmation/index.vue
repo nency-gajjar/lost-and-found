@@ -1057,8 +1057,8 @@
                   </div>
                 </template>
               </div>
-              <div class="flex mt-16-px items-center justify-center">
-                <div v-if="image" class="flex items-center justify-center mt-4 sm:mt-0 h-48 w-48 w-full">
+              <div class="flex item-img-container mt-16-px items-center justify-center">
+                <div v-if="image" class="flex items-center justify-center mt-4 sm:mt-0 w-48 w-full">
                   <img class="w-full object-cover" :src="image" alt="" />
                 </div>
               </div>
@@ -1591,9 +1591,16 @@ textarea.error {
   display: none !important;
 }
 
+.item-img-container{
+  @apply pl-3;
+}
+
 @media only screen and (max-width: 1170px) {
   .foundItemContainer {
     @apply flex-col;
+  }
+  .item-img-container{
+    @apply pl-0;
   }
 }
 </style>
