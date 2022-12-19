@@ -214,8 +214,11 @@
             "
           ></span>
         </div>
-        <div v-if="!isLoading && recentItemList.length > 0" class="flex justify-center my-5">
-          <VueSlickCarousel class="w-5/6" v-bind="sliderSetting">
+        <div v-if="!isLoading && recentItemList.length > 0" class="flex justify-center items-center my-5">
+          <div @click="prevSlide">
+            <BaseIcon icon="angle-left" color="accent" size="2x" />
+          </div>
+          <VueSlickCarousel class="w-5/6" ref="carousel" v-bind="sliderSetting">
             <div v-for="item in recentItemList" :key="item.id">
               <div class="sliderCard cursor-pointer shadow-md border">
                 <div class="flex items-center md:h-28 md:w-28 sm:h-16 sm:w-16 w-14 h-14">
@@ -271,6 +274,9 @@
               </div>
             </div>
           </VueSlickCarousel>
+          <div @click="nextSlide">
+            <BaseIcon icon="angle-right" color="accent" size="2x" />
+          </div>
         </div>
         <div v-else-if="!isLoading && recentItemList.length === 0">
         <p class="text-gray-600 font-medium m-14 text-center">There's not any items have been added recently.</p>
@@ -302,6 +308,7 @@ export default {
         slidesToShow: 3,
         slidesToScroll: 1,
         autoplay: true,
+        arrows: false,
         autoplaySpeed: 2000,
         pauseOnDotsHover: true,
         pauseOnFocus: true,
@@ -354,6 +361,12 @@ export default {
     },
   },
   methods: {
+    prevSlide() {
+      this.$refs.carousel.prev()
+    },
+    nextSlide() {
+      this.$refs.carousel.next()
+    },
     disableStartDate(date){
       return date > new Date();
     },

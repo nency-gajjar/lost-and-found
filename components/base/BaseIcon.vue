@@ -53,7 +53,9 @@ export default {
 <style lang="scss" scoped>
 .base-icon {
   cursor: pointer;
-
+  &.accent {
+    color: #970584ba;
+  }
   &.white {
     color: white;
   }

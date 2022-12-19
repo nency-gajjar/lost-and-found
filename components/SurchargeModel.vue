@@ -81,7 +81,6 @@
                     v-model="effectiveAfter"
                     format="MM-DD-YYYY"
                     type="date"
-                    :confirm="true"
                   ></date-picker>
                 </div>
               </client-only>
@@ -107,7 +106,6 @@
                     v-model="effectiveBefore"
                     format="MM-DD-YYYY"
                     type="date"
-                    :confirm="true"
                   ></date-picker>
                 </div>
               </client-only>
@@ -123,16 +121,32 @@
             Effective after should be less than Effective before.
           </p>
           <div class="flex justify-between">
-            <div class="block">
+            <div class="block w-full">
               <BaseInput
                 v-model="dollarAmount"
                 type="text"
                 label="Doller Amount"
-              />
+              >
+                <template v-slot:icon>
+                  <div
+                    class="absolute inset-y-0 top-7 right-0 flex items-center p-5"
+                  >
+                    <BaseIcon icon="dollar" color="lightgray" />
+                  </div>
+                </template>
+              </BaseInput>
             </div>
-            <div class="block flex items-center">AND</div>
-            <div class="block">
-              <BaseInput v-model="percentage" type="text" label="Percentage" />
+            <div class="block flex items-center px-3">AND</div>
+            <div class="block w-full">
+              <BaseInput v-model="percentage" type="text" label="Percentage">
+                <template v-slot:icon>
+                  <div
+                    class="absolute inset-y-0 top-7 right-0 flex items-center p-5"
+                  >
+                    <BaseIcon icon="percentage" color="lightgray" />
+                  </div>
+                </template>
+              </BaseInput>
             </div>
           </div>
           <p v-show="!isAmountValid" class="text-rose-600">

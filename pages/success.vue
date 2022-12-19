@@ -140,6 +140,7 @@ export default {
       itemId: "",
       showSchedulePickup: false,
       itemDetails: {},
+      itemImg: "",
     };
   },
   async mounted() {
@@ -191,9 +192,36 @@ export default {
       } catch (err) {
         console.log(err);
       }
+
+      if (this.itemDetails.image) {
+        const data = await fetch(this.itemDetails.image, { cache: "no-cache" });
+        const blob = await data.blob();
+        this.itemImg = await this.image_to_base64(blob);
+      }
+
+      // if (this.labelUrl) {
+      //   const data = await fetch(this.labelUrl, { cache: "no-cache" });
+      //   const blob = await data.blob();
+      //   let imgSrc = await this.image_to_base64(blob);
+      //   console.log(imgSrc);
+      // }
     }
   },
   methods: {
+    async image_to_base64(file) {
+      let result_base64 = await new Promise((resolve) => {
+        let fileReader = new FileReader();
+        fileReader.onload = (e) => resolve(fileReader.result);
+        fileReader.onerror = (error) => {
+          console.log(error);
+          this.$toast.error(
+            "An Error occurred please try again, File might be corrupt"
+          );
+        };
+        fileReader.readAsDataURL(file);
+      });
+      return result_base64;
+    },
     displayItemService(service) {
       return startCase(camelCase(service));
     },
@@ -202,7 +230,7 @@ export default {
       if (this.itemDetails.image) {
         imgHtml =
           "<div class='flex justify-around w-100-px'> <img src='http://34.197.126.8/_nuxt/assets/images/found-shelf-icon.svg' /> <img src=" +
-          this.itemDetails.image +
+          this.itemImg +
           "></div>";
       }
       else {
@@ -211,7 +239,11 @@ export default {
       }
       let htmlToPrint = `
       <html><head>
+      <link href='https://fonts.googleapis.com/css?family=Rubik' rel='stylesheet'>
       <style>
+          body {
+            font-family: 'Rubik';
+          }
           .border-dashed {
             border-top-style: dashed;
           }
@@ -279,6 +311,9 @@ export default {
           }
           table tr td {
             padding: 10px 20px;
+          }
+          p {
+            margin: 5px 0;
           }
         </style>
         </head><body>
