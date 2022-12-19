@@ -22,11 +22,11 @@
           rounded-lg
           px-4
           h-full
-          text-sm
+          text-base
           pt-2
           pb-2
           transition-shadow
-          text-gray-800
+          text-gray-700
         "
         :class="[
           inputClasses,

@@ -15,9 +15,9 @@
         w-full
         rounded-lg
         h-full
-        text-sm
+        text-base
         transition-shadow
-        text-gray-800
+        text-gray-700
       "
     >
     </select>
@@ -32,9 +32,9 @@
         w-full
         rounded-lg
         h-full
-        text-sm
+        text-base
         transition-shadow
-        text-gray-800
+        text-gray-700
       "
       :class="[
         inputClasses,

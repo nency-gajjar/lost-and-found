@@ -1153,11 +1153,11 @@
                   rounded-lg
                   px-4
                   h-full
-                  text-sm
+                  text-base
                   pt-4
                   pb-2
                   transition-shadow
-                  text-gray-800
+                  text-gray-700
                 "
                 :class="errors.length > 0 && 'error'"
               ></textarea>
@@ -1203,9 +1203,9 @@ import scrollToError from "../../../mixins/scrollToError.js";
 import _ from "lodash";
 
 export default {
-  middleware({ $auth, redirect }) {
+  middleware({ $auth, redirect, route }) {
     if (!$auth.loggedIn) {
-      return redirect("/login");
+      return redirect(`/login?redirect=${route.path}?id=${route.query.id}`);
     }
   },
   mixins: [ImageEditor, formatMobileNumber, scrollToError],
@@ -1259,6 +1259,7 @@ export default {
             this.isLoadingItemDetails = false;
             this.responseData = {...response.data.data.Item};
             this.itemDetails = {...response.data.data.Item};
+            this.itemDetails.weight_ounces = String(this.itemDetails.weight_ounces);
             this.itemDetails.datse = new Date(this.itemDetails.datse);
             this.image = this.responseData.image;
           }
