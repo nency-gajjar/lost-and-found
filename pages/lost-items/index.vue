@@ -317,109 +317,15 @@
       </div>
 
       <div v-if="!isLoading && lostItems.length > 0">
-        <div
-          v-for="item in lostItems"
-          :key="item.id"
-          @click="viewItem(item)"
-          class="
-            cursor-pointer
-            py-2
-            px-5
-            mt-5
-            flex
-            sm:flex-row
-            flex-col
-            justify-between
-            bg-white
-            rounded-lg
-            border
-            shadow-md
-            relative
-          "
-        >
-          <div
-            class="
-              flex
-              sm:items-center
-              flex-col
-              sm:flex-row
-              justify-left justify-around
-              sm:gap-4
-            "
+        <ItemCard v-for="item in lostItems" :key="item.id" :item="item" @click.native="viewItem(item)">
+          <BaseButton
+            class="!px-5 !py-2 !capitalize"
+            varient="red"
+            @click.stop="claimItem(item)"
           >
-            <div
-              class="
-                w-20
-                min-w-[80px]
-                mx-auto
-                sm:mx-0
-                flex
-                items-center
-                mb-3
-                sm:mb-0
-              "
-            >
-              <img
-                v-if="item.image"
-                class="w-full rounded-t-lg md:rounded-none md:rounded-l-lg"
-                :src="item.image"
-                alt=""
-              />
-              <img
-                v-else
-                class="
-                  w-20
-                  contain
-                  rounded-t-lg
-                  md:rounded-none md:rounded-l-lg
-                "
-                src="@/assets/images/no-image4.png"
-                alt=""
-              />
-            </div>
-            <div
-              class="flex flex-col text-center justify-between leading-normal"
-            >
-              <div class="mb-1 flex items-center">
-                <div
-                  class="
-                    text-xl
-                    font-bold
-                    tracking-tight
-                    text-gray-900 text-accent-100
-                  "
-                >
-                  {{ item.item_description }}
-                </div>
-              </div>
-              <div class="text-left">
-                <div>
-                  <BaseIcon icon="calendar-days" color="gray" />
-                  <span class="text-sm font-normal text-gray-700">
-                    {{ item.datse }}
-                  </span>
-                </div>
-              </div>
-              <div class="text-left">
-                <div>
-                  <BaseIcon icon="location-dot" color="red" />
-                  <span class="text-sm font-normal text-gray-700">
-                    {{ item.address }}
-                  </span>
-                </div>
-              </div>
-            </div>
-          </div>
-          <div class="flex items-center my-4 sm:my-0 gap-3">
-            <BaseButton
-              class="!px-5 !py-2 !capitalize"
-              varient="red"
-              @click.stop="claimItem(item)"
-            >
-              Claim Item
-            </BaseButton>
-          </div>
-        </div>
+            Claim Item
+          </BaseButton>
+        </ItemCard>
       </div>
       <div v-else-if="!isLoading && lostItems.length === 0">
         <p class="text-gray-600 font-medium m-14">No Result Found</p>
@@ -436,8 +342,9 @@ import DatePicker from "vue2-datepicker";
 import "vue2-datepicker/index.css";
 import moment from "moment";
 import DetectBrowser from "~/mixins/detectBrowser";
+import ItemCard from "../../components/shared/ItemCard.vue";
 export default {
-  components: { DatePicker },
+  components: { DatePicker, ItemCard },
   mixins: [DetectBrowser],
   data() {
     return {
