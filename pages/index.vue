@@ -450,10 +450,14 @@ export default {
       //   ...item,
       //   onlyDisplay: true,
       // });
+      this.$store.commit(
+        "item/SET_ITEM_ID",
+        item.id
+      );
       this.$nextTick(() => {
         this.$router.push({
-          path: "/detail-confirmation",
-          query: { id: item.id },
+          name: "detail-confirmation",
+          query: { preview: true },
         });
       });
     },

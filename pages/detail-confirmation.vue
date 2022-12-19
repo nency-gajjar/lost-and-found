@@ -547,6 +547,19 @@ export default {
           console.log(error);
         });
     }
+    else if(this.$route.query.preview && JSON.parse(JSON.stringify(this.$store.getters["item/itemId"]))){
+      this.showInformativeTxt = false;
+      this.$axios
+        .get("/getsinglelostitem?id=" + JSON.parse(JSON.stringify(this.$store.getters["item/itemId"])))
+        .then((response) => {
+          if (response.status === 200) {
+            this.itemDetails = {...response.data.data.Item, onlyDisplay: true};
+          }
+        })
+        .catch((error) => {
+          console.log(error);
+        });
+    }
     else{
       this.showInformativeTxt = true;
       this.itemDetails = JSON.parse(JSON.stringify(this.$store.getters['item/itemDetails']));
