@@ -405,8 +405,8 @@
                 </div>
               </template>
             </div>
-            <div class="flex justify-center items-center">
-              <div v-if="itemDetails.image" class="flex justify-center items-center mt-4 sm:mt-0 h-48 w-48 w-full">
+            <div class="flex item-img-container justify-center items-center">
+              <div v-if="itemDetails.image" class="flex justify-center items-center mt-4 sm:mt-0 w-48 w-full">
                 <img class="w-full object-cover" :src="itemDetails.image" alt="" />
               </div>
             </div>
@@ -460,6 +460,19 @@ export default {
       this.showInformativeTxt = false;
       this.$axios
         .get("/getsinglelostitem?id=" + this.$route.query.id)
+        .then((response) => {
+          if (response.status === 200) {
+            this.itemDetails = {...response.data.data.Item, onlyDisplay: true};
+          }
+        })
+        .catch((error) => {
+          console.log(error);
+        });
+    }
+    else if(this.$route.query.preview && JSON.parse(JSON.stringify(this.$store.getters["item/itemId"]))){
+      this.showInformativeTxt = false;
+      this.$axios
+        .get("/getsinglelostitem?id=" + JSON.parse(JSON.stringify(this.$store.getters["item/itemId"])))
         .then((response) => {
           if (response.status === 200) {
             this.itemDetails = {...response.data.data.Item, onlyDisplay: true};
@@ -619,6 +632,9 @@ export default {
 @media only screen and (max-width: 1170px) {
   .foundItemContainer {
     @apply flex-col;
+  }
+  .item-img-container {
+    @apply mt-5;
   }
 }
 

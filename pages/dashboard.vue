@@ -6,12 +6,6 @@
           <div class="mr-6 order-2 md:order-1 mt-3 md:mt-0">
             <BaseHeader class="text-left" varient="h4">Admin Dashboard</BaseHeader>
           </div>
-          <BaseButton
-            class="order-1 md:order-2 sm:ml-2 grow sm:grow-0 mt-0"
-            @click="showAddNewItemDescription = true"
-          >
-            + Add New Item Description
-          </BaseButton>
         </div>
         <section class="grid md:grid-cols-2 xl:grid-cols-5 gap-6">
           <div
@@ -384,20 +378,13 @@
       <div v-else>
         <BaseLoader />
       </div>
-      <AddNewItemDescription
-        v-if="showAddNewItemDescription"
-        :show-modal="showAddNewItemDescription"
-        @close="showAddNewItemDescription = false"
-      />
     </div>
   </div>
 </template>
 
 <script>
-import AddNewItemDescription from "~/components/admin/AddNewItemDescription.vue";
 export default {
   middleware: ["auth-admin"],
-  components: { AddNewItemDescription },
   data() {
     return {
       dashboardDetails: [],
@@ -405,7 +392,6 @@ export default {
       isLoading: false,
       tabSelected: 1,
       pendingListDetails: [],
-      showAddNewItemDescription: false,
       searchQuery: "",
       lostItems: [],
       cloneLostItems: [],

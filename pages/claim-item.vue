@@ -96,11 +96,11 @@
                     rounded-lg
                     px-4
                     h-full
-                    text-sm
+                    text-base
                     pt-4
                     pb-2
                     transition-shadow
-                    text-gray-800
+                    text-gray-700
                   "
                 ></textarea>
               </div>
@@ -298,6 +298,11 @@ export default {
       this.itemId = this.$route.params.item.id;
       this.venueEmail = this.$route.params.item.venue_email;
       this.secondaryEmail = this.$route.params.item?.secondaryEmail;
+    }
+    else {
+      this.$router.replace({
+        name: "lost-items"
+      });
     }
   },
   computed: {

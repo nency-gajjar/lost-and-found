@@ -1,6 +1,6 @@
 <template>
   <div class="wrapper-admin" v-if="Object.keys(itemDetails).length > 0">
-    <ValidationObserver class="flex justify-center w-full" v-slot="{ validate }" ref="observer">
+    <ValidationObserver class="flex justify-center w-full" v-slot="{ validate }" ref="observerMain">
       <div v-show="showEditor" class="fixed z-50 top-0 w-full left-0" id="modal">
         <div
           class="
@@ -972,9 +972,9 @@
                   </div>
                 </template>
               </div>
-              <div class="flex mt-16-px items-center justify-center">
-                <div v-if="itemDetails.image" class="flex items-center justify-center mt-4 sm:mt-0 h-48 w-48 w-full">
-                  <img class="w-full object-cover" :src="itemDetails.image" alt="" />
+              <div class="flex item-img-container mt-16-px items-center justify-center">
+                <div v-if="image" class="flex items-center justify-center mt-4 sm:mt-0 w-48 w-full">
+                  <img class="w-full object-cover" :src="image" alt="" />
                 </div>
               </div>
             </div>
@@ -984,7 +984,7 @@
             <BaseButton
               :is-loading="isLoading['Approve']"
               class="flex-1"
-              @click="handleItemApprove('Approve')"
+              @click="validate().then(handleItemApprove('Approve'))"
               :disabled="
                 isLoading['Approve'] || isLoading['Approve without Image']
               "
@@ -1029,75 +1029,75 @@
           </div>
         </section>
       </BaseCard>
-      <BaseDialog
-        :showDialog="showDialog"
-        :icon="{ name: 'circle-check', color: 'green', size: '3x' }"
-        :message="dialogMessage"
-        :title="dialogTitle"
-        buttonTitle="Okay"
-        @close="
-          showDialog = false;
-          $router.push('/dashboard');
-        "
-      />
-      <BaseDialog
-        :showDialog="showItemRejectDialog"
-        :icon="{ name: 'circle-info', color: 'blue', size: '3x' }"
-        :message="dialogMessage"
-        title="Please enter rejection reason"
-        :showClose="false"
-        @close="closeRejectDialog"
-      >
-        <template v-slot:input>
-          <ValidationObserver v-slot="{ validate }" ref="observer">
-            <form @submit.prevent="validate().then(onSubmit)">
-              <ValidationProvider
-                v-slot="{ errors }"
-                rules="required"
-                class="block"
-              >
-                <textarea
-                  v-model="rejectReson"
-                  placeholder="Reject Reason"
-                  class="
-                    border
-                    inline-block
-                    border-gray-300
-                    w-full
-                    rounded-lg
-                    px-4
-                    h-full
-                    text-sm
-                    pt-4
-                    pb-2
-                    transition-shadow
-                    text-gray-800
-                  "
-                  :class="errors.length > 0 && 'error'"
-                ></textarea>
-
-                <p
-                  v-if="errors.length"
-                  class="vee-validation-error mt-2 text-sm text-left text-red-600"
-                >
-                  {{ errors[0] }}
-                </p>
-              </ValidationProvider>
-            </form>
-          </ValidationObserver>
-        </template>
-        <template v-slot:action>
-          <BaseButton
-            @click="handleItemReject()"
-            :is-loading="isLoading['Deny']"
-            type="submit"
-            class="w-full"
-          >
-            Submit
-          </BaseButton>
-        </template>
-      </BaseDialog>
     </ValidationObserver>
+    <BaseDialog
+      :showDialog="showDialog"
+      :icon="{ name: 'circle-check', color: 'green', size: '3x' }"
+      :message="dialogMessage"
+      :title="dialogTitle"
+      buttonTitle="Okay"
+      @close="
+        showDialog = false;
+        $router.push('/dashboard');
+      "
+    />
+    <BaseDialog
+      :showDialog="showItemRejectDialog"
+      :icon="{ name: 'circle-info', color: 'blue', size: '3x' }"
+      :message="dialogMessage"
+      title="Please enter rejection reason"
+      :showClose="false"
+      @close="closeRejectDialog"
+    >
+      <template v-slot:input>
+        <ValidationObserver v-slot="{ validate }" ref="observer">
+          <form @submit.prevent="validate().then(onSubmit)">
+            <ValidationProvider
+              v-slot="{ errors }"
+              rules="required"
+              class="block"
+            >
+              <textarea
+                v-model="rejectReson"
+                placeholder="Reject Reason"
+                class="
+                  border
+                  inline-block
+                  border-gray-300
+                  w-full
+                  rounded-lg
+                  px-4
+                  h-full
+                  text-base
+                  pt-4
+                  pb-2
+                  transition-shadow
+                  text-gray-700
+                "
+                :class="errors.length > 0 && 'error'"
+              ></textarea>
+
+              <p
+                v-if="errors.length"
+                class="vee-validation-error mt-2 text-sm text-left text-red-600"
+              >
+                {{ errors[0] }}
+              </p>
+            </ValidationProvider>
+          </form>
+        </ValidationObserver>
+      </template>
+      <template v-slot:action>
+        <BaseButton
+          @click="handleItemReject()"
+          :is-loading="isLoading['Deny']"
+          type="submit"
+          class="w-full"
+        >
+          Submit
+        </BaseButton>
+      </template>
+    </BaseDialog>
   </div>
 </template>
   
@@ -1114,14 +1114,16 @@ import formatMobileNumber from "../../../mixins/formatMobileNumber.js";
 import { weightOuncesOptions } from "static/defaults.js";
 import vSelect from 'vue-select';
 import 'vue-select/dist/vue-select.css';
+import scrollToError from "../../../mixins/scrollToError.js";
+import _ from "lodash";
 
 export default {
-  middleware({ $auth, redirect }) {
+  middleware({ $auth, redirect, route }) {
     if (!$auth.loggedIn) {
-      return redirect("/login");
+      return redirect(`/login?redirect=${route.path}?id=${route.query.id}`);
     }
   },
-  mixins: [ImageEditor, formatMobileNumber],
+  mixins: [ImageEditor, formatMobileNumber, scrollToError],
   components: {
     RedactImage,
     VueCropper,
@@ -1172,6 +1174,7 @@ export default {
             this.isLoadingItemDetails = false;
             this.responseData = {...response.data.data.Item};
             this.itemDetails = {...response.data.data.Item};
+            this.itemDetails.weight_ounces = String(this.itemDetails.weight_ounces);
             this.itemDetails.datse = new Date(this.itemDetails.datse);
             this.image = this.responseData.image;
           }
@@ -1361,76 +1364,56 @@ export default {
         });
     },
     async handleItemApprove(type) {
-      this.isLoading[type] = true;
-      let params = {};
-      if (this.itemDetails.image && type === "Approve" && this.isImageEdited) {
-        params.image = this.image;
-      }
-      if(this.responseData.venu_type !== this.itemDetails.venu_type){
-        params.venu_type = this.itemDetails.venu_type;
-      }
-      if(this.responseData.datse !== moment(this.itemDetails.datse).format("YYYY-MM-DD")){
+      const isValid = await this.$refs.observerMain.validate();
+
+      this.validateVenuePhoneNo();
+      this.validateEmployeeMobileNo();
+      if (this.responseData.item_status === 0) this.validateReceiverMobileNo();
+
+      if(
+        isValid &&
+        this.isVenuePhoneValid &&
+        this.isEmployeeMobileNoValid &&
+        this.isReceiverMobileNoValid
+      ) {
+        this.isLoading[type] = true;
+        let params = {...this.itemDetails};
         params.datse = moment(this.itemDetails.datse).format("YYYY-MM-DD");
-      }
-      if(this.responseData.venue_email !== this.itemDetails.venue_email){
-        params.venue_email = this.itemDetails.venue_email;
-      }
-      if(this.responseData.venue_phone_no !== this.formatMobileNumber(this.itemDetails.venue_phone_no)){
         params.venue_phone_no = this.formatMobileNumber(this.itemDetails.venue_phone_no);
-      }
-      if(this.responseData.employee_mobile_no !== this.formatMobileNumber(this.itemDetails.employee_mobile_no)){
         params.employee_mobile_no = this.formatMobileNumber(this.itemDetails.employee_mobile_no);
-      }
-      if(this.responseData.address !== this.itemDetails.address){
-        params.address = this.itemDetails.address;
-      }
-      if(this.responseData.city !== this.itemDetails.city){
-        params.city = this.itemDetails.city;
-      }
-      if(this.responseData.states !== this.itemDetails.states){
-        params.states = this.itemDetails.states;
-      }
-      if(this.responseData.country !== this.itemDetails.country){
-        params.country = this.itemDetails.country;
-      }
-      if(this.responseData.zipcode !== this.itemDetails.zipcode){
-        params.zipcode = this.itemDetails.zipcode;
-      }
-      if(this.responseData.item_description !== this.itemDetails.item_description){
-        params.item_description = this.itemDetails.item_description;
-      }
-      if(this.responseData.package_type !== this.itemDetails.package_type){
-        params.package_type = this.itemDetails.package_type;
-      }
-      if(this.responseData.weight_pounds !== this.itemDetails.weight_pounds){
-        params.weight_pounds = this.itemDetails.weight_pounds;
-      }
-      if(this.responseData.weight_ounces !== this.itemDetails.weight_ounces){
-        params.weight_ounces = this.itemDetails.weight_ounces;
-      }
-      if(this.responseData.item_length !== this.itemDetails.item_length){
-        params.item_length = this.itemDetails.item_length;
-      }
-      if(this.responseData.item_width !== this.itemDetails.item_width){
-        params.item_width = this.itemDetails.item_width;
-      }
-      if(this.responseData.item_height !== this.itemDetails.item_height){
-        params.item_height = this.itemDetails.item_height;
-      }
-      if(this.responseData.item_status === 0){
-        if(this.responseData.receiver_name !== this.itemDetails.receiver_name){
-          params.receiver_name = this.itemDetails.receiver_name;
-        }
-        if(this.responseData.receiver_email !== this.itemDetails.receiver_email){
-          params.receiver_email = this.itemDetails.receiver_email;
-        }
-        if(this.responseData.receiver_mobile_no !== this.formatMobileNumber(this.itemDetails.receiver_mobile_no)){
+        if(this.responseData.item_status === 0){
           params.receiver_mobile_no = this.formatMobileNumber(this.itemDetails.receiver_mobile_no);
         }
+
+        if (this.itemDetails.image && type === "Approve" && this.isImageEdited) {
+          params.image = this.image;
+        }
+
+        params.is_default = type;
+        params.it_type = 1;
+
+        // compare objects
+
+        const diff = Object.keys(this.responseData).reduce((result, key) => {
+          if (!params.hasOwnProperty(key)) {
+            result.push(key);
+          } else if (_.isEqual(this.responseData[key], params[key])) {
+            const resultKeyIndex = result.indexOf(key);
+            result.splice(resultKeyIndex, 1);
+          }
+          return result;
+        }, Object.keys(params));
+        let requestData = {};
+        diff.forEach((key) => {
+          if (params[key] != undefined) {
+            requestData[key] = params[key];
+          }
+        });
+
+        await this.handleUpdateLostItem(requestData, type);
+      } else {
+        this.scrollToError();
       }
-      params.is_default = type;
-      params.it_type = 1;
-      await this.handleUpdateLostItem(params, type);
     },
     async handleItemReject() {
       const isValid = await this.$refs.observer.validate();
@@ -1524,9 +1507,16 @@ textarea.error {
   display: none !important;
 }
 
+.item-img-container{
+  @apply pl-3;
+}
+
 @media only screen and (max-width: 1170px) {
   .foundItemContainer {
     @apply flex-col;
+  }
+  .item-img-container{
+    @apply pl-0;
   }
 }
 </style>

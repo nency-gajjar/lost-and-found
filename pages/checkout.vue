@@ -146,8 +146,8 @@
             </span>
           </p>
           <p v-if="checkoutDetail.insuranceValue" class="!-my-1">
-            <span class="text-gray-600 font-medium text-sm"> ( Insured for </span>
-            <span class="font-display tracking-wide text-gray-700 font-medium text-sm">
+            <span class="font-medium text-sm"> ( Insured for </span>
+            <span class="font-medium text-sm">
               {{ Number(checkoutDetail.insuranceValue) | currency }}
             )
             </span>
