@@ -5,7 +5,7 @@
   </div>
 </template>
 
-<style>
+<style lang="scss" scoped>
 html {
   @apply bg-gray-100;
 }
