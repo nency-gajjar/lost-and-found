@@ -344,6 +344,11 @@ export default {
       this.venueEmail = this.$route.params.item.venue_email;
       this.secondaryEmail = this.$route.params.item?.secondaryEmail;
     }
+    else {
+      this.$router.replace({
+        name: "lost-items"
+      });
+    }
   },
   computed: {
     dialogMessage() {

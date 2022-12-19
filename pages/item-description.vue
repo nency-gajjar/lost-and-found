@@ -11,18 +11,45 @@
         </div>
         <div
           class="
-            justify-end
+            sm:justify-end
+            justify-center
             w-full
+            gap-3
             flex
             mt-8
             mb-5
           "
         >
+          <input @change="uploadFile($event)" class="hidden" type="file" name="files" id="uploadSheet">
+          <label class="flex cursor-pointer items-center mt-3 sm:mt-0 font-medium tracking-widest text-sm rounded-md leading-5 relative uppercase py-2.5 px-12 focus:outline-none focus:ring-2 focus:ring-offset-2 transition-all disabled:cursor-not-allowed bg-primary-100 text-white focus:ring-primary-100 hover:bg-primary-200" for="uploadSheet">
+            <svg
+              v-if="isUploadSheetLoading"
+              class="w-5 h-5 text-white animate-spin"
+              fill="none"
+              viewBox="0 0 24 24"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <circle
+                class="opacity-25"
+                cx="12"
+                cy="12"
+                r="10"
+                stroke="currentColor"
+                stroke-width="4"
+              ></circle>
+              <path
+                class="opacity-75"
+                d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
+                fill="currentColor"
+              ></path>
+            </svg>
+            <p v-else>UPLOAD</p>
+          </label>
           <BaseButton
             @click="showItemDescModel = true; mode = 'create'"
             class="sm:ml-2 mt-3 sm:mt-0"
           >
-            + Add
+            + Add New
           </BaseButton>
         </div>
         <div
@@ -159,13 +186,43 @@ export default {
       mode: "create",
       editData: {},
       isLoading: true,
-      isRemovingItem: {}
+      isRemovingItem: {},
+      isUploadSheetLoading: false,
     }
   },
   mounted(){
     this.getItemDescriptionOptions();
   },
   methods: {
+    uploadFile(event) {
+      const allowedExtensions = /(\.xlsx)$/i;
+      const filePath = event.target?.files[0];
+      if (filePath) {
+        if (allowedExtensions.exec(filePath.name)) {
+          this.isUploadSheetLoading = true;
+          let formData = new FormData();
+          formData.append('file', filePath);
+          this.$axios.post("/uploadExcelfileData", formData, {
+              headers: {
+                'Content-Type': 'multipart/form-data'
+              }
+          })
+          .then((response) => {
+            if (response.status === 200) {
+              this.$toast.info("Item Description added successfully!");
+              this.getItemDescriptionOptions();
+            }
+            this.isUploadSheetLoading = false;
+          })
+          .catch(() => {
+            this.$toast.error("Something went wrong! Please try again.");
+            this.isUploadSheetLoading = false;
+          })
+        } else {
+          this.$toast.error("Uploaded file is not supported. Allowed file types: .xlsx");
+        }
+      }
+    },
     getItemDescriptionOptions() {
       this.isLoading = true;
       this.$axios

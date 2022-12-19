@@ -573,17 +573,20 @@ export default {
       //   ...item,
       //   onlyDisplay: true,
       // });
+      this.$store.commit(
+        "item/SET_ITEM_ID",
+        item.id
+      );
       this.$nextTick(() => {
         this.$router.push({
-          path: "/detail-confirmation",
-          query: { id: item.id },
+          name: "detail-confirmation",
+          query: { preview: true },
         });
       });
     },
     claimItem(item) {
       this.$router.push({
         name: "claim-item",
-        query: { id: item.id },
         params: { item: item },
       });
     },
