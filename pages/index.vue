@@ -1,25 +1,19 @@
 <template>
   <div class="sm:mt-8">
     <div class="flex space-y-5 max-w-5xl mx-auto">
-      <div
+      <BaseCard
         class="
-          border border-[#E1E3E6]
-          rounded-lg
-          bg-white
           sm:mt-14
           mt-8
-          mx-4
           md:px-12
           px-6
           sm:space-x-2
           lg:space-x-0
-          w-full
           flex
           justify-between
           flex-col
           sm:flex-row
         "
-        style="box-shadow: -10px 18px 32px rgba(54, 28, 93, 0.04)"
       >
         <div
           class="
@@ -69,7 +63,7 @@
             src="../assets/images/lost-found.svg"
           />
         </div>
-      </div>
+      </BaseCard>
     </div>
     <div class="wrapper">
       <!-- Lost Item Filter -->
@@ -192,28 +186,7 @@
       class="bg-white border-b py-8"
     >
       <div class="container max-w-6xl mx-auto m-8">
-        <h3
-          class="
-            w-full
-            my-2
-            text-2xl
-            font-bold
-            leading-tight
-            text-center text-gray-700
-          "
-        >
-          Recently Found Items
-        </h3>
-        <div class="flex justify-center">
-          <span
-            class="
-              w-20
-              border-t-4 border-solid border-orange-200
-              inline-block
-              mb-3
-            "
-          ></span>
-        </div>
+        <BaseHeader class="text-center" varient="gray">Recently Found Items</BaseHeader>
         <div v-if="!isLoading && recentItemList.length > 0" class="flex justify-center items-center my-5">
           <div @click="prevSlide">
             <BaseIcon icon="angle-left" color="accent" size="2x" />
@@ -245,9 +218,9 @@
                     alt=""
                   />
                 </div>
-                <h5 class="m-4 text-lg font-semibold">
+                <div class="m-4 text-lg font-semibold">
                   {{ item.item_description }}
-                </h5>
+                </div>
                 <ul role="list" class="mb-4 text-left text-gray-500">
                   <li
                     class="flex items-center space-x-2"
@@ -478,14 +451,6 @@ export default {
 .gradient {
   background: linear-gradient(90deg, #d53369 0%, #daae51 100%);
   color: #fff;
-}
-
-.card {
-  @apply p-10 rounded-lg text-indigo-500 bg-indigo-100 shadow-lg;
-
-  .title {
-    @apply text-6xl font-bold;
-  }
 }
 
 .sliderCard {

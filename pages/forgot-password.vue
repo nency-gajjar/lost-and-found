@@ -10,21 +10,7 @@
       <div class="w-full bg-white rounded-lg shadow md:mt-0 sm:max-w-md xl:p-0">
         <div class="p-6 space-y-4 md:space-y-6 sm:p-8">
           <div class="form-title">
-            <h1
-              class="w-full my-2 text-xl font-bold leading-tight text-gray-700"
-            >
-              Forgot Password
-            </h1>
-            <div class="flex justify-start">
-              <span
-                class="
-                  w-20
-                  border-t-4 border-solid border-orange-200
-                  inline-block
-                  mb-3
-                "
-              ></span>
-            </div>
+            <BaseHeader varient="gray">Forgot Password</BaseHeader>
           </div>
           <ValidationObserver v-slot="{ validate }" ref="observer">
             <form
@@ -51,14 +37,9 @@
                   {{ errors[0] }}
                 </p>
               </ValidationProvider>
-              <div
-                v-show="showValidateAlert"
-                class="p-4 mb-4 text-sm text-red-700 bg-red-100 rounded-lg"
-                role="alert"
-              >
-                <span class="font-medium">Oops!</span> Please fill all required
-                fields and try submitting again.
-              </div>
+
+              <ValidationAlert :show-alert="showValidateAlert" />
+
               <BaseButton :is-loading="isLoading" type="submit" class="w-full">
                 Send Email
               </BaseButton>
@@ -80,6 +61,7 @@
 
 <script>
 import { ValidationObserver, ValidationProvider } from "vee-validate";
+import ValidationAlert from '~/components/shared/ValidationAlert.vue'
 import eventListners from "../mixins/eventListners.js";
 
 export default {
@@ -92,6 +74,7 @@ export default {
   components: {
     ValidationObserver,
     ValidationProvider,
+    ValidationAlert
   },
   data() {
     return {

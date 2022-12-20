@@ -10,21 +10,7 @@
       <div class="w-full bg-white rounded-lg shadow md:mt-0 sm:max-w-md xl:p-0">
         <div class="p-6 space-y-4 md:space-y-6 sm:p-8">
           <div class="form-title">
-            <h1
-              class="w-full my-2 text-xl font-bold leading-tight text-gray-700"
-            >
-              Reset Password
-            </h1>
-            <div class="flex justify-start">
-              <span
-                class="
-                  w-20
-                  border-t-4 border-solid border-orange-200
-                  inline-block
-                  mb-3
-                "
-              ></span>
-            </div>
+            <BaseHeader varient="gray">Reset Password</BaseHeader>
           </div>
           <ValidationObserver v-slot="{ validate }" ref="observer">
             <form
@@ -81,10 +67,22 @@
                   :isRequired="true"
                   id="password"
                   v-model="password"
-                  type="password"
+                  :type="hidePassword ? 'password' : 'text'"
                   label="New Password"
                   :class="errors.length > 0 && 'error'"
-                />
+                >
+                  <template v-slot:icon>
+                    <div
+                      class="absolute inset-y-0 top-7 right-0 flex items-center p-5"
+                      @click="hidePassword = !hidePassword"
+                    >
+                      <BaseIcon
+                        :icon="hidePassword ? 'eye' : 'eye-slash'"
+                        color="gray"
+                      />
+                    </div>
+                  </template>
+                </BaseInput>
                 <p
                   v-if="errors.length"
                   class="vee-validation-error mt-2 text-sm text-red-600"
@@ -101,10 +99,22 @@
                   :isRequired="true"
                   id="confirmPassword"
                   v-model="confirmPassword"
-                  type="password"
+                  :type="hideConfirmPassword ? 'password' : 'text'"
                   label="Confirm New Password"
                   :class="errors.length > 0 && 'error'"
-                />
+                >
+                  <template v-slot:icon>
+                    <div
+                      class="absolute inset-y-0 top-7 right-0 flex items-center p-5"
+                      @click="hideConfirmPassword = !hideConfirmPassword"
+                    >
+                      <BaseIcon
+                        :icon="hideConfirmPassword ? 'eye' : 'eye-slash'"
+                        color="gray"
+                      />
+                    </div>
+                  </template>
+                </BaseInput>
                 <p
                   v-if="errors.length"
                   class="vee-validation-error mt-2 text-sm text-red-600"
@@ -112,13 +122,9 @@
                   {{ errors[0] }}
                 </p>
               </ValidationProvider>
-              <div
-                v-show="showValidateAlert"
-                class="p-4 mb-4 text-sm text-red-700 bg-red-100 rounded-lg"
-                role="alert"
-              >
-                <span class="font-medium">Oops!</span> {{ alertMessage }}
-              </div>
+
+              <ValidationAlert :show-alert="showValidateAlert" :alert-message="alertMessage" />
+
               <BaseButton :is-loading="isLoading" type="submit" class="w-full">
                 Reset Password
               </BaseButton>
@@ -132,6 +138,7 @@
 
 <script>
 import { ValidationObserver, ValidationProvider } from "vee-validate";
+import ValidationAlert from '~/components/shared/ValidationAlert.vue'
 import eventListners from "../mixins/eventListners.js";
 
 export default {
@@ -144,10 +151,13 @@ export default {
   components: {
     ValidationObserver,
     ValidationProvider,
+    ValidationAlert
   },
   data() {
     return {
       showEmail: false,
+      hidePassword: true,
+      hideConfirmPassword: true,
       verificationCode: "",
       email: "",
       password: "",
@@ -174,11 +184,8 @@ export default {
           this.password != "" &&
           this.confirmPassword != ""
         ) {
-          this.alertMessage = "Password and Confirm Password doesn't match";
-        } else {
-          this.alertMessage =
-            "Please fill all required fields and try submitting again.";
-        }
+          this.alertMessage = "Password and Confirm Password doesn't match.";
+        } 
         this.showValidateAlert = true;
         this.isLoading = false;
       } else {

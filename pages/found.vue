@@ -1,19 +1,6 @@
 <template>
   <div class="wrapper-form">
-    <div
-      class="
-        w-full
-        mx-4
-        lg:mx-0
-        md:w-8/12
-        lg:w-7/12
-        xl:w-6/12
-        bg-white
-        border border-[#E1E3E6]
-        rounded-lg
-      "
-      style="box-shadow: rgba(54, 28, 93, 0.04) -10px 18px 32px"
-    >
+    <BaseCard class="md:w-8/12 lg:w-7/12 xl:w-6/12">
       <div v-if="!isLoadingItemDetails || Object.keys(itemDetails).length > 0">
         <ValidationObserver v-slot="{ validate }" ref="observer">
           <form @submit.prevent="validate().then(onSubmit)">
@@ -25,31 +12,7 @@
                     <!-- <img src="../assets/images/found-qr.png" class="mb-3 qr-img" alt=""> -->
                   </div>
                   <div class="flex justify-between items-center">
-                    <div>
-                      <h1
-                        class="
-                          w-full
-                          my-2
-                          sm:text-xl
-                          text-lg
-                          font-bold
-                          leading-tight
-                          text-gray-700
-                        "
-                      >
-                        {{ senderFormTitle }}
-                      </h1>
-                      <div class="flex justify-start">
-                        <span
-                          class="
-                            w-20
-                            border-t-4 border-solid border-orange-200
-                            inline-block
-                            mb-3
-                          "
-                        ></span>
-                      </div>
-                    </div>
+                    <BaseHeader varient="gray">{{ senderFormTitle }}</BaseHeader>
                     <div v-if="showResetButton">
                       <BaseButton @click="resetItemDetailsStore">
                         Reset
@@ -215,7 +178,7 @@
 
               <!-- AUTOCOMPLETE ADDRESS DETAILS -->
               <div class="flex items-center gap-1">
-                <span class="text-md font-medium text-gray-800">{{ addressTitle }} <span class="text-red-500">*</span></span>
+                <BaseHeader varient="subheader">{{ addressTitle }}</BaseHeader><span class="text-red-500">*</span>
                 <BaseIcon
                   icon="circle-info"
                   color="gray"
@@ -353,27 +316,7 @@
             <!-- FOUND ITEM'S DETAILS -->
             <div class="sm:p-6 p-4 space-y-4">
               <div class="form-title mb-4">
-                <h1
-                  class="
-                    w-full
-                    text-xl
-                    font-bold
-                    leading-tight
-                    text-gray-700
-                    mb-3
-                  "
-                >
-                  {{ foundItemFormTitle }}
-                </h1>
-                <div class="flex justify-start">
-                  <span
-                    class="
-                      w-20
-                      border-t-4 border-solid border-orange-200
-                      inline-block
-                    "
-                  ></span>
-                </div>
+                <BaseHeader varient="gray">{{ foundItemFormTitle }}</BaseHeader>
               </div>
               
               <!-- Found Item Date -->
@@ -848,7 +791,7 @@
                 <ValidationProvider
                   v-slot="{ errors }"
                   rules="required"
-                  class="block !mt-0"
+                  class="block"
                 >
                   <BaseInput
                     :isRequired="true"
@@ -911,16 +854,8 @@
                   </div>
                 </div>
               </template>
-
-              <div v-if="showValidateAlert" class="my-8">
-                <div
-                  class="p-4 text-sm text-red-700 bg-red-100 rounded-lg"
-                  role="alert"
-                >
-                  <span class="font-medium">Oops!</span>
-                  {{ alertMessage }}
-                </div>
-              </div>
+              
+              <ValidationAlert class="!my-8" :show-alert="showValidateAlert" />
 
               <div class="flex justify-end !mt-12">
                 <BaseButton :is-loading="isLoading" type="submit">
@@ -942,7 +877,7 @@
         message="Do you want to remove the image!"
         @close="showDialog= false; deleteEditable()"
     />
-    </div>
+    </BaseCard>
   </div>
 </template>
 
@@ -962,6 +897,7 @@ import eventListners from "../mixins/eventListners.js";
 import scrollToError from "../mixins/scrollToError.js";
 import vSelect from 'vue-select';
 import 'vue-select/dist/vue-select.css';
+import ValidationAlert from '~/components/shared/ValidationAlert.vue'
 
 export default {
   mixins: [DetectBrowser, ImageEditor, formatMobileNumber, eventListners, scrollToError],
@@ -970,7 +906,6 @@ export default {
     showResetButton: false,
     itemDetails: {},
     showValidateAlert: false,
-    alertMessage: "Please fill all required fields and try submitting again.",
     senderFormTitle: "Found an Item that belongs to a guest? Let’s add few details and leave the rest to us!",
     foundItemFormTitle: "Found item details",
     venueEmail: "",
@@ -1035,6 +970,7 @@ export default {
     VueCropper,
     ValidationObserver,
     ValidationProvider,
+    ValidationAlert,
     vSelect,
   },
   computed: {
@@ -1494,7 +1430,6 @@ export default {
       ) {
         this.scrollToError();
         this.showValidateAlert = true;
-        this.alertMessage = "Please fill all required fields and try submitting again.";
         this.isLoading = false;
       } else {
         let venuePhoneNo = this.formatMobileNumber(

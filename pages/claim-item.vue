@@ -1,51 +1,14 @@
 <template>
   <div class="wrapper-form">
-    <div
-      class="
-        card
-        w-full
-        mx-6
-        lg:mx-0
-        md:w-8/12
-        lg:w-7/12
-        xl:w-6/12
-        bg-white
-        border border-[#E1E3E6]
-        rounded-lg
-      "
-      style="box-shadow: rgba(54, 28, 93, 0.04) -10px 18px 32px"
-    >
+    <BaseCard class="md:w-8/12 lg:w-7/12 xl:w-6/12">
       <div>
         <ValidationObserver v-slot="{ validate }" ref="observer">
           <form @submit.prevent="validate().then(onSubmit)">
             <div class="card p-6 space-y-4">
               <div class="form-title">
-                <h1
-                  class="
-                    w-full
-                    my-2
-                    text-xl
-                    font-bold
-                    leading-tight
-                    text-gray-700
-                  "
-                >
-                  Claim Item
-                </h1>
-                <div class="flex justify-start">
-                  <span
-                    class="
-                      w-20
-                      border-t-4 border-solid border-orange-200
-                      inline-block
-                      mb-3
-                    "
-                  ></span>
-                </div>
+                <BaseHeader varient="gray">Claim Item</BaseHeader>
               </div>
-              <label class="block mb-1 text-sm font-medium text-gray-800"
-                >Personal Details:</label
-              >
+              <BaseHeader varient="subheader">Personal Details</BaseHeader>
               <ValidationProvider
                 v-slot="{ errors }"
                 rules="required"
@@ -106,9 +69,7 @@
                   {{ phoneNoValidateMessage }}
                 </div>
               </div>
-              <label class="block mb-1 !mt-14 text-sm font-medium text-gray-800"
-                >Item Details:</label
-              >
+              <BaseHeader class="!mt-14" varient="subheader">Item Details</BaseHeader>
               <ValidationProvider
                 v-slot="{ errors }"
                 rules="required"
@@ -160,10 +121,7 @@
                   </div>
                 </client-only>
               </ValidationProvider>
-
-              <label class="block mb-1 !mt-10 text-sm font-medium text-gray-800"
-                >Lost Item Address:</label
-              >
+              <BaseHeader class="!mt-10" varient="subheader">Lost Item Address</BaseHeader>
               <ValidationProvider
                 v-slot="{ errors }"
                 rules="required"
@@ -263,14 +221,9 @@
                   </p>
                 </ValidationProvider>
               </div>
-              <div
-                v-show="showValidateAlert"
-                class="p-4 mb-4 text-sm text-red-700 bg-red-100 rounded-lg"
-                role="alert"
-              >
-                <span class="font-medium">Oops!</span> Please fill all required
-                fields and try submitting again.
-              </div>
+
+              <ValidationAlert :show-alert="showValidateAlert" />
+              
               <div class="flex justify-end">
                 <BaseButton :is-loading="isLoading" type="submit">
                   Submit
@@ -280,7 +233,7 @@
           </form>
         </ValidationObserver>
       </div>
-    </div>
+    </BaseCard>
 
     <BaseDialog
       :showDialog="showDialog"
@@ -301,12 +254,14 @@ import moment from "moment";
 import formatMobileNumber from "../mixins/formatMobileNumber.js";
 import eventListners from "../mixins/eventListners.js";
 import scrollToError from "../mixins/scrollToError.js";
+import ValidationAlert from '~/components/shared/ValidationAlert.vue'
 
 export default {
   mixins: [formatMobileNumber, eventListners, scrollToError],
   components: {
     ValidationObserver,
     ValidationProvider,
+    ValidationAlert,
     DatePicker,
   },
   data() {

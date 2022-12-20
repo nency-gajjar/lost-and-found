@@ -1,59 +1,16 @@
 <template>
   <div class="wrapper" v-if="Object.keys(itemDetails).length > 0">
-    <div
-      class="
-        w-full
-        mx-6
-        lg:mx-0
-        md:w-8/12
-        lg:w-7/12
-        xl:w-6/12
-        overflow-hidden
-        bg-white
-        border border-[#E1E3E6]
-        rounded-lg
-      "
-      style="box-shadow: rgba(54, 28, 93, 0.04) -10px 18px 32px"
-    >
+    <BaseCard class="md:w-8/12 lg:w-7/12 xl:w-6/12 overflow-hidden">
       <section class="bg-white">
         <div class="main-title bg-accent-100 text-white mb-3">
-          <h1
-            class="
-              w-full
-              py-3
-              text-2xl
-              font-bold
-              leading-tight
-              text-center text-white
-            "
-          >
-            PREVIEW
-          </h1>
+          <BaseHeader varient="details">PREVIEW</BaseHeader>
         </div>
         <div v-if="showInformativeTxt" class="p-6 flex items-center">
           <p class="font-medium text-gray-700 text-lg">Let’s make sure you got everything right before you Submit.</p>
         </div>
         <div class="sections py-4 px-6">
           <div class="form-title">
-            <h2
-              class="
-                text-lg text-accent-100
-                font-medium
-                leading-tight
-                text-left text-gray-800
-              "
-            >
-              Sender's Details:
-            </h2>
-
-            <span
-              class="
-                w-20
-                border-t-4 border-solid border-gray-300
-                inline-block
-                mb-1
-              "
-            ></span>
+            <BaseHeader varient="accent">Sender's Details:</BaseHeader>
           </div>
           <div class="flex sm:items-center items-start mt-3 flex-wrap md:flex-nowrap sm:flex-row flex-col">
             <div
@@ -207,26 +164,8 @@
 
         <div class="sections px-6 py-4">
           <div class="form-title">
-            <h2
-              class="
-                text-lg text-accent-100
-                font-medium
-                leading-tight
-                text-left text-gray-800
-              "
-            >
-              Address Details:
-            </h2>
-            <span
-              class="
-                w-20
-                border-t-4 border-solid border-gray-300
-                inline-block
-                mb-1
-              "
-            ></span>
+            <BaseHeader varient="accent">Address Details:</BaseHeader>
           </div>
-
           <div class="flex sm:items-center items-start mt-3 flex-wrap md:flex-nowrap sm:flex-row flex-col">
             <div
               class="
@@ -339,26 +278,10 @@
             "
           ></div>
         </div>
+
         <div class="sections px-6 py-4">
           <div class="form-title">
-            <h2
-              class="
-                text-lg text-accent-100
-                font-medium
-                leading-tight
-                text-left text-gray-800
-              "
-            >
-              Found Item's Details:
-            </h2>
-            <span
-              class="
-                w-20
-                border-t-4 border-solid border-gray-300
-                inline-block
-                mb-1
-              "
-            ></span>
+            <BaseHeader varient="accent">Found Item's Details:</BaseHeader>
           </div>
 
           <div class="flex foundItemContainer">
@@ -517,12 +440,11 @@
           >
         </div>
       </section>
-    </div>
+    </BaseCard>
   </div>
 </template>
 
 <script>
-import { mapGetters } from "vuex";
 import _ from "lodash";
 export default {
   data() {
