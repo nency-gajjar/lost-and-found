@@ -32,12 +32,6 @@
               label="Insert reference"
               :class="errors.length > 0 && 'error'"
             />
-            <p
-              v-if="errors.length"
-              class="vee-validation-error mt-2 text-sm text-red-600"
-            >
-              {{ errors[0] }}
-            </p>
           </ValidationProvider>
           <ValidationProvider
             v-slot="{ errors }"
@@ -67,13 +61,6 @@
                 'border-red-500 border-2 ring-4 ring-red-500 ring-opacity-10 rounded-lg  transition-none'
               "
             ></textarea>
-
-            <p
-              v-if="errors.length"
-              class="vee-validation-error text-sm text-left text-red-600"
-            >
-              {{ errors[0] }}
-            </p>
           </ValidationProvider>
           <ValidationProvider
             v-slot="{ errors }"
@@ -93,12 +80,6 @@
                 ></date-picker>
               </div>
             </client-only>
-            <p
-              v-if="errors.length"
-              class="vee-validation-error mt-2 text-sm text-red-600"
-            >
-              {{ errors[0] }}
-            </p>
           </ValidationProvider>
           <BaseButton
             type="submit"

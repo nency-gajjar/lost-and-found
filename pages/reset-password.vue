@@ -51,12 +51,6 @@
                   label="Verification Code"
                   :class="errors.length > 0 && 'error'"
                 />
-                <p
-                  v-if="errors.length"
-                  class="vee-validation-error mt-2 text-sm text-red-600"
-                >
-                  {{ errors[0] }}
-                </p>
               </ValidationProvider>
               <ValidationProvider
                 v-slot="{ errors }"
