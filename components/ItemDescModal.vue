@@ -20,12 +20,6 @@
             class="block"
           >
             <BaseInput :isRequired="true" v-model="itemDescObj.item_description" label="Item Description" :class="errors.length > 0 && 'error'" />
-            <p
-              v-if="errors.length"
-              class="vee-validation-error mt-2 text-sm text-red-600"
-            >
-              {{ errors[0] }}
-            </p>
           </ValidationProvider>
           <ValidationProvider
             v-slot="{ errors }"
@@ -33,12 +27,6 @@
             class="block"
           >
             <BaseSelect :isRequired="true" v-model="itemDescObj.package_type" :options="packageTypeOptions" label="Package Type" :class="errors.length > 0 && 'error'" />
-            <p
-              v-if="errors.length"
-              class="vee-validation-error mt-2 text-sm text-red-600"
-            >
-              {{ errors[0] }}
-            </p>
           </ValidationProvider>
           <label class="text-sm mt-2 font-medium text-gray-500">Weight</label>
           <div class="grid sm:grid-cols-2 gap-4">

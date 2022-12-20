@@ -759,7 +759,7 @@
               <ValidationProvider
                 v-slot="{ errors }"
                 rules="required"
-                class="block"
+                class="block !mt-2"
               >
                 <BaseSelect
                   :isRequired="true"
@@ -871,12 +871,22 @@
       </div>
       <BaseDialog
         :showDialog="showDialog"
+        :showClose="false"
         :icon="{ name: 'trash-can', color: 'red', size: '3x' }"
         buttonTitle="Yes please!"
         title="Are you sure?"
         message="Do you want to remove the image!"
-        @close="showDialog= false; deleteEditable()"
-    />
+        @close="showDialog= false;"
+      >
+        <template v-slot:action>
+          <BaseButton
+            class="!capitalize !px-5 !py-2"
+            varient="gray"
+            @click="showDialog= false; deleteEditable()"
+            >Yes please!
+          </BaseButton>
+        </template>
+      </BaseDialog>
     </BaseCard>
   </div>
 </template>

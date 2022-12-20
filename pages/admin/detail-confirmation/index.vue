@@ -463,13 +463,6 @@
                     :class="errors.length > 0 && 'error'"
                   >
                   </BaseInput>
-
-                  <p
-                    v-if="errors.length"
-                    class="vee-validation-error mt-2 text-sm text-red-600"
-                  >
-                    {{ errors[0] }}
-                  </p>
                 </ValidationProvider>
               </div>
             </div>
@@ -1076,13 +1069,6 @@
                 "
                 :class="errors.length > 0 && 'error'"
               ></textarea>
-
-              <p
-                v-if="errors.length"
-                class="vee-validation-error mt-2 text-sm text-left text-red-600"
-              >
-                {{ errors[0] }}
-              </p>
             </ValidationProvider>
           </form>
         </ValidationObserver>

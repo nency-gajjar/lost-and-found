@@ -106,6 +106,7 @@
               v-slot="{ errors }"
               name="Customs Signer"
               class="block"
+              rules="required"
             >
               <BaseInput
                 v-model="customsSigner"
@@ -113,12 +114,6 @@
                 label="Customs Signer"
                 :class="errors.length > 0 && 'error'"
               />
-              <p
-                v-if="errors.length"
-                class="vee-validation-error mt-2 text-sm text-red-600"
-              >
-                {{ errors[0] }}
-              </p>
             </ValidationProvider>
 
             <ValidationAlert :show-alert="showValidateAlert" />

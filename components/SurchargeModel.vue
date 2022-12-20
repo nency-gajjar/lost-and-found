@@ -19,13 +19,7 @@
             rules="required"
             class="block"
           >
-            <BaseSelect :isRequired="true" v-model="key" :options="keyOptions" label="Key" />
-            <p
-              v-if="errors.length"
-              class="vee-validation-error mt-2 text-sm text-red-600"
-            >
-              {{ errors[0] }}
-            </p>
+            <BaseSelect :isRequired="true" v-model="key" :options="keyOptions" label="Key" :class="errors.length > 0 && 'error'" />
           </ValidationProvider>
           <div class="grid sm:grid-cols-2 gap-4">
             <ValidationProvider
@@ -38,13 +32,8 @@
                 v-model="service"
                 :options="serviceOptions"
                 label="Service"
+                :class="errors.length > 0 && 'error'"
               />
-              <p
-                v-if="errors.length"
-                class="vee-validation-error mt-2 text-sm text-red-600"
-              >
-                {{ errors[0] }}
-              </p>
             </ValidationProvider>
             <ValidationProvider
               v-slot="{ errors }"
@@ -56,13 +45,8 @@
                 v-model="packageType"
                 :options="packageTypeOptions"
                 label="Package Type"
+                :class="errors.length > 0 && 'error'"
               />
-              <p
-                v-if="errors.length"
-                class="vee-validation-error mt-2 text-sm text-red-600"
-              >
-                {{ errors[0] }}
-              </p>
             </ValidationProvider>
           </div>
           <div class="grid sm:grid-cols-2 gap-4">
@@ -84,12 +68,6 @@
                   ></date-picker>
                 </div>
               </client-only>
-              <p
-                v-if="errors.length"
-                class="vee-validation-error mt-2 text-sm text-red-600"
-              >
-                {{ errors[0] }}
-              </p>
             </ValidationProvider>
             <ValidationProvider
               v-slot="{ errors }"
@@ -109,12 +87,6 @@
                   ></date-picker>
                 </div>
               </client-only>
-              <p
-                v-if="errors.length"
-                class="vee-validation-error mt-2 text-sm text-red-600"
-              >
-                {{ errors[0] }}
-              </p>
             </ValidationProvider>
           </div>
           <p v-show="!isDateRangeValid" class="text-rose-600">
