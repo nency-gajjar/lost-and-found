@@ -22,3 +22,15 @@
         @apply border-red-500 border-2 ring-4 ring-red-500 ring-opacity-10 rounded-lg transition-none;
     }
 }
+
+@media only screen and (max-width: 376px) {
+    .mx-datepicker input {
+        font-size: 11px;
+    }
+}
+
+@media only screen and (max-width: 330px) {
+    .mx-datepicker input {
+        font-size: 9px;
+    }
+}
