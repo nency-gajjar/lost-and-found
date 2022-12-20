@@ -1,47 +1,11 @@
 <template>
   <div class="wrapper">
-    <div
-      class="
-        w-full
-        mx-6
-        lg:mx-0
-        md:w-8/12
-        lg:w-7/12
-        xl:w-6/12
-        bg-white
-        border border-[#E1E3E6]
-        rounded-lg
-      "
-      style="box-shadow: rgba(54, 28, 93, 0.04) -10px 18px 32px"
-    >
+    <BaseCard class="md:w-8/12 lg:w-7/12 xl:w-6/12">
       <ValidationObserver v-slot="{ validate }" ref="observer">
         <form @submit.prevent="validate().then(onSubmit)">
           <div class="sm:p-6 p-4 space-y-4">
             <div class="form-title">
-              <div>
-                <h1
-                  class="
-                    w-full
-                    my-2
-                    text-xl
-                    font-bold
-                    leading-tight
-                    text-gray-700
-                  "
-                >
-                  CUSTOM SHIPPING DETAILS
-                </h1>
-                <div class="flex justify-start">
-                  <span
-                    class="
-                      w-20
-                      border-t-4 border-solid border-orange-200
-                      inline-block
-                      mb-3
-                    "
-                  ></span>
-                </div>
-              </div>
+              <BaseHeader varient="gray">Custom Shipping Details</BaseHeader>
             </div>
 
             <!-- Custom Items Value -->
@@ -156,32 +120,31 @@
                 {{ errors[0] }}
               </p>
             </ValidationProvider>
-          </div>
-          <div
-            v-show="showValidateAlert"
-            class="p-4 mb-4 text-sm text-red-700 bg-red-100 rounded-lg"
-            role="alert"
-          >
-            <span class="font-medium">Oops!</span> Please fill all required
-            fields and try submitting again.
-          </div>
-          <div class="flex justify-end mr-6">
-            <BaseButton type="submit">
-              Submit
-            </BaseButton>
+
+            <ValidationAlert :show-alert="showValidateAlert" />
+
+            <div class="flex justify-end">
+              <BaseButton type="submit">
+                Submit
+              </BaseButton>
+            </div>
           </div>
         </form>
       </ValidationObserver>
-    </div>
+    </BaseCard>
   </div>
 </template>
 
 <script>
 import eventListners from "../mixins/eventListners.js";
 import scrollToError from "../mixins/scrollToError.js";
+import ValidationAlert from '~/components/shared/ValidationAlert.vue'
 
 export default {
   mixins: [eventListners, scrollToError],
+  components: {
+    ValidationAlert
+  },
   data() {
     return {
       eel_pfc: "NOEEI 30.37(a)",

@@ -4,9 +4,7 @@
       <main class="my-10 space-y-6">
         <div class="flex flex-col md:space-y-0 md:flex-row justify-between">
           <div class="mr-6 order-2 md:order-1 mt-3 md:mt-0">
-            <h1 class="text-2xl text-gray-600 font-semibold">
-              Surcharge
-            </h1>
+            <BaseHeader class="text-left" varient="h4">Surcharge</BaseHeader>
           </div>
         </div>
         <div

@@ -3,57 +3,14 @@
     class="wrapper"
     v-if="!isLoadingItemDetails || Object.keys(itemDetails).length > 0"
   >
-    <div
-      class="
-        w-full
-        mx-6
-        lg:mx-0
-        md:w-8/12
-        lg:w-7/12
-        xl:w-6/12
-        overflow-hidden
-        bg-white
-        border border-[#E1E3E6]
-        rounded-lg
-      "
-      style="box-shadow: rgba(54, 28, 93, 0.04) -10px 18px 32px"
-    >
-      <section class="bg-white">
+    <BaseCard class="md:w-8/12 lg:w-7/12 xl:w-6/12 overflow-hidden">
+      <section>
         <div class="main-title bg-accent-100 text-white mb-3">
-          <h1
-            class="
-              w-full
-              py-3
-              text-2xl
-              font-bold
-              leading-tight
-              text-center text-white
-            "
-          >
-            ITEM DETAILS
-          </h1>
+          <BaseHeader varient="details">ITEM DETAILS</BaseHeader>
         </div>
         <div class="sections py-4 px-6">
           <div class="form-title">
-            <h2
-              class="
-                text-lg text-accent-100
-                font-medium
-                leading-tight
-                text-left text-gray-800
-              "
-            >
-              Claim Person's Details:
-            </h2>
-
-            <span
-              class="
-                w-20
-                border-t-4 border-solid border-gray-300
-                inline-block
-                mb-1
-              "
-            ></span>
+            <BaseHeader varient="accent">Claim Person's Details:</BaseHeader>
           </div>
           <div class="flex sm:items-center items-start mt-3 flex-wrap md:flex-nowrap sm:flex-row flex-col">
             <div
@@ -210,25 +167,7 @@
 
         <div class="sections py-4 px-6">
           <div class="form-title">
-            <h2
-              class="
-                text-lg text-accent-100
-                font-medium
-                leading-tight
-                text-left text-gray-800
-              "
-            >
-              Item Details:
-            </h2>
-
-            <span
-              class="
-                w-20
-                border-t-4 border-solid border-gray-300
-                inline-block
-                mb-1
-              "
-            ></span>
+            <BaseHeader varient="accent">Item Details:</BaseHeader>
           </div>
           <div class="flex flex-col lg:flex-row foundItemContainer">
             <div class="flex flex-col grow">
@@ -442,25 +381,7 @@
         </div>
         <div class="sections py-4 px-6">
           <div class="form-title">
-            <h2
-              class="
-                text-lg text-accent-100
-                font-medium
-                leading-tight
-                text-left text-gray-800
-              "
-            >
-              Found Item Address:
-            </h2>
-
-            <span
-              class="
-                w-20
-                border-t-4 border-solid border-gray-300
-                inline-block
-                mb-1
-              "
-            ></span>
+            <BaseHeader varient="accent">Found Item Address:</BaseHeader>
           </div>
 
           <div class="flex sm:items-center items-start mt-3 flex-wrap md:flex-nowrap sm:flex-row flex-col">
@@ -567,7 +488,7 @@
           </BaseButton>
         </div>
       </section>
-    </div>
+    </BaseCard>
     <BaseDialog
       :showDialog="showDialog"
       :icon="{ name: 'circle-check', color: 'green', size: '3x' }"
