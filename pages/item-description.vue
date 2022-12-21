@@ -194,6 +194,9 @@ export default {
     this.getItemDescriptionOptions();
   },
   methods: {
+    sortItemDescription(obj1, obj2){
+      return obj1.item_description.localeCompare(obj2.item_description);
+    },
     uploadFile(event) {
       const allowedExtensions = /(\.xlsx)$/i;
       const filePath = event.target?.files[0];
@@ -237,6 +240,7 @@ export default {
                 weight_ounces: String(item.weight_ounces),
               };
             });
+            this.itemDescriptionData = this.itemDescriptionData.sort(this.sortItemDescription)
           }
         })
         .catch((error) => {

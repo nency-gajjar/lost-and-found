@@ -21,9 +21,6 @@
             <div v-if="isAdminLogin" class="link-container">
               <NuxtLink to="/item-description" class="menu">Item Description</NuxtLink>
             </div>
-            <div v-else class="link-container">
-              <NuxtLink to="/lost-items" class="menu">Lost Items</NuxtLink>
-            </div>
           </div>
           <div class="menu-right flex items-center">
             <div
@@ -43,12 +40,7 @@
             <div v-if="isAdminLogin" class="link-container cursor-pointer">
               <div class="menu" @click="logoutAdmin('desktop')">Logout</div>
             </div>
-            <div v-if="!isAdminLogin" class="drawer-container">
-              <NuxtLink to="/lost-items" class="opacity-100 menu px-4 py-2"
-                >Lost Items</NuxtLink
-              >
-            </div>
-            <div v-else class="drawer-container">
+            <div v-if="isAdminLogin" class="drawer-container">
               <div class="icon-container" @click="toggleMenu">
                 <div class="bar1"></div>
                 <div class="bar2"></div>
@@ -89,14 +81,6 @@
             @click.native="toggleMenu"
             class="opacity-100"
             >Item Description</NuxtLink
-          >
-        </div>
-        <div v-else>
-          <NuxtLink
-            to="/lost-items"
-            @click.native="toggleMenu"
-            class="opacity-100"
-            >Lost Items</NuxtLink
           >
         </div>
         <template v-if="isAdminLogin">

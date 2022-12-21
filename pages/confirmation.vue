@@ -22,7 +22,7 @@
                 <tr class="flex w-full hidden logo-hidden">
                   <td align="left" class="!w-24"><img class="found-logo" src="../assets/images/found-shelf-icon.svg" alt="Found Shelf"></td>
                 </tr>
-                <tr class="flex justify-center w-full">
+                <tr class="!flex !justify-center !w-full">
                   <td align="center" class="w-full">
                     <h2
                       class="
@@ -404,6 +404,9 @@ tr td:first-child {
 .qr-code-container {
   margin: auto;
 }
+.qr-code-container img {
+  width: 150px;
+}
 .text-center {
   text-align: center;
 }
@@ -534,6 +537,9 @@ td {
   td,
   tr {
     display: block;
+  }
+  .logo-hidden{
+    display: none;
   }
 }
 

@@ -322,7 +322,7 @@
         <ItemCard v-for="item in lostItems" :key="item.id" :item="item" @click.native="viewItem(item)">
           <BaseButton
             class="!px-5 !py-2 !capitalize"
-            varient="red"
+            varient="secondary"
             @click.stop="claimItem(item)"
           >
             Claim Item
@@ -484,7 +484,7 @@ export default {
       this.$nextTick(() => {
         this.$router.push({
           name: "detail-confirmation",
-          query: { preview: true },
+          query: { preview: "claim" },
         });
       });
     },

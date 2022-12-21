@@ -134,6 +134,14 @@
             >Edit</BaseButton
           >
         </div>
+        <div
+          v-if="allowClaim"
+          class="text-left sm:w-12/12 px-6 pb-6 pt-4"
+        >
+          <BaseButton class="w-full" varient="secondary" @click="claimItem"
+            >Claim Item</BaseButton
+          >
+        </div>
       </section>
     </BaseCard>
   </div>
@@ -149,7 +157,8 @@ export default {
       isLoading: false,
       responseData: null,
       itemDetails: {},
-      showInformativeTxt: false
+      showInformativeTxt: false,
+      allowClaim: false,
     };
   },
   mounted(){
@@ -183,6 +192,9 @@ export default {
       this.showInformativeTxt = true;
       this.itemDetails = JSON.parse(JSON.stringify(this.$store.getters['item/itemDetails']));
     }
+    if(this.$route.query.preview === "claim"){
+      this.allowClaim = true;
+    }
   },
   computed: {
     // ...mapGetters("item", ["itemDetails"]),
@@ -191,6 +203,12 @@ export default {
     },
   },
   methods: {
+    claimItem() {
+      this.$router.push({
+        name: "claim-item",
+        params: { item: this.itemDetails },
+      });
+    },
     filterAddressLine(itemDetails) {
       return itemDetails.address == "Other" || !itemDetails.address
         ? itemDetails.manualAddress
