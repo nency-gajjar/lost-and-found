@@ -103,11 +103,12 @@
               class="
                 w-full
                 flex
-                item-center
+                items-end
                 justify-end
                 md:mt-0 md:w-2/12
                 flex-auto
                 gap-2
+                pb-1
               "
             >
               <BaseButton
@@ -125,6 +126,7 @@
                   !items-center
                   mr-1
                   mb-1
+                  !h-12
                 "
                 :varient="isFilterApplied ? 'green' : 'blue'"
                 @click="applyFilters"
@@ -134,7 +136,7 @@
               <BaseButton
                 @click="clearFilters"
                 varient="gray"
-                class="!bg-white !px-4 !py-2 mr-1 mb-1 !capitalize"
+                class="!bg-white !px-4 !h-12 !py-2 mr-1 mb-1 !capitalize"
                 >Clear</BaseButton
               >
             </div>

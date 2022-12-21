@@ -13,23 +13,7 @@
               <div class="form-title">
                 <BaseHeader varient="accent">Item's Details:</BaseHeader>
               </div>
-              <div v-if="!itemDetails.image" class="flex sm:items-center items-start mt-3 flex-wrap md:flex-nowrap sm:flex-row flex-col">
-                <div
-                  class="
-                    text-left text-gray-600
-                    font-medium
-                    w-250-px
-                    lg:w-4/12
-                    md:w-5/12
-                    sm:w-6/12
-                  "
-                >
-                  Item Description
-                </div>
-                <div class="text-gray-600 text-left md:w-7/12 sm:w-6/12">
-                  {{ itemDetails.item_description }}
-                </div>
-              </div>
+              <RawCard v-if="!itemDetails.image" title="Item Description" :value="itemDetails.item_description" />
               <div v-else
                 class="
                   mt-2
@@ -100,111 +84,12 @@
               <div class="form-title">
                 <BaseHeader varient="accent">Sender's Details:</BaseHeader>
               </div>
-              <div class="flex sm:items-center items-start mt-3 flex-wrap md:flex-nowrap sm:flex-row flex-col">
-                <div
-                  class="
-                    text-left text-gray-600
-                    font-medium
-                    w-250-px
-                    lg:w-4/12
-                    md:w-5/12
-                    sm:w-6/12
-                  "
-                >
-                  Venue Name
-                </div>
-                <div class="text-gray-600 text-left md:w-7/12 sm:w-6/12">
-                  {{ itemDetails.venue_name }}
-                </div>
-              </div>
-              <div class="flex sm:items-center items-start mt-3 flex-wrap md:flex-nowrap sm:flex-row flex-col">
-                <div
-                  class="
-                    text-left text-gray-600
-                    font-medium
-                    w-250-px
-                    lg:w-4/12
-                    md:w-5/12
-                    sm:w-6/12
-                  "
-                >
-                  Found Item Date
-                </div>
-                <div class="text-gray-600 text-left md:w-7/12 sm:w-6/12">
-                  {{ itemDetails.datse }}
-                </div>
-              </div>
-              <div class="flex sm:items-center items-start mt-3 flex-wrap md:flex-nowrap sm:flex-row flex-col">
-                <div
-                  class="
-                    text-left text-gray-600
-                    font-medium
-                    w-250-px
-                    lg:w-4/12
-                    md:w-5/12
-                    sm:w-6/12
-                  "
-                >
-                  Venue Email
-                </div>
-                <div class="text-gray-600 text-left md:w-7/12 sm:w-6/12">
-                  {{ itemDetails.venue_email }}
-                </div>
-              </div>
-              <div
-                v-if="itemDetails.secondary_email"
-                class="flex sm:items-center items-start mt-3 flex-wrap md:flex-nowrap sm:flex-row flex-col"
-              >
-                <div
-                  class="
-                    text-left text-gray-600
-                    font-medium
-                    w-250-px
-                    lg:w-4/12
-                    md:w-5/12
-                    sm:w-6/12
-                  "
-                >
-                  Venue Secondary Email
-                </div>
-                <div class="text-gray-600 text-left md:w-7/12 sm:w-6/12">
-                  {{ itemDetails.secondary_email }}
-                </div>
-              </div>
-              <div class="flex sm:items-center items-start mt-3 flex-wrap md:flex-nowrap sm:flex-row flex-col">
-                <div
-                  class="
-                    text-left text-gray-600
-                    font-medium
-                    w-250-px
-                    lg:w-4/12
-                    md:w-5/12
-                    sm:w-6/12
-                  "
-                >
-                  Venue Phone No.
-                </div>
-                <div class="text-gray-600 text-left md:w-7/12 sm:w-6/12">
-                  {{ itemDetails.venue_phone_no }}
-                </div>
-              </div>
-              <div class="flex sm:items-center items-start mt-3 flex-wrap md:flex-nowrap sm:flex-row flex-col">
-                <div
-                  class="
-                    text-left text-gray-600
-                    font-medium
-                    w-250-px
-                    lg:w-4/12
-                    md:w-5/12
-                    sm:w-6/12
-                  "
-                >
-                  Address
-                </div>
-                <div class="text-gray-600 text-left md:w-7/12 sm:w-6/12">
-                  {{ senderAddress(itemDetails.address, itemDetails.city, itemDetails.states, itemDetails.country, itemDetails.zipcode) }}
-                </div>
-              </div>
+              <RawCard title="Venue Name" :value="itemDetails.venue_name" />
+              <RawCard title="Found Item Date" :value="itemDetails.datse" />
+              <RawCard title="Venue Email" :value="itemDetails.venue_email" />
+              <RawCard v-if="itemDetails.secondary_email" title="Venue Secondary Email" :value="itemDetails.secondary_email" />
+              <RawCard title="Venue Phone No." :value="itemDetails.venue_phone_no" />
+              <RawCard title="Address" :value="senderAddress(itemDetails.address, itemDetails.city, itemDetails.states, itemDetails.country, itemDetails.zipcode)" />
             </div>
             <!-- Sender's Details End-->
 
@@ -604,11 +489,12 @@ import formatMobileNumber2 from "../mixins/formatMobileNumber-2.js";
 import eventListners from "../mixins/eventListners.js";
 import scrollToError from "../mixins/scrollToError.js";
 import moment from "moment";
-import ValidationAlert from '~/components/shared/ValidationAlert.vue'
+import ValidationAlert from '~/components/shared/ValidationAlert.vue';
+import RawCard from "../components/shared/RawCard.vue";
 
 export default {
   mixins: [formatMobileNumber, formatMobileNumber2, eventListners, scrollToError],
-  components: { DatePicker, ValidationAlert },
+  components: { DatePicker, ValidationAlert, RawCard },
   data: () => ({
     showDialog: false,
     deliveryType: "0",

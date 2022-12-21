@@ -1260,7 +1260,9 @@ export default {
         };
         let address = autocomplete.getPlace();
         this.venueName = address.name;
-        this.autoCompleteAddress.address = address.formatted_address;
+        let addressLineArr = address.vicinity.split(",");
+        addressLineArr.pop();
+        this.autoCompleteAddress.address = addressLineArr.join();
         this.address = this.venueName;
         this.autoCompleteAddress.phoneNo =
           address.international_phone_number || address.formatted_phone_number;
