@@ -172,6 +172,14 @@
               </div>
             </div>
           </div>
+          <div class="flex justify-center items-center mt-8">
+            <BaseIcon
+              icon="circle-info"
+              color="lightgray"
+              style="max-width: 15px"
+            />
+            <p class="pl-3">Leave all fields blank to show all items</p>
+          </div>
           <div class="flex items-center justify-center m-8">
             <BaseButton @click="applyFilters" class="sm:py-4 sm:px-14">
               Search

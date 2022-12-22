@@ -12,131 +12,13 @@
           <div class="form-title">
             <BaseHeader varient="accent">Claim Person's Details:</BaseHeader>
           </div>
-          <div class="flex sm:items-center items-start mt-3 flex-wrap md:flex-nowrap sm:flex-row flex-col">
-            <div
-              class="
-                text-left text-gray-600
-                font-medium
-                w-250-px
-                lg:w-4/12
-                md:w-5/12
-                sm:w-6/12
-              "
-            >
-              Person Name
-            </div>
-            <div class="text-gray-600 text-left md:w-7/12 sm:w-6/12">
-              {{ claimDetails.claimpersonname }}
-            </div>
-          </div>
-          <div class="flex sm:items-center items-start mt-3 flex-wrap md:flex-nowrap sm:flex-row flex-col">
-            <div
-              class="
-                text-left text-gray-600
-                font-medium
-                w-250-px
-                lg:w-4/12
-                md:w-5/12
-                sm:w-6/12
-              "
-            >
-              Email
-            </div>
-            <div class="text-gray-600 text-left md:w-7/12 sm:w-6/12">
-              {{ claimDetails.claimpersonemail }}
-            </div>
-          </div>
-          <div class="flex sm:items-center items-start mt-3 flex-wrap md:flex-nowrap sm:flex-row flex-col">
-            <div
-              class="
-                text-left text-gray-600
-                font-medium
-                w-250-px
-                lg:w-4/12
-                md:w-5/12
-                sm:w-6/12
-              "
-            >
-              Mobile Number
-            </div>
-            <div class="text-gray-600 text-left md:w-7/12 sm:w-6/12">
-              {{ claimDetails.claimpersonmobileno }}
-            </div>
-          </div>
-
-          <div class="flex sm:items-center items-start mt-3 flex-wrap md:flex-nowrap sm:flex-row flex-col">
-            <div
-              class="
-                text-left text-gray-600
-                font-medium
-                w-250-px
-                lg:w-4/12
-                md:w-5/12
-                sm:w-6/12
-              "
-            >
-              Lost Item Date
-            </div>
-            <div class="text-gray-600 text-left md:w-7/12 sm:w-6/12">
-              {{ claimDetails.claimpersondatelost }}
-            </div>
-          </div>
-          <div class="flex sm:items-center items-start mt-3 flex-wrap md:flex-nowrap sm:flex-row flex-col">
-            <div
-              class="
-                text-left text-gray-600
-                font-medium
-                w-250-px
-                lg:w-4/12
-                md:w-5/12
-                sm:w-6/12
-              "
-            >
-              Item Description
-            </div>
-            <div class="text-gray-600 text-left md:w-7/12 sm:w-6/12">
-              {{ claimDetails.claimpersonitemname }}
-            </div>
-          </div>
-
-          <div
-            v-if="claimDetails.claimpersondescription"
-            class="flex sm:items-center items-start mt-3 flex-wrap md:flex-nowrap sm:flex-row flex-col"
-          >
-            <div
-              class="
-                text-left text-gray-600
-                font-medium
-                w-250-px
-                lg:w-4/12
-                md:w-5/12
-                sm:w-6/12
-              "
-            >
-              Description
-            </div>
-            <div class="text-gray-600 text-left md:w-7/12 sm:w-6/12">
-              {{ claimDetails.claimpersondescription }}
-            </div>
-          </div>
-
-          <div class="flex sm:items-center items-start mt-3 flex-wrap md:flex-nowrap sm:flex-row flex-col">
-            <div
-              class="
-                text-left text-gray-600
-                font-medium
-                w-250-px
-                lg:w-4/12
-                md:w-5/12
-                sm:w-6/12
-              "
-            >
-              Lost Location
-            </div>
-            <div class="text-gray-600 text-left md:w-7/12 sm:w-6/12">
-              {{ claimDetails.claimpersonlocation }}
-            </div>
-          </div>
+          <RawCard title="Person Name" :value="claimDetails.claimpersonname" />
+          <RawCard title="Email" :value="claimDetails.claimpersonemail" />
+          <RawCard title="Mobile Number" :value="claimDetails.claimpersonmobileno" />
+          <RawCard title="Lost Item Date" :value="claimDetails.claimpersondatelost" />
+          <RawCard title="Item Description" :value="claimDetails.claimpersonitemname" />
+          <RawCard v-if="claimDetails.claimpersondescription" title="Description" :value="claimDetails.claimpersondescription" />
+          <RawCard title="Lost Location" :value="claimDetails.claimpersonlocation" />
         </div>
 
         <div data-v-272705a6="" class="flex items-center my-2">
@@ -171,180 +53,16 @@
           </div>
           <div class="flex flex-col lg:flex-row foundItemContainer">
             <div class="flex flex-col grow">
-              <div class="flex sm:items-center items-start mt-3 flex-wrap md:flex-nowrap sm:flex-row flex-col">
-                <div
-                  class="
-                    text-left text-gray-600
-                    font-medium
-                    w-250-px
-                    lg:w-4/12
-                    md:w-5/12
-                    sm:w-6/12
-                  "
-                >
-                  Venue Email
-                </div>
-                <div
-                  class="text-gray-600 text-left md:w-7/12 sm:w-6/12"
-                >
-                  {{ itemDetails.venue_email }}
-                </div>
-              </div>
-              <div class="flex sm:items-center items-start mt-3 flex-wrap md:flex-nowrap sm:flex-row flex-col">
-                <div
-                  class="
-                    text-left text-gray-600
-                    font-medium
-                    w-250-px
-                    lg:w-4/12
-                    md:w-5/12
-                    sm:w-6/12
-                  "
-                >
-                  Found Item Date
-                </div>
-                <div
-                  class="text-gray-600 text-left md:w-7/12 sm:w-6/12"
-                >
-                  {{ itemDetails.datse }}
-                </div>
-              </div>
-              <div class="flex sm:items-center items-start mt-3 flex-wrap md:flex-nowrap sm:flex-row flex-col">
-                <div
-                  class="
-                    text-left text-gray-600
-                    font-medium
-                    w-250-px
-                    lg:w-4/12
-                    md:w-5/12
-                    sm:w-6/12
-                  "
-                >
-                  Venue Phone number
-                </div>
-                <div
-                  class="text-gray-600 text-left md:w-7/12 sm:w-6/12"
-                >
-                  {{ itemDetails.venue_phone_no }}
-                </div>
-              </div>
+              <RawCard title="Venue Email" :value="itemDetails.venue_email" />
+              <RawCard title="Found Item Date" :value="itemDetails.datse" />
+              <RawCard title="Venue Phone number" :value="itemDetails.venue_phone_no" />
               <div class="flex flex-col w-full">
-                <div class="flex sm:items-center items-start mt-3 flex-wrap md:flex-nowrap sm:flex-row flex-col">
-                  <div
-                    class="
-                      text-left text-gray-600
-                      font-medium
-                      w-250-px
-                      lg:w-4/12
-                      md:w-5/12
-                      sm:w-6/12
-                    "
-                  >
-                    Employee Mobile Numer
-                  </div>
-                  <div
-                    class="text-gray-600 text-left md:w-7/12 sm:w-6/12"
-                  >
-                    {{ itemDetails.employee_mobile_no }}
-                  </div>
-                </div>
-                <div class="flex sm:items-center items-start mt-3 flex-wrap md:flex-nowrap sm:flex-row flex-col">
-                  <div
-                    class="
-                      text-left text-gray-600
-                      font-medium
-                      w-250-px
-                      lg:w-4/12
-                      md:w-5/12
-                      sm:w-6/12
-                    "
-                  >
-                    Item Description
-                  </div>
-                  <div
-                    class="text-gray-600 text-left md:w-7/12 sm:w-6/12"
-                  >
-                    {{ itemDetails.item_description }}
-                  </div>
-                </div>
-                <div class="flex sm:items-center items-start mt-3 flex-wrap md:flex-nowrap sm:flex-row flex-col">
-                  <div
-                    class="
-                      text-left text-gray-600
-                      font-medium
-                      w-250-px
-                      lg:w-4/12
-                      md:w-5/12
-                      sm:w-6/12
-                    "
-                  >
-                    Package Type
-                  </div>
-                  <div
-                    class="text-gray-600 text-left md:w-7/12 sm:w-6/12"
-                  >
-                    {{ itemDetails.package_type }}
-                  </div>
-                </div>
-                <div class="flex sm:items-center items-start mt-3 flex-wrap md:flex-nowrap sm:flex-row flex-col">
-                  <div
-                    class="
-                      text-left text-gray-600
-                      font-medium
-                      w-250-px
-                      lg:w-4/12
-                      md:w-5/12
-                      sm:w-6/12
-                    "
-                  >
-                    Weight
-                  </div>
-                  <div
-                    class="text-gray-600 text-left md:w-7/12 sm:w-6/12"
-                  >
-                    {{ itemDetails.weight_pounds }} lbs
-                  </div>
-                </div>
-                <div class="flex sm:items-center items-start mt-3 flex-wrap md:flex-nowrap sm:flex-row flex-col">
-                  <div
-                    class="
-                      text-left text-gray-600
-                      font-medium
-                      w-250-px
-                      lg:w-4/12
-                      md:w-5/12
-                      sm:w-6/12
-                    "
-                  >
-                    Dimension
-                  </div>
-                  <div
-                    class="text-gray-600 text-left md:w-7/12 sm:w-6/12"
-                  >
-                    {{ itemDetails.item_length }}(l) x
-                    {{ itemDetails.item_width }}(w) x
-                    {{ itemDetails.item_height }}(h) inches
-                  </div>
-                </div>
-                <div class="flex sm:items-center items-start mt-3 flex-wrap md:flex-nowrap sm:flex-row flex-col">
-                  <div
-                    class="
-                      text-left text-gray-600
-                      font-medium
-                      w-250-px
-                      lg:w-4/12
-                      md:w-5/12
-                      sm:w-6/12
-                    "
-                  >
-                    Item Status
-                  </div>
-                  <div
-                    class="text-gray-600 text-left md:w-7/12 sm:w-6/12"
-                  >
-                    {{ itemDetails.item_status == 0 ? "Claimed" : "Unclaimed" }}
-                  </div>
-                </div>
+                <RawCard title="Employee Mobile Numer" :value="itemDetails.employee_mobile_no" />
+                <RawCard title="Item Description" :value="itemDetails.item_description" />
+                <RawCard title="Package Type" :value="itemDetails.package_type" />
+                <RawCard title="Weight" :value='itemDetails.weight_pounds + "lbs"' />
+                <RawCard title="Dimension" :value='itemDetails.item_length + "(l) x " + itemDetails.item_width + "(w) x " + itemDetails.item_height + "(h) inches"' />
+                <RawCard title="Item Status" :value="itemDetails.item_status == 0 ? 'Claimed' : 'Unclaimed'" />
               </div>
             </div>
             <div class="flex justify-center item-img-container items-center mt-3 lg:mt-0">
@@ -383,92 +101,11 @@
           <div class="form-title">
             <BaseHeader varient="accent">Found Item Address:</BaseHeader>
           </div>
-
-          <div class="flex sm:items-center items-start mt-3 flex-wrap md:flex-nowrap sm:flex-row flex-col">
-            <div
-              class="
-                text-left text-gray-600
-                font-medium
-                w-250-px
-                lg:w-4/12
-                md:w-5/12
-                sm:w-6/12
-              "
-            >
-              Address
-            </div>
-            <div class="text-gray-600 text-left md:w-7/12 sm:w-6/12">
-              {{ itemDetails.address }}
-            </div>
-          </div>
-          <div class="flex sm:items-center items-start mt-3 flex-wrap md:flex-nowrap sm:flex-row flex-col">
-            <div
-              class="
-                text-left text-gray-600
-                font-medium
-                w-250-px
-                lg:w-4/12
-                md:w-5/12
-                sm:w-6/12
-              "
-            >
-              City
-            </div>
-            <div class="text-gray-600 text-left md:w-7/12 sm:w-6/12">
-              {{ itemDetails.city }}
-            </div>
-          </div>
-          <div class="flex sm:items-center items-start mt-3 flex-wrap md:flex-nowrap sm:flex-row flex-col">
-            <div
-              class="
-                text-left text-gray-600
-                font-medium
-                w-250-px
-                lg:w-4/12
-                md:w-5/12
-                sm:w-6/12
-              "
-            >
-              State
-            </div>
-            <div class="text-gray-600 text-left md:w-7/12 sm:w-6/12">
-              {{ itemDetails.states }}
-            </div>
-          </div>
-          <div class="flex sm:items-center items-start mt-3 flex-wrap md:flex-nowrap sm:flex-row flex-col">
-            <div
-              class="
-                text-left text-gray-600
-                font-medium
-                w-250-px
-                lg:w-4/12
-                md:w-5/12
-                sm:w-6/12
-              "
-            >
-              Country
-            </div>
-            <div class="text-gray-600 text-left md:w-7/12 sm:w-6/12">
-              {{ itemDetails.country }}
-            </div>
-          </div>
-          <div class="flex sm:items-center items-start mt-3 flex-wrap md:flex-nowrap sm:flex-row flex-col">
-            <div
-              class="
-                text-left text-gray-600
-                font-medium
-                w-250-px
-                lg:w-4/12
-                md:w-5/12
-                sm:w-6/12
-              "
-            >
-              Zipcode
-            </div>
-            <div class="text-gray-600 text-left md:w-7/12 sm:w-6/12">
-              {{ itemDetails.zipcode }}
-            </div>
-          </div>
+          <RawCard title="Address" :value="itemDetails.address" />
+          <RawCard title="City" :value="itemDetails.city" />
+          <RawCard title="State" :value="itemDetails.states" />
+          <RawCard title="Country" :value="itemDetails.country" />
+          <RawCard title="Zipcode" :value="itemDetails.zipcode" />
         </div>
 
         <div class="flex flex-wrap gap-2 m-5">
@@ -557,7 +194,9 @@
 </template>
 
 <script>
+import RawCard from "../components/shared/RawCard.vue";
 export default {
+  components: { RawCard },
   data() {
     return {
       showDialog: false,

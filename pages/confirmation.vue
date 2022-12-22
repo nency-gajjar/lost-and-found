@@ -22,7 +22,7 @@
                 <tr class="flex w-full hidden logo-hidden">
                   <td align="left" class="!w-24"><img class="found-logo" src="../assets/images/found-shelf-icon.svg" alt="Found Shelf"></td>
                 </tr>
-                <tr class="flex justify-center w-full">
+                <tr class="!flex !justify-center !w-full">
                   <td align="center" class="w-full">
                     <h2
                       class="
@@ -206,7 +206,7 @@
                     </div>
                   </td>
                 </tr>
-                <template v-if="itemDetails.item_status === 'claimed'">
+                <template v-if="itemDetails.item_status === 0 || itemDetails.item_status === 'claimed'">
                   <tr class="l-2">
                     <td>
                       <div class="text-left text-gray-600 font-medium">
@@ -404,6 +404,9 @@ tr td:first-child {
 .qr-code-container {
   margin: auto;
 }
+.qr-code-container img {
+  width: 150px;
+}
 .text-center {
   text-align: center;
 }
@@ -535,11 +538,18 @@ td {
   tr {
     display: block;
   }
+  .logo-hidden{
+    display: none;
+  }
 }
 
 @media print {
   .noPrint{
     display: none;
+  }
+
+  .qr-code-container img {
+    width: 100px;
   }
 
   .logo-hidden{

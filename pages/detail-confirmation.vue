@@ -5,135 +5,21 @@
         <div class="main-title bg-accent-100 text-white mb-3">
           <BaseHeader varient="details">PREVIEW</BaseHeader>
         </div>
-        <div v-if="showInformativeTxt" class="p-6 flex items-center">
-          <p class="font-medium text-gray-700 text-lg">Let’s make sure you got everything right before you Submit.</p>
+        <div v-if="showInformativeTxt" class="p-6">
+          <p class="font-medium text-gray-700 text-lg text-center">Let’s make sure you got everything right.</p>
+          <p class="font-medium text-gray-700 text-lg text-center">Scroll down to Submit.</p>
         </div>
         <div class="sections py-4 px-6">
           <div class="form-title">
             <BaseHeader varient="accent">Sender's Details:</BaseHeader>
           </div>
-          <div class="flex sm:items-center items-start mt-3 flex-wrap md:flex-nowrap sm:flex-row flex-col">
-            <div
-              class="
-                text-left text-gray-600
-                font-medium
-                w-250-px
-                lg:w-4/12
-                md:w-5/12
-                sm:w-6/12
-              "
-            >
-              Sender Affiliation
-            </div>
-            <div class="text-gray-600 text-left md:w-7/12 sm:w-6/12">
-              {{ itemDetails.venu_type }}
-            </div>
-          </div>
-          <div class="flex sm:items-center items-start mt-3 flex-wrap md:flex-nowrap sm:flex-row flex-col">
-            <div
-              class="
-                text-left text-gray-600
-                font-medium
-                w-250-px
-                lg:w-4/12
-                md:w-5/12
-                sm:w-6/12
-              "
-            >
-              Found Item Date
-            </div>
-            <div class="text-gray-600 text-left md:w-7/12 sm:w-6/12">
-              {{ itemDetails.datse }}
-            </div>
-          </div>
-          <div v-show="itemDetails.venue_name" class="flex sm:items-center items-start mt-3 flex-wrap md:flex-nowrap sm:flex-row flex-col">
-            <div
-              class="
-                text-left text-gray-600
-                font-medium
-                w-250-px
-                lg:w-4/12
-                md:w-5/12
-                sm:w-6/12
-              "
-            >
-              Venue Name
-            </div>
-            <div class="text-gray-600 text-left md:w-7/12 sm:w-6/12">
-              {{ itemDetails.venue_name }}
-            </div>
-          </div>
-          <div class="flex sm:items-center items-start mt-3 flex-wrap md:flex-nowrap sm:flex-row flex-col">
-            <div
-              class="
-                text-left text-gray-600
-                font-medium
-                w-250-px
-                lg:w-4/12
-                md:w-5/12
-                sm:w-6/12
-              "
-            >
-              Venue Email
-            </div>
-            <div class="text-gray-600 text-left md:w-7/12 sm:w-6/12">
-              {{ itemDetails.venue_email }}
-            </div>
-          </div>
-          <div
-            v-if="itemDetails.secondary_email"
-            class="flex sm:items-center items-start mt-3 flex-wrap md:flex-nowrap sm:flex-row flex-col"
-          >
-            <div
-              class="
-                text-left text-gray-600
-                font-medium
-                w-250-px
-                lg:w-4/12
-                md:w-5/12
-                sm:w-6/12
-              "
-            >
-              Venue Secondary Email
-            </div>
-            <div class="text-gray-600 text-left md:w-7/12 sm:w-6/12">
-              {{ itemDetails.secondary_email }}
-            </div>
-          </div>
-          <div class="flex sm:items-center items-start mt-3 flex-wrap md:flex-nowrap sm:flex-row flex-col">
-            <div
-              class="
-                text-left text-gray-600
-                font-medium
-                w-250-px
-                lg:w-4/12
-                md:w-5/12
-                sm:w-6/12
-              "
-            >
-              Venue Phone No.
-            </div>
-            <div class="text-gray-600 text-left md:w-7/12 sm:w-6/12">
-              {{ itemDetails.venue_phone_no }}
-            </div>
-          </div>
-          <div class="flex sm:items-center items-start mt-3 flex-wrap md:flex-nowrap sm:flex-row flex-col">
-            <div
-              class="
-                text-left text-gray-600
-                font-medium
-                w-250-px
-                lg:w-4/12
-                md:w-5/12
-                sm:w-6/12
-              "
-            >
-              Employee Mobile No.
-            </div>
-            <div class="text-gray-600 text-left md:w-7/12 sm:w-6/12">
-              {{ itemDetails.employee_mobile_no }}
-            </div>
-          </div>
+          <RawCard title="Sender Affiliation" :value="itemDetails.venu_type" />
+          <RawCard title="Found Item Date" :value="itemDetails.datse" />
+          <RawCard title="Venue Name" :value="itemDetails.venue_name" />
+          <RawCard title="Venue Email" :value="itemDetails.venue_email" />
+          <RawCard v-if="itemDetails.secondary_email" title="Venue Secondary Email" :value="itemDetails.secondary_email" />
+          <RawCard title="Venue Phone No." :value="itemDetails.venue_phone_no" />
+          <RawCard title="Employee Mobile No." :value="itemDetails.employee_mobile_no" />
         </div>
 
         <div data-v-272705a6="" class="flex items-center my-2">
@@ -166,91 +52,11 @@
           <div class="form-title">
             <BaseHeader varient="accent">Address Details:</BaseHeader>
           </div>
-          <div class="flex sm:items-center items-start mt-3 flex-wrap md:flex-nowrap sm:flex-row flex-col">
-            <div
-              class="
-                text-left text-gray-600
-                font-medium
-                w-250-px
-                lg:w-4/12
-                md:w-5/12
-                sm:w-6/12
-              "
-            >
-              Address
-            </div>
-            <div class="text-gray-600 text-left md:w-7/12 sm:w-6/12">
-              {{ filterAddressLine(itemDetails) }}
-            </div>
-          </div>
-          <div class="flex sm:items-center items-start mt-3 flex-wrap md:flex-nowrap sm:flex-row flex-col">
-            <div
-              class="
-                text-left text-gray-600
-                font-medium
-                w-250-px
-                lg:w-4/12
-                md:w-5/12
-                sm:w-6/12
-              "
-            >
-              City
-            </div>
-            <div class="text-gray-600 text-left md:w-7/12 sm:w-6/12">
-              {{ itemDetails.city }}
-            </div>
-          </div>
-          <div class="flex sm:items-center items-start mt-3 flex-wrap md:flex-nowrap sm:flex-row flex-col">
-            <div
-              class="
-                text-left text-gray-600
-                font-medium
-                w-250-px
-                lg:w-4/12
-                md:w-5/12
-                sm:w-6/12
-              "
-            >
-              State
-            </div>
-            <div class="text-gray-600 text-left md:w-7/12 sm:w-6/12">
-              {{ itemDetails.states }}
-            </div>
-          </div>
-          <div class="flex sm:items-center items-start mt-3 flex-wrap md:flex-nowrap sm:flex-row flex-col">
-            <div
-              class="
-                text-left text-gray-600
-                font-medium
-                w-250-px
-                lg:w-4/12
-                md:w-5/12
-                sm:w-6/12
-              "
-            >
-              Country
-            </div>
-            <div class="text-gray-600 text-left md:w-7/12 sm:w-6/12">
-              {{ itemDetails.country }}
-            </div>
-          </div>
-          <div class="flex sm:items-center items-start mt-3 flex-wrap md:flex-nowrap sm:flex-row flex-col">
-            <div
-              class="
-                text-left text-gray-600
-                font-medium
-                w-250-px
-                lg:w-4/12
-                md:w-5/12
-                sm:w-6/12
-              "
-            >
-              Zipcode
-            </div>
-            <div class="text-gray-600 text-left md:w-7/12 sm:w-6/12">
-              {{ itemDetails.zipcode }}
-            </div>
-          </div>
+          <RawCard title="Address" :value="filterAddressLine(itemDetails)" />
+          <RawCard title="City" :value="itemDetails.city" />
+          <RawCard title="State" :value="itemDetails.states" />
+          <RawCard title="Country" :value="itemDetails.country" />
+          <RawCard title="Zipcode" :value="itemDetails.zipcode" />
         </div>
 
         <div data-v-272705a6="" class="flex items-center my-2">
@@ -286,123 +92,13 @@
 
           <div class="flex foundItemContainer">
             <div class="flex flex-col grow">
-              <div class="flex sm:items-center items-start mt-3 flex-wrap md:flex-nowrap sm:flex-row flex-col">
-                <div
-                  class="
-                    text-left text-gray-600
-                    font-medium
-                    w-250-px
-                    lg:w-4/12
-                    md:w-5/12
-                    sm:w-6/12
-                  "
-                >
-                  Item Description
-                </div>
-                <div
-                  class="text-gray-600 text-left md:w-7/12 sm:w-6/12"
-                >
-                  {{ itemDetails.item_description }}
-                </div>
-              </div>
-              <div class="flex sm:items-center items-start mt-3 flex-wrap md:flex-nowrap sm:flex-row flex-col">
-                <div
-                  class="
-                    text-left text-gray-600
-                    font-medium
-                    w-250-px
-                    lg:w-4/12
-                    md:w-5/12
-                    sm:w-6/12
-                  "
-                >
-                  Package Type
-                </div>
-                <div
-                  class="text-gray-600 text-left md:w-7/12 sm:w-6/12"
-                >
-                  {{ itemDetails.package_type }}
-                </div>
-              </div>
-              <div class="flex sm:items-center items-start mt-3 flex-wrap md:flex-nowrap sm:flex-row flex-col">
-                <div
-                  class="
-                    text-left text-gray-600
-                    font-medium
-                    w-250-px
-                    lg:w-4/12
-                    md:w-5/12
-                    sm:w-6/12
-                  "
-                >
-                  Item Status
-                </div>
-                <div
-                  class="text-gray-600 text-left md:w-7/12 sm:w-6/12"
-                >
-                  {{ itemDetails.item_status === 0 ? "Claimed" : "Unclaimed" }}
-                </div>
-              </div>
+              <RawCard title="Item Description" :value="itemDetails.item_description" />
+              <RawCard title="Package Type" :value="itemDetails.package_type" />
+              <RawCard title="Item Status" :value="itemDetails.item_status === 0 ? 'Claimed' : 'Unclaimed'" />
               <template v-if="itemDetails.item_status === 0">
-                <div class="flex sm:items-center items-start mt-3 flex-wrap md:flex-nowrap sm:flex-row flex-col">
-                  <div
-                    class="
-                      text-left text-gray-600
-                      font-medium
-                      w-full
-                      lg:w-4/12
-                      md:w-5/12
-                      sm:w-6/12
-                    "
-                  >
-                    Receiver's Name
-                  </div>
-                  <div
-                    class="text-gray-600 text-left md:w-7/12 sm:w-6/12"
-                  >
-                    {{ itemDetails.receiver_name }}
-                  </div>
-                </div>
-
-                <div class="flex sm:items-center items-start mt-3 flex-wrap md:flex-nowrap sm:flex-row flex-col">
-                  <div
-                    class="
-                      text-left text-gray-600
-                      font-medium
-                      w-full
-                      lg:w-4/12
-                      md:w-5/12
-                      sm:w-6/12
-                    "
-                  >
-                    Receiver's Email
-                  </div>
-                  <div
-                    class="text-gray-600 text-left md:w-7/12 sm:w-6/12"
-                  >
-                    {{ itemDetails.receiver_email }}
-                  </div>
-                </div>
-
-                <div class="flex sm:items-center items-start mt-3 flex-wrap md:flex-nowrap sm:flex-row flex-col">
-                  <div
-                    class="
-                      text-left text-gray-600
-                      font-medium
-                      w-full
-                      lg:w-4/12
-                      md:w-5/12
-                      sm:w-6/12
-                    "
-                  >
-                    Receiver's Mobile No.
-                  </div>
-                  <div
-                    class="text-gray-600 text-left md:w-7/12 sm:w-6/12"
-                  >
-                    {{ itemDetails.receiver_mobile_no }}
-                  </div>
-                </div>
+                <RawCard title="Receiver's Name" :value="itemDetails.receiver_name" />
+                <RawCard title="Receiver's Email" :value="itemDetails.receiver_email" />
+                <RawCard title="Receiver's Mobile No." :value="itemDetails.receiver_mobile_no" />
               </template>
             </div>
             <div class="flex item-img-container justify-center items-center">
@@ -439,6 +135,14 @@
             >Edit</BaseButton
           >
         </div>
+        <div
+          v-if="allowClaim"
+          class="text-left sm:w-12/12 px-6 pb-6 pt-4"
+        >
+          <BaseButton class="w-full" varient="secondary" @click="claimItem"
+            >Claim Item</BaseButton
+          >
+        </div>
       </section>
     </BaseCard>
   </div>
@@ -446,13 +150,16 @@
 
 <script>
 import _ from "lodash";
+import RawCard from "../components/shared/RawCard.vue";
 export default {
+  components: { RawCard },
   data() {
     return {
       isLoading: false,
       responseData: null,
       itemDetails: {},
-      showInformativeTxt: false
+      showInformativeTxt: false,
+      allowClaim: false,
     };
   },
   mounted(){
@@ -486,6 +193,9 @@ export default {
       this.showInformativeTxt = true;
       this.itemDetails = JSON.parse(JSON.stringify(this.$store.getters['item/itemDetails']));
     }
+    if(this.$route.query.preview === "claim"){
+      this.allowClaim = true;
+    }
   },
   computed: {
     // ...mapGetters("item", ["itemDetails"]),
@@ -494,6 +204,12 @@ export default {
     },
   },
   methods: {
+    claimItem() {
+      this.$router.push({
+        name: "claim-item",
+        params: { item: this.itemDetails },
+      });
+    },
     filterAddressLine(itemDetails) {
       return itemDetails.address == "Other" || !itemDetails.address
         ? itemDetails.manualAddress

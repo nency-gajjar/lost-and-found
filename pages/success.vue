@@ -135,6 +135,7 @@ export default {
       showSchedulePickup: false,
       itemDetails: {},
       itemImg: "",
+      labelImg: "",
     };
   },
   async mounted() {
@@ -193,12 +194,11 @@ export default {
         this.itemImg = await this.image_to_base64(blob);
       }
 
-      // if (this.labelUrl) {
-      //   const data = await fetch(this.labelUrl, { cache: "no-cache" });
-      //   const blob = await data.blob();
-      //   let imgSrc = await this.image_to_base64(blob);
-      //   console.log(imgSrc);
-      // }
+      if (this.labelUrl) {
+        const data = await fetch(this.labelUrl, { cache: "no-cache" });
+        const blob = await data.blob();
+        this.labelImg = await this.image_to_base64(blob);
+      }
     }
   },
   methods: {
@@ -353,7 +353,7 @@ export default {
             </div>
             <hr class="w-full border-dashed border border-accent" />
           </div>
-          <div class='labelContainer'><img src=${this.labelUrl}></div>
+          <div class='labelContainer'><img src=${this.labelImg}></div>
           </body></html>
       `;
       let userAgent = navigator.userAgent.toLowerCase();
