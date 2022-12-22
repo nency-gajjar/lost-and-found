@@ -5,7 +5,7 @@
         <form @submit.prevent="validate().then(onSubmit)">
           <div class="p-6">
             <div class="form-title">
-              <BaseHeader varient="gray">We Found Your Item!</BaseHeader>
+              <BaseHeader class="text-center" varient="gray">Here are the details of an item that belongs to you</BaseHeader>
             </div>
 
             <!-- Item Details -->

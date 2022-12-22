@@ -24,11 +24,10 @@
           </div>
           <div class="menu-right flex items-center">
             <div
-              v-if="!mobileDevice && !isAdminLogin"
-              class="link-container"
+              v-if="!isAdminLogin"
               @click="$router.push('/found')"
             >
-              <BaseButton class="!text-xs !py-2 !px-6"
+              <BaseButton class="!text-xs !py-2 !px-6 addBtn"
                 >+ ADD A FOUND ITEM
               </BaseButton>
             </div>
@@ -214,6 +213,10 @@ export default {
   }
   .mobile-menu > div:not(:last-child) {
     border-bottom: 1px solid #ececee;
+  }
+  .addBtn {
+    padding-left: 10px !important;
+    padding-right: 10px !important;
   }
 }
 

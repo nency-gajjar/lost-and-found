@@ -124,7 +124,7 @@
                 <BaseInput
                   v-model="venueSecondaryEmail"
                   type="email"
-                  label="Secondary Email"
+                  label="Secondary Email (Optional)"
                   :class="errors.length > 0 && 'error'"
                 />
                 <p

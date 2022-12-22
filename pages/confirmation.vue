@@ -206,7 +206,7 @@
                     </div>
                   </td>
                 </tr>
-                <template v-if="itemDetails.item_status === 'claimed'">
+                <template v-if="itemDetails.item_status === 0 || itemDetails.item_status === 'claimed'">
                   <tr class="l-2">
                     <td>
                       <div class="text-left text-gray-600 font-medium">
@@ -546,6 +546,10 @@ td {
 @media print {
   .noPrint{
     display: none;
+  }
+
+  .qr-code-container img {
+    width: 100px;
   }
 
   .logo-hidden{

@@ -5,8 +5,9 @@
         <div class="main-title bg-accent-100 text-white mb-3">
           <BaseHeader varient="details">PREVIEW</BaseHeader>
         </div>
-        <div v-if="showInformativeTxt" class="p-6 flex items-center">
-          <p class="font-medium text-gray-700 text-lg">Let’s make sure you got everything right before you Submit.</p>
+        <div v-if="showInformativeTxt" class="p-6">
+          <p class="font-medium text-gray-700 text-lg text-center">Let’s make sure you got everything right.</p>
+          <p class="font-medium text-gray-700 text-lg text-center">Scroll down to Submit.</p>
         </div>
         <div class="sections py-4 px-6">
           <div class="form-title">
