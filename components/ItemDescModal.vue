@@ -32,7 +32,7 @@
           <div class="grid sm:grid-cols-2 gap-4">
             <ValidationProvider
               v-slot="{ errors }"
-              rules="required|int|weight"
+              rules="required|int|weight|positiveNumber"
               class="block col-span-1"
               name="Pounds"
             >

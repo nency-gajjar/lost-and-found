@@ -860,6 +860,9 @@ export default {
 @import "./assets/styles/date-picker.scss";
 @import "./assets/styles/address-autocomplete.scss";
 @import "./assets/styles/phone-number-input.scss";
+</style>
+
+<style scoped>
 .wrapper {
   @apply min-h-screen flex justify-center py-10 mx-auto;
 }

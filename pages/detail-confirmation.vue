@@ -94,6 +94,8 @@
             <div class="flex flex-col grow">
               <RawCard title="Item Description" :value="itemDetails.item_description" />
               <RawCard title="Package Type" :value="itemDetails.package_type" />
+              <RawCard title="Weight" :value='itemDetails.weight_pounds + " lbs"' />
+              <RawCard title="Dimension" :value='itemDetails.item_length + "(l) x " + itemDetails.item_width + "(w) x " + itemDetails.item_height + "(h) inches"' />
               <RawCard title="Item Status" :value="itemDetails.item_status === 0 ? 'Claimed' : 'Unclaimed'" />
               <template v-if="itemDetails.item_status === 0">
                 <RawCard title="Receiver's Name" :value="itemDetails.receiver_name" />
