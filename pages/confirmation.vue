@@ -17,13 +17,13 @@
       <table id="printMe" width="100%" class="table-style">
         <tbody>
           <tr>
-            <td class="padding-1rem w-full w-full-imp">
+            <td class="w-full w-full-imp">
               <table width="100%" cellspacing="0" cellpadding="0">
                 <tr class="flex w-full hidden logo-hidden">
                   <td align="left" class="!w-24"><img class="found-logo" src="../assets/images/found-shelf-icon.svg" alt="Found Shelf"></td>
                 </tr>
                 <tr class="!flex !justify-center !w-full">
-                  <td align="center" class="w-full">
+                  <td align="center" class="!w-full">
                     <h2
                       class="
                         text-2xl
@@ -246,8 +246,8 @@
                 </template>
               </table>
             </td>
-            <div class="flex justify-center items-center px-6">
-              <div v-if="itemDetails.image" class="flex justify-center items-center mt-4 sm:mt-0 w-48 w-full">
+            <div class="flex justify-center items-center pr-6">
+              <div v-if="itemDetails.image" class="flex img-container justify-center items-center mt-4 sm:mt-0 w-48 w-full">
                 <img class="w-full object-cover" :src="itemDetails.image" alt="" />
               </div>
             </div>
@@ -554,6 +554,10 @@ td {
 
   .logo-hidden{
     display: block;
+  }
+
+  .img-container {
+    margin-top: 0px !important
   }
 }
 </style>

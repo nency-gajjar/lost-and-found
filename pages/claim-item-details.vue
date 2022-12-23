@@ -60,7 +60,7 @@
                 <RawCard title="Employee Mobile Numer" :value="itemDetails.employee_mobile_no" />
                 <RawCard title="Item Description" :value="itemDetails.item_description" />
                 <RawCard title="Package Type" :value="itemDetails.package_type" />
-                <RawCard title="Weight" :value='itemDetails.weight_pounds + "lbs"' />
+                <RawCard title="Weight" :value='itemDetails.weight_pounds + " lbs"' />
                 <RawCard title="Dimension" :value='itemDetails.item_length + "(l) x " + itemDetails.item_width + "(w) x " + itemDetails.item_height + "(h) inches"' />
                 <RawCard title="Item Status" :value="itemDetails.item_status == 0 ? 'Claimed' : 'Unclaimed'" />
               </div>

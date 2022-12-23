@@ -20,7 +20,7 @@
             mb-5
           "
         >
-          <input @change="uploadFile($event)" class="hidden" type="file" name="files" id="uploadSheet">
+          <input @change="uploadFile($event)" ref="excelFile" class="hidden" type="file" name="files" id="uploadSheet">
           <label class="flex cursor-pointer items-center mt-3 sm:mt-0 font-medium tracking-widest text-sm rounded-md leading-5 relative uppercase py-2.5 px-12 focus:outline-none focus:ring-2 focus:ring-offset-2 transition-all disabled:cursor-not-allowed bg-primary-100 text-white focus:ring-primary-100 hover:bg-primary-200" for="uploadSheet">
             <svg
               v-if="isUploadSheetLoading"
@@ -119,7 +119,7 @@
                           color="white"
                         />
                       </div>
-                      <div @click="deleteSurcharge(data.id)" class="bg-red-600 px-3 py-2 rounded cursor-pointer">
+                      <div @click="idToDelete=data.id; showDialog=true" class="bg-red-600 px-3 py-2 rounded cursor-pointer">
                         <svg
                           v-if="isRemovingItem[data.id]"
                           class="w-5 h-5 text-white animate-spin"
@@ -171,6 +171,24 @@
       :data="editData"
       @close="showItemDescModel = false; getItemDescriptionOptions();"
     />
+    <BaseDialog
+      :showDialog="showDialog"
+      :showClose="false"
+      :icon="{ name: 'trash-can', color: 'red', size: '3x' }"
+      buttonTitle="Yes please!"
+      title="Are you sure?"
+      message="Do you want to remove the item description?"
+      @close="showDialog=false;"
+    >
+      <template v-slot:action>
+        <BaseButton
+          class="!capitalize !px-5 !py-2"
+          varient="gray"
+          @click="showDialog=false; deleteSurcharge()"
+          >Yes please!
+        </BaseButton>
+      </template>
+    </BaseDialog>
   </div>
 </template>
 
@@ -188,6 +206,8 @@ export default {
       isLoading: true,
       isRemovingItem: {},
       isUploadSheetLoading: false,
+      showDialog: false,
+      idToDelete: "",
     }
   },
   mounted(){
@@ -216,10 +236,12 @@ export default {
               this.getItemDescriptionOptions();
             }
             this.isUploadSheetLoading = false;
+            this.$refs.excelFile.value = "";
           })
           .catch(() => {
             this.$toast.error("Something went wrong! Please try again.");
             this.isUploadSheetLoading = false;
+            this.$refs.excelFile.value = "";
           })
         } else {
           this.$toast.error("Uploaded file is not supported. Allowed file types: .xlsx");
@@ -253,27 +275,28 @@ export default {
       this.mode = "edit";
       this.showItemDescModel = true;
     },
-    deleteSurcharge(id) {
-    this.$set(this.isRemovingItem, id, true);
-    this.$axios
-        .post("/deleteItemdescriptionDetails", _, {
-          headers: {
-            Authorization: localStorage.getItem("auth._token.local"),
-          },
-          params: { id: id },
-        })
-        .then((res) => {
-          if (res.status === 200) {
-            this.$toast.info("Item Description deleted successfully!");
-            this.getItemDescriptionOptions();
+    deleteSurcharge() {
+      let id = this.idToDelete;
+      this.$set(this.isRemovingItem, id, true);
+      this.$axios
+          .post("/deleteItemdescriptionDetails", _, {
+            headers: {
+              Authorization: localStorage.getItem("auth._token.local"),
+            },
+            params: { id: id },
+          })
+          .then((res) => {
+            if (res.status === 200) {
+              this.$toast.info("Item Description deleted successfully!");
+              this.getItemDescriptionOptions();
+              this.isRemovingItem[id] = false;
+            }
+          })
+          .catch((err) => {
+            this.$toast.error("Something went wrong! Please try again.");
             this.isRemovingItem[id] = false;
-          }
-        })
-        .catch((err) => {
-          this.$toast.error("Something went wrong! Please try again.");
-          this.isRemovingItem[id] = false;
-          console.log(err);
-        });
+            console.log(err);
+          });
     },
   },
 };
