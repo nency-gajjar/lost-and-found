@@ -73,6 +73,7 @@
               <div :class="errors.length && 'error'">
                 <date-picker
                   v-model="dateTimeRange"
+                  :disabled-date="disableStartDate"
                   format="MM-DD-YYYY HH:mm:ss"
                   type="datetime"
                   range
@@ -141,6 +142,9 @@ export default {
     }
   },
   methods: {
+    disableStartDate(date){
+      return date < new Date();
+    },
     async onSubmit() {
       const isValid = await this.$refs.observer.validate();
       if (isValid) {
@@ -203,6 +207,6 @@ export default {
 };
 </script>
 
-<style lang="scss" scoped>
+<style lang="scss">
 @import "./assets/styles/date-picker.scss";
 </style>

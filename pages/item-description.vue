@@ -20,7 +20,7 @@
             mb-5
           "
         >
-          <input @change="uploadFile($event)" class="hidden" type="file" name="files" id="uploadSheet">
+          <input @change="uploadFile($event)" ref="excelFile" class="hidden" type="file" name="files" id="uploadSheet">
           <label class="flex cursor-pointer items-center mt-3 sm:mt-0 font-medium tracking-widest text-sm rounded-md leading-5 relative uppercase py-2.5 px-12 focus:outline-none focus:ring-2 focus:ring-offset-2 transition-all disabled:cursor-not-allowed bg-primary-100 text-white focus:ring-primary-100 hover:bg-primary-200" for="uploadSheet">
             <svg
               v-if="isUploadSheetLoading"
@@ -236,10 +236,12 @@ export default {
               this.getItemDescriptionOptions();
             }
             this.isUploadSheetLoading = false;
+            this.$refs.excelFile.value = "";
           })
           .catch(() => {
             this.$toast.error("Something went wrong! Please try again.");
             this.isUploadSheetLoading = false;
+            this.$refs.excelFile.value = "";
           })
         } else {
           this.$toast.error("Uploaded file is not supported. Allowed file types: .xlsx");
