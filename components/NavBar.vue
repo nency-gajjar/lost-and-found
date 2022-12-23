@@ -220,6 +220,12 @@ export default {
   }
 }
 
+@media screen and (max-width: 300px) {
+  .addBtn {
+    font-size: 10px !important;
+  }
+}
+
 @media print {
   .noPrint{
     display: none;

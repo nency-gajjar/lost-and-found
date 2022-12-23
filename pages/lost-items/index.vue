@@ -40,7 +40,7 @@
               <template v-slot:icon>
                 <div
                   v-if="address"
-                  class="absolute inset-y-0 top-7 right-0 flex items-center p-5"
+                  class="absolute bg-white inset-y-0 top-7 right-1 flex items-center p-5"
                 >
                   <BaseIcon @click="clearAddress" icon="xmark" color="gray" />
                 </div>
@@ -439,8 +439,18 @@ export default {
       }
       if (itemDescription) params.item_description = itemDescription;
       if (this.startDate || this.endDate) {
-        params.datse = this.apiFormatedStartDate;
-        params.datse1 = this.apiFormatedEndDate;
+        if(this.startDate && !this.endDate) {
+          params.datse = this.apiFormatedStartDate;
+          params.datse1 = this.apiFormatedStartDate;
+        }
+        else if(!this.startDate && this.endDate) {
+          params.datse = this.apiFormatedEndDate;
+          params.datse1 = this.apiFormatedEndDate;
+        }
+        else {
+          params.datse = this.apiFormatedStartDate;
+          params.datse1 = this.apiFormatedEndDate;
+        }
       }
       if (this.lostItemAddress) params.address = this.lostItemAddress;
       if (this.lat) params.lat = this.lat;
