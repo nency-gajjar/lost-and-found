@@ -77,7 +77,6 @@
                   format="MM-DD-YYYY HH:mm:ss"
                   type="datetime"
                   range
-                  :confirm="true"
                 ></date-picker>
               </div>
             </client-only>
@@ -193,6 +192,7 @@ export default {
               this.isLoading = false;
             }
           }
+          this.$emit("close");
         } catch (error) {
           this.$toast.error("Something went wrong! Please try again.");
           console.log(error);

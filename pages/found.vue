@@ -74,7 +74,7 @@
                   <template v-slot:icon>
                     <div
                       v-if="address"
-                      class="absolute inset-y-0 top-7 right-0 flex items-center p-5"
+                      class="absolute inset-y-0 top-7 right-1 bg-white flex items-center p-5"
                     >
                       <BaseIcon
                         icon="xmark"
@@ -314,7 +314,7 @@
             </div>
 
             <!-- FOUND ITEM'S DETAILS -->
-            <div class="sm:p-6 p-4 space-y-4">
+            <div class="sm:p-6 p-4 space-y-4 lg:mt-0 mt-7">
               <div class="form-title mb-4">
                 <BaseHeader varient="gray">{{ foundItemFormTitle }}</BaseHeader>
               </div>
