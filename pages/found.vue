@@ -1,5 +1,43 @@
 <template>
   <div class="wrapper-form">
+    <BaseCard  
+        v-if="!mobileDevice"
+        class="md:w-8/12 lg:w-7/12 xl:w-6/12
+          py-4
+          px-6
+          flex
+          justify-between
+          flex-col
+          sm:flex-row
+        "
+      >
+        <div
+          class="
+            sm:w-10/12
+            w-full
+            py-4
+            flex flex-col
+            justify-center
+          "
+        > 
+          <h1 class="my-2 text-xl font-bold text-gray-700 leading-tight">Found an Item that belongs to a guest?</h1>
+          <p class="my-2 text-sm text-gray-700 leading-tight">Scan the QR code to access it from your mobile device for a better user experience.</p>
+        </div>
+        <div
+          class="
+            sm:w-2/12
+            w-full
+            flex
+            justify-center
+            md:justify-end
+          "
+        >
+          <img
+            class="w-24 h-24"
+            src="../assets/images/found-qr.png"
+          />
+        </div>
+    </BaseCard>
     <BaseCard class="md:w-8/12 lg:w-7/12 xl:w-6/12">
       <div v-if="!isLoadingItemDetails || Object.keys(itemDetails).length > 0">
         <ValidationObserver v-slot="{ validate }" ref="observer">
@@ -7,11 +45,7 @@
             <div class="sm:p-6 p-4 space-y-4">
               <div class="form-title">
                 <div class="w-full">
-                  <div class="w-full flex justify-between">
-                    <img src="../assets/images/found-shelf-icon.svg" class="mb-3 logo-img" alt="">
-                    <!-- <img src="../assets/images/found-qr.png" class="mb-3 qr-img" alt=""> -->
-                  </div>
-                  <div class="flex justify-between items-center">
+                  <div class="flex flex-col justify-between">
                     <BaseHeader varient="gray">{{ senderFormTitle }}</BaseHeader>
                     <div v-if="showResetButton">
                       <BaseButton @click="resetItemDetailsStore">
@@ -442,7 +476,7 @@
                           Choose a file
                         </label>
                       </span>
-                      <p class="mt-3 text-xs text-gray-500">PNG, JPEG, JPG.</p>
+                      <p class="mt-3 text-xs text-gray-500">PNG, JPEG, JPG, HEIC.</p>
                     </div>
                   </div>
 
@@ -916,7 +950,7 @@ export default {
     showResetButton: false,
     itemDetails: {},
     showValidateAlert: false,
-    senderFormTitle: "Found an Item that belongs to a guest? Let’s add few details and leave the rest to us!",
+    senderFormTitle: "Let’s add few details and leave the rest to us!",
     foundItemFormTitle: "Found item details",
     venueEmail: "",
     venueSecondaryEmail: "",
@@ -1190,7 +1224,7 @@ export default {
         this.isLoadingItemDetails = false;
       } else {
         this.isLoadingItemDetails = false;
-        this.senderFormTitle = "Found an Item that belongs to a guest? Let’s add few details and leave the rest to us!";
+        this.senderFormTitle = "Let’s add few details and leave the rest to us!";
         this.foundItemFormTitle = "Found item's details";
         this.venueType = "";
         this.venueName = "";
@@ -1687,7 +1721,7 @@ export default {
 }
 
 .wrapper-form {
-  @apply min-h-screen flex justify-center py-10 mx-auto;
+  @apply min-h-screen flex flex-col justify-center py-10 items-center gap-5 mx-4;
 }
 
 .error {
