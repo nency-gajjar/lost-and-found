@@ -136,6 +136,8 @@ export default {
       itemDetails: {},
       itemImg: "",
       labelImg: "",
+      labelWidth: 360,
+      rotateCss: "",
     };
   },
   async mounted() {
@@ -143,6 +145,29 @@ export default {
       this.labelUrl = JSON.parse(
         JSON.stringify(this.$store.getters["shipment/labelUrl"])
       );
+      this.getImgData(this.labelUrl)
+      .then(img => {
+        if(img.naturalWidth < img.naturalHeight){
+          this.rotateCss = `
+            -webkit-transform:rotate(270deg);  
+            -moz-transform: rotate(270deg);  
+            -ms-transform: rotate(270deg);  
+            -o-transform: rotate(270deg);  
+            transform: rotate(270deg);`;
+        }
+      });
+    }
+    if (this.$store.getters["shipment/selectedRate"]) {
+      let selectedRate = JSON.parse(
+        JSON.stringify(this.$store.getters["shipment/selectedRate"])
+      );
+      let carrier = selectedRate?.carrier;
+      if(carrier === "UPS"){
+        this.labelWidth = 309;
+      }
+      else if(carrier === "DHLExpress"){
+        this.labelWidth = 180;
+      }
     }
     if (this.$store.getters["shipment/itemId"]) {
       this.itemId = JSON.parse(
@@ -202,6 +227,12 @@ export default {
     }
   },
   methods: {
+    async getImgData(url){
+      const img = new Image();
+      img.src = url;
+      await img.decode();  
+      return img;
+    },
     async image_to_base64(file) {
       let result_base64 = await new Promise((resolve) => {
         let fileReader = new FileReader();
@@ -273,8 +304,12 @@ export default {
           .text-gray-600 {
             color: rgb(82 82 82);
           }
+          .labelContainer {
+            width: 100%;
+          }
           .labelContainer img{
-            height: 600px;
+            width: ${this.labelWidth}px;
+            ${this.rotateCss}
           }
           .itemImgContainer img{
             width: 100px;
@@ -369,6 +404,7 @@ export default {
           image: { type: "jpg", quality: 0.98 },
           html2canvas: {
             dpi: 300,
+            scale: 1,
             letterRendering: true,
             useCORS: true,
           },

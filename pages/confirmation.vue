@@ -373,6 +373,7 @@ export default {
           image: { type: "jpg", quality: 0.98 },
           html2canvas: {
             dpi: 300,
+            scale: 1,
             letterRendering: true,
             useCORS: true
           },
