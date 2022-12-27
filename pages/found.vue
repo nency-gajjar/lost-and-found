@@ -775,6 +775,15 @@
                 </div>
               </div>
 
+              <!-- Hotel room -->
+              <div v-if="venueType === 'Hotel'" class="block">
+                <BaseInput
+                  v-model="hotelRoom"
+                  type="text"
+                  label="Location (Ex. Room No., Hotel Area, etc.)"
+                />
+              </div>
+
               <!-- Item Description -->
               <div id="manualItemDescription">
                 <label style="font-size:15px;" class="text-gray-500">Enter Item Description <span class="text-red-500">*</span> </label>
@@ -958,6 +967,7 @@ export default {
     manualVenue: "",
     venueType: "",
     venueOptions: venueOptions,
+    hotelRoom: "",
     employeeMobileNo: "",
     foundDate: new Date(),
     venueManually: false,
@@ -1087,6 +1097,7 @@ export default {
               }
               this.itemDescription = data.item_description;
               this.venueName = data.venue_name;
+              this.hotelRoom = data?.hotel_room ? data.hotel_room : "";
               this.foundDate = new Date(data.datse);
               this.venueEmail = data.venue_email;
               this.venueSecondaryEmail = data.secondary_email;
@@ -1140,6 +1151,7 @@ export default {
           this.foundItemId = data.id;
         }
         this.venueName = data.venue_name;
+        this.hotelRoom = data?.hotel_room ? data.hotel_room : "";
         this.foundDate = new Date(data.datse);
         this.venueEmail = data.venue_email;
         this.venueSecondaryEmail = data.secondary_email;
@@ -1192,6 +1204,7 @@ export default {
           this.foundItemId = data.id;
         }
         this.venueName = data.venue_name;
+        this.hotelRoom = data?.hotel_room ? data.hotel_room : "";
         this.foundDate = new Date(data.datse);
         this.venueEmail = data.venue_email;
         this.venueSecondaryEmail = data.secondary_email;
@@ -1228,6 +1241,7 @@ export default {
         this.foundItemFormTitle = "Found item's details";
         this.venueType = "";
         this.venueName = "";
+        this.hotelRoom = "";
         this.manualVenue = "";
         this.itemDescription = "";
         this.foundItemId = "";
@@ -1519,6 +1533,9 @@ export default {
           item_status: itemStatus === "Claimed" ? 0 : 1,
         };
         params.foundItemId = this.foundItemId;
+        if(this.hotelRoom){
+          params.hotel_room = this.hotelRoom;
+        }
         if (itemStatus === "Claimed") {
           let receiverMobileNo = this.formatMobileNumber(this.receiverMobileNo);
           params.receiver_name = this.receiverName;

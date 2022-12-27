@@ -1,5 +1,13 @@
 <template>
   <div class="wrapper pb-10">
+    <button v-if="!isBottom && mobileDevice" @click="jumpToBottom" class="fixed z-50 bottom-5 right-5 py-3 px-4 bg-accent-100 rounded-full">
+      <BaseIcon
+        icon="angle-down"
+        color="white"
+        size="1x"
+        style="max-width: 15px"
+      />
+    </button>
     <div class="container max-w-7xl mx-auto px-4">
       <div class="form-title my-5">
         <BaseHeader class="mt-10" varient="gray">Select Your Rate Quote</BaseHeader>
@@ -408,6 +416,7 @@
             </div>
           </div>
           <div
+            v-if="!isInternational"
             class="
               mt-5
               w-full
@@ -479,8 +488,9 @@
 import { startCase, camelCase } from "lodash";
 import calculateInsuranceCharges from "../mixins/calculateInsuranceCharges.js"
 import FormatCurrency from "~/mixins/formatCurrency";
+import DetectBrowser from "~/mixins/detectBrowser";
 export default {
-  mixins: [calculateInsuranceCharges, FormatCurrency],
+  mixins: [calculateInsuranceCharges, FormatCurrency, DetectBrowser],
   data() {
     return {
       selectedRate: {},
@@ -490,9 +500,14 @@ export default {
       menuOpened: false,
       sortBy: 0,
       isLoading: true,
+      isInternational: false,
+      isBottom: false,
     };
   },
   methods: {
+    jumpToBottom(){
+      window.scrollTo({ top: document.body.scrollHeight, behavior: 'smooth' });
+    },
     sortRateQuotes(sortBy) {
       this.sortBy = sortBy;
       if (sortBy === 0) {
@@ -593,8 +608,23 @@ export default {
           JSON.stringify(this.$store.getters["shipment/insuranceValue"])
         );
       }
+      if (this.$store.getters["shipment/isInternational"]) {
+        this.isInternational = JSON.parse(
+          JSON.stringify(this.$store.getters["shipment/isInternational"])
+        );
+      }
       this.lableDetails = lableDetails;
       this.sortRateQuotes(0);
+      if(this.mobileDevice){
+        window.onscroll = () => {
+          if ((window.innerHeight + window.scrollY) >= document.body.offsetHeight) {
+            this.isBottom = true;
+          }
+          else{
+            this.isBottom = false;
+          }
+        };
+      }
     } else {
       if (
         JSON.parse(

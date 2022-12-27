@@ -100,7 +100,7 @@
                   </td>
                   <td>
                     <div class="text-gray-600 text-left">
-                      {{ itemDetails.date || itemDetails.datse }}
+                      {{ formatDate(itemDetails.date, itemDetails.datse) }}
                     </div>
                   </td>
                 </tr>
@@ -276,6 +276,7 @@
       </div>
     </div>
     <BaseDialog
+      :fixedHeight="true"
       :showDialog="showDialog"
       :icon="{ name: 'circle-check', color: 'green', size: '3x' }"
       title="Awesome, you are a legend!"
@@ -287,6 +288,7 @@
 </template>
 
 <script>
+import moment from 'moment';
 export default {
   data() {
     return {
@@ -340,6 +342,12 @@ export default {
     },
   },
   methods: {
+    formatDate(date, datse){
+      if(date){
+        return moment(date).format("MMMM DD, YYYY");
+      }
+      return moment(datse).format("MMMM DD, YYYY");
+    },
     editListing(){
       this.$nextTick(() => {
           this.$router.push({

@@ -9,6 +9,7 @@ export const state = () => ({
     itemId: "",
     shipmentId: "",
     itemDeliveryId: "",
+    isInternational: false,
 })
 
 export const getters = {
@@ -42,6 +43,9 @@ export const getters = {
     customInfo: (state) => {
         return state.customInfo;
     },
+    isInternational: (state) => {
+        return state.isInternational;
+    },
 }
 
 export const actions = {
@@ -73,5 +77,8 @@ export const mutations = {
     },
     SET_CUSTOM_INFO(state, customInfo) {
         state.customInfo = customInfo;
+    },
+    SET_IS_INTERNATIONAL(state, isInternational) {
+        state.isInternational = isInternational;
     },
 }

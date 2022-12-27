@@ -106,8 +106,8 @@
             <div>
               <p class="font-bold text-primary-100 uppercase">from</p>
               <template class="text-gray-800">
-                <p>{{ checkoutDetail.lableDetails.name }}</p>
-                <!-- <p>{{ checkoutDetail.lableDetails.company }}</p> -->
+                <!-- <p>{{ checkoutDetail.lableDetails.name }}</p> -->
+                <p>{{ checkoutDetail.lableDetails.company }}</p>
                 <p>{{ checkoutDetail.lableDetails.street1 }}</p>
                 <p>
                   {{ checkoutDetail.lableDetails.city }},

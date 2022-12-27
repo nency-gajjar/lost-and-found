@@ -75,7 +75,7 @@
       <p class="text-gray-800">
         We recommend that you call the sender below to ensure that they have received the email containing the label. <br> <span class="font-semibold text-gray-700">Sender name:</span> {{ itemDetails.venue_name }} <br> <span class="font-semibold text-gray-700">Sender Mobile No:</span> <a :href="`tel: ${itemDetails.venue_phone_no}`" class="font-display underline decoration-1">{{ itemDetails.venue_phone_no }}</a>
       </p>
-      <BaseButton v-if="!itemDetails.scheduled_pickup" @click="printLabel"> Print Label </BaseButton>
+      <BaseButton v-if="!itemDetails.scheduled_pickup" @click="printLabel"> Print/Download Label </BaseButton>
     </div>
     <p class="text-gray-800">
       Optionally, you can schedule a pickup for your package:

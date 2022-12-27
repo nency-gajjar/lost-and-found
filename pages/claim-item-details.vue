@@ -15,7 +15,7 @@
           <RawCard title="Person Name" :value="claimDetails.claimpersonname" />
           <RawCard title="Email" :value="claimDetails.claimpersonemail" />
           <RawCard title="Mobile Number" :value="claimDetails.claimpersonmobileno" />
-          <RawCard title="Lost Item Date" :value="claimDetails.claimpersondatelost" />
+          <RawCard title="Lost Item Date" :value="formatDate(claimDetails.claimpersondatelost)" />
           <RawCard title="Item Description" :value="claimDetails.claimpersonitemname" />
           <RawCard v-if="claimDetails.claimpersondescription" title="Description" :value="claimDetails.claimpersondescription" />
           <RawCard title="Lost Location" :value="claimDetails.claimpersonlocation" />
@@ -54,7 +54,7 @@
           <div class="flex flex-col lg:flex-row foundItemContainer">
             <div class="flex flex-col grow">
               <RawCard title="Venue Email" :value="itemDetails.venue_email" />
-              <RawCard title="Found Item Date" :value="itemDetails.datse" />
+              <RawCard title="Found Item Date" :value="formatDate(itemDetails.datse)" />
               <RawCard title="Venue Phone number" :value="itemDetails.venue_phone_no" />
               <div class="flex flex-col w-full">
                 <RawCard title="Employee Mobile Numer" :value="itemDetails.employee_mobile_no" />
@@ -101,6 +101,7 @@
           <div class="form-title">
             <BaseHeader varient="accent">Found Item Address:</BaseHeader>
           </div>
+          <RawCard v-if="itemDetails.hotel_room" title="Room No. Or Hotel Area" :value="itemDetails.hotel_room" />
           <RawCard title="Address" :value="itemDetails.address" />
           <RawCard title="City" :value="itemDetails.city" />
           <RawCard title="State" :value="itemDetails.states" />
@@ -195,6 +196,7 @@
 
 <script>
 import RawCard from "../components/shared/RawCard.vue";
+import moment from "moment";
 export default {
   components: { RawCard },
   data() {
@@ -241,6 +243,9 @@ export default {
     }
   },
   methods: {
+    formatDate(date){
+      return moment(date).format("MMMM DD, YYYY");
+    },
     async handleItemApprove() {
       await this.handleUpdateLostItem("Approve");
     },

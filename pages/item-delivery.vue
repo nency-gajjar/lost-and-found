@@ -84,8 +84,9 @@
               <div class="form-title">
                 <BaseHeader varient="accent">Sender's Details:</BaseHeader>
               </div>
+              <RawCard v-if="itemDetails.hotel_room" title="Room No. Or Hotel Area" :value="itemDetails.hotel_room" />
               <RawCard title="Venue Name" :value="itemDetails.venue_name" />
-              <RawCard title="Found Item Date" :value="itemDetails.datse" />
+              <RawCard title="Found Item Date" :value="formatDate(itemDetails.datse)" />
               <RawCard title="Venue Email" :value="itemDetails.venue_email" />
               <RawCard v-if="itemDetails.secondary_email" title="Venue Secondary Email" :value="itemDetails.secondary_email" />
               <RawCard title="Venue Phone No." :value="itemDetails.venue_phone_no" />
@@ -605,6 +606,9 @@ export default {
     },
   },
   methods: {
+    formatDate(date){
+      return moment(date).format("MMMM DD, YYYY");
+    },
     senderAddress(addressLine, city, state, country, zip){
       return `${addressLine}, ${city}, ${state}, ${country}, ${zip}`;
     },
@@ -736,7 +740,12 @@ export default {
         if (this.tempReceiverDetails.receiver_email !== this.receiverEmail)
           params.receiver_email = this.receiverEmail;
         params_rateQuotes.name = this.itemDetails.venue_name;
-        params_rateQuotes.company = this.itemDetails.venue_name;
+        if(this.itemDetails?.hotel_room){
+          params_rateQuotes.company = this.itemDetails?.hotel_room + ", " + this.itemDetails.venue_name;
+        }
+        else{
+          params_rateQuotes.company = this.itemDetails.venue_name;
+        }
         // params_rateQuotes.name = this.itemDetails.itemDetails;
         // params_rateQuotes.company = this.itemDetails.venue_name;
         params_rateQuotes.street1 = this.itemDetails.address;
@@ -821,6 +830,10 @@ export default {
                 });
               });
               if(senderCountry !== receiverCountry){
+                this.$store.commit(
+                  "shipment/SET_IS_INTERNATIONAL",
+                  true
+                );
                 this.$nextTick(() => {
                   this.$router.push({
                     name: "custom-shipping-details",
@@ -829,6 +842,10 @@ export default {
                   });
                 });
               } else {
+                this.$store.commit(
+                  "shipment/SET_IS_INTERNATIONAL",
+                  false
+                );
                 this.$nextTick(() => {
                   this.$router.push({
                     name: "rate-quotes",
