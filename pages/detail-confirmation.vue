@@ -14,7 +14,7 @@
             <BaseHeader varient="accent">Sender's Details:</BaseHeader>
           </div>
           <RawCard title="Sender Affiliation" :value="itemDetails.venu_type" />
-          <RawCard title="Found Item Date" :value="itemDetails.datse" />
+          <RawCard title="Found Item Date" :value="formatDate(itemDetails.datse)" />
           <RawCard title="Venue Name" :value="itemDetails.venue_name" />
           <RawCard title="Venue Email" :value="itemDetails.venue_email" />
           <RawCard v-if="itemDetails.secondary_email" title="Venue Secondary Email" :value="itemDetails.secondary_email" />
@@ -52,6 +52,7 @@
           <div class="form-title">
             <BaseHeader varient="accent">Address Details:</BaseHeader>
           </div>
+          <RawCard v-if="itemDetails.hotel_room" title="Room No. Or Hotel Area" :value="itemDetails.hotel_room" />
           <RawCard title="Address" :value="filterAddressLine(itemDetails)" />
           <RawCard title="City" :value="itemDetails.city" />
           <RawCard title="State" :value="itemDetails.states" />
@@ -94,8 +95,6 @@
             <div class="flex flex-col grow">
               <RawCard title="Item Description" :value="itemDetails.item_description" />
               <RawCard title="Package Type" :value="itemDetails.package_type" />
-              <RawCard title="Weight" :value='itemDetails.weight_pounds + " lbs"' />
-              <RawCard title="Dimension" :value='itemDetails.item_length + "(l) x " + itemDetails.item_width + "(w) x " + itemDetails.item_height + "(h) inches"' />
               <RawCard title="Item Status" :value="itemDetails.item_status === 0 ? 'Claimed' : 'Unclaimed'" />
               <template v-if="itemDetails.item_status === 0">
                 <RawCard title="Receiver's Name" :value="itemDetails.receiver_name" />
@@ -153,6 +152,7 @@
 <script>
 import _ from "lodash";
 import RawCard from "../components/shared/RawCard.vue";
+import moment from "moment";
 export default {
   components: { RawCard },
   data() {
@@ -206,6 +206,9 @@ export default {
     },
   },
   methods: {
+    formatDate(date){
+      return moment(date).format("MMMM DD, YYYY");
+    },
     claimItem() {
       this.$router.push({
         name: "claim-item",

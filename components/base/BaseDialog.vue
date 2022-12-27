@@ -24,6 +24,7 @@
         >&#8203;</span
       >
       <div
+        :class="fixedHeight && 'h-600-px overflow-y-auto'"
         class="
           inline-block
           align-center
@@ -49,7 +50,6 @@
             mx-auto
             my-auto
             rounded-xl
-            shadow-lg
             bg-white
           "
         >
@@ -124,6 +124,23 @@ export default {
       default: true,
       required: false,
     },
+    fixedHeight: {
+      type: Boolean,
+      default: false,
+      required: false,
+    }
   },
 };
 </script>
+
+<style scoped>
+.h-600-px {
+  height: 550px;
+}
+
+@media only screen and (max-width: 504px) {
+  .h-600-px {
+    height: 600px;
+  }
+}
+</style>
