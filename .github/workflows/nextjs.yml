@@ -15,7 +15,7 @@ jobs:
       - name: Install NPM dependencies
         run: npm install
       - name: setup .env
-        run: cp /home/ubuntu/runner/_work/lost-and-found/.env /home/ubuntu/runner/_work/lost-and-found/lost-and-found
+        run: cp /home/ubuntu/actions-runner/_work/lost-and-found/.env /home/ubuntu/actions-runner/_work/lost-and-found/lost-and-found
       - name: npm i
         run: npm i
       - name: Deploy Next.js app in staging
