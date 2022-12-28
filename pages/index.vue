@@ -326,6 +326,7 @@ export default {
   mounted() {
     this.getItemDescriptionOptions();
     this.getRecentItemList();
+    console.log("testing..");
   },
   computed: {
     formatedStartDate() {
