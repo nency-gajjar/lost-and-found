@@ -236,7 +236,7 @@
                     title="Found item date"
                   >
                     <BaseIcon icon="calendar-days" color="gray" />
-                    <span>{{ item.datse }}</span>
+                    <span>{{ formatDate(item.datse) }}</span>
                   </li>
                   <li
                     class="flex items-center space-x-2"
@@ -342,6 +342,9 @@ export default {
     },
   },
   methods: {
+    formatDate(date){
+      return moment(date).format("MMMM DD, YYYY");
+    },
     prevSlide() {
       this.$refs.carousel.prev()
     },
