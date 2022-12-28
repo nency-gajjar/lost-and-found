@@ -3,7 +3,7 @@ name: CI
 on:
   push:
     branches: staging
-## devop
+
 jobs:
   build:
     runs-on: staging
@@ -18,7 +18,5 @@ jobs:
         run: cp /home/ubuntu/runner/_work/lost-and-found/.env /home/ubuntu/runner/_work/lost-and-found/lost-and-found
       - name: npm i
         run: npm i
-      - name: Deploy Next.js app
-        run: pm2 start "npm run dev" --name staging
-      - name: list the npm
-        run: pm2 list
+      - name: Deploy Next.js app in staging
+        run: pm2 restart 1 
