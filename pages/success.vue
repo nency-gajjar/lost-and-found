@@ -108,7 +108,7 @@
         Back to listing
       </BaseButton>
     </div>
-    <p class="text-gray-800">
+    <p class="text-gray-800 !mb-10">
       Need help? Reach out to us at <a href="mailto:support@foundshelf.com" class="font-display underline decoration-1">support@foundshelf.com</a>
       In most cases, we will send you a reply in an hour!
     </p>
