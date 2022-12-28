@@ -20,4 +20,4 @@ jobs:
       - name: npm i
         run: npm i
       - name: Deploy Next.js app
-        run: pm2 restart Frontend
+        run: pm2 restart 3
