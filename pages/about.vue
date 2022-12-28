@@ -1,6 +1,6 @@
 <template>
     <div>
-        Support
+        About
     </div>
 </template>
 

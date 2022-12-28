@@ -247,7 +247,7 @@ export default {
 };
 </script>
 
-<style lang="scss">
+<style lang="scss" scoped>
 .wrapper {
   @apply min-h-screen flex justify-center py-10 mx-auto;
 }

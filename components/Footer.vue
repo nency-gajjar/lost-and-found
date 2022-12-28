@@ -56,7 +56,9 @@
     <div class="mt-5 flex px-6 py-5 text-white font-bold md:px-10 bg-accent-100 items-center justify-between">
       <div class="flex sm:flex-row flex-col gap-4">
         <p class="cursor-pointer">About Us</p>
-        <p class="cursor-pointer">Contact Us</p>
+        <NuxtLink to="/contact">
+          <p class="cursor-pointer">Contact Us</p>
+        </NuxtLink>
       </div>
       <div class="flex sm:flex-row flex-col gap-4">
         <p class="cursor-pointer">Terms of service</p>
