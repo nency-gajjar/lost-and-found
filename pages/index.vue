@@ -324,6 +324,7 @@ export default {
     };
   },
   mounted() {
+    console.log('Test Push in staging');
     this.getItemDescriptionOptions();
     this.getRecentItemList();
   },
