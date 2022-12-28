@@ -29,6 +29,7 @@
             w-full
             flex
             justify-center
+            items-center
             md:justify-end
           "
         >
@@ -348,7 +349,7 @@
             </div>
 
             <!-- FOUND ITEM'S DETAILS -->
-            <div class="sm:p-6 p-4 space-y-4 lg:mt-0 mt-7">
+            <div class="sm:p-6 p-4 space-y-4 -mt-5">
               <div class="form-title mb-4">
                 <BaseHeader varient="gray">{{ foundItemFormTitle }}</BaseHeader>
               </div>
