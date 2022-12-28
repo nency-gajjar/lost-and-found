@@ -6,7 +6,7 @@ on:
 ## devop
 jobs:
   build:
-    runs-on: self-hosted
+    runs-on: staging
     steps:
       - uses: actions/checkout@v1
       - uses: actions/setup-node@v1
