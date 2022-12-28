@@ -3,7 +3,7 @@ name: CI
 on:
   push:
     branches: staging
-## devops
+## devops is
 jobs:
   build:
     runs-on: self-hosted
