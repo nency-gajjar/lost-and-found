@@ -1024,6 +1024,7 @@
       </BaseCard>
     </ValidationObserver>
     <BaseDialog
+      v-if="showDialog"
       :showDialog="showDialog"
       :icon="{ name: 'circle-check', color: 'green', size: '3x' }"
       :message="dialogMessage"
@@ -1035,6 +1036,7 @@
       "
     />
     <BaseDialog
+      v-if="showItemRejectDialog"
       :showDialog="showItemRejectDialog"
       :icon="{ name: 'circle-info', color: 'blue', size: '3x' }"
       :message="dialogMessage"

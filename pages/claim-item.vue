@@ -236,6 +236,7 @@
     </BaseCard>
 
     <BaseDialog
+      v-if="showDialog"
       :showDialog="showDialog"
       :icon="{ name: 'circle-check', color: 'green', size: '3x' }"
       title="Details submitted successfully!"

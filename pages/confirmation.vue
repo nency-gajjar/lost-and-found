@@ -276,7 +276,7 @@
       </div>
     </div>
     <BaseDialog
-      :fixedHeight="true"
+      v-if="showDialog"
       :showDialog="showDialog"
       :icon="{ name: 'circle-check', color: 'green', size: '3x' }"
       title="Awesome, you are a legend!"
