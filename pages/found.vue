@@ -793,8 +793,13 @@
                     rules="required"
                     class="block"
                   >
-                    <div :class="errors.length > 0 && 'error'">
-                      <v-select taggable v-model="itemDescription" :options="itemDescriptionOptions"></v-select>
+                    <div :class="errors.length > 0 && isItemDescriptionFocused && 'error'">
+                      <vue-simple-suggest
+                        @blur="isItemDescriptionFocused = true"
+                        v-model="itemDescription"
+                        :list="itemDescriptionOptions"
+                        :filter-by-query="true">
+                      </vue-simple-suggest>
                     </div>
                   </ValidationProvider>
               </div>
@@ -950,14 +955,15 @@ import ImageEditor from "@/mixins/imageEditor";
 import formatMobileNumber from "../mixins/formatMobileNumber.js";
 import eventListners from "../mixins/eventListners.js";
 import scrollToError from "../mixins/scrollToError.js";
-import vSelect from 'vue-select';
-import 'vue-select/dist/vue-select.css';
-import ValidationAlert from '~/components/shared/ValidationAlert.vue'
+import ValidationAlert from '~/components/shared/ValidationAlert.vue';
+import VueSimpleSuggest from 'vue-simple-suggest';
+import 'vue-simple-suggest/dist/styles.css';
 
 export default {
   mixins: [DetectBrowser, ImageEditor, formatMobileNumber, eventListners, scrollToError],
   data: () => ({
     venueName: "",
+    isItemDescriptionFocused: false,
     showResetButton: false,
     itemDetails: {},
     showValidateAlert: false,
@@ -1027,7 +1033,7 @@ export default {
     ValidationObserver,
     ValidationProvider,
     ValidationAlert,
-    vSelect,
+    VueSimpleSuggest
   },
   computed: {
     // ...mapGetters("item", ["itemDetails"]),
@@ -1750,6 +1756,31 @@ export default {
   }
 }
 
+.input-wrapper {
+  input{
+    border-width: 1px !important;
+    --tw-border-opacity: 1 !important;
+    border-color: rgb(209 213 219 / var(--tw-border-opacity)) !important;
+    border-radius: 0.5rem !important;
+  }
+}
+
+.error {
+  .input-wrapper {
+    input{
+      border-width: 2px !important;
+      --tw-border-opacity: 1 !important;
+      border-color: rgb(239 68 68 / var(--tw-border-opacity)) !important;
+      --tw-ring-offset-shadow: var(--tw-ring-inset) 0 0 0 var(--tw-ring-offset-width) var(--tw-ring-offset-color);
+      --tw-ring-shadow: var(--tw-ring-inset) 0 0 0 calc(4px + var(--tw-ring-offset-width)) var(--tw-ring-color);
+      box-shadow: var(--tw-ring-offset-shadow), var(--tw-ring-shadow), var(--tw-shadow, 0 0 #0000);
+      --tw-ring-color: rgb(239 68 68 / var(--tw-ring-opacity));
+      --tw-ring-opacity: 0.1;
+      transition-property: none;
+    }
+  }
+}
+
 .toasted-container .toasted .action.icon svg {
   font-size: 16px;
 }
@@ -1762,9 +1793,5 @@ export default {
   .vs__dropdown-toggle {
     @apply border-red-500 border-2 ring-4 ring-red-500 ring-opacity-10 transition-none;
   }
-}
-
-#manualItemDescription .vs__actions{
-  display: none !important;
 }
 </style>

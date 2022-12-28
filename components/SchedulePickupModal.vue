@@ -29,7 +29,7 @@
               v-model="reference"
               :isRequired="true"
               type="text"
-              label="Insert reference"
+              label="Reference"
               :class="errors.length > 0 && 'error'"
             />
           </ValidationProvider>
