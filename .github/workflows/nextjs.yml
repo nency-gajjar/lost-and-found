@@ -4,7 +4,6 @@ on:
   push:
     branches: master
     
-## demo 1
 jobs:
   build:
     runs-on: self-hosted
