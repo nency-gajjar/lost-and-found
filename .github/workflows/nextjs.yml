@@ -1,10 +1,8 @@
-# .github/workflows/main.yml
 name: CI
 on:
   push:
-    branches: master
-    
-## demo 1
+    branches: staging
+## devops
 jobs:
   build:
     runs-on: self-hosted
@@ -20,4 +18,6 @@ jobs:
       - name: npm i
         run: npm i
       - name: Deploy Next.js app
-        run: pm2 restart 3
+        run: pm2 start "npm run dev" --name staging
+      - name: list the npm
+        run: pm2 list
