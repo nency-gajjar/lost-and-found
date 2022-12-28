@@ -19,4 +19,4 @@ jobs:
       - name: npm i
         run: npm i
       - name: Deploy Next.js app in staging
-        run: pm2 restart 1 
+        run: pm2 start "npm run dev" --name Staging 
