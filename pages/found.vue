@@ -1720,6 +1720,7 @@ export default {
     },
   },
   mounted() {
+    console.log("===Test")
     this.getItemsData();
   },
 };
