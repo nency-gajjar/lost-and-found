@@ -3,7 +3,7 @@ name: CI
 on:
   push:
     branches: staging
-## shekhar
+## devops
 jobs:
   build:
     runs-on: self-hosted
