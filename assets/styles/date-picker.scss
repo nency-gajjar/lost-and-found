@@ -1,7 +1,9 @@
 .mx-input-wrapper i {
     margin-right: 10px;
 }
-
+.mx-input-wrapper input {
+    font-size:16px;
+}
 .mx-input:hover {
     @apply border-gray-300;
 }

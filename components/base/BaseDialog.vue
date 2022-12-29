@@ -24,8 +24,8 @@
         >&#8203;</span
       >
       <div
-        :class="fixedHeight && 'h-600-px overflow-y-auto'"
         class="
+          dialog-body
           inline-block
           align-center
           bg-white
@@ -50,6 +50,7 @@
             mx-auto
             my-auto
             rounded-xl
+            shadow-lg
             bg-white
           "
         >
@@ -124,23 +125,25 @@ export default {
       default: true,
       required: false,
     },
-    fixedHeight: {
-      type: Boolean,
-      default: false,
-      required: false,
-    }
   },
+  mounted () {
+    document.body.style.overflow = 'hidden'
+  },
+  destroyed () {
+     document.body.style.overflow = ''
+  }
 };
 </script>
-
 <style scoped>
-.h-600-px {
-  height: 550px;
+.dialog-body {
+  overflow-y: auto;
+  max-height: calc(100vh - 10vh)
 }
-
-@media only screen and (max-width: 504px) {
-  .h-600-px {
-    height: 600px;
-  }
+.dialog-body::-webkit-scrollbar {
+    display: none; /* Chrome, Safari and Opera */
+}
+.dialog-body {
+  -ms-overflow-style: none;  /* IE and Edge */
+  scrollbar-width: none;  /* Firefox */
 }
 </style>

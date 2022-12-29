@@ -69,7 +69,6 @@ export default {
           return res;
         }
       } else {
-        console.log("return err");
         return null;
       }
     },

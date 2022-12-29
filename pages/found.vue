@@ -29,6 +29,7 @@
             w-full
             flex
             justify-center
+            items-center
             md:justify-end
           "
         >
@@ -918,6 +919,7 @@
         <BaseLoader />
       </div>
       <BaseDialog
+        v-if="showDialog"
         :showDialog="showDialog"
         :showClose="false"
         :icon="{ name: 'trash-can', color: 'red', size: '3x' }"
