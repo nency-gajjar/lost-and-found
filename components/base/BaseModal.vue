@@ -1,6 +1,6 @@
 <template>
   <transition name="t-fade">
-    <div v-show="showModal" class="base-modal">
+    <div v-show="showModal" class="base-modal !mt-0">
       <div class="base-modal-backdrop" />
       <div :class="['base-modal-content', size]">
         <div class="base-modal-header">

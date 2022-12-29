@@ -40,7 +40,7 @@
             </ValidationProvider>
 
             <!-- Contents Explanation -->
-            <div>
+            <div class="block !mt-10">
               <textarea
                 v-model="contentsExplanation"
                 placeholder="Contents Explanation (Optional)"
@@ -62,7 +62,7 @@
             </div>
 
             <!-- Restriction Comments -->
-            <div>
+            <div class="!mt-3">
               <textarea
                 v-model="restrictionComments"
                 placeholder="Restriction Comments (Optional)"
@@ -247,7 +247,7 @@ export default {
 };
 </script>
 
-<style lang="scss">
+<style lang="scss" scoped>
 .wrapper {
   @apply min-h-screen flex justify-center py-10 mx-auto;
 }

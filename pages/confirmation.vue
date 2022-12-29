@@ -1,289 +1,294 @@
 <template>
-  <div class="wrapper my-10" v-if="Object.keys(itemDetails).length > 0">
-    <div
-      class="
-        card
-        w-12/12
-        mx-4
-        md:mx-auto 
-        lg:w-6/12
-        mx-auto
-        rounded-lg
-        shadow-lg
-        bg-white
-        overflow-hidden
-      "
-    >
-      <table id="printMe" width="100%" class="table-style">
-        <tbody>
-          <tr>
-            <td class="w-full w-full-imp">
-              <table width="100%" cellspacing="0" cellpadding="0">
-                <tr class="flex w-full hidden logo-hidden">
-                  <td align="left" class="!w-24"><img class="found-logo" src="../assets/images/found-shelf-icon.svg" alt="Found Shelf"></td>
-                </tr>
-                <tr class="!flex !justify-center !w-full">
-                  <td align="center" class="!w-full">
-                    <h2
-                      class="
-                        text-2xl
-                        font-bold
-                        text-accent-100 text-center
-                        w-full
-                        confirmation-title
-                      "
-                    >
-                      Confirmation Details
-                    </h2>
-                  </td>
-                </tr>
-              </table>
-            </td>
-          </tr>
-          <tr v-if="itemDetails.link">
-            <td class="w-full-imp">
-              <div class="w-full-imp qr-code-container flex-imp justify-center-imp">
-                <img :src="itemDetails.link" alt="" />
-              </div>
-              <div class="px-6 flex items-center justify-center">
-                <BaseIcon
-                  icon="circle-info"
-                  color="gray"
-                  style="max-width: 15px"
-                />
-                <p class="pl-2 font-medium text-gray-700">Scan this QR code to edit the details of this item.</p>
-              </div>
-            </td>
-          </tr>
-          <tr class="border-b">
-            <td class="px-6 py-4">
-              <table width="100%">
-                <tr>
-                  <td colspan="2" class="pb-2">
-                    <h2
-                      class="
-                        text-lg text-accent-100
-                        font-medium
-                        leading-tight
-                        text-left text-gray-800
-                      "
-                    >
-                      Sender's Details:
-                    </h2>
-                    <span
-                      class="
-                        w-20
-                        border-t-4 border-solid border-gray-300
-                        inline-block
-                        mb-1
-                      "
-                    ></span>
-                  </td>
-                </tr>
-                <tr class="l-2">
-                  <td>
-                    <div class="text-left text-gray-600 font-medium">
-                      Sender Affiliation
-                    </div>
-                  </td>
-                  <td>
-                    <div class="text-gray-600 text-left">
-                      {{ itemDetails.venu_type }}
-                    </div>
-                  </td>
-                </tr>
-                <tr class="l-2">
-                  <td>
-                    <div class="text-left text-gray-600 font-medium">
-                      Found Item Date
-                    </div>
-                  </td>
-                  <td>
-                    <div class="text-gray-600 text-left">
-                      {{ formatDate(itemDetails.date, itemDetails.datse) }}
-                    </div>
-                  </td>
-                </tr>
-                <tr v-show="itemDetails.venue_name" class="l-2">
-                  <td>
-                    <div class="text-left text-gray-600 font-medium">
-                      Venue Name
-                    </div>
-                  </td>
-                  <td>
-                    <div class="text-gray-600 text-left">
-                      {{ itemDetails.venue_name }}
-                    </div>
-                  </td>
-                </tr>
-                <tr class="l-2">
-                  <td>
-                    <div class="text-left text-gray-600 font-medium">
-                      Venue Email
-                    </div>
-                  </td>
-                  <td>
-                    <div class="text-gray-600 text-left">
-                      {{ itemDetails.venue_email }}
-                    </div>
-                  </td>
-                </tr>
-                <tr v-if="itemDetails.secondary_email" class="l-2">
-                  <td>
-                    <div class="text-left text-gray-600 font-medium">
-                      Venue Secondary Email
-                    </div>
-                  </td>
-                  <td>
-                    <div class="text-gray-600 text-left">
-                      {{ itemDetails.secondary_email }}
-                    </div>
-                  </td>
-                </tr>
-              </table>
-            </td>
-          </tr>
-          <tr class="border-b items-center flex xl:flex-row lg:flex-col md:flex-row flex-col justify-between items-center">
-            <td class="px-6 py-4 w-full-imp">
-              <table width="100%" cellspacing="0" cellpadding="0">
-                <tr>
-                  <td colspan="2" class="pb-2">
-                    <h2
-                      class="
-                        text-lg text-accent-100
-                        font-medium
-                        leading-tight
-                        text-left text-gray-800
-                      "
-                    >
-                      Found Item's Details:
-                    </h2>
-                    <span
-                      class="
-                        w-20
-                        border-t-4 border-solid border-gray-300
-                        inline-block
-                        mb-1
-                      "
-                    ></span>
-                  </td>
-                </tr>
-                <tr class="l-2">
-                  <td>
-                    <div class="text-left text-gray-600 font-medium">
-                      Item Description
-                    </div>
-                  </td>
-                  <td>
-                    <div class="text-gray-600 text-left">
-                      {{ itemDetails.item_description }}
-                    </div>
-                  </td>
-                </tr>
-                <tr class="l-2">
-                  <td>
-                    <div class="text-left text-gray-600 font-medium">
-                      Package Type
-                    </div>
-                  </td>
-                  <td>
-                    <div class="text-gray-600 text-left">
-                      {{ itemDetails.package_type }}
-                    </div>
-                  </td>
-                </tr>
-                <tr class="l-2">
-                  <td>
-                    <div class="text-left text-gray-600 font-medium">
-                      Item Status
-                    </div>
-                  </td>
-                  <td>
-                    <div class="text-gray-600 text-left">
-                      {{
-                        itemDetails.item_status == 0 ? "Claimed" : "Unclaimed"
-                      }}
-                    </div>
-                  </td>
-                </tr>
-                <template v-if="itemDetails.item_status === 0 || itemDetails.item_status === 'claimed'">
+  <div class="wrapper my-10">
+    <div v-if="!isLoadingItem || Object.keys(itemDetails).length > 0">
+      <div
+        class="
+          card
+          w-12/12
+          mx-4
+          md:mx-auto 
+          lg:w-6/12
+          mx-auto
+          rounded-lg
+          shadow-lg
+          bg-white
+          overflow-hidden
+        "
+      >
+        <table id="printMe" width="100%" class="table-style">
+          <tbody>
+            <tr>
+              <td class="w-full w-full-imp">
+                <table width="100%" cellspacing="0" cellpadding="0">
+                  <tr class="flex w-full hidden logo-hidden">
+                    <td align="left" class="!w-24"><img class="found-logo" src="../assets/images/found-shelf-icon.svg" alt="Found Shelf"></td>
+                  </tr>
+                  <tr class="!flex !justify-center !w-full">
+                    <td align="center" class="!w-full">
+                      <h2
+                        class="
+                          text-2xl
+                          font-bold
+                          text-accent-100 text-center
+                          w-full
+                          confirmation-title
+                        "
+                      >
+                        Confirmation Details
+                      </h2>
+                    </td>
+                  </tr>
+                </table>
+              </td>
+            </tr>
+            <tr v-if="itemDetails.link">
+              <td class="w-full-imp">
+                <div class="w-full-imp qr-code-container flex-imp justify-center-imp">
+                  <img :src="itemDetails.link" alt="" />
+                </div>
+                <div class="px-6 flex items-center justify-center">
+                  <BaseIcon
+                    icon="circle-info"
+                    color="gray"
+                    style="max-width: 15px"
+                  />
+                  <p class="pl-2 font-medium text-gray-700">Scan this QR code to edit the details of this item.</p>
+                </div>
+              </td>
+            </tr>
+            <tr class="border-b">
+              <td class="px-6 py-4">
+                <table width="100%">
+                  <tr>
+                    <td colspan="2" class="pb-2">
+                      <h2
+                        class="
+                          text-lg text-accent-100
+                          font-medium
+                          leading-tight
+                          text-left text-gray-800
+                        "
+                      >
+                        Sender's Details:
+                      </h2>
+                      <span
+                        class="
+                          w-20
+                          border-t-4 border-solid border-gray-300
+                          inline-block
+                          mb-1
+                        "
+                      ></span>
+                    </td>
+                  </tr>
                   <tr class="l-2">
                     <td>
                       <div class="text-left text-gray-600 font-medium">
-                        Receiver's Name
+                        Sender Affiliation
                       </div>
                     </td>
                     <td>
                       <div class="text-gray-600 text-left">
-                        {{ itemDetails.receiver_name }}
+                        {{ itemDetails.venu_type }}
                       </div>
                     </td>
                   </tr>
                   <tr class="l-2">
                     <td>
                       <div class="text-left text-gray-600 font-medium">
-                        Receiver's Email
+                        Found Item Date
                       </div>
                     </td>
                     <td>
                       <div class="text-gray-600 text-left">
-                        {{ itemDetails.receiver_email }}
+                        {{ formatDate(itemDetails.date, itemDetails.datse) }}
+                      </div>
+                    </td>
+                  </tr>
+                  <tr v-show="itemDetails.venue_name" class="l-2">
+                    <td>
+                      <div class="text-left text-gray-600 font-medium">
+                        Venue Name
+                      </div>
+                    </td>
+                    <td>
+                      <div class="text-gray-600 text-left">
+                        {{ itemDetails.venue_name }}
                       </div>
                     </td>
                   </tr>
                   <tr class="l-2">
                     <td>
                       <div class="text-left text-gray-600 font-medium">
-                        Receiver's Mobile No.
+                        Venue Email
                       </div>
                     </td>
                     <td>
                       <div class="text-gray-600 text-left">
-                        {{ itemDetails.receiver_mobile_no }}
+                        {{ itemDetails.venue_email }}
                       </div>
                     </td>
                   </tr>
-                </template>
-              </table>
-            </td>
-            <div class="flex justify-center items-center pr-6">
-              <div v-if="itemDetails.image" class="flex img-container justify-center items-center mt-4 sm:mt-0 w-48 w-full">
-                <img class="w-full object-cover" :src="itemDetails.image" alt="" />
+                  <tr v-if="itemDetails.secondary_email" class="l-2">
+                    <td>
+                      <div class="text-left text-gray-600 font-medium">
+                        Venue Secondary Email
+                      </div>
+                    </td>
+                    <td>
+                      <div class="text-gray-600 text-left">
+                        {{ itemDetails.secondary_email }}
+                      </div>
+                    </td>
+                  </tr>
+                </table>
+              </td>
+            </tr>
+            <tr class="border-b items-center flex xl:flex-row lg:flex-col md:flex-row flex-col justify-between items-center">
+              <td class="px-6 py-4 w-full-imp">
+                <table width="100%" cellspacing="0" cellpadding="0">
+                  <tr>
+                    <td colspan="2" class="pb-2">
+                      <h2
+                        class="
+                          text-lg text-accent-100
+                          font-medium
+                          leading-tight
+                          text-left text-gray-800
+                        "
+                      >
+                        Found Item's Details:
+                      </h2>
+                      <span
+                        class="
+                          w-20
+                          border-t-4 border-solid border-gray-300
+                          inline-block
+                          mb-1
+                        "
+                      ></span>
+                    </td>
+                  </tr>
+                  <tr class="l-2">
+                    <td>
+                      <div class="text-left text-gray-600 font-medium">
+                        Item Description
+                      </div>
+                    </td>
+                    <td>
+                      <div class="text-gray-600 text-left">
+                        {{ itemDetails.item_description }}
+                      </div>
+                    </td>
+                  </tr>
+                  <tr class="l-2">
+                    <td>
+                      <div class="text-left text-gray-600 font-medium">
+                        Package Type
+                      </div>
+                    </td>
+                    <td>
+                      <div class="text-gray-600 text-left">
+                        {{ itemDetails.package_type }}
+                      </div>
+                    </td>
+                  </tr>
+                  <tr class="l-2">
+                    <td>
+                      <div class="text-left text-gray-600 font-medium">
+                        Item Status
+                      </div>
+                    </td>
+                    <td>
+                      <div class="text-gray-600 text-left">
+                        {{
+                          itemDetails.item_status == 0 ? "Claimed" : "Unclaimed"
+                        }}
+                      </div>
+                    </td>
+                  </tr>
+                  <template v-if="itemDetails.item_status === 0 || itemDetails.item_status === 'claimed'">
+                    <tr class="l-2">
+                      <td>
+                        <div class="text-left text-gray-600 font-medium">
+                          Receiver's Name
+                        </div>
+                      </td>
+                      <td>
+                        <div class="text-gray-600 text-left">
+                          {{ itemDetails.receiver_name }}
+                        </div>
+                      </td>
+                    </tr>
+                    <tr class="l-2">
+                      <td>
+                        <div class="text-left text-gray-600 font-medium">
+                          Receiver's Email
+                        </div>
+                      </td>
+                      <td>
+                        <div class="text-gray-600 text-left">
+                          {{ itemDetails.receiver_email }}
+                        </div>
+                      </td>
+                    </tr>
+                    <tr class="l-2">
+                      <td>
+                        <div class="text-left text-gray-600 font-medium">
+                          Receiver's Mobile No.
+                        </div>
+                      </td>
+                      <td>
+                        <div class="text-gray-600 text-left">
+                          {{ itemDetails.receiver_mobile_no }}
+                        </div>
+                      </td>
+                    </tr>
+                  </template>
+                </table>
+              </td>
+              <div class="flex justify-center items-center pr-6">
+                <div v-if="itemDetails.image" class="flex img-container justify-center items-center mt-4 sm:mt-0 w-48 w-full">
+                  <img class="w-full object-cover" :src="itemDetails.image" alt="" />
+                </div>
               </div>
-            </div>
-          </tr>
-        </tbody>
-      </table>
-      <div class="noPrint">
-        <div class="flex flex-wrap gap-2 m-5">
-          <BaseButton class="flex-auto" @click="printDetails">
-            Print Details
-          </BaseButton>
-          <BaseButton class="flex-auto"  @click="routeToListing">
-            Back To Listing
-          </BaseButton>
-        </div>
-        <div class="flex flex-wrap gap-2 m-5">
-          <BaseButton class="flex-auto" varient="primaryAlt"  @click="editListing">
-            Edit the listing
-          </BaseButton>
-        </div>
-        <div class="flex flex-wrap gap-2 m-5">
-          <BaseButton class="flex-auto" varient="secondary"  @click="addFoundItem">
-            Add another Found Item
-          </BaseButton>
+            </tr>
+          </tbody>
+        </table>
+        <div class="noPrint">
+          <div class="flex flex-wrap gap-2 m-5">
+            <BaseButton class="flex-auto" @click="printDetails">
+              Print Details
+            </BaseButton>
+            <BaseButton class="flex-auto"  @click="routeToListing">
+              Back To Listing
+            </BaseButton>
+          </div>
+          <div class="flex flex-wrap gap-2 m-5">
+            <BaseButton class="flex-auto" varient="primaryAlt"  @click="editListing">
+              Edit the listing
+            </BaseButton>
+          </div>
+          <div class="flex flex-wrap gap-2 m-5">
+            <BaseButton class="flex-auto" varient="secondary"  @click="addFoundItem">
+              Add another Found Item
+            </BaseButton>
+          </div>
         </div>
       </div>
+      <BaseDialog
+        :fixedHeight="true"
+        :showDialog="showDialog"
+        :icon="{ name: 'circle-check', color: 'green', size: '3x' }"
+        title="Awesome, you are a legend!"
+        :message="dialogMessage"
+        buttonTitle="Okay"
+        @close="showDialog = false"
+      />
     </div>
-    <BaseDialog
-      :fixedHeight="true"
-      :showDialog="showDialog"
-      :icon="{ name: 'circle-check', color: 'green', size: '3x' }"
-      title="Awesome, you are a legend!"
-      :message="dialogMessage"
-      buttonTitle="Okay"
-      @close="showDialog = false"
-    />
+    <div v-else>
+      <BaseLoader />
+    </div>
   </div>
 </template>
 
@@ -295,11 +300,15 @@ export default {
       itemDetails: {},
       showDialog: false,
       itemConfirmationDetails: {},
+      isLoadingItem: false,
     };
+  },
+  created(){
+    this.isLoadingItem = true;
   },
   mounted() {
     this.itemConfirmationDetails = JSON.parse(JSON.stringify(this.$store.getters['item/itemConfirmationDetails']));
-    this.showDialog = true;
+    this.isLoadingItem = true;
     if (this.$route.query.id) {
       this.$axios
         .get("/getsinglelostitem?id=" + this.$route.query.id)
@@ -307,13 +316,19 @@ export default {
           if (response.status === 200) {
             this.itemDetails = response.data.data.Item;
           }
+          this.isLoadingItem = false;
+          this.showDialog = true;
         })
         .catch((error) => {
+          this.isLoadingItem = false;
           console.log(error);
         });
     } else if (Object.keys(this.itemConfirmationDetails).length > 0) {
       this.itemDetails = this.itemConfirmationDetails;
+      this.isLoadingItem = false;
+      this.showDialog = true;
     } else {
+      this.isLoadingItem = false;
       this.$nextTick(() => {
         this.$router.push({
           name: "lost-items",

@@ -107,7 +107,7 @@
               <ValidationProvider
                 v-slot="{ errors }"
                 rules="required"
-                class="block"
+                class="block !mt-1"
               >
               <div class="text-gray-500" :class="errors.length > 0 && 'text-red-500'">Date of Lost <span class="text-red-500">*</span> </div>
                 <client-only>
