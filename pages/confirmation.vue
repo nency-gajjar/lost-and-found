@@ -248,7 +248,7 @@
                 </table>
               </td>
               <div class="flex justify-center items-center pr-6">
-                <div v-if="itemDetails.image" class="flex img-container justify-center items-center mt-4 sm:mt-0 w-48 w-full">
+                <div v-if="showImage" class="flex img-container justify-center items-center mt-4 sm:mt-0 w-48 w-full">
                   <img class="w-full object-cover" :src="itemDetails.image" alt="" />
                 </div>
               </div>
@@ -338,6 +338,9 @@ export default {
   },
   computed: {
     // ...mapGetters("item", ["itemConfirmationDetails"]),
+    showImage() {
+      return this.itemDetails.image && this.itemDetails.is_default !== 'Approve without Image'
+    },
     dialogMessage() {
       return `
         <p class="pb-2">We also emailed you the confirmation. You can print it and tape it on the item.</p>

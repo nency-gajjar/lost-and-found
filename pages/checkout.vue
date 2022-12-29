@@ -34,7 +34,7 @@
                   "
                 >
                   
-                  <div class="w-full sm:grid sm:grid grid-cols-2" :class="itemDetails.image && 'sm:gap-24'">
+                  <div class="w-full sm:grid sm:grid grid-cols-2" :class="showImage && 'sm:gap-24'">
                     <div
                       class="font-medium text-md"
                     >
@@ -47,7 +47,7 @@
 
                   <div class="flex items-center my-4 sm:my-0 gap-3">
             
-                  <div v-if="itemDetails.image"
+                  <div v-if="showImage"
                     class="
                       w-56
                       sm:w-24
@@ -384,6 +384,9 @@ export default {
     } 
   },
   computed: {
+    showImage() {
+      return this.itemDetails.image && this.itemDetails.is_default !== 'Approve without Image';
+    },
     packageDimensionsString() {
       let data = this.checkoutDetail?.lableDetails;
       return `${data?.length}x${data?.width}x${data?.height}`;

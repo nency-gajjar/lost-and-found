@@ -13,8 +13,7 @@
               <div class="form-title">
                 <BaseHeader varient="accent">Item's Details:</BaseHeader>
               </div>
-              <RawCard v-if="!itemDetails.image" title="Item Description" :value="itemDetails.item_description" />
-              <div v-else
+              <div v-if="showImage"
                 class="
                   mt-2
                   py-2
@@ -76,6 +75,7 @@
           
                 </div>
               </div>
+              <RawCard v-else title="Item Description" :value="itemDetails.item_description" />
             </div>
             <!-- Item Details End -->
 
@@ -598,6 +598,9 @@ export default {
     this.$store.commit("shipment/SET_CUSTOM_INFO", {});
   },
   computed: {
+    showImage() {
+      return this.itemDetails.image && this.itemDetails.is_default !== 'Approve without Image';
+    },
     dialogMessage() {
       if (this.deliveryType === "0") {
         return "We have sent the notification link on your email. You can click on the link received on the mail to proceed further with the shipping.";

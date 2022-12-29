@@ -204,7 +204,7 @@
               <div class="sliderCard cursor-pointer shadow-md border">
                 <div class="flex items-center md:h-28 md:w-28 sm:h-16 sm:w-16 w-14 h-14">
                   <img
-                    v-if="item.image"
+                    v-if="showImage(item)"
                     class="
                       object-cover
                       w-full
@@ -344,6 +344,9 @@ export default {
     },
   },
   methods: {
+    showImage(item) {
+      return item.image && item.is_default !== 'Approve without Image';
+    },
     formatDate(date){
       return moment(date).format("MMMM DD, YYYY");
     },
