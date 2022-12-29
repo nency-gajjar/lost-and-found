@@ -1,20 +1,17 @@
 <template>
   <div class="wrapper pb-10">
-    <button v-if="!isBottom && mobileDevice" @click="jumpToBottom" class="fixed z-50 bottom-5 right-5 py-3 px-4 bg-accent-100 rounded-full">
-      <BaseIcon
-        icon="angle-down"
-        color="white"
-        size="1x"
-        style="max-width: 15px"
-      />
-    </button>
+    <span v-if="!isBottom && mobileDevice" @click="jumpToBottom" class="fixed z-50 bottom-5 right-5 animate-bounce rounded-full p-4 bg-accent-100 text-sm">
+      <svg class="w-5 h-5 mx-auto" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="white">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 13l-7 7-7-7m14-8l-7 7-7-7" />
+      </svg>
+    </span>
     <div class="container max-w-7xl mx-auto px-4">
       <div class="form-title my-5">
         <BaseHeader class="mt-10" varient="gray">Select Your Rate Quote</BaseHeader>
       </div>
       <div class="flex flex-col md:flex-row justify-center gap-4">
         <div class="w-full">
-          <div class="w-full flex items-end relative">
+          <div v-if="!isLoading && rateQuoteItems.length > 0" class="w-full flex items-end relative">
             <div
               class="
                 flex
@@ -295,7 +292,7 @@
             <BaseLoader />
           </div>
         </div>
-        <div class="w-full md:max-w-sm">
+        <div v-if="!isLoading && rateQuoteItems.length > 0" class="w-full md:max-w-sm">
           <div
             class="
               mt-10

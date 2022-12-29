@@ -1,6 +1,6 @@
 <template>
-  <div class="wrapper" v-if="Object.keys(itemDetails).length > 0">
-    <BaseCard class="md:w-8/12 lg:w-7/12 xl:w-6/12 overflow-hidden">
+  <div class="wrapper">
+    <BaseCard v-if="!isLoadingItem || Object.keys(itemDetails).length > 0" class="md:w-8/12 lg:w-7/12 xl:w-6/12 overflow-hidden">
       <section class="bg-white">
         <div class="main-title bg-accent-100 text-white mb-3">
           <BaseHeader varient="details">PREVIEW</BaseHeader>
@@ -146,6 +146,9 @@
         </div>
       </section>
     </BaseCard>
+    <div v-else>
+      <BaseLoader />
+    </div>
   </div>
 </template>
 
@@ -162,7 +165,11 @@ export default {
       itemDetails: {},
       showInformativeTxt: false,
       allowClaim: false,
+      isLoadingItem: false,
     };
+  },
+  created(){
+    this.isLoadingItem = true;
   },
   mounted(){
     if(this.$route.query.id){
@@ -173,8 +180,10 @@ export default {
           if (response.status === 200) {
             this.itemDetails = {...response.data.data.Item, onlyDisplay: true};
           }
+          this.isLoadingItem = true;
         })
         .catch((error) => {
+          this.isLoadingItem = true;
           console.log(error);
         });
     }
@@ -186,12 +195,15 @@ export default {
           if (response.status === 200) {
             this.itemDetails = {...response.data.data.Item, onlyDisplay: true};
           }
+          this.isLoadingItem = true;
         })
         .catch((error) => {
           console.log(error);
+          this.isLoadingItem = true;
         });
     }
     else{
+      this.isLoadingItem = true;
       this.showInformativeTxt = true;
       this.itemDetails = JSON.parse(JSON.stringify(this.$store.getters['item/itemDetails']));
     }

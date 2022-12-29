@@ -1,5 +1,5 @@
 <template>
-  <div class="bg-white footer-container">
+  <div class="noPrint">
     <div class="flex px-6 pt-8 md:px-10 items-center justify-between">
       <div>
         <img
@@ -69,12 +69,6 @@
 </template>
 
 <style scoped>
-.footer-container {
-  -webkit-box-shadow: 0px 0px 39px -15px rgba(0, 0, 0, 0.75);
-  -moz-box-shadow: 0px 0px 39px -15px rgba(0, 0, 0, 0.75);
-  box-shadow: 0px 0px 39px -15px rgba(0, 0, 0, 0.75);
-}
-
 .nav-logo {
   width: 80px;
 }
@@ -82,6 +76,12 @@
 @media screen and (max-width: 810px) {
   .nav-logo {
     width: 70px;
+  }
+}
+
+@media print {
+  .noPrint{
+    display: none;
   }
 }
 </style>

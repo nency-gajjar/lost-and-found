@@ -96,7 +96,7 @@
         class="w-full sm:w-fit"
         :disabled="itemDetails.scheduled_pickup"
         varient="secondary"
-        @click="showSchedulePickup = true"
+        @click="goToSchedulePickup"
       >
         Schedule Pickup
       </BaseButton>
@@ -112,27 +112,17 @@
       Need help? Reach out to us at <a href="mailto:support@foundshelf.com" class="font-display underline decoration-1">support@foundshelf.com</a>
       In most cases, we will send you a reply in an hour!
     </p>
-    <SchedulePickupModal
-      v-if="showSchedulePickup"
-      :show-modal="showSchedulePickup"
-      @close="showSchedulePickup = false"
-    />
   </main>
 </template>
 
 <script>
-import SchedulePickupModal from "~/components/SchedulePickupModal.vue";
 import { startCase, camelCase } from "lodash";
 
 export default {
-  components: {
-    SchedulePickupModal,
-  },
   data() {
     return {
       labelUrl: "",
       itemId: "",
-      showSchedulePickup: false,
       itemDetails: {},
       itemImg: "",
       labelImg: "",
@@ -187,6 +177,10 @@ export default {
         parcel: JSON.parse(
           JSON.stringify(this.$store.getters["shipment/shippingRates"])
         ).parcel.id,
+        shipment: JSON.parse(
+          JSON.stringify(this.$store.getters["shipment/shipmentId"])
+        ),
+        label_url: this.labelUrl,
         delivery_confirmation:
           JSON.parse(
             JSON.stringify(this.$store.getters["shipment/signature"])
@@ -227,6 +221,14 @@ export default {
     }
   },
   methods: {
+    goToSchedulePickup(){
+      this.$nextTick(() => {
+        this.$router.push({
+          name: "schedule",
+          query: { id: this.$route.query?.id ? this.$route.query.id : this.itemId },
+        });
+      });
+    },
     async getImgData(url){
       const img = new Image();
       img.src = url;
