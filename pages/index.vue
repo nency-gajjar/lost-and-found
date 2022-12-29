@@ -324,6 +324,8 @@ export default {
     };
   },
   mounted() {
+    console.log('Test Push in staging');
+    console.log('Test Merge in staging');
     this.getItemDescriptionOptions();
     this.getRecentItemList();
   },

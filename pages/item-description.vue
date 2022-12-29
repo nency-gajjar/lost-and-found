@@ -172,6 +172,7 @@
       @close="showItemDescModel = false; getItemDescriptionOptions();"
     />
     <BaseDialog
+      v-if="showDialog"
       :showDialog="showDialog"
       :showClose="false"
       :icon="{ name: 'trash-can', color: 'red', size: '3x' }"

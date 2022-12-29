@@ -472,6 +472,7 @@
       <BaseLoader />
     </div>
     <BaseDialog
+      v-if="showDialog"
       :showDialog="showDialog"
       :icon="{ name: 'circle-check', color: 'green', size: '3x' }"
       :message="dialogMessage"

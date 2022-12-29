@@ -30,7 +30,7 @@
         class="w-20 min-w-[80px] mx-auto sm:mx-0 flex items-center mb-3 sm:mb-0"
       >
         <img
-          v-if="item.image"
+          v-if="showImage"
           class="w-full rounded-t-lg md:rounded-none md:rounded-l-lg"
           :src="item.image"
           alt=""
@@ -84,5 +84,10 @@ export default {
   props: {
     item: { type: Object, default: {} },
   },
+  computed: {
+    showImage() {
+      return this.item.image && this.item.is_default !== 'Approve without Image'
+    }
+  }
 }
 </script>
