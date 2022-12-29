@@ -2,11 +2,11 @@
 name: CI
 on:
   push:
-    branches: staging
-
+    branches: master
+    
 jobs:
   build:
-    runs-on: staging
+    runs-on: self-hosted
     steps:
       - uses: actions/checkout@v1
       - uses: actions/setup-node@v1
@@ -15,8 +15,8 @@ jobs:
       - name: Install NPM dependencies
         run: npm install
       - name: setup .env
-        run: cp /home/ubuntu/actions-runner/_work/lost-and-found/.env /home/ubuntu/actions-runner/_work/lost-and-found/lost-and-found
+        run: cp /home/ubuntu/runner/_work/lost-and-found/.env /home/ubuntu/runner/_work/lost-and-found/lost-and-found
       - name: npm i
         run: npm i
-      - name: Deploy Next.js app in staging
-        run: pm2 restart Staging
+      - name: Deploy Next.js app
+        run: pm2 restart 3
