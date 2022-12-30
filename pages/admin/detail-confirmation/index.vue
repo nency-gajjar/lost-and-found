@@ -1508,6 +1508,7 @@ textarea.error {
 
 .input-wrapper {
   input{
+    color: rgb(55, 65, 81) !important;
     border-width: 1px !important;
     --tw-border-opacity: 1 !important;
     border-color: rgb(209 213 219 / var(--tw-border-opacity)) !important;

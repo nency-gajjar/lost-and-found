@@ -66,6 +66,7 @@
               >
                 <BaseSelect
                   :isRequired="true"
+                  @focus="scrollToFocused"
                   v-model="venueType"
                   :options="venueOptions"
                   label="Your Affiliation"
@@ -82,6 +83,7 @@
               >
                 <BaseInput
                   :isRequired="true"
+                  @focus="scrollToFocused"
                   v-model="manualVenue"
                   type="text"
                   label="Type manually"
@@ -97,6 +99,7 @@
               >
                 <BaseInput
                   :isRequired="true"
+                  @focus="scrollToFocused"
                   v-model="address"
                   id="autocomplete"
                   type="text"
@@ -136,6 +139,7 @@
               >
                 <BaseInput
                   v-model="venueEmail"
+                  @focus="scrollToFocused"
                   :isRequired="true"
                   type="email"
                   label="Your Email"
@@ -158,6 +162,7 @@
               >
                 <BaseInput
                   v-model="venueSecondaryEmail"
+                  @focus="scrollToFocused"
                   type="email"
                   label="Secondary Email (Optional)"
                   :class="errors.length > 0 && 'error'"
@@ -230,6 +235,7 @@
                 class="block"
               >
                 <BaseInput
+                  @focus="scrollToFocused"
                   v-model="autoCompleteAddress.address"
                   label="Address"
                   type="text"
@@ -248,6 +254,7 @@
                 >
                   <BaseInput
                     v-model="autoCompleteAddress.city"
+                    @focus="scrollToFocused"
                     label="City"
                     type="text"
                     :class="{
@@ -264,6 +271,7 @@
                 >
                   <BaseInput
                     v-model="autoCompleteAddress.state"
+                    @focus="scrollToFocused"
                     label="State"
                     type="text"
                     :class="{
@@ -281,6 +289,7 @@
                 >
                   <BaseInput
                     v-model="autoCompleteAddress.zipcode"
+                    @focus="scrollToFocused"
                     label="Zipcode"
                     type="text"
                     :class="{
@@ -305,6 +314,7 @@
                 >
                   <BaseInput
                     v-model="autoCompleteAddress.country"
+                    @focus="scrollToFocused"
                     label="Country"
                     type="text"
                     :class="{
@@ -365,6 +375,7 @@
                 <client-only>
                   <div :class="errors.length && 'error'">
                     <date-picker
+                      @focus="scrollToFocused"
                       v-model="foundDate"
                       :disabled-date="disableStartDate"
                       format="MM-DD-YYYY"
@@ -779,6 +790,7 @@
               <!-- Hotel room -->
               <div v-if="venueType === 'Hotel'" class="block">
                 <BaseInput
+                  @focus="scrollToFocused"
                   v-model="hotelRoom"
                   type="text"
                   label="Location (Ex. Room No., Hotel Area, etc.)"
@@ -795,6 +807,7 @@
                   >
                     <div :class="errors.length > 0 && isItemDescriptionFocused && 'error'">
                       <vue-simple-suggest
+                        @focus="scrollToFocused"
                         @blur="isItemDescriptionFocused = true"
                         v-model="itemDescription"
                         :list="itemDescriptionOptions"
@@ -812,6 +825,7 @@
               >
                 <BaseSelect
                   :isRequired="true"
+                  @focus="scrollToFocused"
                   v-model="packageType"
                   :options="packageTypeOptions"
                   label="Package Type"
@@ -827,6 +841,7 @@
               >
                 <BaseSelect
                   :isRequired="true"
+                  @focus="scrollToFocused"
                   v-model="itemStatus"
                   :options="itemStatusOptions"
                   label="Item Status"
@@ -843,6 +858,7 @@
                   class="block"
                 >
                   <BaseInput
+                    @focus="scrollToFocused"
                     :isRequired="true"
                     v-model="receiverName"
                     type="text"
@@ -859,6 +875,7 @@
                   name="Receiver's Email"
                 >
                   <BaseInput
+                    @focus="scrollToFocused"
                     :isRequired="true"
                     v-model="receiverEmail"
                     type="email"
@@ -1757,6 +1774,7 @@ export default {
 
 .input-wrapper {
   input{
+    color: rgb(55, 65, 81) !important;
     border-width: 1px !important;
     --tw-border-opacity: 1 !important;
     border-color: rgb(209 213 219 / var(--tw-border-opacity)) !important;

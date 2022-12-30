@@ -272,7 +272,7 @@
             :icon="{ name: 'trash-can', color: 'white', size: '1x' }"
             class="!capitalize !px-5 !py-2 !inline-flex !items-center"
             varient="red"
-            @click.stop="deleteItem(item)"
+            @click.stop="showDialog = true; itemToDelete = item"
           >
             Delete Item
           </BaseButton>
@@ -285,6 +285,25 @@
         <BaseLoader />
       </div>
     </div>
+    <BaseDialog
+      v-if="showDialog"
+      :showDialog="showDialog"
+      :showClose="false"
+      :icon="{ name: 'trash-can', color: 'red', size: '3x' }"
+      buttonTitle="Yes please!"
+      title="Are you sure?"
+      message="Do you want to remove the item?"
+      @close="showDialog= false;"
+    >
+      <template v-slot:action>
+        <BaseButton
+          class="!capitalize !px-5 !py-2"
+          varient="gray"
+          @click="showDialog= false; deleteItem()"
+          >Yes please!
+        </BaseButton>
+      </template>
+    </BaseDialog>
   </div>
 </template>
 
@@ -304,6 +323,8 @@ export default {
       searchQuery: "",
       lostItems: [],
       cloneLostItems: [],
+      showDialog: false,
+      itemToDelete: {}
     };
   },
   created() {
@@ -422,25 +443,25 @@ export default {
         });
       }
     },
-    deleteItem(item) {
+    deleteItem() {
       const access_token = this.$auth.getToken("local");
-      this.$set(this.isLoadingRemoveImage, item.id, true);
+      this.$set(this.isLoadingRemoveImage, this.itemToDelete.id, true);
       this.$axios
-        .post(`/deletesingledetailadmin?id=${item.id}`, {
+        .post(`/deletesingledetailadmin?id=${this.itemToDelete.id}`, {
           headers: {
             Authorization: `Bearer ${access_token}`,
           },
         })
         .then((response) => {
           if (response.status === 200) {
-            this.isLoadingRemoveImage[item.id] = false;
+            this.isLoadingRemoveImage[this.itemToDelete.id] = false;
             this.$toast.info("Item Deleted successfully!");
             this.getAdminDashboardDetails();
           }
         })
         .catch((err) => {
           this.$toast.error("Something went wrong! Please try again.");
-          this.isLoadingRemoveImage[item.id] = false;
+          this.isLoadingRemoveImage[this.itemToDelete.id] = false;
           console.log(err);
         });
     },
