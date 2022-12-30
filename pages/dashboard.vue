@@ -9,12 +9,13 @@
         </div>
         <section class="grid md:grid-cols-2 xl:grid-cols-5 gap-6">
           <div
-            :class="{ 'border-b-8 border-gray-500': tabSelected === 5 }"
+            v-for="tab in tabs" :key="tab.id"
+            :class="[tab.tileBgClass, tabSelected === tab.id ? tab.borderClass : '']"
             class="
               p-3
               bg-blue-600
               transition-shadow
-              border border-blue-800
+              border-b-8 border-transparent
               rounded-lg
               shadow-sm
               hover:shadow-lg
@@ -22,10 +23,11 @@
               justify-center
               cursor-pointer
             "
-            @click="getData(5)"
+            @click="tabSelected = tab.id; searchQuery = ''"
           >
             <div class="flex flex-col items-center justify-center">
               <span
+                 :class="[tab.totalBgClass]"
                 class="
                   mb-2
                   text-2xl
@@ -37,200 +39,18 @@
                   h-14
                   w-14
                   text-white
-                  bg-blue-500
                   rounded-full
                 "
-                >{{ pendingListDetails.length || "0" }}</span
-              >
-              <span class="block font-semibold text-white"
-                >Waiting For Approval</span
-              >
-            </div>
-          </div>
-          <div
-            :class="{ 'border-b-8 border-gray-500': tabSelected === 1 }"
-            class="
-              p-3
-              bg-pink-600
-              transition-shadow
-              border border-pink-800
-              rounded-lg
-              shadow-sm
-              hover:shadow-lg
-              flex
-              justify-center
-              cursor-pointer
-            "
-            @click="getData(1)"
-          >
-            <div class="flex flex-col items-center justify-center">
-              <span
-                v-if="
-                  dashboardDetails &&
-                  dashboardDetails[0] &&
-                  dashboardDetails[0].totallostitemslisted
-                "
-                class="
-                  mb-2
-                  text-2xl
-                  font-bold
-                  inline-flex
-                  flex-shrink-0
-                  items-center
-                  justify-center
-                  h-14
-                  w-14
-                  text-white
-                  bg-pink-400
-                  rounded-full
-                "
-                >{{ dashboardDetails[0].totallostitemslisted.length }}</span
-              >
-              <span class="block font-semibold text-white"
-                >Total Lost Items</span
-              >
-            </div>
-          </div>
-          <div
-            :class="{ 'border-b-8 border-gray-500': tabSelected === 2 }"
-            class="
-              p-3
-              bg-yellow-600
-              transition-shadow
-              border border-yellow-800
-              rounded-lg
-              shadow-sm
-              hover:shadow-lg
-              flex
-              justify-center
-              cursor-pointer
-            "
-            @click="getData(2)"
-          >
-            <div class="flex flex-col items-center justify-center">
-              <span
-                v-if="
-                  dashboardDetails &&
-                  dashboardDetails[1] &&
-                  dashboardDetails[1].totalclaimitems
-                "
-                class="
-                  mb-2
-                  text-2xl
-                  font-bold
-                  inline-flex
-                  flex-shrink-0
-                  items-center
-                  justify-center
-                  h-14
-                  w-14
-                  text-white
-                  bg-yellow-500
-                  rounded-full
-                "
-                >{{ dashboardDetails[1].totalclaimitems.length }}</span
-              >
-              <span class="block font-semibold text-white"
-                >Total Claim Items</span
-              >
-            </div>
-          </div>
-          <div
-            :class="{ 'border-b-8 border-gray-500': tabSelected === 3 }"
-            class="
-              p-3
-              bg-cyan-600
-              transition-shadow
-              border border-cyan-800
-              rounded-lg
-              shadow-sm
-              hover:shadow-lg
-              flex
-              justify-center
-              cursor-pointer
-            "
-            @click="getData(3)"
-          >
-            <div class="flex flex-col items-center justify-center">
-              <span
-                v-if="
-                  dashboardDetails &&
-                  dashboardDetails[2] &&
-                  dashboardDetails[2].totalitemslistedtoday
-                "
-                class="
-                  mb-2
-                  text-2xl
-                  font-bold
-                  inline-flex
-                  flex-shrink-0
-                  items-center
-                  justify-center
-                  h-14
-                  w-14
-                  text-white
-                  bg-cyan-500
-                  rounded-full
-                "
-                >{{ dashboardDetails[2].totalitemslistedtoday.length }}</span
-              >
-              <span class="block font-semibold text-white"
-                >Total Items Listed Today</span
-              >
-            </div>
-          </div>
-          <div
-            :class="{ 'border-b-8 border-gray-500': tabSelected === 4 }"
-            class="
-              p-3
-              bg-indigo-600
-              transition-shadow
-              border border-indigo-800
-              rounded-lg
-              shadow-sm
-              hover:shadow-lg
-              flex
-              justify-center
-              cursor-pointer
-            "
-            @click="getData(4)"
-          >
-            <div class="flex flex-col items-center justify-center">
-              <span
-                v-if="
-                  dashboardDetails &&
-                  dashboardDetails[3] &&
-                  dashboardDetails[3].totalclaimitemstoday
-                "
-                class="
-                  mb-2
-                  text-2xl
-                  font-bold
-                  inline-flex
-                  flex-shrink-0
-                  items-center
-                  justify-center
-                  h-14
-                  w-14
-                  text-white
-                  bg-indigo-400
-                  rounded-full
-                "
-                >{{ dashboardDetails[3].totalclaimitemstoday.length }}</span
-              >
-              <span class="block font-semibold text-white"
-                >Total Items Claimed Today</span
-              >
+                >{{ tab.data.length }}</span>
+              <span class="block font-semibold text-white">{{ tab.name }}</span>
             </div>
           </div>
         </section>
-        <!-- </div> -->
       </main>
       <div class="w-full flex gap-3 flex-auto mt-3 sm:mt-0 sm:w-7/12">
         <div class="w-full flex justify-end items-center pt-5 relative">
           <input
             v-model="searchQuery"
-            @input="filterItems"
             class="
               text-sm
               leading-none
@@ -261,28 +81,30 @@
             size="1x"
             class="absolute right-3 z-10 cursor-pointer"
             style="max-width: 15px"
-            @click="(searchQuery = ''), (lostItems = cloneLostItems)"
+            @click="searchQuery = ''"
           />
         </div>
       </div>
-      <div v-if="!isLoading && lostItems.length > 0">
-        <ItemCard v-for="item in lostItems" :key="item.id" :item="item" @click.native="viewItem(item)">
-          <BaseButton
-            :is-loading="isLoadingRemoveImage[item.id]"
-            :icon="{ name: 'trash-can', color: 'white', size: '1x' }"
-            class="!capitalize !px-5 !py-2 !inline-flex !items-center"
-            varient="red"
-            @click.stop="deleteItem(item)"
-          >
-            Delete Item
-          </BaseButton>
-        </ItemCard>
-      </div>
-      <div v-else-if="!isLoading && lostItems.length === 0">
-        <p class="text-gray-600 font-medium m-14">No Result Found</p>
-      </div>
-      <div v-else>
-        <BaseLoader />
+      <div v-if="!isLoading && filteredItems">
+        <template v-if="filteredItems.length > 0">        
+          <ItemCard v-for="item in filteredItems" :key="item.id" :item="item" @click.native="viewItem(item)">
+            <BaseButton
+              :is-loading="isLoadingRemoveImage[item.id]"
+              :icon="{ name: 'trash-can', color: 'white', size: '1x' }"
+              class="!capitalize !px-5 !py-2 !inline-flex !items-center"
+              varient="red"
+              @click.stop="deleteItem(item)"
+            >
+              Delete Item
+            </BaseButton>
+          </ItemCard>
+        </template>
+        <template v-else-if="!isLoading && filteredItems.length === 0">
+          <p class="text-gray-600 font-medium m-14">No Item Available</p>
+        </template>
+        <template v-else>
+          <BaseLoader />
+        </template>
       </div>
     </div>
   </div>
@@ -299,59 +121,34 @@ export default {
       dashboardDetails: [],
       isLoadingRemoveImage: {},
       isLoading: false,
-      tabSelected: 1,
+      tabSelected: 0,
       pendingListDetails: [],
       searchQuery: "",
-      lostItems: [],
-      cloneLostItems: [],
+      tabs: [
+        { id: 0, name: 'Waiting For Approval', data: '', tileBgClass: 'bg-blue-600', borderClass: '!border-blue-800', totalBgClass: 'bg-blue-500'},
+        { id: 1, name: 'Total Lost Items', data: '', tileBgClass: 'bg-pink-600', borderClass: '!border-pink-800', totalBgClass: 'bg-pink-400'},
+        { id: 2, name: 'Total Claim Items', data: '', tileBgClass: 'bg-yellow-600', borderClass: '!border-yellow-800', totalBgClass: 'bg-yellow-500'},
+        { id: 3, name: 'Total Items Listed Today', data: '', tileBgClass: 'bg-cyan-600', borderClass: '!border-cyan-800', totalBgClass: 'bg-cyan-500'},
+        { id: 4, name: 'Total Items Claimed Today', data: '', tileBgClass: 'bg-indigo-600', borderClass: '!border-indigo-800', totalBgClass: 'bg-indigo-400'},
+      ]
     };
   },
   created() {
     this.getAdminDashboardDetails();
     this.getPendingListDetails();
   },
-  watch: {
-    tabSelected(value) {
-      this.tabSelectedChanged(value);
-    },
+  computed: {
+    filteredItems () {
+      if (this.searchQuery?.length) {
+        if (this.tabs[this.tabSelected].data.length > 0) {
+          return this.tabs[this.tabSelected].data.filter(item => item?.item_description?.trim()?.toLowerCase()?.includes(this.searchQuery?.trim()?.toLowerCase()));
+        }
+      } else {
+        return this.tabs[this.tabSelected].data
+      }
+    }
   },
   methods: {
-    tabSelectedChanged(value) {
-      this.searchQuery = "";
-      if (value === 1) {
-        this.lostItems = this.dashboardDetails[0]?.totallostitemslisted || [];
-      } else if (value === 2) {
-        this.lostItems = this.dashboardDetails[1]?.totalclaimitems || [];
-      } else if (value === 3) {
-        this.lostItems = this.dashboardDetails[2]?.totalitemslistedtoday || [];
-      } else if (value === 4) {
-        this.lostItems = this.dashboardDetails[3]?.totalclaimitemstoday || [];
-      } else if (value === 5) {
-        this.lostItems = this.pendingListDetails;
-      }
-      this.cloneLostItems = this.lostItems;
-    },
-    filterItems() {
-      let filterArray = [];
-      if (this.searchQuery === "") {
-        this.lostItems = this.cloneLostItems;
-      }
-      this.cloneLostItems.forEach((item) => {
-        let itemArr = Object.values(item);
-        let filteredItems = itemArr.filter((itemElement) => {
-          if (typeof itemElement !== "string") {
-            itemElement = itemElement.toString();
-          }
-          return itemElement
-            .toLowerCase()
-            .includes(this.searchQuery.toLowerCase());
-        });
-        if (filteredItems.length != 0) {
-          filterArray.push(item);
-        }
-      });
-      this.lostItems = filterArray;
-    },
     getAdminDashboardDetails() {
       const access_token = this.$auth.getToken("local");
       this.isLoading = true;
@@ -364,11 +161,12 @@ export default {
         .then((response) => {
           if (response.status === 200) {
             this.isLoading = false;
-            this.dashboardDetails = response?.data?.data;
-            if(!this.dashboardDetails){
-              this.dashboardDetails = [];
-            }
-            this.tabSelectedChanged(this.tabSelected);
+            this.dashboardDetails = response?.data?.data || [];
+
+            this.tabs[0].data = this.pendingListDetails
+            this.dashboardDetails.forEach((detail, index) => {
+              for (const key in detail)  this.tabs[index+1].data = detail[key]
+            });
           }
         })
         .catch((err) => {
@@ -387,19 +185,13 @@ export default {
         })
         .then((response) => {
           if (response.status === 200) {
-            this.pendingListDetails = response?.data?.data?.Items;
-            if(!this.pendingListDetails){
-              this.pendingListDetails = [];
-            }
+            this.pendingListDetails = response?.data?.data?.Items || [];
           }
         })
         .catch((err) => {
           this.$toast.error("Something went wrong! Please try again.");
           console.log(err);
         });
-    },
-    getData(tabNumber) {
-      this.tabSelected = tabNumber;
     },
     viewItem(item) {
       if (this.tabSelected === 5) {
