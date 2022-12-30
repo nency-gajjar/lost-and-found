@@ -13,7 +13,6 @@
             :class="[tab.tileBgClass, tabSelected === tab.id ? tab.borderClass : '']"
             class="
               p-3
-              bg-blue-600
               transition-shadow
               border-b-8 border-transparent
               rounded-lg
