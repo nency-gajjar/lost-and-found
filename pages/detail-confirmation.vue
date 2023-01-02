@@ -4,9 +4,9 @@
       <section class="bg-white">
         <div class="main-title bg-accent-100 text-white mb-3">
           <BaseHeader varient="details">
-            <div class="flex justify-between px-6">
+            <div class="flex px-6" :class="[showInformativeTxt ? 'justify-center' : 'justify-between']">
               <p>PREVIEW</p>
-              <div class="relative">
+              <div class="relative" v-if="!showInformativeTxt">
                 <BaseIcon @click.stop="showSharingIcons = !showSharingIcons" icon="share-alt" color="white" />
                 <div class="absolute right-0 top-8 bg-white rounded divide-y divide-gray-200 shadow" v-if="showSharingIcons">
                   <div @click="socialShare('whatsapp')" href="https://web.whatsapp.com/send?text=my message" target="_blank" class="cursor-pointer hover:bg-gray-100 py-3 px-3 flex gap-2 items-center">

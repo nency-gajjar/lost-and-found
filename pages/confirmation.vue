@@ -120,7 +120,7 @@
                 </table>
               </td>
             </tr>
-            <tr class="border-b items-center flex xl:flex-row lg:flex-col md:flex-row flex-col justify-between items-center">
+            <tr class="img-row border-b flex justify-between items-center">
               <td class="px-6 py-4 w-full-imp">
                 <table width="100%" cellspacing="0" cellpadding="0">
                   <tr>
@@ -224,7 +224,7 @@
                 </table>
               </td>
               <div class="flex justify-center items-center pr-6">
-                <div v-if="showImage" class="flex img-container justify-center items-center mt-4 sm:mt-0 w-48 w-full">
+                <div v-if="showImage" class="flex img-container justify-center items-center mt-4 sm:mt-0 w-40 w-full">
                   <img class="w-full object-cover" :src="itemDetails.image" alt="" />
                 </div>
               </div>
@@ -393,7 +393,7 @@ export default {
   width: 80px;
 }
 tr td:first-child {
-  width: 250px;
+  width: 200px;
 }
 .w-full-imp{
   width: 100% !important;
@@ -518,6 +518,28 @@ td {
   margin-top: 1.25rem;
   margin-left: auto;
   margin-right: auto;
+}
+
+.img-row {
+  @apply flex-row;
+}
+
+@media (max-width: 1189px) {
+  .img-row {
+    @apply flex-col;
+  }
+}
+
+@media (max-width: 1023px) {
+  .img-row {
+    @apply flex-row;
+  }
+}
+
+@media (max-width: 620px) {
+  .img-row {
+    @apply flex-col;
+  }
 }
 
 @media (min-width: 640px) {

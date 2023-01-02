@@ -708,7 +708,14 @@ export default {
   top: 40%;
 }
 .rateLogoContainer img {
-  max-width: 100px;
-  max-height: 100px;
+  max-width: 179px;
+  max-height: 120px;
+}
+
+@media (max-width: 640px) {
+  .rateLogoContainer img {
+    max-width: 109px;
+    max-height: 100px;
+  }
 }
 </style>
