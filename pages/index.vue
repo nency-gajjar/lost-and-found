@@ -398,9 +398,9 @@ export default {
     },
     applyFilters() {
       this.$nextTick(() => {
-        this.$router.push({
-          name: "lost-items",
-          params: {
+        this.$router.push(this.localeLocation({ 
+          name: 'lost-items', 
+          params: { 
             appliedFilters: {
               itemDescription: this.itemDescription,
               startDate: this.startDate,
@@ -408,9 +408,9 @@ export default {
               lostItemAddress: this.lostItemAddress,
               lat: this.lat,
               long: this.long,
-            },
-          },
-        });
+            }
+          } 
+        }))
       });
     },
     getRecentItemList() {

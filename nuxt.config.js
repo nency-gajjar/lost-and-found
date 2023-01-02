@@ -14,7 +14,7 @@ export default {
     link: [
       { rel: 'icon', type: 'image/x-icon', href: '/favicon.ico' }
     ],
-    script: [{ src: `https://maps.googleapis.com/maps/api/js?key=${process.env.GOOGLE_MAP_KEY}&libraries=places`}],
+    script: [{ src: `https://maps.googleapis.com/maps/api/js?key=${process.env.GOOGLE_MAP_KEY}&libraries=places` }],
   },
 
   loading: { color: 'purple', height: '3px' },
@@ -29,8 +29,8 @@ export default {
     '~/plugins/vee-validate',
     "~/plugins/vue-tel-input",
     "~/plugins/font-awesome",
-    {src: "~/plugins/html2pdf", mode: 'client'},
-    {src: "~/plugins/persistedState", mode: 'client'},
+    { src: "~/plugins/html2pdf", mode: 'client' },
+    { src: "~/plugins/persistedState", mode: 'client' },
   ],
 
   // Auto import components: https://go.nuxtjs.dev/config-components
@@ -46,6 +46,7 @@ export default {
   modules: [
     // https://go.nuxtjs.dev/axios
     '@nuxtjs/axios',
+    '@nuxtjs/i18n',
     '@nuxtjs/auth',
     '@nuxtjs/toast',
     'nuxt-stripe-module',
@@ -70,6 +71,21 @@ export default {
     },
   },
 
+  // i18n Configuration
+  i18n: {
+    locales: [{ code: 'en', file: 'en.js', iso: 'en-US' }],
+    defaultLocale: 'en',
+    vueI18nLoader: true,
+    langDir: 'lang/',
+    lazy: true,
+    vueI18n: {
+      fallbackLocale: 'en',
+      silentFallbackWarn: true,
+      silentTranslationWarn: true,
+    },
+  },
+
+  // env vars
   env: {
     GOOGLE_MAP_KEY: process.env.GOOGLE_MAP_KEY
   },

@@ -399,7 +399,7 @@ export default {
       return date < this.startDate || date > new Date();
     },
     addNewItem() {
-      this.$router.push({ name: "found" });
+      this.$router.push({ path: this.localePath({ name: 'found' }) });
     },
     resetAddress() {
       this.clearAddress();

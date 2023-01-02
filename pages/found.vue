@@ -20,8 +20,8 @@
             justify-center
           "
         > 
-          <h1 class="my-2 text-xl font-bold text-gray-700 leading-tight">Found an Item that belongs to a guest?</h1>
-          <p class="my-2 text-sm text-gray-700 leading-tight">Scan the QR code to access it from your mobile device for a better user experience.</p>
+          <h1 class="my-2 text-xl font-bold text-gray-700 leading-tight">{{ $t('foundAnItem') }}</h1>
+          <p class="my-2 text-sm text-gray-700 leading-tight">{{ $t('scanQR') }}</p>
         </div>
         <div
           class="
@@ -46,11 +46,11 @@
             <div class="sm:p-6 p-4 space-y-4">
               <div class="form-title">
                 <div class="w-full">
-                  <div class="flex flex-col justify-between">
+                  <div class="flex justify-between">
                     <BaseHeader varient="gray">{{ senderFormTitle }}</BaseHeader>
                     <div v-if="showResetButton">
                       <BaseButton @click="resetItemDetailsStore">
-                        Reset
+                        {{ $t('reset') }}
                       </BaseButton>
                     </div>
                   </div>
@@ -68,7 +68,7 @@
                   :isRequired="true"
                   v-model="venueType"
                   :options="venueOptions"
-                  label="Your Affiliation"
+                  :label="$t('yourAffiliation')"
                   :class="errors.length > 0 && 'error'"
                 />
               </ValidationProvider>
@@ -84,7 +84,7 @@
                   :isRequired="true"
                   v-model="manualVenue"
                   type="text"
-                  label="Type manually"
+                  :label="$t('typemanually')"
                   :class="errors.length > 0 && 'error'"
                 />
               </ValidationProvider>
@@ -132,13 +132,12 @@
                 v-slot="{ errors }"
                 rules="required|email"
                 class="block"
-                name="Venue Email"
               >
                 <BaseInput
                   v-model="venueEmail"
                   :isRequired="true"
                   type="email"
-                  label="Your Email"
+                  :label="$t('yourEmail')"
                   :class="errors.length > 0 && 'error'"
                 />
                 <p
@@ -154,12 +153,11 @@
                 v-slot="{ errors }"
                 rules="email"
                 class="block"
-                name="Secondary Email"
               >
                 <BaseInput
                   v-model="venueSecondaryEmail"
                   type="email"
-                  label="Secondary Email (Optional)"
+                  :label="$t('secondaryEmail')"
                   :class="errors.length > 0 && 'error'"
                 />
                 <p
@@ -176,7 +174,7 @@
                   !isEmployeeMobileNoValid && 'error'
                 ]"
               >
-                <div style="font-size:15px;" class="text-gray-500" :class="!isEmployeeMobileNoValid && 'text-red-500'">Employee Mobile Number <span class="text-red-500">*</span> </div>
+                <div style="font-size:15px;" class="text-gray-500" :class="!isEmployeeMobileNoValid && 'text-red-500'"> {{ $t('employeeMobileNumber')}} <span class="text-red-500">*</span> </div>
                 <vue-tel-input
                   class="
                     relative
@@ -207,7 +205,7 @@
                 />
                 &nbsp;&nbsp;
                 <p style="color: #939393; font-size: 14px">
-                  Your mobile number is only for notification purpose that is related to this item. We do not share your mobile number to item owner, or anyone else.
+                  {{ $t('weDoNotShareYourMobileNumber') }}
                 </p>
               </div>
 
@@ -219,7 +217,7 @@
                   color="gray"
                   style="max-width: 15px"
                   data-toggle="tooltip"
-                  title="Address will be selected automatically as you type & select the 'Venue Address' above"
+                  :title="$t('addressWillBeSelectedAutomatically')"
                 />
               </div>
 
@@ -231,7 +229,7 @@
               >
                 <BaseInput
                   v-model="autoCompleteAddress.address"
-                  label="Address"
+                  :label="$t('autoAddress.address')"
                   type="text"
                   :class="{
                     error: errors.length > 0
@@ -248,7 +246,7 @@
                 >
                   <BaseInput
                     v-model="autoCompleteAddress.city"
-                    label="City"
+                    :label="$t('autoAddress.city')"
                     type="text"
                     :class="{
                       error: errors.length > 0
@@ -264,7 +262,7 @@
                 >
                   <BaseInput
                     v-model="autoCompleteAddress.state"
-                    label="State"
+                    :label="$t('autoAddress.state')"
                     type="text"
                     :class="{
                       error: errors.length > 0
@@ -281,7 +279,7 @@
                 >
                   <BaseInput
                     v-model="autoCompleteAddress.zipcode"
-                    label="Zipcode"
+                    :label="$t('autoAddress.zipcode')"
                     type="text"
                     :class="{
                       error: errors.length > 0
@@ -305,7 +303,7 @@
                 >
                   <BaseInput
                     v-model="autoCompleteAddress.country"
-                    label="Country"
+                    :label="$t('autoAddress.country')"
                     type="text"
                     :class="{
                       error: errors.length > 0
@@ -317,7 +315,7 @@
                     class="block relative box-content h-12"
                     :class="!isVenuePhoneValid && 'error'"
                   >
-                    <div style="font-size:15px;"  class="text-gray-500" :class="!isVenuePhoneValid && 'text-red-500'">Phone Number</div>
+                    <div style="font-size:15px;"  class="text-gray-500" :class="!isVenuePhoneValid && 'text-red-500'"> {{ $t('autoAddress.phoneNumber') }} </div>
                     <vue-tel-input
                       class="
                         relative
@@ -356,7 +354,7 @@
               
               <!-- Found Item Date -->
               <label style="font-size:15px;" class="text-gray-500"
-                >Found Item Date</label
+                > {{ $t('foundItemDate') }}</label
               > <span class="text-red-500">*</span>
               <ValidationProvider
                 v-slot="{ errors }"
@@ -374,9 +372,7 @@
               </ValidationProvider>
 
               <div class="block">
-                <label style="font-size:15px;" class="text-gray-500"
-                  >Found Item Image</label
-                >
+                <label style="font-size:15px;" class="text-gray-500"> {{ $t('image.foundItemImage') }} </label>
                 <div
                   class="
                     flex
@@ -436,13 +432,13 @@
                             class="mr-1"
                             style="max-width: 15px"
                           />
-                          Take a Picture
+                          {{ $t('image.takeAPicture') }}
                         </label>
 
                         <span
                           v-show="mobileDevice"
                           class="m-2 text-md text-gray-500"
-                          >or</span
+                          >{{ $t('image.or') }}</span
                         >
                         <input
                           type="file"
@@ -474,10 +470,10 @@
                             class="mr-1"
                             style="max-width: 15px"
                           />
-                          Choose a file
+                          {{ $t('image.chooseAFile') }}
                         </label>
                       </span>
-                      <p class="mt-3 text-xs text-gray-500">PNG, JPEG, JPG, HEIC.</p>
+                      <p class="mt-3 text-xs text-gray-500">{{ $t('image.fileTypes') }}</p>
                     </div>
                   </div>
 
@@ -522,7 +518,7 @@
                         varient="red"
                         @click="showDialog = true"
                       >
-                        Remove Image
+                        {{ $t('image.removeImage') }}
                       </BaseButton>
 
                       <BaseButton
@@ -543,7 +539,7 @@
                         varient="indigo"
                         @click="editImage"
                       >
-                        Edit Image
+                        {{ $t('image.editImage') }}
                       </BaseButton>
 
                       <input
@@ -575,7 +571,7 @@
                           color="white"
                           class="mr-2"
                         />
-                        Choose another file
+                         {{ $t('image.chooseAnotherFile') }}
                       </label>
                     </div>
                   </div>
@@ -625,7 +621,7 @@
                   >
                     <div class="relative">
                       <div class="title bg-accent-100 pl-6 py-4 mb-4">
-                        <h3 class="text-white">Upload Image</h3>
+                        <h3 class="text-white"> {{ $t('image.uploadImage') }} </h3>
                       </div>
                       <span
                         @click="closeEditor"
@@ -710,7 +706,7 @@
                                   style="padding: 10px"
                                 />
                               </div>
-                              <p>Undo</p>
+                              <p>{{ $t('image.undo') }}</p>
                             </div>
                             <div
                               class="flex flex-col justify-center items-center"
@@ -733,8 +729,8 @@
                                   style="padding: 10px"
                                 />
                               </div>
-                              <p v-if="!showDraw">Blackout</p>
-                              <p v-else>Done</p>
+                              <p v-if="!showDraw">{{ $t('image.blackout') }}</p>
+                              <p v-else>{{ $t('image.done') }}</p>
                             </div>
                             <div
                               class="flex flex-col justify-center items-center"
@@ -757,8 +753,8 @@
                                   style="padding: 10px"
                                 />
                               </div>
-                              <p v-if="!showCrop">Crop</p>
-                              <p v-else>Done</p>
+                              <p v-if="!showCrop">{{ $t('image.crop') }}</p>
+                              <p v-else>{{ $t('image.done') }}</p>
                             </div>
                           </div>
                           <div class="save-upload flex items-center">
@@ -766,7 +762,7 @@
                               :is-loading="isSavingImage"
                               @click="saveImg"
                             >
-                              Save
+                              {{ $t('image.save') }}
                             </BaseButton>
                           </div>
                         </div>
@@ -781,13 +777,13 @@
                 <BaseInput
                   v-model="hotelRoom"
                   type="text"
-                  label="Location (Ex. Room No., Hotel Area, etc.)"
+                  :label="$t('hotelLocation')"
                 />
               </div>
 
               <!-- Item Description -->
               <div id="manualItemDescription">
-                <label style="font-size:15px;" class="text-gray-500">Enter Item Description <span class="text-red-500">*</span> </label>
+                <label style="font-size:15px;" class="text-gray-500"> {{ $t('enterItemDescription') }} <span class="text-red-500">*</span> </label>
                   <ValidationProvider
                     v-slot="{ errors }"
                     rules="required"
@@ -829,7 +825,7 @@
                   :isRequired="true"
                   v-model="itemStatus"
                   :options="itemStatusOptions"
-                  label="Item Status"
+                  :label="$t('itemStatus')"
                   :class="errors.length > 0 && 'error'"
                 />
               </ValidationProvider>
@@ -846,7 +842,7 @@
                     :isRequired="true"
                     v-model="receiverName"
                     type="text"
-                    label="Receiver's Name"
+                    :label="$t('receiverName')"
                     :class="errors.length > 0 && 'error'"
                   />
                 </ValidationProvider>
@@ -862,7 +858,7 @@
                     :isRequired="true"
                     v-model="receiverEmail"
                     type="email"
-                    label="Receiver's Email"
+                    :label="$t('receiverEmail')"
                     :class="errors.length > 0 && 'error'"
                   />
                   <p
@@ -879,7 +875,7 @@
                     isReceiverMobileNoValid && '!mt-0',
                   ]"
                 >
-                  <div style="font-size:15px;" class="text-gray-500" :class="!isReceiverMobileNoValid && 'text-red-500'">Receiver Mobile Number  <span class="text-red-500">*</span> </div>
+                  <div style="font-size:15px;" class="text-gray-500" :class="!isReceiverMobileNoValid && 'text-red-500'"> {{ $t('receiverMobileNumber') }} <span class="text-red-500">*</span> </div>
                   <vue-tel-input
                     class="
                       relative
@@ -908,7 +904,7 @@
 
               <div class="flex justify-end !mt-12">
                 <BaseButton :is-loading="isLoading" type="submit">
-                  Preview
+                  {{ $t('preview') }}
                 </BaseButton>
               </div>
             </div>
@@ -925,7 +921,7 @@
         :icon="{ name: 'trash-can', color: 'red', size: '3x' }"
         buttonTitle="Yes please!"
         title="Are you sure?"
-        message="Do you want to remove the image!"
+        :message="$t('doYouWantToRemoveTheImage')"
         @close="showDialog= false;"
       >
         <template v-slot:action>
@@ -933,7 +929,7 @@
             class="!capitalize !px-5 !py-2"
             varient="gray"
             @click="showDialog= false; deleteEditable()"
-            >Yes please!
+            > {{ $t('yesPlease') }}
           </BaseButton>
         </template>
       </BaseDialog>
@@ -960,72 +956,72 @@ import VueSimpleSuggest from 'vue-simple-suggest';
 import 'vue-simple-suggest/dist/styles.css';
 
 export default {
+  name: 'Found',
   mixins: [DetectBrowser, ImageEditor, formatMobileNumber, eventListners, scrollToError],
-  data: () => ({
-    venueName: "",
-    isItemDescriptionFocused: false,
-    showResetButton: false,
-    itemDetails: {},
-    showValidateAlert: false,
-    senderFormTitle: "Let’s add few details and leave the rest to us!",
-    foundItemFormTitle: "Found item details",
-    venueEmail: "",
-    venueSecondaryEmail: "",
-    address: "",
-    manualVenue: "",
-    venueType: "",
-    venueOptions: venueOptions,
-    hotelRoom: "",
-    employeeMobileNo: "",
-    foundDate: new Date(),
-    venueManually: false,
-    itemDescription: "",
-    itemDescriptionOptions: [],
-    itemDescriptionResponse: [],
-    packageType: "",
-    packageTypeOptions: ["Box", "Envelope"],
-    weight: "",
-    weightOunces: "",
-    weightOuncesOptions: weightOuncesOptions,
-    itemLength: "",
-    itemWidth: "",
-    itemHeight: "",
-    itemStatus: "",
-    itemStatusOptions: [
-      "Claimed (You know the actual owner of this item)",
-      "Unclaimed (You do not know the actual owner of this item)",
-    ],
-    showReceiverInputs: false,
-    receiverName: "",
-    receiverEmail: "",
-    receiverMobileNo: "",
-    imageRecognitionData: [],
-    isImageValid: true,
-    imageValidationMessage: "",
-    isLoadingRemoveImage: false,
-    foundItemId: "",
-    isLoading: false,
-    isLoadingItemDetails: true,
-    isLoadingEditImage: false,
-    isVenuePhoneValid: true,
-    isEmployeeMobileNoValid: true,
-    isReceiverMobileNoValid: true,
-    isVenuePhoneFormatValid: true,
-    isEmployeeMobileNoFormatValid: true,
-    isReceiverMobileNoFormatValid: true,
-    autoCompleteAddress: {
+  data () {
+    return {
+      venueName: "",
+      isItemDescriptionFocused: false,
+      showResetButton: false,
+      itemDetails: {},
+      showValidateAlert: false,
+      senderFormTitle:'',
+      foundItemFormTitle: '',
+      venueEmail: "",
+      venueSecondaryEmail: "",
       address: "",
-      city: "",
-      state: "",
-      country: "",
-      zipcode: "",
-      phoneNo: "",
-    },
-    venuePhoneValidationMessage: "",
-    employeePhoneValidationMessage: "",
-    receiverPhoneValidationMessage: "",
-    showDialog: false,
-  }),
+      manualVenue: "",
+      venueType: "",
+      venueOptions: venueOptions,
+      hotelRoom: "",
+      employeeMobileNo: "",
+      foundDate: new Date(),
+      venueManually: false,
+      itemDescription: "",
+      itemDescriptionOptions: [],
+      itemDescriptionResponse: [],
+      packageType: "",
+      packageTypeOptions: ["Box", "Envelope"],
+      weight: "",
+      weightOunces: "",
+      weightOuncesOptions: weightOuncesOptions,
+      itemLength: "",
+      itemWidth: "",
+      itemHeight: "",
+      itemStatus: "",
+      itemStatusOptions: [this.$t('claimed'), this.$t('unClaimed')],
+      showReceiverInputs: false,
+      receiverName: "",
+      receiverEmail: "",
+      receiverMobileNo: "",
+      imageRecognitionData: [],
+      isImageValid: true,
+      imageValidationMessage: "",
+      isLoadingRemoveImage: false,
+      foundItemId: "",
+      isLoading: false,
+      isLoadingItemDetails: true,
+      isLoadingEditImage: false,
+      isVenuePhoneValid: true,
+      isEmployeeMobileNoValid: true,
+      isReceiverMobileNoValid: true,
+      isVenuePhoneFormatValid: true,
+      isEmployeeMobileNoFormatValid: true,
+      isReceiverMobileNoFormatValid: true,
+      autoCompleteAddress: {
+        address: "",
+        city: "",
+        state: "",
+        country: "",
+        zipcode: "",
+        phoneNo: "",
+      },
+      venuePhoneValidationMessage: "",
+      employeePhoneValidationMessage: "",
+      receiverPhoneValidationMessage: "",
+      showDialog: false,
+    }
+  },
   components: {
     DatePicker,
     RedactImage,
@@ -1039,24 +1035,24 @@ export default {
     // ...mapGetters("item", ["itemDetails"]),
     venueLabel() {
       if (this.venueType === "Restaurant") {
-        return "Your Restaurant Name";
+        return this.$t('yourRestaurantName');
       } else if (this.venueType === "Hotel") {
-        return "Your Hotel Name";
+        return this.$t('yourHotelName');
       } else if (this.venueType === "Airport") {
-        return "Airport Name or Code";
+        return this.$t('airportNameOrCode');
       } else {
-        return "Venue Address";
+        return this.$t('venueAddress');
       }
     },
     addressTitle() {
       if (this.venueType === "Restaurant") {
-        return "Restaurant Address";
+        return this.$t('restaurantAddress');
       } else if (this.venueType === "Hotel") {
-        return "Hotel Address";
+        return this.$t('hotelAddress');
       } else if (this.venueType === "Airport") {
-        return "Airport Address";
+        return this.$t('airportAddress');
       } else {
-        return "Venue Address";
+        return this.$t('venueAddress');
       }
     },
     autoAddressSelected() {
@@ -1089,8 +1085,8 @@ export default {
       if (this.$route.query.id) {
         this.isLoadingItemDetails = true;
         this.foundItemId = this.$route.query.id;
-        this.senderFormTitle = "Edit details";
-        this.foundItemFormTitle = "Edit found item's details";
+        this.senderFormTitle = this.$t('editDetails');
+        this.foundItemFormTitle = this.$t('editFoundItemDetails');
         this.$axios
           .get("/getsinglelostitem?id=" + this.$route.query.id)
           .then((response) => {
@@ -1126,8 +1122,8 @@ export default {
               this.itemHeight = data.item_height;
               this.itemStatus =
                 data.item_status === 0
-                  ? "Claimed (You know the actual owner of this item)"
-                  : "Unclaimed (You do not know the actual owner of this item)";
+                  ? this.$t('claimed')
+                  : this.$t('unClaimed')
 
               if (data.item_status === 0) {
                 this.receiverName = data.receiver_name;
@@ -1142,8 +1138,8 @@ export default {
           });
       } else if (this.$route.params?.itemDetails) {
         this.isLoadingItemDetails = false;
-        this.senderFormTitle = "Edit details";
-        this.foundItemFormTitle = "Edit found item's details";
+        this.senderFormTitle = this.$t('editDetails');
+        this.foundItemFormTitle = this.$t('editFoundItemDetails');
         let data = this.$route.params.itemDetails;
         var index = this.venueOptions.indexOf(data.venu_type) !== -1;
         if (index) this.venueType = data.venu_type;
@@ -1181,8 +1177,8 @@ export default {
         this.itemHeight = data.item_height;
         this.itemStatus =
           data.item_status === 0
-            ? "Claimed (You know the actual owner of this item)"
-            : "Unclaimed (You do not know the actual owner of this item)";
+            ? this.$t('claimed')
+            : this.$t('unClaimed')
 
         if (data.item_status === 0) {
           this.receiverName = data.receiver_name;
@@ -1193,8 +1189,8 @@ export default {
       } else if (Object.keys(this.itemDetails).length > 0) {
         this.showResetButton = true;
         this.isLoadingItemDetails = false;
-        this.senderFormTitle = "Edit details";
-        this.foundItemFormTitle = "Edit found item's details";
+        this.senderFormTitle = this.$t('editDetails');
+        this.foundItemFormTitle = this.$t('editFoundItemDetails');
         let data = JSON.parse(
           JSON.stringify(this.$store.getters["item/itemDetails"])
         );
@@ -1234,8 +1230,8 @@ export default {
         this.itemHeight = data.item_height;
         this.itemStatus =
           data.item_status === 0
-            ? "Claimed (You know the actual owner of this item)"
-            : "Unclaimed (You do not know the actual owner of this item)";
+            ? this.$t('claimed')
+            : this.$t('unClaimed')
 
         if (data.item_status === 0) {
           this.receiverName = data.receiver_name;
@@ -1245,8 +1241,8 @@ export default {
         this.isLoadingItemDetails = false;
       } else {
         this.isLoadingItemDetails = false;
-        this.senderFormTitle = "Let’s add few details and leave the rest to us!";
-        this.foundItemFormTitle = "Found item's details";
+        this.senderFormTitle = this.$t('addDetails');
+        this.foundItemFormTitle = this.$t('foundItemDetails');
         this.venueType = "";
         this.venueName = "";
         this.hotelRoom = "";
@@ -1384,7 +1380,7 @@ export default {
         } else {
           this.isVenuePhoneFormatValid = false;
           this.isVenuePhoneValid = false;
-          this.venuePhoneValidationMessage = "Please enter valid phone number";
+          this.venuePhoneValidationMessage = this.$t('pleaseEnterValidPhoneNumber');
         }
       }
     },
@@ -1410,8 +1406,7 @@ export default {
         } else {
           this.isEmployeeMobileNoFormatValid = false;
           this.isEmployeeMobileNoValid = false;
-          this.employeePhoneValidationMessage =
-            "Please enter valid phone number";
+          this.employeePhoneValidationMessage = this.$t('pleaseEnterValidMobileNumber');
         }
       }
     },
@@ -1437,8 +1432,7 @@ export default {
         } else {
           this.isReceiverMobileNoFormatValid = false;
           this.isReceiverMobileNoValid = false;
-          this.receiverPhoneValidationMessage =
-            "Please enter valid phone number";
+          this.receiverPhoneValidationMessage = this.$t('pleaseEnterValidMobileNumber');
         }
       }
     },
@@ -1474,14 +1468,9 @@ export default {
     },
     async onSubmit() {
       let itemStatus = "";
-      if (
-        this.itemStatus === "Claimed (You know the actual owner of this item)"
-      ) {
+      if (this.itemStatus === this.$t('claimed')) {
         itemStatus = "Claimed";
-      } else if (
-        this.itemStatus ===
-        "Unclaimed (You do not know the actual owner of this item)"
-      ) {
+      } else if (this.itemStatus === this.$t('unClaimed')) {
         itemStatus = "Unclaimed";
       }
       this.validateVenuePhoneNo();
@@ -1614,8 +1603,7 @@ export default {
           this.imgSrc = await this.process_image(file);
           this.showEditor = true;
         } else {
-          this.imageValidationMessage =
-            "Uploaded file is not supported. Allowed file types: .png, .jpeg, .jpg";
+          this.imageValidationMessage = this.$t('image.fileNotSupported')
           this.isImageValid = false;
           return;
         }
@@ -1712,7 +1700,7 @@ export default {
     },
     itemStatus(newValue, oldValue) {
       if (newValue != oldValue) {
-        if (newValue == "Claimed (You know the actual owner of this item)") {
+        if (newValue == this.$t('claimed')) {
           this.showReceiverInputs = true;
         } else {
           this.showReceiverInputs = false;
