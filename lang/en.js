@@ -59,5 +59,23 @@ export default {
   receiverMobileNumber: "Receiver Mobile Number",
   preview: "Preview",
   doYouWantToRemoveTheImage: "Do you want to remove the image!",
-  yesPlease: "Yes please!"
+  yesPlease: "Yes please!",
+
+  // Lost Items Page
+  addAFoundItem: "+ ADD A FOUND ITEM",
+  filters: "Filters",
+  location: "Location",
+  itemDescription: "Item Description",
+  dateWhenLost: "Date when lost?",
+  startDate: "Start date",
+  endDate: "End date",
+  filtersApplied: "Filters Applied",
+  applyFilters: "Apply Filters",
+  clear: "Clear",
+  searchResults: "Search Results",
+  search: "Search",
+  claimItem: "Claim Item",
+  noItemFound: "No Item Found",
+
+
 }

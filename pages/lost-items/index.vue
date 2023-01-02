@@ -18,12 +18,12 @@
           class="sm:ml-2 grow mt-3 sm:mt-0 sm:grow-0"
           @click="addNewItem"
         >
-          + ADD A FOUND ITEM
+          {{ $t('addAFoundItem') }}
         </BaseButton>
       </div>
 
       <!-- Filter Panel -->
-      <BaseHeader class="text-left" varient="h5">Filters:</BaseHeader>
+      <BaseHeader class="text-left" varient="h5">{{ $t('filters') }}:</BaseHeader>
       <div class="flex flex-col gap-3">
         <div class="align-middle inline-block w-full">
           <!-- Location -->
@@ -33,7 +33,7 @@
               id="autocomplete-lost-items"
               type="text"
               placeholder=""
-              label="Location"
+              :label="$t('location')"
               class="w-full"
               @input="getAddress"
             >
@@ -71,18 +71,17 @@
               <BaseSelect
                 v-model="itemDescription"
                 :options="itemDescriptionOptions"
-                label="Item Description"
+                :label="$t('itemDescription')"
               />
             </div>
             <div class="w-full flex flex-col mt-3 sm:mt-0 md:w-1/3">
-              <label
-                class="block text-md font-medium text-gray-800 text-left"
-                >Date when lost?</label
-              >
+              <label class="block text-md font-medium text-gray-800 text-left">
+                {{ $t('dateWhenLost') }}
+              </label>
               <div class="w-full flex flex-auto gap-4">
                 <client-only>
                   <date-picker
-                    placeholder="Start date"
+                    :placeholder="$t('startDate')"
                     v-model="startDate"
                     :disabled-date="disableStartDate"
                     format="MM-DD-YYYY"
@@ -90,7 +89,7 @@
                 </client-only>
                 <client-only>
                   <date-picker
-                    placeholder="End date"
+                    :placeholder="$t('endDate')"
                     v-model="endDate"
                     :disabled-date="disableEndDate"
                     format="MM-DD-YYYY"
@@ -131,13 +130,13 @@
                 :varient="isFilterApplied ? 'green' : 'blue'"
                 @click="applyFilters"
               >
-                {{ isFilterApplied ? "Filters Applied" : "Apply Filters" }}
+                {{ isFilterApplied ? $t('filtersApplied') : $t('applyFilters') }}
               </BaseButton>
               <BaseButton
                 @click="clearFilters"
                 varient="gray"
                 class="!bg-white !px-4 !h-12 !py-2 mr-1 mb-1 !capitalize"
-                >Clear</BaseButton
+                >{{ $t('clear') }}</BaseButton
               >
             </div>
           </div>
@@ -258,7 +257,7 @@
           mb-5
         "
       >
-        <BaseHeader class="text-left" varient="h4">Search Results ({{ lostItems.length }})</BaseHeader>
+        <BaseHeader class="text-left" varient="h4">{{ $t('searchResults') }} ({{ lostItems.length }})</BaseHeader>
       </div>
 
       <div class="flex flex-col gap-3">
@@ -293,7 +292,7 @@
                     outline-none
                   "
                   type="text"
-                  placeholder="Search"
+                  :placeholder="$t('search')"
                 />
                 <BaseIcon
                   v-if="!searchQuery"
@@ -325,12 +324,12 @@
             varient="secondary"
             @click.stop="claimItem(item)"
           >
-            Claim Item
+            {{ $t('claimItem') }}
           </BaseButton>
         </ItemCard>
       </div>
       <div v-else-if="!isLoading && lostItems.length === 0">
-        <p class="text-gray-600 font-medium m-14">No Result Found</p>
+        <p class="text-gray-600 font-medium m-14">{{ $t('noItemFound') }}</p>
       </div>
       <div v-else>
         <BaseLoader />
@@ -346,6 +345,7 @@ import moment from "moment";
 import DetectBrowser from "~/mixins/detectBrowser";
 import ItemCard from "../../components/shared/ItemCard.vue";
 export default {
+  name: 'LostItems',
   components: { DatePicker, ItemCard },
   mixins: [DetectBrowser],
   data() {
@@ -492,17 +492,17 @@ export default {
         item.id
       );
       this.$nextTick(() => {
-        this.$router.push({
-          name: "detail-confirmation",
-          query: { preview: "claim" },
-        });
+        this.$router.push(this.localeLocation({ 
+          name: 'detail-confirmation', 
+          query: { preview: "claim" }
+        }))
       });
     },
     claimItem(item) {
-      this.$router.push({
-        name: "claim-item",
-        params: { item: item },
-      });
+      this.$router.push(this.localeLocation({ 
+        name: 'claim-item', 
+        params: { item: item }
+      }))
     },
     getAddress() {
       if (this.address == "") {
