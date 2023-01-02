@@ -761,8 +761,8 @@ export default {
           this.itemDetails.venue_phone_no
         );
         params_rateQuotes.toname = this.receiverName;
-        params_rateQuotes.tocompany = this.receiverCompany;
-        params_rateQuotes.tostreet1 = this.autoCompleteAddress.address;
+        params_rateQuotes.tocompany = this.autoCompleteAddress.address;
+        params_rateQuotes.tostreet1 = this.autoCompleteAddress.addressLine2 || this.autoCompleteAddress.address;
         params_rateQuotes.tocity = this.autoCompleteAddress.city;
         params_rateQuotes.tostate = this.autoCompleteAddress.state;
         params_rateQuotes.tozip = this.autoCompleteAddress.zipcode;

@@ -19,29 +19,16 @@
                 {{ fromZip }}
               </p>
             </div>
-            <ValidationProvider
-              v-slot="{ errors }"
-              rules="required"
-              class="block"
-            >
+            <div class="block">
               <BaseInput
                 v-model="reference"
-                :isRequired="true"
                 type="text"
                 label="Reference"
-                :class="errors.length > 0 && 'error'"
               />
-            </ValidationProvider>
-            <ValidationProvider
-              v-slot="{ errors }"
-              rules="required"
-              class="block"
-            >
-              <div
-                class="text-gray-500"
-                :class="errors.length > 0 && 'text-red-500'"
-              >
-                Add instructions <span class="text-red-500">*</span>
+            </div>
+            <div class="block">
+              <div class="text-gray-500">
+                Add instructions
               </div>
               <textarea
                 v-model="instructions"
@@ -60,12 +47,8 @@
                   transition-shadow
                   text-gray-700
                 "
-                :class="
-                  errors.length > 0 &&
-                  'border-red-500 border-2 ring-4 ring-red-500 ring-opacity-10 rounded-lg  transition-none'
-                "
               ></textarea>
-            </ValidationProvider>
+            </div>
             <ValidationProvider
               v-slot="{ errors }"
               rules="required"
@@ -167,14 +150,14 @@ export default {
             let params = {
               address: this.fromAddressId,
               shipment: this.shipmentId,
-              reference: this.reference,
+              reference: this.reference || "test",
               min_datetime: moment(this.dateTimeRange[0]).format(
                 "YYYY-MM-DD HH:mm:ss"
               ),
               max_datetime: moment(this.dateTimeRange[1]).format(
                 "YYYY-MM-DD HH:mm:ss"
               ),
-              instructions: this.instructions,
+              instructions: this.instructions || "test",
               id: this.itemId,
             };
             let response = await this.$axios.post("/schedulePickup", params);

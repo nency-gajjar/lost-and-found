@@ -473,7 +473,7 @@ export default {
                           service_provider:
                             this.checkoutDetail.selectedRate.carrier,
                           scheduled_pickup: false,
-                          tracking_id: response.data.tracking_id
+                          tracking_id: response.data.tracking_number
                         }
                       )
                       .then((response) => {
