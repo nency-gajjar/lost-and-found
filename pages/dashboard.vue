@@ -162,9 +162,9 @@ export default {
             this.isLoading = false;
             this.dashboardDetails = response?.data?.data || [];
 
-            this.tabs[0].data = this.pendingListDetails
+            this.tabs[0].data = this.pendingListDetails.reverse()
             this.dashboardDetails.forEach((detail, index) => {
-              for (const key in detail)  this.tabs[index+1].data = detail[key]
+              for (const key in detail)  this.tabs[index+1].data = detail[key].reverse()
             });
           }
         })
