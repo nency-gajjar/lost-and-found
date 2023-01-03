@@ -139,18 +139,6 @@
                   <tr class="l-2">
                     <td>
                       <div class="text-left text-gray-600 font-medium">
-                        Package Type
-                      </div>
-                    </td>
-                    <td>
-                      <div class="text-gray-600 text-left">
-                        {{ itemDetails.package_type }}
-                      </div>
-                    </td>
-                  </tr>
-                  <tr class="l-2">
-                    <td>
-                      <div class="text-left text-gray-600 font-medium">
                         Item Status
                       </div>
                     </td>

@@ -115,7 +115,6 @@
           <div class="flex foundItemContainer">
             <div class="flex flex-col grow">
               <RawCard title="Item Description" :value="itemDetails.item_description" />
-              <RawCard title="Package Type" :value="itemDetails.package_type" />
               <RawCard title="Item Status" :value="itemDetails.item_status === 0 ? 'Claimed' : 'Unclaimed'" />
               <template v-if="itemDetails.item_status === 0">
                 <RawCard title="Receiver's Name" :value="itemDetails.receiver_name" />

@@ -46,7 +46,7 @@
             <div class="sm:p-6 p-4 space-y-4">
               <div class="form-title">
                 <div class="w-full">
-                  <div class="flex flex-col justify-between">
+                  <div class="flex justify-between">
                     <BaseHeader varient="gray">{{ senderFormTitle }}</BaseHeader>
                     <div v-if="showResetButton">
                       <BaseButton @click="resetItemDetailsStore">
@@ -383,6 +383,16 @@
                 </client-only>
               </ValidationProvider>
 
+              <!-- Hotel room -->
+              <div v-if="venueType === 'Hotel'" class="block">
+                <BaseInput
+                  @focus="scrollToFocused"
+                  v-model="hotelRoom"
+                  type="text"
+                  label="Location (Ex. Room No., Hotel Area, etc.)"
+                />
+              </div>
+              
               <div class="block">
                 <label style="font-size:15px;" class="text-gray-500"
                   >Found Item Image</label
@@ -786,16 +796,6 @@
                 </div>
               </div>
 
-              <!-- Hotel room -->
-              <div v-if="venueType === 'Hotel'" class="block">
-                <BaseInput
-                  @focus="scrollToFocused"
-                  v-model="hotelRoom"
-                  type="text"
-                  label="Location (Ex. Room No., Hotel Area, etc.)"
-                />
-              </div>
-
               <!-- Item Description -->
               <div id="manualItemDescription">
                 <label style="font-size:15px;" class="text-gray-500">Enter Item Description <span class="text-red-500">*</span> </label>
@@ -815,22 +815,6 @@
                     </div>
                   </ValidationProvider>
               </div>
-
-              <!-- Package Type -->
-              <ValidationProvider
-                v-slot="{ errors }"
-                rules="required"
-                class="block"
-              >
-                <BaseSelect
-                  :isRequired="true"
-                  @focus="scrollToFocused"
-                  v-model="packageType"
-                  :options="packageTypeOptions"
-                  label="Package Type"
-                  :class="errors.length > 0 && 'error'"
-                />
-              </ValidationProvider>
 
               <!-- Item Status -->
               <ValidationProvider
@@ -997,8 +981,7 @@ export default {
     itemDescription: "",
     itemDescriptionOptions: [],
     itemDescriptionResponse: [],
-    packageType: "",
-    packageTypeOptions: ["Box", "Envelope"],
+    packageType: "Box",
     weight: "",
     weightOunces: "",
     weightOuncesOptions: weightOuncesOptions,
