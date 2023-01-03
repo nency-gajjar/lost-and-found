@@ -29,14 +29,14 @@ module.exports = {
           60: '#2e9705c9',
         },
         accent: {
-          200: '#970584', // we use this on hover primary button
-          100: '#970584ba',
-          80: '#97058482',
-          60: '#97058482',
-          20: '#97058429',
+          200: '#153f5e', // we use this on hover primary button
+          100: '#153f5ed9',
+          80: '#153f5ec4',
+          60: '#153f5eab',
+          20: '#153f5e80',
         },
         orange: {
-          200: '#970584ba'
+          200: '#153f5ed9'
         },
       }
     }

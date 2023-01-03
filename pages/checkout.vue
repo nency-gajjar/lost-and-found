@@ -392,7 +392,7 @@ export default {
       return `${data?.length}x${data?.width}x${data?.height}`;
     },
     packageWeightString() {
-      return `${this.checkoutDetail?.lableDetails?.weight} lbs`;
+      return `${this.checkoutDetail?.lableDetails?.weight} OZ`;
     },
     fromAddressString() {
       return `from ${this.checkoutDetail?.lableDetails?.city}`;

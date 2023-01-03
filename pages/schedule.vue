@@ -52,7 +52,7 @@
             <ValidationProvider
               v-slot="{ errors }"
               rules="required"
-              class="block !mt-1"
+              class="block"
             >
               <label
                 class="block text-md !mt-0 text-gray-500"

@@ -441,7 +441,7 @@ td {
   color: rgb(38 38 38 / var(--tw-text-opacity));
 }
 .text-accent-100 {
-  color: #970584ba;
+  color: #153f5ed9;
 }
 .border-solid {
   border-style: solid;

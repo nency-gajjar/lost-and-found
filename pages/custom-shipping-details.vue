@@ -40,7 +40,7 @@
             </ValidationProvider>
 
             <!-- Contents Explanation -->
-            <div class="block !mt-10">
+            <div class="block">
               <textarea
                 v-model="contentsExplanation"
                 placeholder="Contents Explanation (Optional)"

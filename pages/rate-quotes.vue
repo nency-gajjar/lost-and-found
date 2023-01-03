@@ -417,7 +417,7 @@
               </div>
               <div class="flex justify-between text-sm leading-6">
                 <p>Weight</p>
-                <p>{{ lableDetails.weight }} LBS</p>
+                <p>{{ lableDetails.weight }} OZ</p>
               </div>
               <div v-if="lableDetails.insuranceValue" class="flex justify-between text-sm leading-6">
                 <p>Insurance Charges</p>

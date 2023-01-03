@@ -112,7 +112,7 @@
                   <template v-slot:icon>
                     <div
                       v-if="address"
-                      class="absolute inset-y-0 top-7 right-1 bg-white flex items-center p-5"
+                      class="absolute bg-white bottom-13-px right-1 pr-5"
                     >
                       <BaseIcon
                         icon="xmark"
@@ -122,7 +122,7 @@
                     </div>
                     <div
                       v-else
-                      class="absolute inset-y-0 top-7 right-0 flex items-center p-5"
+                      class="absolute bottom-13-px right-0 pr-5"
                     >
                       <BaseIcon icon="location-arrow" color="lightgray" />
                     </div>
@@ -177,7 +177,6 @@
               <div
                 class="block box-content h-12"
                 :class="[
-                  isEmployeeMobileNoValid && '!mt-0',
                   !isEmployeeMobileNoValid && 'error'
                 ]"
               >
@@ -305,7 +304,7 @@
                 </ValidationProvider>
               </div>
 
-              <div class="grid lg:grid-cols-2 lg:gap-4 gap-0 !mt-0">
+              <div class="grid lg:grid-cols-2 gap-4">
                 <!-- Country -->
                 <ValidationProvider
                   v-slot="{ errors }"
@@ -821,7 +820,7 @@
               <ValidationProvider
                 v-slot="{ errors }"
                 rules="required"
-                class="block !mt-2"
+                class="block"
               >
                 <BaseSelect
                   :isRequired="true"
@@ -893,7 +892,6 @@
                   class="block relative box-content h-12"
                   :class="[
                     !isReceiverMobileNoValid && 'error',
-                    isReceiverMobileNoValid && '!mt-0',
                   ]"
                 >
                   <div style="font-size:15px;" class="text-gray-500" :class="!isReceiverMobileNoValid && 'text-red-500'">Receiver Mobile Number  <span class="text-red-500">*</span> </div>
@@ -1747,6 +1745,12 @@ export default {
   },
 };
 </script>
+
+<style scoped>
+.bottom-13-px{
+  bottom: 13px;
+}
+</style>
 
 <style lang="scss">
 @import "./assets/styles/date-picker.scss";

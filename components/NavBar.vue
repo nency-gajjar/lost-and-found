@@ -6,7 +6,8 @@
           <div class="menu-left flex items-center">
             <div class="logo-container">
               <NuxtLink to="/" class="logo">
-                <img class="nav-logo" src="../assets/images/found-shelf-icon.svg" alt="Found Shelf">
+                <img v-if="!mobileDevice" class="nav-logo" src="../assets/images/found-shelf-icon.svg" alt="Found Shelf">
+                <img v-else class="nav-logo" src="../assets/images/mobile-logo.svg" alt="Found Shelf">
               </NuxtLink>
             </div>
             <div v-if="isAdminLogin" class="link-container">
@@ -146,7 +147,7 @@ export default {
 
 <style lang="scss" scoped>
 .nav-logo{
-  width: 80px;
+  width: 130px;
 }
 
 .appbar-container {
@@ -165,7 +166,7 @@ export default {
   }
 
   .menu {
-    @apply md:px-4 md:py-2 text-gray-500 rounded-lg font-medium;
+    @apply md:px-4 md:py-4 py-2 text-gray-500 rounded-lg font-medium;
 
     &.nuxt-link-exact-active {
       @apply bg-accent-20 text-accent-200;
@@ -202,7 +203,7 @@ export default {
   .logo {
     @apply py-2;
     .nav-logo {
-      width: 70px;
+      width: 120px;
     }
   }
 
@@ -228,6 +229,24 @@ export default {
   .addBtn {
     padding-left: 10px !important;
     padding-right: 10px !important;
+  }
+}
+
+@media screen and (max-width: 348px) {
+  .logo {
+    @apply py-2;
+    .nav-logo {
+      width: 100px;
+    }
+  }
+}
+
+@media screen and (max-width: 330px) {
+  .logo {
+    @apply py-2;
+    .nav-logo {
+      width: 70px;
+    }
   }
 }
 

@@ -159,7 +159,46 @@ export default {
         this.labelWidth = 180;
       }
     }
-    if (this.$store.getters["shipment/itemId"]) {
+    if(this.$route.query.id){
+      this.$axios
+        .get("/getsinglelostitem?id=" + this.$route.query.id)
+        .then(async (response) => {
+          this.itemDetails = response.data.data.Item;
+          let img = await this.getImgData(this.itemDetails.label_url)
+          if(img.naturalWidth < img.naturalHeight){
+            this.rotateCss = `
+              -webkit-transform:rotate(270deg);  
+              -moz-transform: rotate(270deg);  
+              -ms-transform: rotate(270deg);  
+              -o-transform: rotate(270deg);  
+              transform: rotate(270deg);`;
+          }
+          if(this.itemDetails.service_provider === "UPS"){
+            this.labelWidth = 309;
+          }
+          else if(this.itemDetails.service_provider === "DHLExpress"){
+            this.labelWidth = 180;
+          }
+          if (this.itemDetails.image) {
+            const data = await fetch(this.itemDetails.image, { cache: "no-cache" });
+            const blob = await data.blob();
+            this.itemImg = await this.image_to_base64(blob);
+          }
+
+          if (this.itemDetails.label_url) {
+            const data = await fetch(this.itemDetails.label_url, { cache: "no-cache" });
+            const blob = await data.blob();
+            this.labelImg = await this.image_to_base64(blob);
+          }
+          if(this.$route.query.download) {
+            this.printLabel();
+          }
+        })
+        .catch((error) => {
+          console.log(error);
+        });
+    }
+    else if(this.$store.getters["shipment/itemId"]) {
       this.itemId = JSON.parse(
         JSON.stringify(this.$store.getters["shipment/itemId"])
       );
@@ -301,7 +340,7 @@ export default {
             margin-top: 10px;
           }
           .text-accent-100 {
-            color: #970584ba;
+            color: #153f5ed9;
           }
           .text-gray-600 {
             color: rgb(82 82 82);

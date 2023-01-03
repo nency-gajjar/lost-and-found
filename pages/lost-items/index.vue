@@ -40,13 +40,13 @@
               <template v-slot:icon>
                 <div
                   v-if="address"
-                  class="absolute bg-white inset-y-0 top-7 right-1 flex items-center p-5"
+                  class="absolute bg-white bottom-13-px right-1 pr-5"
                 >
                   <BaseIcon @click="clearAddress" icon="xmark" color="gray" />
                 </div>
                 <div
                   v-else
-                  class="absolute inset-y-0 top-7 right-0 flex items-center p-5"
+                  class="absolute bottom-13-px right-0 pr-5"
                 >
                   <BaseIcon icon="location-arrow" color="lightgray" />
                 </div>
@@ -108,7 +108,6 @@
                 md:mt-0 md:w-2/12
                 flex-auto
                 gap-2
-                pb-1
               "
             >
               <BaseButton
@@ -125,7 +124,6 @@
                   !inline-flex
                   !items-center
                   mr-1
-                  mb-1
                   !h-12
                 "
                 :varient="isFilterApplied ? 'green' : 'blue'"
@@ -136,7 +134,7 @@
               <BaseButton
                 @click="clearFilters"
                 varient="gray"
-                class="!bg-white !px-4 !h-12 !py-2 mr-1 mb-1 !capitalize"
+                class="!bg-white !px-4 !h-12 !py-2 mr-1 !capitalize"
                 >Clear</BaseButton
               >
             </div>
@@ -620,5 +618,9 @@ export default {
 
 .wrapper {
   @apply flex flex-col justify-start pt-0 items-center text-center mx-auto;
+}
+
+.bottom-13-px{
+  bottom: 13px;
 }
 </style>

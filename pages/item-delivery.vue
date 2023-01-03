@@ -212,7 +212,7 @@
               </ValidationProvider>
               <div>
                 <div
-                  class="block !mb-8 relative box-content h-12 w-full"
+                  class="block relative box-content w-full"
                   :class="!isUserPhoneValid && 'error'"
                 >
                   <label class="text-gray-500" :class="!isUserPhoneValid && 'text-red-500'"
@@ -226,7 +226,7 @@
                       border-gray-300
                       w-full
                       rounded-lg
-                      h-full
+                      h-12
                     "
                     v-model="receiverMobileNo"
                     @blur="validateUserPhone"
@@ -244,7 +244,7 @@
               <ValidationProvider
                 v-slot="{ errors }"
                 :rules="deliveryType === '0' ? 'required' : ''"
-                class="block !mt-2"
+                class="block"
               >
                 <BaseInput
                   :isRequired="true"
@@ -259,7 +259,7 @@
                   <template v-slot:icon>
                     <div
                       v-if="autoCompleteAddress.address"
-                      class="absolute bg-white inset-y-0 top-7 right-1 flex items-center p-5"
+                      class="absolute bg-white bottom-13-px right-1 pr-5"
                     >
                       <BaseIcon
                         @click="clearAddress"
@@ -269,7 +269,7 @@
                     </div>
                     <div
                       v-else
-                      class="absolute inset-y-0 top-7 right-0 flex items-center p-5"
+                      class="absolute bottom-13-px right-0 pr-5"
                     >
                       <BaseIcon icon="location-arrow" color="lightgray" />
                     </div>
@@ -436,7 +436,7 @@
               <ValidationProvider
                 v-slot="{ errors }"
                 rules="required"
-                class="block mb-4 mt-2"
+                class="block mb-4"
               >
                 <label class="text-gray-500" :class="errors.length > 0 && 'text-red-500'"
                   >Expected Pickup Date <span class="text-red-500">*</span> </label
@@ -656,6 +656,9 @@ export default {
         let address = autocomplete.getPlace();
         this.receiverCompany = address.name;
         this.autoCompleteAddress.address = address.name;
+        let addressLineArr = address.vicinity.split(",");
+        addressLineArr.pop();
+        this.autoCompleteAddress.addressLine2 = addressLineArr.join();
 
         address.address_components.forEach((component) => {
           component.types.forEach((type) => {
@@ -761,7 +764,12 @@ export default {
           this.itemDetails.venue_phone_no
         );
         params_rateQuotes.toname = this.receiverName;
-        params_rateQuotes.tocompany = this.autoCompleteAddress.address;
+        if(this.autoCompleteAddress.address.length >= 44){
+          params_rateQuotes.tocompany = this.autoCompleteAddress.address.substring(0, 43);
+        }
+        else{
+          params_rateQuotes.tocompany = this.autoCompleteAddress.address;
+        }
         params_rateQuotes.tostreet1 = this.autoCompleteAddress.addressLine2 || this.autoCompleteAddress.address;
         params_rateQuotes.tocity = this.autoCompleteAddress.city;
         params_rateQuotes.tostate = this.autoCompleteAddress.state;
@@ -773,7 +781,12 @@ export default {
         params_rateQuotes.length = Number(this.itemDetails.item_length);
         params_rateQuotes.width = Number(this.itemDetails.item_width);
         params_rateQuotes.height = Number(this.itemDetails.item_height);
-        params_rateQuotes.weight = Number(this.itemDetails.weight_pounds);
+        if(this.itemDetails.weight_ounces > 0){
+          params_rateQuotes.weight = Number(this.itemDetails.weight_ounces);
+        }
+        else{
+          params_rateQuotes.weight = Number((Number(this.itemDetails.weight_pounds) * 16).toFixed(1));
+        }
         params_rateQuotes.residential = !this.commercialAddress;
       }
       if (this.deliveryType === "1") {
@@ -890,5 +903,9 @@ export default {
 
 .w-250-px {
   width: 200px;
+}
+
+.bottom-13-px {
+  bottom: 13px;
 }
 </style>
