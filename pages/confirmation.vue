@@ -4,7 +4,7 @@
       <div
         class="
           card
-          w-12/12
+          w-full
           mx-4
           md:mx-auto 
           lg:w-6/12
@@ -47,16 +47,11 @@
                   <img :src="itemDetails.link" alt="" />
                 </div>
                 <div class="px-6 flex items-center justify-center">
-                  <BaseIcon
-                    icon="circle-info"
-                    color="gray"
-                    style="max-width: 15px"
-                  />
-                  <p class="pl-2 font-medium text-gray-700">Scan this QR code to edit the details of this item.</p>
+                  <p class="pl-2 font-medium text-gray-600 l-2">Scan this QR code to edit the details of this item.</p>
                 </div>
               </td>
             </tr>
-            <tr class="border-b">
+            <tr>
               <td class="px-6 py-4">
                 <table width="100%">
                   <tr>
@@ -71,14 +66,6 @@
                       >
                         Sender's Details:
                       </h2>
-                      <span
-                        class="
-                          w-20
-                          border-t-4 border-solid border-gray-300
-                          inline-block
-                          mb-1
-                        "
-                      ></span>
                     </td>
                   </tr>
                   <tr class="l-2">
@@ -120,7 +107,7 @@
                 </table>
               </td>
             </tr>
-            <tr class="img-row border-b flex justify-between items-center">
+            <tr class="flex justify-between items-center">
               <td class="px-6 py-4 w-full-imp">
                 <table width="100%" cellspacing="0" cellpadding="0">
                   <tr>
@@ -135,14 +122,6 @@
                       >
                         Found Item's Details:
                       </h2>
-                      <span
-                        class="
-                          w-20
-                          border-t-4 border-solid border-gray-300
-                          inline-block
-                          mb-1
-                        "
-                      ></span>
                     </td>
                   </tr>
                   <tr class="l-2">
@@ -370,14 +349,14 @@ export default {
 
       if (mobile || android) {
         this.$html2pdf(document.getElementById("printMe"), {
-          margin: 1,
           filename: "Item-Details.pdf",
           image: { type: "jpg", quality: 0.98 },
           html2canvas: {
             dpi: 300,
             scale: 1,
             letterRendering: true,
-            useCORS: true
+            useCORS: true,
+            windowWidth: 1024
           },
           jsPDF: { unit: "in", format: "letter", orientation: "portrait" },
         });
@@ -393,7 +372,7 @@ export default {
   width: 80px;
 }
 tr td:first-child {
-  width: 200px;
+  width: 250px;
 }
 .w-full-imp{
   width: 100% !important;
@@ -413,9 +392,6 @@ tr td:first-child {
 .text-center {
   text-align: center;
 }
-.mt-70-px {
-  margin-top: 70px;
-}
 th,
 td {
   overflow: hidden;
@@ -431,16 +407,13 @@ td {
 .pt-3 {
   padding-top: 0.75rem;
 }
-.pr-6 {
-  padding-right: 1.5rem;
-}
 .px-3 {
   padding-left: 0.75rem;
   padding-right: 0.75rem;
 }
 .py-4 {
-  padding-top: 1rem;
-  padding-bottom: 1rem;
+  padding-top: 0.5rem;
+  padding-bottom: 0.5rem;
 }
 .px-6 {
   padding-left: 1.5rem;
@@ -470,12 +443,6 @@ td {
 .text-accent-100 {
   color: #970584ba;
 }
-.border-b {
-  border-bottom-width: 1px;
-}
-.border-t-4 {
-  border-top-width: 4px;
-}
 .border-solid {
   border-style: solid;
 }
@@ -494,9 +461,6 @@ td {
 .font-medium {
   font-weight: 500;
 }
-.h-40 {
-  height: 10rem;
-}
 .l-2 {
   line-height: 2;
 }
@@ -513,44 +477,15 @@ td {
   margin-bottom: 0.25rem;
 }
 
-.item-img-container {
-  max-width: 450px;
-  margin-top: 1.25rem;
-  margin-left: auto;
-  margin-right: auto;
-}
-
-.img-row {
-  @apply flex-row;
-}
-
-@media (max-width: 1189px) {
-  .img-row {
-    @apply flex-col;
-  }
-}
-
-@media (max-width: 1023px) {
-  .img-row {
-    @apply flex-row;
-  }
-}
-
-@media (max-width: 620px) {
-  .img-row {
-    @apply flex-col;
-  }
-}
-
 @media (min-width: 640px) {
   .sm\:w-40 {
     width: 10rem;
   }
 }
 
-@media (max-width: 640px) {
-  .mt-70-px {
-    margin-top: 0px;
+@media (max-width: 475px) {
+ .pr-6 {
+    padding-right: 0rem;
   }
 }
 
