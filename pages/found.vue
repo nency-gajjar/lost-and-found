@@ -383,6 +383,16 @@
                 </client-only>
               </ValidationProvider>
 
+              <!-- Hotel room -->
+              <div v-if="venueType === 'Hotel'" class="block">
+                <BaseInput
+                  @focus="scrollToFocused"
+                  v-model="hotelRoom"
+                  type="text"
+                  label="Location (Ex. Room No., Hotel Area, etc.)"
+                />
+              </div>
+              
               <div class="block">
                 <label style="font-size:15px;" class="text-gray-500"
                   >Found Item Image</label
@@ -784,16 +794,6 @@
                     </div>
                   </div>
                 </div>
-              </div>
-
-              <!-- Hotel room -->
-              <div v-if="venueType === 'Hotel'" class="block">
-                <BaseInput
-                  @focus="scrollToFocused"
-                  v-model="hotelRoom"
-                  type="text"
-                  label="Location (Ex. Room No., Hotel Area, etc.)"
-                />
               </div>
 
               <!-- Item Description -->
