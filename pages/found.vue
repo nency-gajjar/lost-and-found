@@ -66,6 +66,7 @@
               >
                 <BaseSelect
                   :isRequired="true"
+                  @focus="scrollToFocused"
                   v-model="venueType"
                   :options="venueOptions"
                   label="Your Affiliation"
@@ -82,6 +83,7 @@
               >
                 <BaseInput
                   :isRequired="true"
+                  @focus="scrollToFocused"
                   v-model="manualVenue"
                   type="text"
                   label="Type manually"
@@ -97,6 +99,7 @@
               >
                 <BaseInput
                   :isRequired="true"
+                  @focus="scrollToFocused"
                   v-model="address"
                   id="autocomplete"
                   type="text"
@@ -109,7 +112,7 @@
                   <template v-slot:icon>
                     <div
                       v-if="address"
-                      class="absolute inset-y-0 top-7 right-1 bg-white flex items-center p-5"
+                      class="absolute bg-white bottom-13-px right-1 pr-5"
                     >
                       <BaseIcon
                         icon="xmark"
@@ -119,7 +122,7 @@
                     </div>
                     <div
                       v-else
-                      class="absolute inset-y-0 top-7 right-0 flex items-center p-5"
+                      class="absolute bottom-13-px right-0 pr-5"
                     >
                       <BaseIcon icon="location-arrow" color="lightgray" />
                     </div>
@@ -136,6 +139,7 @@
               >
                 <BaseInput
                   v-model="venueEmail"
+                  @focus="scrollToFocused"
                   :isRequired="true"
                   type="email"
                   label="Your Email"
@@ -158,6 +162,7 @@
               >
                 <BaseInput
                   v-model="venueSecondaryEmail"
+                  @focus="scrollToFocused"
                   type="email"
                   label="Secondary Email (Optional)"
                   :class="errors.length > 0 && 'error'"
@@ -172,7 +177,6 @@
               <div
                 class="block box-content h-12"
                 :class="[
-                  isEmployeeMobileNoValid && '!mt-0',
                   !isEmployeeMobileNoValid && 'error'
                 ]"
               >
@@ -230,6 +234,7 @@
                 class="block"
               >
                 <BaseInput
+                  @focus="scrollToFocused"
                   v-model="autoCompleteAddress.address"
                   label="Address"
                   type="text"
@@ -248,6 +253,7 @@
                 >
                   <BaseInput
                     v-model="autoCompleteAddress.city"
+                    @focus="scrollToFocused"
                     label="City"
                     type="text"
                     :class="{
@@ -264,6 +270,7 @@
                 >
                   <BaseInput
                     v-model="autoCompleteAddress.state"
+                    @focus="scrollToFocused"
                     label="State"
                     type="text"
                     :class="{
@@ -281,6 +288,7 @@
                 >
                   <BaseInput
                     v-model="autoCompleteAddress.zipcode"
+                    @focus="scrollToFocused"
                     label="Zipcode"
                     type="text"
                     :class="{
@@ -296,7 +304,7 @@
                 </ValidationProvider>
               </div>
 
-              <div class="grid lg:grid-cols-2 lg:gap-4 gap-0 !mt-0">
+              <div class="grid lg:grid-cols-2 gap-4">
                 <!-- Country -->
                 <ValidationProvider
                   v-slot="{ errors }"
@@ -305,6 +313,7 @@
                 >
                   <BaseInput
                     v-model="autoCompleteAddress.country"
+                    @focus="scrollToFocused"
                     label="Country"
                     type="text"
                     :class="{
@@ -365,6 +374,7 @@
                 <client-only>
                   <div :class="errors.length && 'error'">
                     <date-picker
+                      @focus="scrollToFocused"
                       v-model="foundDate"
                       :disabled-date="disableStartDate"
                       format="MM-DD-YYYY"
@@ -779,6 +789,7 @@
               <!-- Hotel room -->
               <div v-if="venueType === 'Hotel'" class="block">
                 <BaseInput
+                  @focus="scrollToFocused"
                   v-model="hotelRoom"
                   type="text"
                   label="Location (Ex. Room No., Hotel Area, etc.)"
@@ -795,6 +806,7 @@
                   >
                     <div :class="errors.length > 0 && isItemDescriptionFocused && 'error'">
                       <vue-simple-suggest
+                        @focus="scrollToFocused"
                         @blur="isItemDescriptionFocused = true"
                         v-model="itemDescription"
                         :list="itemDescriptionOptions"
@@ -808,10 +820,11 @@
               <ValidationProvider
                 v-slot="{ errors }"
                 rules="required"
-                class="block !mt-2"
+                class="block"
               >
                 <BaseSelect
                   :isRequired="true"
+                  @focus="scrollToFocused"
                   v-model="packageType"
                   :options="packageTypeOptions"
                   label="Package Type"
@@ -827,6 +840,7 @@
               >
                 <BaseSelect
                   :isRequired="true"
+                  @focus="scrollToFocused"
                   v-model="itemStatus"
                   :options="itemStatusOptions"
                   label="Item Status"
@@ -843,6 +857,7 @@
                   class="block"
                 >
                   <BaseInput
+                    @focus="scrollToFocused"
                     :isRequired="true"
                     v-model="receiverName"
                     type="text"
@@ -859,6 +874,7 @@
                   name="Receiver's Email"
                 >
                   <BaseInput
+                    @focus="scrollToFocused"
                     :isRequired="true"
                     v-model="receiverEmail"
                     type="email"
@@ -876,7 +892,6 @@
                   class="block relative box-content h-12"
                   :class="[
                     !isReceiverMobileNoValid && 'error',
-                    isReceiverMobileNoValid && '!mt-0',
                   ]"
                 >
                   <div style="font-size:15px;" class="text-gray-500" :class="!isReceiverMobileNoValid && 'text-red-500'">Receiver Mobile Number  <span class="text-red-500">*</span> </div>
@@ -1731,6 +1746,12 @@ export default {
 };
 </script>
 
+<style scoped>
+.bottom-13-px{
+  bottom: 13px;
+}
+</style>
+
 <style lang="scss">
 @import "./assets/styles/date-picker.scss";
 @import "./assets/styles/image-editor.scss";
@@ -1757,6 +1778,7 @@ export default {
 
 .input-wrapper {
   input{
+    color: rgb(55, 65, 81) !important;
     border-width: 1px !important;
     --tw-border-opacity: 1 !important;
     border-color: rgb(209 213 219 / var(--tw-border-opacity)) !important;

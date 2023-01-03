@@ -305,6 +305,6 @@ export default {
 
 <style lang="scss" scoped>
   .wrapper {
-    @apply flex flex-col justify-start pt-0 items-center text-center mx-0 sm:mx-8;
+    @apply min-h-screen flex flex-col justify-start pt-0 items-center text-center mx-0 sm:mx-8;
   }
 </style>

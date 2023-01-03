@@ -57,7 +57,7 @@
                     <div class="flex items-center">
                       <div class="mr-2">
                         <img
-                          v-if="detail.image"
+                          v-if="showImage(detail)"
                           class="img-width"
                           :src="detail.image"
                         />
@@ -122,7 +122,7 @@
               </p>
             </div>
             <div class="py-3" v-if="isLoading">
-              <BaseLoader :needFullScreen="false" style="min-height:200px;" />
+              <BaseLoader :needFullScreen="true" style="min-height:200px;" />
             </div>
           </div>
         </div>
@@ -145,6 +145,9 @@ export default {
   },
   computed: {},
   methods: {
+    showImage(item) {
+      return item.image && item.is_default !== 'Approve without Image';
+    },
     packageDimensionsString(detail) {
       return `${detail?.item_length} x ${detail?.item_width} x ${detail?.item_height}`;
     },

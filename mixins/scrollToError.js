@@ -6,6 +6,11 @@ export default {
                 veeValidationError.style.scrollMargin = '20px'
                 veeValidationError.scrollIntoView({ behavior: "smooth" })
             }
+        },
+        scrollToFocused(event) {
+            const field = event.target;
+            field.style.scrollMargin = '30px';
+            field.scrollIntoView({ behavior: "smooth" })
         }
     }
 }

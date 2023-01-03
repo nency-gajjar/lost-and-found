@@ -1,5 +1,5 @@
 <template>
-  <label class="mb-8 block relative box-content h-12">
+  <label class="block relative box-content">
     <div
       class="transition-all text-gray-500 text-left"
     >
@@ -14,7 +14,7 @@
         border-gray-300
         w-full
         rounded-lg
-        h-full
+        h-12
         text-base
         transition-shadow
         text-gray-700
@@ -31,7 +31,7 @@
         border-gray-300
         w-full
         rounded-lg
-        h-full
+        h-12
         text-base
         transition-shadow
         text-gray-700

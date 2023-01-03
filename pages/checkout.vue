@@ -34,7 +34,7 @@
                   "
                 >
                   
-                  <div class="w-full sm:grid sm:grid grid-cols-2" :class="itemDetails.image && 'sm:gap-24'">
+                  <div class="w-full sm:grid sm:grid grid-cols-2" :class="showImage && 'sm:gap-24'">
                     <div
                       class="font-medium text-md"
                     >
@@ -47,7 +47,7 @@
 
                   <div class="flex items-center my-4 sm:my-0 gap-3">
             
-                  <div v-if="itemDetails.image"
+                  <div v-if="showImage"
                     class="
                       w-56
                       sm:w-24
@@ -384,12 +384,15 @@ export default {
     } 
   },
   computed: {
+    showImage() {
+      return this.itemDetails.image && this.itemDetails.is_default !== 'Approve without Image';
+    },
     packageDimensionsString() {
       let data = this.checkoutDetail?.lableDetails;
       return `${data?.length}x${data?.width}x${data?.height}`;
     },
     packageWeightString() {
-      return `${this.checkoutDetail?.lableDetails?.weight} lbs`;
+      return `${this.checkoutDetail?.lableDetails?.weight} OZ`;
     },
     fromAddressString() {
       return `from ${this.checkoutDetail?.lableDetails?.city}`;
@@ -470,7 +473,31 @@ export default {
                           service_provider:
                             this.checkoutDetail.selectedRate.carrier,
                           scheduled_pickup: false,
-                          tracking_id: response.data.tracking_id
+                          tracking_id: response.data.tracking_number,
+                          from_address: JSON.parse(
+                            JSON.stringify(this.$store.getters["shipment/shippingRates"])
+                          ).from_address.id,
+                          to_address: JSON.parse(
+                            JSON.stringify(this.$store.getters["shipment/shippingRates"])
+                          ).to_address.id,
+                          carrier_accounts: JSON.parse(
+                            JSON.stringify(this.$store.getters["shipment/selectedRate"])
+                          ).carrier_account_id,
+                          parcel: JSON.parse(
+                            JSON.stringify(this.$store.getters["shipment/shippingRates"])
+                          ).parcel.id,
+                          shipment: JSON.parse(
+                            JSON.stringify(this.$store.getters["shipment/shipmentId"])
+                          ),
+                          label_url: JSON.parse(
+                            JSON.stringify(this.$store.getters["shipment/labelUrl"])
+                          ),
+                          delivery_confirmation:
+                            JSON.parse(
+                              JSON.stringify(this.$store.getters["shipment/signature"])
+                            ) === true
+                              ? true
+                              : false,
                         }
                       )
                       .then((response) => {
