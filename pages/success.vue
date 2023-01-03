@@ -1,7 +1,8 @@
 <template>
-  <main class="text-center space-y-5 max-w-5xl mx-auto">
+  <main class="h-screen text-center space-y-5 max-w-5xl mx-auto">
     <div class="flex space-y-5 max-w-5xl mx-auto">
       <BaseCard
+        v-if="!isDownload"
         class="
           sm:mt-14
           mt-8
@@ -65,7 +66,7 @@
         </div>
       </BaseCard>
     </div>
-    <div class="text-center mt-8 space-y-5 max-w-4xl mx-auto px-4">
+    <div v-if="!isDownload" class="text-center mt-8 space-y-5 max-w-4xl mx-auto px-4">
       <h3 class="text-xl font-medium text-primary-100">
         You have successfully created a shipping label!
       </h3>
@@ -77,8 +78,11 @@
       </p>
       <BaseButton @click="printLabel"> Print/Download Label </BaseButton>
     </div>
-    <p class="text-gray-800">
+    <p v-if="!isDownload" class="text-gray-800">
       Optionally, you can schedule a pickup for your package:
+    </p>
+    <p v-else class="text-gray-800">
+      Pickup has already been scheduled!
     </p>
     <div
       class="
@@ -128,43 +132,17 @@ export default {
       labelImg: "",
       labelWidth: 360,
       rotateCss: "",
+      isDownload: false,
     };
   },
   async mounted() {
-    if (this.$store.getters["shipment/labelUrl"]) {
-      this.labelUrl = JSON.parse(
-        JSON.stringify(this.$store.getters["shipment/labelUrl"])
-      );
-      this.getImgData(this.labelUrl)
-      .then(img => {
-        if(img.naturalWidth < img.naturalHeight){
-          this.rotateCss = `
-            -webkit-transform:rotate(270deg);  
-            -moz-transform: rotate(270deg);  
-            -ms-transform: rotate(270deg);  
-            -o-transform: rotate(270deg);  
-            transform: rotate(270deg);`;
-        }
-      });
-    }
-    if (this.$store.getters["shipment/selectedRate"]) {
-      let selectedRate = JSON.parse(
-        JSON.stringify(this.$store.getters["shipment/selectedRate"])
-      );
-      let carrier = selectedRate?.carrier;
-      if(carrier === "UPS"){
-        this.labelWidth = 309;
-      }
-      else if(carrier === "DHLExpress"){
-        this.labelWidth = 180;
-      }
-    }
     if(this.$route.query.id){
       this.$axios
         .get("/getsinglelostitem?id=" + this.$route.query.id)
         .then(async (response) => {
           this.itemDetails = response.data.data.Item;
           let img = await this.getImgData(this.itemDetails.label_url)
+          console.log(img.naturalHeight, img.naturalWidth)
           if(img.naturalWidth < img.naturalHeight){
             this.rotateCss = `
               -webkit-transform:rotate(270deg);  
@@ -192,37 +170,12 @@ export default {
           }
           if(this.$route.query.download) {
             this.printLabel();
+            this.isDownload = true;
           }
         })
         .catch((error) => {
           console.log(error);
         });
-    }
-    else if(this.$store.getters["shipment/itemId"]) {
-      this.itemId = JSON.parse(
-        JSON.stringify(this.$store.getters["shipment/itemId"])
-      );
-
-      try {
-        let response = await this.$axios.get(
-          "/getsinglelostitem?id=" + this.itemId
-        );
-        this.itemDetails = response.data.data.Item;
-      } catch (err) {
-        console.log(err);
-      }
-
-      if (this.itemDetails.image) {
-        const data = await fetch(this.itemDetails.image, { cache: "no-cache" });
-        const blob = await data.blob();
-        this.itemImg = await this.image_to_base64(blob);
-      }
-
-      if (this.labelUrl) {
-        const data = await fetch(this.labelUrl, { cache: "no-cache" });
-        const blob = await data.blob();
-        this.labelImg = await this.image_to_base64(blob);
-      }
     }
   },
   methods: {

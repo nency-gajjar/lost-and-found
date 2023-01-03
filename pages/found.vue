@@ -46,7 +46,7 @@
             <div class="sm:p-6 p-4 space-y-4">
               <div class="form-title">
                 <div class="w-full">
-                  <div class="flex flex-col justify-between">
+                  <div class="flex justify-between">
                     <BaseHeader varient="gray">{{ senderFormTitle }}</BaseHeader>
                     <div v-if="showResetButton">
                       <BaseButton @click="resetItemDetailsStore">
@@ -816,22 +816,6 @@
                   </ValidationProvider>
               </div>
 
-              <!-- Package Type -->
-              <ValidationProvider
-                v-slot="{ errors }"
-                rules="required"
-                class="block"
-              >
-                <BaseSelect
-                  :isRequired="true"
-                  @focus="scrollToFocused"
-                  v-model="packageType"
-                  :options="packageTypeOptions"
-                  label="Package Type"
-                  :class="errors.length > 0 && 'error'"
-                />
-              </ValidationProvider>
-
               <!-- Item Status -->
               <ValidationProvider
                 v-slot="{ errors }"
@@ -997,8 +981,7 @@ export default {
     itemDescription: "",
     itemDescriptionOptions: [],
     itemDescriptionResponse: [],
-    packageType: "",
-    packageTypeOptions: ["Box", "Envelope"],
+    packageType: "Box",
     weight: "",
     weightOunces: "",
     weightOuncesOptions: weightOuncesOptions,

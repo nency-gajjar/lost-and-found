@@ -59,7 +59,6 @@
               <div class="flex flex-col w-full">
                 <RawCard title="Employee Mobile Numer" :value="itemDetails.employee_mobile_no" />
                 <RawCard title="Item Description" :value="itemDetails.item_description" />
-                <RawCard title="Package Type" :value="itemDetails.package_type" />
                 <RawCard title="Item Status" :value="itemDetails.item_status == 0 ? 'Claimed' : 'Unclaimed'" />
               </div>
             </div>
