@@ -1484,7 +1484,12 @@ export default {
       }
       this.validateVenuePhoneNo();
       this.validateEmployeeMobileNo();
-      if (itemStatus == "Claimed") this.validateReceiverMobileNo();
+      if (itemStatus == "Claimed") {
+        this.validateReceiverMobileNo();
+      }
+      else {
+        this.isReceiverMobileNoValid = true;
+      }
 
       this.isLoading = true;
       const isValid = await this.$refs.observer.validate();

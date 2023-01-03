@@ -523,7 +523,7 @@ export default {
     isUserPhoneFormatValid: true,
     isUserPhoneValid: true,
     userPhoneValidationMessage: "",
-    commercialAddress: "",
+    commercialAddress: false,
     insurance: "",
     insuranceValue: "",
     isLoadingItemDetails: true,
@@ -585,6 +585,19 @@ export default {
   },
   mounted() {
     if (this.$route.query.id) {
+      if(this.$store.getters["shipment/itemId"]){
+        let itemId = JSON.parse(JSON.stringify(this.$store.getters["shipment/itemId"]));
+        if(itemId === this.$route.query.id){
+          if(this.$store.getters["shipment/insuranceValue"]){
+            this.insurance = true;
+            this.insuranceValue = JSON.parse(JSON.stringify(this.$store.getters["shipment/insuranceValue"]));
+          }
+          if(this.$store.getters["shipment/lableDetails"]){
+            let commercialAddress = JSON.parse(JSON.stringify(this.$store.getters["shipment/lableDetails"])).residential;
+            this.commercialAddress = !commercialAddress;
+          }
+        }
+      }
       this.itemId = this.$route.query.id;
       this.$store.commit("shipment/SET_ITEM_DELIVERY_ID", this.itemId);
     } else {
@@ -815,6 +828,10 @@ export default {
               this.$store.commit(
                 "shipment/SET_LABLE_DETAILS",
                 params_rateQuotes
+              );
+              this.$store.commit(
+                "shipment/SET_ITEM_ID",
+                this.$route.query.id
               );
               if (this.insuranceValue) {
                 this.$store.commit(
