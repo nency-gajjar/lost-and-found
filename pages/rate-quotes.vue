@@ -282,6 +282,22 @@
                   src="@/assets/images/dhl-express-logo.png"
                   alt="DHLExpress"
                 />
+                <img
+                  v-else-if="item.carrier === 'CanadaPost'"
+                  class="
+                    w-full
+                    h-auto
+                    mx-auto
+                    my-auto
+                    object-contain
+                    transition
+                    duration-500
+                    ease
+                    hover:transform hover:scale-[110%]
+                  "
+                  src="@/assets/images/canada-post.png"
+                  alt="DHLExpress"
+                />
               </div>
             </div>
           </div>
@@ -313,7 +329,7 @@
             <h3
               class="text-sm font-bold text-[#37322C] tracking-wider uppercase"
             >
-              lable preview
+              label preview
             </h3>
 
             <hr class="my-5 flex-grow border-dashed border border-[#E1E3E6]" />
@@ -361,7 +377,7 @@
               <div class="text-sm leading-6">
                 <p>{{ lableDetails.toname }}</p>
                 <p>{{ lableDetails.tocompany }}</p>
-                <p>{{ lableDetails.tostreet1 }}</p>
+                <p v-if="lableDetails.tocompany != lableDetails.tostreet1">{{ lableDetails.tostreet1 }}</p>
                 <p>
                   {{ lableDetails.tocity }}, {{ lableDetails.tostate }},
                   {{ lableDetails.tozip }}
@@ -401,7 +417,7 @@
               </div>
               <div class="flex justify-between text-sm leading-6">
                 <p>Weight</p>
-                <p>{{ lableDetails.weight }} LBS</p>
+                <p>{{ lableDetails.weight }} OZ</p>
               </div>
               <div v-if="lableDetails.insuranceValue" class="flex justify-between text-sm leading-6">
                 <p>Insurance Charges</p>
@@ -513,6 +529,12 @@ export default {
         });
       } else if (sortBy === 1) {
         this.rateQuoteItems.sort((a, b) => {
+          if(a.delivery_days === null){
+            return 1;
+          }
+          if(b.delivery_days === null){
+            return -1;
+          }
           return a.delivery_days - b.delivery_days;
         });
       }
@@ -548,13 +570,32 @@ export default {
   },
   mounted() {
     if (this.$route.params.fromItemDelivery) {
+      let labelDetails = JSON.parse(
+        JSON.stringify(this.$store.getters["shipment/lableDetails"])
+      );
+
+      let customs_info = JSON.parse(
+        JSON.stringify(this.$store.getters["shipment/customInfo"])
+      );
       this.isLoading = true;
+      let params = {}
+      if(Object.keys(customs_info).length > 0){
+        params = {
+          ...labelDetails,
+          customs_info: {
+            ...customs_info
+          }
+        }
+      }
+      else{
+        params = {
+          ...labelDetails
+        }
+      }
       this.$axios
         .post(
           "/getshippingrates",
-          JSON.parse(
-            JSON.stringify(this.$store.getters["shipment/lableDetails"])
-          )
+          params
         )
         .then((response) => {
           if (response.status === 200) {
@@ -669,5 +710,12 @@ export default {
 .rateLogoContainer img {
   max-width: 179px;
   max-height: 120px;
+}
+
+@media (max-width: 640px) {
+  .rateLogoContainer img {
+    max-width: 109px;
+    max-height: 100px;
+  }
 }
 </style>

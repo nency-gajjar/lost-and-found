@@ -53,7 +53,7 @@
                 >
                   <template v-slot:icon>
                     <div
-                      class="absolute inset-y-0 top-7 right-0 flex items-center p-5"
+                      class="absolute bottom-13-px right-0 pr-5"
                       @click="hidePassword = !hidePassword"
                     >
                       <BaseIcon
@@ -171,3 +171,9 @@ export default {
   },
 };
 </script>
+
+<style scoped>
+.bottom-13-px{
+  bottom: 13px;
+}
+</style>

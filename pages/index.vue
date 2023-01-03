@@ -40,11 +40,8 @@
               text-accent-100
             "
           >
-            Have you <span class="text-primary-100"> Lost</span> anything!
+            What have you <span class="text-primary-100"> Lost?</span>
           </h2>
-          <p class="text-gray-800 text-sm max-w-[21.875rem]">
-            Describe your lost item!
-          </p>
         </div>
         <div
           class="
@@ -101,20 +98,20 @@
                 id="autocomplete-main"
                 type="text"
                 placeholder=""
-                label="Location"
+                label="Location where you might have lost your item. Try City/State, or a specific location name."
                 class="w-full"
                 @input="getAddress"
               >
                 <template v-slot:icon>
                   <div
                     v-if="address"
-                    class="absolute bg-white inset-y-0 top-7 right-1 flex items-center p-5"
+                    class="absolute bg-white bottom-13-px right-1 pr-5"
                   >
                     <BaseIcon @click="clearAddress" icon="xmark" color="gray" />
                   </div>
                   <div
                     v-else
-                    class="absolute inset-y-0 top-7 right-0 flex items-center p-5"
+                    class="absolute bottom-13-px right-0 pr-5"
                   >
                     <BaseIcon icon="location-arrow" color="lightgray" />
                   </div>
@@ -144,7 +141,7 @@
                   label="Item Description"
                 />
               </div>
-              <div class="mb-9-px w-full flex flex-col mt-3 sm:mt-0">
+              <div class="w-full flex flex-col mt-3 sm:mt-0">
                 <label
                   class="block text-md font-medium text-gray-800 text-left"
                   >Date when lost?</label
@@ -204,7 +201,7 @@
               <div class="sliderCard cursor-pointer shadow-md border">
                 <div class="flex items-center md:h-28 md:w-28 sm:h-16 sm:w-16 w-14 h-14">
                   <img
-                    v-if="item.image"
+                    v-if="showImage(item)"
                     class="
                       object-cover
                       w-full
@@ -342,6 +339,9 @@ export default {
     },
   },
   methods: {
+    showImage(item) {
+      return item.image && item.is_default !== 'Approve without Image';
+    },
     formatDate(date){
       return moment(date).format("MMMM DD, YYYY");
     },
@@ -472,6 +472,10 @@ export default {
 .mb-9-px {
   margin-bottom: 9px;
 }
+
+.bottom-13-px{
+  bottom: 13px;
+}
 </style>
 
 <style lang="scss">
@@ -484,7 +488,7 @@ export default {
   width: 35px !important;
   background: none !important;
   border-radius: 60px;
-  background-color: #970584ba !important;
+  background-color: #153f5ed9 !important;
 }
 .slick-prev:before,
 .slick-next:before {

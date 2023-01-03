@@ -64,7 +64,7 @@
               </div>
             </div>
             <div class="flex justify-center item-img-container items-center mt-3 lg:mt-0">
-              <div v-if="itemDetails.image" class="flex justify-center items-center mt-4 sm:mt-0 w-48 w-full">
+              <div v-if="showImage" class="flex justify-center items-center mt-4 sm:mt-0 w-48 w-full">
                 <img class="w-full object-cover" :src="itemDetails.image" alt="" />
               </div>
             </div>
@@ -215,6 +215,11 @@ export default {
       itemDetails: {},
       itemId: "",
     };
+  },
+  computed: {
+    showImage() {
+      return this.itemDetails.image && this.itemDetails.is_default !== 'Approve without Image';
+    }
   },
   mounted() {
     if (this.$route.query.id) {

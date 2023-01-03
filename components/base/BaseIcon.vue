@@ -54,7 +54,7 @@ export default {
 .base-icon {
   cursor: pointer;
   &.accent {
-    color: #970584ba;
+    color: #153f5ed9;
   }
   &.white {
     color: white;
