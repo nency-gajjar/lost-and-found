@@ -203,40 +203,6 @@ export default {
         JSON.stringify(this.$store.getters["shipment/itemId"])
       );
 
-      let update_params = {
-        from_address: JSON.parse(
-          JSON.stringify(this.$store.getters["shipment/shippingRates"])
-        ).from_address.id,
-        to_address: JSON.parse(
-          JSON.stringify(this.$store.getters["shipment/shippingRates"])
-        ).to_address.id,
-        carrier_accounts: JSON.parse(
-          JSON.stringify(this.$store.getters["shipment/selectedRate"])
-        ).carrier_account_id,
-        parcel: JSON.parse(
-          JSON.stringify(this.$store.getters["shipment/shippingRates"])
-        ).parcel.id,
-        shipment: JSON.parse(
-          JSON.stringify(this.$store.getters["shipment/shipmentId"])
-        ),
-        label_url: this.labelUrl,
-        delivery_confirmation:
-          JSON.parse(
-            JSON.stringify(this.$store.getters["shipment/signature"])
-          ) === true
-            ? true
-            : false,
-      };
-
-      try {
-        let response = await this.$axios.post(
-          "/updatesinglelostitem?id=" + this.itemId,
-          update_params
-        );
-      } catch (err) {
-        console.log(err);
-      }
-
       try {
         let response = await this.$axios.get(
           "/getsinglelostitem?id=" + this.itemId

@@ -122,7 +122,7 @@
               </p>
             </div>
             <div class="py-3" v-if="isLoading">
-              <BaseLoader :needFullScreen="false" style="min-height:200px;" />
+              <BaseLoader :needFullScreen="true" style="min-height:200px;" />
             </div>
           </div>
         </div>

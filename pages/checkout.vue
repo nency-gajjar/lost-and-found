@@ -473,7 +473,31 @@ export default {
                           service_provider:
                             this.checkoutDetail.selectedRate.carrier,
                           scheduled_pickup: false,
-                          tracking_id: response.data.tracking_number
+                          tracking_id: response.data.tracking_number,
+                          from_address: JSON.parse(
+                            JSON.stringify(this.$store.getters["shipment/shippingRates"])
+                          ).from_address.id,
+                          to_address: JSON.parse(
+                            JSON.stringify(this.$store.getters["shipment/shippingRates"])
+                          ).to_address.id,
+                          carrier_accounts: JSON.parse(
+                            JSON.stringify(this.$store.getters["shipment/selectedRate"])
+                          ).carrier_account_id,
+                          parcel: JSON.parse(
+                            JSON.stringify(this.$store.getters["shipment/shippingRates"])
+                          ).parcel.id,
+                          shipment: JSON.parse(
+                            JSON.stringify(this.$store.getters["shipment/shipmentId"])
+                          ),
+                          label_url: JSON.parse(
+                            JSON.stringify(this.$store.getters["shipment/labelUrl"])
+                          ),
+                          delivery_confirmation:
+                            JSON.parse(
+                              JSON.stringify(this.$store.getters["shipment/signature"])
+                            ) === true
+                              ? true
+                              : false,
                         }
                       )
                       .then((response) => {
