@@ -1,6 +1,6 @@
 <template>
   <section>
-    <div class="flex flex-col items-center px-6 mt-16 md:h-screen">
+    <div class="flex flex-col items-center px-6 mt-16 min-h-screen">
       <a
         href="#"
         class="flex items-center mb-6 text-2xl font-semibold text-gray-900"

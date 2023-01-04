@@ -1,10 +1,5 @@
 <template>
   <div class="wrapper pb-10">
-    <span v-if="!isBottom && mobileDevice" @click="jumpToBottom" class="fixed z-50 bottom-5 right-5 animate-bounce rounded-full p-4 bg-accent-100 text-sm">
-      <svg class="w-5 h-5 mx-auto" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="white">
-        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 13l-7 7-7-7m14-8l-7 7-7-7" />
-      </svg>
-    </span>
     <div class="container max-w-7xl mx-auto px-4">
       <div class="form-title my-5">
         <BaseHeader class="mt-10" varient="gray">Select Your Rate Quote</BaseHeader>
@@ -546,6 +541,7 @@ export default {
     selecteRateQuote(item) {
       this.selectedRate = item;
       this.$store.commit("shipment/SET_SELECTED_RATE", item);
+      this.jumpToBottom();
       // localStorage.setItem("SelectedRate", JSON.stringify(item));
     },
     proceedToCheckout() {
@@ -601,6 +597,7 @@ export default {
           if (response.status === 200) {
             let surchargeData = response.data.surcharge[0];
             let ratesData = response.data.demo.rates;
+            let tempRateArr = [];
             let ratesUpdated = ratesData.map((data) => {
               let updatedRate = Number(data.rate);
               if(surchargeData?.srchargepercentage){
@@ -609,11 +606,28 @@ export default {
               if(surchargeData?.srchargeamont){
                 updatedRate = updatedRate + Number(surchargeData.srchargeamont);
               }
-              return {
+              let returnedData = {
                 ...data,
                 rate: updatedRate.toFixed(2)
               }
+              if(tempRateArr.length > 0){
+                let index = tempRateArr.findIndex(rateObj => {
+                  return rateObj.service === data.service;
+                })
+                if(index === -1){
+                  tempRateArr.push(returnedData);
+                  return returnedData;
+                }
+                else{
+                  return null;
+                }
+              }
+              else{
+                tempRateArr.push(returnedData);
+                return returnedData;
+              }
             })
+            ratesUpdated = ratesUpdated.filter((rate) => { return rate !== null })
             let shippingRates = {
               buyer_address: response.data.demo.buyer_address,
               from_address: response.data.demo.from_address,

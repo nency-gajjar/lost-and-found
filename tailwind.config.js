@@ -25,8 +25,8 @@ module.exports = {
         primary: {
           200: '#35d87a', // we use this on hover secondary button
           100: '#35d87a',
-          80: '#35d87ac2',
-          60: '#35d87a7a',
+          80: '#35d87a47',
+          60: '#35d87a3b',
         },
         accent: {
           200: '#153f5e', // we use this on hover primary button

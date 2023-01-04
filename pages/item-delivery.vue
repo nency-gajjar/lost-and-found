@@ -551,6 +551,7 @@ export default {
             };
             // this.venueName = this.itemDetails.venue_name || "";
             this.receiverName = this.itemDetails.receiver_name || "";
+            this.pickupPersonName = this.receiverName;
             this.receiverEmail = this.itemDetails.receiver_email || "";
             this.receiverMobileNo = this.itemDetails.receiver_mobile_no || "";
             this.autoCompleteAddress.address =
@@ -609,6 +610,11 @@ export default {
     }
     this.callEventListners();
     this.$store.commit("shipment/SET_CUSTOM_INFO", {});
+  },
+  watch: {
+    receiverName(value){
+      this.pickupPersonName = value;
+    },
   },
   computed: {
     showImage() {

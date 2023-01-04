@@ -1,4 +1,7 @@
+import DetectBrowser from "./detectBrowser";
+
 export default {
+    mixins: [DetectBrowser],
     methods: {
         scrollToError() {
             const veeValidationError = document.getElementsByClassName("error")[0];
@@ -10,7 +13,12 @@ export default {
         scrollToFocused(event) {
             const field = event.target;
             field.style.scrollMargin = '30px';
-            field.scrollIntoView({ behavior: "smooth" })
+            if(this.mobileDevice){
+                field.scrollIntoView();
+            }
+            else{
+                field.scrollIntoView({ behavior: "smooth" });
+            }
         }
     }
 }
