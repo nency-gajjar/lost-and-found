@@ -72,6 +72,9 @@ export const mutations = {
         state.itemId = labelDetails.itemId;
         state.shipmentId = labelDetails.shipmentId;
     },
+    SET_ITEM_ID(state, itemId) {
+        state.itemId = itemId;
+    },
     SET_ITEM_DELIVERY_ID(state, itemDeliveryId) {
         state.itemDeliveryId = itemDeliveryId;
     },

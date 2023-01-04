@@ -22,7 +22,7 @@
               justify-center
               cursor-pointer
             "
-            @click="tabSelected = tab.id; searchQuery = ''"
+            @click="changeTab(tab.id)"
           >
             <div class="flex flex-col items-center justify-center">
               <span
@@ -156,6 +156,9 @@ export default {
   created() {
     this.getAdminDashboardDetails();
     this.getPendingListDetails();
+    if(this.$store.getters["admin/tabId"]){
+      this.tabSelected = JSON.parse(JSON.stringify(this.$store.getters["admin/tabId"]));
+    }
   },
   computed: {
     filteredItems () {
@@ -169,6 +172,11 @@ export default {
     }
   },
   methods: {
+    changeTab(tabId){
+      this.tabSelected = tabId;
+      this.searchQuery = '';
+      this.$store.commit("admin/SET_TAB_ID", tabId);
+    },
     getAdminDashboardDetails() {
       const access_token = this.$auth.getToken("local");
       this.isLoading = true;

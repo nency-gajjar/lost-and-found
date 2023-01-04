@@ -486,12 +486,8 @@ export default {
                           parcel: JSON.parse(
                             JSON.stringify(this.$store.getters["shipment/shippingRates"])
                           ).parcel.id,
-                          shipment: JSON.parse(
-                            JSON.stringify(this.$store.getters["shipment/shipmentId"])
-                          ),
-                          label_url: JSON.parse(
-                            JSON.stringify(this.$store.getters["shipment/labelUrl"])
-                          ),
+                          shipment: shippingResponse.data.shipment_id,
+                          label_url: shippingResponse.data.label_url,
                           delivery_confirmation:
                             JSON.parse(
                               JSON.stringify(this.$store.getters["shipment/signature"])

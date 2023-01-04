@@ -1,5 +1,5 @@
 <template>
-  <main class="h-screen text-center space-y-5 max-w-5xl mx-auto">
+  <main class="min-h-screen text-center space-y-5 max-w-5xl mx-auto">
     <div class="flex space-y-5 max-w-5xl mx-auto">
       <BaseCard
         v-if="!isDownload"
@@ -67,7 +67,7 @@
       </BaseCard>
     </div>
     <div v-if="!isDownload" class="text-center mt-8 space-y-5 max-w-4xl mx-auto px-4">
-      <h3 class="text-xl font-medium text-primary-100">
+      <h3 class="text-xl font-medium text-accent-100">
         You have successfully created a shipping label!
       </h3>
       <p class="text-gray-800">
@@ -142,7 +142,6 @@ export default {
         .then(async (response) => {
           this.itemDetails = response.data.data.Item;
           let img = await this.getImgData(this.itemDetails.label_url)
-          console.log(img.naturalHeight, img.naturalWidth)
           if(img.naturalWidth < img.naturalHeight){
             this.rotateCss = `
               -webkit-transform:rotate(270deg);  
@@ -304,6 +303,9 @@ export default {
           p {
             margin: 5px 0;
           }
+          .items-center{
+            align-items: center;
+          }
         </style>
         </head><body>
         ${imgHtml}
@@ -342,7 +344,7 @@ export default {
           </tr>
           </table>
           <div class="flex justify-center"><p>Tracking ID: ${this.itemDetails.tracking_id}</p></div>
-          <div class="flex">
+          <div class="flex items-center">
             <div style="width: 20px">
               <svg style="color: rgb(240, 107, 4);" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256"><rect width="256" height="256" fill="none"></rect><circle cx="60" cy="76" r="28" fill="none" stroke="#000" stroke-linecap="round" stroke-linejoin="round" stroke-width="12"></circle><circle cx="60" cy="180" r="28" fill="none" stroke="#000" stroke-linecap="round" stroke-linejoin="round" stroke-width="12"></circle><line x1="136" y1="128" x2="83.1" y2="164.2" fill="none" stroke="#000" stroke-linecap="round" stroke-linejoin="round" stroke-width="12"></line><line x1="232" y1="62.3" x2="164.3" y2="108.6" fill="none" stroke="#000" stroke-linecap="round" stroke-linejoin="round" stroke-width="12"></line><line x1="232" y1="193.7" x2="83.1" y2="91.8" fill="none" stroke="#000" stroke-linecap="round" stroke-linejoin="round" stroke-width="12"></line></svg>
             </div>
