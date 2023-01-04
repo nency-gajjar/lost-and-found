@@ -1180,9 +1180,7 @@ export default {
       await this.getItemDescriptionOptions();
     } else {
       this.$nextTick(() => {
-        this.$router.push({
-          name: "lost-items",
-        });
+        this.$router.push("lost-items");
       });
     }
   },

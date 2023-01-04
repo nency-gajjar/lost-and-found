@@ -160,20 +160,14 @@ export default {
         )
       ) {
         this.$nextTick(() => {
-          this.$router.push({
+          this.$router.push(this.localeLocation({ 
             name: "item-delivery",
-            query: {
-              id: JSON.parse(
-                JSON.stringify(this.$store.getters["shipment/itemDeliveryId"])
-              ),
-            },
-          });
+            query: { id: JSON.parse(JSON.stringify(this.$store.getters["shipment/itemDeliveryId"])) }
+          }))
         });
       } else {
         this.$nextTick(() => {
-          this.$router.push({
-            name: "lost-items",
-          });
+          this.$router.push("lost-items");
         });
       }
     }
@@ -231,11 +225,11 @@ export default {
         }
         this.$store.commit("shipment/SET_CUSTOM_INFO", params);
         this.$nextTick(() => {
-          this.$router.push({
-            name: "rate-quotes",
+          this.$router.push(this.localeLocation({ 
+            name: 'rate-quotes', 
             query: { id: this.$route.query.id },
             params: { fromItemDelivery: true },
-          });
+          }))
         });
       }
       else{

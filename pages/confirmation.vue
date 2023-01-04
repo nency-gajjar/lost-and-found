@@ -330,9 +330,7 @@ export default {
     } else {
       this.isLoadingItem = false;
       this.$nextTick(() => {
-        this.$router.push({
-          name: "lost-items",
-        });
+        this.$router.push("lost-items");
       });
     }
   },
@@ -365,24 +363,20 @@ export default {
     },
     editListing(){
       this.$nextTick(() => {
-          this.$router.push({
-            name: "found",
-            query: {
-              id: this.itemDetails.id
-            },
-          });
-        });
+        this.$router.push(this.localeLocation({ 
+          name: "found",
+          query: { id: this.itemDetails.id }
+        }))
+      });
     },
     addFoundItem(){
       this.$nextTick(() => {
-          this.$router.push({
-            name: "found"
-          });
-        });
+        this.$router.push("found");
+      });
     },
     routeToListing() {
       this.$store.commit("item/SET_ITEM_CONFIRMATION_DETAILS", {});
-      this.$router.push({ path: "/lost-items" });
+      this.$router.push({ path: this.localePath({ name: 'lost-items' }) });
     },
     printDetails() {
       let userAgent = navigator.userAgent.toLowerCase();

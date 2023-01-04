@@ -234,11 +234,10 @@ export default {
           this.isLoadingItemDetails = false;
           console.log(error);
         });
-    } else {
+    } 
+    else {
       this.$nextTick(() => {
-        this.$router.push({
-          name: "lost-items",
-        });
+        this.$router.push('lost-items');
       });
     }
   },

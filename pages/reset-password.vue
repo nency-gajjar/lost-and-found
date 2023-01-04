@@ -197,9 +197,7 @@ export default {
               this.isLoading = false;
               this.$toast.info("Password Reset successfully!");
               this.$nextTick(() => {
-                this.$router.push({
-                  name: "login",
-                });
+                this.$router.push("/login");
               });
             }
           })

@@ -222,10 +222,10 @@ export default {
       return moment(date).format("MMMM DD, YYYY");
     },
     claimItem() {
-      this.$router.push({
+      this.$router.push(this.localeLocation({ 
         name: "claim-item",
-        params: { item: this.itemDetails },
-      });
+        params: { item: this.itemDetails }
+      }))
     },
     filterAddressLine(itemDetails) {
       return itemDetails.address == "Other" || !itemDetails.address
@@ -289,11 +289,11 @@ export default {
 
                     this.$store.commit("item/SET_ITEM_DETAILS", {});
 
-                    this.$router.push({
-                      path: "/confirmation",
+                    this.$router.push(this.localeLocation({ 
+                      name: "confirmation",
                       params: { data: this.responseData },
                       query: { id: this.responseData.id },
-                    });
+                    }))
                   }
                 })
                 .catch((error) => {
@@ -323,11 +323,11 @@ export default {
               this.$store.commit("item/SET_ITEM_DETAILS", {});
 
               // localStorage.setItem("itemId", this.responseData.id);
-              this.$router.push({
-                path: "/confirmation",
+              this.$router.push(this.localeLocation({ 
+                name: "confirmation",
                 params: { data: this.responseData },
                 query: { id: this.responseData.id },
-              });
+              }))
             }
           })
           .catch((error) => {
@@ -339,10 +339,10 @@ export default {
     },
     editDetails() {
       this.$nextTick(() => {
-        this.$router.push({
+        this.$router.push(this.localeLocation({ 
           name: "found",
-          params: { itemDetails: this.itemDetails },
-        });
+          params: { itemDetails: this.itemDetails }
+        }))
       });
     },
   },

@@ -441,10 +441,10 @@ export default {
         item.id
       );
       this.$nextTick(() => {
-        this.$router.push({
+        this.$router.push(this.localeLocation({ 
           name: "detail-confirmation",
           query: { preview: true },
-        });
+        }))
       });
     },
   },

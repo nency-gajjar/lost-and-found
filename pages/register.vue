@@ -144,9 +144,7 @@ export default {
               this.$toast.info("Register successfully!");
               await this.$auth.logout();
               this.$nextTick(() => {
-                this.$router.push({
-                  name: "login",
-                });
+                this.$router.push("/login");
               });
             }
           })

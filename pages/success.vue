@@ -223,10 +223,10 @@ export default {
   methods: {
     goToSchedulePickup(){
       this.$nextTick(() => {
-        this.$router.push({
+        this.$router.push(this.localeLocation({ 
           name: "schedule",
           query: { id: this.$route.query?.id ? this.$route.query.id : this.itemId },
-        });
+        }))
       });
     },
     async getImgData(url){

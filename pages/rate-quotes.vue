@@ -530,19 +530,19 @@ export default {
       // localStorage.setItem("Signature", this.signature);
       this.$store.commit("shipment/SET_SIGNATURE", this.signature);
       this.$nextTick(() => {
-        this.$router.push({
-          name: "checkout",
+        this.$router.push(this.localeLocation({ 
+          name: 'checkout', 
           params: { fromRatePage: true },
           query: { id: this.$route.query.id },
-        });
+        }))
       });
     },
     stepBack() {
       this.$nextTick(() => {
-        this.$router.push({
+        this.$router.push(this.localeLocation({ 
           name: "item-delivery",
           query: { id: this.$route.query.id },
-        });
+        }))
       });
     },
   },
@@ -629,20 +629,15 @@ export default {
         )
       ) {
         this.$nextTick(() => {
-          this.$router.push({
-            name: "item-delivery",
-            query: {
-              id: JSON.parse(
-                JSON.stringify(this.$store.getters["shipment/itemDeliveryId"])
-              ),
-            },
-          });
+          this.$router.push(this.localeLocation({ 
+            name: 'item-delivery', 
+            params: { fromRatePage: true },
+            query: { id: JSON.parse(JSON.stringify(this.$store.getters["shipment/itemDeliveryId"])) },
+          }))
         });
       } else {
         this.$nextTick(() => {
-          this.$router.push({
-            name: "lost-items",
-          });
+          this.$router.push("lost-items");
         });
       }
     }

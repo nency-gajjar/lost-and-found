@@ -427,7 +427,7 @@ export default {
     closeDialog() {
       this.showDialog = false;
       this.$nextTick(() => {
-        this.$router.push({ path: "/lost-items" });
+        this.$router.push("/lost-items");
       });
     },
   },

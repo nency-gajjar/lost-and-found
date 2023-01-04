@@ -365,20 +365,14 @@ export default {
         )
       ) {
         this.$nextTick(() => {
-          this.$router.push({
+          this.$router.push(this.localeLocation({ 
             name: "item-delivery",
-            query: {
-              id: JSON.parse(
-                JSON.stringify(this.$store.getters["shipment/itemDeliveryId"])
-              ),
-            },
-          });
+            query: { id: JSON.parse(JSON.stringify(this.$store.getters["shipment/itemDeliveryId"])) },
+          }))
         });
       } else {
         this.$nextTick(() => {
-          this.$router.push({
-            name: "lost-items",
-          });
+          this.$router.push({ path: this.localePath({ name: 'lost-items' }) });
         });
       }
     } 
@@ -484,16 +478,10 @@ export default {
                           this.isLoading = false;
                         }
                         this.$nextTick(() => {
-                          this.$router.push({
+                          this.$router.push(this.localeLocation({ 
                             name: "success",
-                            query: {
-                              id: JSON.parse(
-                                JSON.stringify(
-                                  this.$store.getters["shipment/itemDeliveryId"]
-                                )
-                              ),
-                            },
-                          });
+                            query: { id: JSON.parse(JSON.stringify(this.$store.getters["shipment/itemDeliveryId"])) },
+                          }))
                         });
                       })
                       .catch((error) => {
@@ -520,11 +508,11 @@ export default {
     },
     stepBack() {
       this.$nextTick(() => {
-        this.$router.push({
+        this.$router.push(this.localeLocation({ 
           name: "rate-quotes",
           query: { id: this.$route.query.id },
-          params: { fromItemDelivery: true },
-        });
+          params: { fromItemDelivery: true }
+        }))
       });
     },
   },

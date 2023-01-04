@@ -1548,7 +1548,7 @@ export default {
         setTimeout(() => {
           this.isLoading = false;
           this.$nextTick(() => {
-            this.$router.push({ path: "/detail-confirmation" });
+            this.$router.push("detail-confirmation");
           });
         }, 300);
       }

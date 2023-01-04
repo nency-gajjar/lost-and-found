@@ -123,10 +123,11 @@ export default {
       this.showDialog = false;
       this.$toast.info("Email sent successfully!");
       this.$nextTick(() => {
-        this.$router.push({
+        this.$router.push(this.localeLocation({ 
           name: "reset-password",
           params: { email: this.email },
-        });
+        }))
+
       });
     },
   },

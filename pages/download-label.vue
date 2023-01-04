@@ -18,9 +18,7 @@ export default {
           a.download = "Label.png"; //File name Here
           a.click(); //Downloaded file
           this.$nextTick(() => {
-            this.$router.push({
-              name: "lost-items"
-            });
+            this.$router.push("lost-items");
           });
         })
         .catch((error) => {
