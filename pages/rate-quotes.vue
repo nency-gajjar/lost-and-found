@@ -541,7 +541,9 @@ export default {
     selecteRateQuote(item) {
       this.selectedRate = item;
       this.$store.commit("shipment/SET_SELECTED_RATE", item);
-      this.jumpToBottom();
+      if(this.mobileDevice){
+        this.jumpToBottom();
+      }
       // localStorage.setItem("SelectedRate", JSON.stringify(item));
     },
     proceedToCheckout() {
