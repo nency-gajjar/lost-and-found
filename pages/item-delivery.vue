@@ -523,7 +523,7 @@ export default {
     isUserPhoneFormatValid: true,
     isUserPhoneValid: true,
     userPhoneValidationMessage: "",
-    commercialAddress: "",
+    commercialAddress: false,
     insurance: "",
     insuranceValue: "",
     isLoadingItemDetails: true,
@@ -551,6 +551,7 @@ export default {
             };
             // this.venueName = this.itemDetails.venue_name || "";
             this.receiverName = this.itemDetails.receiver_name || "";
+            this.pickupPersonName = this.receiverName;
             this.receiverEmail = this.itemDetails.receiver_email || "";
             this.receiverMobileNo = this.itemDetails.receiver_mobile_no || "";
             this.autoCompleteAddress.address =
@@ -585,6 +586,19 @@ export default {
   },
   mounted() {
     if (this.$route.query.id) {
+      if(this.$store.getters["shipment/itemId"]){
+        let itemId = JSON.parse(JSON.stringify(this.$store.getters["shipment/itemId"]));
+        if(itemId === this.$route.query.id){
+          if(this.$store.getters["shipment/insuranceValue"]){
+            this.insurance = true;
+            this.insuranceValue = JSON.parse(JSON.stringify(this.$store.getters["shipment/insuranceValue"]));
+          }
+          if(this.$store.getters["shipment/lableDetails"]){
+            let commercialAddress = JSON.parse(JSON.stringify(this.$store.getters["shipment/lableDetails"])).residential;
+            this.commercialAddress = !commercialAddress;
+          }
+        }
+      }
       this.itemId = this.$route.query.id;
       this.$store.commit("shipment/SET_ITEM_DELIVERY_ID", this.itemId);
     } else {
@@ -596,6 +610,11 @@ export default {
     }
     this.callEventListners();
     this.$store.commit("shipment/SET_CUSTOM_INFO", {});
+  },
+  watch: {
+    receiverName(value){
+      this.pickupPersonName = value;
+    },
   },
   computed: {
     showImage() {
@@ -815,6 +834,10 @@ export default {
               this.$store.commit(
                 "shipment/SET_LABLE_DETAILS",
                 params_rateQuotes
+              );
+              this.$store.commit(
+                "shipment/SET_ITEM_ID",
+                this.$route.query.id
               );
               if (this.insuranceValue) {
                 this.$store.commit(

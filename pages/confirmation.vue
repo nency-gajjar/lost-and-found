@@ -4,8 +4,6 @@
       <div
         class="
           card
-          w-full
-          mx-4
           md:mx-auto 
           lg:w-6/12
           mx-auto
@@ -20,8 +18,8 @@
             <tr>
               <td class="w-full w-full-imp">
                 <table width="100%" cellspacing="0" cellpadding="0">
-                  <tr class="flex w-full hidden logo-hidden">
-                    <td align="left" class="!w-24"><img class="found-logo" src="../assets/images/found-shelf-icon.svg" alt="Found Shelf"></td>
+                  <tr id="found-shelf-logo" class="flex w-full hidden logo-hidden">
+                    <td align="left" class="!w-24"><img class="found-logo" src="https://foundshelf.com/_nuxt/assets/images/found-shelf-icon.svg" alt="Found Shelf"></td>
                   </tr>
                   <tr class="!flex !justify-center !w-full">
                     <td align="center" class="!w-full">
@@ -192,10 +190,19 @@
               </td>
               <div class="flex justify-center items-center pr-6">
                 <div v-if="showImage" class="flex img-container justify-center items-center mt-4 sm:mt-0 w-40 w-full">
-                  <img class="w-full object-cover" :src="itemDetails.image" alt="" />
+                  <img class="w-full object-cover" :src="itemImg" alt="" />
                 </div>
               </div>
             </tr>
+            <div id="scissor-container" class="hidden scissor-container items-center">
+              <div style="width: 20px">
+                <svg style="color: rgb(240, 107, 4);" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256"><rect width="256" height="256" fill="none"></rect><circle cx="60" cy="76" r="28" fill="none" stroke="#000" stroke-linecap="round" stroke-linejoin="round" stroke-width="12"></circle><circle cx="60" cy="180" r="28" fill="none" stroke="#000" stroke-linecap="round" stroke-linejoin="round" stroke-width="12"></circle><line x1="136" y1="128" x2="83.1" y2="164.2" fill="none" stroke="#000" stroke-linecap="round" stroke-linejoin="round" stroke-width="12"></line><line x1="232" y1="62.3" x2="164.3" y2="108.6" fill="none" stroke="#000" stroke-linecap="round" stroke-linejoin="round" stroke-width="12"></line><line x1="232" y1="193.7" x2="83.1" y2="91.8" fill="none" stroke="#000" stroke-linecap="round" stroke-linejoin="round" stroke-width="12"></line></svg>
+              </div>
+              <hr class="w-full border-dashed border border-black" />
+            </div>
+            <div id="scissor-text" class="hidden h-12 justify-center scissor-text text-gray-600 font-medium">
+              Cutout the above confirmation & tape it on the found item.
+            </div>
           </tbody>
         </table>
         <div class="noPrint">
@@ -241,6 +248,7 @@ export default {
   data() {
     return {
       itemDetails: {},
+      itemImg: "",
       showDialog: false,
       itemConfirmationDetails: {},
       isLoadingItem: false,
@@ -255,9 +263,14 @@ export default {
     if (this.$route.query.id) {
       this.$axios
         .get("/getsinglelostitem?id=" + this.$route.query.id)
-        .then((response) => {
+        .then(async (response) => {
           if (response.status === 200) {
             this.itemDetails = response.data.data.Item;
+            if (this.itemDetails.image) {
+              const data = await fetch(this.itemDetails.image, { cache: "no-cache" });
+              const blob = await data.blob();
+              this.itemImg = await this.image_to_base64(blob);
+            }
           }
           this.isLoadingItem = false;
           this.showDialog = true;
@@ -303,6 +316,20 @@ export default {
     },
   },
   methods: {
+    async image_to_base64(file) {
+      let result_base64 = await new Promise((resolve) => {
+        let fileReader = new FileReader();
+        fileReader.onload = (e) => resolve(fileReader.result);
+        fileReader.onerror = (error) => {
+          console.log(error);
+          this.$toast.error(
+            "An Error occurred please try again, File might be corrupt"
+          );
+        };
+        fileReader.readAsDataURL(file);
+      });
+      return result_base64;
+    },
     formatDate(date, datse){
       if(date){
         return moment(date).format("MMMM DD, YYYY");
@@ -336,6 +363,9 @@ export default {
       let android = userAgent.indexOf("android") > -1;
 
       if (mobile || android) {
+        document.getElementById("found-shelf-logo").style.display = "block";
+        document.getElementById("scissor-container").style.display = "flex";
+        document.getElementById("scissor-text").style.display = "flex";
         this.$html2pdf(document.getElementById("printMe"), {
           filename: "Item-Details.pdf",
           image: { type: "jpg", quality: 0.98 },
@@ -347,6 +377,10 @@ export default {
             windowWidth: 1024
           },
           jsPDF: { unit: "in", format: "letter", orientation: "portrait" },
+        }).then(() => {
+          document.getElementById("found-shelf-logo").style.display = "none";
+          document.getElementById("scissor-container").style.display = "none";
+          document.getElementById("scissor-text").style.display = "none";
         });
       } else {
         window.print();
@@ -494,6 +528,14 @@ td {
 @media print {
   .noPrint{
     display: none;
+  }
+
+  .scissor-container{
+    display: flex !important;
+  }
+
+  .scissor-text{
+    display: flex;
   }
 
   .qr-code-container img {

@@ -1042,6 +1042,14 @@ export default {
         return "Your Hotel Name";
       } else if (this.venueType === "Airport") {
         return "Airport Name or Code";
+      } else if (this.venueType === "Transit") {
+        return "Transit Name";
+      } else if (this.venueType === "University") {
+        return "University Name";
+      } else if (this.venueType === "Law Enforcement") {
+        return "Enforcement Name";
+      } else if (this.venueType === "Other Establishment") {
+        return "Establishment Name";
       } else {
         return "Venue Address";
       }
@@ -1053,6 +1061,14 @@ export default {
         return "Hotel Address";
       } else if (this.venueType === "Airport") {
         return "Airport Address";
+      } else if (this.venueType === "Transit") {
+        return "Transit Address";
+      } else if (this.venueType === "University") {
+        return "University Address";
+      } else if (this.venueType === "Law Enforcement") {
+        return "Law Enforcement Address";
+      } else if (this.venueType === "Other Establishment") {
+        return "Establishment Address";
       } else {
         return "Venue Address";
       }
@@ -1098,7 +1114,7 @@ export default {
               let index = this.venueOptions.indexOf(data.venu_type) !== -1;
               if (index) this.venueType = data.venu_type;
               else {
-                this.venueType = "Other";
+                this.venueType = "Personal";
                 this.manualVenue = data.venu_type;
               }
               this.itemDescription = data.item_description;
@@ -1146,7 +1162,7 @@ export default {
         var index = this.venueOptions.indexOf(data.venu_type) !== -1;
         if (index) this.venueType = data.venu_type;
         else {
-          this.venueType = "Other";
+          this.venueType = "Personal";
           this.manualVenue = data.venu_type;
         }
         this.itemDescription = data.item_description;
@@ -1199,7 +1215,7 @@ export default {
         var index = this.venueOptions.indexOf(data.venu_type) !== -1;
         if (index) this.venueType = data.venu_type;
         else {
-          this.venueType = "Other";
+          this.venueType = "Personal";
           this.manualVenue = data.venu_type;
         }
         this.itemDescription = data.item_description;
@@ -1484,7 +1500,12 @@ export default {
       }
       this.validateVenuePhoneNo();
       this.validateEmployeeMobileNo();
-      if (itemStatus == "Claimed") this.validateReceiverMobileNo();
+      if (itemStatus == "Claimed") {
+        this.validateReceiverMobileNo();
+      }
+      else {
+        this.isReceiverMobileNoValid = true;
+      }
 
       this.isLoading = true;
       const isValid = await this.$refs.observer.validate();
@@ -1516,7 +1537,7 @@ export default {
           it_type: it_type,
           venue_name: this.venueName,
           venu_type:
-            this.venueType === "Other" ? this.manualVenue : this.venueType,
+            this.venueType === "Personal" ? this.manualVenue : this.venueType,
           datse: moment(this.foundDate).format("YYYY-MM-DD"),
           venue_email: this.venueEmail,
           secondary_email: this.venueSecondaryEmail,
@@ -1701,7 +1722,7 @@ export default {
   watch: {
     venueType(newValue, oldValue) {
       if (newValue != oldValue) {
-        if (newValue == "Other") {
+        if (newValue == "Personal") {
           this.venueManually = true;
         } else {
           this.venueManually = false;

@@ -37,7 +37,7 @@
                 rules="required"
                 class="block"
               >
-                <label class="text-gray-500">Description <span class="text-red-500">*</span></label>
+                <label :class="errors.length > 0 && 'text-red-500'" class="text-gray-500">Description <span class="text-red-500">*</span></label>
                 <textarea
                   v-model="description"
                   class="
@@ -56,7 +56,7 @@
                   "
                   :class="
                     errors.length > 0 &&
-                    'border-red-500 border-2 ring-4 ring-red-500 ring-opacity-10 rounded-lg  transition-none'
+                    '!border-red-500 !border-2 ring-4 ring-red-500 ring-opacity-10 transition-none'
                   "
                 ></textarea>
               </ValidationProvider>
