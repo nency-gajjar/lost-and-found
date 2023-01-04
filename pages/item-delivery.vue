@@ -5,15 +5,15 @@
         <form @submit.prevent="validate().then(onSubmit)">
           <div class="p-6">
             <div class="form-title">
-              <BaseHeader class="text-center" varient="gray">Here are the details of an item that belongs to you</BaseHeader>
+              <BaseHeader class="text-center" varient="gray">{{ $t('hereAreTheDetailsOfAnItem') }}</BaseHeader>
             </div>
 
             <!-- Item Details -->
             <div class="sections py-4">
               <div class="form-title">
-                <BaseHeader varient="accent">Item's Details:</BaseHeader>
+                <BaseHeader varient="accent">{{ $t('itemDetails') }}:</BaseHeader>
               </div>
-              <RawCard v-if="!itemDetails.image" title="Item Description" :value="itemDetails.item_description" />
+              <RawCard v-if="!itemDetails.image" :title="$t('itemDescription')" :value="itemDetails.item_description" />
               <div v-else
                 class="
                   mt-2
@@ -40,7 +40,7 @@
                     <div
                       class="text-gray-600 font-medium"
                     >
-                      Item Description
+                      {{ $t('itemDescription') }}
                     </div>
                     <div
                       class="text-gray-600 text-left"
@@ -82,20 +82,20 @@
             <!-- Sender's Details -->
             <div class="sections py-4">
               <div class="form-title">
-                <BaseHeader varient="accent">Sender's Details:</BaseHeader>
+                <BaseHeader varient="accent">{{ $t('senderDetails') }}:</BaseHeader>
               </div>
-              <RawCard v-if="itemDetails.hotel_room" title="Room No. Or Hotel Area" :value="itemDetails.hotel_room" />
-              <RawCard title="Venue Name" :value="itemDetails.venue_name" />
-              <RawCard title="Found Item Date" :value="formatDate(itemDetails.datse)" />
-              <RawCard title="Venue Email" :value="itemDetails.venue_email" />
-              <RawCard v-if="itemDetails.secondary_email" title="Venue Secondary Email" :value="itemDetails.secondary_email" />
-              <RawCard title="Venue Phone No." :value="itemDetails.venue_phone_no" />
-              <RawCard title="Address" :value="senderAddress(itemDetails.address, itemDetails.city, itemDetails.states, itemDetails.country, itemDetails.zipcode)" />
+              <RawCard v-if="itemDetails.hotel_room" :title="$t('roomNo')" :value="itemDetails.hotel_room" />
+              <RawCard :title="$t('venueName')" :value="itemDetails.venue_name" />
+              <RawCard :title="$t('foundItemDate')" :value="formatDate(itemDetails.datse)" />
+              <RawCard :title="$t('venueEmail')" :value="itemDetails.venue_email" />
+              <RawCard v-if="itemDetails.secondary_email" :title="$t('venueSecondaryEmail')" :value="itemDetails.secondary_email" />
+              <RawCard :title="$t('venuePhoneNo')" :value="itemDetails.venue_phone_no" />
+              <RawCard :title="$t('autoAddress.address')" :value="senderAddress(itemDetails.address, itemDetails.city, itemDetails.states, itemDetails.country, itemDetails.zipcode)" />
             </div>
             <!-- Sender's Details End-->
 
             <div class="form-title mt-4">
-              <BaseHeader varient="accent">How would you like to proceed?</BaseHeader>
+              <BaseHeader varient="accent">{{ $t('howWouldYouLikeToProceed') }}</BaseHeader>
             </div>
             <div class="grid grid-cols-2 gap-4 mt-2">
               <!-- Ship it to me -->
@@ -132,7 +132,7 @@
                     text-gray-900
                     cursor-pointer
                   "
-                  >Ship it to Me</label
+                  >{{ $t('shipItToMe') }}</label
                 >
               </div>
 
@@ -171,7 +171,7 @@
                     text-gray-900
                     cursor-pointer
                   "
-                  >Hold for pickup</label
+                  >{{ $t('holdForPickup') }}</label
                 >
               </div>
             </div>
@@ -186,7 +186,7 @@
                   :isRequired="true"
                   v-model="receiverName"
                   type="text"
-                  label="Your Name"
+                  :label="$t('yourName')"
                   :class="errors.length > 0 && 'error'"
                 />
               </ValidationProvider>
@@ -200,7 +200,7 @@
                   :isRequired="true"
                   v-model="receiverEmail"
                   type="email"
-                  label="Your Email"
+                  :label="$t('yourEmail')"
                   :class="errors.length > 0 && 'error'"
                 />
                 <p
@@ -216,7 +216,7 @@
                   :class="!isUserPhoneValid && 'error'"
                 >
                   <label class="text-gray-500" :class="!isUserPhoneValid && 'text-red-500'"
-                    >Your Number <span class="text-red-500">*</span> </label
+                    >{{ $t('yourNumber') }} <span class="text-red-500">*</span> </label
                   >
                   <vue-tel-input
                     class="
@@ -252,7 +252,7 @@
                   id="autocomplete-item-delivery"
                   type="text"
                   placeholder=""
-                  label="Your Mailing Address"
+                  :label="$t('yourMailingAddress')"
                   @input="getAddress"
                   :class="errors.length > 0 && 'error'"
                 >
@@ -281,7 +281,7 @@
                 <BaseInput
                   v-model="autoCompleteAddress.addressLine2"
                   type="text"
-                  label="Address Line 2"
+                  :label="$t('autoAddress.addressLine2')"
                 />
               </div>
               <div class="grid grid-cols-2 lg:grid-cols-2 gap-4">
@@ -293,7 +293,7 @@
                   <BaseInput
                     :isRequired="true"
                     v-model="autoCompleteAddress.city"
-                    label="City"
+                    :label="$t('autoAddress.city')"
                     type="text"
                     :class="errors.length > 0 && 'error'"
                   />
@@ -306,7 +306,7 @@
                   <BaseInput
                     :isRequired="true"
                     v-model="autoCompleteAddress.state"
-                    label="State"
+                    :label="$t('autoAddress.state')"
                     type="text"
                     :class="errors.length > 0 && 'error'"
                   />
@@ -320,7 +320,7 @@
                   <BaseInput
                     :isRequired="true"
                     v-model="autoCompleteAddress.zipcode"
-                    label="Zip Code"
+                    :label="$t('autoAddress.zipcode')"
                     type="text"
                     :class="errors.length > 0 && 'error'"
                   />
@@ -339,7 +339,7 @@
                   <BaseInput
                     :isRequired="true"
                     v-model="autoCompleteAddress.country"
-                    label="Country"
+                    :label="$t('autoAddress.country')"
                     type="text"
                     :class="errors.length > 0 && 'error'"
                   />
@@ -362,7 +362,7 @@
                       w-5
                     "
                   />
-                  <label for="commercial">This is a Commercial Address</label>
+                  <label for="commercial">{{ $t('thisIsCommercialAddress') }}</label>
                 </div>
                 <div class="flex items-center space-x-3 ml-4">
                   <input
@@ -379,7 +379,7 @@
                       w-5
                     "
                   />
-                  <label for="insurance"> Add Insurance</label>
+                  <label for="insurance"> {{ $t('addInsurance') }} </label>
                 </div>
                 <ValidationProvider
                   v-show="insurance"
@@ -391,7 +391,7 @@
                   <BaseInput
                     v-model="insuranceValue"
                     type="text"
-                    label="Insurance Value"
+                    :label="$t('insuranceValue')"
                     :class="errors.length > 0 && 'error'"
                   >
                     <template v-slot:icon>
@@ -422,7 +422,7 @@
                   :isRequired="true"
                   v-model="pickupPersonName"
                   type="text"
-                  label="Pickup Person Name"
+                  :label="$t('pickupPersonName')"
                   :class="errors.length > 0 && 'error'"
                 />
               </ValidationProvider>
@@ -430,7 +430,7 @@
                 <BaseInput
                   v-model="additionalPersonName"
                   type="text"
-                  label="Additional Person Name"
+                  :label="$t('additionalPersonName')"
                 />
               </div>
               <ValidationProvider
@@ -439,7 +439,7 @@
                 class="block mb-4 mt-2"
               >
                 <label class="text-gray-500" :class="errors.length > 0 && 'text-red-500'"
-                  >Expected Pickup Date <span class="text-red-500">*</span> </label
+                  >{{ $t('expectedPickupDate') }} <span class="text-red-500">*</span> </label
                 >
                 <client-only>
                   <div :class="errors.length && 'error'">
@@ -456,7 +456,7 @@
 
             <div class="flex justify-end">
               <BaseButton :is-loading="isLoading" type="submit">
-                Next Step
+                {{ $t('nextStep') }}
               </BaseButton>
             </div>
           </div>
@@ -466,7 +466,7 @@
     <div
       v-else-if="!isLoadingItemDetails && Object.keys(itemDetails).length === 0"
     >
-      <p class="text-gray-600 font-medium m-14">No Result Found</p>
+      <p class="text-gray-600 font-medium m-14"> {{ $t('noResultFound') }} </p>
     </div>
     <div v-else>
       <BaseLoader />
@@ -476,7 +476,7 @@
       :showDialog="showDialog"
       :icon="{ name: 'circle-check', color: 'green', size: '3x' }"
       :message="dialogMessage"
-      title="Details submitted successfully!"
+      :title="$t('detailsSubmittedSuccessfully')"
       buttonTitle="Okay"
       @close="closeDialog"
     />
@@ -587,11 +587,10 @@ export default {
     if (this.$route.query.id) {
       this.itemId = this.$route.query.id;
       this.$store.commit("shipment/SET_ITEM_DELIVERY_ID", this.itemId);
-    } else {
+    } 
+    else {
       this.$nextTick(() => {
-        this.$router.push({
-          name: "lost-items",
-        });
+        this.$router.push('/lost-items');
       });
     }
     this.callEventListners();
@@ -600,9 +599,9 @@ export default {
   computed: {
     dialogMessage() {
       if (this.deliveryType === "0") {
-        return "We have sent the notification link on your email. You can click on the link received on the mail to proceed further with the shipping.";
+        return this.$t('weHaveSentTheNotificationLinkOnYourEmail')
       } else {
-        return " We have sent the notification to the person who has uploaded the item, with the entered Pickup details. You can pickup your item accordingly at the scheduled time.";
+        return this.$t('weHaveSentTheNotificationToThePerson')
       }
     },
   },
@@ -622,7 +621,7 @@ export default {
         } else {
           this.isUserPhoneFormatValid = false;
           this.isUserPhoneValid = false;
-          this.userPhoneValidationMessage = "Please enter valid phone number";
+          this.userPhoneValidationMessage = this.$t('pleaseEnterValidMobileNumber');
         }
       }
     },
@@ -836,11 +835,11 @@ export default {
                   true
                 );
                 this.$nextTick(() => {
-                  this.$router.push({
-                    name: "custom-shipping-details",
+                  this.$router.push(this.localeLocation({ 
+                    name: 'custom-shipping-details', 
                     query: { id: this.itemId },
                     params: { fromItemDelivery: true },
-                  });
+                  }))
                 });
               } else {
                 this.$store.commit(
@@ -848,11 +847,11 @@ export default {
                   false
                 );
                 this.$nextTick(() => {
-                  this.$router.push({
-                    name: "rate-quotes",
+                  this.$router.push(this.localeLocation({ 
+                    name: 'rate-quotes', 
                     query: { id: this.itemId },
                     params: { fromItemDelivery: true },
-                  });
+                  }))
                 });
               }
             }
@@ -867,7 +866,7 @@ export default {
     closeDialog() {
       this.showDialog = false;
       this.$nextTick(() => {
-        this.$router.push({ path: "/lost-items" });
+        this.$router.push({ path: this.localePath({ name: 'lost-items' }) });
       });
     },
   },

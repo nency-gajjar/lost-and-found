@@ -22,9 +22,11 @@ export default {
   addressWillBeSelectedAutomatically: "Address will be selected automatically as you type & select the 'Venue Address' above",
   autoAddress: {
     address: "Address",
+    yourMailingAddress: "Your Mailing Address",
+    addressLine2: "Address Line 2",
     city: "City",
     state: "State",
-    zipcode: "Zipcode",
+    zipcode: "Zip Code",
     country: "Country",
     phoneNumber: "Phone Number"
   },
@@ -77,5 +79,30 @@ export default {
   claimItem: "Claim Item",
   noItemFound: "No Item Found",
 
-
+  // Item Delivery Page
+  hereAreTheDetailsOfAnItem: "Here are the details of an item that belongs to you",
+  itemDetails: "Item's Details",
+  senderDetails: "Sender's Details",
+  roomNo: "Room No. Or Hotel Area",
+  venueName: "Venue Name",
+  venueEmail: "Venue Email",
+  venueSecondaryEmail: "Venue Secondary Email",
+  venuePhoneNo: "Venue Phone No.",
+  howWouldYouLikeToProceed: "How would you like to proceed?",
+  shipItToMe: "Ship it to Me",
+  holdForPickup: "Hold for pickup",
+  yourName: "Your Name",
+  yourNumber: "Your Number",
+  yourMailingAddress: "Your Mailing Address",
+  thisIsCommercialAddress: "This is a Commercial Address",
+  addInsurance: "Add Insurance",
+  insuranceValue: "Insurance Value",
+  pickupPersonName: "Pickup Person Name",
+  additionalPersonName: "Additional Person Name",
+  expectedPickupDate: "Expected Pickup Date",
+  nextStep: "Next Step",
+  noResultFound: "No Result Found",
+  detailsSubmittedSuccessfully: "Details submitted successfully!",
+  weHaveSentTheNotificationLinkOnYourEmail: "We have sent the notification link on your email. You can click on the link received on the mail to proceed further with the shipping.",
+  weHaveSentTheNotificationToThePerson: "We have sent the notification to the person who has uploaded the item, with the entered Pickup details. You can pickup your item accordingly at the scheduled time."
 }
