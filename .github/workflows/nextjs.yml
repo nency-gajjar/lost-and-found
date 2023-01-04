@@ -18,5 +18,7 @@ jobs:
         run: cp /home/ubuntu/actions-runner/_work/lost-and-found/.env /home/ubuntu/actions-runner/_work/lost-and-found/lost-and-found
       - name: npm i
         run: npm i
-      - name: Deploy Next.js app in staging
-        run: pm2 restart Staging
+      - name: Generating Build
+        run: npm run build
+      - name: Serving Static Files
+        run: npm run generate
