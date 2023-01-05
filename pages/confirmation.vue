@@ -19,7 +19,7 @@
               <td class="w-full w-full-imp">
                 <table width="100%" cellspacing="0" cellpadding="0">
                   <tr id="found-shelf-logo" class="flex w-full hidden logo-hidden">
-                    <td align="left" class="!w-24"><img class="found-logo" src="https://foundshelf.com/_nuxt/assets/images/found-shelf-icon.svg" alt="Found Shelf"></td>
+                    <td align="left" class="!w-24"><img class="found-logo" src="https://foundshelf.com/_nuxt/img/found-shelf-icon.908beac.svg" alt="Found Shelf"></td>
                   </tr>
                   <tr class="!flex !justify-center !w-full">
                     <td align="center" class="!w-full">
