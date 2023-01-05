@@ -13,8 +13,7 @@
               <div class="form-title">
                 <BaseHeader varient="accent">{{ $t('itemDetails') }}:</BaseHeader>
               </div>
-              <RawCard v-if="!itemDetails.image" :title="$t('itemDescription')" :value="itemDetails.item_description" />
-              <div v-else
+              <div v-if="showImage"
                 class="
                   mt-2
                   py-2
@@ -76,6 +75,7 @@
           
                 </div>
               </div>
+              <RawCard v-else :title="$t('itemDescription')" :value="itemDetails.item_description" />
             </div>
             <!-- Item Details End -->
 
@@ -212,7 +212,7 @@
               </ValidationProvider>
               <div>
                 <div
-                  class="block !mb-8 relative box-content h-12 w-full"
+                  class="block relative box-content w-full"
                   :class="!isUserPhoneValid && 'error'"
                 >
                   <label class="text-gray-500" :class="!isUserPhoneValid && 'text-red-500'"
@@ -226,7 +226,7 @@
                       border-gray-300
                       w-full
                       rounded-lg
-                      h-full
+                      h-12
                     "
                     v-model="receiverMobileNo"
                     @blur="validateUserPhone"
@@ -244,7 +244,7 @@
               <ValidationProvider
                 v-slot="{ errors }"
                 :rules="deliveryType === '0' ? 'required' : ''"
-                class="block !mt-2"
+                class="block"
               >
                 <BaseInput
                   :isRequired="true"
@@ -259,7 +259,7 @@
                   <template v-slot:icon>
                     <div
                       v-if="autoCompleteAddress.address"
-                      class="absolute bg-white inset-y-0 top-7 right-1 flex items-center p-5"
+                      class="absolute bg-white bottom-13-px right-1 pr-5"
                     >
                       <BaseIcon
                         @click="clearAddress"
@@ -269,7 +269,7 @@
                     </div>
                     <div
                       v-else
-                      class="absolute inset-y-0 top-7 right-0 flex items-center p-5"
+                      class="absolute bottom-13-px right-0 pr-5"
                     >
                       <BaseIcon icon="location-arrow" color="lightgray" />
                     </div>
@@ -436,7 +436,7 @@
               <ValidationProvider
                 v-slot="{ errors }"
                 rules="required"
-                class="block mb-4 mt-2"
+                class="block mb-4"
               >
                 <label class="text-gray-500" :class="errors.length > 0 && 'text-red-500'"
                   >{{ $t('expectedPickupDate') }} <span class="text-red-500">*</span> </label
@@ -446,6 +446,7 @@
                     <date-picker
                       v-model="expectedPickupDate"
                       format="MM-DD-YYYY"
+                      :disabled-date="disablePickupDate"
                     ></date-picker>
                   </div>
                 </client-only>
@@ -523,7 +524,7 @@ export default {
     isUserPhoneFormatValid: true,
     isUserPhoneValid: true,
     userPhoneValidationMessage: "",
-    commercialAddress: "",
+    commercialAddress: false,
     insurance: "",
     insuranceValue: "",
     isLoadingItemDetails: true,
@@ -551,6 +552,7 @@ export default {
             };
             // this.venueName = this.itemDetails.venue_name || "";
             this.receiverName = this.itemDetails.receiver_name || "";
+            this.pickupPersonName = this.receiverName;
             this.receiverEmail = this.itemDetails.receiver_email || "";
             this.receiverMobileNo = this.itemDetails.receiver_mobile_no || "";
             this.autoCompleteAddress.address =
@@ -585,6 +587,19 @@ export default {
   },
   mounted() {
     if (this.$route.query.id) {
+      if(this.$store.getters["shipment/itemId"]){
+        let itemId = JSON.parse(JSON.stringify(this.$store.getters["shipment/itemId"]));
+        if(itemId === this.$route.query.id){
+          if(this.$store.getters["shipment/insuranceValue"]){
+            this.insurance = true;
+            this.insuranceValue = JSON.parse(JSON.stringify(this.$store.getters["shipment/insuranceValue"]));
+          }
+          if(this.$store.getters["shipment/lableDetails"]){
+            let commercialAddress = JSON.parse(JSON.stringify(this.$store.getters["shipment/lableDetails"])).residential;
+            this.commercialAddress = !commercialAddress;
+          }
+        }
+      }
       this.itemId = this.$route.query.id;
       this.$store.commit("shipment/SET_ITEM_DELIVERY_ID", this.itemId);
     } 
@@ -596,7 +611,15 @@ export default {
     this.callEventListners();
     this.$store.commit("shipment/SET_CUSTOM_INFO", {});
   },
+  watch: {
+    receiverName(value){
+      this.pickupPersonName = value;
+    },
+  },
   computed: {
+    showImage() {
+      return this.itemDetails.image && this.itemDetails.is_default !== 'Approve without Image';
+    },
     dialogMessage() {
       if (this.deliveryType === "0") {
         return this.$t('weHaveSentTheNotificationLinkOnYourEmail')
@@ -608,6 +631,9 @@ export default {
   methods: {
     formatDate(date){
       return moment(date).format("MMMM DD, YYYY");
+    },
+    disablePickupDate (date) {
+      return date < new Date();
     },
     senderAddress(addressLine, city, state, country, zip){
       return `${addressLine}, ${city}, ${state}, ${country}, ${zip}`;
@@ -652,6 +678,9 @@ export default {
         let address = autocomplete.getPlace();
         this.receiverCompany = address.name;
         this.autoCompleteAddress.address = address.name;
+        let addressLineArr = address.vicinity.split(",");
+        addressLineArr.pop();
+        this.autoCompleteAddress.addressLine2 = addressLineArr.join();
 
         address.address_components.forEach((component) => {
           component.types.forEach((type) => {
@@ -757,8 +786,13 @@ export default {
           this.itemDetails.venue_phone_no
         );
         params_rateQuotes.toname = this.receiverName;
-        params_rateQuotes.tocompany = this.receiverCompany;
-        params_rateQuotes.tostreet1 = this.autoCompleteAddress.address;
+        if(this.autoCompleteAddress.address.length >= 44){
+          params_rateQuotes.tocompany = this.autoCompleteAddress.address.substring(0, 43);
+        }
+        else{
+          params_rateQuotes.tocompany = this.autoCompleteAddress.address;
+        }
+        params_rateQuotes.tostreet1 = this.autoCompleteAddress.addressLine2 || this.autoCompleteAddress.address;
         params_rateQuotes.tocity = this.autoCompleteAddress.city;
         params_rateQuotes.tostate = this.autoCompleteAddress.state;
         params_rateQuotes.tozip = this.autoCompleteAddress.zipcode;
@@ -769,7 +803,12 @@ export default {
         params_rateQuotes.length = Number(this.itemDetails.item_length);
         params_rateQuotes.width = Number(this.itemDetails.item_width);
         params_rateQuotes.height = Number(this.itemDetails.item_height);
-        params_rateQuotes.weight = Number(this.itemDetails.weight_pounds);
+        if(this.itemDetails.weight_ounces > 0){
+          params_rateQuotes.weight = Number(this.itemDetails.weight_ounces);
+        }
+        else{
+          params_rateQuotes.weight = Number((Number(this.itemDetails.weight_pounds) * 16).toFixed(1));
+        }
         params_rateQuotes.residential = !this.commercialAddress;
       }
       if (this.deliveryType === "1") {
@@ -798,6 +837,10 @@ export default {
               this.$store.commit(
                 "shipment/SET_LABLE_DETAILS",
                 params_rateQuotes
+              );
+              this.$store.commit(
+                "shipment/SET_ITEM_ID",
+                this.$route.query.id
               );
               if (this.insuranceValue) {
                 this.$store.commit(
@@ -886,5 +929,9 @@ export default {
 
 .w-250-px {
   width: 200px;
+}
+
+.bottom-13-px {
+  bottom: 13px;
 }
 </style>

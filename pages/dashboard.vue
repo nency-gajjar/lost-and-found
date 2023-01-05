@@ -22,7 +22,7 @@
               justify-center
               cursor-pointer
             "
-            @click="tabSelected = tab.id; searchQuery = ''"
+            @click="changeTab(tab.id)"
           >
             <div class="flex flex-col items-center justify-center">
               <span
@@ -106,6 +106,25 @@
         </template>
       </div>
     </div>
+    <BaseDialog
+      v-if="showDialog"
+      :showDialog="showDialog"
+      :showClose="false"
+      :icon="{ name: 'trash-can', color: 'red', size: '3x' }"
+      buttonTitle="Yes please!"
+      title="Are you sure?"
+      message="Do you want to remove the item?"
+      @close="showDialog= false;"
+    >
+      <template v-slot:action>
+        <BaseButton
+          class="!capitalize !px-5 !py-2"
+          varient="gray"
+          @click="showDialog= false; deleteItem()"
+          >Yes please!
+        </BaseButton>
+      </template>
+    </BaseDialog>
   </div>
 </template>
 
@@ -123,18 +142,26 @@ export default {
       tabSelected: 0,
       pendingListDetails: [],
       searchQuery: "",
+      showDialog: false,
+      itemToDelete: {},
       tabs: [
         { id: 0, name: 'Waiting For Approval', data: '', tileBgClass: 'bg-blue-600', borderClass: '!border-blue-800', totalBgClass: 'bg-blue-500'},
         { id: 1, name: 'Total Lost Items', data: '', tileBgClass: 'bg-pink-600', borderClass: '!border-pink-800', totalBgClass: 'bg-pink-400'},
         { id: 2, name: 'Total Claim Items', data: '', tileBgClass: 'bg-yellow-600', borderClass: '!border-yellow-800', totalBgClass: 'bg-yellow-500'},
         { id: 3, name: 'Total Items Listed Today', data: '', tileBgClass: 'bg-cyan-600', borderClass: '!border-cyan-800', totalBgClass: 'bg-cyan-500'},
         { id: 4, name: 'Total Items Claimed Today', data: '', tileBgClass: 'bg-indigo-600', borderClass: '!border-indigo-800', totalBgClass: 'bg-indigo-400'},
+        { id: 5, name: 'Total Unclaimed Items', data: '', tileBgClass: 'bg-rose-600', borderClass: '!border-rose-800', totalBgClass: 'bg-rose-400'},
+        { id: 6, name: 'Awaiting Item Owner Action', data: '', tileBgClass: 'bg-purple-600', borderClass: '!border-purple-800', totalBgClass: 'bg-purple-400'},
+        { id: 7, name: 'Hold for Pickup items', data: '', tileBgClass: 'bg-emerald-600', borderClass: '!border-emerald-800', totalBgClass: 'bg-emerald-400'},
       ]
     };
   },
   created() {
     this.getAdminDashboardDetails();
     this.getPendingListDetails();
+    if(this.$store.getters["admin/tabId"]){
+      this.tabSelected = JSON.parse(JSON.stringify(this.$store.getters["admin/tabId"]));
+    }
   },
   computed: {
     filteredItems () {
@@ -148,6 +175,11 @@ export default {
     }
   },
   methods: {
+    changeTab(tabId){
+      this.tabSelected = tabId;
+      this.searchQuery = '';
+      this.$store.commit("admin/SET_TAB_ID", tabId);
+    },
     getAdminDashboardDetails() {
       const access_token = this.$auth.getToken("local");
       this.isLoading = true;
@@ -162,9 +194,13 @@ export default {
             this.isLoading = false;
             this.dashboardDetails = response?.data?.data || [];
 
-            this.tabs[0].data = this.pendingListDetails
+            this.tabs[0].data = this.pendingListDetails.reverse()
             this.dashboardDetails.forEach((detail, index) => {
-              for (const key in detail)  this.tabs[index+1].data = detail[key]
+              if(this.tabs.length > index+1){
+                for (const key in detail) {
+                  this.tabs[index+1].data = detail[key].reverse()
+                }
+              }
             });
           }
         })
@@ -193,7 +229,7 @@ export default {
         });
     },
     viewItem(item) {
-      if (this.tabSelected === 5) {
+      if (this.tabSelected === 0) {
         this.$nextTick(() => {
           this.$router.push(this.localeLocation({ 
             name: "admin/detail-confirmation",
@@ -213,25 +249,25 @@ export default {
         });
       }
     },
-    deleteItem(item) {
+    deleteItem() {
       const access_token = this.$auth.getToken("local");
-      this.$set(this.isLoadingRemoveImage, item.id, true);
+      this.$set(this.isLoadingRemoveImage, this.itemToDelete.id, true);
       this.$axios
-        .post(`/deletesingledetailadmin?id=${item.id}`, {
+        .post(`/deletesingledetailadmin?id=${this.itemToDelete.id}`, {
           headers: {
             Authorization: `Bearer ${access_token}`,
           },
         })
         .then((response) => {
           if (response.status === 200) {
-            this.isLoadingRemoveImage[item.id] = false;
+            this.isLoadingRemoveImage[this.itemToDelete.id] = false;
             this.$toast.info("Item Deleted successfully!");
             this.getAdminDashboardDetails();
           }
         })
         .catch((err) => {
           this.$toast.error("Something went wrong! Please try again.");
-          this.isLoadingRemoveImage[item.id] = false;
+          this.isLoadingRemoveImage[this.itemToDelete.id] = false;
           console.log(err);
         });
     },

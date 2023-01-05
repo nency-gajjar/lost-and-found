@@ -1,6 +1,6 @@
 <template>
   <div class="wrapper">
-    <BaseCard class="md:w-8/12 lg:w-7/12 xl:w-6/12">
+    <BaseCard v-if="!isAlreadyPickup" class="md:w-8/12 lg:w-7/12 xl:w-6/12">
       <ValidationObserver v-slot="{ validate }" ref="observer">
         <form
           class="grid gap-4 mt-1"
@@ -19,29 +19,16 @@
                 {{ fromZip }}
               </p>
             </div>
-            <ValidationProvider
-              v-slot="{ errors }"
-              rules="required"
-              class="block"
-            >
+            <div class="block">
               <BaseInput
                 v-model="reference"
-                :isRequired="true"
                 type="text"
                 label="Reference"
-                :class="errors.length > 0 && 'error'"
               />
-            </ValidationProvider>
-            <ValidationProvider
-              v-slot="{ errors }"
-              rules="required"
-              class="block"
-            >
-              <div
-                class="text-gray-500"
-                :class="errors.length > 0 && 'text-red-500'"
-              >
-                Add instructions <span class="text-red-500">*</span>
+            </div>
+            <div class="block">
+              <div class="text-gray-500">
+                Add instructions
               </div>
               <textarea
                 v-model="instructions"
@@ -60,16 +47,12 @@
                   transition-shadow
                   text-gray-700
                 "
-                :class="
-                  errors.length > 0 &&
-                  'border-red-500 border-2 ring-4 ring-red-500 ring-opacity-10 rounded-lg  transition-none'
-                "
               ></textarea>
-            </ValidationProvider>
+            </div>
             <ValidationProvider
               v-slot="{ errors }"
               rules="required"
-              class="block !mt-1"
+              class="block"
             >
               <label
                 class="block text-md !mt-0 text-gray-500"
@@ -101,6 +84,9 @@
         </form>
       </ValidationObserver>
     </BaseCard>
+    <div v-else>
+      <BaseHeader varient="h4">Pickup has already been scheduled!</BaseHeader>
+    </div>
   </div>
 </template>
 
@@ -130,6 +116,7 @@ export default {
       fromState: "",
       fromCountry: "",
       fromZip: "",
+      isAlreadyPickup: false,
     };
   },
   mounted() {
@@ -148,6 +135,7 @@ export default {
           this.fromState = response.data.data.Item.states;
           this.fromCountry = response.data.data.Item.country;
           this.fromZip = response.data.data.Item.zipcode;
+          this.isAlreadyPickup = response.data.data.Item?.scheduled_pickup;
         })
         .catch((error) => {
           console.log(error);
@@ -167,39 +155,43 @@ export default {
             let params = {
               address: this.fromAddressId,
               shipment: this.shipmentId,
-              reference: this.reference,
+              reference: this.reference || "test",
               min_datetime: moment(this.dateTimeRange[0]).format(
                 "YYYY-MM-DD HH:mm:ss"
               ),
               max_datetime: moment(this.dateTimeRange[1]).format(
                 "YYYY-MM-DD HH:mm:ss"
               ),
-              instructions: this.instructions,
+              instructions: this.instructions || "test",
               id: this.itemId,
             };
             let response = await this.$axios.post("/schedulePickup", params);
-            this.$toast.info("Pickup scheduled successfully!");
-            let update_params = {
-              min_datetime: moment(this.dateTimeRange[0]).format(
-                "YYYY-MM-DD HH:mm:ss"
-              ),
-              max_datetime: moment(this.dateTimeRange[1]).format(
-                "YYYY-MM-DD HH:mm:ss"
-              ),
-              scheduled_pickup: true,
-            };
-            try {
-              let response = await this.$axios.post(
-                "/updatesinglelostitem?id=" + this.itemId,
-                update_params
-              );
-              this.isLoading = false;
-            } catch (err) {
-              console.log(err);
-              this.isLoading = false;
+            if(response.status === 200){
+              this.$toast.info("Pickup scheduled successfully!");
+              let update_params = {
+                min_datetime: moment(this.dateTimeRange[0]).format(
+                  "YYYY-MM-DD HH:mm:ss"
+                ),
+                max_datetime: moment(this.dateTimeRange[1]).format(
+                  "YYYY-MM-DD HH:mm:ss"
+                ),
+                scheduled_pickup: true,
+              };
+              try {
+                let response = await this.$axios.post(
+                  "/updatesinglelostitem?id=" + this.itemId,
+                  update_params
+                );
+                this.isLoading = false;
+              } catch (err) {
+                console.log(err);
+                this.isLoading = false;
+              }
+              this.$nextTick(() => {
+                this.$router.push("/lost-items");
+              });
             }
           }
-          this.$emit("close");
         } catch (error) {
           this.$toast.error("Something went wrong! Please try again.");
           console.log(error);

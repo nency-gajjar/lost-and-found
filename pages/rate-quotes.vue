@@ -1,10 +1,5 @@
 <template>
   <div class="wrapper pb-10">
-    <span v-if="!isBottom && mobileDevice" @click="jumpToBottom" class="fixed z-50 bottom-5 right-5 animate-bounce rounded-full p-4 bg-accent-100 text-sm">
-      <svg class="w-5 h-5 mx-auto" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="white">
-        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 13l-7 7-7-7m14-8l-7 7-7-7" />
-      </svg>
-    </span>
     <div class="container max-w-7xl mx-auto px-4">
       <div class="form-title my-5">
         <BaseHeader class="mt-10" varient="gray">Select Your Rate Quote</BaseHeader>
@@ -282,6 +277,22 @@
                   src="@/assets/images/dhl-express-logo.png"
                   alt="DHLExpress"
                 />
+                <img
+                  v-else-if="item.carrier === 'CanadaPost'"
+                  class="
+                    w-full
+                    h-auto
+                    mx-auto
+                    my-auto
+                    object-contain
+                    transition
+                    duration-500
+                    ease
+                    hover:transform hover:scale-[110%]
+                  "
+                  src="@/assets/images/canada-post.png"
+                  alt="DHLExpress"
+                />
               </div>
             </div>
           </div>
@@ -313,7 +324,7 @@
             <h3
               class="text-sm font-bold text-[#37322C] tracking-wider uppercase"
             >
-              lable preview
+              label preview
             </h3>
 
             <hr class="my-5 flex-grow border-dashed border border-[#E1E3E6]" />
@@ -361,7 +372,7 @@
               <div class="text-sm leading-6">
                 <p>{{ lableDetails.toname }}</p>
                 <p>{{ lableDetails.tocompany }}</p>
-                <p>{{ lableDetails.tostreet1 }}</p>
+                <p v-if="lableDetails.tocompany != lableDetails.tostreet1">{{ lableDetails.tostreet1 }}</p>
                 <p>
                   {{ lableDetails.tocity }}, {{ lableDetails.tostate }},
                   {{ lableDetails.tozip }}
@@ -401,7 +412,7 @@
               </div>
               <div class="flex justify-between text-sm leading-6">
                 <p>Weight</p>
-                <p>{{ lableDetails.weight }} LBS</p>
+                <p>{{ lableDetails.weight }} OZ</p>
               </div>
               <div v-if="lableDetails.insuranceValue" class="flex justify-between text-sm leading-6">
                 <p>Insurance Charges</p>
@@ -513,6 +524,12 @@ export default {
         });
       } else if (sortBy === 1) {
         this.rateQuoteItems.sort((a, b) => {
+          if(a.delivery_days === null){
+            return 1;
+          }
+          if(b.delivery_days === null){
+            return -1;
+          }
           return a.delivery_days - b.delivery_days;
         });
       }
@@ -524,6 +541,9 @@ export default {
     selecteRateQuote(item) {
       this.selectedRate = item;
       this.$store.commit("shipment/SET_SELECTED_RATE", item);
+      if(this.mobileDevice){
+        this.jumpToBottom();
+      }
       // localStorage.setItem("SelectedRate", JSON.stringify(item));
     },
     proceedToCheckout() {
@@ -548,18 +568,38 @@ export default {
   },
   mounted() {
     if (this.$route.params.fromItemDelivery) {
+      let labelDetails = JSON.parse(
+        JSON.stringify(this.$store.getters["shipment/lableDetails"])
+      );
+
+      let customs_info = JSON.parse(
+        JSON.stringify(this.$store.getters["shipment/customInfo"])
+      );
       this.isLoading = true;
+      let params = {}
+      if(Object.keys(customs_info).length > 0){
+        params = {
+          ...labelDetails,
+          customs_info: {
+            ...customs_info
+          }
+        }
+      }
+      else{
+        params = {
+          ...labelDetails
+        }
+      }
       this.$axios
         .post(
           "/getshippingrates",
-          JSON.parse(
-            JSON.stringify(this.$store.getters["shipment/lableDetails"])
-          )
+          params
         )
         .then((response) => {
           if (response.status === 200) {
             let surchargeData = response.data.surcharge[0];
             let ratesData = response.data.demo.rates;
+            let tempRateArr = [];
             let ratesUpdated = ratesData.map((data) => {
               let updatedRate = Number(data.rate);
               if(surchargeData?.srchargepercentage){
@@ -568,11 +608,28 @@ export default {
               if(surchargeData?.srchargeamont){
                 updatedRate = updatedRate + Number(surchargeData.srchargeamont);
               }
-              return {
+              let returnedData = {
                 ...data,
                 rate: updatedRate.toFixed(2)
               }
+              if(tempRateArr.length > 0){
+                let index = tempRateArr.findIndex(rateObj => {
+                  return rateObj.service === data.service;
+                })
+                if(index === -1){
+                  tempRateArr.push(returnedData);
+                  return returnedData;
+                }
+                else{
+                  return null;
+                }
+              }
+              else{
+                tempRateArr.push(returnedData);
+                return returnedData;
+              }
             })
+            ratesUpdated = ratesUpdated.filter((rate) => { return rate !== null })
             let shippingRates = {
               buyer_address: response.data.demo.buyer_address,
               from_address: response.data.demo.from_address,
@@ -664,5 +721,12 @@ export default {
 .rateLogoContainer img {
   max-width: 179px;
   max-height: 120px;
+}
+
+@media (max-width: 640px) {
+  .rateLogoContainer img {
+    max-width: 109px;
+    max-height: 100px;
+  }
 }
 </style>

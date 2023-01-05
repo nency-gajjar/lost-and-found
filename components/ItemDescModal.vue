@@ -11,7 +11,7 @@
     >
       <ValidationObserver v-slot="{ validate }" ref="observer">
         <form
-          class="grid gap-1 mt-1"
+          class="grid gap-4 mt-1"
           @submit.prevent="validate().then(onSubmit)"
         >
           <ValidationProvider
@@ -32,11 +32,11 @@
           <div class="grid sm:grid-cols-2 gap-4">
             <ValidationProvider
               v-slot="{ errors }"
-              rules="required|int|weight|positiveNumber"
+              rules="required|weight|positiveNumber"
               class="block col-span-1"
               name="Pounds"
             >
-              <BaseInput :isRequired="true" v-model="itemDescObj.weight_pounds" label="Pounds" :class="errors.length > 0 && 'error'" />
+              <BaseInput :isRequired="true" @input="changedPound" v-model="itemDescObj.weight_pounds" label="Pounds" :class="errors.length > 0 && 'error'" />
               <p
                 v-if="errors.length"
                 class="vee-validation-error mt-2 text-sm text-red-600"
@@ -45,9 +45,9 @@
               </p>
             </ValidationProvider>
             <div class="block col-span-1">
-              <BaseSelect
+              <BaseInput
                 v-model="itemDescObj.weight_ounces"
-                :options="weightOuncesOptions"
+                @input="changedOunces"
                 label="Ounces"
               />
             </div>
@@ -148,6 +148,8 @@ export default {
       this.itemDescObj = {...this.data};
       this.tempEditData = {...this.data};
     }
+    this.changedPound();
+    this.changedOunces();
   },
   computed: {
     headerText() {
@@ -158,6 +160,12 @@ export default {
     },
   },
   methods: {
+    changedPound(){
+      this.itemDescObj.weight_ounces = Number((Number(this.itemDescObj.weight_pounds) * 16).toFixed(1));
+    },
+    changedOunces(){
+      this.itemDescObj.weight_pounds = Number((Number(this.itemDescObj.weight_ounces) / 16).toFixed(1));
+    },
     async onSubmit() {
       const isValid = await this.$refs.observer.validate();
       if (isValid) {

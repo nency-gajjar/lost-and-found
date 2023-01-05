@@ -26,7 +26,7 @@ export default {
 
 <style scoped>
 .loader {
-  border-top-color: #970584ba;
+  border-top-color: #153f5ed9;
   -webkit-animation: spinner 1.5s linear infinite;
   animation: spinner 1.5s linear infinite;
   border-width: 6px;

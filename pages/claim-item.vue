@@ -107,7 +107,7 @@
               <ValidationProvider
                 v-slot="{ errors }"
                 rules="required"
-                class="block !mt-1"
+                class="block"
               >
               <div class="text-gray-500" :class="errors.length > 0 && 'text-red-500'">{{ $t('dateOfLost') }} <span class="text-red-500">*</span> </div>
                 <client-only>
@@ -140,7 +140,7 @@
                   <template v-slot:icon>
                     <div
                       v-if="autoCompleteAddress.address"
-                      class="absolute inset-y-0 top-7 right-1 bg-white flex items-center p-5"
+                      class="absolute bg-white bottom-13-px right-1 pr-5"
                     >
                       <BaseIcon
                         @click="clearAddress"
@@ -150,7 +150,7 @@
                     </div>
                     <div
                       v-else
-                      class="absolute inset-y-0 top-7 right-0 flex items-center p-5"
+                      class="absolute bottom-13-px right-0 pr-5"
                     >
                       <BaseIcon icon="location-arrow" color="lightgray" />
                     </div>
@@ -328,7 +328,7 @@ export default {
         if (index == "-1") {
           this.addressArr.unshift(address.formatted_address);
         }
-        this.autoCompleteAddress.address = address.name;
+        this.autoCompleteAddress.address = address.formatted_address;
         this.autoCompleteAddress.phoneNumber =
           address.international_phone_number || address.formatted_phone_number;
         ("");
@@ -431,6 +431,12 @@ export default {
   },
 };
 </script>
+
+<style scoped>
+.bottom-13-px{
+  bottom: 13px;
+}
+</style>
 
 <style lang="scss">
 @import "./assets/styles/date-picker.scss";

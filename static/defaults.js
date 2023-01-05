@@ -45,7 +45,7 @@ export const itemDescriptionOptions = [
     "Other",
 ]
 
-export const venueOptions = ["Hotel", "Restaurant", "Airport", "Other"]
+export const venueOptions = ["Hotel", "Restaurant", "Airport","Venue (Stadium, Concert, Conference)", "Transit", "University", "Law Enforcement", "Other Establishment", "Personal"]
 
 export const weightOuncesOptions = [
     "0",

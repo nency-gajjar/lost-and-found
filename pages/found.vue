@@ -66,6 +66,7 @@
               >
                 <BaseSelect
                   :isRequired="true"
+                  @focus="scrollToFocused"
                   v-model="venueType"
                   :options="venueOptions"
                   :label="$t('yourAffiliation')"
@@ -82,6 +83,7 @@
               >
                 <BaseInput
                   :isRequired="true"
+                  @focus="scrollToFocused"
                   v-model="manualVenue"
                   type="text"
                   :label="$t('typemanually')"
@@ -97,6 +99,7 @@
               >
                 <BaseInput
                   :isRequired="true"
+                  @focus="scrollToFocused"
                   v-model="address"
                   id="autocomplete"
                   type="text"
@@ -109,7 +112,7 @@
                   <template v-slot:icon>
                     <div
                       v-if="address"
-                      class="absolute inset-y-0 top-7 right-1 bg-white flex items-center p-5"
+                      class="absolute bg-white bottom-13-px right-1 pr-5"
                     >
                       <BaseIcon
                         icon="xmark"
@@ -119,7 +122,7 @@
                     </div>
                     <div
                       v-else
-                      class="absolute inset-y-0 top-7 right-0 flex items-center p-5"
+                      class="absolute bottom-13-px right-0 pr-5"
                     >
                       <BaseIcon icon="location-arrow" color="lightgray" />
                     </div>
@@ -135,6 +138,7 @@
               >
                 <BaseInput
                   v-model="venueEmail"
+                  @focus="scrollToFocused"
                   :isRequired="true"
                   type="email"
                   :label="$t('yourEmail')"
@@ -156,6 +160,7 @@
               >
                 <BaseInput
                   v-model="venueSecondaryEmail"
+                  @focus="scrollToFocused"
                   type="email"
                   :label="$t('secondaryEmail')"
                   :class="errors.length > 0 && 'error'"
@@ -170,7 +175,6 @@
               <div
                 class="block box-content h-12"
                 :class="[
-                  isEmployeeMobileNoValid && '!mt-0',
                   !isEmployeeMobileNoValid && 'error'
                 ]"
               >
@@ -228,6 +232,7 @@
                 class="block"
               >
                 <BaseInput
+                  @focus="scrollToFocused"
                   v-model="autoCompleteAddress.address"
                   :label="$t('autoAddress.address')"
                   type="text"
@@ -246,6 +251,7 @@
                 >
                   <BaseInput
                     v-model="autoCompleteAddress.city"
+                    @focus="scrollToFocused"
                     :label="$t('autoAddress.city')"
                     type="text"
                     :class="{
@@ -262,6 +268,7 @@
                 >
                   <BaseInput
                     v-model="autoCompleteAddress.state"
+                    @focus="scrollToFocused"
                     :label="$t('autoAddress.state')"
                     type="text"
                     :class="{
@@ -279,6 +286,7 @@
                 >
                   <BaseInput
                     v-model="autoCompleteAddress.zipcode"
+                    @focus="scrollToFocused"
                     :label="$t('autoAddress.zipcode')"
                     type="text"
                     :class="{
@@ -294,7 +302,7 @@
                 </ValidationProvider>
               </div>
 
-              <div class="grid lg:grid-cols-2 lg:gap-4 gap-0 !mt-0">
+              <div class="grid lg:grid-cols-2 gap-4">
                 <!-- Country -->
                 <ValidationProvider
                   v-slot="{ errors }"
@@ -303,6 +311,7 @@
                 >
                   <BaseInput
                     v-model="autoCompleteAddress.country"
+                    @focus="scrollToFocused"
                     :label="$t('autoAddress.country')"
                     type="text"
                     :class="{
@@ -363,6 +372,7 @@
                 <client-only>
                   <div :class="errors.length && 'error'">
                     <date-picker
+                      @focus="scrollToFocused"
                       v-model="foundDate"
                       :disabled-date="disableStartDate"
                       format="MM-DD-YYYY"
@@ -371,6 +381,16 @@
                 </client-only>
               </ValidationProvider>
 
+              <!-- Hotel room -->
+              <div v-if="venueType === 'Hotel'" class="block">
+                <BaseInput
+                  @focus="scrollToFocused"
+                  v-model="hotelRoom"
+                  type="text"
+                  label="Location (Ex. Room No., Hotel Area, etc.)"
+                />
+              </div>
+              
               <div class="block">
                 <label style="font-size:15px;" class="text-gray-500"> {{ $t('image.foundItemImage') }} </label>
                 <div
@@ -772,15 +792,6 @@
                 </div>
               </div>
 
-              <!-- Hotel room -->
-              <div v-if="venueType === 'Hotel'" class="block">
-                <BaseInput
-                  v-model="hotelRoom"
-                  type="text"
-                  :label="$t('hotelLocation')"
-                />
-              </div>
-
               <!-- Item Description -->
               <div id="manualItemDescription">
                 <label style="font-size:15px;" class="text-gray-500"> {{ $t('enterItemDescription') }} <span class="text-red-500">*</span> </label>
@@ -791,6 +802,7 @@
                   >
                     <div :class="errors.length > 0 && isItemDescriptionFocused && 'error'">
                       <vue-simple-suggest
+                        @focus="scrollToFocused"
                         @blur="isItemDescriptionFocused = true"
                         v-model="itemDescription"
                         :list="itemDescriptionOptions"
@@ -800,21 +812,6 @@
                   </ValidationProvider>
               </div>
 
-              <!-- Package Type -->
-              <ValidationProvider
-                v-slot="{ errors }"
-                rules="required"
-                class="block !mt-2"
-              >
-                <BaseSelect
-                  :isRequired="true"
-                  v-model="packageType"
-                  :options="packageTypeOptions"
-                  label="Package Type"
-                  :class="errors.length > 0 && 'error'"
-                />
-              </ValidationProvider>
-
               <!-- Item Status -->
               <ValidationProvider
                 v-slot="{ errors }"
@@ -823,6 +820,7 @@
               >
                 <BaseSelect
                   :isRequired="true"
+                  @focus="scrollToFocused"
                   v-model="itemStatus"
                   :options="itemStatusOptions"
                   :label="$t('itemStatus')"
@@ -839,6 +837,7 @@
                   class="block"
                 >
                   <BaseInput
+                    @focus="scrollToFocused"
                     :isRequired="true"
                     v-model="receiverName"
                     type="text"
@@ -855,6 +854,7 @@
                   name="Receiver's Email"
                 >
                   <BaseInput
+                    @focus="scrollToFocused"
                     :isRequired="true"
                     v-model="receiverEmail"
                     type="email"
@@ -872,7 +872,6 @@
                   class="block relative box-content h-12"
                   :class="[
                     !isReceiverMobileNoValid && 'error',
-                    isReceiverMobileNoValid && '!mt-0',
                   ]"
                 >
                   <div style="font-size:15px;" class="text-gray-500" :class="!isReceiverMobileNoValid && 'text-red-500'"> {{ $t('receiverMobileNumber') }} <span class="text-red-500">*</span> </div>
@@ -965,8 +964,8 @@ export default {
       showResetButton: false,
       itemDetails: {},
       showValidateAlert: false,
-      senderFormTitle:'',
-      foundItemFormTitle: '',
+      senderFormTitle: "Let’s add few details and leave the rest to us!",
+      foundItemFormTitle: "Found item details",
       venueEmail: "",
       venueSecondaryEmail: "",
       address: "",
@@ -980,8 +979,7 @@ export default {
       itemDescription: "",
       itemDescriptionOptions: [],
       itemDescriptionResponse: [],
-      packageType: "",
-      packageTypeOptions: ["Box", "Envelope"],
+      packageType: "Box",
       weight: "",
       weightOunces: "",
       weightOuncesOptions: weightOuncesOptions,
@@ -1040,6 +1038,14 @@ export default {
         return this.$t('yourHotelName');
       } else if (this.venueType === "Airport") {
         return this.$t('airportNameOrCode');
+      } else if (this.venueType === "Transit") {
+        return "Transit Name";
+      } else if (this.venueType === "University") {
+        return "University Name";
+      } else if (this.venueType === "Law Enforcement") {
+        return "Enforcement Name";
+      } else if (this.venueType === "Other Establishment") {
+        return "Establishment Name";
       } else {
         return this.$t('venueAddress');
       }
@@ -1051,6 +1057,14 @@ export default {
         return this.$t('hotelAddress');
       } else if (this.venueType === "Airport") {
         return this.$t('airportAddress');
+      } else if (this.venueType === "Transit") {
+        return "Transit Address";
+      } else if (this.venueType === "University") {
+        return "University Address";
+      } else if (this.venueType === "Law Enforcement") {
+        return "Law Enforcement Address";
+      } else if (this.venueType === "Other Establishment") {
+        return "Establishment Address";
       } else {
         return this.$t('venueAddress');
       }
@@ -1096,7 +1110,7 @@ export default {
               let index = this.venueOptions.indexOf(data.venu_type) !== -1;
               if (index) this.venueType = data.venu_type;
               else {
-                this.venueType = "Other";
+                this.venueType = "Personal";
                 this.manualVenue = data.venu_type;
               }
               this.itemDescription = data.item_description;
@@ -1144,7 +1158,7 @@ export default {
         var index = this.venueOptions.indexOf(data.venu_type) !== -1;
         if (index) this.venueType = data.venu_type;
         else {
-          this.venueType = "Other";
+          this.venueType = "Personal";
           this.manualVenue = data.venu_type;
         }
         this.itemDescription = data.item_description;
@@ -1197,7 +1211,7 @@ export default {
         var index = this.venueOptions.indexOf(data.venu_type) !== -1;
         if (index) this.venueType = data.venu_type;
         else {
-          this.venueType = "Other";
+          this.venueType = "Personal";
           this.manualVenue = data.venu_type;
         }
         this.itemDescription = data.item_description;
@@ -1475,7 +1489,12 @@ export default {
       }
       this.validateVenuePhoneNo();
       this.validateEmployeeMobileNo();
-      if (itemStatus == "Claimed") this.validateReceiverMobileNo();
+      if (itemStatus == "Claimed") {
+        this.validateReceiverMobileNo();
+      }
+      else {
+        this.isReceiverMobileNoValid = true;
+      }
 
       this.isLoading = true;
       const isValid = await this.$refs.observer.validate();
@@ -1507,7 +1526,7 @@ export default {
           it_type: it_type,
           venue_name: this.venueName,
           venu_type:
-            this.venueType === "Other" ? this.manualVenue : this.venueType,
+            this.venueType === "Personal" ? this.manualVenue : this.venueType,
           datse: moment(this.foundDate).format("YYYY-MM-DD"),
           venue_email: this.venueEmail,
           secondary_email: this.venueSecondaryEmail,
@@ -1691,7 +1710,7 @@ export default {
   watch: {
     venueType(newValue, oldValue) {
       if (newValue != oldValue) {
-        if (newValue == "Other") {
+        if (newValue == "Personal") {
           this.venueManually = true;
         } else {
           this.venueManually = false;
@@ -1719,6 +1738,12 @@ export default {
 };
 </script>
 
+<style scoped>
+.bottom-13-px{
+  bottom: 13px;
+}
+</style>
+
 <style lang="scss">
 @import "./assets/styles/date-picker.scss";
 @import "./assets/styles/image-editor.scss";
@@ -1745,6 +1770,7 @@ export default {
 
 .input-wrapper {
   input{
+    color: rgb(55, 65, 81) !important;
     border-width: 1px !important;
     --tw-border-opacity: 1 !important;
     border-color: rgb(209 213 219 / var(--tw-border-opacity)) !important;

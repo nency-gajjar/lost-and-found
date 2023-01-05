@@ -1,7 +1,8 @@
 <template>
-  <main class="text-center space-y-5 max-w-5xl mx-auto">
+  <main class="min-h-screen text-center space-y-5 max-w-5xl mx-auto">
     <div class="flex space-y-5 max-w-5xl mx-auto">
       <BaseCard
+        v-if="!isDownload"
         class="
           sm:mt-14
           mt-8
@@ -65,8 +66,8 @@
         </div>
       </BaseCard>
     </div>
-    <div class="text-center mt-8 space-y-5 max-w-4xl mx-auto px-4">
-      <h3 class="text-xl font-medium text-primary-100">
+    <div v-if="!isDownload" class="text-center mt-8 space-y-5 max-w-4xl mx-auto px-4">
+      <h3 class="text-xl font-medium text-accent-100">
         You have successfully created a shipping label!
       </h3>
       <p class="text-gray-800">
@@ -75,10 +76,13 @@
       <p class="text-gray-800">
         We recommend that you call the sender below to ensure that they have received the email containing the label. <br> <span class="font-semibold text-gray-700">Sender name:</span> {{ itemDetails.venue_name }} <br> <span class="font-semibold text-gray-700">Sender Mobile No:</span> <a :href="`tel: ${itemDetails.venue_phone_no}`" class="font-display underline decoration-1">{{ itemDetails.venue_phone_no }}</a>
       </p>
-      <BaseButton v-if="!itemDetails.scheduled_pickup" @click="printLabel"> Print/Download Label </BaseButton>
+      <BaseButton @click="printLabel"> Print/Download Label </BaseButton>
     </div>
-    <p class="text-gray-800">
+    <p v-if="!isDownload" class="text-gray-800">
       Optionally, you can schedule a pickup for your package:
+    </p>
+    <p v-else class="text-gray-800">
+      Pickup has already been scheduled!
     </p>
     <div
       class="
@@ -128,96 +132,49 @@ export default {
       labelImg: "",
       labelWidth: 360,
       rotateCss: "",
+      isDownload: false,
     };
   },
   async mounted() {
-    if (this.$store.getters["shipment/labelUrl"]) {
-      this.labelUrl = JSON.parse(
-        JSON.stringify(this.$store.getters["shipment/labelUrl"])
-      );
-      this.getImgData(this.labelUrl)
-      .then(img => {
-        if(img.naturalWidth < img.naturalHeight){
-          this.rotateCss = `
-            -webkit-transform:rotate(270deg);  
-            -moz-transform: rotate(270deg);  
-            -ms-transform: rotate(270deg);  
-            -o-transform: rotate(270deg);  
-            transform: rotate(270deg);`;
-        }
-      });
-    }
-    if (this.$store.getters["shipment/selectedRate"]) {
-      let selectedRate = JSON.parse(
-        JSON.stringify(this.$store.getters["shipment/selectedRate"])
-      );
-      let carrier = selectedRate?.carrier;
-      if(carrier === "UPS"){
-        this.labelWidth = 309;
-      }
-      else if(carrier === "DHLExpress"){
-        this.labelWidth = 180;
-      }
-    }
-    if (this.$store.getters["shipment/itemId"]) {
-      this.itemId = JSON.parse(
-        JSON.stringify(this.$store.getters["shipment/itemId"])
-      );
+    if(this.$route.query.id){
+      this.$axios
+        .get("/getsinglelostitem?id=" + this.$route.query.id)
+        .then(async (response) => {
+          this.itemDetails = response.data.data.Item;
+          let img = await this.getImgData(this.itemDetails.label_url)
+          if(img.naturalWidth < img.naturalHeight){
+            this.rotateCss = `
+              -webkit-transform:rotate(270deg);  
+              -moz-transform: rotate(270deg);  
+              -ms-transform: rotate(270deg);  
+              -o-transform: rotate(270deg);  
+              transform: rotate(270deg);`;
+          }
+          if(this.itemDetails.service_provider === "UPS"){
+            this.labelWidth = 309;
+          }
+          else if(this.itemDetails.service_provider === "DHLExpress"){
+            this.labelWidth = 180;
+          }
+          if (this.itemDetails.image) {
+            const data = await fetch(this.itemDetails.image, { cache: "no-cache" });
+            const blob = await data.blob();
+            this.itemImg = await this.image_to_base64(blob);
+          }
 
-      let update_params = {
-        from_address: JSON.parse(
-          JSON.stringify(this.$store.getters["shipment/shippingRates"])
-        ).from_address.id,
-        to_address: JSON.parse(
-          JSON.stringify(this.$store.getters["shipment/shippingRates"])
-        ).to_address.id,
-        carrier_accounts: JSON.parse(
-          JSON.stringify(this.$store.getters["shipment/selectedRate"])
-        ).carrier_account_id,
-        parcel: JSON.parse(
-          JSON.stringify(this.$store.getters["shipment/shippingRates"])
-        ).parcel.id,
-        shipment: JSON.parse(
-          JSON.stringify(this.$store.getters["shipment/shipmentId"])
-        ),
-        label_url: this.labelUrl,
-        delivery_confirmation:
-          JSON.parse(
-            JSON.stringify(this.$store.getters["shipment/signature"])
-          ) === true
-            ? true
-            : false,
-      };
-
-      try {
-        let response = await this.$axios.post(
-          "/updatesinglelostitem?id=" + this.itemId,
-          update_params
-        );
-      } catch (err) {
-        console.log(err);
-      }
-
-      try {
-        let response = await this.$axios.get(
-          "/getsinglelostitem?id=" + this.itemId
-        );
-        this.itemDetails = response.data.data.Item;
-      } catch (err) {
-        console.log(err);
-      }
-
-      if (this.itemDetails.image) {
-        const data = await fetch(this.itemDetails.image, { cache: "no-cache" });
-        const blob = await data.blob();
-        this.itemImg = await this.image_to_base64(blob);
-      }
-
-      if (this.labelUrl) {
-        const data = await fetch(this.labelUrl, { cache: "no-cache" });
-        const blob = await data.blob();
-        this.labelImg = await this.image_to_base64(blob);
-      }
+          if (this.itemDetails.label_url) {
+            const data = await fetch(this.itemDetails.label_url, { cache: "no-cache" });
+            const blob = await data.blob();
+            this.labelImg = await this.image_to_base64(blob);
+          }
+          if(this.$route.query.download) {
+            this.printLabel();
+            this.isDownload = true;
+          }
+        })
+        .catch((error) => {
+          console.log(error);
+        });
     }
   },
   methods: {
@@ -256,13 +213,13 @@ export default {
       let imgHtml = "";
       if (this.itemDetails.image) {
         imgHtml =
-          "<div class='flex justify-around w-100-px'> <img src='http://34.197.126.8/_nuxt/assets/images/found-shelf-icon.svg' /> <img src=" +
+          "<div class='flex justify-around w-100-px'> <img src='https://foundshelf.com/_nuxt/img/found-shelf-icon.908beac.svg' /> <img src=" +
           this.itemImg +
           "></div>";
       }
       else {
         imgHtml =
-          "<div class='itemImgContainer'><img src='http://34.197.126.8/_nuxt/assets/images/found-shelf-icon.svg' /></div>";
+          "<div class='itemImgContainer'><img src='https://foundshelf.com/_nuxt/img/found-shelf-icon.908beac.svg' /></div>";
       }
       let htmlToPrint = `
       <html><head>
@@ -301,7 +258,7 @@ export default {
             margin-top: 10px;
           }
           .text-accent-100 {
-            color: #970584ba;
+            color: #153f5ed9;
           }
           .text-gray-600 {
             color: rgb(82 82 82);
@@ -346,6 +303,9 @@ export default {
           p {
             margin: 5px 0;
           }
+          .items-center{
+            align-items: center;
+          }
         </style>
         </head><body>
         ${imgHtml}
@@ -384,7 +344,7 @@ export default {
           </tr>
           </table>
           <div class="flex justify-center"><p>Tracking ID: ${this.itemDetails.tracking_id}</p></div>
-          <div class="flex">
+          <div class="flex items-center">
             <div style="width: 20px">
               <svg style="color: rgb(240, 107, 4);" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256"><rect width="256" height="256" fill="none"></rect><circle cx="60" cy="76" r="28" fill="none" stroke="#000" stroke-linecap="round" stroke-linejoin="round" stroke-width="12"></circle><circle cx="60" cy="180" r="28" fill="none" stroke="#000" stroke-linecap="round" stroke-linejoin="round" stroke-width="12"></circle><line x1="136" y1="128" x2="83.1" y2="164.2" fill="none" stroke="#000" stroke-linecap="round" stroke-linejoin="round" stroke-width="12"></line><line x1="232" y1="62.3" x2="164.3" y2="108.6" fill="none" stroke="#000" stroke-linecap="round" stroke-linejoin="round" stroke-width="12"></line><line x1="232" y1="193.7" x2="83.1" y2="91.8" fill="none" stroke="#000" stroke-linecap="round" stroke-linejoin="round" stroke-width="12"></line></svg>
             </div>

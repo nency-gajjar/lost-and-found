@@ -1,7 +1,7 @@
 export default {
   // Global page headers: https://go.nuxtjs.dev/config-head
   head: {
-    title: 'lost-and-found',
+    title: 'Found Shelf',
     htmlAttrs: {
       lang: 'en'
     },
@@ -12,12 +12,12 @@ export default {
       { name: 'format-detection', content: 'telephone=no' }
     ],
     link: [
-      { rel: 'icon', type: 'image/x-icon', href: '/favicon.ico' }
+      { rel: 'icon', type: 'image/x-icon', href: '/favicon.svg' }
     ],
     script: [{ src: `https://maps.googleapis.com/maps/api/js?key=${process.env.GOOGLE_MAP_KEY}&libraries=places` }],
   },
 
-  loading: { color: 'purple', height: '3px' },
+  loading: { color: '#153f5ed9', height: '3px' },
 
   // Global CSS: https://go.nuxtjs.dev/config-css
   css: [

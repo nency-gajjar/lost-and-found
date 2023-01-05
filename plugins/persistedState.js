@@ -1,7 +1,7 @@
 import createPersistedState from 'vuex-persistedstate';
 
 // Add a new store path here to persist it
-const pathsToPersist = ['item', 'shipment']
+const pathsToPersist = ['item', 'shipment', 'admin']
 
 export default ({ store }) => {
   pathsToPersist.forEach((path) => {

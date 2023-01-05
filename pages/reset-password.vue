@@ -1,6 +1,6 @@
 <template>
   <section>
-    <div class="flex flex-col items-center px-6 mt-16 md:h-screen">
+    <div class="flex flex-col items-center px-6 mt-16 min-h-screen">
       <a
         href="#"
         class="flex items-center mb-6 text-2xl font-semibold text-gray-900"
@@ -67,7 +67,7 @@
                 >
                   <template v-slot:icon>
                     <div
-                      class="absolute inset-y-0 top-7 right-0 flex items-center p-5"
+                      class="absolute bottom-13-px right-0 pr-5"
                       @click="hidePassword = !hidePassword"
                     >
                       <BaseIcon
@@ -99,7 +99,7 @@
                 >
                   <template v-slot:icon>
                     <div
-                      class="absolute inset-y-0 top-7 right-0 flex items-center p-5"
+                      class="absolute bottom-13-px right-0 pr-5"
                       @click="hideConfirmPassword = !hideConfirmPassword"
                     >
                       <BaseIcon
@@ -211,3 +211,9 @@ export default {
   },
 };
 </script>
+
+<style scoped>
+.bottom-13-px{
+  bottom: 13px;
+}
+</style>

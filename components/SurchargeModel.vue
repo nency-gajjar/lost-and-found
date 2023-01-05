@@ -101,7 +101,7 @@
               >
                 <template v-slot:icon>
                   <div
-                    class="absolute inset-y-0 top-7 right-0 flex items-center p-5"
+                    class="absolute bottom-13-px right-0 pr-5"
                   >
                     <BaseIcon icon="dollar" color="lightgray" />
                   </div>
@@ -113,7 +113,7 @@
               <BaseInput v-model="percentage" type="text" label="Percentage">
                 <template v-slot:icon>
                   <div
-                    class="absolute inset-y-0 top-7 right-0 flex items-center p-5"
+                    class="absolute bottom-13-px right-0 pr-5"
                   >
                     <BaseIcon icon="percentage" color="lightgray" />
                   </div>
@@ -293,5 +293,8 @@ export default {
   & > .mx-datepicker {
     @apply border-red-500 border-2 ring-4 ring-red-500 ring-opacity-10 rounded-lg transition-none;
   }
+}
+.bottom-13-px{
+  bottom: 13px;
 }
 </style>

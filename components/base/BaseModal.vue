@@ -162,7 +162,7 @@ export default {
       justify-content: space-between;
       color: white;
       // background: #6ab4e4;
-      background-color: #970584ba;
+      background-color: #153f5ed9;
       padding: 10px 15px;
 
       .default-header-text {

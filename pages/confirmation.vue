@@ -4,8 +4,6 @@
       <div
         class="
           card
-          w-12/12
-          mx-4
           md:mx-auto 
           lg:w-6/12
           mx-auto
@@ -20,8 +18,8 @@
             <tr>
               <td class="w-full w-full-imp">
                 <table width="100%" cellspacing="0" cellpadding="0">
-                  <tr class="flex w-full hidden logo-hidden">
-                    <td align="left" class="!w-24"><img class="found-logo" src="../assets/images/found-shelf-icon.svg" alt="Found Shelf"></td>
+                  <tr id="found-shelf-logo" class="flex w-full hidden logo-hidden">
+                    <td align="left" class="!w-24"><img class="found-logo" src="https://foundshelf.com/_nuxt/img/found-shelf-icon.908beac.svg" alt="Found Shelf"></td>
                   </tr>
                   <tr class="!flex !justify-center !w-full">
                     <td align="center" class="!w-full">
@@ -47,16 +45,11 @@
                   <img :src="itemDetails.link" alt="" />
                 </div>
                 <div class="px-6 flex items-center justify-center">
-                  <BaseIcon
-                    icon="circle-info"
-                    color="gray"
-                    style="max-width: 15px"
-                  />
-                  <p class="pl-2 font-medium text-gray-700">{{ $t('scanQrCodeToEdit') }}</p>
+                  <p class="pl-2 font-medium text-gray-600 l-2">{{ $t('scanQrCodeToEdit') }}</p>
                 </div>
               </td>
             </tr>
-            <tr class="border-b">
+            <tr>
               <td class="px-6 py-4">
                 <table width="100%">
                   <tr>
@@ -71,14 +64,6 @@
                       >
                         {{ $t('senderDetails') }}:
                       </h2>
-                      <span
-                        class="
-                          w-20
-                          border-t-4 border-solid border-gray-300
-                          inline-block
-                          mb-1
-                        "
-                      ></span>
                     </td>
                   </tr>
                   <tr class="l-2">
@@ -117,34 +102,10 @@
                       </div>
                     </td>
                   </tr>
-                  <tr class="l-2">
-                    <td>
-                      <div class="text-left text-gray-600 font-medium">
-                        {{ $t('venueEmail') }}
-                      </div>
-                    </td>
-                    <td>
-                      <div class="text-gray-600 text-left">
-                        {{ itemDetails.venue_email }}
-                      </div>
-                    </td>
-                  </tr>
-                  <tr v-if="itemDetails.secondary_email" class="l-2">
-                    <td>
-                      <div class="text-left text-gray-600 font-medium">
-                        {{ $t('venueSecondaryEmail') }}
-                      </div>
-                    </td>
-                    <td>
-                      <div class="text-gray-600 text-left">
-                        {{ itemDetails.secondary_email }}
-                      </div>
-                    </td>
-                  </tr>
                 </table>
               </td>
             </tr>
-            <tr class="border-b items-center flex xl:flex-row lg:flex-col md:flex-row flex-col justify-between items-center">
+            <tr class="flex justify-between items-center">
               <td class="px-6 py-4 w-full-imp">
                 <table width="100%" cellspacing="0" cellpadding="0">
                   <tr>
@@ -159,14 +120,6 @@
                       >
                         {{ $t('foundItemDetails') }}:
                       </h2>
-                      <span
-                        class="
-                          w-20
-                          border-t-4 border-solid border-gray-300
-                          inline-block
-                          mb-1
-                        "
-                      ></span>
                     </td>
                   </tr>
                   <tr class="l-2">
@@ -178,18 +131,6 @@
                     <td>
                       <div class="text-gray-600 text-left">
                         {{ itemDetails.item_description }}
-                      </div>
-                    </td>
-                  </tr>
-                  <tr class="l-2">
-                    <td>
-                      <div class="text-left text-gray-600 font-medium">
-                        {{ $t('packageType') }}
-                      </div>
-                    </td>
-                    <td>
-                      <div class="text-gray-600 text-left">
-                        {{ itemDetails.package_type }}
                       </div>
                     </td>
                   </tr>
@@ -248,11 +189,20 @@
                 </table>
               </td>
               <div class="flex justify-center items-center pr-6">
-                <div v-if="itemDetails.image" class="flex img-container justify-center items-center mt-4 sm:mt-0 w-48 w-full">
-                  <img class="w-full object-cover" :src="itemDetails.image" alt="" />
+                <div v-if="showImage" class="flex img-container justify-center items-center mt-4 sm:mt-0 w-40 w-full">
+                  <img class="w-full object-cover" :src="itemImg" alt="" />
                 </div>
               </div>
             </tr>
+            <div id="scissor-container" class="hidden scissor-container items-center">
+              <div style="width: 20px">
+                <svg style="color: rgb(240, 107, 4);" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256"><rect width="256" height="256" fill="none"></rect><circle cx="60" cy="76" r="28" fill="none" stroke="#000" stroke-linecap="round" stroke-linejoin="round" stroke-width="12"></circle><circle cx="60" cy="180" r="28" fill="none" stroke="#000" stroke-linecap="round" stroke-linejoin="round" stroke-width="12"></circle><line x1="136" y1="128" x2="83.1" y2="164.2" fill="none" stroke="#000" stroke-linecap="round" stroke-linejoin="round" stroke-width="12"></line><line x1="232" y1="62.3" x2="164.3" y2="108.6" fill="none" stroke="#000" stroke-linecap="round" stroke-linejoin="round" stroke-width="12"></line><line x1="232" y1="193.7" x2="83.1" y2="91.8" fill="none" stroke="#000" stroke-linecap="round" stroke-linejoin="round" stroke-width="12"></line></svg>
+              </div>
+              <hr class="w-full border-dashed border border-black" />
+            </div>
+            <div id="scissor-text" class="hidden h-12 justify-center scissor-text text-gray-600 font-medium">
+              Cutout the above confirmation & tape it on the found item.
+            </div>
           </tbody>
         </table>
         <div class="noPrint">
@@ -298,6 +248,7 @@ export default {
   data() {
     return {
       itemDetails: {},
+      itemImg: "",
       showDialog: false,
       itemConfirmationDetails: {},
       isLoadingItem: false,
@@ -312,9 +263,14 @@ export default {
     if (this.$route.query.id) {
       this.$axios
         .get("/getsinglelostitem?id=" + this.$route.query.id)
-        .then((response) => {
+        .then(async (response) => {
           if (response.status === 200) {
             this.itemDetails = response.data.data.Item;
+            if (this.itemDetails.image) {
+              const data = await fetch(this.itemDetails.image, { cache: "no-cache" });
+              const blob = await data.blob();
+              this.itemImg = await this.image_to_base64(blob);
+            }
           }
           this.isLoadingItem = false;
           this.showDialog = true;
@@ -336,6 +292,9 @@ export default {
   },
   computed: {
     // ...mapGetters("item", ["itemConfirmationDetails"]),
+    showImage() {
+      return this.itemDetails.image && this.itemDetails.is_default !== 'Approve without Image'
+    },
     dialogMessage() {
       return `
         <p class="pb-2">We also emailed you the confirmation. You can print it and tape it on the item.</p>
@@ -355,6 +314,20 @@ export default {
     },
   },
   methods: {
+    async image_to_base64(file) {
+      let result_base64 = await new Promise((resolve) => {
+        let fileReader = new FileReader();
+        fileReader.onload = (e) => resolve(fileReader.result);
+        fileReader.onerror = (error) => {
+          console.log(error);
+          this.$toast.error(
+            "An Error occurred please try again, File might be corrupt"
+          );
+        };
+        fileReader.readAsDataURL(file);
+      });
+      return result_base64;
+    },
     formatDate(date, datse){
       if(date){
         return moment(date).format("MMMM DD, YYYY");
@@ -384,17 +357,24 @@ export default {
       let android = userAgent.indexOf("android") > -1;
 
       if (mobile || android) {
+        document.getElementById("found-shelf-logo").style.display = "block";
+        document.getElementById("scissor-container").style.display = "flex";
+        document.getElementById("scissor-text").style.display = "flex";
         this.$html2pdf(document.getElementById("printMe"), {
-          margin: 1,
           filename: "Item-Details.pdf",
           image: { type: "jpg", quality: 0.98 },
           html2canvas: {
             dpi: 300,
             scale: 1,
             letterRendering: true,
-            useCORS: true
+            useCORS: true,
+            windowWidth: 1024
           },
           jsPDF: { unit: "in", format: "letter", orientation: "portrait" },
+        }).then(() => {
+          document.getElementById("found-shelf-logo").style.display = "none";
+          document.getElementById("scissor-container").style.display = "none";
+          document.getElementById("scissor-text").style.display = "none";
         });
       } else {
         window.print();
@@ -428,9 +408,6 @@ tr td:first-child {
 .text-center {
   text-align: center;
 }
-.mt-70-px {
-  margin-top: 70px;
-}
 th,
 td {
   overflow: hidden;
@@ -446,16 +423,13 @@ td {
 .pt-3 {
   padding-top: 0.75rem;
 }
-.pr-6 {
-  padding-right: 1.5rem;
-}
 .px-3 {
   padding-left: 0.75rem;
   padding-right: 0.75rem;
 }
 .py-4 {
-  padding-top: 1rem;
-  padding-bottom: 1rem;
+  padding-top: 0.5rem;
+  padding-bottom: 0.5rem;
 }
 .px-6 {
   padding-left: 1.5rem;
@@ -483,13 +457,7 @@ td {
   color: rgb(38 38 38 / var(--tw-text-opacity));
 }
 .text-accent-100 {
-  color: #970584ba;
-}
-.border-b {
-  border-bottom-width: 1px;
-}
-.border-t-4 {
-  border-top-width: 4px;
+  color: #153f5ed9;
 }
 .border-solid {
   border-style: solid;
@@ -509,9 +477,6 @@ td {
 .font-medium {
   font-weight: 500;
 }
-.h-40 {
-  height: 10rem;
-}
 .l-2 {
   line-height: 2;
 }
@@ -528,22 +493,15 @@ td {
   margin-bottom: 0.25rem;
 }
 
-.item-img-container {
-  max-width: 450px;
-  margin-top: 1.25rem;
-  margin-left: auto;
-  margin-right: auto;
-}
-
 @media (min-width: 640px) {
   .sm\:w-40 {
     width: 10rem;
   }
 }
 
-@media (max-width: 640px) {
-  .mt-70-px {
-    margin-top: 0px;
+@media (max-width: 475px) {
+ .pr-6 {
+    padding-right: 0rem;
   }
 }
 
@@ -564,6 +522,14 @@ td {
 @media print {
   .noPrint{
     display: none;
+  }
+
+  .scissor-container{
+    display: flex !important;
+  }
+
+  .scissor-text{
+    display: flex;
   }
 
   .qr-code-container img {

@@ -1,6 +1,6 @@
 <template>
-  <div class="mb-8 block relative box-content h-12 bg-transparent">
-    <label class="block relative box-content h-12 cursor-text">
+  <div class="block relative box-content bg-transparent">
+    <label class="block relative box-content cursor-text">
       <div
         class="transition-all text-gray-500 z-10 text-left"
       >
@@ -19,9 +19,9 @@
           inline-block
           border-gray-300
           w-full
+          h-12
           rounded-lg
           px-4
-          h-full
           text-base
           pt-2
           pb-2

@@ -6,23 +6,8 @@
           <form @submit.prevent="validate().then(onSubmit)">
             <div class="card p-6 space-y-4">
               <div class="form-title">
-                <BaseHeader varient="gray">Submit a request</BaseHeader>
+                <BaseHeader varient="gray">Contact Us</BaseHeader>
               </div>
-
-              <!-- Issue options -->
-              <ValidationProvider
-                v-slot="{ errors }"
-                rules="required"
-                class="block"
-              >
-                <BaseSelect
-                  :isRequired="true"
-                  v-model="selectedIssue"
-                  :options="issueOptions"
-                  label="Please choose your issue below"
-                  :class="errors.length > 0 && 'error'"
-                />
-              </ValidationProvider>
 
               <!-- email -->
               <ValidationProvider
@@ -46,69 +31,13 @@
                 </p>
               </ValidationProvider>
 
-              <template
-                v-if="selectedIssue === 'Request a refund for unused label'"
-              >
-                <!-- Tracking id -->
-                <ValidationProvider
-                  v-slot="{ errors }"
-                  rules="required"
-                  class="block"
-                >
-                  <BaseInput
-                    :isRequired="true"
-                    v-model="trackingId"
-                    type="text"
-                    label="Tracking ID"
-                    :class="errors.length > 0 && 'error'"
-                  />
-                </ValidationProvider>
-
-                <!-- Destination zip -->
-                <ValidationProvider
-                  v-slot="{ errors }"
-                  rules="required|max:10"
-                  class="block"
-                  name="Zipcode"
-                >
-                  <BaseInput
-                    :isRequired="true"
-                    v-model="destinationZip"
-                    type="text"
-                    label="Destination Zip"
-                    :class="errors.length > 0 && 'error'"
-                  />
-                  <p
-                    v-if="errors.length"
-                    class="vee-validation-error mt-2 text-sm text-red-600"
-                  >
-                    {{ errors[0] }}
-                  </p>
-                </ValidationProvider>
-
-                <!-- Refund reason -->
-                <ValidationProvider
-                  v-slot="{ errors }"
-                  rules="required"
-                  class="block"
-                >
-                  <BaseSelect
-                    :isRequired="true"
-                    v-model="refundReason"
-                    :options="refundReasonOptions"
-                    label="Reason for refund"
-                    :class="errors.length > 0 && 'error'"
-                  />
-                </ValidationProvider>
-              </template>
-
               <!-- Description -->
               <ValidationProvider
                 v-slot="{ errors }"
                 rules="required"
                 class="block"
               >
-                <label class="text-gray-500">Description <span class="text-red-500">*</span></label>
+                <label :class="errors.length > 0 && 'text-red-500'" class="text-gray-500">Description <span class="text-red-500">*</span></label>
                 <textarea
                   v-model="description"
                   class="
@@ -127,7 +56,7 @@
                   "
                   :class="
                     errors.length > 0 &&
-                    'border-red-500 border-2 ring-4 ring-red-500 ring-opacity-10 rounded-lg  transition-none'
+                    '!border-red-500 !border-2 ring-4 ring-red-500 ring-opacity-10 transition-none'
                   "
                 ></textarea>
               </ValidationProvider>
@@ -154,16 +83,7 @@ export default {
   },
   data() {
     return {
-      selectedIssue: "",
-      issueOptions: ["Contact Us", "Request a refund for unused label"],
       email: "",
-      trackingId: "",
-      destinationZip: "",
-      refundReason: "",
-      refundReasonOptions: [
-        "Made an error - Created another label",
-        "Decided not to ship",
-      ],
       description: "",
       isLoading: false
     };
