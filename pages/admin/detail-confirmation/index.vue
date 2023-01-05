@@ -38,7 +38,7 @@
             >
               <div class="relative">
                 <div class="title bg-accent-100 pl-6 py-4 mb-4">
-                  <h3 class="text-white">Edit Image</h3>
+                  <h3 class="text-white">{{ $t('editImage') }}</h3>
                 </div>
                 <span
                   @click="closeEditor"
@@ -119,7 +119,7 @@
                             style="padding: 10px"
                           />
                         </div>
-                        <p>Undo</p>
+                        <p>{{ $t('image.undo') }}</p>
                       </div>
                       <div class="flex flex-col justify-center items-center">
                         <div class="tool-addSquare">
@@ -140,8 +140,8 @@
                             style="padding: 10px"
                           />
                         </div>
-                        <p v-if="!showDraw">Blackout</p>
-                        <p v-else>Done</p>
+                        <p v-if="!showDraw">{{ $t('image.blackout') }}</p>
+                        <p v-else>{{ $t('image.done') }}</p>
                       </div>
                       <div class="flex flex-col justify-center items-center">
                         <div class="tool-crop">
@@ -162,13 +162,13 @@
                             style="padding: 10px"
                           />
                         </div>
-                        <p v-if="!showCrop">Crop</p>
-                        <p v-else>Done</p>
+                        <p v-if="!showCrop">{{ $t('image.crop') }}</p>
+                        <p v-else>{{ $t('image.done') }}</p>
                       </div>
                     </div>
                     <div class="save-upload flex items-center">
                       <BaseButton :is-loading="isSavingImage" @click="saveImg">
-                        Save
+                        {{ $t('image.save') }}
                       </BaseButton>
                     </div>
                   </div>
@@ -180,11 +180,11 @@
         <BaseCard class="md:w-8/12 lg:w-7/12 xl:w-6/12 overflow-hidden">
           <section>
             <div class="main-title bg-accent-100 text-white mb-3">
-              <BaseHeader varient="details">ITEM DETAILS</BaseHeader>
+              <BaseHeader class="uppercase" varient="details">{{ $t('itemDetails') }}</BaseHeader>
             </div>
             <div class="sections py-4 px-6">
               <div class="form-title">
-                <BaseHeader varient="accent">Sender's Details:</BaseHeader>
+                <BaseHeader varient="accent">{{ $t('senderDetails') }}:</BaseHeader>
               </div>
               <div class="flex sm:items-center items-start mt-3 flex-wrap md:flex-nowrap sm:flex-row flex-col">
                 <div
@@ -197,7 +197,7 @@
                     sm:w-6/12
                   "
                 >
-                  Sender Affiliation
+                  {{ $t('senderAffiliation') }}
                 </div>
                 <div class="text-gray-600 text-left md:w-7/12 sm:w-6/12 w-full">
                   <ValidationProvider
@@ -224,7 +224,7 @@
                     sm:w-6/12
                   "
                 >
-                  Found Item Date
+                  {{ $t('foundItemDate') }}
                 </div>
                 <div class="text-gray-600 text-left md:w-7/12 sm:w-6/12 w-full">
                   <ValidationProvider
@@ -253,7 +253,7 @@
                     sm:w-6/12
                   "
                 >
-                  Venue Email
+                  {{ $t('venueEmail') }}
                 </div>
                 <div class="text-gray-600 text-left md:w-7/12 sm:w-6/12 w-full">
                   <ValidationProvider
@@ -290,7 +290,7 @@
                     sm:w-6/12
                   "
                 >
-                  Venue Secondary Email
+                  {{ $t('venueSecondaryEmail') }}
                 </div>
                 <div class="text-gray-600 text-left md:w-7/12 sm:w-6/12 w-full">
                   <ValidationProvider
@@ -324,7 +324,7 @@
                     sm:w-6/12
                   "
                 >
-                  Venue Phone No.
+                  {{ $t('venuePhoneNo') }}
                 </div>
                 <div class="text-gray-600 text-left md:w-7/12 sm:w-6/12 w-full">
                   <div
@@ -369,7 +369,7 @@
                     sm:w-6/12
                   "
                 >
-                  Employee Mobile No.
+                  {{ $t('employeeMobileNo') }}
                 </div>
                 <div class="text-gray-600 text-left md:w-7/12 sm:w-6/12 w-full">
                   <div
@@ -433,7 +433,7 @@
 
             <div class="sections px-6 py-4">
               <div class="form-title">
-                <BaseHeader varient="accent">Address Details::</BaseHeader>
+                <BaseHeader varient="accent">{{ $t('addressDetails') }}:</BaseHeader>
               </div>
 
               <div class="flex sm:items-center items-start mt-3 flex-wrap md:flex-nowrap sm:flex-row flex-col">
@@ -447,7 +447,7 @@
                     sm:w-6/12
                   "
                 >
-                  Address
+                  {{ $t('autoAddress.address') }}
                 </div>
                 <div class="text-gray-600 text-left md:w-7/12 sm:w-6/12 w-full">
                   <ValidationProvider
@@ -478,7 +478,7 @@
                     sm:w-6/12
                   "
                 >
-                  City
+                  {{ $t('autoAddress.city') }}
                 </div>
                 <div class="text-gray-600 text-left md:w-7/12 sm:w-6/12 w-full">
                   <ValidationProvider
@@ -505,7 +505,7 @@
                     sm:w-6/12
                   "
                 >
-                  State
+                  {{ $t('autoAddress.state') }}
                 </div>
                 <div class="text-gray-600 text-left md:w-7/12 sm:w-6/12 w-full">
                   <ValidationProvider
@@ -532,7 +532,7 @@
                     sm:w-6/12
                   "
                 >
-                  Country
+                  {{ $t('autoAddress.country') }}
                 </div>
                 <div class="text-gray-600 text-left md:w-7/12 sm:w-6/12 w-full">
                   <ValidationProvider
@@ -559,7 +559,7 @@
                     sm:w-6/12
                   "
                 >
-                  Zipcode
+                  {{ $t('autoAddress.zipcode') }}
                 </div>
                 <div class="text-gray-600 text-left md:w-7/12 sm:w-6/12 w-full">
                   <ValidationProvider
@@ -604,7 +604,7 @@
             </div>
             <div class="sections px-6 py-4">
               <div class="form-title">
-                <BaseHeader varient="accent">Found Item's Details:</BaseHeader>
+                <BaseHeader varient="accent">{{ $t('foundItemDetails') }}:</BaseHeader>
               </div>
 
               <div class="flex foundItemContainer">
@@ -620,7 +620,7 @@
                         sm:w-6/12
                       "
                     >
-                      Item Description
+                      {{ $t('itemDescription') }}
                     </div>
                     <div
                       class="text-gray-600 text-left md:w-7/12 sm:w-6/12 w-full"
@@ -652,7 +652,7 @@
                         sm:w-6/12
                       "
                     >
-                      Package Type
+                      {{ $t('packageType') }}
                     </div>
                     <div
                       class="text-gray-600 text-left md:w-7/12 sm:w-6/12 w-full"
@@ -681,7 +681,7 @@
                         sm:w-6/12
                       "
                     >
-                      Weight Pounds
+                      {{ $t('weightPounds') }}
                     </div>
                     <div
                       class="text-gray-600 text-left md:w-7/12 sm:w-6/12 w-full"
@@ -718,7 +718,7 @@
                         sm:w-6/12
                       "
                     >
-                      Weight Ounces
+                      {{ $t('weightOunces') }}
                     </div>
                     <div
                       class="text-gray-600 text-left md:w-7/12 sm:w-6/12 w-full"
@@ -742,7 +742,7 @@
                         sm:w-6/12
                       "
                     >
-                      Length
+                      {{ $t('length') }}
                     </div>
                     <div
                       class="text-gray-600 text-left md:w-7/12 sm:w-6/12 w-full"
@@ -778,7 +778,7 @@
                         sm:w-6/12
                       "
                     >
-                      Width
+                      {{ $t('width') }}
                     </div>
                     <div
                       class="text-gray-600 text-left md:w-7/12 sm:w-6/12 w-full"
@@ -814,7 +814,7 @@
                         sm:w-6/12
                       "
                     >
-                      Height
+                      {{ $t('height') }}
                     </div>
                     <div
                       class="text-gray-600 text-left md:w-7/12 sm:w-6/12 w-full"
@@ -850,12 +850,12 @@
                         sm:w-6/12
                       "
                     >
-                      Item Status
+                      {{ $t('itemStatus') }}
                     </div>
                     <div
                       class="text-gray-600 text-left md:w-7/12 sm:w-6/12"
                     >
-                      {{ itemDetails.item_status === 0 ? "Claimed" : "Unclaimed" }}
+                      {{ itemDetails.item_status === 0 ? $t('claimed') : $t('unClaimed') }}
                     </div>
                   </div>
                   <template v-if="!itemDetails.item_status">
@@ -870,7 +870,7 @@
                           sm:w-6/12
                         "
                       >
-                        Receiver's Name
+                        {{ $t('receiverName') }}
                       </div>
                       <div
                         class="text-gray-600 text-left md:w-7/12 sm:w-6/12 w-full"
@@ -900,7 +900,7 @@
                           sm:w-6/12
                         "
                       >
-                        Receiver's Email
+                        {{ $t('receiverEmail') }}
                       </div>
                       <div
                         class="text-gray-600 text-left md:w-7/12 sm:w-6/12 w-full"
@@ -937,7 +937,7 @@
                           sm:w-6/12
                         "
                       >
-                        Receiver's Mobile No.
+                        {{ $t('receiverMobileNumber') }}
                       </div>
                       <div
                         class="text-gray-600 text-left md:w-7/12 sm:w-6/12 w-full"
@@ -989,7 +989,7 @@
                   isLoading['Approve'] || isLoading['Approve without Image']
                 "
               >
-                Approve
+                {{ $t('approve') }}
               </BaseButton>
               <BaseButton
                 class="flex-1"
@@ -998,7 +998,7 @@
                   isLoading['Approve'] || isLoading['Approve without Image']
                 "
               >
-                Reject
+                {{ $t('reject') }}
               </BaseButton>
               <BaseButton
                 :is-loading="isLoading['Approve without Image']"
@@ -1008,7 +1008,7 @@
                   isLoading['Approve'] || isLoading['Approve without Image']
                 "
               >
-                Approve without Image
+                {{ $t('approveWithoutImage') }}
               </BaseButton>
             </div>
             <div v-if="image" class="text-left sm:w-12/12 px-6 pb-6 pt-4">
@@ -1021,10 +1021,10 @@
                   after:flex-1 after:border-t after:border-gray-300 after:mt-0.5
                 "
               >
-                <p class="text-center text-gray-400 font-medium mx-4 mb-0">OR</p>
+                <p class="text-center text-gray-400 font-medium mx-4 mb-0 uppercase">{{ $t('or') }}</p>
               </div>
               <BaseButton class="w-full" :is-loading="isLoadingEditImage" varient="secondary" @click="editImage()"
-                >Edit Image</BaseButton
+                >{{ $t('editImage') }}</BaseButton
               >
             </div>
           </section>
@@ -1040,7 +1040,7 @@
       :icon="{ name: 'circle-check', color: 'green', size: '3x' }"
       :message="dialogMessage"
       :title="dialogTitle"
-      buttonTitle="Okay"
+      :buttonTitle="$t('okay')"
       @close="
         showDialog = false;
         $router.push('/dashboard');
@@ -1051,7 +1051,7 @@
       :showDialog="showItemRejectDialog"
       :icon="{ name: 'circle-info', color: 'blue', size: '3x' }"
       :message="dialogMessage"
-      title="Please enter rejection reason"
+      :title="$t('pleaseEnterRejectionReason')"
       :showClose="false"
       @close="closeRejectDialog"
     >
@@ -1065,7 +1065,7 @@
             >
               <textarea
                 v-model="rejectReason"
-                placeholder="Reject Reason"
+                :placeholder="$t('rejectReason')"
                 class="
                   border
                   inline-block
@@ -1093,7 +1093,7 @@
           type="submit"
           class="w-full"
         >
-          Submit
+          {{ $t('submit') }}
         </BaseButton>
       </template>
     </BaseDialog>
@@ -1258,7 +1258,7 @@ export default {
         } else {
           this.isVenuePhoneFormatValid = false;
           this.isVenuePhoneValid = false;
-          this.venuePhoneValidationMessage = "Please enter valid phone number";
+          this.venuePhoneValidationMessage = this.$t('pleaseEnterValidPhoneNumber');
         }
       }
     },
@@ -1284,8 +1284,7 @@ export default {
         } else {
           this.isEmployeeMobileNoFormatValid = false;
           this.isEmployeeMobileNoValid = false;
-          this.employeePhoneValidationMessage =
-            "Please enter valid phone number";
+          this.employeePhoneValidationMessage = this.$t('pleaseEnterValidPhoneNumber');
         }
       }
     },
@@ -1311,8 +1310,7 @@ export default {
         } else {
           this.isReceiverMobileNoFormatValid = false;
           this.isReceiverMobileNoValid = false;
-          this.receiverPhoneValidationMessage =
-            "Please enter valid phone number";
+          this.receiverPhoneValidationMessage = this.$t('pleaseEnterValidPhoneNumber');
         }
       }
     },
@@ -1458,17 +1456,14 @@ export default {
     },
     setDialogBody(type) {
       if (type === "Approve") {
-        this.dialogTitle = "Item approved successfully!";
-        this.dialogMessage =
-          "Item is approved & listed successfully. User who uploaded this item will be notified with the status.";
+        this.dialogTitle = this.$t('itemApprovedSuccessfully');
+        this.dialogMessage = this.$t('itemApprovedSuccessfully');
       } else if (type === "Deny") {
-        this.dialogTitle = "Item rejected successfully!";
-        this.dialogMessage =
-          "Item is rejected & will not be listed. User who uploaded this item will be notified with the rejection reason.";
+        this.dialogTitle = this.$t('itemRejectedSuccessfully');
+        this.dialogMessage = this.$t('itemIsRejectedAndWillNotBeListed');
       } else if (type === "Approve without Image") {
-        this.dialogTitle = "Item approved without Image successfully!";
-        this.dialogMessage =
-          "Item is approved without Image & listed accordingly. User who uploaded this item will be notified with the status.";
+        this.dialogTitle = this.$t('itemApprovedWithoutImage');
+        this.dialogMessage = this.$t('itemApprovedWithoutImageAndListed');
       }
     },
     closeRejectDialog() {

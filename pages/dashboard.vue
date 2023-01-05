@@ -4,7 +4,7 @@
       <main class="my-10 space-y-6">
         <div class="flex flex-col md:space-y-0 md:flex-row justify-between">
           <div class="mr-6 order-2 md:order-1 mt-3 md:mt-0">
-            <BaseHeader class="text-left" varient="h4">Admin Dashboard</BaseHeader>
+            <BaseHeader class="text-left" varient="h4">{{ $t('adminDashboard') }}</BaseHeader>
           </div>
         </div>
         <section class="grid md:grid-cols-2 xl:grid-cols-5 gap-6">
@@ -94,12 +94,12 @@
               varient="red"
               @click.stop="deleteItem(item)"
             >
-              Delete Item
+              {{ $t('deleteItem') }}
             </BaseButton>
           </ItemCard>
         </template>
         <template v-else-if="!isLoading && filteredItems.length === 0">
-          <p class="text-gray-600 font-medium m-14">No Item Available</p>
+          <p class="text-gray-600 font-medium m-14">{{ $t('noItemAvailable') }}</p>
         </template>
         <template v-else>
           <BaseLoader />
@@ -111,9 +111,9 @@
       :showDialog="showDialog"
       :showClose="false"
       :icon="{ name: 'trash-can', color: 'red', size: '3x' }"
-      buttonTitle="Yes please!"
-      title="Are you sure?"
-      message="Do you want to remove the item?"
+      :buttonTitle="$t('yesPlease')"
+      :title="$t('areYouSure')"
+      :message="$t('doYouWantToRemoveTheItem')"
       @close="showDialog= false;"
     >
       <template v-slot:action>
@@ -121,7 +121,7 @@
           class="!capitalize !px-5 !py-2"
           varient="gray"
           @click="showDialog= false; deleteItem()"
-          >Yes please!
+          >{{ $t('yesPlease') }}
         </BaseButton>
       </template>
     </BaseDialog>
@@ -145,14 +145,14 @@ export default {
       showDialog: false,
       itemToDelete: {},
       tabs: [
-        { id: 0, name: 'Waiting For Approval', data: '', tileBgClass: 'bg-blue-600', borderClass: '!border-blue-800', totalBgClass: 'bg-blue-500'},
-        { id: 1, name: 'Total Lost Items', data: '', tileBgClass: 'bg-pink-600', borderClass: '!border-pink-800', totalBgClass: 'bg-pink-400'},
-        { id: 2, name: 'Total Claim Items', data: '', tileBgClass: 'bg-yellow-600', borderClass: '!border-yellow-800', totalBgClass: 'bg-yellow-500'},
-        { id: 3, name: 'Total Items Listed Today', data: '', tileBgClass: 'bg-cyan-600', borderClass: '!border-cyan-800', totalBgClass: 'bg-cyan-500'},
-        { id: 4, name: 'Total Items Claimed Today', data: '', tileBgClass: 'bg-indigo-600', borderClass: '!border-indigo-800', totalBgClass: 'bg-indigo-400'},
-        { id: 5, name: 'Total Unclaimed Items', data: '', tileBgClass: 'bg-rose-600', borderClass: '!border-rose-800', totalBgClass: 'bg-rose-400'},
-        { id: 6, name: 'Awaiting Item Owner Action', data: '', tileBgClass: 'bg-purple-600', borderClass: '!border-purple-800', totalBgClass: 'bg-purple-400'},
-        { id: 7, name: 'Hold for Pickup items', data: '', tileBgClass: 'bg-emerald-600', borderClass: '!border-emerald-800', totalBgClass: 'bg-emerald-400'},
+        { id: 0, name: this.$t('waitingForApproval'), data: '', tileBgClass: 'bg-blue-600', borderClass: '!border-blue-800', totalBgClass: 'bg-blue-500'},
+        { id: 1, name: this.$t('totalLostItems'), data: '', tileBgClass: 'bg-pink-600', borderClass: '!border-pink-800', totalBgClass: 'bg-pink-400'},
+        { id: 2, name: this.$t('totalClaimItems'), data: '', tileBgClass: 'bg-yellow-600', borderClass: '!border-yellow-800', totalBgClass: 'bg-yellow-500'},
+        { id: 3, name: this.$t('totalItemsListedToday'), data: '', tileBgClass: 'bg-cyan-600', borderClass: '!border-cyan-800', totalBgClass: 'bg-cyan-500'},
+        { id: 4, name: this.$t('totalItemsClaimedToday'), data: '', tileBgClass: 'bg-indigo-600', borderClass: '!border-indigo-800', totalBgClass: 'bg-indigo-400'},
+        { id: 5, name: this.$t('totalUnclaimedItems'), data: '', tileBgClass: 'bg-rose-600', borderClass: '!border-rose-800', totalBgClass: 'bg-rose-400'},
+        { id: 6, name: this.$t('awaitingItemOwnerAction'), data: '', tileBgClass: 'bg-purple-600', borderClass: '!border-purple-800', totalBgClass: 'bg-purple-400'},
+        { id: 7, name: this.$t('holdForPickupItems'), data: '', tileBgClass: 'bg-emerald-600', borderClass: '!border-emerald-800', totalBgClass: 'bg-emerald-400'},
       ]
     };
   },
@@ -231,21 +231,17 @@ export default {
     viewItem(item) {
       if (this.tabSelected === 0) {
         this.$nextTick(() => {
-          this.$router.push(this.localeLocation({ 
-            name: "admin/detail-confirmation",
+          this.$router.push({
+            path: "/admin/detail-confirmation",
             query: { id: item.id },
-          }))
+          });
         });
       } else {
-        // this.$store.commit("item/SET_ITEM_DETAILS", {
-        //   ...item,
-        //   onlyDisplay: true,
-        // });
         this.$nextTick(() => {
-          this.$router.push(this.localeLocation({ 
-            name: "detail-confirmation",
+          this.$router.push({
+            path: "detail-confirmation",
             query: { id: item.id },
-          }))
+          });
         });
       }
     },

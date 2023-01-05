@@ -11,19 +11,19 @@
               </NuxtLink>
             </div>
             <div v-if="isAdminLogin" class="link-container">
-              <NuxtLink to="/dashboard" class="menu">Dashboard</NuxtLink>
+              <NuxtLink to="/dashboard" class="menu">{{ $t('dashboard') }}</NuxtLink>
             </div>
             <div v-if="isAdminLogin" class="link-container">
-              <NuxtLink to="/shipping-details" class="menu">Shipping Details</NuxtLink>
+              <NuxtLink to="/shipping-details" class="menu">{{ $t('shippingDetails') }}</NuxtLink>
             </div>
             <div v-if="isAdminLogin" class="link-container">
-              <NuxtLink to="/surcharge" class="menu">Surcharge</NuxtLink>
+              <NuxtLink to="/surcharge" class="menu">{{ $t('surcharge') }}</NuxtLink>
             </div>
             <div v-if="isAdminLogin" class="link-container">
-              <NuxtLink to="/item-description" class="menu">Item Description</NuxtLink>
+              <NuxtLink to="/item-description" class="menu">{{ $t('itemDescription') }}</NuxtLink>
             </div>
             <div v-if="isAdminLogin" class="link-container">
-              <NuxtLink to="/users" class="menu">Users</NuxtLink>
+              <NuxtLink to="/users" class="menu">{{ $t('users') }}</NuxtLink>
             </div>
           </div>
           <div class="menu-right flex items-center">
@@ -32,7 +32,7 @@
               @click="$router.push('/found')"
             >
               <BaseButton class="!text-xs !py-2 !px-6 addBtn"
-                >+ ADD A FOUND ITEM
+                >{{ $t('addAFoundItem') }}
               </BaseButton>
             </div>
             <!-- <div v-if="isAdminLogin" class="link-container">
@@ -41,7 +41,7 @@
               >
             </div> -->
             <div v-if="isAdminLogin" class="link-container cursor-pointer">
-              <div class="menu" @click="logoutAdmin('desktop')">Logout</div>
+              <div class="menu" @click="logoutAdmin('desktop')">{{ $t('logout') }}</div>
             </div>
             <div v-if="isAdminLogin" class="drawer-container">
               <div class="icon-container" @click="toggleMenu">
@@ -59,7 +59,7 @@
             to="/dashboard"
             @click.native="toggleMenu"
             class="opacity-100"
-            >Dashboard</NuxtLink
+            >{{ $t('dashboard') }}</NuxtLink
           >
         </div>
         <div v-if="isAdminLogin">
@@ -67,7 +67,7 @@
             to="/shipping-details"
             @click.native="toggleMenu"
             class="opacity-100"
-            >Shipping Details</NuxtLink
+            >{{ $t('shippingDetails') }}</NuxtLink
           >
         </div>
         <div v-if="isAdminLogin">
@@ -75,7 +75,7 @@
             to="/surcharge"
             @click.native="toggleMenu"
             class="opacity-100"
-            >Surcharge</NuxtLink
+            >{{ $t('surcharge') }}</NuxtLink
           >
         </div>
         <div v-if="isAdminLogin">
@@ -83,7 +83,7 @@
             to="/item-description"
             @click.native="toggleMenu"
             class="opacity-100"
-            >Item Description</NuxtLink
+            >{{ $t('itemDescription') }}</NuxtLink
           >
         </div>
         <div v-if="isAdminLogin">
@@ -91,7 +91,7 @@
             to="/users"
             @click.native="toggleMenu"
             class="opacity-100"
-            >Users</NuxtLink
+            >{{ $t('users') }}</NuxtLink
           >
         </div>
         <template v-if="isAdminLogin">
@@ -104,7 +104,7 @@
             >
           </div> -->
           <div>
-            <div @click="logoutAdmin('mobile')" class="opacity-100">Logout</div>
+            <div @click="logoutAdmin('mobile')" class="opacity-100">{{ $t('logout') }}</div>
           </div>
         </template>
       </div>

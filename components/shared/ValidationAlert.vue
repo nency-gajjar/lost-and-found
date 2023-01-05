@@ -6,7 +6,7 @@
     >
     <template v-if="alertMessage"><span>{{ alertMessage }}</span></template>
     <template v-else>
-      <span  class="font-medium">Oops!</span> Please fill all required fields and try submitting again.
+      <div v-html="$t('oopsPleaseFillAllRequiredFields')"></div>
     </template>
   </div>
 </template>
