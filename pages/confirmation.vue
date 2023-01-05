@@ -34,7 +34,7 @@
                           confirmation-title
                         "
                       >
-                        Confirmation Details
+                        {{ $t('confirmationDetails') }}
                       </h2>
                     </td>
                   </tr>
@@ -52,7 +52,7 @@
                     color="gray"
                     style="max-width: 15px"
                   />
-                  <p class="pl-2 font-medium text-gray-700">Scan this QR code to edit the details of this item.</p>
+                  <p class="pl-2 font-medium text-gray-700">{{ $t('scanQrCodeToEdit') }}</p>
                 </div>
               </td>
             </tr>
@@ -69,7 +69,7 @@
                           text-left text-gray-800
                         "
                       >
-                        Sender's Details:
+                        {{ $t('senderDetails') }}:
                       </h2>
                       <span
                         class="
@@ -84,7 +84,7 @@
                   <tr class="l-2">
                     <td>
                       <div class="text-left text-gray-600 font-medium">
-                        Sender Affiliation
+                        {{ $t('senderAffiliation') }}
                       </div>
                     </td>
                     <td>
@@ -96,7 +96,7 @@
                   <tr class="l-2">
                     <td>
                       <div class="text-left text-gray-600 font-medium">
-                        Found Item Date
+                        {{ $t('foundItemDate') }}
                       </div>
                     </td>
                     <td>
@@ -108,7 +108,7 @@
                   <tr v-show="itemDetails.venue_name" class="l-2">
                     <td>
                       <div class="text-left text-gray-600 font-medium">
-                        Venue Name
+                        {{ $t('venueName') }}
                       </div>
                     </td>
                     <td>
@@ -120,7 +120,7 @@
                   <tr class="l-2">
                     <td>
                       <div class="text-left text-gray-600 font-medium">
-                        Venue Email
+                        {{ $t('venueEmail') }}
                       </div>
                     </td>
                     <td>
@@ -132,7 +132,7 @@
                   <tr v-if="itemDetails.secondary_email" class="l-2">
                     <td>
                       <div class="text-left text-gray-600 font-medium">
-                        Venue Secondary Email
+                        {{ $t('venueSecondaryEmail') }}
                       </div>
                     </td>
                     <td>
@@ -157,7 +157,7 @@
                           text-left text-gray-800
                         "
                       >
-                        Found Item's Details:
+                        {{ $t('foundItemDetails') }}:
                       </h2>
                       <span
                         class="
@@ -172,7 +172,7 @@
                   <tr class="l-2">
                     <td>
                       <div class="text-left text-gray-600 font-medium">
-                        Item Description
+                        {{ $t('itemDescription') }}
                       </div>
                     </td>
                     <td>
@@ -184,7 +184,7 @@
                   <tr class="l-2">
                     <td>
                       <div class="text-left text-gray-600 font-medium">
-                        Package Type
+                        {{ $t('packageType') }}
                       </div>
                     </td>
                     <td>
@@ -196,7 +196,7 @@
                   <tr class="l-2">
                     <td>
                       <div class="text-left text-gray-600 font-medium">
-                        Item Status
+                        {{ $t('itemStatus') }}
                       </div>
                     </td>
                     <td>
@@ -211,7 +211,7 @@
                     <tr class="l-2">
                       <td>
                         <div class="text-left text-gray-600 font-medium">
-                          Receiver's Name
+                          {{ $t('receiverName') }}
                         </div>
                       </td>
                       <td>
@@ -223,7 +223,7 @@
                     <tr class="l-2">
                       <td>
                         <div class="text-left text-gray-600 font-medium">
-                          Receiver's Email
+                          {{ $t('receiverEmail') }}
                         </div>
                       </td>
                       <td>
@@ -235,7 +235,7 @@
                     <tr class="l-2">
                       <td>
                         <div class="text-left text-gray-600 font-medium">
-                          Receiver's Mobile No.
+                          {{ $t('receiverMobileNo') }}
                         </div>
                       </td>
                       <td>
@@ -258,20 +258,20 @@
         <div class="noPrint">
           <div class="flex flex-wrap gap-2 m-5">
             <BaseButton class="flex-auto" @click="printDetails">
-              Print Details
+              {{ $t('printDetails') }}
             </BaseButton>
             <BaseButton class="flex-auto"  @click="routeToListing">
-              Back To Listing
+              {{ $t('backToListing') }}
             </BaseButton>
           </div>
           <div class="flex flex-wrap gap-2 m-5">
             <BaseButton class="flex-auto" varient="primaryAlt"  @click="editListing">
-              Edit the listing
+              {{ $t('editTheListing') }}
             </BaseButton>
           </div>
           <div class="flex flex-wrap gap-2 m-5">
             <BaseButton class="flex-auto" varient="secondary"  @click="addFoundItem">
-              Add another Found Item
+              {{ $t('addAnotherFoundItem') }}
             </BaseButton>
           </div>
         </div>
@@ -280,9 +280,9 @@
         v-if="showDialog"
         :showDialog="showDialog"
         :icon="{ name: 'circle-check', color: 'green', size: '3x' }"
-        title="Awesome, you are a legend!"
+        :title="$t('awesomeYouAreLegend')"
         :message="dialogMessage"
-        buttonTitle="Okay"
+        :buttonTitle="$t('okay')"
         @close="showDialog = false"
       />
     </div>

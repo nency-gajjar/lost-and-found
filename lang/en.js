@@ -142,4 +142,31 @@ export default {
   personalDetails: "Personal Details",
   lostItemAddress: "Lost Item Address",
   dateOfLost: "Date of Lost",
+
+  // Confirmation Page
+  confirmationDetails: "Confirmation Details",
+  scanQrCodeToEdit: "Scan this QR code to edit the details of this item.",
+  senderAffiliation: "Sender Affiliation",
+  receiverMobileNo: "Receiver's Mobile No.",
+  printDetails: "Print Details",
+  backToListing: "Back To Listing",
+  editTheListing: "Edit the listing",
+  addAnotherFoundItem: "Add another Found Item",
+  awesomeYouAreLegend: "Awesome, you are a legend!",
+
+  // Custom Shipping Page
+  customShippingDetails: "Custom Shipping Details",
+  customItemValue: "Custom Item's Value",
+  eelCodeOrPfc: "EEL code or PFC",
+  contentsExplanation: "Contents Explanation (Optional)",
+  restrictionComments: "Restriction Comments (Optional)",
+  customsCertify: "Customs Certify",
+  customsSigner: "Customs Signer",
+
+  // Detail Confirmation Page
+  letsMakeSureYouGotEverythingRight: "Let’s make sure you got everything right.",
+  scrollDownToSubmit: "Scroll down to Submit.",
+  employeeMobileNo: "Employee Mobile No.",
+  addressDetails: "Address Details",
+  edit: "Edit",
 }

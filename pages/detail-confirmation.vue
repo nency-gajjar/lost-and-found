@@ -3,23 +3,23 @@
     <BaseCard v-if="!isLoadingItem || Object.keys(itemDetails).length > 0" class="md:w-8/12 lg:w-7/12 xl:w-6/12 overflow-hidden">
       <section class="bg-white">
         <div class="main-title bg-accent-100 text-white mb-3">
-          <BaseHeader varient="details">PREVIEW</BaseHeader>
+          <BaseHeader class="uppercase" varient="details">{{ $t('preview') }}</BaseHeader>
         </div>
         <div v-if="showInformativeTxt" class="p-6">
-          <p class="font-medium text-gray-700 text-lg text-center">Let’s make sure you got everything right.</p>
-          <p class="font-medium text-gray-700 text-lg text-center">Scroll down to Submit.</p>
+          <p class="font-medium text-gray-700 text-lg text-center">{{ $t('letsMakeSureYouGotEverythingRight') }}</p>
+          <p class="font-medium text-gray-700 text-lg text-center">{{ $t('scrollDownToSubmit') }}</p>
         </div>
         <div class="sections py-4 px-6">
           <div class="form-title">
-            <BaseHeader varient="accent">Sender's Details:</BaseHeader>
+            <BaseHeader varient="accent">{{ $t('senderDetails') }}:</BaseHeader>
           </div>
-          <RawCard title="Sender Affiliation" :value="itemDetails.venu_type" />
-          <RawCard title="Found Item Date" :value="formatDate(itemDetails.datse)" />
-          <RawCard title="Venue Name" :value="itemDetails.venue_name" />
-          <RawCard title="Venue Email" :value="itemDetails.venue_email" />
-          <RawCard v-if="itemDetails.secondary_email" title="Venue Secondary Email" :value="itemDetails.secondary_email" />
-          <RawCard title="Venue Phone No." :value="itemDetails.venue_phone_no" />
-          <RawCard title="Employee Mobile No." :value="itemDetails.employee_mobile_no" />
+          <RawCard :title="$t('senderAffiliation')" :value="itemDetails.venu_type" />
+          <RawCard :title="$t('foundItemDate')" :value="formatDate(itemDetails.datse)" />
+          <RawCard :title="$t('venueName')" :value="itemDetails.venue_name" />
+          <RawCard :title="$t('venueEmail')" :value="itemDetails.venue_email" />
+          <RawCard v-if="itemDetails.secondary_email" :title="$t('venueSecondaryEmail')" :value="itemDetails.secondary_email" />
+          <RawCard :title="$t('venuePhoneNo')" :value="itemDetails.venue_phone_no" />
+          <RawCard :title="$t('employeeMobileNo')" :value="itemDetails.employee_mobile_no" />
         </div>
 
         <div data-v-272705a6="" class="flex items-center my-2">
@@ -50,14 +50,14 @@
 
         <div class="sections px-6 py-4">
           <div class="form-title">
-            <BaseHeader varient="accent">Address Details:</BaseHeader>
+            <BaseHeader varient="accent">{{ $t('addressDetails') }}:</BaseHeader>
           </div>
-          <RawCard v-if="itemDetails.hotel_room" title="Room No. Or Hotel Area" :value="itemDetails.hotel_room" />
-          <RawCard title="Address" :value="filterAddressLine(itemDetails)" />
-          <RawCard title="City" :value="itemDetails.city" />
-          <RawCard title="State" :value="itemDetails.states" />
-          <RawCard title="Country" :value="itemDetails.country" />
-          <RawCard title="Zipcode" :value="itemDetails.zipcode" />
+          <RawCard v-if="itemDetails.hotel_room" :title="$t('roomNo')" :value="itemDetails.hotel_room" />
+          <RawCard :title="$t('autoAddress.address')" :value="filterAddressLine(itemDetails)" />
+          <RawCard :title="$t('autoAddress.city')" :value="itemDetails.city" />
+          <RawCard :title="$t('autoAddress.state')" :value="itemDetails.states" />
+          <RawCard :title="$t('autoAddress.country')" :value="itemDetails.country" />
+          <RawCard :title="$t('autoAddress.zipcode')" :value="itemDetails.zipcode" />
         </div>
 
         <div data-v-272705a6="" class="flex items-center my-2">
@@ -88,18 +88,18 @@
 
         <div class="sections px-6 py-4">
           <div class="form-title">
-            <BaseHeader varient="accent">Found Item's Details:</BaseHeader>
+            <BaseHeader varient="accent">{{ $t('foundItemDetails') }}:</BaseHeader>
           </div>
 
           <div class="flex foundItemContainer">
             <div class="flex flex-col grow">
-              <RawCard title="Item Description" :value="itemDetails.item_description" />
-              <RawCard title="Package Type" :value="itemDetails.package_type" />
-              <RawCard title="Item Status" :value="itemDetails.item_status === 0 ? 'Claimed' : 'Unclaimed'" />
+              <RawCard :title="$t('itemDescription')" :value="itemDetails.item_description" />
+              <RawCard :title="$t('packageType')" :value="itemDetails.package_type" />
+              <RawCard :title="$t('itemStatus')" :value="itemDetails.item_status === 0 ? 'Claimed' : 'Unclaimed'" />
               <template v-if="itemDetails.item_status === 0">
-                <RawCard title="Receiver's Name" :value="itemDetails.receiver_name" />
-                <RawCard title="Receiver's Email" :value="itemDetails.receiver_email" />
-                <RawCard title="Receiver's Mobile No." :value="itemDetails.receiver_mobile_no" />
+                <RawCard :title="$t('receiverName')" :value="itemDetails.receiver_name" />
+                <RawCard :title="$t('receiverEmail')" :value="itemDetails.receiver_email" />
+                <RawCard :title="$t('receiverMobileNo')" :value="itemDetails.receiver_mobile_no" />
               </template>
             </div>
             <div class="flex item-img-container justify-center items-center">
@@ -130,10 +130,10 @@
               after:flex-1 after:border-t after:border-gray-300 after:mt-0.5
             "
           >
-            <p class="text-center text-gray-400 font-medium mx-4 mb-0">OR</p>
+            <p class="text-center text-gray-400 font-medium mx-4 mb-0 uppercase">{{ $t('or') }}</p>
           </div>
           <BaseButton class="w-full" varient="gray" @click="editDetails()"
-            >Edit</BaseButton
+            >{{ $t('edit') }}</BaseButton
           >
         </div>
         <div
@@ -141,7 +141,7 @@
           class="text-left sm:w-12/12 px-6 pb-6 pt-4"
         >
           <BaseButton class="w-full" varient="secondary" @click="claimItem"
-            >Claim Item</BaseButton
+            >{{ $t('claimItem') }}</BaseButton
           >
         </div>
       </section>

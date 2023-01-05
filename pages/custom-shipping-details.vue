@@ -5,7 +5,7 @@
         <form @submit.prevent="validate().then(onSubmit)">
           <div class="sm:p-6 p-4 space-y-4">
             <div class="form-title">
-              <BaseHeader varient="gray">Custom Shipping Details</BaseHeader>
+              <BaseHeader varient="gray">{{ $t('customShippingDetails') }}</BaseHeader>
             </div>
 
             <!-- Custom Items Value -->
@@ -19,7 +19,7 @@
                 :isRequired="true"
                 v-model="customItemsValue"
                 type="text"
-                label="Custom Item's Value"
+                :label="$t('customItemValue')"
                 :class="errors.length > 0 && 'error'"
               />
             </ValidationProvider>
@@ -34,7 +34,7 @@
                 :isRequired="true"
                 v-model="eel_pfc"
                 type="text"
-                label="EEL code or PFC"
+                :label="$t('eelCodeOrPfc')"
                 :class="errors.length > 0 && 'error'"
               />
             </ValidationProvider>
@@ -43,7 +43,7 @@
             <div class="block !mt-10">
               <textarea
                 v-model="contentsExplanation"
-                placeholder="Contents Explanation (Optional)"
+                :placeholder="$t('contentsExplanation')"
                 class="
                   border
                   inline-block
@@ -65,7 +65,7 @@
             <div class="!mt-3">
               <textarea
                 v-model="restrictionComments"
-                placeholder="Restriction Comments (Optional)"
+                :placeholder="$t('restrictionComments')"
                 class="
                   border
                   inline-block
@@ -99,7 +99,7 @@
                   w-5
                 "
               />
-              <label for="customs-certify"> Customs Certify</label>
+              <label for="customs-certify"> {{ $t('customsCertify') }}</label>
             </div>
             <ValidationProvider
               v-if="customsCertify"
@@ -111,7 +111,7 @@
               <BaseInput
                 v-model="customsSigner"
                 type="text"
-                label="Customs Signer"
+                :label="$t('customsSigner')"
                 :class="errors.length > 0 && 'error'"
               />
             </ValidationProvider>
@@ -120,7 +120,7 @@
 
             <div class="flex justify-end">
               <BaseButton type="submit">
-                Submit
+                {{ $t('submit') }}
               </BaseButton>
             </div>
           </div>
