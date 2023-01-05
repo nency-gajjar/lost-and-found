@@ -164,14 +164,14 @@
             >Claim Item</BaseButton
           >
         </div>
-        <!-- <div
+        <div
           v-if="allowResendNotification"
           class="text-left sm:w-12/12 px-6 pb-6 pt-4"
         >
-          <BaseButton class="w-full" varient="secondary"
+          <BaseButton class="w-full" varient="secondary" @click="resendNotification"
             >Resend Notification</BaseButton
           >
-        </div> -->
+        </div>
       </section>
     </BaseCard>
     <div v-else>
@@ -290,6 +290,26 @@ export default {
         name: "claim-item",
         params: { item: this.itemDetails },
       });
+    },
+    resendNotification() {
+      let params = {
+        id: this.itemDetails.id,
+        receiver_email: this.itemDetails.receiver_email,
+        receiver_name: this.itemDetails.receiver_name,
+        item_description: this.itemDetails.item_description,
+        receiver_mobile_no: this.itemDetails.receiver_mobile_no
+      }
+
+      this.$axios
+        .post("/sendawaitingactionmail", params)
+        .then((response) => {
+          if(response.status === 200){
+            this.$toast.info("Notification resent successfully!");
+          }
+        })
+        .catch(() => {
+          this.$toast.info("Something went wrong! Please try again.");
+        })
     },
     filterAddressLine(itemDetails) {
       return itemDetails.address == "Other" || !itemDetails.address
