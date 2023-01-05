@@ -2,7 +2,7 @@
   <div class="wrapper pb-10">
     <div class="container max-w-4xl mx-auto px-4">
       <div class="form-title my-5">
-        <BaseHeader class="mt-10" varient="gray">Checkout</BaseHeader>
+        <BaseHeader class="mt-10" varient="gray">{{ $t('checkout') }}</BaseHeader>
       </div>
       <div class="my-5">
         <div
@@ -21,7 +21,7 @@
           "
         >
           <h3 class="font-bold text-[#37322C] tracking-wider uppercase text-md">
-            Item Details
+            {{ $t('itemDetails') }}
           </h3>
             <div class="flex sm:flex-row">
                 <div
@@ -38,7 +38,7 @@
                     <div
                       class="font-medium text-md"
                     >
-                      Item Description
+                      {{ $t('itemDescription') }}
                     </div>
                     <div>
                       {{ itemDetails.item_description }}
@@ -86,7 +86,7 @@
           "
         >
           <h3 class="font-bold text-[#37322C] tracking-wider uppercase text-md">
-            summary
+            {{ $t('summary') }}
           </h3>
           <div
             v-if="!isEmpty(checkoutDetail) && checkoutDetail.selectedRate"
@@ -104,7 +104,7 @@
             class="mt-2 mb-4 grid sm:grid-cols-2 gap-4 sm:gap-0"
           >
             <div>
-              <p class="font-bold text-primary-100 uppercase">from</p>
+              <p class="font-bold text-primary-100 uppercase">{{ $t('from') }}</p>
               <template class="text-gray-800">
                 <!-- <p>{{ checkoutDetail.lableDetails.name }}</p> -->
                 <p>{{ checkoutDetail.lableDetails.company }}</p>
@@ -117,7 +117,7 @@
               </template>
             </div>
             <div>
-              <p class="font-bold text-primary-100 uppercase">to</p>
+              <p class="font-bold text-primary-100 uppercase">{{ $t('to') }}</p>
               <template class="text-gray-800">
                 <p>{{ checkoutDetail.lableDetails.toname }}</p>
                 <!-- <p>{{ checkoutDetail.lableDetails.tocompany }}</p> -->
@@ -134,19 +134,19 @@
             class="flex justify-between"
             v-if="!isEmpty(checkoutDetail) && checkoutDetail.signature"
           >
-            <span class="font-medium text-md"> Signature Confirmation</span>
+            <span class="font-medium text-md">{{ $t('signatureConfirmation') }}</span>
             <span class="font-display tracking-wide text-gray-700 font-medium">
               {{ 5 | currency }}
             </span>
           </p>
           <p class="flex justify-between" v-if="insuranceCharges">
-            <span class="font-medium text-md"> Insurance Charges</span>
+            <span class="font-medium text-md">{{ $t('insuranceCharges') }}</span>
             <span class="font-display tracking-wide text-gray-700 font-medium">
               {{ Number(insuranceCharges) | currency }}
             </span>
           </p>
           <p v-if="checkoutDetail.insuranceValue" class="!-my-1">
-            <span class="font-medium text-sm"> ( Insured for </span>
+            <span class="font-medium text-sm"> ( {{ $t('insuredFor') }} </span>
             <span class="font-medium text-sm">
               {{ Number(checkoutDetail.insuranceValue) | currency }}
             )
@@ -156,7 +156,7 @@
           <hr class="my-5" />
           <div v-if="!isEmpty(checkoutDetail) && checkoutDetail.selectedRate">
             <div class="flex justify-between mt-6">
-              <p class="font-semibold text-lg text-gray-800">Total Price</p>
+              <p class="font-semibold text-lg text-gray-800">{{ $t('totalPrice') }}</p>
               <p
                 v-if="checkoutDetail.selectedRate"
                 class="
@@ -190,7 +190,7 @@
             <h3
               class="font-bold text-[#37322C] tracking-wider uppercase text-sm"
             >
-              payment method
+              {{ $t('paymentMethod') }}
             </h3>
             <div class="py-3">
               <div
@@ -238,7 +238,7 @@
               :is-loading="isLoading"
               @click="confirmAndPay"
             >
-              Confirm & pay
+              {{ $t('confirmAndPay') }}
             </BaseButton>
             <button
               class="
@@ -253,7 +253,7 @@
               "
               @click="stepBack"
             >
-              BACK
+              {{ $t('back') }}
             </button>
           </div>
         </div>

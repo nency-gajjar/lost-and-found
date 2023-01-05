@@ -6,9 +6,9 @@
           <form @submit.prevent="validate().then(onSubmit)">
             <div class="card p-6 space-y-4">
               <div class="form-title">
-                <BaseHeader varient="gray">Claim Item</BaseHeader>
+                <BaseHeader varient="gray">{{ $t('claimItem') }}</BaseHeader>
               </div>
-              <BaseHeader varient="subheader">Personal Details</BaseHeader>
+              <BaseHeader varient="subheader">{{ $t('personalDetails') }}</BaseHeader>
               <ValidationProvider
                 v-slot="{ errors }"
                 rules="required"
@@ -18,7 +18,7 @@
                   :isRequired="true"
                   v-model="claimPersonName"
                   type="text"
-                  label="Your Name"
+                  :label="$t('yourName')"
                   :class="errors.length > 0 && 'error'"
                 />
               </ValidationProvider>
@@ -32,7 +32,7 @@
                   :isRequired="true"
                   v-model="claimPersonEmail"
                   type="email"
-                  label="Your Email"
+                  :label="$t('yourEmail')"
                   :class="errors.length > 0 && 'error'"
                 />
                 <p
@@ -46,7 +46,7 @@
                 class="block relative box-content h-12"
                 :class="!isPhoneNoValid && 'error'"
               >
-                <div class="text-gray-500" :class="!isPhoneNoValid && 'text-red-500'">Mobile Number <span class="text-red-500">*</span> </div>
+                <div class="text-gray-500" :class="!isPhoneNoValid && 'text-red-500'">{{ $t('mobileNumber') }} <span class="text-red-500">*</span> </div>
                 <vue-tel-input
                   class="
                     relative
@@ -69,7 +69,7 @@
                   {{ phoneNoValidateMessage }}
                 </div>
               </div>
-              <BaseHeader class="!mt-14" varient="subheader">Item Details</BaseHeader>
+              <BaseHeader class="!mt-14" varient="subheader">{{ $t('itemDetails') }}</BaseHeader>
               <ValidationProvider
                 v-slot="{ errors }"
                 rules="required"
@@ -79,15 +79,15 @@
                   :isRequired="true"
                   v-model="itemName"
                   type="text"
-                  label="Item Description"
+                  :label="$t('itemDescription')"
                   :class="errors.length > 0 && 'error'"
                 />
               </ValidationProvider>
-              <div class="text-gray-500">Description</div>
+              <div class="text-gray-500">{{ $t('description') }}</div>
               <div class="block !mt-0">
                 <textarea
                   v-model="itemDescription"
-                  placeholder="Description"
+                  :placeholder="$t('description')"
                   class="
                     border
                     inline-block
@@ -109,19 +109,19 @@
                 rules="required"
                 class="block !mt-1"
               >
-              <div class="text-gray-500" :class="errors.length > 0 && 'text-red-500'">Date of Lost <span class="text-red-500">*</span> </div>
+              <div class="text-gray-500" :class="errors.length > 0 && 'text-red-500'">{{ $t('dateOfLost') }} <span class="text-red-500">*</span> </div>
                 <client-only>
                   <div :class="errors.length && 'error'">
                     <date-picker
                       v-model="itemLostDate"
                       :disabled-date="disableStartDate"
                       format="MM-DD-YYYY"
-                      placeholder="Date of Lost"
+                      :placeholder="$t('dateOfLost')"
                     ></date-picker>
                   </div>
                 </client-only>
               </ValidationProvider>
-              <BaseHeader class="!mt-10" varient="subheader">Lost Item Address</BaseHeader>
+              <BaseHeader class="!mt-10" varient="subheader">{{ $t('lostItemAddress') }}</BaseHeader>
               <ValidationProvider
                 v-slot="{ errors }"
                 rules="required"
@@ -133,7 +133,7 @@
                   id="autocomplete-claim-item"
                   type="text"
                   placeholder=""
-                  label="Lost Location"
+                  :label="$t('lostLocation')"
                   @input="getAddress"
                   :class="errors.length > 0 && 'error'"
                 >
@@ -167,7 +167,7 @@
                   <BaseInput
                     :isRequired="true"
                     v-model="autoCompleteAddress.city"
-                    label="City"
+                    :label="$t('autoAddress.city')"
                     type="text"
                     :class="errors.length > 0 && 'error'"
                   />
@@ -180,7 +180,7 @@
                   <BaseInput
                     :isRequired="true"
                     v-model="autoCompleteAddress.state"
-                    label="State"
+                    :label="$t('autoAddress.state')"
                     type="text"
                     :class="errors.length > 0 && 'error'"
                   />
@@ -195,7 +195,7 @@
                   <BaseInput
                     :isRequired="true"
                     v-model="autoCompleteAddress.country"
-                    label="Country"
+                    :label="$t('autoAddress.country')"
                     type="text"
                     :class="errors.length > 0 && 'error'"
                   />
@@ -209,7 +209,7 @@
                   <BaseInput
                     :isRequired="true"
                     v-model="autoCompleteAddress.zipcode"
-                    label="Zip Code"
+                    :label="$t('autoAddress.zipcode')"
                     type="text"
                     :class="errors.length > 0 && 'error'"
                   />
@@ -226,7 +226,7 @@
               
               <div class="flex justify-end">
                 <BaseButton :is-loading="isLoading" type="submit">
-                  Submit
+                  {{ $t('submit') }}
                 </BaseButton>
               </div>
             </div>
@@ -239,9 +239,9 @@
       v-if="showDialog"
       :showDialog="showDialog"
       :icon="{ name: 'circle-check', color: 'green', size: '3x' }"
-      title="Details submitted successfully!"
+      :title="$t('detailsSubmittedSuccessfully')"
       :message="dialogMessage"
-      buttonTitle="Okay"
+      :buttonTitle="$t('okay')"
       @close="closeDialog"
     />
   </div>
@@ -301,9 +301,7 @@ export default {
       this.secondaryEmail = this.$route.params.item?.secondaryEmail;
     }
     else {
-      this.$router.replace({
-        name: "lost-items"
-      });
+      this.$router.replace("lost-items");
     }
   },
   computed: {

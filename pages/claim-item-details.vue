@@ -6,19 +6,19 @@
     <BaseCard class="md:w-8/12 lg:w-7/12 xl:w-6/12 overflow-hidden">
       <section>
         <div class="main-title bg-accent-100 text-white mb-3">
-          <BaseHeader varient="details">ITEM DETAILS</BaseHeader>
+          <BaseHeader class="uppercase" varient="details">{{ $t('itemDetails') }}</BaseHeader>
         </div>
         <div class="sections py-4 px-6">
           <div class="form-title">
-            <BaseHeader varient="accent">Claim Person's Details:</BaseHeader>
+            <BaseHeader varient="accent">{{ $t('claimPersonDetails') }}:</BaseHeader>
           </div>
-          <RawCard title="Person Name" :value="claimDetails.claimpersonname" />
-          <RawCard title="Email" :value="claimDetails.claimpersonemail" />
-          <RawCard title="Mobile Number" :value="claimDetails.claimpersonmobileno" />
-          <RawCard title="Lost Item Date" :value="formatDate(claimDetails.claimpersondatelost)" />
-          <RawCard title="Item Description" :value="claimDetails.claimpersonitemname" />
-          <RawCard v-if="claimDetails.claimpersondescription" title="Description" :value="claimDetails.claimpersondescription" />
-          <RawCard title="Lost Location" :value="claimDetails.claimpersonlocation" />
+          <RawCard :title="$t('personName')" :value="claimDetails.claimpersonname" />
+          <RawCard :title="$t('email')" :value="claimDetails.claimpersonemail" />
+          <RawCard :title="$t('mobileNumber')" :value="claimDetails.claimpersonmobileno" />
+          <RawCard :title="$t('lostItemDate')" :value="formatDate(claimDetails.claimpersondatelost)" />
+          <RawCard :title="$t('itemDescription')" :value="claimDetails.claimpersonitemname" />
+          <RawCard v-if="claimDetails.claimpersondescription" :title="$t('description')" :value="claimDetails.claimpersondescription" />
+          <RawCard :title="$t('lostLocation')" :value="claimDetails.claimpersonlocation" />
         </div>
 
         <div data-v-272705a6="" class="flex items-center my-2">
@@ -49,18 +49,18 @@
 
         <div class="sections py-4 px-6">
           <div class="form-title">
-            <BaseHeader varient="accent">Item Details:</BaseHeader>
+            <BaseHeader varient="accent">{{ $t('itemDetails') }}:</BaseHeader>
           </div>
           <div class="flex flex-col lg:flex-row foundItemContainer">
             <div class="flex flex-col grow">
-              <RawCard title="Venue Email" :value="itemDetails.venue_email" />
-              <RawCard title="Found Item Date" :value="formatDate(itemDetails.datse)" />
-              <RawCard title="Venue Phone number" :value="itemDetails.venue_phone_no" />
+              <RawCard :title="$t('venueEmail')" :value="itemDetails.venue_email" />
+              <RawCard :title="$t('foundItemDate')" :value="formatDate(itemDetails.datse)" />
+              <RawCard :title="$t('venuePhoneNumber')" :value="itemDetails.venue_phone_no" />
               <div class="flex flex-col w-full">
-                <RawCard title="Employee Mobile Numer" :value="itemDetails.employee_mobile_no" />
-                <RawCard title="Item Description" :value="itemDetails.item_description" />
-                <RawCard title="Package Type" :value="itemDetails.package_type" />
-                <RawCard title="Item Status" :value="itemDetails.item_status == 0 ? 'Claimed' : 'Unclaimed'" />
+                <RawCard :title="$t('employeeMobileNumber')" :value="itemDetails.employee_mobile_no" />
+                <RawCard :title="$t('itemDescription')" :value="itemDetails.item_description" />
+                <RawCard :title="$t('packageType')" :value="itemDetails.package_type" />
+                <RawCard :title="$t('itemStatus')" :value="itemDetails.item_status == 0 ? 'Claimed' : 'Unclaimed'" />
               </div>
             </div>
             <div class="flex justify-center item-img-container items-center mt-3 lg:mt-0">
@@ -97,14 +97,14 @@
         </div>
         <div class="sections py-4 px-6">
           <div class="form-title">
-            <BaseHeader varient="accent">Found Item Address:</BaseHeader>
+            <BaseHeader varient="accent">{{ $t('foundItemAddress') }}:</BaseHeader>
           </div>
-          <RawCard v-if="itemDetails.hotel_room" title="Room No. Or Hotel Area" :value="itemDetails.hotel_room" />
-          <RawCard title="Address" :value="itemDetails.address" />
-          <RawCard title="City" :value="itemDetails.city" />
-          <RawCard title="State" :value="itemDetails.states" />
-          <RawCard title="Country" :value="itemDetails.country" />
-          <RawCard title="Zipcode" :value="itemDetails.zipcode" />
+          <RawCard v-if="itemDetails.hotel_room" :title="$t('roomNo')" :value="itemDetails.hotel_room" />
+          <RawCard :title="$t('autoAddress.address')" :value="itemDetails.address" />
+          <RawCard :title="$t('autoAddress.city')" :value="itemDetails.city" />
+          <RawCard :title="$t('autoAddress.state')" :value="itemDetails.states" />
+          <RawCard :title="$t('autoAddress.country')" :value="itemDetails.country" />
+          <RawCard :title="$t('autoAddress.zipcode')" :value="itemDetails.zipcode" />
         </div>
 
         <div class="flex flex-wrap gap-2 m-5">
@@ -113,14 +113,14 @@
             :is-loading="isLoading['Approve']"
             @click="handleItemApprove()"
           >
-            Approve
+            {{ $t('approve') }}
           </BaseButton>
           <BaseButton
             class="flex-auto"
             @click="showItemRejectDialog = true"
             :disabled="isLoading['Approve']"
           >
-            Reject
+            {{ $t('reject') }}
           </BaseButton>
         </div>
       </section>
@@ -131,7 +131,7 @@
       :icon="{ name: 'circle-check', color: 'green', size: '3x' }"
       :title="dialogTitle"
       :message="dialogMessage"
-      buttonTitle="Okay"
+      :buttonTitle="$t('okay')"
       @close="
         showDialog = false;
         $router.push('/lost-items');
@@ -142,7 +142,7 @@
       :showDialog="showItemRejectDialog"
       :icon="{ name: 'circle-info', color: 'blue', size: '3x' }"
       :message="dialogMessage"
-      title="Please enter rejection reason"
+      :title="$t('pleaseEnterRejectionReason')"
       :showClose="false"
       @close="closeRejectDialog"
     >
@@ -156,7 +156,7 @@
             >
               <textarea
                 v-model="rejectReson"
-                placeholder="Reject Reason"
+                :placeholder="$t('rejectReason')"
                 class="
                   border
                   inline-block
@@ -184,7 +184,7 @@
           type="submit"
           class="w-full"
         >
-          Submit
+          {{ $t('submit') }}
         </BaseButton>
       </template>
     </BaseDialog>

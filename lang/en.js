@@ -104,5 +104,42 @@ export default {
   noResultFound: "No Result Found",
   detailsSubmittedSuccessfully: "Details submitted successfully!",
   weHaveSentTheNotificationLinkOnYourEmail: "We have sent the notification link on your email. You can click on the link received on the mail to proceed further with the shipping.",
-  weHaveSentTheNotificationToThePerson: "We have sent the notification to the person who has uploaded the item, with the entered Pickup details. You can pickup your item accordingly at the scheduled time."
+  weHaveSentTheNotificationToThePerson: "We have sent the notification to the person who has uploaded the item, with the entered Pickup details. You can pickup your item accordingly at the scheduled time.",
+
+  // Checkout page
+  checkout: "Checkout",
+  itemDetails: "Item Details",
+  summary: "Summary",
+  from: "from",
+  to: "to",
+  signatureConfirmation: "Signature Confirmation",
+  insuranceCharges: "Insurance Charges",
+  insuredFor: "Insured for",
+  totalPrice: "Total Price",
+  paymentMethod: "payment method",
+  confirmAndPay: "Confirm & pay",
+  back: "BACK",
+
+  // Claim Item Details page
+  claimPersonDetails: "Claim Person's Details",
+  personName: "Person Name",
+  email: "Email",
+  mobileNumber: "Mobile Number",
+  lostItemDate: "Lost Item Date",
+  description: "Description",
+  lostLocation: "Lost Location",
+  venuePhoneNumber: "Venue Phone Number",
+  packageType: "Package Type",
+  foundItemAddress: "Found Item Address",
+  approve: "Approve",
+  reject: "Reject",
+  okay: "Okay",
+  pleaseEnterRejectionReason: "Please enter rejection reason",
+  rejectReason: "Reject Reason",
+  submit: "Submit",
+
+  // Claim Item Page
+  personalDetails: "Personal Details",
+  lostItemAddress: "Lost Item Address",
+  dateOfLost: "Date of Lost",
 }
