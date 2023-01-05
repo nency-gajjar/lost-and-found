@@ -150,6 +150,9 @@ export default {
         { id: 2, name: 'Total Claim Items', data: '', tileBgClass: 'bg-yellow-600', borderClass: '!border-yellow-800', totalBgClass: 'bg-yellow-500'},
         { id: 3, name: 'Total Items Listed Today', data: '', tileBgClass: 'bg-cyan-600', borderClass: '!border-cyan-800', totalBgClass: 'bg-cyan-500'},
         { id: 4, name: 'Total Items Claimed Today', data: '', tileBgClass: 'bg-indigo-600', borderClass: '!border-indigo-800', totalBgClass: 'bg-indigo-400'},
+        { id: 5, name: 'Total Unclaimed Items', data: '', tileBgClass: 'bg-rose-600', borderClass: '!border-rose-800', totalBgClass: 'bg-rose-400'},
+        { id: 6, name: 'Awaiting Item Owner Action', data: '', tileBgClass: 'bg-purple-600', borderClass: '!border-purple-800', totalBgClass: 'bg-purple-400'},
+        { id: 7, name: 'Hold for Pickup items', data: '', tileBgClass: 'bg-emerald-600', borderClass: '!border-emerald-800', totalBgClass: 'bg-emerald-400'},
       ]
     };
   },
@@ -193,7 +196,11 @@ export default {
 
             this.tabs[0].data = this.pendingListDetails.reverse()
             this.dashboardDetails.forEach((detail, index) => {
-              for (const key in detail)  this.tabs[index+1].data = detail[key].reverse()
+              if(this.tabs.length > index+1){
+                for (const key in detail) {
+                  this.tabs[index+1].data = detail[key].reverse()
+                }
+              }
             });
           }
         })

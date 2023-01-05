@@ -213,13 +213,13 @@ export default {
       let imgHtml = "";
       if (this.itemDetails.image) {
         imgHtml =
-          "<div class='flex justify-around w-100-px'> <img src='http://34.197.126.8/_nuxt/assets/images/found-shelf-icon.svg' /> <img src=" +
+          "<div class='flex justify-around w-100-px'> <img src='https://foundshelf.com/_nuxt/img/found-shelf-icon.908beac.svg' /> <img src=" +
           this.itemImg +
           "></div>";
       }
       else {
         imgHtml =
-          "<div class='itemImgContainer'><img src='http://34.197.126.8/_nuxt/assets/images/found-shelf-icon.svg' /></div>";
+          "<div class='itemImgContainer'><img src='https://foundshelf.com/_nuxt/img/found-shelf-icon.908beac.svg' /></div>";
       }
       let htmlToPrint = `
       <html><head>
