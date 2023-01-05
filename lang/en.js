@@ -141,6 +141,7 @@ export default {
   foundItemAddress: "Found Item Address",
   approve: "Approve",
   reject: "Reject",
+  approveWithoutImage: "Approve without Image",
   okay: "Okay",
   pleaseEnterRejectionReason: "Please enter rejection reason",
   rejectReason: "Reject Reason",
@@ -237,4 +238,42 @@ export default {
   stepBack: "Step Back",
   in: "IN",
   oz: "OZ",
+
+  // Admin - Dashboard Page
+  adminDashboard: "Admin Dashboard",
+  deleteItem: "Delete Item",
+  noItemAvailable: "No Item Available",
+  areYouSure: "Are you sure?",
+  doYouWantToRemoveTheItem: "Do you want to remove the item?",
+  waitingForApproval: "Waiting For Approval",
+  totalLostItems: "Total Lost Items",
+  totalClaimItems: "Total Claim Items",
+  totalItemsListedToday: "Total Items Listed Today",
+  totalItemsClaimedToday: "Total Items Claimed Today",
+  totalUnclaimedItems: "Total Unclaimed Items",
+  awaitingItemOwnerAction: "Awaiting Item Owner Action",
+  holdForPickupItems: "Hold for Pickup items",
+
+  // Admin - Detail Confirmation Page
+  weightPounds: "Weight Pounds",
+  weightOunces: "Weight Ounces",
+  claimed: "Claimed",
+  unClaimed: "Unclaimed",
+  itemApprovedSuccessfully: "Item approved successfully!",
+  itemIsApprovedAndListed: "Item is approved & listed successfully. User who uploaded this item will be notified with the status.",
+  itemRejectedSuccessfully: "Item rejected successfully!",
+  itemIsRejectedAndWillNotBeListed: "Item is rejected & will not be listed. User who uploaded this item will be notified with the rejection reason.",
+  itemApprovedWithoutImage: "Item approved without Image successfully!",
+  itemApprovedWithoutImageAndListed: "Item is approved without Image & listed accordingly. User who uploaded this item will be notified with the status.",
+
+  // Validation Alert Component
+  oopsPleaseFillAllRequiredFields: "<span class='font-medium'>Oops!</span> Please fill all required fields and try submitting again.",
+
+  // Navbar Component
+  dashboard: "Dashboard",
+  shippingDetails: "Shipping Details",
+  surcharge: "Surcharge",
+  users: "Users",
+  logout: "Logout",
+
 }
