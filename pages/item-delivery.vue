@@ -446,6 +446,7 @@
                     <date-picker
                       v-model="expectedPickupDate"
                       format="MM-DD-YYYY"
+                      :disabled-date="disablePickupDate"
                     ></date-picker>
                   </div>
                 </client-only>
@@ -631,6 +632,9 @@ export default {
   methods: {
     formatDate(date){
       return moment(date).format("MMMM DD, YYYY");
+    },
+    disablePickupDate (date) {
+      return date < new Date();
     },
     senderAddress(addressLine, city, state, country, zip){
       return `${addressLine}, ${city}, ${state}, ${country}, ${zip}`;
