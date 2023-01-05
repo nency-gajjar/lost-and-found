@@ -201,7 +201,7 @@
               <hr class="w-full border-dashed border border-black" />
             </div>
             <div id="scissor-text" class="hidden h-12 justify-center scissor-text text-gray-600 font-medium">
-              Cutout the above confirmation & tape it on the found item.
+              {{ $t('cutoutTheConfirmation') }}
             </div>
           </tbody>
         </table>

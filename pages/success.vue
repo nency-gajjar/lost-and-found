@@ -41,10 +41,10 @@
               text-accent-100
             "
           >
-            Success!
+            {{ $t('success') }}
           </h2>
           <p class="text-gray-800 text-sm max-w-[21.875rem]">
-            Your shipment created successfully!
+            {{ $t('shipmentCreatedSuccessfully') }}
           </p>
         </div>
         <div
@@ -68,21 +68,21 @@
     </div>
     <div v-if="!isDownload" class="text-center mt-8 space-y-5 max-w-4xl mx-auto px-4">
       <h3 class="text-xl font-medium text-accent-100">
-        You have successfully created a shipping label!
+        {{ $t('successfullyCreatedShippingLabel') }}
       </h3>
       <p class="text-gray-800">
-        Your label will be automatically sent to the sender’s email address: <span class="font-semibold">{{ itemDetails.venue_email }}</span>, and also to your email address: <span class="font-semibold">{{ itemDetails.receiver_email }}</span>. Please be sure to check the spam if you have not received the email.
+        {{ $t('LabelWillBeSentToSender') }} <span class="font-semibold">{{ itemDetails.venue_email }}</span>, {{ $t('alsoYourEmailAddress') }} <span class="font-semibold">{{ itemDetails.receiver_email }}</span>. {{ $t('checkTheSpam') }}
       </p><br/>
       <p class="text-gray-800">
-        We recommend that you call the sender below to ensure that they have received the email containing the label. <br> <span class="font-semibold text-gray-700">Sender name:</span> {{ itemDetails.venue_name }} <br> <span class="font-semibold text-gray-700">Sender Mobile No:</span> <a :href="`tel: ${itemDetails.venue_phone_no}`" class="font-display underline decoration-1">{{ itemDetails.venue_phone_no }}</a>
+        {{ $t('recommendToCallSender') }} <br> <span class="font-semibold text-gray-700">{{ $t('senderName') }}:</span> {{ itemDetails.venue_name }} <br> <span class="font-semibold text-gray-700">{{ $t('senderMobileNo') }}:</span> <a :href="`tel: ${itemDetails.venue_phone_no}`" class="font-display underline decoration-1">{{ itemDetails.venue_phone_no }}</a>
       </p>
-      <BaseButton @click="printLabel"> Print/Download Label </BaseButton>
+      <BaseButton @click="printLabel"> {{ $t('printOrDownloadLabel') }} </BaseButton>
     </div>
     <p v-if="!isDownload" class="text-gray-800">
-      Optionally, you can schedule a pickup for your package:
+      {{ $t('optionallySchedulePickup') }}
     </p>
     <p v-else class="text-gray-800">
-      Pickup has already been scheduled!
+      {{ $t('pickupHasAlreadyBeenScheduled') }}
     </p>
     <div
       class="
@@ -102,19 +102,19 @@
         varient="secondary"
         @click="goToSchedulePickup"
       >
-        Schedule Pickup
+        {{ $t('schedulePickup') }}
       </BaseButton>
       <BaseButton
         class="w-full sm:w-fit"
         varient="primaryAlt"
         @click="$router.push('lost-items')"
       >
-        Back to listing
+        {{ $t('backToListing') }}
       </BaseButton>
     </div>
     <p class="text-gray-800 !mb-10">
-      Need help? Reach out to us at <a href="mailto:support@foundshelf.com" class="font-display underline decoration-1">support@foundshelf.com</a>
-      In most cases, we will send you a reply in an hour!
+      {{ $t('reachOut') }} <a href="mailto:support@foundshelf.com" class="font-display underline decoration-1">{{ $t('supportMail') }}</a>
+      {{ $t('replayInHour') }}
     </p>
   </main>
 </template>

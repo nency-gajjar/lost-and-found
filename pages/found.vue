@@ -387,7 +387,7 @@
                   @focus="scrollToFocused"
                   v-model="hotelRoom"
                   type="text"
-                  label="Location (Ex. Room No., Hotel Area, etc.)"
+                  :label="$t('hotelLocation')"
                 />
               </div>
               
@@ -964,8 +964,8 @@ export default {
       showResetButton: false,
       itemDetails: {},
       showValidateAlert: false,
-      senderFormTitle: "Let’s add few details and leave the rest to us!",
-      foundItemFormTitle: "Found item details",
+      senderFormTitle: "",
+      foundItemFormTitle: "",
       venueEmail: "",
       venueSecondaryEmail: "",
       address: "",
@@ -1039,15 +1039,15 @@ export default {
       } else if (this.venueType === "Airport") {
         return this.$t('airportNameOrCode');
       } else if (this.venueType === "Transit") {
-        return "Transit Name";
+        return this.$t('transitName');
       } else if (this.venueType === "University") {
-        return "University Name";
+        return this.$t('universityName');
       } else if (this.venueType === "Law Enforcement") {
-        return "Enforcement Name";
+        return this.$t('enforcementName');
       } else if (this.venueType === "Other Establishment") {
-        return "Establishment Name";
+        return this.$t('establishmentName');
       } else {
-        return this.$t('venueAddress');
+        return this.$t('venueName');
       }
     },
     addressTitle() {
@@ -1058,13 +1058,13 @@ export default {
       } else if (this.venueType === "Airport") {
         return this.$t('airportAddress');
       } else if (this.venueType === "Transit") {
-        return "Transit Address";
+        return this.$t('transitAddress');
       } else if (this.venueType === "University") {
-        return "University Address";
+        return this.$t('universityAddress');
       } else if (this.venueType === "Law Enforcement") {
-        return "Law Enforcement Address";
+        return this.$t('enforcementAddress');
       } else if (this.venueType === "Other Establishment") {
-        return "Establishment Address";
+        return this.$t('establishmentAddress');
       } else {
         return this.$t('venueAddress');
       }

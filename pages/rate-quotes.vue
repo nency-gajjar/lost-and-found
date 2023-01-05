@@ -2,7 +2,7 @@
   <div class="wrapper pb-10">
     <div class="container max-w-7xl mx-auto px-4">
       <div class="form-title my-5">
-        <BaseHeader class="mt-10" varient="gray">Select Your Rate Quote</BaseHeader>
+        <BaseHeader class="mt-10" varient="gray">{{ $t('selectYourRateQuotes') }}</BaseHeader>
       </div>
       <div class="flex flex-col md:flex-row justify-center gap-4">
         <div class="w-full">
@@ -20,13 +20,13 @@
               "
               @click="menuOpened = !menuOpened"
             >
-              <span class="!font-medium text-gray-700">
-                SORT BY:
+              <span class="!font-medium text-gray-700 uppercase">
+                {{ $t('sortBy') }}:
                 <span v-if="sortBy === 0" class="!font-bold uppercase">
-                  cheapest
+                  {{ $t('cheapest') }}
                 </span>
                 <span v-else-if="sortBy === 1" class="!font-bold uppercase">
-                  fastest
+                  {{ $t('fastest') }}
                 </span>
               </span>
               <BaseIcon
@@ -94,10 +94,10 @@
                       @click="sortRateQuotes(0)"
                     >
                       <p class="text-base font-medium text-primary-100">
-                        Cheapest
+                        {{ $t('cheapest') }}
                       </p>
                       <p class="mt-1 text-sm text-grayText">
-                        Sort from lowest price to highest
+                        {{ $t('sortFromLowestPriceToHighest') }}
                       </p>
                     </button>
 
@@ -116,10 +116,10 @@
                       @click="sortRateQuotes(1)"
                     >
                       <p class="text-base font-medium text-primary-100">
-                        Fastest
+                        {{ $t('fastest') }}
                       </p>
                       <p class="mt-1 text-sm text-grayText">
-                        Sort from fastest delivery to slowest
+                        {{ $t('sortFromFastestDeliveryToSlowest') }}
                       </p>
                     </button>
                   </div>
@@ -193,7 +193,7 @@
                   <div class="text-left">
                     <div>
                       <h5 class="text-sm font-[#212B36] font-medium">
-                        Estimated Delivery
+                        {{ $t('estimatedDelivery') }}
                       </h5>
                     </div>
                     <div>
@@ -201,11 +201,11 @@
                         v-if="item && item.delivery_days"
                         class="text-sm tracking-wider text-[#637381]"
                       >
-                        {{ item.delivery_days }} Day{{
+                        {{ item.delivery_days }} {{ $t('day') }}{{
                           item.delivery_days > 1 ? "s" : null
                         }}
                       </span>
-                      <span v-else>Unknown</span>
+                      <span v-else>{{ $t('unknown') }}</span>
                     </div>
                   </div>
                 </div>
@@ -297,7 +297,7 @@
             </div>
           </div>
           <div v-else-if="!isLoading && rateQuoteItems.length === 0">
-            <p class="mt-5">No result found</p>
+            <p class="mt-5">{{ $t('noResultFound') }}</p>
           </div>
           <div v-else>
             <BaseLoader />
@@ -324,7 +324,7 @@
             <h3
               class="text-sm font-bold text-[#37322C] tracking-wider uppercase"
             >
-              label preview
+              {{ $t('labelPreview') }}
             </h3>
 
             <hr class="my-5 flex-grow border-dashed border border-[#E1E3E6]" />
@@ -339,7 +339,7 @@
                     uppercase
                   "
                 >
-                  from
+                  {{ $t('from') }}
                 </h3>
                 <p class="text-sm leading-6">{{ lableDetails.phone }}</p>
               </div>
@@ -365,7 +365,7 @@
                     uppercase
                   "
                 >
-                  To
+                  {{ $t('to') }}
                 </h3>
                 <p class="text-sm leading-6">{{ lableDetails.tophone }}</p>
               </div>
@@ -391,35 +391,35 @@
                     uppercase
                   "
                 >
-                  Package
+                  {{ $t('package') }}
                 </h3>
               </div>
               <div class="flex justify-between text-sm leading-6">
-                <p>Type</p>
+                <p>{{ $t("type") }}</p>
                 <p>{{ lableDetails.type }}</p>
               </div>
               <div class="flex justify-between text-sm leading-6">
-                <p>Length</p>
-                <p>{{ lableDetails.length }} IN</p>
+                <p>{{ $t('length') }}</p>
+                <p>{{ lableDetails.length }} {{ $t('in') }}</p>
               </div>
               <div class="flex justify-between text-sm leading-6">
                 <p>Width</p>
-                <p>{{ lableDetails.width }} IN</p>
+                <p>{{ lableDetails.width }} {{ $t('in') }}</p>
               </div>
               <div class="flex justify-between text-sm leading-6">
                 <p>Height</p>
-                <p>{{ lableDetails.height }} IN</p>
+                <p>{{ lableDetails.height }} {{ $t('in') }}</p>
               </div>
               <div class="flex justify-between text-sm leading-6">
                 <p>Weight</p>
-                <p>{{ lableDetails.weight }} OZ</p>
+                <p>{{ lableDetails.weight }} {{ $t('oz') }}</p>
               </div>
               <div v-if="lableDetails.insuranceValue" class="flex justify-between text-sm leading-6">
-                <p>Insurance Charges</p>
+                <p>{{ $t('insuranceCharges') }}</p>
                 <p>{{ calculateInsuranceCharges(lableDetails.insuranceValue ? Number(lableDetails.insuranceValue) : 0) | currency }}</p>
               </div>
               <div v-if="lableDetails.insuranceValue" class="flex justify-between text-sm leading-6">
-                <p style="font-size:13px" class="text-gray-600 !-my-2">(Insured for: {{ (lableDetails.insuranceValue ? Number(lableDetails.insuranceValue) : 0) | currency }})</p>
+                <p style="font-size:13px" class="text-gray-600 !-my-2">({{ $t('insuredFor') }}: {{ (lableDetails.insuranceValue ? Number(lableDetails.insuranceValue) : 0) | currency }})</p>
               </div>
             </div>
           </div>
@@ -443,7 +443,7 @@
             <h3
               class="text-sm font-bold text-[#37322C] tracking-wider uppercase"
             >
-              Extra Services:
+              {{ $t('extraServices') }}:
             </h3>
             <div class="flex items-center text-gray-700 mt-[0.75rem]">
               <input
@@ -469,22 +469,22 @@
                   ml-[1.125rem]
                   font-normal
                 "
-                >Add Signature Confirmation (+$5.00)</label
+                >{{ $t('addSignatureConfirmation') }}</label
               >
             </div>
           </div>
           <BaseButton
             :disabled="Object.keys(selectedRate).length < 1"
-            class="grow font-semibold text-md w-full md:max-w-sm mt-5 mx-auto"
+            class="grow font-semibold text-md w-full md:max-w-sm mt-5 mx-auto uppercase"
             @click="proceedToCheckout"
           >
-            PROCEED TO CHECKOUT
+            {{ $t('proceedToCheckout') }}
           </BaseButton>
           <BaseButton
             class="w-full mt-4"
             varient="transparent"
             @click="stepBack"
-            >STEP BACK</BaseButton
+            >{{ $t('stepBack') }}</BaseButton
           >
         </div>
       </div>

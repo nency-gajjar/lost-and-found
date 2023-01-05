@@ -7,10 +7,10 @@ export default {
   mounted() {
     if (this.$route.query.id) {
       this.$nextTick(() => {
-        this.$router.push({
+        this.$router.push(this.localeLocation({
           name: "success",
           query: { id: this.$route.query.id, download: true},
-        });
+        }));
       });
     }
   },

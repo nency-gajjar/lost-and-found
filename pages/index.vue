@@ -40,7 +40,7 @@
               text-accent-100
             "
           >
-            What have you <span class="text-primary-100"> Lost?</span>
+            {{ $t('whatHaveYou') }} <span class="text-primary-100"> {{ $t('lost') }}?</span>
           </h2>
         </div>
         <div
@@ -98,7 +98,7 @@
                 id="autocomplete-main"
                 type="text"
                 placeholder=""
-                label="Location where you might have lost your item. Try City/State, or a specific location name."
+                :label="$t('locationWhereYouLost')"
                 class="w-full"
                 @input="getAddress"
               >
@@ -138,18 +138,18 @@
                 <BaseSelect
                   v-model="itemDescription"
                   :options="itemDescriptionOptions"
-                  label="Item Description"
+                  :label="$t('itemDescription')"
                 />
               </div>
               <div class="w-full flex flex-col mt-3 sm:mt-0">
                 <label
                   class="block text-md font-medium text-gray-800 text-left"
-                  >Date when lost?</label
+                  >{{ $t('dateWhenLost') }}</label
                 >
                 <div class="flex gap-4 flex-auto w-full">
                   <client-only>
                     <date-picker
-                      placeholder="Approx. Start date"
+                      :placeholder="$t('approxStartDate')"
                       v-model="startDate"
                       format="MM-DD-YYYY"
                       :disabled-date="disableStartDate"
@@ -158,7 +158,7 @@
                   </client-only>
                   <client-only>
                     <date-picker
-                      placeholder="Approx. End date"
+                      :placeholder="$t('approxEndDate')"
                       v-model="endDate"
                       format="MM-DD-YYYY"
                       :disabled-date="disableEndDate"
@@ -175,11 +175,11 @@
               color="lightgray"
               style="max-width: 15px"
             />
-            <p class="pl-3">Leave all fields blank to show all items</p>
+            <p class="pl-3">{{ $t('leaveAllFieldsBlank') }}</p>
           </div>
           <div class="flex items-center justify-center m-8">
             <BaseButton @click="applyFilters" class="sm:py-4 sm:px-14">
-              Search
+              {{ $t('search') }}
             </BaseButton>
           </div>
         </div>
@@ -191,7 +191,7 @@
       class="bg-white border-b py-8"
     >
       <div class="container max-w-6xl mx-auto m-8">
-        <BaseHeader class="text-center" varient="gray">Recently Found Items</BaseHeader>
+        <BaseHeader class="text-center" varient="gray">{{ $t('recentlyFoundItems') }}</BaseHeader>
         <div v-if="!isLoading && recentItemList.length > 0" class="flex justify-center items-center my-5">
           <div @click="prevSlide">
             <BaseIcon icon="angle-left" color="accent" size="2x" />
@@ -247,7 +247,7 @@
                 <BaseButton
                   class="w-full px-5 py-2 !capitalize"
                   @click="viewItem(item)"
-                  >View Item</BaseButton
+                  >{{ $t('viewItem') }}</BaseButton
                 >
               </div>
             </div>
@@ -257,7 +257,7 @@
           </div>
         </div>
         <div v-else-if="!isLoading && recentItemList.length === 0">
-        <p class="text-gray-600 font-medium m-14 text-center">There's not any items have been added recently.</p>
+        <p class="text-gray-600 font-medium m-14 text-center">{{ $t('emptyRecentItems') }}</p>
         </div>
         <div v-else>
           <BaseLoader  class="h-64"/>
