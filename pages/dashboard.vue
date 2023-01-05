@@ -243,6 +243,13 @@ export default {
             query: { id: item.id },
           });
         });
+      } else if(this.tabSelected === 5){
+        this.$nextTick(() => {
+          this.$router.push({
+            path: "/detail-confirmation",
+            query: { id: item.id, awaiting: true },
+          });
+        });
       } else {
         // this.$store.commit("item/SET_ITEM_DETAILS", {
         //   ...item,

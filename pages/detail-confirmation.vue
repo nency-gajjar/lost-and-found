@@ -164,6 +164,14 @@
             >Claim Item</BaseButton
           >
         </div>
+        <!-- <div
+          v-if="allowResendNotification"
+          class="text-left sm:w-12/12 px-6 pb-6 pt-4"
+        >
+          <BaseButton class="w-full" varient="secondary"
+            >Resend Notification</BaseButton
+          >
+        </div> -->
       </section>
     </BaseCard>
     <div v-else>
@@ -189,6 +197,7 @@ export default {
       allowClaim: false,
       isLoadingItem: false,
       showSharingIcons: false,
+      allowResendNotification: false,
     };
   },
   created(){
@@ -204,6 +213,9 @@ export default {
             this.itemDetails = {...response.data.data.Item, onlyDisplay: true};
           }
           this.isLoadingItem = true;
+          if(this.$route.query.awaiting === "true"){
+            this.allowResendNotification = true;
+          }
         })
         .catch((error) => {
           this.isLoadingItem = true;
