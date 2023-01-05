@@ -7,7 +7,7 @@
             <BaseHeader class="text-left" varient="h4">Admin Dashboard</BaseHeader>
           </div>
         </div>
-        <section class="grid md:grid-cols-2 xl:grid-cols-5 gap-6">
+        <section class="grid md:grid-cols-2 xl:grid-cols-4 gap-6">
           <div
             v-for="tab in tabs" :key="tab.id"
             :class="[tab.tileBgClass, tabSelected === tab.id ? tab.borderClass : '']"
@@ -92,7 +92,7 @@
               :icon="{ name: 'trash-can', color: 'white', size: '1x' }"
               class="!capitalize !px-5 !py-2 !inline-flex !items-center"
               varient="red"
-              @click.stop="deleteItem(item)"
+              @click.stop="openDeleteDialog(item)"
             >
               Delete Item
             </BaseButton>
@@ -147,12 +147,11 @@ export default {
       tabs: [
         { id: 0, name: 'Waiting For Approval', data: '', tileBgClass: 'bg-blue-600', borderClass: '!border-blue-800', totalBgClass: 'bg-blue-500'},
         { id: 1, name: 'Total Lost Items', data: '', tileBgClass: 'bg-pink-600', borderClass: '!border-pink-800', totalBgClass: 'bg-pink-400'},
-        { id: 2, name: 'Total Claim Items', data: '', tileBgClass: 'bg-yellow-600', borderClass: '!border-yellow-800', totalBgClass: 'bg-yellow-500'},
-        { id: 3, name: 'Total Items Listed Today', data: '', tileBgClass: 'bg-cyan-600', borderClass: '!border-cyan-800', totalBgClass: 'bg-cyan-500'},
-        { id: 4, name: 'Total Items Claimed Today', data: '', tileBgClass: 'bg-indigo-600', borderClass: '!border-indigo-800', totalBgClass: 'bg-indigo-400'},
-        { id: 5, name: 'Total Unclaimed Items', data: '', tileBgClass: 'bg-rose-600', borderClass: '!border-rose-800', totalBgClass: 'bg-rose-400'},
-        { id: 6, name: 'Awaiting Item Owner Action', data: '', tileBgClass: 'bg-purple-600', borderClass: '!border-purple-800', totalBgClass: 'bg-purple-400'},
-        { id: 7, name: 'Hold for Pickup items', data: '', tileBgClass: 'bg-emerald-600', borderClass: '!border-emerald-800', totalBgClass: 'bg-emerald-400'},
+        { id: 2, name: 'Total Items Listed Today', data: '', tileBgClass: 'bg-cyan-600', borderClass: '!border-cyan-800', totalBgClass: 'bg-cyan-500'},
+        { id: 3, name: 'Total Items Claimed Today', data: '', tileBgClass: 'bg-yellow-600', borderClass: '!border-yellow-800', totalBgClass: 'bg-yellow-400'},
+        { id: 4, name: 'Total Unclaimed Items', data: '', tileBgClass: 'bg-rose-600', borderClass: '!border-rose-800', totalBgClass: 'bg-rose-400'},
+        { id: 5, name: 'Awaiting Item Owner Action', data: '', tileBgClass: 'bg-purple-600', borderClass: '!border-purple-800', totalBgClass: 'bg-purple-400'},
+        { id: 6, name: 'Hold for Pickup items', data: '', tileBgClass: 'bg-emerald-600', borderClass: '!border-emerald-800', totalBgClass: 'bg-emerald-400'},
       ]
     };
   },
@@ -175,6 +174,10 @@ export default {
     }
   },
   methods: {
+    openDeleteDialog(item) {
+      this.itemToDelete = item;
+      this.showDialog = true;
+    },
     changeTab(tabId){
       this.tabSelected = tabId;
       this.searchQuery = '';
@@ -193,12 +196,16 @@ export default {
           if (response.status === 200) {
             this.isLoading = false;
             this.dashboardDetails = response?.data?.data || [];
-
-            this.tabs[0].data = this.pendingListDetails.reverse()
-            this.dashboardDetails.forEach((detail, index) => {
-              if(this.tabs.length > index+1){
+            
+            this.tabs[0].data = this.pendingListDetails.reverse();
+            let tabIndex = 1;
+            this.dashboardDetails.forEach((detail) => {
+              if(this.tabs.length > tabIndex){
                 for (const key in detail) {
-                  this.tabs[index+1].data = detail[key].reverse()
+                  if(key !== "totalclaimitems") {
+                    this.tabs[tabIndex].data = detail[key].reverse();
+                    tabIndex++;
+                  }
                 }
               }
             });
