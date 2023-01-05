@@ -46,44 +46,7 @@
           </div>
         </section>
       </main>
-      <div class="w-full flex gap-3 flex-auto mt-3 sm:mt-0 sm:w-7/12">
-        <div class="w-full flex justify-end items-center pt-5 relative">
-          <input
-            v-model="searchQuery"
-            class="
-              text-sm
-              leading-none
-              text-left text-gray-600
-              px-4
-              py-3
-              w-full
-              border
-              rounded-md
-              border-gray-300
-              outline-none
-            "
-            type="text"
-            placeholder="Search"
-          />
-          <BaseIcon
-            v-if="!searchQuery"
-            icon="magnifying-glass"
-            color="gray"
-            size="1x"
-            class="absolute right-3 z-10 cursor-pointer"
-            style="max-width: 15px"
-          />
-          <BaseIcon
-            v-else
-            icon="xmark"
-            color="gray"
-            size="1x"
-            class="absolute right-3 z-10 cursor-pointer"
-            style="max-width: 15px"
-            @click="searchQuery = ''"
-          />
-        </div>
-      </div>
+      <SearchBar  v-model="searchQuery"/>
       <div v-if="!isLoading && filteredItems">
         <template v-if="filteredItems.length > 0">        
           <ItemCard v-for="item in filteredItems" :key="item.id" :item="item" @click.native="viewItem(item)">
@@ -130,10 +93,10 @@
 
 <script>
 import ItemCard from "../components/shared/ItemCard.vue";
-
+import SearchBar from '@/components/shared/SearchBar.vue'
 export default {
   middleware: ["auth-admin"],
-  components: { ItemCard },
+  components: { ItemCard, SearchBar },
   data() {
     return {
       dashboardDetails: [],

@@ -273,65 +273,29 @@
               items-center
             "
           >
-            <div class="w-full flex gap-3 flex-auto mt-3 sm:mt-0 sm:w-7/12">
-              <div class="w-full flex justify-end items-center pt-5 relative">
-                <input
-                  v-model="searchQuery"
-                  @input="filterItems"
-                  class="
-                    text-sm
-                    leading-none
-                    text-left text-gray-600
-                    px-4
-                    py-3
-                    w-full
-                    border
-                    rounded-md
-                    border-gray-300
-                    outline-none
-                  "
-                  type="text"
-                  placeholder="Search"
-                />
-                <BaseIcon
-                  v-if="!searchQuery"
-                  icon="magnifying-glass"
-                  color="gray"
-                  size="1x"
-                  class="absolute right-3 z-10 cursor-pointer"
-                  style="max-width: 15px"
-                />
-                <BaseIcon
-                  v-else
-                  icon="xmark"
-                  color="gray"
-                  size="1x"
-                  class="absolute right-3 z-10 cursor-pointer"
-                  style="max-width: 15px"
-                  @click="(searchQuery = ''), (lostItems = cloneLostItems)"
-                />
-              </div>
-            </div>
+          <SearchBar  v-model="searchQuery"/>
           </div>
         </div>
       </div>
 
-      <div v-if="!isLoading && lostItems.length > 0">
-        <ItemCard v-for="item in lostItems" :key="item.id" :item="item" @click.native="viewItem(item)">
-          <BaseButton
-            class="!px-5 !py-2 !capitalize"
-            varient="secondary"
-            @click.stop="claimItem(item)"
-          >
-            Claim Item
-          </BaseButton>
-        </ItemCard>
-      </div>
-      <div v-else-if="!isLoading && lostItems.length === 0">
-        <p class="text-gray-600 font-medium m-14">No Result Found</p>
-      </div>
-      <div v-else>
-        <BaseLoader />
+      <div v-if="!isLoading && filteredItems">
+        <template v-if="filteredItems.length > 0">
+          <ItemCard v-for="item in filteredItems" :key="item.id" :item="item" @click.native="viewItem(item)">
+            <BaseButton
+              class="!px-5 !py-2 !capitalize"
+              varient="secondary"
+              @click.stop="claimItem(item)"
+            >
+              Claim Item
+            </BaseButton>
+          </ItemCard>
+        </template>
+        <template v-else-if="!isLoading && filteredItems.length === 0">
+          <p class="text-gray-600 font-medium m-14">No Item Available</p>
+        </template>
+        <template v-else>
+          <BaseLoader />
+        </template>
       </div>
     </div>
   </div>
@@ -343,13 +307,13 @@ import "vue2-datepicker/index.css";
 import moment from "moment";
 import DetectBrowser from "~/mixins/detectBrowser";
 import ItemCard from "../../components/shared/ItemCard.vue";
+import SearchBar from '../../components/shared/SearchBar.vue'
 export default {
-  components: { DatePicker, ItemCard },
+  components: { DatePicker, ItemCard, SearchBar },
   mixins: [DetectBrowser],
   data() {
     return {
       lostItems: [],
-      cloneLostItems: [],
       isLoading: true,
       searchQuery: "",
       startDate: null,
@@ -388,6 +352,15 @@ export default {
       }
       return moment(new Date()).format("YYYY-MM-DD");
     },
+    filteredItems () {
+      if (this.searchQuery?.length) {
+        if (this.lostItems.length > 0) {
+          return this.lostItems.filter(item => item?.item_description?.trim()?.toLowerCase()?.includes(this.searchQuery?.trim()?.toLowerCase()));
+        }
+      } else {
+        return this.lostItems
+      }
+    }
   },
   methods: {
     disableStartDate(date){
@@ -421,7 +394,7 @@ export default {
       }
     },
     resetItemDescription() {
-      this.itemDescription = "";
+      this.itemDescription = "All";
       if (this.isFilterApplied) {
         this.applyFilters();
       }
@@ -431,11 +404,7 @@ export default {
       let params = {
         abc: "123",
       };
-      let itemDescription = this.itemDescription;
-      if (this.itemDescription === "All") {
-        itemDescription = "";
-      }
-      if (itemDescription) params.item_description = itemDescription;
+      if (this.itemDescription && this.itemDescription !== 'All') params.item_description = this.itemDescription;
       if (this.startDate || this.endDate) {
         if(this.startDate && !this.endDate) {
           params.datse = this.apiFormatedStartDate;
@@ -456,21 +425,9 @@ export default {
       this.$axios
         .post("getallfilteritemdetails", {}, { params: params })
         .then((res) => {
-          this.lostItems = res?.data?.data[0]?.ITEMS;
-          if (!this.lostItems) {
-            this.lostItems = [];
-          }
-          this.cloneLostItems = this.lostItems;
-          if (this.searchQuery) {
-            this.filterItems();
-          }
+          this.lostItems = res?.data?.data[0]?.ITEMS || [];
           this.isLoading = false;
-          if (
-            itemDescription ||
-            this.startDate ||
-            this.endDate ||
-            this.lostItemAddress
-          ) {
+          if (this.itemDescription && this.itemDescription !== 'All' || this.startDate || this.endDate || this.lostItemAddress) {
             this.isFilterApplied = true;
           } else {
             this.isFilterApplied = false;
@@ -481,14 +438,7 @@ export default {
         });
     },
     viewItem(item) {
-      // this.$store.commit("item/SET_ITEM_DETAILS", {
-      //   ...item,
-      //   onlyDisplay: true,
-      // });
-      this.$store.commit(
-        "item/SET_ITEM_ID",
-        item.id
-      );
+      this.$store.commit("item/SET_ITEM_ID",item.id);
       this.$nextTick(() => {
         this.$router.push({
           name: "detail-confirmation",
@@ -520,32 +470,11 @@ export default {
       this.address = "";
       document.getElementById("autocomplete-lost-items").placeholder = "";
     },
-    filterItems() {
-      let filterArray = [];
-      if (this.searchQuery === "") {
-        this.lostItems = this.cloneLostItems;
-      }
-      this.cloneLostItems.forEach((item) => {
-        let itemArr = Object.values(item);
-        let filteredItems = itemArr.filter((itemElement) => {
-          if (typeof itemElement !== "string") {
-            itemElement = itemElement.toString();
-          }
-          return itemElement
-            .toLowerCase()
-            .includes(this.searchQuery.toLowerCase());
-        });
-        if (filteredItems.length != 0) {
-          filterArray.push(item);
-        }
-      });
-      this.lostItems = filterArray;
-    },
     clearFilters() {
       this.searchQuery = "";
       this.startDate = null;
       this.endDate = null;
-      this.itemDescription = "";
+      this.itemDescription = "All";
       this.clearAddress();
       this.lostItemAddress = "";
       this.lat = "";
@@ -559,11 +488,9 @@ export default {
           .then((response) => {
             if (response.status === 200) {
               let itemDescriptionResponse = response.data?.data?.Items || [];
-              this.itemDescriptionOptions = itemDescriptionResponse.map(
-                (item) => {
-                  return item.item_description;
-                }
-              );
+              itemDescriptionResponse.forEach(item => {
+                this.itemDescriptionOptions.push(item.item_description)
+              });
               this.itemDescriptionOptions.unshift("All");
               this.itemDescription = "All";
               resolve();
@@ -574,26 +501,6 @@ export default {
           });
       });
     },
-    // getAllLostItems() {
-    //   this.isFilterApplied = false;
-    //   this.isLoading = true;
-    //   this.$axios
-    //     .get("/getalllostitem")
-    //     .then((response) => {
-    //       if (response.status === 200) {
-    //         this.isLoading = false;
-    //         this.lostItems = response?.data?.data;
-    //         this.cloneLostItems = cloneDeep(this.lostItems);
-    //         if (!this.lostItems) {
-    //           this.lostItems = [];
-    //         }
-    //       }
-    //     })
-    //     .catch((err) => {
-    //       this.isLoading = false;
-    //       console.log(err);
-    //     });
-    // }
   },
   async mounted() {
     await this.getItemDescriptionOptions();
@@ -605,10 +512,8 @@ export default {
       this.lostItemAddress = this.$route.params.appliedFilters.lostItemAddress;
       this.lat = this.$route.params.appliedFilters.lat;
       this.long = this.$route.params.appliedFilters.long;
-      this.applyFilters();
-    } else {
-      this.applyFilters();
-    }
+    } 
+    await this.applyFilters();
   },
 };
 </script>
