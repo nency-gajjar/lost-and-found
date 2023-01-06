@@ -10,4 +10,10 @@
 html {
   @apply bg-gray-100;
 }
+
+@media print {
+  .min-h-screen {
+    min-height: max-content !important;
+  }
+}
 </style>
