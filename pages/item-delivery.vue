@@ -98,6 +98,7 @@
               <BaseHeader varient="accent">How would you like to proceed?</BaseHeader>
             </div>
             <div class="grid grid-cols-2 gap-4 mt-2">
+            <!-- <div class="grid sm:grid-cols-3 grid-cols-1 gap-4 mt-2"> -->
               <!-- Ship it to me -->
               <div
                 class="flex items-center pl-4 rounded-lg border border-gray-300"
@@ -174,6 +175,45 @@
                   >Hold for pickup</label
                 >
               </div>
+
+              <!-- No longer needed -->
+              <!-- <div
+                class="flex items-center pl-4 rounded-lg border border-gray-300"
+                :class="[
+                  deliveryType === '2' &&
+                    'border-primary-100 ring-primary-80 ring-[6px] ring-offset-primary-100 ring-offset-1',
+                ]"
+              >
+                <input
+                  v-model="deliveryType"
+                  checked
+                  id="bordered-radio-3"
+                  type="radio"
+                  value="2"
+                  name="bordered-radio"
+                  class="
+                    w-4
+                    h-4
+                    text-primary-100
+                    bg-gray-100
+                    border-gray-300
+                    focus:ring-primary-200 focus:ring-2
+                  "
+                />
+                <label
+                  for="bordered-radio-3"
+                  class="
+                    py-4
+                    ml-2
+                    w-full
+                    text-sm
+                    font-medium
+                    text-gray-900
+                    cursor-pointer
+                  "
+                  >No Longer Needed</label
+                >
+              </div> -->
             </div>
 
             <div class="!my-6 space-y-4" v-show="deliveryType === '0'">
@@ -451,6 +491,56 @@
                 </client-only>
               </ValidationProvider>
             </div>
+
+            <!-- <div class="!my-6 space-y-4" v-show="deliveryType === '2'">
+              <ValidationProvider
+                v-slot="{ errors }"
+                :rules="deliveryType === '2' ? 'required' : ''"
+                class="block"
+              >
+                <BaseSelect
+                  :isRequired="true"
+                  label="Select Reason"
+                  v-model="noNeedReason"
+                  :options="noNeedReasonOptions"
+                  :class="errors.length > 0 && 'error'"
+                />
+              </ValidationProvider>
+              <ValidationProvider
+                v-if="isManualReason"
+                v-slot="{ errors }"
+                :rules="deliveryType === '2' ? 'required' : ''"
+                class="block"
+              >
+                <BaseInput
+                  :isRequired="true"
+                  v-model="manualReason"
+                  type="text"
+                  label="Enter Reason"
+                  :class="errors.length > 0 && 'error'"
+                />
+              </ValidationProvider>
+              <div class="!mt-3">
+                <textarea
+                  v-model="noNeedDescription"
+                  placeholder="Description (Optional)"
+                  class="
+                    border
+                    inline-block
+                    border-gray-300
+                    w-full
+                    rounded-lg
+                    px-4
+                    h-full
+                    text-base
+                    pt-4
+                    pb-2
+                    transition-shadow
+                    text-gray-700
+                  "
+                ></textarea>
+              </div>
+            </div> -->
             
             <ValidationAlert :show-alert="showValidateAlert" />
 
@@ -528,6 +618,10 @@ export default {
     insuranceValue: "",
     isLoadingItemDetails: true,
     itemDetails: {},
+    // noNeedReason: "",
+    // noNeedReasonOptions: ['Throw it away', 'Do not need anymore', 'Other'],
+    // manualReason: "",
+    // noNeedDescription: "",
   }),
   async created() {
     if (this.$route.query.id) {
@@ -617,6 +711,14 @@ export default {
     },
   },
   computed: {
+    // isManualReason() {
+    //   if(this.noNeedReason === "Other"){
+    //     return true;
+    //   }
+    //   else {
+    //     return false;
+    //   }
+    // },
     showImage() {
       return this.itemDetails.image && this.itemDetails.is_default !== 'Approve without Image';
     },
@@ -624,7 +726,7 @@ export default {
       if (this.deliveryType === "0") {
         return "We have sent the notification link on your email. You can click on the link received on the mail to proceed further with the shipping.";
       } else {
-        return " We have sent the notification to the person who has uploaded the item, with the entered Pickup details. You can pickup your item accordingly at the scheduled time.";
+        return "We have sent the notification to the person who has uploaded the item, with the entered Pickup details. You can pickup your item accordingly at the scheduled time.";
       }
     },
   },
@@ -830,7 +932,7 @@ export default {
                   this.$toast.error("Something went wrong! Please try again.");
                   this.isLoading = false;
                 });
-            } else {
+            } else if(this.deliveryType === "0") {
               this.$store.commit(
                 "shipment/SET_LABLE_DETAILS",
                 params_rateQuotes

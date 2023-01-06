@@ -1,5 +1,5 @@
 <template>
-  <div class="wrapper my-10">
+  <div @click="showSharingIcons = false" class="wrapper my-10">
     <div v-if="!isLoadingItem || Object.keys(itemDetails).length > 0">
       <div
         class="
@@ -11,8 +11,13 @@
           shadow-lg
           bg-white
           overflow-hidden
+          relative
         "
       >
+        <div class="absolute right-0 top-14 bg-gray-100 rounded divide-y divide-gray-300 shadow-lg" v-if="showSharingIcons">
+          <SocialShare @social-share="socialShare" />
+        </div>
+                      
         <table id="printMe" width="100%" class="table-style">
           <tbody>
             <tr>
@@ -21,20 +26,25 @@
                   <tr id="found-shelf-logo" class="flex w-full hidden logo-hidden">
                     <td align="left" class="!w-24"><img class="found-logo" src="https://foundshelf.com/_nuxt/img/found-shelf-icon.908beac.svg" alt="Found Shelf"></td>
                   </tr>
-                  <tr class="!flex !justify-center !w-full">
-                    <td align="center" class="!w-full">
+                  <tr class="!flex !justify-around !items-center !w-full">
+                    <td class="!w-full">
                       <h2
                         class="
                           text-2xl
                           font-bold
-                          text-accent-100 text-center
-                          w-full
+                          text-accent-100
                           confirmation-title
+                          pl-10
+                          w-full
                         "
+                        :class="!showSocialShare && '!text-center !pl-0'"
                       >
                         Confirmation Details
                       </h2>
                     </td>
+                    <div v-if="showSocialShare" id="share-icon-container" class="!w-1/4 !text-right !pr-10">
+                      <BaseIcon @click.stop="showSharingIcons = !showSharingIcons" size="lg" icon="share-alt" color="accent" />
+                    </div>
                   </tr>
                 </table>
               </td>
@@ -161,7 +171,7 @@
                         </div>
                       </td>
                     </tr>
-                    <tr class="l-2">
+                    <tr v-if="itemDetails.receiver_email" class="l-2">
                       <td>
                         <div class="text-left text-gray-600 font-medium">
                           Receiver's Email
@@ -244,7 +254,11 @@
 
 <script>
 import moment from 'moment';
+import SocialShare from "../components/shared/SocialShare.vue";
+import socialShare from "../mixins/socialShare.js";
 export default {
+  mixins: [socialShare],
+  components: { SocialShare },
   data() {
     return {
       itemDetails: {},
@@ -366,6 +380,11 @@ export default {
         document.getElementById("found-shelf-logo").style.display = "block";
         document.getElementById("scissor-container").style.display = "flex";
         document.getElementById("scissor-text").style.display = "flex";
+        if(this.showSocialShare){
+          document.getElementById("share-icon-container").style.display = "none";
+          document.getElementsByClassName("confirmation-title")[0].style.textAlign = "center";
+          document.getElementsByClassName("confirmation-title")[0].style.paddingLeft = "0";
+        }
         this.$html2pdf(document.getElementById("printMe"), {
           filename: "Item-Details.pdf",
           image: { type: "jpg", quality: 0.98 },
@@ -381,6 +400,11 @@ export default {
           document.getElementById("found-shelf-logo").style.display = "none";
           document.getElementById("scissor-container").style.display = "none";
           document.getElementById("scissor-text").style.display = "none";
+          if(this.showSocialShare){
+            document.getElementById("share-icon-container").style.display = "block";
+            document.getElementsByClassName("confirmation-title")[0].style.textAlign = "left";
+            document.getElementsByClassName("confirmation-title")[0].style.paddingLeft = "2.5rem";
+          }
         });
       } else {
         window.print();
@@ -392,6 +416,9 @@ export default {
 <style scoped>
 .found-logo {
   width: 80px;
+}
+.confirmation-title {
+  text-align: left;
 }
 tr td:first-child {
   width: 250px;
@@ -548,6 +575,22 @@ td {
 
   .img-container {
     margin-top: 0px !important
+  }
+
+  .shadow-lg {
+    box-shadow: none;
+  }
+
+  .confirmation-title {
+    text-align: center;
+  }
+
+  #share-icon-container {
+    display: none;
+  }
+
+  .pl-10 {
+    padding-left: 0 !important;
   }
 }
 </style>
