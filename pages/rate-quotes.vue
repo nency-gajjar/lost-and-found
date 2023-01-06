@@ -201,7 +201,7 @@
                         v-if="item && item.delivery_days"
                         class="text-sm tracking-wider text-[#637381]"
                       >
-                        {{ item.delivery_days }} Day{{
+                        {{ item.delivery_days }} Business Day{{
                           item.delivery_days > 1 ? "s" : null
                         }}
                       </span>

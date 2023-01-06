@@ -850,30 +850,8 @@
                   />
                 </ValidationProvider>
 
-                <!-- Receiver Email -->
-                <ValidationProvider
-                  v-slot="{ errors }"
-                  rules="required|email"
-                  class="block"
-                  name="Receiver's Email"
-                >
-                  <BaseInput
-                    @focus="scrollToFocused"
-                    :isRequired="true"
-                    v-model="receiverEmail"
-                    type="email"
-                    label="Receiver's Email"
-                    :class="errors.length > 0 && 'error'"
-                  />
-                  <p
-                    v-if="errors.length"
-                    class="vee-validation-error mt-2 text-sm text-red-600"
-                  >
-                    {{ errors[0] }}
-                  </p>
-                </ValidationProvider>
                 <div
-                  class="block relative box-content h-12"
+                  class="block relative box-content"
                   :class="[
                     !isReceiverMobileNoValid && 'error',
                   ]"
@@ -887,7 +865,7 @@
                       border-gray-300
                       w-full
                       rounded-lg
-                      h-full
+                      h-12
                     "
                     v-model="receiverMobileNo"
                     v-bind="bindPhoneInputProps"
@@ -901,6 +879,28 @@
                     {{ receiverPhoneValidationMessage }}
                   </div>
                 </div>
+
+                <!-- Receiver Email -->
+                <ValidationProvider
+                  v-slot="{ errors }"
+                  rules="email"
+                  class="block"
+                  name="Receiver's Email"
+                >
+                  <BaseInput
+                    @focus="scrollToFocused"
+                    v-model="receiverEmail"
+                    type="email"
+                    label="Receiver's Email"
+                    :class="errors.length > 0 && 'error'"
+                  />
+                  <p
+                    v-if="errors.length"
+                    class="vee-validation-error mt-2 text-sm text-red-600"
+                  >
+                    {{ errors[0] }}
+                  </p>
+                </ValidationProvider>
               </template>
               
               <ValidationAlert class="!my-8" :show-alert="showValidateAlert" />
@@ -1038,14 +1038,14 @@ export default {
     venueLabel() {
       if (this.venueType === "Restaurant") {
         return "Your Restaurant Name";
-      } else if (this.venueType === "Hotel") {
-        return "Your Hotel Name";
+      } else if (this.venueType === "Hotel / Resorts") {
+        return "Your Hotel / Resorts Name";
       } else if (this.venueType === "Airport") {
         return "Airport Name or Code";
       } else if (this.venueType === "Transit") {
         return "Transit Name";
-      } else if (this.venueType === "University") {
-        return "University Name";
+      } else if (this.venueType === "University / Schools") {
+        return "University / Schools Name";
       } else if (this.venueType === "Law Enforcement") {
         return "Enforcement Name";
       } else if (this.venueType === "Other Establishment") {
@@ -1057,14 +1057,14 @@ export default {
     addressTitle() {
       if (this.venueType === "Restaurant") {
         return "Restaurant Address";
-      } else if (this.venueType === "Hotel") {
-        return "Hotel Address";
+      } else if (this.venueType === "Hotel / Resorts") {
+        return "Hotel / Resorts Address";
       } else if (this.venueType === "Airport") {
         return "Airport Address";
       } else if (this.venueType === "Transit") {
         return "Transit Address";
-      } else if (this.venueType === "University") {
-        return "University Address";
+      } else if (this.venueType === "University / Schools") {
+        return "University / Schools Address";
       } else if (this.venueType === "Law Enforcement") {
         return "Law Enforcement Address";
       } else if (this.venueType === "Other Establishment") {
