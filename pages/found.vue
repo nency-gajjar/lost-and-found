@@ -177,10 +177,10 @@
               <div
                 class="block box-content h-12"
                 :class="[
-                  !isEmployeeMobileNoValid && 'error'
+                  !isEmployeeMobileNoFormatValid && 'error'
                 ]"
               >
-                <div style="font-size:15px;" class="text-gray-500" :class="!isEmployeeMobileNoValid && 'text-red-500'">Employee Mobile Number <span class="text-red-500">*</span> </div>
+                <div style="font-size:15px;" class="text-gray-500" :class="!isEmployeeMobileNoFormatValid && 'text-red-500'">Employee Mobile Number <span class="text-red-500">*</span> </div>
                 <vue-tel-input
                   class="
                     relative
@@ -198,7 +198,7 @@
                 ></vue-tel-input>
               </div>
               <div
-                v-if="!isEmployeeMobileNoValid"
+                v-if="!isEmployeeMobileNoFormatValid"
                 class="vee-validation-error !mt-8 text-sm text-red-600"
               >
                 {{ employeePhoneValidationMessage }}
@@ -324,9 +324,9 @@
                 <div>
                   <div
                     class="block relative box-content h-12"
-                    :class="!isVenuePhoneValid && 'error'"
+                    :class="!isVenuePhoneFormatValid && 'error'"
                   >
-                    <div style="font-size:15px;"  class="text-gray-500" :class="!isVenuePhoneValid && 'text-red-500'">Phone Number</div>
+                    <div style="font-size:15px;"  class="text-gray-500" :class="!isVenuePhoneFormatValid && 'text-red-500'">Phone Number</div>
                     <vue-tel-input
                       class="
                         relative
@@ -343,7 +343,7 @@
                       v-bind="bindPhoneInputProps"
                     ></vue-tel-input>
                     <div
-                      v-if="!isVenuePhoneValid"
+                      v-if="!isVenuePhoneFormatValid"
                       class="
                         vee-validation-error
                         mt-2
@@ -875,10 +875,10 @@
                 <div
                   class="block relative box-content h-12"
                   :class="[
-                    !isReceiverMobileNoValid && 'error',
+                    !isReceiverMobileNoFormatValid && 'error',
                   ]"
                 >
-                  <div style="font-size:15px;" class="text-gray-500" :class="!isReceiverMobileNoValid && 'text-red-500'">Receiver Mobile Number  <span class="text-red-500">*</span> </div>
+                  <div style="font-size:15px;" class="text-gray-500" :class="!isReceiverMobileNoFormatValid && 'text-red-500'">Receiver Mobile Number  <span class="text-red-500">*</span> </div>
                   <vue-tel-input
                     class="
                       relative
@@ -895,7 +895,7 @@
                     @validate="validateReceiverPhoneFormat"
                   ></vue-tel-input>
                   <div
-                    v-if="!isReceiverMobileNoValid"
+                    v-if="!isReceiverMobileNoFormatValid"
                     class="vee-validation-error mt-2 text-sm text-red-600"
                   >
                     {{ receiverPhoneValidationMessage }}
@@ -977,7 +977,6 @@ export default {
     hotelRoom: "",
     employeeMobileNo: "",
     foundDate: new Date(),
-    venueManually: false,
     itemDescription: "",
     itemDescriptionOptions: [],
     itemDescriptionResponse: [],
@@ -993,7 +992,6 @@ export default {
       "Claimed (You know the actual owner of this item)",
       "Unclaimed (You do not know the actual owner of this item)",
     ],
-    showReceiverInputs: false,
     receiverName: "",
     receiverEmail: "",
     receiverMobileNo: "",
@@ -1005,9 +1003,6 @@ export default {
     isLoading: false,
     isLoadingItemDetails: true,
     isLoadingEditImage: false,
-    isVenuePhoneValid: true,
-    isEmployeeMobileNoValid: true,
-    isReceiverMobileNoValid: true,
     isVenuePhoneFormatValid: true,
     isEmployeeMobileNoFormatValid: true,
     isReceiverMobileNoFormatValid: true,
@@ -1035,6 +1030,19 @@ export default {
   },
   computed: {
     // ...mapGetters("item", ["itemDetails"]),
+    showReceiverInputs() {
+      if(this.itemStatus === "Claimed (You know the actual owner of this item)") {
+        return true;
+      }
+      return false;
+    },
+    venueManually() {
+      if (this.venueType == "Personal") {
+        return true;
+      } else {
+        return false;
+      }
+    },
     venueLabel() {
       if (this.venueType === "Restaurant") {
         return "Your Restaurant Name";
@@ -1393,37 +1401,25 @@ export default {
       if (vueTelObj.valid !== undefined) {
         if (vueTelObj.valid) {
           this.isVenuePhoneFormatValid = true;
-          this.isVenuePhoneValid = true;
           this.venuePhoneValidationMessage = "";
         } else {
           this.isVenuePhoneFormatValid = false;
-          this.isVenuePhoneValid = false;
           this.venuePhoneValidationMessage = "Please enter valid phone number";
         }
       }
     },
     validateVenuePhoneNo() {
       if (!this.autoCompleteAddress.phoneNo) {
-        this.isVenuePhoneValid = false;
-        // this.venuePhoneValidationMessage = "*Required";
-      } else {
-        if (this.isVenuePhoneFormatValid) {
-          this.isVenuePhoneValid = true;
-          // this.venuePhoneValidationMessage = "";
-        } else {
-          this.isVenuePhoneValid = false;
-        }
+        this.isVenuePhoneFormatValid = false;
       }
     },
     validateEmployeePhoneFormat(vueTelObj) {
       if (vueTelObj.valid !== undefined) {
         if (vueTelObj.valid) {
           this.isEmployeeMobileNoFormatValid = true;
-          this.isEmployeeMobileNoValid = true;
           this.employeePhoneValidationMessage = "";
         } else {
           this.isEmployeeMobileNoFormatValid = false;
-          this.isEmployeeMobileNoValid = false;
           this.employeePhoneValidationMessage =
             "Please enter valid phone number";
         }
@@ -1431,26 +1427,16 @@ export default {
     },
     validateEmployeeMobileNo() {
       if (!this.employeeMobileNo) {
-        this.isEmployeeMobileNoValid = false;
-        // this.employeePhoneValidationMessage = "*Required";
-      } else {
-        if (this.isEmployeeMobileNoFormatValid) {
-          this.isEmployeeMobileNoValid = true;
-          // this.employeePhoneValidationMessage = "";
-        } else {
-          this.isEmployeeMobileNoValid = false;
-        }
+        this.isEmployeeMobileNoFormatValid = false;
       }
     },
     validateReceiverPhoneFormat(vueTelObj) {
       if (vueTelObj.valid !== undefined) {
         if (vueTelObj.valid) {
           this.isReceiverMobileNoFormatValid = true;
-          this.isReceiverMobileNoValid = true;
           this.receiverPhoneValidationMessage = "";
         } else {
           this.isReceiverMobileNoFormatValid = false;
-          this.isReceiverMobileNoValid = false;
           this.receiverPhoneValidationMessage =
             "Please enter valid phone number";
         }
@@ -1458,16 +1444,7 @@ export default {
     },
     validateReceiverMobileNo() {
       if (!this.receiverMobileNo) {
-        this.isReceiverMobileNoValid = false;
-        // this.receiverPhoneValidationMessage = "*Required";
-      } else {
-        this.isReceiverMobileNoValid = true;
-        if (this.isReceiverMobileNoFormatValid) {
-          this.isReceiverMobileNoValid = true;
-          // this.receiverPhoneValidationMessage = "";
-        } else {
-          this.isReceiverMobileNoValid = false;
-        }
+        this.isReceiverMobileNoFormatValid = false;
       }
     },
     setItemDetails(value) {
@@ -1504,16 +1481,16 @@ export default {
         this.validateReceiverMobileNo();
       }
       else {
-        this.isReceiverMobileNoValid = true;
+        this.isReceiverMobileNoFormatValid = true;
       }
 
       this.isLoading = true;
       const isValid = await this.$refs.observer.validate();
       if (
         !isValid ||
-        !this.isVenuePhoneValid ||
-        !this.isEmployeeMobileNoValid ||
-        !this.isReceiverMobileNoValid
+        !this.isVenuePhoneFormatValid ||
+        !this.isEmployeeMobileNoFormatValid ||
+        !this.isReceiverMobileNoFormatValid
       ) {
         this.scrollToError();
         this.showValidateAlert = true;
@@ -1720,24 +1697,6 @@ export default {
     },
   },
   watch: {
-    venueType(newValue, oldValue) {
-      if (newValue != oldValue) {
-        if (newValue == "Personal") {
-          this.venueManually = true;
-        } else {
-          this.venueManually = false;
-        }
-      }
-    },
-    itemStatus(newValue, oldValue) {
-      if (newValue != oldValue) {
-        if (newValue == "Claimed (You know the actual owner of this item)") {
-          this.showReceiverInputs = true;
-        } else {
-          this.showReceiverInputs = false;
-        }
-      }
-    },
     itemDescription(newValue, oldValue) {
       if (newValue != oldValue) {
         this.setItemDetails(this.itemDescription);
