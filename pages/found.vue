@@ -384,7 +384,7 @@
               </ValidationProvider>
 
               <!-- Hotel room -->
-              <div v-if="venueType === 'Hotel'" class="block">
+              <div v-if="venueType === 'Hotel / Resorts'" class="block">
                 <BaseInput
                   @focus="scrollToFocused"
                   v-model="hotelRoom"
