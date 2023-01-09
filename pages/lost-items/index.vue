@@ -319,7 +319,7 @@
       <div v-if="!isLoading && lostItems.length > 0">
         <ItemCard v-for="item in lostItems" :key="item.id" :item="item" @click.native="viewItem(item)">
           <BaseButton
-            class="!px-5 !py-2 !capitalize"
+            class="!px-5 !py-2 !capitalize w-[123px]"
             varient="secondary"
             @click.stop="claimItem(item)"
           >

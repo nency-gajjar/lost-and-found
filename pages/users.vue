@@ -17,6 +17,8 @@
           "
         >
           <BaseButton
+            @click="downloadCsv"
+            :is-loading="isExportLoading"
             varient="secondary"
             class="sm:ml-2 mt-3 sm:mt-0"
           >
@@ -60,73 +62,34 @@
                   <th class="py-3 px-6 text-left">Business Name</th>
                 </tr>
               </thead>
-              <tbody class="bg-white text-gray-800">
+              <tbody v-if="userList.length > 0" class="bg-white text-gray-800">
                 <tr
                   class="border-b border-gray-200 hover:bg-gray-100"
+                  v-for="user in userList" :key="user.id"
                 >
                   <td class="py-3 px-6 text-left">
-                    <p>Nency</p>
+                    <p>{{ user.venue_name }}</p>
                   </td>
                   <td class="py-3 px-6 text-left">
-                    <p>nency.bhadeshiya@bacancy.com</p>
+                    <p>{{ user.venue_email }}</p>
                   </td>
                   <td class="py-3 px-6 text-left">
-                    <p>7564895452</p>
+                    <p>{{ user.venue_phone_no }}</p>
                   </td>
                   <td class="py-3 px-6 text-left">
-                    <p>Bacancy</p>
-                  </td>
-                </tr>
-                <tr
-                  class="border-b border-gray-200 hover:bg-gray-100"
-                >
-                  <td class="py-3 px-6 text-left">
-                    <p>Nency</p>
-                  </td>
-                  <td class="py-3 px-6 text-left">
-                    <p>nency.bhadeshiya@bacancy.com</p>
-                  </td>
-                  <td class="py-3 px-6 text-left">
-                    <p>7564895452</p>
-                  </td>
-                  <td class="py-3 px-6 text-left">
-                    <p>Bacancy</p>
-                  </td>
-                </tr>
-                <tr
-                  class="border-b border-gray-200 hover:bg-gray-100"
-                >
-                  <td class="py-3 px-6 text-left">
-                    <p>Nency</p>
-                  </td>
-                  <td class="py-3 px-6 text-left">
-                    <p>nency.bhadeshiya@bacancy.com</p>
-                  </td>
-                  <td class="py-3 px-6 text-left">
-                    <p>7564895452</p>
-                  </td>
-                  <td class="py-3 px-6 text-left">
-                    <p>Bacancy</p>
-                  </td>
-                </tr>
-                <tr
-                  class="border-b border-gray-200 hover:bg-gray-100"
-                >
-                  <td class="py-3 px-6 text-left">
-                    <p>Nency</p>
-                  </td>
-                  <td class="py-3 px-6 text-left">
-                    <p>nency.bhadeshiya@bacancy.com</p>
-                  </td>
-                  <td class="py-3 px-6 text-left">
-                    <p>7564895452</p>
-                  </td>
-                  <td class="py-3 px-6 text-left">
-                    <p>Bacancy</p>
+                    <p>{{ user.venu_type }}</p>
                   </td>
                 </tr>
               </tbody>
             </table>
+            <div v-if="!isLoading && userList.length === 0">
+              <p class="py-3">
+                No users found!
+              </p>
+            </div>
+            <div class="py-3" v-if="isLoading">
+              <BaseLoader :needFullScreen="false" />
+            </div>
           </div>
         </div>
       </main>
@@ -137,6 +100,59 @@
 <script>
 export default {
   middleware: ["auth-admin"],
+  data() {
+    return {
+      isLoading: true,
+      userList: [],
+      isExportLoading: false,
+    }
+  },
+  mounted() {
+    this.getAllUsers();
+  },
+  methods: {
+    downloadCsv() {
+      this.isExportLoading = true;
+      let x = document.createElement("A");
+      x.setAttribute("href", this.csvString );
+      x.setAttribute("download","somedata.csv");
+      document.body.appendChild(x);
+      x.click();
+      this.isExportLoading = false;
+    },
+    getAllUsers() {
+      const access_token = this.$auth.getToken("local");
+      this.isLoading = true;
+      this.$axios
+        .post("/getAllUserListforAdmin", {
+          headers: {
+            Authorization: `${access_token}`,
+          }
+        })
+        .then((response) => {
+          if (response.status === 200) {
+            this.isLoading = false;
+            this.userList = response?.data?.data[0]?.userlist;
+            let excelData = this.userList.map(data => {
+              return [data.venue_name.replaceAll(",", " "), data.venue_email, data.venue_phone_no.replaceAll(",", " "), data.venu_type.replaceAll(", ", " ")]
+            });
+            excelData.unshift(["NAME", "EMAIL", "PHONE NUMBER", "BUSINESS NAME"]);
+            this.csvString = "";
+            excelData.forEach((RowItem) => {
+              RowItem.forEach((ColItem) => {
+                this.csvString += ColItem + ',';
+              });
+              this.csvString += "\r\n";
+            });
+            this.csvString = "data:application/csv," + encodeURIComponent(this.csvString);
+          }
+        })
+        .catch((error) => {
+          this.isLoading = false;
+          console.log(error);
+        });
+    },
+  }
 };
 </script>
 

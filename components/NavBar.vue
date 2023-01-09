@@ -199,7 +199,7 @@ export default {
   @apply hidden;
 }
 
-@media screen and (max-width: 882px) {
+@media screen and (max-width: 932px) {
   .logo {
     @apply py-2;
     .nav-logo {

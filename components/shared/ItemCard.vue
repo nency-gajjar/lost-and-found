@@ -1,6 +1,12 @@
 <template>
   <div
     class="
+      transition
+      ease-in-out
+      delay-150
+      hover:-translate-y-1
+      hover:scale-[1]
+      duration-300
       cursor-pointer
       py-2
       px-5
@@ -27,17 +33,17 @@
       "
     >
       <div
-        class="w-20 min-w-[80px] mx-auto sm:mx-0 flex items-center mb-3 sm:mb-0"
+        class="w-20 min-w-[80px] h-16 mx-auto sm:mx-0 flex items-center mb-3 sm:mb-0"
       >
         <img
           v-if="showImage"
-          class="w-full rounded-t-lg md:rounded-none md:rounded-l-lg"
+          class="h-16 w-20 contain rounded-lg"
           :src="item.image"
           alt=""
         />
         <img
           v-else
-          class="w-20 contain rounded-t-lg md:rounded-none md:rounded-l-lg"
+          class="h-16 w-20 contain rounded-lg"
           src="@/assets/images/no-image4.png"
           alt=""
         />
