@@ -22,5 +22,3 @@ jobs:
         run: npm run build
       - name: Serving Static Files
         run: npm run generate
-      - name: Cleaning the cache
-        run: npm cache clean --force

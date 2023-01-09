@@ -24,7 +24,7 @@
               <td class="w-full w-full-imp">
                 <table width="100%" cellspacing="0" cellpadding="0">
                   <tr id="found-shelf-logo" class="flex w-full hidden logo-hidden">
-                    <td align="left" class="!w-24"><img class="found-logo" src="https://foundshelf.com/_nuxt/img/found-shelf-icon.908beac.svg" alt="Found Shelf"></td>
+                    <td align="left" class="!w-24"><img class="found-logo" src="https://foundshelf.com/_nuxt/assets/images/found-shelf-icon.svg" alt="Found Shelf"></td>
                   </tr>
                   <tr class="!flex !justify-around !items-center !w-full">
                     <td class="!w-full">
@@ -320,11 +320,11 @@ export default {
         `
       } else {
         // Item is Claimed
-        return `
-          <p class="pb-2">We also emailed you the confirmation. You can print it and tape it on the item.</p>
-          <p class="pb-2">After the review, we will notify the lucky owner. If the owner would like it shipped, then FoundShelf will create and email you a shipping label. If the owner would like to pick it up instead, then we notify you with an expected pick up date and time.</p>
-          <p class="pb-2">Need to edit the details? No problem, just click the link provided in the confirmation email, or scan the special QR code that is on the confirmation page.</p>
-          <p class="pb-2">You did a lot of work today. Why don’t you take rest of the day off.</p>
+      return `
+        <p class="pb-2">We also emailed you the confirmation. You can print it and tape it on the item.</p>
+        <p class="pb-2">After the review, we will notify the lucky owner. If the owner would like it shipped, then FoundShelf will create and email you a shipping label. If the owner would like to pick it up instead, then we notify you with an expected pick up date and time.</p>
+        <p class="pb-2">Need to edit the details? No problem, just click the link provided in the confirmation email, or scan the special QR code that is on the confirmation page.</p>
+        <p class="pb-2">You did a lot of work today. Why don’t you take rest of the day off.</p>
         `
       }
     },
