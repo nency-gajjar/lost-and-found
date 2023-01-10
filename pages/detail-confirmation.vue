@@ -109,7 +109,7 @@
             </div>
             <div class="flex item-img-container justify-center items-center">
               <div v-if="showImage" class="flex justify-center items-center mt-4 sm:mt-0 w-48 w-full">
-                <img class="w-full object-cover" :src="itemDetails.image" alt="" />
+                <img class="w-48 h-48" :src="itemDetails.image" alt="" />
               </div>
             </div>
           </div>

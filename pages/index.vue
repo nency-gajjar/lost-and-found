@@ -8,17 +8,14 @@
           md:px-12
           px-0
           flex
-          justify-between
+          justify-center
           flex-col
           sm:flex-row
         "
       >
         <div
           class="
-            sm:w-4/6
             w-full
-            sm:text-left
-            text-center
             py-4
             lg:py-0
             flex flex-col
@@ -29,7 +26,7 @@
             sm:mb-0
           "
         >
-          <div class="px-6">
+          <div class="px-6 w-full">
             <h2
               class="
                 font-bold
@@ -37,13 +34,14 @@
                 md:text-[2.625rem] md:leading-[3.125rem]
                 text-accent-100
                 text-[1.5rem]
-                w-max
+                text-center
+                w-full
               "
             >
               What have you <span class="text-primary-100"> Lost?</span>
             </h2>
           </div>
-          <div class="px-6 mt-3">
+          <div class="px-6 mt-3 w-full text-center">
             <TypeWriter
               :speed="200"
               :full-erase="true"
@@ -142,30 +140,13 @@
                   <p class="pl-3">Leave all fields blank to show all items</p>
                 </div>
                 <div class="flex items-center justify-center m-8">
-                  <BaseButton @click="applyFilters" class="sm:py-4 sm:px-14">
+                  <BaseButton @click="applyFilters" class="sm:py-4 sm:px-14 !rounded-full">
                     Search
                   </BaseButton>
                 </div>
               </div>
             </section>
           </div>
-        </div>
-        <div
-          class="
-            sm:w-2/6
-            w-full
-            text-center
-            sm:text-left
-            relative
-            flex
-            justify-center
-            md:justify-end
-          "
-        >
-          <img
-            class="mt-0 sm:-mt-10 lg:-mt-12"
-            src="../assets/images/lost-found.svg"
-          />
         </div>
       </div>
     </div>

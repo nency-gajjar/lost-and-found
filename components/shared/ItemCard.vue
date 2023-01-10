@@ -6,6 +6,7 @@
       delay-150
       hover:-translate-y-1
       hover:scale-[1]
+      hover:border-gray-400
       duration-300
       cursor-pointer
       py-2

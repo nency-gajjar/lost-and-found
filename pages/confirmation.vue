@@ -200,7 +200,7 @@
               </td>
               <div class="flex justify-center items-center pr-6">
                 <div v-if="showImage" class="flex img-container justify-center items-center mt-4 sm:mt-0 w-40 w-full">
-                  <img class="w-full object-cover" :src="itemImg" alt="" />
+                  <img class="w-40 h-40" :src="itemImg" alt="" />
                 </div>
               </div>
             </tr>

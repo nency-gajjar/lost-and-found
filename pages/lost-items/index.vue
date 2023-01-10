@@ -1,146 +1,129 @@
 <template>
   <div class="wrapper">
-    <div class="container max-w-7xl mx-auto px-4 pb-6">
-      <div
-        class="
-          justify-end
-          w-full
-          flex flex-col
-          sm:flex-row
-          flex-wrap
-          sm:flex-nowrap
-          mt-8
-          mb-5
-        "
-      >
-        <BaseButton
-          v-if="mobileDevice"
-          class="sm:ml-2 grow mt-3 sm:mt-0 sm:grow-0"
-          @click="addNewItem"
-        >
-          + ADD A FOUND ITEM
-        </BaseButton>
-      </div>
-
-      <!-- Filter Panel -->
-      <BaseHeader class="text-left" varient="h5">Filters:</BaseHeader>
-      <div class="flex flex-col gap-3">
-        <div class="align-middle inline-block w-full">
-          <!-- Location -->
-          <div class="inline-flex flex-auto w-full">
-            <BaseInput
-              v-model="address"
-              id="autocomplete-lost-items"
-              type="text"
-              placeholder=""
-              label="Location"
-              class="w-full"
-              @input="getAddress"
-            >
-              <template v-slot:icon>
-                <div
-                  v-if="address"
-                  class="absolute bg-white bottom-13-px right-1 pr-5"
-                >
-                  <BaseIcon @click="clearAddress" icon="xmark" color="gray" />
-                </div>
-                <div
-                  v-else
-                  class="absolute bottom-13-px right-0 pr-5"
-                >
-                  <BaseIcon icon="location-arrow" color="lightgray" />
-                </div>
-              </template>
-            </BaseInput>
-          </div>
-        </div>
-        <div class="align-middle inline-block w-full">
-          <div
-            class="
-              flex
-              justify-between
-              flex-col
-              gap-3
-              flex-wrap
-              md:flex-nowrap
-              sm:flex-row
-            "
-          >
-            <!-- Item Description -->
-            <div class="h-full flex-auto w-full md:mt-0 md:w-1/4">
-              <BaseSelect
-                v-model="itemDescription"
-                :options="itemDescriptionOptions"
-                label="Item Description"
-              />
-            </div>
-            <div class="w-full flex flex-col mt-3 sm:mt-0 md:w-1/3">
-              <label
-                class="block text-md font-medium text-gray-800 text-left"
-                >Date when lost?</label
+    <div class="w-full bg-[#729dbe21] ellipse-bg pb-10">
+      <div class="container max-w-7xl mx-auto px-4 pb-6">
+        <!-- Filter Panel -->
+        <BaseHeader class="text-left" varient="h5">Filters:</BaseHeader>
+        <div class="flex flex-col gap-3">
+          <div class="align-middle inline-block w-full">
+            <!-- Location -->
+            <div class="inline-flex flex-auto w-full">
+              <BaseInput
+                v-model="address"
+                id="autocomplete-lost-items"
+                type="text"
+                placeholder=""
+                label="Location where you might have lost your item. Try City/State, or a specific location name."
+                class="w-full"
+                @input="getAddress"
               >
-              <div class="w-full flex flex-auto gap-4">
-                <client-only>
-                  <date-picker
-                    placeholder="Start date"
-                    v-model="startDate"
-                    :disabled-date="disableStartDate"
-                    format="MM-DD-YYYY"
-                  ></date-picker>
-                </client-only>
-                <client-only>
-                  <date-picker
-                    placeholder="End date"
-                    v-model="endDate"
-                    :disabled-date="disableEndDate"
-                    format="MM-DD-YYYY"
-                  ></date-picker>
-                </client-only>
-              </div>
+                <template v-slot:icon>
+                  <div
+                    v-if="address"
+                    class="absolute bg-white bottom-13-px right-1 pr-5"
+                  >
+                    <BaseIcon @click="clearAddress" icon="xmark" color="gray" />
+                  </div>
+                  <div
+                    v-else
+                    class="absolute bottom-13-px right-0 pr-5"
+                  >
+                    <BaseIcon icon="location-arrow" color="lightgray" />
+                  </div>
+                </template>
+              </BaseInput>
             </div>
-
+          </div>
+          <div class="align-middle inline-block w-full">
             <div
               class="
-                w-full
                 flex
-                items-end
-                justify-end
-                md:mt-0 md:w-2/12
-                flex-auto
-                gap-2
+                justify-between
+                flex-col
+                gap-3
+                flex-wrap
+                md:flex-nowrap
+                sm:flex-row
               "
             >
-              <BaseButton
-                :icon="{
-                  name: 'filter',
-                  color: 'white',
-                  size: '1x',
-                }"
+              <!-- Item Description -->
+              <div class="h-full flex-auto w-full md:mt-0 md:w-1/4">
+                <BaseSelect
+                  v-model="itemDescription"
+                  :options="itemDescriptionOptions"
+                  label="Item Description"
+                />
+              </div>
+              <div class="w-full flex flex-col mt-3 sm:mt-0 md:w-1/3">
+                <label
+                  class="block text-md font-medium text-gray-800 text-left"
+                  >Date when lost?</label
+                >
+                <div class="w-full flex flex-auto gap-4">
+                  <client-only>
+                    <date-picker
+                      placeholder="Start date"
+                      v-model="startDate"
+                      :disabled-date="disableStartDate"
+                      format="MM-DD-YYYY"
+                    ></date-picker>
+                  </client-only>
+                  <client-only>
+                    <date-picker
+                      placeholder="End date"
+                      v-model="endDate"
+                      :disabled-date="disableEndDate"
+                      format="MM-DD-YYYY"
+                    ></date-picker>
+                  </client-only>
+                </div>
+              </div>
+
+              <div
                 class="
-                  !tracking-normal
-                  !capitalize
-                  !px-4
-                  !py-2
-                  !inline-flex
-                  !items-center
-                  mr-1
-                  !h-12
+                  w-full
+                  flex
+                  items-end
+                  justify-end
+                  md:mt-0 md:w-2/12
+                  flex-auto
+                  gap-2
                 "
-                :varient="isFilterApplied ? 'green' : 'blue'"
-                @click="applyFilters"
               >
-                {{ isFilterApplied ? "Filters Applied" : "Apply Filters" }}
-              </BaseButton>
-              <BaseButton
-                @click="clearFilters"
-                varient="gray"
-                class="!bg-white !px-4 !h-12 !py-2 mr-1 !capitalize"
-                >Clear</BaseButton
-              >
+                <BaseButton
+                  :icon="{
+                    name: 'filter',
+                    color: 'white',
+                    size: '1x',
+                  }"
+                  class="
+                    !tracking-normal
+                    !capitalize
+                    !px-4
+                    !py-2
+                    !inline-flex
+                    !items-center
+                    mr-1
+                    !h-12
+                  "
+                  :varient="isFilterApplied ? 'green' : 'blue'"
+                  @click="applyFilters"
+                >
+                  {{ isFilterApplied ? "Filters Applied" : "Apply Filters" }}
+                </BaseButton>
+                <BaseButton
+                  @click="clearFilters"
+                  varient="gray"
+                  class="!bg-white !px-4 !h-12 !py-2 mr-1 !capitalize"
+                  >Clear</BaseButton
+                >
+              </div>
             </div>
           </div>
         </div>
       </div>
+    </div>
+    <div class="container max-w-7xl mx-auto px-4 pb-6">
       <div
         v-if="isFilterApplied"
         class="w-full flex gap-3 flex-auto mt-3 sm:mt-0 sm:w-5/12"
@@ -286,7 +269,7 @@
                     py-3
                     w-full
                     border
-                    rounded-md
+                    rounded-full
                     border-gray-300
                     outline-none
                   "
@@ -622,5 +605,15 @@ export default {
 
 .bottom-13-px{
   bottom: 13px;
+}
+
+.ellipse-bg {
+  clip-path: ellipse(100% 59% at 50% 40%);
+}
+
+@media only screen and (max-width: 767px) {
+  .ellipse-bg {
+    clip-path: ellipse(150% 59% at 50% 40%);
+  }
 }
 </style>
