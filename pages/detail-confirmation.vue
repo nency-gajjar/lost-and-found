@@ -26,6 +26,9 @@
           <RawCard title="Sender Affiliation" :value="itemDetails.venu_type" />
           <RawCard title="Found Item Date" :value="formatDate(itemDetails.datse)" />
           <RawCard title="Venue Name" :value="itemDetails.venue_name" />
+          <RawCard v-if="showVenueDetails" title="Venue Email" :value="itemDetails.venue_email" />
+          <RawCard v-if="showVenueDetails && itemDetails.secondary_email" title="Venue Secondary Email" :value="itemDetails.secondary_email" />
+          <RawCard v-if="showVenueDetails" title="Venue Phone No." :value="itemDetails.venue_phone_no" />
         </div>
 
         <div data-v-272705a6="" class="flex items-center my-2">
@@ -185,6 +188,7 @@ export default {
       allowClaim: false,
       isLoadingItem: false,
       allowResendNotification: false,
+      showVenueDetails: true,
     };
   },
   created(){
@@ -199,35 +203,41 @@ export default {
           if (response.status === 200) {
             this.itemDetails = {...response.data.data.Item, onlyDisplay: true};
           }
-          this.isLoadingItem = true;
+          this.isLoadingItem = false;
           if(this.$route.query.awaiting === "true"){
             this.allowResendNotification = true;
           }
         })
         .catch((error) => {
-          this.isLoadingItem = true;
+          this.isLoadingItem = false;
           console.log(error);
         });
     }
     else if(this.$route.query.preview && JSON.parse(JSON.stringify(this.$store.getters["item/itemId"]))){
       this.showInformativeTxt = false;
+      this.showVenueDetails = false;
       this.$axios
         .get("/getsinglelostitem?id=" + JSON.parse(JSON.stringify(this.$store.getters["item/itemId"])))
         .then((response) => {
           if (response.status === 200) {
             this.itemDetails = {...response.data.data.Item, onlyDisplay: true};
           }
-          this.isLoadingItem = true;
+          this.isLoadingItem = false;
         })
         .catch((error) => {
           console.log(error);
-          this.isLoadingItem = true;
+          this.isLoadingItem = false;
         });
     }
     else{
-      this.isLoadingItem = true;
+      this.isLoadingItem = false;
       this.showInformativeTxt = true;
       this.itemDetails = JSON.parse(JSON.stringify(this.$store.getters['item/itemDetails']));
+      if(Object.keys(this.itemDetails).length < 1) {
+        this.$router.replace({
+          name: "lost-items"
+        });
+      }
     }
     if(this.$route.query.preview === "claim"){
       this.allowClaim = true;
@@ -388,8 +398,7 @@ export default {
     editDetails() {
       this.$nextTick(() => {
         this.$router.push({
-          name: "found",
-          params: { itemDetails: this.itemDetails },
+          name: "found"
         });
       });
     },

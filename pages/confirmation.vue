@@ -24,7 +24,7 @@
               <td class="w-full w-full-imp">
                 <table width="100%" cellspacing="0" cellpadding="0">
                   <tr id="found-shelf-logo" class="flex w-full hidden logo-hidden">
-                    <td align="left" class="!w-24"><img class="found-logo" src="https://foundshelf.com/_nuxt/img/found-shelf-icon.908beac.svg" alt="Found Shelf"></td>
+                    <td align="left" class="!w-24"><img class="found-logo" src="https://i.ibb.co/G32NGsk/found-shelf-icon.jpg" alt="Found Shelf"></td>
                   </tr>
                   <tr class="!flex !justify-around !items-center !w-full">
                     <td class="!w-full">
@@ -79,18 +79,6 @@
                   <tr class="l-2">
                     <td>
                       <div class="text-left text-gray-600 font-medium">
-                        Sender Affiliation
-                      </div>
-                    </td>
-                    <td>
-                      <div class="text-gray-600 text-left">
-                        {{ itemDetails.venu_type }}
-                      </div>
-                    </td>
-                  </tr>
-                  <tr class="l-2">
-                    <td>
-                      <div class="text-left text-gray-600 font-medium">
                         Found Item Date
                       </div>
                     </td>
@@ -109,6 +97,42 @@
                     <td>
                       <div class="text-gray-600 text-left">
                         {{ itemDetails.venue_name }}
+                      </div>
+                    </td>
+                  </tr>
+                  <tr class="l-2">
+                    <td>
+                      <div class="text-left text-gray-600 font-medium">
+                        Venue Email
+                      </div>
+                    </td>
+                    <td>
+                      <div class="text-gray-600 text-left">
+                        {{ itemDetails.venue_email }}
+                      </div>
+                    </td>
+                  </tr>
+                  <tr v-if="itemDetails.secondary_email" class="l-2">
+                    <td>
+                      <div class="text-left text-gray-600 font-medium">
+                        Venue Secondary Email
+                      </div>
+                    </td>
+                    <td>
+                      <div class="text-gray-600 text-left">
+                        {{ itemDetails.secondary_email }}
+                      </div>
+                    </td>
+                  </tr>
+                  <tr class="l-2">
+                    <td>
+                      <div class="text-left text-gray-600 font-medium">
+                        Venue Phone No.
+                      </div>
+                    </td>
+                    <td>
+                      <div class="text-gray-600 text-left">
+                        {{ itemDetails.venue_phone_no }}
                       </div>
                     </td>
                   </tr>
@@ -240,7 +264,7 @@
         v-if="showDialog"
         :showDialog="showDialog"
         :icon="{ name: 'circle-check', color: 'green', size: '3x' }"
-        title="Awesome, you are a legend!"
+        :title="dialogTitle"
         :message="dialogMessage"
         buttonTitle="Okay"
         @close="showDialog = false"
@@ -312,12 +336,30 @@ export default {
       return this.itemDetails.image && this.itemDetails.is_default !== 'Approve without Image'
     },
     dialogMessage() {
-      return `
-        <p class="pb-2">We also emailed you the confirmation. You can print it and tape it on the item.</p>
-        <p class="pb-2">After the review, we will notify the lucky owner. If the owner would like it shipped, then FoundShelf will create and email you a shipping label. If the owner would like to pick it up instead, then we notify you with an expected pick up date and time.</p>
-        <p class="pb-2">Need to edit the details? No problem, just click the link provided in the confirmation email, or scan the special QR code that is on the confirmation page.</p>
-        <p class="pb-2">You did a lot of work today. Why don’t you take rest of the day off.</p>
-      `;
+      if (this.itemStatus) {
+        // Item is Unclaimed
+        return `
+          <p class="pb-2">We have emailed you the confirmation of this item that you submitted. Let’s hope we can find the owner of this item.</p>
+          <p class="pb-2">If you are able to get the contact information of the item’s owner, simply go back to your email confirmation, click the link provided to <span class="font-bold">Edit the Listing</span> <br> OR <br> Scan the confirmation QR Code to change the listing to <span class="font-bold">Claimed</span> to add the contact information. Owner will then get a notification to create shipping label or choose other options.</p>
+        `
+      } else {
+        // Item is Claimed
+        return `
+          <p class="pb-2">We also emailed you the confirmation. You can print it and tape it on the item.</p>
+          <p class="pb-2">After the review, we will notify the lucky owner. If the owner would like it shipped, then FoundShelf will create and email you a shipping label. If the owner would like to pick it up instead, then we notify you with an expected pick up date and time.</p>
+          <p class="pb-2">Need to edit the details? No problem, just click the link provided in the confirmation email, or scan the special QR code that is on the confirmation page.</p>
+          <p class="pb-2">You did a lot of work today. Why don’t you take rest of the day off.</p>
+        `
+      }
+    },
+    dialogTitle () {
+      if (this.itemStatus) {
+        // Item is Unclaimed
+        return 'Thanks, glad that you found this item!'
+      } else {
+        // Item is Claimed
+        return 'Awesome, you are a legend!'
+      }
     },
     itemStatus() {
       return this.itemDetails.item_status;

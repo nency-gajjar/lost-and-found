@@ -384,7 +384,7 @@
               </ValidationProvider>
 
               <!-- Hotel room -->
-              <div v-if="venueType === 'Hotel'" class="block">
+              <div v-if="venueType === 'Hotel / Resorts'" class="block">
                 <BaseInput
                   @focus="scrollToFocused"
                   v-model="hotelRoom"
@@ -1154,56 +1154,6 @@ export default {
             this.$toast.error("Something went wrong! Please try again.");
             console.log(error);
           });
-      } else if (this.$route.params?.itemDetails) {
-        this.isLoadingItemDetails = false;
-        this.senderFormTitle = "Edit details";
-        this.foundItemFormTitle = "Edit found item's details";
-        let data = this.$route.params.itemDetails;
-        var index = this.venueOptions.indexOf(data.venu_type) !== -1;
-        if (index) this.venueType = data.venu_type;
-        else {
-          this.venueType = "Personal";
-          this.manualVenue = data.venu_type;
-        }
-        this.itemDescription = data.item_description;
-
-        if (data.foundItemId) {
-          this.foundItemId = data.foundItemId;
-        } else {
-          this.foundItemId = data.id;
-        }
-        this.venueName = data.venue_name;
-        this.hotelRoom = data?.hotel_room ? data.hotel_room : "";
-        this.foundDate = new Date(data.datse);
-        this.venueEmail = data.venue_email;
-        this.venueSecondaryEmail = data.secondary_email;
-        this.employeeMobileNo = data.employee_mobile_no;
-        this.address = this.venueName;
-        this.autoCompleteAddress.address = data.address;
-        this.autoCompleteAddress.phoneNo = data.venue_phone_no;
-        this.autoCompleteAddress.city = data.city;
-        this.autoCompleteAddress.state = data.states;
-        this.autoCompleteAddress.country = data.country;
-        this.autoCompleteAddress.zipcode = data.zipcode;
-        this.imageKey = data.image_key;
-        this.image = data.image;
-        this.packageType = data.package_type;
-        this.weight = data.weight_pounds;
-        this.weightOunces = data.weight_ounces;
-        this.itemLength = data.item_length;
-        this.itemWidth = data.item_width;
-        this.itemHeight = data.item_height;
-        this.itemStatus =
-          data.item_status === 0
-            ? "Claimed (You know the actual owner of this item)"
-            : "Unclaimed (You do not know the actual owner of this item)";
-
-        if (data.item_status === 0) {
-          this.receiverName = data.receiver_name;
-          this.receiverEmail = data.receiver_email;
-          this.receiverMobileNo = data.receiver_mobile_no;
-        }
-        this.isLoadingItemDetails = false;
       } else if (Object.keys(this.itemDetails).length > 0) {
         this.showResetButton = true;
         this.isLoadingItemDetails = false;

@@ -159,6 +159,8 @@ extend('length', length)
 
 extend('max', max)
 
+extend('contents_explanation', { ...max, message: "The {_field_} field may not be greater than 255 characters" })
+
 export const phoneRegex = /^\(?([0-9]{3})\)?[-. ]?([0-9]{3})[-. ]?([0-9]{4})$/
 export const zipRegex = /^[0-9]{5}(?:-[0-9]{4})?$/
 
