@@ -183,13 +183,14 @@
           <VueSlickCarousel class="w-5/6" ref="carousel" v-bind="sliderSetting">
             <div v-for="item in recentItemList" :key="item.id">
               <div class="sliderCard cursor-pointer shadow-md border">
-                <div class="flex items-center md:h-24 md:w-24 sm:h-16 sm:w-16 w-14 h-14">
+                <div class="flex items-center">
                   <img
                     v-if="showImage(item)"
                     class="
                       object-cover
                       w-full
                       rounded-lg
+                      h-20 w-20
                     "
                     :src="item.image"
                     alt=""
@@ -200,12 +201,13 @@
                       object-cover
                       w-full
                       rounded-lg
+                      h-20 w-20
                     "
                     src="@/assets/images/no-image4.png"
                     alt=""
                   />
                 </div>
-                <div class="m-4 text-lg font-semibold pt-10">
+                <div class="m-4 text-lg font-semibold text-center h-[54px] flex items-center">
                   {{ item.item_description }}
                 </div>
                 <ul role="list" class="mb-4 text-left text-gray-500">
