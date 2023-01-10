@@ -17,10 +17,8 @@ jobs:
         run: cp /home/ubuntu/runner/_work/lost-and-found/.env /home/ubuntu/runner/_work/lost-and-found/lost-and-found
       - name: Install NPM dependencies
         run: npm install nuxt
-      - name: Install NPM dependencies   
+      - name: npm Install 
         run: npm install
-      - name: Generating Build
-        run: npm run build
       - name: Serving Static Files
         run: npm run generate
 #      - name: Cleaning the cache
