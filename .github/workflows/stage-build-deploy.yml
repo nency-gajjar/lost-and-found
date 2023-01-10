@@ -7,20 +7,21 @@ jobs:
   deploy:
     runs-on: ubuntu-latest
     steps:
-    - uses: actions/checkout@v2
+    - name: Checkout repository
+      uses: actions/checkout@v2
     - name: 'Create env file'
-        run: |
+      run: |
           echo "${{ secrets.ENV_FILE_STG }}" > .env
     - uses: actions/setup-node@v2
-        with:
+      with:
           node-version: '14.21.1'
     - name: Create Build
-        run: |
+      run: |
           npm install nuxt
           npm install
           npm run generate
-        env:
-          CI: false
+      env:
+         CI: false
     - name: rsync deployments
       uses: burnett01/rsync-deployments@5.2.1
       with:
