@@ -82,7 +82,7 @@
             >
               <textarea
                 v-model="contentsExplanation"
-                placeholder="Contents Explanation (Optional)"
+                placeholder="Contents Explanation"
                 class="
                   border
                   inline-block
@@ -273,7 +273,7 @@ export default {
             {
               description: this.itemDetails.item_description,
               // hs_tariff_number: "",
-              quantity: this.itemQuantity,
+              quantity: Number(this.itemQuantity),
               weight: Number(this.itemDetails.weight_pounds),
               value: Number(this.customItemsValue),
               origin_country: this.itemDetails.country.trim()

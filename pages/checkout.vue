@@ -309,6 +309,21 @@ export default {
         ),
       };
 
+      if(this.checkoutDetail.signature) {
+        if(this.checkoutDetail.selectedRate.carrier === "CanadaPost") {
+          this.checkoutDetail.signature = "DO_NOT_SAFE_DROP";
+        }
+        else if(this.checkoutDetail.selectedRate.carrier === "USPS") {
+          this.checkoutDetail.signature = "SIGNATURE_RESTRICTED";
+        }
+        else {
+          this.checkoutDetail.signature = "SIGNATURE";
+        }
+      }
+      else {
+        this.checkoutDetail.signature = "NO_SIGNATURE";
+      }
+
       if(this.checkoutDetail.insuranceValue){
         this.insuranceCharges = this.calculateInsuranceCharges(this.checkoutDetail.insuranceValue);
       }
@@ -452,7 +467,7 @@ export default {
                 from_address: shippingRates.from_address.id,
                 parcel: shippingRates.parcel.id,
                 delivery_confirmation:
-                  this.checkoutDetail.signature === true ? true : false,
+                  this.checkoutDetail.signature,
                 insurance: Number(insuranceValue),
               };
               if (Object.keys(customInfo).length > 0) {

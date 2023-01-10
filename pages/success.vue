@@ -76,7 +76,7 @@
       <p class="text-gray-800">
         We recommend that you call the sender below to ensure that they have received the email containing the label. <br> <span class="font-semibold text-gray-700">Sender name:</span> {{ itemDetails.venue_name }} <br> <span class="font-semibold text-gray-700">Sender Mobile No:</span> <a :href="`tel: ${itemDetails.venue_phone_no}`" class="font-display underline decoration-1">{{ itemDetails.venue_phone_no }}</a>
       </p>
-      <BaseButton @click="printLabel"> Print/Download Label </BaseButton>
+      <BaseButton :disabled="!isImageLoaded" @click="printLabel"> Print/Download Label </BaseButton>
     </div>
     <p v-if="!isDownload" class="text-gray-800">
       Optionally, you can schedule a pickup for your package:
@@ -133,6 +133,7 @@ export default {
       labelWidth: 360,
       rotateCss: "",
       isDownload: false,
+      isImageLoaded: false,
     };
   },
   async mounted() {
@@ -167,6 +168,7 @@ export default {
             const blob = await data.blob();
             this.labelImg = await this.image_to_base64(blob);
           }
+          this.isImageLoaded = true;
           if(this.$route.query.download) {
             this.printLabel();
             this.isDownload = true;
@@ -213,13 +215,13 @@ export default {
       let imgHtml = "";
       if (this.itemDetails.image) {
         imgHtml =
-          "<div class='flex justify-around w-100-px'> <img src='https://foundshelf.com/_nuxt/img/found-shelf-icon.908beac.svg' /> <img src=" +
+          "<div class='flex justify-around w-100-px items-center'> <img style='height: 100%' src='https://i.ibb.co/G32NGsk/found-shelf-icon.jpg' /> <img src=" +
           this.itemImg +
           "></div>";
       }
       else {
         imgHtml =
-          "<div class='itemImgContainer'><img src='https://foundshelf.com/_nuxt/img/found-shelf-icon.908beac.svg' /></div>";
+          "<div class='itemImgContainer'><img src='https://i.ibb.co/G32NGsk/found-shelf-icon.jpg' /></div>";
       }
       let htmlToPrint = `
       <html><head>
@@ -227,6 +229,7 @@ export default {
       <style>
           body {
             font-family: 'Rubik';
+            background-color: #ffffff;
           }
           .border-dashed {
             border-top-style: dashed;

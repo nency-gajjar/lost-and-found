@@ -871,12 +871,26 @@ export default {
           );
         if (this.tempReceiverDetails.receiver_email !== this.receiverEmail)
           params.receiver_email = this.receiverEmail;
-        params_rateQuotes.name = this.itemDetails.venue_name;
+
+        if(this.itemDetails.venue_name.length >= 34){
+          params_rateQuotes.name = this.itemDetails.venue_name.substring(0, 33);
+        }
+        else{
+          params_rateQuotes.name = this.itemDetails.venue_name;
+        }
+
         if(this.itemDetails?.hotel_room){
           params_rateQuotes.company = this.itemDetails?.hotel_room + ", " + this.itemDetails.venue_name;
         }
         else{
           params_rateQuotes.company = this.itemDetails.venue_name;
+        }
+
+        if(params_rateQuotes.company.length >= 34){
+          params_rateQuotes.company = params_rateQuotes.company.substring(0, 33);
+        }
+        else{
+          params_rateQuotes.company = params_rateQuotes.company;
         }
         // params_rateQuotes.name = this.itemDetails.itemDetails;
         // params_rateQuotes.company = this.itemDetails.venue_name;
@@ -889,8 +903,8 @@ export default {
           this.itemDetails.venue_phone_no
         );
         params_rateQuotes.toname = this.receiverName;
-        if(this.autoCompleteAddress.address.length >= 44){
-          params_rateQuotes.tocompany = this.autoCompleteAddress.address.substring(0, 43);
+        if(this.autoCompleteAddress.address.length >= 34){
+          params_rateQuotes.tocompany = this.autoCompleteAddress.address.substring(0, 33);
         }
         else{
           params_rateQuotes.tocompany = this.autoCompleteAddress.address;
