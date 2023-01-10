@@ -2,6 +2,7 @@
   <div class="block relative box-content bg-transparent">
     <label class="block relative box-content cursor-text">
       <div
+        v-if="label"
         class="transition-all text-gray-500 z-10 text-left"
       >
         <span style="font-size:15px;">{{ label }}</span> <span v-if="isRequired" class="text-red-500">*</span>

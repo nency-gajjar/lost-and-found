@@ -688,7 +688,7 @@
                     >
                       <ValidationProvider
                         v-slot="{ errors }"
-                        rules="required|int|positiveNumber"
+                        rules="required|positiveNumber"
                         class="block"
                         name="Pounds"
                       >
@@ -710,7 +710,7 @@
                   <div class="flex sm:items-center items-start mt-3 flex-wrap md:flex-nowrap sm:flex-row flex-col">
                     <div
                       class="
-                        text-left text-gray-600
+                        text-left text-gray-600 
                         font-medium
                         w-250-px
                         lg:w-4/12
