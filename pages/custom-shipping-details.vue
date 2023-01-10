@@ -39,8 +39,47 @@
               />
             </ValidationProvider>
 
+            <!-- Item Quantity -->
+            <ValidationProvider
+              v-slot="{ errors }"
+              rules="required|positiveNumber"
+              class="block"
+              name="Quantity"
+            >
+              <BaseInput
+                :isRequired="true"
+                v-model="itemQuantity"
+                type="text"
+                label="Quantity"
+                :class="errors.length > 0 && 'error'"
+              />
+              <p v-if="errors.length" class="vee-validation-error mt-2 text-sm text-red-600">
+                {{ errors[0] }}
+              </p>
+            </ValidationProvider>
+
+            <!-- Contents Type -->
+            <ValidationProvider
+              v-slot="{ errors }"
+              rules="required"
+              class="block"
+            >
+              <BaseSelect
+                :isRequired="true"
+                v-model="contentsType"
+                :options="contentsTypeOptions"
+                label="Contents Type"
+                :class="errors.length > 0 && 'error'"
+              />
+            </ValidationProvider>
+
             <!-- Contents Explanation -->
-            <div class="block">
+            <ValidationProvider
+              v-slot="{ errors }"
+              rules="required|contents_explanation:255"
+              class="block"
+              name="Contents Explanation"
+            >
               <textarea
                 v-model="contentsExplanation"
                 placeholder="Contents Explanation (Optional)"
@@ -58,8 +97,15 @@
                   transition-shadow
                   text-gray-700
                 "
+                :class="errors.length > 0 && 'error'"
               ></textarea>
-            </div>
+              <p
+                v-if="errors.length"
+                class="vee-validation-error mt-2 text-sm text-red-600"
+              >
+                {{ errors[0] }}
+              </p>
+            </ValidationProvider>
 
             <!-- Restriction Comments -->
             <div class="!mt-3">
@@ -143,6 +189,9 @@ export default {
   data() {
     return {
       eel_pfc: "NOEEI 30.37(a)",
+      itemQuantity: '',
+      contentsType: 'returned_goods',
+      contentsTypeOptions: ['documents', 'merchandise', 'returned_goods', 'other'],
       contentsExplanation: "",
       restrictionComments: "",
       customItemsValue: "",
@@ -219,10 +268,12 @@ export default {
           contents_explanation: this.contentsExplanation,
           restriction_type: "none",
           restriction_comments: this.restrictionComments,
+          contents_type: this.contentsType,
           customs_items: [
             {
               description: this.itemDetails.item_description,
-              quantity: 1,
+              // hs_tariff_number: "",
+              quantity: this.itemQuantity,
               weight: Number(this.itemDetails.weight_pounds),
               value: Number(this.customItemsValue),
               origin_country: this.itemDetails.country.trim()
@@ -250,5 +301,8 @@ export default {
 <style lang="scss" scoped>
 .wrapper {
   @apply min-h-screen flex justify-center py-10 mx-auto;
+}
+textarea.error {
+  @apply border-red-500 border-2 ring-4 ring-red-500 ring-opacity-10 transition-none;
 }
 </style>
