@@ -548,6 +548,9 @@ export default {
     },
     proceedToCheckout() {
       // localStorage.setItem("Signature", this.signature);
+      if(this.isInternational){
+        this.signature = true;
+      }
       this.$store.commit("shipment/SET_SIGNATURE", this.signature);
       this.$nextTick(() => {
         this.$router.push({
