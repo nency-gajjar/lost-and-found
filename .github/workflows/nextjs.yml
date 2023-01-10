@@ -3,7 +3,8 @@ name: CI
 on:
   push:
     branches: master
-    
+  
+# demo
 jobs:
   build:
     runs-on: self-hosted
