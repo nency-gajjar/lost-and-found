@@ -79,18 +79,6 @@
                   <tr class="l-2">
                     <td>
                       <div class="text-left text-gray-600 font-medium">
-                        Sender Affiliation
-                      </div>
-                    </td>
-                    <td>
-                      <div class="text-gray-600 text-left">
-                        {{ itemDetails.venu_type }}
-                      </div>
-                    </td>
-                  </tr>
-                  <tr class="l-2">
-                    <td>
-                      <div class="text-left text-gray-600 font-medium">
                         Found Item Date
                       </div>
                     </td>
@@ -109,6 +97,42 @@
                     <td>
                       <div class="text-gray-600 text-left">
                         {{ itemDetails.venue_name }}
+                      </div>
+                    </td>
+                  </tr>
+                  <tr class="l-2">
+                    <td>
+                      <div class="text-left text-gray-600 font-medium">
+                        Venue Email
+                      </div>
+                    </td>
+                    <td>
+                      <div class="text-gray-600 text-left">
+                        {{ itemDetails.venue_email }}
+                      </div>
+                    </td>
+                  </tr>
+                  <tr v-if="itemDetails.secondary_email" class="l-2">
+                    <td>
+                      <div class="text-left text-gray-600 font-medium">
+                        Venue Secondary Email
+                      </div>
+                    </td>
+                    <td>
+                      <div class="text-gray-600 text-left">
+                        {{ itemDetails.secondary_email }}
+                      </div>
+                    </td>
+                  </tr>
+                  <tr class="l-2">
+                    <td>
+                      <div class="text-left text-gray-600 font-medium">
+                        Venue Phone No.
+                      </div>
+                    </td>
+                    <td>
+                      <div class="text-gray-600 text-left">
+                        {{ itemDetails.venue_phone_no }}
                       </div>
                     </td>
                   </tr>
