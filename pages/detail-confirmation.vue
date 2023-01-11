@@ -1,17 +1,17 @@
 <template>
-  <div @click="showSharingIcons = false" class="wrapper">
+  <div class="wrapper">
     <BaseCard v-if="!isLoadingItem || Object.keys(itemDetails).length > 0" class="md:w-8/12 lg:w-7/12 xl:w-6/12 overflow-hidden">
       <section class="bg-white">
         <div class="main-title bg-accent-100 text-white mb-3">
           <BaseHeader varient="details">
             <div class="flex px-6" :class="[showInformativeTxt ? 'justify-center' : 'justify-between']">
               <p>PREVIEW</p>
-              <div class="relative" v-if="!showInformativeTxt && showSocialShare">
+              <!-- <div class="relative" v-if="!showInformativeTxt && showSocialShare">
                 <BaseIcon @click.stop="showSharingIcons = !showSharingIcons" icon="share-alt" color="white" />
                 <div class="absolute right-0 top-8 bg-gray-100 rounded divide-y divide-gray-300 shadow" v-if="showSharingIcons">
                   <SocialShare @social-share="socialShare" />
                 </div>
-              </div>
+              </div> -->
             </div>
           </BaseHeader>
         </div>
@@ -173,11 +173,9 @@ import DetectBrowser from "~/mixins/detectBrowser";
 import _ from "lodash";
 import RawCard from "../components/shared/RawCard.vue";
 import moment from "moment";
-import SocialShare from "../components/shared/SocialShare.vue";
-import socialShare from "../mixins/socialShare.js";
 export default {
-  mixins: [DetectBrowser, socialShare],
-  components: { RawCard, SocialShare },
+  mixins: [DetectBrowser],
+  components: { RawCard },
   data() {
     return {
       isLoading: false,

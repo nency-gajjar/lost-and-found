@@ -1,5 +1,5 @@
 <template>
-  <div @click="showSharingIcons = false" class="wrapper my-10">
+  <div class="wrapper my-10">
     <div v-if="!isLoadingItem || Object.keys(itemDetails).length > 0">
       <div
         class="
@@ -14,9 +14,9 @@
           relative
         "
       >
-        <div class="absolute right-0 top-14 bg-gray-100 rounded divide-y divide-gray-300 shadow-lg" v-if="showSharingIcons">
+        <!-- <div class="absolute right-0 top-14 bg-gray-100 rounded divide-y divide-gray-300 shadow-lg" v-if="showSharingIcons">
           <SocialShare @social-share="socialShare" />
-        </div>
+        </div> -->
                       
         <table id="printMe" width="100%" class="table-style">
           <tbody>
@@ -37,14 +37,13 @@
                           pl-10
                           w-full
                         "
-                        :class="!showSocialShare && '!text-center !pl-0'"
                       >
                         Confirmation Details
                       </h2>
                     </td>
-                    <div v-if="showSocialShare" id="share-icon-container" class="!w-1/4 !text-right !pr-10">
+                    <!-- <div v-if="showSocialShare" id="share-icon-container" class="!w-1/4 !text-right !pr-10">
                       <BaseIcon @click.stop="showSharingIcons = !showSharingIcons" size="lg" icon="share-alt" color="accent" />
-                    </div>
+                    </div> -->
                   </tr>
                 </table>
               </td>
@@ -278,11 +277,7 @@
 
 <script>
 import moment from 'moment';
-import SocialShare from "../components/shared/SocialShare.vue";
-import socialShare from "../mixins/socialShare.js";
 export default {
-  mixins: [socialShare],
-  components: { SocialShare },
   data() {
     return {
       itemDetails: {},
@@ -422,11 +417,11 @@ export default {
         document.getElementById("found-shelf-logo").style.display = "block";
         document.getElementById("scissor-container").style.display = "flex";
         document.getElementById("scissor-text").style.display = "flex";
-        if(this.showSocialShare){
-          document.getElementById("share-icon-container").style.display = "none";
-          document.getElementsByClassName("confirmation-title")[0].style.textAlign = "center";
-          document.getElementsByClassName("confirmation-title")[0].style.paddingLeft = "0";
-        }
+        // if(this.showSocialShare){
+        //   document.getElementById("share-icon-container").style.display = "none";
+        //   document.getElementsByClassName("confirmation-title")[0].style.textAlign = "center";
+        //   document.getElementsByClassName("confirmation-title")[0].style.paddingLeft = "0";
+        // }
         this.$html2pdf(document.getElementById("printMe"), {
           filename: "Item-Details.pdf",
           image: { type: "jpg", quality: 0.98 },
@@ -442,11 +437,11 @@ export default {
           document.getElementById("found-shelf-logo").style.display = "none";
           document.getElementById("scissor-container").style.display = "none";
           document.getElementById("scissor-text").style.display = "none";
-          if(this.showSocialShare){
-            document.getElementById("share-icon-container").style.display = "block";
-            document.getElementsByClassName("confirmation-title")[0].style.textAlign = "left";
-            document.getElementsByClassName("confirmation-title")[0].style.paddingLeft = "2.5rem";
-          }
+          // if(this.showSocialShare){
+          //   document.getElementById("share-icon-container").style.display = "block";
+          //   document.getElementsByClassName("confirmation-title")[0].style.textAlign = "left";
+          //   document.getElementsByClassName("confirmation-title")[0].style.paddingLeft = "2.5rem";
+          // }
         });
       } else {
         window.print();
