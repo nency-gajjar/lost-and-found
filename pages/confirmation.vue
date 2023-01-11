@@ -52,7 +52,7 @@
             <tr v-if="itemDetails.link">
               <td class="w-full-imp">
                 <div class="w-full-imp qr-code-container flex-imp justify-center-imp">
-                  <img :src="itemDetails.link" alt="" />
+                  <img :src="itemDetails.link" alt="">
                 </div>
                 <div class="px-6 flex items-center justify-center">
                   <p class="pl-2 font-medium text-gray-600 l-2">Scan this QR code to edit the details of this item.</p>
@@ -224,7 +224,7 @@
               </td>
               <div class="flex justify-center items-center pr-6">
                 <div v-if="showImage" class="flex img-container justify-center items-center mt-4 sm:mt-0 w-40 w-full">
-                  <img class="w-full object-cover" :src="itemImg" alt="" />
+                  <img class="w-full object-cover" :src="itemImg" alt="">
                 </div>
               </div>
             </tr>

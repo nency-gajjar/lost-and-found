@@ -228,7 +228,7 @@
                   "
                   src="@/assets/images/usps-logo.svg"
                   alt="USPS"
-                />
+                >
                 <img
                   v-else-if="item.carrier === 'UPS'"
                   class="
@@ -244,7 +244,7 @@
                   "
                   src="@/assets/images/ups-logo.svg"
                   alt="UPS"
-                />
+                >
                 <img
                   v-else-if="item.carrier === 'FedEx'"
                   class="
@@ -260,7 +260,7 @@
                   "
                   src="@/assets/images/fedex-logo.svg"
                   alt="FedEx"
-                />
+                >
                 <img
                   v-else-if="item.carrier === 'DHLExpress'"
                   class="
@@ -276,7 +276,7 @@
                   "
                   src="@/assets/images/dhl-express-logo.png"
                   alt="DHLExpress"
-                />
+                >
                 <img
                   v-else-if="item.carrier === 'CanadaPost'"
                   class="
@@ -292,7 +292,7 @@
                   "
                   src="@/assets/images/canada-post.png"
                   alt="DHLExpress"
-                />
+                >
               </div>
             </div>
           </div>

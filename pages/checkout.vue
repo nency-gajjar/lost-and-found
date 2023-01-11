@@ -65,7 +65,7 @@
                       class="w-full"
                       :src="itemDetails.image"
                       alt=""
-                    />
+                    >
                   </div>
                 </div>
                 </div>
