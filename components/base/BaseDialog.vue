@@ -72,7 +72,9 @@
               <BaseHeader v-if="title" class="py-4" varient="h4">{{ title }}</BaseHeader>
               <slot name="input" />
               <div v-if="message" class="text-md text-gray-600 px-8">
-                <p v-html="message"></p>
+                <!-- <client-only> -->
+                  <p v-html="message"></p>
+                <!-- </client-only> -->
               </div>
             </div>
             <div class="p-3 mt-2 text-center space-x-4 md:block">
