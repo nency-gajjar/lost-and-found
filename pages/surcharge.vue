@@ -137,7 +137,7 @@
               </p>
             </div>
             <div class="py-3" v-if="isLoading">
-              <BaseLoader :needFullScreen="false" />
+              <BaseLoader :needFullScreen="true" />
             </div>
           </div>
         </div>

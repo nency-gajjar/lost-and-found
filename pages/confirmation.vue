@@ -207,7 +207,7 @@
                         </div>
                       </td>
                     </tr>
-                    <tr class="l-2">
+                    <tr v-if="itemDetails.receiver_mobile_no" class="l-2">
                       <td>
                         <div class="text-left text-gray-600 font-medium">
                           Receiver's Mobile No.
@@ -244,11 +244,6 @@
             <BaseButton class="flex-auto" @click="printDetails">
               Print Details
             </BaseButton>
-            <BaseButton class="flex-auto"  @click="routeToListing">
-              Back To Listing
-            </BaseButton>
-          </div>
-          <div class="flex flex-wrap gap-2 m-5">
             <BaseButton class="flex-auto" varient="primaryAlt"  @click="editListing">
               Edit the listing
             </BaseButton>
@@ -408,10 +403,6 @@ export default {
             name: "found"
           });
         });
-    },
-    routeToListing() {
-      this.$store.commit("item/SET_ITEM_CONFIRMATION_DETAILS", {});
-      this.$router.push({ path: "/lost-items" });
     },
     printDetails() {
       let userAgent = navigator.userAgent.toLowerCase();

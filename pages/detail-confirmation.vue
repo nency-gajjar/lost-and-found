@@ -107,7 +107,7 @@
               <template v-if="itemDetails.item_status === 0">
                 <RawCard title="Receiver's Name" :value="itemDetails.receiver_name" />
                 <RawCard v-if="itemDetails.receiver_email" title="Receiver's Email" :value="itemDetails.receiver_email" />
-                <RawCard title="Receiver's Mobile No." :value="itemDetails.receiver_mobile_no" />
+                <RawCard v-if="itemDetails.receiver_mobile_no" title="Receiver's Mobile No." :value="itemDetails.receiver_mobile_no" />
               </template>
             </div>
             <div class="flex item-img-container justify-center items-center">
@@ -332,33 +332,38 @@ export default {
                   requestData[key] = params[key];
                 }
               });
-              this.$axios
-                .post(
-                  "/updatesinglelostitem?id=" + this.itemDetails.foundItemId,
-                  requestData
-                )
-                .then((response) => {
-                  if (response.status === 200) {
+              if(Object.keys(requestData).length > 0) {
+                this.$axios
+                  .post(
+                    "/updatesinglelostitem?id=" + this.itemDetails.foundItemId,
+                    requestData
+                  )
+                  .then((response) => {
+                    if (response.status === 200) {
+                      this.isLoading = false;
+                      this.responseData = response.data.data;
+                      this.$store.commit("item/SET_ITEM_CONFIRMATION_DETAILS", {
+                        ...this.responseData,
+                      });
+  
+                      this.$store.commit("item/SET_ITEM_DETAILS", {});
+  
+                      this.$router.push({
+                        path: "/confirmation",
+                        params: { data: this.responseData },
+                        query: { id: this.responseData.id },
+                      });
+                    }
+                  })
+                  .catch((error) => {
                     this.isLoading = false;
-                    this.responseData = response.data.data;
-                    this.$store.commit("item/SET_ITEM_CONFIRMATION_DETAILS", {
-                      ...this.responseData,
-                    });
-
-                    this.$store.commit("item/SET_ITEM_DETAILS", {});
-
-                    this.$router.push({
-                      path: "/confirmation",
-                      params: { data: this.responseData },
-                      query: { id: this.responseData.id },
-                    });
-                  }
-                })
-                .catch((error) => {
-                  this.isLoading = false;
-                  this.$toast.error("Something went wrong! Please try again.");
-                  console.log(error);
-                });
+                    this.$toast.error("Something went wrong! Please try again.");
+                    console.log(error);
+                  });
+              }
+              else {
+                this.$toast.info("Item data is already updated!");
+              }
             }
           })
           .catch((err) => {

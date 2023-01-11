@@ -1517,7 +1517,7 @@ export default {
           let receiverMobileNo = this.formatMobileNumber(this.receiverMobileNo);
           params.receiver_name = this.receiverName;
           params.receiver_email = this.receiverEmail;
-          params.receiver_mobile_no = receiverMobileNo;
+          params.receiver_mobile_no = receiverMobileNo.trim();
         }
 
         this.$store.commit("item/SET_ITEM_DETAILS", {
