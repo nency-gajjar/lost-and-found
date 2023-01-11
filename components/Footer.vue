@@ -1,13 +1,13 @@
 <template>
   <div class="noPrint">
     <div class="flex px-6 pt-8 md:px-10 items-center justify-between">
-      <div>
+      <NuxtLink to="/">
         <img
           class="nav-logo"
           src="../assets/images/found-shelf-icon.svg"
           alt="Found Shelf"
         >
-      </div>
+      </NuxtLink>
       <div>
         <div class="flex space-x-4">
           <a

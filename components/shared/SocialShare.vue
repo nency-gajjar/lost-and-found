@@ -37,6 +37,22 @@
       <p class="uppercase text-xs text-gray-700">Facebook</p>
     </div>
     <div
+      @click="socialShare('email')"
+      class="
+        w-36
+        cursor-pointer
+        hover:bg-gray-200
+        py-3
+        px-3
+        flex
+        gap-2
+        items-center
+      "
+    >
+      <BaseIcon icon="envelope" class="w-7" color="black" />
+      <p class="uppercase text-xs text-gray-700">Email</p>
+    </div>
+    <div
       @click="socialShare('copy')"
       class="
         w-36

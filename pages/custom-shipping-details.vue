@@ -78,11 +78,11 @@
               v-slot="{ errors }"
               rules="required|contents_explanation:255"
               class="block"
-              name="Contents Explanation"
+              name="Detail description"
             >
               <textarea
                 v-model="contentsExplanation"
-                placeholder="Contents Explanation"
+                placeholder="Detail description of an item"
                 class="
                   border
                   inline-block
