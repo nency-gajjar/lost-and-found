@@ -13,7 +13,7 @@
         items-center
       "
     >
-      <img src="../../assets/images/twitter-logo.png" class="w-7" alt="twitter" />
+      <img src="../../assets/images/twitter-logo.png" class="w-7" alt="twitter">
       <p class="uppercase text-xs text-gray-700">Twitter</p>
     </div>
     <div
@@ -33,7 +33,7 @@
         src="../../assets/images/facebook-logo.png"
         class="w-7"
         alt="facebook"
-      />
+      >
       <p class="uppercase text-xs text-gray-700">Facebook</p>
     </div>
     <div

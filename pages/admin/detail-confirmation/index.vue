@@ -76,7 +76,7 @@
                       class="previewImage"
                       v-show="!showCrop & !showDraw || imgPreview"
                       :src="imgSrc"
-                    />
+                    >
                     <div
                       v-if="showCrop && !imgPreview"
                       class="vue-cropper-container"
@@ -974,7 +974,7 @@
                 </div>
                 <div class="flex item-img-container mt-16-px items-center justify-center">
                   <div v-if="image" class="flex items-center justify-center mt-4 sm:mt-0 w-48 w-full">
-                    <img class="w-full object-cover" :src="image" alt="" />
+                    <img class="w-full object-cover" :src="image" alt="">
                   </div>
                 </div>
               </div>

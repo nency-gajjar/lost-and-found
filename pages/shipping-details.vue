@@ -60,12 +60,12 @@
                           v-if="showImage(detail)"
                           class="img-width"
                           :src="detail.image"
-                        />
+                        >
                         <img
                           v-else
                           class="img-width"
                           src="@/assets/images/no-image4.png"
-                        />
+                        >
                       </div>
                     </div>
                   </td>

@@ -6,7 +6,7 @@
           class="nav-logo"
           src="../assets/images/found-shelf-icon.svg"
           alt="Found Shelf"
-        />
+        >
       </div>
       <div>
         <div class="flex space-x-4">
