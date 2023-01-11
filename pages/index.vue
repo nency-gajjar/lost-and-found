@@ -58,7 +58,7 @@
           <img
             class="h-[250px] mt-0 sm:-mt-10 lg:-mt-12"
             src="../assets/images/lost-found.svg"
-          />
+          >
         </div>
       </BaseCard>
     </div>
@@ -210,7 +210,7 @@
                     "
                     :src="item.image"
                     alt=""
-                  />
+                  >
                   <img
                     v-else
                     class="
@@ -221,7 +221,7 @@
                     "
                     src="@/assets/images/no-image4.png"
                     alt=""
-                  />
+                  >
                 </div>
                 <div class="m-4 text-lg font-semibold">
                   {{ item.item_description }}

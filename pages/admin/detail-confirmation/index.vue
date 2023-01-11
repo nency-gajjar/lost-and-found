@@ -76,7 +76,7 @@
                       class="previewImage"
                       v-show="!showCrop & !showDraw || imgPreview"
                       :src="imgSrc"
-                    />
+                    >
                     <div
                       v-if="showCrop && !imgPreview"
                       class="vue-cropper-container"
@@ -633,6 +633,7 @@
                         <div :class="errors.length > 0 && isItemDescriptionFocused && 'error'">
                           <vue-simple-suggest
                             @blur="isItemDescriptionFocused = true"
+                            @select="changeItemDescription($event)"
                             v-model="itemDetails.item_description"
                             :list="itemDescriptionOptions"
                             :filter-by-query="true">
@@ -787,7 +788,7 @@
                         v-slot="{ errors }"
                         rules="required|float|positiveNumber"
                         class="block"
-                        name="Length"
+                        name="Width"
                       >
                         <BaseInput
                           v-model="itemDetails.item_width"
@@ -823,7 +824,7 @@
                         v-slot="{ errors }"
                         rules="required|float|positiveNumber"
                         class="block"
-                        name="Length"
+                        name="Height"
                       >
                         <BaseInput
                           v-model="itemDetails.item_height"
@@ -974,7 +975,7 @@
                 </div>
                 <div class="flex item-img-container mt-16-px items-center justify-center">
                   <div v-if="image" class="flex items-center justify-center mt-4 sm:mt-0 w-48 w-full">
-                    <img class="w-full object-cover" :src="image" alt="" />
+                    <img class="w-full object-cover" :src="image" alt="">
                   </div>
                 </div>
               </div>
@@ -1142,6 +1143,7 @@ export default {
       isLoadingItemDetails: true,
       responseData: {},
       itemDetails: {},
+      itemDescriptionResponse: [],
       itemDescriptionOptions: [],
       packageTypeOptions: ["Box", "Envelope"],
       isImageEdited: false,
@@ -1174,11 +1176,23 @@ export default {
             this.isLoadingItemDetails = false;
             this.responseData = {...response.data.data.Item};
             this.itemDetails = {...response.data.data.Item};
-            this.itemDetails.weight_ounces = String(this.itemDetails.weight_ounces);
+            if(!this.itemDetails.package_type) this.itemDetails.package_type = "Box";
             this.itemDetails.datse = new Date(this.itemDetails.datse);
+            if(!this.itemDetails.item_length) this.itemDetails.item_length = "";
+            if(!this.itemDetails.item_width) this.itemDetails.item_width = "";
+            if(!this.itemDetails.item_height) this.itemDetails.item_height = "";
             this.image = this.responseData.image;
-            this.changedPound();
-            this.changedOunces();
+            if(this.itemDetails.weight_pounds) {
+              this.changedPound();
+            } else {
+              this.itemDetails.weight_pounds = "";
+            }
+            if(this.itemDetails.weight_ounces) {
+              this.itemDetails.weight_ounces = String(this.itemDetails.weight_ounces);
+              this.changedOunces();
+            } else {
+              this.itemDetails.weight_ounces = "";
+            }
           }
         })
         .catch((error) => {
@@ -1202,14 +1216,30 @@ export default {
     changedOunces(){
       this.itemDetails.weight_pounds = Number((Number(this.itemDetails.weight_ounces) / 16).toFixed(1));
     },
+    changeItemDescription(value) {
+      let index = this.itemDescriptionResponse.findIndex((item) => {
+        return item.item_description === value;
+      });
+
+      if (index != -1) {
+        this.itemDetails.package_type = this.itemDescriptionResponse[index].package_type;
+        this.itemDetails.item_length = this.itemDescriptionResponse[index].item_length;
+        this.itemDetails.item_width = this.itemDescriptionResponse[index].item_width;
+        this.itemDetails.item_height = this.itemDescriptionResponse[index].item_height;
+        this.itemDetails.weight_pounds = this.itemDescriptionResponse[index].weight_pounds;
+        this.itemDetails.weight_ounces = String(
+          this.itemDescriptionResponse[index].weight_ounces
+        );
+      }
+    },
     getItemDescriptionOptions() {
       return new Promise((resolve) => {
         this.$axios
           .get("/viewallItemdescriptionDetails")
           .then((response) => {
             if (response.status === 200) {
-              let itemDescriptionResponse = response.data?.data?.Items || [];
-              this.itemDescriptionOptions = itemDescriptionResponse.map(
+              this.itemDescriptionResponse = response.data?.data?.Items || [];
+              this.itemDescriptionOptions = this.itemDescriptionResponse.map(
                 (item) => {
                   return item.item_description;
                 }

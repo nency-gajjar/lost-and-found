@@ -52,7 +52,7 @@
             <tr v-if="itemDetails.link">
               <td class="w-full-imp">
                 <div class="w-full-imp qr-code-container flex-imp justify-center-imp">
-                  <img :src="itemDetails.link" alt="" />
+                  <img :src="itemDetails.link" alt="">
                 </div>
                 <div class="px-6 flex items-center justify-center">
                   <p class="pl-2 font-medium text-gray-600 l-2">Scan this QR code to edit the details of this item.</p>
@@ -207,7 +207,7 @@
                         </div>
                       </td>
                     </tr>
-                    <tr class="l-2">
+                    <tr v-if="itemDetails.receiver_mobile_no" class="l-2">
                       <td>
                         <div class="text-left text-gray-600 font-medium">
                           Receiver's Mobile No.
@@ -224,7 +224,7 @@
               </td>
               <div class="flex justify-center items-center pr-6">
                 <div v-if="showImage" class="flex img-container justify-center items-center mt-4 sm:mt-0 w-40 w-full">
-                  <img class="w-full object-cover" :src="itemImg" alt="" />
+                  <img class="w-full object-cover" :src="itemImg" alt="">
                 </div>
               </div>
             </tr>
@@ -244,11 +244,6 @@
             <BaseButton class="flex-auto" @click="printDetails">
               Print Details
             </BaseButton>
-            <BaseButton class="flex-auto"  @click="routeToListing">
-              Back To Listing
-            </BaseButton>
-          </div>
-          <div class="flex flex-wrap gap-2 m-5">
             <BaseButton class="flex-auto" varient="primaryAlt"  @click="editListing">
               Edit the listing
             </BaseButton>
@@ -408,10 +403,6 @@ export default {
             name: "found"
           });
         });
-    },
-    routeToListing() {
-      this.$store.commit("item/SET_ITEM_CONFIRMATION_DETAILS", {});
-      this.$router.push({ path: "/lost-items" });
     },
     printDetails() {
       let userAgent = navigator.userAgent.toLowerCase();

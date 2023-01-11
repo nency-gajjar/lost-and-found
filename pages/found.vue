@@ -36,7 +36,7 @@
           <img
             class="w-24 h-24"
             src="../assets/images/found-qr.png"
-          />
+          >
         </div>
     </BaseCard>
     <BaseCard class="md:w-8/12 lg:w-7/12 xl:w-6/12">
@@ -513,7 +513,7 @@
                     "
                   >
                     <div class="m-auto sm:m-0 image-card max-w-[166px]">
-                      <img :src="image" alt="Item image" />
+                      <img :src="image" alt="Item image">
                     </div>
                     <div
                       class="
@@ -686,7 +686,7 @@
                             class="previewImage"
                             v-show="!showCrop & !showDraw || imgPreview"
                             :src="imgSrc"
-                          />
+                          >
                           <!-- <div
                             v-if="showCrop && !imgPreview"
                             class="vue-cropper-container"
@@ -1517,7 +1517,7 @@ export default {
           let receiverMobileNo = this.formatMobileNumber(this.receiverMobileNo);
           params.receiver_name = this.receiverName;
           params.receiver_email = this.receiverEmail;
-          params.receiver_mobile_no = receiverMobileNo;
+          params.receiver_mobile_no = receiverMobileNo.trim();
         }
 
         this.$store.commit("item/SET_ITEM_DETAILS", {

@@ -68,7 +68,7 @@
                       class="w-full"
                       :src="itemDetails.image"
                       alt=""
-                    />
+                    >
                   </div>
                 </div>
 
@@ -211,7 +211,7 @@
                     text-gray-900
                     cursor-pointer
                   "
-                  >No Longer Needed</label
+                  >Other Options</label
                 >
               </div> -->
             </div>
@@ -501,30 +501,30 @@
               >
                 <BaseSelect
                   :isRequired="true"
+                  label="Select Option"
+                  v-model="selectedOtherOption"
+                  :options="otherOptions"
+                  :class="errors.length > 0 && 'error'"
+                />
+              </ValidationProvider>
+              <ValidationProvider
+                v-if="isNoLongerSelected"
+                v-slot="{ errors }"
+                :rules="deliveryType === '2' ? 'required' : ''"
+                class="block"
+              >
+                <BaseSelect
+                  :isRequired="true"
                   label="Select Reason"
                   v-model="noNeedReason"
                   :options="noNeedReasonOptions"
                   :class="errors.length > 0 && 'error'"
                 />
               </ValidationProvider>
-              <ValidationProvider
-                v-if="isManualReason"
-                v-slot="{ errors }"
-                :rules="deliveryType === '2' ? 'required' : ''"
-                class="block"
-              >
-                <BaseInput
-                  :isRequired="true"
-                  v-model="manualReason"
-                  type="text"
-                  label="Enter Reason"
-                  :class="errors.length > 0 && 'error'"
-                />
-              </ValidationProvider>
               <div class="!mt-3">
                 <textarea
-                  v-model="noNeedDescription"
-                  placeholder="Description (Optional)"
+                  v-model="noNeedComment"
+                  placeholder="Comment (Optional)"
                   class="
                     border
                     inline-block
@@ -619,10 +619,13 @@ export default {
     insuranceValue: "",
     isLoadingItemDetails: true,
     itemDetails: {},
+    // showDropDownList: false,
+    // showNestedDropDownList: false,
+    // selectedOtherOption: "",
+    // otherOptions: ["Item is not mine", "Item is no longer needed"],
     // noNeedReason: "",
-    // noNeedReasonOptions: ['Throw it away', 'Do not need anymore', 'Other'],
-    // manualReason: "",
-    // noNeedDescription: "",
+    // noNeedReasonOptions: ['Dispose the item', 'Shared / Destroy the item', 'Staff can keep it'],
+    // noNeedComment: "",
   }),
   async created() {
     if (this.$route.query.id) {
@@ -712,8 +715,8 @@ export default {
     },
   },
   computed: {
-    // isManualReason() {
-    //   if(this.noNeedReason === "Other"){
+    // isNoLongerSelected() {
+    //   if(this.selectedOtherOption === "Item is no longer needed"){
     //     return true;
     //   }
     //   else {
@@ -920,7 +923,7 @@ export default {
         params_rateQuotes.length = Number(this.itemDetails.item_length);
         params_rateQuotes.width = Number(this.itemDetails.item_width);
         params_rateQuotes.height = Number(this.itemDetails.item_height);
-        if(this.itemDetails.weight_ounces > 0){
+        if(Number(this.itemDetails.weight_ounces) > 0){
           params_rateQuotes.weight = Number(this.itemDetails.weight_ounces);
         }
         else{

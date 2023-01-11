@@ -9,10 +9,12 @@
         </div>
         <div
           class="
-            justify-end
+            sm:justify-end
+            justify-center
             w-full
             flex
             mt-8
+            gap-3
             mb-5
           "
         >
@@ -20,10 +22,18 @@
             @click="downloadCsv"
             :is-loading="isExportLoading"
             varient="secondary"
-            class="sm:ml-2 mt-3 sm:mt-0"
+            class="sm:!px-12 !px-4"
           >
             Export
           </BaseButton>
+          <!-- <BaseButton
+            @click="deleteAllUsers"
+            :is-loading="isDeleteAllLoading"
+            varient="red"
+            class="sm:!px-12 !px-4"
+          >
+            Delete all
+          </BaseButton> -->
         </div>
         <div
           class="
@@ -57,9 +67,22 @@
                   "
                 >
                   <th data-priority="1" class="py-3 px-6 text-left">Name</th>
+                  <th class="py-3 px-6 text-left" @click="sortVenueType">
+                    Venue Type 
+                    <span v-show="sortVenueAsc !== null">
+                      <BaseIcon
+                        :icon="sortVenueAsc ? 'angle-up' : 'angle-down'"
+                        color="white"
+                        size="1x"
+                        style="max-width: 15px"
+                      />
+                    </span>
+                  </th>
                   <th class="py-3 px-6 text-left">Email</th>
-                  <th class="py-3 px-6 text-left">Phone No.</th>
-                  <th class="py-3 px-6 text-left">Business Name</th>
+                  <th class="py-3 px-6 text-left">Secondary Email</th>
+                  <th class="py-3 px-6 text-left">Venue Mobile No.</th>
+                  <th class="py-3 px-6 text-left">Employee Mobile No.</th>
+                  <!-- <th class="py-3 px-6 text-left">Delete</th> -->
                 </tr>
               </thead>
               <tbody v-if="userList.length > 0" class="bg-white text-gray-800">
@@ -71,14 +94,50 @@
                     <p>{{ user.venue_name }}</p>
                   </td>
                   <td class="py-3 px-6 text-left">
+                    <p>{{ user.venu_type }}</p>
+                  </td>
+                  <td class="py-3 px-6 text-left">
                     <p>{{ user.venue_email }}</p>
+                  </td>
+                  <td class="py-3 px-6 text-left">
+                    <p>{{ user.secondary_email || '-' }}</p>
                   </td>
                   <td class="py-3 px-6 text-left">
                     <p>{{ user.venue_phone_no }}</p>
                   </td>
                   <td class="py-3 px-6 text-left">
-                    <p>{{ user.venu_type }}</p>
+                    <p>{{ user.employee_mobile_no }}</p>
                   </td>
+                  <!-- <td class="py-3 px-6 text-left">
+                    <div @click="idToDelete=user.id; showDialog=true" class="bg-red-600 flex justify-center items-center px-3 py-2 rounded cursor-pointer">
+                      <svg
+                        v-if="isRemovingUser[user.id]"
+                        class="w-5 h-5 text-white animate-spin"
+                        fill="none"
+                        viewBox="0 0 24 24"
+                        xmlns="http://www.w3.org/2000/svg"
+                      >
+                        <circle
+                          class="opacity-25"
+                          cx="12"
+                          cy="12"
+                          r="10"
+                          stroke="currentColor"
+                          stroke-width="4"
+                        ></circle>
+                        <path
+                          class="opacity-75"
+                          d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
+                          fill="currentColor"
+                        ></path>
+                      </svg>
+                      <BaseIcon
+                        v-else
+                        icon="trash"
+                        color="white"
+                      />
+                    </div>
+                  </td> -->
                 </tr>
               </tbody>
             </table>
@@ -88,12 +147,31 @@
               </p>
             </div>
             <div class="py-3" v-if="isLoading">
-              <BaseLoader :needFullScreen="false" />
+              <BaseLoader :needFullScreen="true" />
             </div>
           </div>
         </div>
       </main>
     </div>
+    <BaseDialog
+      v-if="showDialog"
+      :showDialog="showDialog"
+      :showClose="false"
+      :icon="{ name: 'trash-can', color: 'red', size: '3x' }"
+      buttonTitle="Yes please!"
+      title="Are you sure?"
+      message="Do you want to remove User?"
+      @close="showDialog=false;"
+    >
+      <template v-slot:action>
+        <BaseButton
+          class="!capitalize !px-5 !py-2"
+          varient="gray"
+          @click="showDialog=false; deleteSingleUser()"
+          >Yes please!
+        </BaseButton>
+      </template>
+    </BaseDialog>
   </div>
 </template>
 
@@ -105,12 +183,42 @@ export default {
       isLoading: true,
       userList: [],
       isExportLoading: false,
+      isDeleteAllLoading: false,
+      idToDelete: "",
+      isRemovingUser: {},
+      showDialog: false,
+      sortVenueAsc: null,
     }
   },
   mounted() {
     this.getAllUsers();
   },
   methods: {
+    sortVenueType() {
+      if(this.sortVenueAsc === null){
+        this.sortVenueAsc = false;
+      }
+      this.sortVenueAsc = !this.sortVenueAsc;
+      this.userList = this.userList.sort((a, b) => {
+        return a.venu_type.localeCompare(b.venu_type);
+      });
+      if(!this.sortVenueAsc) {
+        this.userList.reverse();
+      }
+    },
+    deleteSingleUser() {
+      let id = this.idToDelete;
+      this.$set(this.isRemovingUser, id, true);
+      setTimeout(() => {
+        this.isRemovingUser[id] = false;
+      }, 2000);
+    },
+    deleteAllUsers() {
+      this.isDeleteAllLoading = true;
+      setTimeout(() => {
+        this.isDeleteAllLoading = false;
+      }, 2000);
+    },
     downloadCsv() {
       this.isExportLoading = true;
       let x = document.createElement("A");

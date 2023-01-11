@@ -13,7 +13,7 @@
         items-center
       "
     >
-      <img src="../../assets/images/twitter-logo.png" class="w-7" alt="twitter" />
+      <img src="../../assets/images/twitter-logo.png" class="w-7" alt="twitter">
       <p class="uppercase text-xs text-gray-700">Twitter</p>
     </div>
     <div
@@ -33,8 +33,24 @@
         src="../../assets/images/facebook-logo.png"
         class="w-7"
         alt="facebook"
-      />
+      >
       <p class="uppercase text-xs text-gray-700">Facebook</p>
+    </div>
+    <div
+      @click="socialShare('email')"
+      class="
+        w-36
+        cursor-pointer
+        hover:bg-gray-200
+        py-3
+        px-3
+        flex
+        gap-2
+        items-center
+      "
+    >
+      <BaseIcon icon="envelope" class="w-7" color="black" />
+      <p class="uppercase text-xs text-gray-700">Email</p>
     </div>
     <div
       @click="socialShare('copy')"

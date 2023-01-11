@@ -62,7 +62,7 @@
           <img
             class="h-[250px] mt-0 sm:-mt-10 lg:-mt-12"
             src="../assets/images/successfull-payment.svg"
-          />
+          >
         </div>
       </BaseCard>
     </div>
@@ -215,13 +215,13 @@ export default {
       let imgHtml = "";
       if (this.itemDetails.image) {
         imgHtml =
-          "<div class='flex justify-around w-100-px items-center'> <img style='height: 100%' src='https://i.ibb.co/G32NGsk/found-shelf-icon.jpg' /> <img src=" +
+          "<div class='flex justify-around w-100-px items-center'> <img style='height: 100%' src='https://i.ibb.co/G32NGsk/found-shelf-icon.jpg'> <img src=" +
           this.itemImg +
           "></div>";
       }
       else {
         imgHtml =
-          "<div class='itemImgContainer'><img src='https://i.ibb.co/G32NGsk/found-shelf-icon.jpg' /></div>";
+          "<div class='itemImgContainer'><img src='https://i.ibb.co/G32NGsk/found-shelf-icon.jpg'></div>";
       }
       let htmlToPrint = `
       <html><head>

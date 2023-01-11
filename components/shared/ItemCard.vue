@@ -34,13 +34,13 @@
           class="w-full rounded-t-lg md:rounded-none md:rounded-l-lg"
           :src="item.image"
           alt=""
-        />
+        >
         <img
           v-else
           class="w-20 contain rounded-t-lg md:rounded-none md:rounded-l-lg"
           src="@/assets/images/no-image4.png"
           alt=""
-        />
+        >
       </div>
       <div class="flex flex-col text-center justify-between leading-normal">
         <div class="mb-1 flex items-center">
