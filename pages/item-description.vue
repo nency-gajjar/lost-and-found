@@ -258,10 +258,7 @@ export default {
             this.isLoading = false;
             this.itemDescriptionData = response.data?.data?.Items || [];
             this.itemDescriptionData = this.itemDescriptionData.map((item) => {
-              return {
-                ...item,
-                weight_ounces: String(item.weight_ounces),
-              };
+              return item;
             });
             this.itemDescriptionData = this.itemDescriptionData.sort(this.sortItemDescription)
           }

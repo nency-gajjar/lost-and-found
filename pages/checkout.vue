@@ -429,6 +429,7 @@ export default {
     },
     async confirmAndPay() {
       this.isLoading = true;
+      let result;
       let totalPrice = Math.floor(
         Number(this.totalPrice).toFixed(2) * 100
       ); // convert usd to cents
@@ -438,7 +439,7 @@ export default {
         })
         .then(async (response) => {
           try {
-            const result = await this.$stripe.confirmCardPayment(
+            result = await this.$stripe.confirmCardPayment(
               response.data.client_secret,
               {
                 payment_method: {
@@ -546,8 +547,7 @@ export default {
                 });
             }
           } catch (error) {
-            console.log(error);
-            this.$toast.error(error);
+            this.$toast.error(result?.error?.message || "Payment failed! Try again");
             this.isLoading = false;
           }
         })

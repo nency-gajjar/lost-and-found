@@ -220,6 +220,7 @@ export default {
           }
           else{
             this.isLoading = false;
+            this.$emit("close");
           }
         }
         else{

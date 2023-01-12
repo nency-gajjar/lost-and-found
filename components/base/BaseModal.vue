@@ -172,7 +172,6 @@ export default {
     }
 
     .base-modal-body {
-      background: #f7f7f7;
       overflow: auto;
       margin: 20px;
 

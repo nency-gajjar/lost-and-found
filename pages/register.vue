@@ -152,7 +152,7 @@ export default {
           })
           .catch((error) => {
             this.isLoading = false;
-            this.$toast.error("Something went wrong! Please try again.");
+            this.$toast.error("Registration failed! Please try again.");
             console.log(error);
           });
       }

@@ -1,5 +1,5 @@
 <template>
-  <div class="wrapper">
+  <div class="wrapper min-h-screen">
     <div class="container max-w-7xl mx-auto px-4">
       <main class="my-10 space-y-6">
         <div class="flex flex-col md:space-y-0 md:flex-row justify-between">
@@ -156,8 +156,8 @@ export default {
     };
   },
   created() {
-    this.getAdminDashboardDetails();
     this.getPendingListDetails();
+    this.getAdminDashboardDetails();
     if(this.$store.getters["admin/tabId"]){
       this.tabSelected = JSON.parse(JSON.stringify(this.$store.getters["admin/tabId"]));
     }
@@ -280,7 +280,7 @@ export default {
           }
         })
         .catch((err) => {
-          this.$toast.error("Something went wrong! Please try again.");
+          this.$toast.error(err?.response?.data?.message || "Something went wrong! Please try again.");
           this.isLoadingRemoveImage[this.itemToDelete.id] = false;
           console.log(err);
         });

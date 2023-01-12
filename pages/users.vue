@@ -67,7 +67,7 @@
                   "
                 >
                   <th data-priority="1" class="py-3 px-6 text-left">Name</th>
-                  <th class="py-3 px-6 text-left" @click="sortVenueType">
+                  <th class="py-3 px-6 text-left cursor-pointer" @click="sortVenueType">
                     Venue Type 
                     <span v-show="sortVenueAsc !== null">
                       <BaseIcon

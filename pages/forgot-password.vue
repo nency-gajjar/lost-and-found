@@ -111,11 +111,7 @@ export default {
           })
           .catch((error) => {
             this.isLoading = false;
-            if (error.response.status === 400) {
-              this.$toast.error(error.response.data.data);
-            } else {
-              this.$toast.error("Something went wrong! Please try again.");
-            }
+            this.$toast.error(error?.response?.data?.data || "Something went wrong! Please try again.");
           });
       }
     },

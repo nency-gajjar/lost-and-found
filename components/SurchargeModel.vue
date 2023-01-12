@@ -239,16 +239,23 @@ export default {
               if (this.percentage !== this.tempEditData.percentage) {
                 updateParams.srchargepercentage = Number(this.percentage);
               }
-               this.$axios
-                .post("/updateSingleSurchargeDetails?id="+this.surchargeId, updateParams)
-                .then((response) => {
-                  this.$toast.info("Surcharge edited successfully!");
-                  this.isLoading = false;
-                })
-                .catch((error) => {
-                  this.$toast.error("Something went wrong! Please try again.");
-                  this.isLoading = false;
-                })
+
+              if(Object.keys(updateParams).length > 0) {
+                this.$axios
+                  .post("/updateSingleSurchargeDetails?id="+this.surchargeId, updateParams)
+                  .then((response) => {
+                    this.$emit('close');
+                    this.$toast.info("Surcharge edited successfully!");
+                    this.isLoading = false;
+                  })
+                  .catch((error) => {
+                    this.$toast.error(error?.response?.data?.message || "Something went wrong! Please try again.");
+                    this.isLoading = false;
+                  })
+              }
+              else {
+                this.$emit('close');
+              }
             }
             else{
               this.isLoading = true;
@@ -266,6 +273,7 @@ export default {
               this.$axios
                 .post("/storeSurchargeDetails", storeParams)
                 .then((response) => {
+                  this.$emit('close');
                   this.$toast.info("Surcharge added successfully!");
                   this.isLoading = false;
                 })
