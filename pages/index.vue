@@ -1,151 +1,153 @@
 <template>
-  <div class="sm:mt-8 flex flex-col items-center">
-    <div class="w-10/12">
-      <div
-        class="
-          sm:mt-14
-          mt-8
-          md:px-12
-          px-0
-          flex
-          justify-center
-          flex-col
-          sm:flex-row
-        "
-      >
+  <div class="flex flex-col items-center">
+    <div class="w-full flex justify-center landing-background">
+      <div class="sm:mt-8 w-10/12 !opacity-100">
         <div
           class="
-            w-full
-            py-4
-            lg:py-0
-            flex flex-col
-            items-center
+            sm:mt-14
+            mt-8
+            md:px-12
+            px-0
+            flex
             justify-center
-            sm:items-start
-            mb-8
-            sm:mb-0
+            flex-col
+            sm:flex-row
           "
         >
-          <div class="px-6 w-full">
-            <h2
-              class="
-                font-bold
-                text-4xl
-                md:text-[2.625rem] md:leading-[3.125rem]
-                text-accent-100
-                text-[1.5rem]
-                text-center
-                w-full
-              "
-            >
-              What have you <span class="text-primary-100"> Lost?</span>
-            </h2>
-          </div>
-          <div class="px-6 mt-3 w-full text-center">
-            <TypeWriter
-              :speed="200"
-              :full-erase="true"
-              :interval="300"
-              :words='venueOptions'>
-              <span class="font-medium text-accent-100">We are providing service in: </span>
-            </TypeWriter>
-          </div>
-          <div>
-            <!-- Lost Item Filter -->
-            <section class="p-6 w-full">
-              <div class="container mx-auto">
-                <div class="align-middle inline-block w-full mt-5">
-                  <div class="inline-flex flex-auto w-full">
-                    <BaseInput
-                      v-model="address"
-                      id="autocomplete-main"
-                      type="text"
-                      placeholder=""
-                      label="Location where you might have lost your item. Try City/State, or a specific location name."
-                      class="w-full"
-                      @input="getAddress"
-                    >
-                      <template v-slot:icon>
-                        <div
-                          v-if="address"
-                          class="absolute bg-white bottom-13-px right-1 pr-5"
-                        >
-                          <BaseIcon @click="clearAddress" icon="xmark" color="gray" />
-                        </div>
-                        <div
-                          v-else
-                          class="absolute bottom-13-px right-0 pr-5"
-                        >
-                          <BaseIcon icon="location-arrow" color="lightgray" />
-                        </div>
-                      </template>
-                    </BaseInput>
-                  </div>
-                </div>
-
-                <div class="align-middle inline-block w-full mt-5">
-                  <div
-                    class="
-                      flex
-                      justify-between
-                      flex-col
-                      gap-4
-                      flex-wrap
-                      md:flex-nowrap
-                      sm:flex-row
-                      items-end
-                    "
-                  >
-                    <div class="h-full flex-auto w-full mt-3 sm:mt-0 sm:w-1/2">
-                      <BaseSelect
-                        v-model="itemDescription"
-                        :options="itemDescriptionOptions"
-                        label="Item Description"
-                      />
-                    </div>
-                    <div class="w-full flex flex-col mt-3 sm:mt-0">
-                      <label
-                        class="block text-md font-medium text-gray-800 text-left"
-                        >Date when lost?</label
+          <div
+            class="
+              w-full
+              py-4
+              lg:py-0
+              flex flex-col
+              items-center
+              justify-center
+              sm:items-start
+              mb-8
+              sm:mb-0
+            "
+          >
+            <div class="px-6 w-full">
+              <h2
+                class="
+                  font-bold
+                  text-4xl
+                  md:text-[2.625rem] md:leading-[3.125rem]
+                  text-accent-100
+                  text-[1.5rem]
+                  text-center
+                  w-full
+                "
+              >
+                What have you <span class="text-primary-100"> Lost?</span>
+              </h2>
+            </div>
+            <div class="px-6 mt-3 w-full text-center">
+              <TypeWriter
+                :speed="200"
+                :full-erase="true"
+                :interval="300"
+                :words='venueOptions'>
+                <span class="font-medium text-accent-100">We are providing service in: </span>
+              </TypeWriter>
+            </div>
+            <div>
+              <!-- Lost Item Filter -->
+              <section class="p-6 w-full">
+                <div class="container mx-auto">
+                  <div class="align-middle inline-block w-full mt-5">
+                    <div class="inline-flex flex-auto w-full">
+                      <BaseInput
+                        v-model="address"
+                        id="autocomplete-main"
+                        type="text"
+                        placeholder=""
+                        label="Location where you might have lost your item. Try City/State, or a specific location name."
+                        class="w-full"
+                        @input="getAddress"
                       >
-                      <div class="flex sm:gap-4 gap-1 flex-auto w-full">
-                        <client-only>
-                          <date-picker
-                            placeholder="Approx. Start date"
-                            v-model="startDate"
-                            format="MM-DD-YYYY"
-                            :disabled-date="disableStartDate"
+                        <template v-slot:icon>
+                          <div
+                            v-if="address"
+                            class="absolute bg-white bottom-13-px right-1 pr-5"
                           >
-                          </date-picker>
-                        </client-only>
-                        <client-only>
-                          <date-picker
-                            placeholder="Approx. End date"
-                            v-model="endDate"
-                            format="MM-DD-YYYY"
-                            :disabled-date="disableEndDate"
+                            <BaseIcon @click="clearAddress" icon="xmark" color="gray" />
+                          </div>
+                          <div
+                            v-else
+                            class="absolute bottom-13-px right-0 pr-5"
                           >
-                          </date-picker>
-                        </client-only>
+                            <BaseIcon icon="location-arrow" color="lightgray" />
+                          </div>
+                        </template>
+                      </BaseInput>
+                    </div>
+                  </div>
+
+                  <div class="align-middle inline-block w-full mt-5">
+                    <div
+                      class="
+                        flex
+                        justify-between
+                        flex-col
+                        gap-4
+                        flex-wrap
+                        md:flex-nowrap
+                        sm:flex-row
+                        items-end
+                      "
+                    >
+                      <div class="h-full flex-auto w-full mt-3 sm:mt-0 sm:w-1/2">
+                        <BaseSelect
+                          v-model="itemDescription"
+                          :options="itemDescriptionOptions"
+                          label="Item Description"
+                        />
+                      </div>
+                      <div class="w-full flex flex-col mt-3 sm:mt-0">
+                        <label
+                          class="block text-md font-medium text-gray-800 text-left"
+                          >Date when lost?</label
+                        >
+                        <div class="flex sm:gap-4 gap-1 flex-auto w-full">
+                          <client-only>
+                            <date-picker
+                              placeholder="Approx. Start date"
+                              v-model="startDate"
+                              format="MM-DD-YYYY"
+                              :disabled-date="disableStartDate"
+                            >
+                            </date-picker>
+                          </client-only>
+                          <client-only>
+                            <date-picker
+                              placeholder="Approx. End date"
+                              v-model="endDate"
+                              format="MM-DD-YYYY"
+                              :disabled-date="disableEndDate"
+                            >
+                            </date-picker>
+                          </client-only>
+                        </div>
                       </div>
                     </div>
                   </div>
+                  <div class="flex justify-center items-center mt-8">
+                    <BaseIcon
+                      icon="circle-info"
+                      color="lightgray"
+                      style="max-width: 15px"
+                    />
+                    <p class="pl-3">Leave all fields blank to show all items</p>
+                  </div>
+                  <div class="flex items-center justify-center m-8">
+                    <BaseButton @click="applyFilters" class="sm:py-4 sm:px-14 !rounded-full">
+                      Search
+                    </BaseButton>
+                  </div>
                 </div>
-                <div class="flex justify-center items-center mt-8">
-                  <BaseIcon
-                    icon="circle-info"
-                    color="lightgray"
-                    style="max-width: 15px"
-                  />
-                  <p class="pl-3">Leave all fields blank to show all items</p>
-                </div>
-                <div class="flex items-center justify-center m-8">
-                  <BaseButton @click="applyFilters" class="sm:py-4 sm:px-14 !rounded-full">
-                    Search
-                  </BaseButton>
-                </div>
-              </div>
-            </section>
+              </section>
+            </div>
           </div>
         </div>
       </div>
@@ -431,6 +433,14 @@ export default {
 .gradient {
   background: linear-gradient(90deg, #d53369 0%, #daae51 100%);
   color: #fff;
+}
+
+.landing-background {
+  background-image: url("../assets/images/landing-bg.png");
+  -webkit-background-size: cover;
+  -moz-background-size: cover;
+  -o-background-size: cover;
+  background-size: cover;
 }
 
 .sliderCard {
